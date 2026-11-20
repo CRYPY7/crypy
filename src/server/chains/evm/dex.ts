@@ -59,3 +59,23 @@ export const chainDex: Record<ChainKey, ChainDex> = {
     ],
   },
 };
+
+/**
+ * Factories used to recognise liquidity pools in transactions (not for pricing, which stays on `dexes` to stay fast).
+ * A pool counts as verified only when one of these factories lists it (getPair / getPool), because any contract can
+ * claim a factory. All addresses were checked on-chain on 2026-11-20 (allPairsLength / owner answered).
+ */
+export const poolFactories: Record<ChainKey, { name: string; protocol: "v2" | "v3"; factory: string }[]> = {
+  ethereum: [
+    ...chainDex.ethereum.dexes.map(({ name, protocol, factory }) => ({ name, protocol, factory })),
+    { name: "SushiSwap", protocol: "v2", factory: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac" },
+    { name: "PancakeSwap v2", protocol: "v2", factory: "0x1097053Fd2ea711dad45caCcc45EfF7548fCB362" },
+    { name: "PancakeSwap v3", protocol: "v3", factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865" },
+  ],
+  bsc: [
+    ...chainDex.bsc.dexes.map(({ name, protocol, factory }) => ({ name, protocol, factory })),
+    { name: "Uniswap v2", protocol: "v2", factory: "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6" },
+    { name: "Uniswap v3", protocol: "v3", factory: "0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7" },
+    { name: "Biswap", protocol: "v2", factory: "0x858E3312ed3A876947EA49d572A7C42DE08af7EE" },
+  ],
+};

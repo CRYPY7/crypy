@@ -50,6 +50,11 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
                       <Link href={href} data-sidebar-href={href} prefetch={false} className={item} title={name}>
                         <ToolIcon name={tool.icon} className="size-[18px] shrink-0 text-primary" />
                         <span className="sidebar-label line-clamp-2 min-w-0 flex-1 leading-snug">{name}</span>
+                        {tool.status === "live" && tool.isNew && (
+                          <span className="sidebar-label shrink-0 rounded bg-low/15 px-1 text-[10px] leading-4 text-low">
+                            {t("nav.new")}
+                          </span>
+                        )}
                         {tool.status !== "live" && (
                           <span className="sidebar-label shrink-0 rounded bg-muted px-1 text-[10px] leading-4 text-muted-foreground">
                             {t("nav.soon")}

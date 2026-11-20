@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { CircleAlert } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
+import { cn } from "@/lib/utils";
 import { ToolIcon } from "@/components/tool-icon";
 import { siteUrl } from "@/config/env";
 import { type ToolDefinition, getTool } from "@/config/tools";
@@ -40,11 +41,14 @@ export async function ToolPage({
   tool,
   locale,
   children,
+  wide = false,
 }: {
   tool: ToolDefinition;
   locale: Locale;
   /** The working tool, for live tools. */
   children?: ReactNode;
+  /** Wide tools (tables) use the full content width; reading text stays at a comfortable width. */
+  wide?: boolean;
 }) {
   const t = await getTranslations();
   const features = t.raw(`tools.${tool.id}.features`) as string[];
@@ -54,7 +58,7 @@ export async function ToolPage({
 
   const url = (path: string) => new URL(localePath(locale, path), siteUrl).toString();
   return (
-    <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <article className={cn("mx-auto px-4 py-10 sm:px-6", wide ? "max-w-7xl" : "max-w-3xl")}>
       <JsonLd
         data={[
           {
@@ -112,7 +116,7 @@ export async function ToolPage({
         </div>
       </header>
 
-      <p className="mt-6 text-base">{t(`tools.${tool.id}.description`)}</p>
+      <p className="mt-6 max-w-3xl text-base">{t(`tools.${tool.id}.description`)}</p>
       {live ? (
         <>
           {tool.category === "utilities" && (
@@ -143,7 +147,7 @@ export async function ToolPage({
       )}
 
       {howTo.length > 0 && (
-        <section className="mt-10">
+        <section className="mt-10 max-w-3xl">
           <h2 className="text-xl font-semibold">{t("toolPage.howToUse")}</h2>
           <ol className="mt-3 flex list-decimal flex-col gap-2 ps-5">
             {howTo.map((step) => (
@@ -153,7 +157,7 @@ export async function ToolPage({
         </section>
       )}
 
-      <section className="mt-10">
+      <section className="mt-10 max-w-3xl">
         <h2 className="text-xl font-semibold">{t("toolPage.whatYouGet")}</h2>
         <ul className="mt-3 flex list-disc flex-col gap-2 ps-5">
           {features.map((feature) => (
@@ -163,7 +167,7 @@ export async function ToolPage({
       </section>
 
       {faq.length > 0 && (
-        <section className="mt-10">
+        <section className="mt-10 max-w-3xl">
           <h2 className="text-xl font-semibold">{t("toolPage.faq")}</h2>
           <div className="mt-3 flex flex-col gap-2">
             {faq.map((item) => (

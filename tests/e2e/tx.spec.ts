@@ -99,3 +99,19 @@ test("the transaction page stays within the JavaScript budget", async ({ page })
   await page.goto(`/en/tx/${ETH_TOKEN}?chain=ethereum`, { waitUntil: "networkidle" });
   expect(bytes).toBeLessThan(650 * 1024);
 });
+
+test("a router swap shows its route, actions, permissions and parties, with honest evidence labels", async ({
+  page,
+}) => {
+  await page.goto("/en/tx/0xadf65326e84d22326edceb6dd8f4a8e388a3eacc3940ff634110191576e0b58d?chain=bsc");
+  const main = page.locator("#main");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Swapped 391\.06\d* TATA for 0\.003726 BNB/);
+  await expect(main.getByRole("heading", { name: "How the assets moved" })).toBeVisible();
+  await expect(main.getByText("PancakeSwap v2 pool").first()).toBeVisible();
+  await expect(main.getByText("Possible fee (unverified)").first()).toBeVisible();
+  await expect(main.getByText("11 of 13 events explained").first()).toBeVisible();
+  await expect(main.getByText("Used up by this transaction").first()).toBeVisible();
+  // Never assumes the visitor is the sender, and never calls a used-up permission a new one.
+  await expect(main.getByText("Your wallet")).toHaveCount(0);
+  await expect(main.getByText("This transaction gave spending permission")).toHaveCount(0);
+});

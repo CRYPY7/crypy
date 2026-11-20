@@ -9,8 +9,12 @@
  * any contract can reuse a standard function name. When evidence is missing we say less, not more.
  */
 import { type KnownContract, burnAddresses, knownContract } from "@/config/known-contracts";
-import type { TxDetails, TxTransfer, TransferStandard } from "@/lib/chains/types";
+import type { TxDetails, TxTransfer } from "@/lib/chains/types";
 import type { DecodeResult, DecodedParam } from "@/modules/tools/tx-decoder/decode";
+import { type ActionSet, detectActions } from "./actions";
+import { type AssetAmount, type EvidenceLevel, assetOf, internalNative, lower, nativeAsset, weakest } from "./assets";
+
+export type { AssetAmount, EvidenceLevel } from "./assets";
 
 export type ActionKind =
   | "native-send"
@@ -29,19 +33,11 @@ export type ActionKind =
   | "contract-call"
   | "unknown-call";
 
-/** confirmed: read from the chain (status, events); decoded: from call data; likely: a reasoned guess; unknown. */
-export type Evidence = "confirmed" | "decoded" | "likely" | "unknown";
-
-export interface AssetAmount {
-  /** "native" or the token contract address. */
-  token: string;
-  standard: TransferStandard | "native";
-  /** Absolute raw amount (integer string). */
-  raw: string;
-  decimals: number | null;
-  symbol: string;
-  tokenId?: string;
-}
+/**
+ * Headline evidence. confirmed: read from the chain (status, events, verified pools); decoded: from call data;
+ * reported: relies on a contract's own report (e.g. a router's payout event); likely: a reasoned guess; unknown.
+ */
+export type Evidence = "confirmed" | "decoded" | "reported" | "likely" | "unknown";
 
 export interface Party {
   address: string;
@@ -88,6 +84,8 @@ export interface Change {
   asset: AssetAmount;
   /** +1 received, −1 sent. */
   sign: 1 | -1;
+  /** event: token events; chain: the coin value or a measured balance change; reported: a router's report. */
+  evidence: EvidenceLevel;
 }
 
 export interface Interpretation {
@@ -107,20 +105,24 @@ export interface Interpretation {
     unlimited?: boolean;
     fn?: string;
     movements?: number;
+    /** Swaps: exchange of a pool its factory verified (e.g. "PancakeSwap v2"). */
+    via?: string;
+    /** App named in a known router's report (reported, not verified). */
+    app?: string;
+    /** Partial swaps: what the pool paid out, when where it went next isn't visible. */
+    poolOut?: AssetAmount;
   };
   flow: Flow;
   /** The wallet that sent the transaction and what changed for it, as seen in standard token events. */
   focus: string;
   changes: Change[];
   failure: Failure | null;
+  /** Every action found, permissions and event coverage (see actions.ts). */
+  set: ActionSet;
 }
 
 const ZERO = "0x0000000000000000000000000000000000000000";
 const HALF_UINT = 1n << 255n;
-
-function lower(value: string | null | undefined) {
-  return (value ?? "").toLowerCase();
-}
 
 function party(tx: TxDetails, address: string, isContract?: boolean | null): Party {
   const known = knownContract(tx.chain, address);
@@ -128,28 +130,6 @@ function party(tx: TxDetails, address: string, isContract?: boolean | null): Par
     address,
     known,
     isContract: isContract ?? (known ? known.kind !== "burn" : null),
-  };
-}
-
-function nativeAsset(raw: bigint, symbol: string): AssetAmount {
-  return { token: "native", standard: "native", raw: raw.toString(), decimals: 18, symbol };
-}
-
-function assetOf(
-  tx: TxDetails,
-  token: string,
-  standard: AssetAmount["standard"],
-  raw: bigint,
-  tokenId?: string,
-): AssetAmount {
-  const info = tx.tokens[lower(token)];
-  return {
-    token,
-    standard,
-    raw: (raw < 0n ? -raw : raw).toString(),
-    decimals: standard === "erc721" ? 0 : (info?.decimals ?? null),
-    symbol: info?.symbol || info?.name || "",
-    ...(tokenId !== undefined ? { tokenId } : {}),
   };
 }
 
@@ -173,8 +153,12 @@ function paramNumber(call: DecodeResult | null, name: string): bigint | null {
   return value?.kind === "number" ? BigInt(value.value) : null;
 }
 
-/** Net token changes for one address from standard events (wrap/unwrap included), plus native coin it sent. */
-export function changesFor(tx: TxDetails, address: string, nativeSymbol: string): Change[] {
+/**
+ * Net changes for one address: token events (wrap/unwrap included), the coin value it sent, and coins received
+ * inside contracts — measured from its balance across the block when available (chain), otherwise from a known
+ * router's report (reported).
+ */
+export function changesFor(tx: TxDetails, address: string, nativeSymbol: string, set?: ActionSet): Change[] {
   const who = lower(address);
   const totals = new Map<string, { asset: AssetAmount; net: bigint; transfer: TxTransfer }>();
   for (const transfer of tx.transfers) {
@@ -196,12 +180,32 @@ export function changesFor(tx: TxDetails, address: string, nativeSymbol: string)
   }
   const changes: Change[] = [];
   const value = BigInt(tx.value);
-  if (value > 0n && lower(tx.from) === who && lower(tx.to) !== who && tx.status === "success") {
-    changes.push({ asset: nativeAsset(value, nativeSymbol), sign: -1 });
+  const success = tx.status === "success";
+  const isSender = lower(tx.from) === who;
+  const internal = isSender ? internalNative(tx) : null;
+  if (internal !== null && internal !== 0n && success) {
+    // Measured: the coin value sent and coins received inside contracts, as one net change.
+    const net = internal - (lower(tx.to) !== who ? value : 0n);
+    if (net !== 0n) changes.push({ asset: nativeAsset(net, nativeSymbol), sign: net < 0n ? -1 : 1, evidence: "chain" });
+  } else {
+    if (value > 0n && isSender && lower(tx.to) !== who && success) {
+      changes.push({ asset: nativeAsset(value, nativeSymbol), sign: -1, evidence: "chain" });
+    }
+    if (internal === null) {
+      for (const action of set?.actions ?? []) {
+        if (action.type === "router-swap" && action.assetOut?.token === "native" && lower(action.to) === who) {
+          changes.push({ asset: action.assetOut, sign: 1, evidence: "reported" });
+        }
+      }
+    }
   }
   for (const { asset, net } of totals.values()) {
     if (net === 0n) continue;
-    changes.push({ asset: { ...asset, raw: (net < 0n ? -net : net).toString() }, sign: net < 0n ? -1 : 1 });
+    changes.push({
+      asset: { ...asset, raw: (net < 0n ? -net : net).toString() },
+      sign: net < 0n ? -1 : 1,
+      evidence: "event",
+    });
   }
   return changes;
 }
@@ -325,7 +329,8 @@ function intended(tx: TxDetails, nativeSymbol: string): Pick<Interpretation, "ki
 
 export function interpret(tx: TxDetails, nativeSymbol: string): Interpretation {
   const focus = tx.from;
-  const base = { focus, failure: null as Failure | null };
+  const set = detectActions(tx, nativeSymbol);
+  const base = { focus, failure: null as Failure | null, set };
 
   if (tx.status !== "success") {
     const attempt = intended(tx, nativeSymbol);
@@ -340,8 +345,8 @@ export function interpret(tx: TxDetails, nativeSymbol: string): Interpretation {
 
   const from = party(tx, tx.from, false);
   const value = BigInt(tx.value);
-  const changes = changesFor(tx, focus, nativeSymbol);
-  const result = (partial: Omit<Interpretation, "focus" | "changes" | "failure">): Interpretation => ({
+  const changes = changesFor(tx, focus, nativeSymbol, set);
+  const result = (partial: Omit<Interpretation, "focus" | "changes" | "failure" | "set">): Interpretation => ({
     ...base,
     changes,
     ...partial,
@@ -367,7 +372,7 @@ export function interpret(tx: TxDetails, nativeSymbol: string): Interpretation {
       flow: { mode: "self", left: from, right: null, out: [], back: [] },
     });
   }
-  if (!tx.call && tx.transfers.length === 0 && tx.approvals.length === 0) {
+  if (!tx.call && tx.transfers.length === 0 && tx.approvals.length === 0 && tx.protocolEvents.length === 0) {
     const amount = nativeAsset(value, nativeSymbol);
     return result({
       kind: "native-send",
@@ -456,9 +461,21 @@ export function interpret(tx: TxDetails, nativeSymbol: string): Interpretation {
     if (outs.length > 0 && ins.length > 0) {
       const decodedSwap = tx.call?.status === "decoded" && (tx.call.key === "swap" || tx.call.key === "router-execute");
       const knownExchange = to.known?.kind === "router" || to.known?.kind === "aggregator";
+      const pools = set.actions.filter((a) => a.type === "pool-swap");
+      const verifiedPool = pools.find((a) => a.evidence === "protocol");
+      const changeLevel = weakest(...outs.map((c) => c.evidence), ...ins.map((c) => c.evidence));
+      const app = set.actions.find((a) => a.type === "router-swap" && a.app)?.app ?? undefined;
       return result({
         kind: "swap",
-        evidence: decodedSwap || knownExchange ? "decoded" : "likely",
+        // Movements read from the chain → confirmed; a part that only a router reported → reported.
+        evidence:
+          changeLevel === "reported"
+            ? "reported"
+            : verifiedPool
+              ? "confirmed"
+              : decodedSwap || knownExchange
+                ? "decoded"
+                : "likely",
         values: {
           amountOut: outs[0]!.asset,
           amountIn: ins[0]!.asset,
@@ -467,9 +484,36 @@ export function interpret(tx: TxDetails, nativeSymbol: string): Interpretation {
           from,
           to,
           fn,
+          ...(verifiedPool?.dex ? { via: verifiedPool.dex } : {}),
+          ...(app ? { app } : {}),
         },
         flow: { mode: "exchange", left: from, right: to, out: outs.map((c) => c.asset), back: ins.map((c) => c.asset) },
       });
+    }
+
+    // The sender paid a token into a pool swap but nothing visible came back (e.g. coins paid out inside
+    // contracts, with no balance measurement available): a swap, with the return side honestly unknown.
+    if (outs.length > 0 && ins.length === 0 && tx.nativeBalance === null) {
+      const outTokens = new Set(tokenOuts.map((c) => lower(c.asset.token)));
+      const poolSwap = set.actions.find(
+        (a) => a.type === "pool-swap" && a.assetIn && outTokens.has(lower(a.assetIn.token)),
+      );
+      if (poolSwap) {
+        const spent = tokenOuts.find((c) => lower(c.asset.token) === lower(poolSwap.assetIn!.token))!;
+        return result({
+          kind: "swap",
+          evidence: "likely",
+          values: {
+            amountOut: spent.asset,
+            poolOut: poolSwap.assetOut,
+            from,
+            to,
+            fn,
+            ...(poolSwap.evidence === "protocol" && poolSwap.dex ? { via: poolSwap.dex } : {}),
+          },
+          flow: { mode: "exchange", left: from, right: to, out: [spent.asset], back: [] },
+        });
+      }
     }
 
     // One movement in total: a send (by the sender or by someone allowed to move it).

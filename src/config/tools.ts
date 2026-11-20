@@ -12,6 +12,7 @@ export const toolIds = [
   "token-security",
   "approval-checker",
   "balance-scanner",
+  "batch-balance",
   "address-analyzer",
   "portfolio",
   "tx-checker",
@@ -40,7 +41,8 @@ export type ToolIconName =
   | "binary"
   | "at-sign"
   | "clock"
-  | "code-xml";
+  | "code-xml"
+  | "layers";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -52,12 +54,15 @@ export interface ToolDefinition {
   /** Shown as a question tile on the home page. */
   featured?: boolean;
   requiresAccount?: boolean;
+  /** Shows a "New" badge in navigation for a while after launch. */
+  isNew?: boolean;
 }
 
 export const tools: readonly ToolDefinition[] = [
   { id: "token-security", category: "security", icon: "shield-alert", status: "soon", milestone: "M5", featured: true },
   { id: "approval-checker", category: "security", icon: "key-round", status: "soon", milestone: "M6", featured: true },
   { id: "balance-scanner", category: "wallet", icon: "wallet", status: "live", milestone: "M3", featured: true },
+  { id: "batch-balance", category: "wallet", icon: "layers", status: "live", milestone: "M4.5", isNew: true },
   { id: "address-analyzer", category: "wallet", icon: "activity", status: "soon", milestone: "M7" },
   { id: "portfolio", category: "wallet", icon: "chart-pie", status: "soon", milestone: "M8" },
   { id: "tx-checker", category: "network", icon: "receipt", status: "live", milestone: "M4", featured: true },

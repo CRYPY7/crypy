@@ -8,6 +8,8 @@ import { getChain } from "@/config/chains";
 import { knownContractsFor } from "@/config/known-contracts";
 import { evmAdapter } from "@/server/chains/evm/adapter";
 import { getEvmClient } from "@/server/chains/evm/providers";
+import { interpret } from "@/lib/tx/interpret";
+import { buildRoute } from "@/lib/tx/route";
 
 const live = process.env.LIVE === "1";
 const details = (chain: string, hash: string) => evmAdapter.getTransactionDetails!(getChain(chain)!, hash);
@@ -81,5 +83,42 @@ describe.skipIf(!live)("live transactions", () => {
 
   it("a made-up hash is not found", async () => {
     expect(await details("bsc", `0x${"ab".repeat(32)}`)).toBeNull();
+  }, 60_000);
+
+  // ---------- Transaction Intelligence V2 ----------
+
+  it("BNB Chain: KyberSwap TATA → BNB swap is explained from its events (regression case)", async () => {
+    const tx = (await details("bsc", "0xadf65326e84d22326edceb6dd8f4a8e388a3eacc3940ff634110191576e0b58d"))!;
+    const pool = tx.pools["0x9ad7eee97891fa30c808904fa7d1ddc3313e6649"];
+    expect(pool).toMatchObject({ verified: true, dex: "PancakeSwap v2" });
+    // The router's permission is used up; today it is 0 (read now).
+    expect(tx.allowances[0]).toMatchObject({ now: "0" });
+    const it = interpret(tx, "BNB");
+    expect(it.kind).toBe("swap");
+    // Reported by the router, or confirmed when an archive node measured the balance change.
+    expect(["reported", "confirmed"]).toContain(it.evidence);
+    expect(it.values.amountIn).toMatchObject({ token: "native", raw: "3725998343504062" });
+    expect(it.set.coverage).toMatchObject({ total: 13, explained: 11 });
+    expect(it.set.permissions[0]!.onlyUsed).toBe(true);
+    const route = buildRoute(tx, it.set, "BNB")!;
+    expect(route).toMatchObject({ mode: "path", returnsToStart: true });
+    expect(route.side.some((e) => e.possibleFee)).toBe(true);
+  }, 60_000);
+
+  it("Ethereum: Uniswap v2 swap goes through a verified pool", async () => {
+    const tx = (await details("ethereum", "0x7ba9d5d91a4c23ce13fcb2607e1dad6e973e9b4de36d198c14bf23606d3c1627"))!;
+    expect(Object.values(tx.pools)).toEqual([expect.objectContaining({ verified: true, dex: "Uniswap v2" })]);
+    const it = interpret(tx, "ETH");
+    expect(it.kind).toBe("swap");
+    expect(it.set.actions.find((a) => a.type === "pool-swap")?.evidence).toBe("protocol");
+  }, 60_000);
+
+  it("Ethereum: aggregator trade through many Uniswap v3 pools is listed, not forced into one route", async () => {
+    const tx = (await details("ethereum", "0xf7b690ea4873c0b6368b9af852e86938a02ac323b67d688406c33923b4fa8cd0"))!;
+    const it = interpret(tx, "ETH");
+    const swaps = it.set.actions.filter((a) => a.type === "pool-swap");
+    expect(swaps.length).toBeGreaterThanOrEqual(5);
+    expect(swaps.some((a) => a.evidence === "protocol")).toBe(true);
+    expect(it.set.coverage.explained).toBeLessThanOrEqual(it.set.coverage.total);
   }, 60_000);
 });

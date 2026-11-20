@@ -27,6 +27,7 @@ import {
   headlineText,
   summaryText,
 } from "@/components/entity/tx-story";
+import { StoryActions, StoryParties, StoryPermissions, StoryRoute, showsRoute } from "@/components/entity/tx-intel";
 import { siteUrl } from "@/config/env";
 import { interpret } from "@/lib/tx/interpret";
 import { getChain } from "@/config/chains";
@@ -103,7 +104,12 @@ async function TxContent({ params, searchParams }: Props) {
     `/api/v1/tx/${tx.hash}?chain=${chain.key}&format=${format}&locale=${locale}&download=1`;
   // The left column holds the failure, permission, pending or wallet-change boxes; without any, the rest spreads out.
   const hasMainColumn =
-    tx.status !== "success" || it.kind === "approval" || it.kind === "revoke" || it.changes.length > 0;
+    tx.status !== "success" ||
+    it.kind === "approval" ||
+    it.kind === "revoke" ||
+    it.changes.length > 0 ||
+    it.set.actions.length > 1 ||
+    it.set.coverage.unexplained.length > 0;
   const extraTransfers = tx.transfers.length > Math.max(1, it.changes.filter((c) => c.asset.token !== "native").length);
 
   return (
@@ -169,7 +175,7 @@ async function TxContent({ params, searchParams }: Props) {
 
       <div className="tx-simple flex flex-col gap-4">
         <StoryHeadline {...ctx} />
-        <StoryFlow {...ctx} />
+        {showsRoute(ctx) ? <StoryRoute {...ctx} /> : <StoryFlow {...ctx} />}
         <StoryProgress {...ctx} />
         {hasMainColumn ? (
           <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
@@ -177,9 +183,12 @@ async function TxContent({ params, searchParams }: Props) {
               <StoryFailure {...ctx} />
               <StoryApproval {...ctx} />
               <StoryPending {...ctx} />
+              <StoryActions {...ctx} />
               <StoryChanges {...ctx} />
             </div>
             <div className="flex flex-col gap-4">
+              <StoryPermissions {...ctx} />
+              <StoryParties {...ctx} />
               <StoryCost {...ctx} />
               <StoryNotes {...ctx} />
             </div>
@@ -213,6 +222,7 @@ async function TxContent({ params, searchParams }: Props) {
         </section>
         <StoryFailure {...ctx} />
         <AdvancedFacts {...ctx} />
+        <StoryActions {...ctx} idSuffix="-adv" />
         <TxTransfers {...legacy} />
         <TxApprovals {...legacy} />
         <TxCall {...legacy} />

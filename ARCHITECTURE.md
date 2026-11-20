@@ -424,6 +424,33 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 - `TxDetails` also carries `pricesAtTx` (block-time prices when the node has the state), `technical` (chain ID, block
   hash, index, base/priority fee, max fees), `events` (raw, capped 400), `nonceUsed` (pending) and `checkedAt`.
 
+### Transaction Intelligence V2 (M4.2)
+
+- **Data (EVM adapter):** `tx-logs.ts` also decodes protocol events by exact signature into `TxProtocolEvent`
+  (pool swap/sync/mint/burn, router reports, Safe, ERC-4337) with log indexes. `tx-reads.ts` adds optional reads in the
+  existing rounds: pool tokens/factory then factory verification, allowances (now, and at block − 1 with past state),
+  the sender's native balance across the block, and code checks for event parties. Each read has a time limit and
+  failing reads leave the field empty.
+- **Engine (`lib/tx/`, pure, family-neutral):** `assets.ts` (assets, evidence levels, `weakest`), `actions.ts`
+  (actions, permission groups, coverage, parties), `route.ts` (route edges and path search), `interpret.ts` (headline,
+  changes, failure). Trust depends on who emitted an event: a pool a known factory lists → protocol; a known router
+  marked `reports` in `known-contracts.ts` → reported; anything else → only its standard shape.
+- **Other chain families** supply the same normalized fields (transfers, approvals, protocol events, balances) through
+  their adapter; their own decoders add protocol events. The UI reads only the engine's output.
+- **UI:** `components/entity/tx-intel.tsx` (route, actions, permissions, parties) next to `tx-story.tsx`.
+
+## 12d. Batch Balance Scanner (M4.5)
+
+- Browser: `modules/tools/batch-balance/` — `parse.ts` (list parsing, pure), `results.ts` (values, totals, sorting,
+  CSV, pure), `editor.tsx`, `widget.tsx` (scan orchestration: 100 addresses per request, chains in parallel, one retry,
+  one block per chain), `results-view.tsx`. Picker tokens: `config/batch-assets.ts`.
+- Server: `POST /api/v1/batch-balances` → `server/chains/evm/batch.ts` (`readBatchBalances`): multicall balances plus a
+  deployless code-size program (`CODE_SIZE_PROGRAM`, 37 bytes, plain `eth_call` without `to`). `GET /api/v1/token-info`
+  checks a pasted contract per chain. Rate limiter `batchLimiter` (40/min). Nothing stored or logged; labels stay in the
+  browser.
+- Other chain families plug in by adding the same reader to their adapter; the page lists every live chain with the
+  `tokenBalances` capability.
+
 ## 12b. DEX market data (M5.5)
 
 Three layers; only the bottom one depends on the chain or DEX:

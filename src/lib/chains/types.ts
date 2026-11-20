@@ -69,6 +69,8 @@ export interface TxTransfer {
   to: string;
   amount: string;
   tokenId?: string;
+  /** Position of the event in the receipt (log index). */
+  logIndex: number;
 }
 
 /** A permission granted or removed by this transaction (from Approval / ApprovalForAll events). */
@@ -82,6 +84,89 @@ export interface TxApproval {
   amount: string;
   unlimited: boolean;
   revoke: boolean;
+  /** Position of the event in the receipt (log index). */
+  logIndex: number;
+}
+
+/**
+ * A non-token event decoded by its standard shape (pool, router, smart wallet). These are raw facts about what an
+ * event says; whether its emitter is trusted (a verified pool, a known router) is decided by the interpreter.
+ * Amounts are raw integers as strings.
+ */
+export type TxProtocolEvent =
+  | {
+      type: "pool-swap";
+      logIndex: number;
+      pool: string;
+      version: "v2" | "v3";
+      sender: string;
+      recipient: string;
+      /** Amounts going into / out of the pool for token0 and token1 (v3 signed amounts are split the same way). */
+      amount0In: string;
+      amount1In: string;
+      amount0Out: string;
+      amount1Out: string;
+    }
+  | { type: "pool-sync"; logIndex: number; pool: string }
+  | { type: "pool-mint"; logIndex: number; pool: string; sender: string; amount0: string; amount1: string }
+  | {
+      type: "pool-burn";
+      logIndex: number;
+      pool: string;
+      sender: string;
+      recipient: string;
+      amount0: string;
+      amount1: string;
+    }
+  | {
+      type: "router-swapped";
+      logIndex: number;
+      emitter: string;
+      sender: string;
+      /** "native" for the 0xEeee… placeholder. */
+      tokenIn: string;
+      tokenOut: string;
+      recipient: string;
+      amountIn: string;
+      amountOut: string;
+    }
+  | { type: "router-exchange"; logIndex: number; emitter: string; pair: string; amountOut: string; output: string }
+  | { type: "router-client"; logIndex: number; emitter: string; source: string | null }
+  | { type: "safe-exec"; logIndex: number; emitter: string; success: boolean }
+  | {
+      type: "user-op";
+      logIndex: number;
+      emitter: string;
+      sender: string;
+      paymaster: string;
+      success: boolean;
+    };
+
+/** A liquidity pool seen in the transaction, with how we checked it. */
+export interface TxPool {
+  address: string;
+  version: "v2" | "v3";
+  token0: string;
+  token1: string;
+  /** v3 fee tier; null for v2. */
+  fee: number | null;
+  /** The factory the pool names; null when it didn't answer. */
+  factory: string | null;
+  /** Exchange name when the factory is a known deployment. */
+  dex: string | null;
+  /** True only when that known factory itself lists this pool (getPair / getPool). */
+  verified: boolean;
+}
+
+/** Spending permission for one token/owner/spender, read from the chain (not from events). Raw integers. */
+export interface TxAllowanceRead {
+  token: string;
+  owner: string;
+  spender: string;
+  /** Just before this transaction's block; null when the node no longer keeps that state. */
+  before: string | null;
+  /** Read when the page was built (see TxDetails.checkedAt); null when it couldn't be read. */
+  now: string | null;
 }
 
 /** Everything the transaction page shows. Plain, serializable data (cached on the server). */
@@ -140,6 +225,19 @@ export interface TxDetails extends TxLookup {
   nonceUsed: boolean | null;
   /** Unix ms when the server read this data. */
   checkedAt: number;
+  /** Pool, router and smart-wallet events decoded by their standard shapes. */
+  protocolEvents: TxProtocolEvent[];
+  /** Pools named in protocol events (lower-case keys). */
+  pools: Record<string, TxPool>;
+  /** Current (and, when available, earlier) allowance for each permission touched by this transaction. */
+  allowances: TxAllowanceRead[];
+  /**
+   * The sender's native balance just before and at the end of the transaction's block (wei), when the node keeps that
+   * state. Other transactions in the same block can also change it, so it is shown as a block-level measurement.
+   */
+  nativeBalance: { address: string; before: string; after: string } | null;
+  /** Whether addresses seen in the transaction have code (lower-case keys); only addresses we checked. */
+  codes: Record<string, boolean>;
 }
 
 export interface ChainHead {

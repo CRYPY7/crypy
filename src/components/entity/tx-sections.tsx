@@ -9,6 +9,7 @@ import { formatUsd } from "@/lib/format/money";
 import { localePath, toolPath } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import type { DecodeResult, DecodedValue } from "@/modules/tools/tx-decoder/decode";
+import { permissionGroups } from "@/lib/tx/actions";
 
 type T = Awaited<ReturnType<typeof getTranslations>>;
 
@@ -107,6 +108,9 @@ export function TxTransfers({ tx, chain, locale, t, explorerName }: TxView) {
           <thead>
             <tr className="text-start text-xs text-muted-foreground">
               <th scope="col" className="px-4 py-2.5 text-start font-medium">
+                {t("entity.tx.transfers.event")}
+              </th>
+              <th scope="col" className="px-4 py-2.5 text-start font-medium">
                 {t("entity.tx.transfers.token")}
               </th>
               <th scope="col" className="px-4 py-2.5 text-start font-medium">
@@ -120,7 +124,7 @@ export function TxTransfers({ tx, chain, locale, t, explorerName }: TxView) {
                 {t("entity.tx.transfers.amount")}
               </th>
               <th scope="col" className="px-4 py-2.5 text-end font-medium">
-                {t("entity.tx.transfers.value")}
+                {t(tx.pricesAtTx ? "entity.tx.transfers.valueAtTx" : "entity.tx.transfers.valueToday")}
               </th>
             </tr>
           </thead>
@@ -129,10 +133,11 @@ export function TxTransfers({ tx, chain, locale, t, explorerName }: TxView) {
               const token = tx.tokens[transfer.token.toLowerCase()];
               const value =
                 transfer.standard !== "erc721" && transfer.standard !== "erc1155" && token?.decimals != null
-                  ? usdOf(transfer.amount, token.decimals, tx.prices[transfer.token.toLowerCase()])
+                  ? usdOf(transfer.amount, token.decimals, (tx.pricesAtTx ?? tx.prices)[transfer.token.toLowerCase()])
                   : null;
               return (
                 <tr key={index} className="border-t">
+                  <td className="w-12 px-4 py-2.5 text-muted-foreground tabular-nums">#{transfer.logIndex}</td>
                   <td className="px-4 py-2.5">
                     <Link
                       href={localePath(locale, `/token/${chain.key}/${transfer.token}`)}
@@ -174,7 +179,8 @@ export function TxTransfers({ tx, chain, locale, t, explorerName }: TxView) {
 }
 
 function allowanceText(approval: TxApproval, token: TxToken | undefined, locale: string, t: T): string {
-  if (approval.revoke) return t("entity.tx.approvals.removed");
+  if (approval.revoke && approval.kind !== "amount") return t("entity.tx.approvals.removed");
+  if (approval.kind === "amount" && approval.amount === "0") return "0";
   if (approval.kind === "all") return t("entity.tx.approvals.all");
   if (approval.kind === "nft") return t("entity.tx.approvals.nft", { id: shortenId(approval.amount, 8, 4) });
   if (approval.unlimited) return t("entity.tx.approvals.unlimited");
@@ -183,7 +189,15 @@ function allowanceText(approval: TxApproval, token: TxToken | undefined, locale:
 
 export function TxApprovals({ tx, chain, locale, t }: TxView) {
   if (tx.approvals.length === 0) return null;
-  const granted = tx.status === "success" && tx.approvals.some((a) => !a.revoke);
+  // What each event did to the permission (granted, changed, used by a transfer, removed).
+  const steps = new Map(
+    tx.status === "success"
+      ? permissionGroups(tx).flatMap((g) => g.steps.map((step) => [step.logIndex, step] as const))
+      : [],
+  );
+  // Warn only when a permission was actually given or raised, never for one that was only used up.
+  const granted =
+    tx.status === "success" && [...steps.values()].some((step) => step.change !== "used" && step.change !== "revoked");
   return (
     <section aria-labelledby="tx-approvals" className="flex flex-col gap-3">
       <h2 id="tx-approvals" className="font-sans text-lg font-semibold">
@@ -203,6 +217,7 @@ export function TxApprovals({ tx, chain, locale, t }: TxView) {
           const token = tx.tokens[approval.token.toLowerCase()];
           return (
             <li key={index} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 text-sm">
+              <span className="text-muted-foreground tabular-nums">#{approval.logIndex}</span>
               <Link
                 href={localePath(locale, `/token/${chain.key}/${approval.token}`)}
                 prefetch={false}
@@ -216,9 +231,15 @@ export function TxApprovals({ tx, chain, locale, t }: TxView) {
               <span className="text-muted-foreground">
                 {t("entity.tx.approvals.spender")} <AddressLink address={approval.spender} locale={locale} short />
               </span>
+              {steps.get(approval.logIndex) && (
+                <span className="ms-auto text-xs text-muted-foreground">
+                  {t(`entity.tx.story.permissions.change.${steps.get(approval.logIndex)!.change}`)}
+                </span>
+              )}
               <span
                 className={cn(
-                  "ms-auto rounded px-2 py-0.5 text-xs font-semibold",
+                  "rounded px-2 py-0.5 text-xs font-semibold",
+                  !steps.get(approval.logIndex) && "ms-auto",
                   approval.revoke
                     ? "bg-low/14 text-low"
                     : approval.unlimited

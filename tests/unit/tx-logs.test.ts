@@ -29,7 +29,7 @@ function erc20Transfer(amount: bigint, address = TOKEN): RawLog {
 describe("parseTxLogs", () => {
   it("reads ERC-20 transfers", () => {
     const { transfers } = parseTxLogs([erc20Transfer(1_500_000n)]);
-    expect(transfers).toEqual([{ standard: "erc20", token: TOKEN, from: A, to: B, amount: "1500000" }]);
+    expect(transfers).toEqual([{ standard: "erc20", token: TOKEN, from: A, to: B, amount: "1500000", logIndex: 0 }]);
   });
 
   it("reads ERC-721 transfers (token id in the 4th topic)", () => {

@@ -60,15 +60,22 @@ function tx(over: Partial<TxDetails>): TxDetails {
     events: [],
     nonceUsed: null,
     checkedAt: 0,
+    protocolEvents: [],
+    pools: {},
+    allowances: [],
+    nativeBalance: null,
+    codes: {},
     ...over,
   };
 }
-const erc20 = (token: string, from: string, to: string, amount: bigint): TxTransfer => ({
+let nextLog = 0;
+const erc20 = (token: string, from: string, to: string, amount: bigint, logIndex = nextLog++): TxTransfer => ({
   standard: "erc20",
   token,
   from,
   to,
   amount: amount.toString(),
+  logIndex,
 });
 
 describe("interpret", () => {
@@ -76,7 +83,7 @@ describe("interpret", () => {
     const r = interpret(tx({ value: "500000000000000000" }), "ETH");
     expect(r).toMatchObject({ kind: "native-send", evidence: "confirmed" });
     expect(r.values.amount).toMatchObject({ raw: "500000000000000000", symbol: "ETH" });
-    expect(r.changes).toEqual([{ asset: expect.objectContaining({ token: "native" }), sign: -1 }]);
+    expect(r.changes).toEqual([{ asset: expect.objectContaining({ token: "native" }), sign: -1, evidence: "chain" }]);
   });
 
   it("token transfer is confirmed by its event, not by the function name", () => {
@@ -127,6 +134,7 @@ describe("interpret", () => {
       amount: (2n ** 256n - 1n).toString(),
       unlimited: true,
       revoke: false,
+      logIndex: 0,
     };
     const r = interpret(tx({ to: USDC, toIsContract: true, approvals: [approval] }), "ETH");
     expect(r).toMatchObject({ kind: "approval", evidence: "confirmed", values: { unlimited: true } });
@@ -142,7 +150,7 @@ describe("interpret", () => {
     expect(
       interpret(tx({ transfers: [erc20(USDC, ME, "0x000000000000000000000000000000000000dEaD", 5n)] }), "ETH").kind,
     ).toBe("burn");
-    const wrap: TxTransfer = { standard: "wrap", token: WETH, from: WETH, to: ME, amount: "1000" };
+    const wrap: TxTransfer = { standard: "wrap", token: WETH, from: WETH, to: ME, amount: "1000", logIndex: 0 };
     const r = interpret(tx({ to: WETH, value: "1000", transfers: [wrap] }), "ETH");
     expect(r.kind).toBe("wrap");
     expect(r.changes.map((c) => [c.asset.token, c.sign])).toEqual([
@@ -216,6 +224,6 @@ describe("explainFailure", () => {
 describe("changesFor", () => {
   it("nets several movements of the same token", () => {
     const r = changesFor(tx({ transfers: [erc20(USDC, ME, YOU, 10n), erc20(USDC, YOU, ME, 3n)] }), ME, "ETH");
-    expect(r).toEqual([{ asset: expect.objectContaining({ raw: "7" }), sign: -1 }]);
+    expect(r).toEqual([{ asset: expect.objectContaining({ raw: "7" }), sign: -1, evidence: "event" }]);
   });
 });

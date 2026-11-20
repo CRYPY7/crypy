@@ -56,3 +56,5 @@ export function clientKey(headers: Headers): string {
 export const searchLimiter = createRateLimiter({ limit: 30, windowMs: 60_000 });
 export const healthLimiter = createRateLimiter({ limit: 20, windowMs: 60_000 });
 export const pageLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 });
+/** Batch Balance Scanner: one request = up to 100 addresses on one chain; a full 500 × 2 scan is 10 requests. */
+export const batchLimiter = createRateLimiter({ limit: 40, windowMs: 60_000 });

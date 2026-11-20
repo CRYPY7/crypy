@@ -1,7 +1,15 @@
 import { type Server, createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { type Provider, rankedFallback, resetCoolDown, resetSpeeds, resetUsage } from "@/server/chains/evm/providers";
+import {
+  type Provider,
+  rankedFallback,
+  refusesLately,
+  resetCoolDown,
+  resetRefusals,
+  resetSpeeds,
+  resetUsage,
+} from "@/server/chains/evm/providers";
 
 /** Fake JSON-RPC nodes on this machine (test fixtures only). Each answers by its configured behaviour. */
 type Behaviour = { result?: unknown; error?: { code: number; message: string }; status?: number; delay?: number };
@@ -44,6 +52,7 @@ beforeEach(() => {
   resetSpeeds();
   resetCoolDown();
   resetUsage();
+  resetRefusals();
   hits.a = 0;
   hits.b = 0;
 });
@@ -91,5 +100,17 @@ describe("ranked fallback", () => {
     behaviours.a = { error: { code: -32000, message: "missing trie node" } };
     behaviours.b = { result: "0xabc" };
     expect(await ask("eth_call")).toBe("0xabc");
+  });
+
+  it("a node that refused old data is asked last for a while, not removed", async () => {
+    behaviours.a = { error: { code: -32602, message: "Archive requests require a personal token" } };
+    behaviours.b = { result: TX };
+    expect(await ask("eth_getTransactionReceipt")).toEqual(TX);
+    expect(refusesLately(a, "eth_getTransactionReceipt")).toBe(true);
+    // Other kinds of requests still go to it first.
+    expect(refusesLately(a, "eth_blockNumber")).toBe(false);
+    hits.a = 0;
+    expect(await ask("eth_getTransactionReceipt")).toEqual(TX);
+    expect(hits.a).toBe(0);
   });
 });

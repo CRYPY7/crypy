@@ -241,6 +241,35 @@ export function resetSpeeds(): void {
 /** Lookups where a null answer from one node may only mean that node hasn't seen it (yet). */
 const NOT_FOUND_IS_NOT_FINAL = new Set(["eth_getTransactionByHash", "eth_getTransactionReceipt"]);
 
+/**
+ * Some free nodes refuse requests about old blocks ("archive requests require a personal token", "missing trie node").
+ * We remember that per provider and method for a while and ask them last, instead of first. Temporary on purpose:
+ * one refusal never removes a provider, and the note expires.
+ */
+const REFUSAL_MS = 10 * 60_000;
+const refusals = new Map<string, number>();
+const REFUSAL_PATTERN =
+  /archive|missing trie node|pruned|historical state|state (?:is )?not available|header not found/i;
+
+export function noteRefusal(provider: Provider, method: string, error: unknown): void {
+  const text = error instanceof Error ? `${error.message} ${(error as { details?: string }).details ?? ""}` : "";
+  if (REFUSAL_PATTERN.test(text)) refusals.set(`${provider.url}|${method}`, Date.now() + REFUSAL_MS);
+}
+
+export function refusesLately(provider: Provider, method: string): boolean {
+  const until = refusals.get(`${provider.url}|${method}`);
+  if (until === undefined) return false;
+  if (until < Date.now()) {
+    refusals.delete(`${provider.url}|${method}`);
+    return false;
+  }
+  return true;
+}
+
+export function resetRefusals(): void {
+  refusals.clear();
+}
+
 export function rankedFallback(providers: Provider[]): Transport {
   return (options) => {
     const transports = new Map(providers.map((provider) => [provider.url, meteredHttp(provider)(options)]));
@@ -254,7 +283,12 @@ export function rankedFallback(providers: Provider[]): Transport {
         new Promise<unknown>((resolve, reject) => {
           // Try the fastest provider; if it is slow to answer, also ask the next one ("hedging") and take the
           // first answer. Safe because the server only reads: it never sends transactions.
-          const ordered = rankProviders(providers);
+          // Fastest first; providers that recently refused this kind of request (old data) go last.
+          const ranked = rankProviders(providers);
+          const ordered = [
+            ...ranked.filter((p) => !refusesLately(p, args.method)),
+            ...ranked.filter((p) => refusesLately(p, args.method)),
+          ];
           let next = 0;
           let inFlight = 0;
           let settled = false;
@@ -303,6 +337,7 @@ export function rankedFallback(providers: Provider[]): Transport {
                   return;
                 }
                 lastError = error;
+                noteRefusal(provider, args.method, error);
                 if (next < ordered.length) start();
                 else finish(lastError);
               },

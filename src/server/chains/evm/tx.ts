@@ -6,8 +6,10 @@ import type { TxDetails, TxToken } from "@/lib/chains/types";
 import { decodeCallData } from "@/modules/tools/tx-decoder/decode";
 import { chainDex } from "./dex";
 import { getOnchainPrices } from "./prices";
+import { knownContract } from "@/config/known-contracts";
 import { archiveClient } from "./providers";
 import { parseTxLogs } from "./tx-logs";
+import { readAllowances, readCodes, readNativeBalance, readPools } from "./tx-reads";
 
 /** Raw input shown on the page (hex characters); the full data is on the explorer. */
 const INPUT_PREVIEW_CHARS = 4_096;
@@ -171,10 +173,21 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
 
   const wrapped = chainDex[chain.key]?.quotes.find((q) => q.role === "wrapped-native")?.address;
   const logs = parseTxLogs(
-    (receipt?.logs ?? []).map((log) => ({ address: log.address, topics: log.topics, data: log.data })),
+    (receipt?.logs ?? []).map((log) => ({
+      address: log.address,
+      topics: log.topics,
+      data: log.data,
+      logIndex: log.logIndex,
+    })),
     wrapped,
   );
   const logTokens = [...new Set([...logs.transfers, ...logs.approvals].map((item) => item.token.toLowerCase()))];
+  // Tokens named by a router's report (e.g. what it says it paid out) are read too, for their symbols.
+  for (const event of logs.protocolEvents) {
+    if (event.type !== "router-swapped") continue;
+    for (const token of [event.tokenIn, event.tokenOut])
+      if (token !== "native" && !logTokens.includes(token.toLowerCase())) logTokens.push(token.toLowerCase());
+  }
   const status: TxDetails["status"] = pending ? "pending" : receipt!.status === "success" ? "success" : "reverted";
   // Replaying the failure and reading past prices need the state of an earlier block. Free public nodes keep only
   // recent blocks (about 128), so for older transactions this is tried only with an archive-capable provider.
@@ -182,9 +195,41 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
   const pastClient = pending ? null : head - tx.blockNumber! <= RECENT_BLOCKS ? client : archiveClient(chain);
   // Prices: token decimals are read inside the price engine's first round, so prices don't wait for names.
   const priced = logTokens.slice(0, MAX_PRICED).map((address) => ({ address, decimals: null }));
+  const block = pending ? null : tx.blockNumber!;
+  // Addresses whose type (wallet or contract) the page shows: event parties that aren't tokens, pools or known names.
+  const pools = new Set(logs.protocolEvents.flatMap((e) => ("pool" in e ? [e.pool.toLowerCase()] : [])));
+  const codeCandidates = [
+    ...logs.transfers.flatMap((t) => [t.from, t.to]),
+    ...logs.approvals.map((a) => a.spender),
+    ...logs.protocolEvents.flatMap((e) =>
+      e.type === "router-swapped" || e.type === "pool-swap" ? [e.recipient] : e.type === "user-op" ? [e.sender] : [],
+    ),
+  ].filter((address) => {
+    const key = address.toLowerCase();
+    return (
+      key !== tx.from.toLowerCase() &&
+      key !== tx.to?.toLowerCase() &&
+      !logTokens.includes(key) &&
+      !pools.has(key) &&
+      !knownContract(chain.key, key) &&
+      BigInt(key) !== 0n
+    );
+  });
 
   // Rounds 2 and 3 (prices take both; everything else finishes in round 2).
-  const [block, toCode, latestNonce, tokensRaw, revertReason, nowQuotes, thenQuotes] = await Promise.all([
+  const [
+    blockData,
+    toCode,
+    latestNonce,
+    tokensRaw,
+    revertReason,
+    nowQuotes,
+    thenQuotes,
+    poolInfo,
+    allowances,
+    nativeBalance,
+    codes,
+  ] = await Promise.all([
     pending ? null : client.getBlock({ blockNumber: tx.blockNumber! }),
     // viem returns undefined for "no code"; a failed read becomes null.
     tx.to ? client.getCode({ address: tx.to }).catch(() => null) : null,
@@ -199,6 +244,13 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     // Prices at the transaction's block, when the node still keeps that state (recent blocks on public nodes;
     // any block with an archive provider). Optional; never mixed with today's prices.
     pastClient ? withTimeout(getOnchainPrices(pastClient, chain, priced, tx.blockNumber!), OPTIONAL_MS) : null,
+    // Pools: what they say about themselves, then whether a known factory lists them (rounds 2 and 3).
+    status === "success" ? withTimeout(readPools(client, chain.key, logs.protocolEvents), PRICES_MS) : null,
+    // Permissions: today's value, and just before this block when the node keeps that state.
+    status === "success" ? withTimeout(readAllowances(client, pastClient, logs.approvals, block), OPTIONAL_MS) : null,
+    // The sender's native balance across the block: shows coins received inside contracts (no event for those).
+    status === "success" ? withTimeout(readNativeBalance(pastClient, tx.from, block), OPTIONAL_MS) : null,
+    status === "success" ? withTimeout(readCodes(client, codeCandidates), OPTIONAL_MS) : null,
   ]);
 
   // Drop the called contract's entry when it isn't a token (nothing readable).
@@ -218,7 +270,7 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
 
   const gasUsed = receipt?.gasUsed ?? null;
   const gasPrice = receipt?.effectiveGasPrice ?? (pending ? (tx.maxFeePerGas ?? tx.gasPrice ?? null) : null);
-  const baseFee = block?.baseFeePerGas ?? null;
+  const baseFee = blockData?.baseFeePerGas ?? null;
   const input = tx.input ?? "0x";
   const isCreation = !tx.to;
   const call = isCreation || input === "0x" ? null : decodeCallData(input);
@@ -230,7 +282,7 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     blockNumber: tx.blockNumber?.toString() ?? null,
     from: getAddress(tx.from),
     to: tx.to ? getAddress(tx.to) : null,
-    timestamp: block ? Number(block.timestamp) : null,
+    timestamp: blockData ? Number(blockData.timestamp) : null,
     confirmations: tx.blockNumber !== null ? Math.max(1, Number(head - tx.blockNumber + 1n)) : null,
     nonce: tx.nonce,
     type: typeNames[tx.type] ?? String(tx.type),
@@ -278,5 +330,10 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     })),
     nonceUsed: pending && latestNonce !== null ? latestNonce > tx.nonce : null,
     checkedAt: Date.now(),
+    protocolEvents: logs.protocolEvents,
+    pools: poolInfo ?? {},
+    allowances: allowances ?? [],
+    nativeBalance,
+    codes: codes ?? {},
   };
 }

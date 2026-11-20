@@ -112,7 +112,18 @@ evidence on demand. Based on the owner's "Universal Transaction Intelligence" sp
 contract creation, unknown contract, many events, no events, not found, provider down, no price, mobile, Simple /
 Advanced consistency, RTL) passes on real transactions of both chains.
 
-## M4.5 — Batch Balance Scanner (owner request 2026-11-20; design approved 2026-11-20)
+## M4.2 — Transaction Intelligence V2 (owner request 2026-11-20; design approved; Part 1 ✅ built 2026-11-20)
+
+Part 1 (built): multi-action engine with six evidence levels, permission granted/used/removed with today's value,
+verified pool swaps (factory check), KyberSwap router reports, coins inside contracts from balances, reusable route
+template, "Who was involved", neutral sender wording, provider refusal memory. See PROGRESS.md.
+
+Part 2 (next, alongside M5/M5.5): more protocol adapters (Uniswap Universal Router and v4, 1inch, 0x, PancakeSwap
+Smart Router, Curve, Balancer), NFT marketplace sales, lending (Aave/Venus) and bridges as named actions, Safe/ERC-4337
+inner calls, an "analysis coverage" panel (events recognised, never shown as "100% understood"), and more regression
+transactions per category. Execution traces stay planned for when we run our own node.
+
+## M4.5 — Batch Balance Scanner (owner request 2026-11-20; design approved 2026-11-20; ✅ built 2026-11-20)
 
 Check one or more coins/tokens for a whole list of addresses, on the chains the visitor picks. Own tool page
 `/tools/batch-balance` (Wallet category). Reads directly from the chain with multicall: about 2–3 requests per

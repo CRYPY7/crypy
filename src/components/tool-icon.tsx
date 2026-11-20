@@ -9,6 +9,7 @@ import {
   CodeXml,
   Fuel,
   KeyRound,
+  Layers,
   type LucideProps,
   Receipt,
   ShieldAlert,
@@ -30,6 +31,7 @@ const icons = {
   "at-sign": AtSign,
   clock: Clock,
   "code-xml": CodeXml,
+  layers: Layers,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 
 /** Server-rendered tool icon. Decorative: the tool name is always shown as text. */

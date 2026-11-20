@@ -3,17 +3,39 @@
  * deployments are listed; `tests/unit/tx-live.test.ts` checks each one is a contract on its chain.
  * A name is a label to help people read a transaction. It is never a safety verdict.
  */
-export type KnownKind = "router" | "aggregator" | "permit" | "wrapped" | "token" | "burn";
+export type KnownKind = "router" | "aggregator" | "permit" | "wrapped" | "token" | "burn" | "entrypoint";
+
+/** Protocols whose own summary events we read, and only when this exact contract emitted them. */
+export type ReportingProtocol = "kyberswap" | "erc4337";
 
 export interface KnownContract {
   name: string;
   kind: KnownKind;
+  /** This contract's summary events (e.g. "Swapped") are read as reports from it. */
+  reports?: ReportingProtocol;
 }
 
 const shared: Record<string, KnownContract> = {
   "0x000000000022d473030f116ddee9f6b43ac78ba3": { name: "Uniswap Permit2", kind: "permit" },
   "0x111111125421ca6dc452d289314280a0f8842a65": { name: "1inch Aggregation Router v6", kind: "aggregator" },
   "0x1111111254eeb25477b68fb85ed929f73a960582": { name: "1inch Aggregation Router v5", kind: "aggregator" },
+  // Same address on Ethereum and BNB Chain (KyberSwap docs: MetaAggregationRouterV2).
+  "0x6131b5fae19ea4f9d964eac0408e4408b66337b5": {
+    name: "KyberSwap Aggregation Router",
+    kind: "aggregator",
+    reports: "kyberswap",
+  },
+  // ERC-4337 EntryPoint v0.6 and v0.7 (same address on every EVM chain).
+  "0x5ff137d4b0fdcd49dca30c7cf57e578a026d2789": {
+    name: "ERC-4337 EntryPoint v0.6",
+    kind: "entrypoint",
+    reports: "erc4337",
+  },
+  "0x0000000071727de22e5e9d8baf0edac6f37da032": {
+    name: "ERC-4337 EntryPoint v0.7",
+    kind: "entrypoint",
+    reports: "erc4337",
+  },
 };
 
 /** Addresses that can't hold keys: tokens sent here are gone for good. Same on every EVM chain. */

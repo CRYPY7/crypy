@@ -4,19 +4,20 @@ Last updated: 2026-11-20
 
 ## Milestones
 
-| Milestone                                              | Status                                                  |
-| ------------------------------------------------------ | ------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                 |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                    |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                    |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                    |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                   |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                    |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                   |
-| M4.5 Batch Balance Scanner                             | ⏭ Next (design approved 2026-11-20)                     |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                           |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                    |
+| Milestone                                              | Status                                                         |
+| ------------------------------------------------------ | -------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                        |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                           |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                           |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                           |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending        |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                          |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                           |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                          |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions) |
+| M4.5 Batch Balance Scanner                             | ⏭ Next (design approved 2026-11-20)                            |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                  |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                           |
 
 ## M1 — what was built
 
@@ -146,6 +147,97 @@ and a swap of your own on CRYPY to confirm the wording.
 - **Not found:** explains the likely reasons and links to a search across all networks.
 - Non-standard events are counted ("3 events aren't standard token events") but never interpreted.
 - Cost per page: about 6–9 node requests (batched), cached 15 seconds; no paid API.
+
+## M4.5 — Batch Balance Scanner (design approved 2026-11-20, boards 8–10)
+
+What was built (`/tools/batch-balance`, Wallet category, "New" badge in the sidebar):
+
+- **Address list editor:** paste, type, drag-and-drop or upload CSV/TXT (read in the browser, 1 MB cap); line numbers;
+  per-line notes drawn beside each line: duplicate (merged, label kept), wrong checksum (possible typo, never "fixed"),
+  invalid, several addresses on one line, over the 500 limit. Labels after a comma (or before the address) are cleaned
+  of invisible and direction-changing characters and **never leave the browser**.
+- **Chains:** Ethereum and BNB Chain (from the chain registry; new EVM chains appear automatically).
+- **Assets:** native coin always, plus up to 5 tokens: quick picks from a list of 14 well-known tokens (per-chain
+  contracts and decimals, all checked on-chain by a live test), or any pasted contract, checked on every chain
+  ("not a token on Ethereum, skipped there").
+- **Scan:** batches of 100 addresses per chain, chains in parallel, progress bar and Cancel; each batch retried once;
+  every batch of a chain read at that chain's first block (falls back to the latest block if a node no longer keeps it).
+- **Server reads per batch** (`POST /api/v1/batch-balances`): one multicall (`getEthBalance` + `balanceOf`) and one
+  "deployless" `eth_call` running a 37-byte hand-written program that returns each address's code size (wallet or
+  contract; EIP-7702 delegated wallets confirmed by their code). First batch also returns on-chain USD prices.
+  Read-only; nothing stored or logged; 16 KB body limit; 40 requests per minute per visitor.
+- **Results:** status line with each chain's block and time; total value (priced assets only), addresses with a balance,
+  empty addresses (only when every check succeeded), failed checks; total per asset per chain; table with search, chain
+  filter, hide empty, sorting by any column, totals row, share bars, 50 rows per page, retry per failed row; phone layout
+  with cards and a bottom Copy / Export bar.
+- **Export:** CSV built in the browser (UTF-8 with BOM for Excel, exact amounts, formula injection blocked); copy the
+  table, the addresses with a balance, or the empty addresses.
+- **Wide tool pages:** `ToolPage` has a `wide` option (full content width for tables; reading text stays narrow).
+
+Bug found and fixed during checks: results from the second chain overwrote the first chain's rows (rows were matched by
+address only). A browser test now checks that each chain shows its own block.
+
+## M4.5 checks (2026-11-20, in the cloud workspace)
+
+- Typecheck, lint, Prettier: passed. Unit tests: 164 passed (12 new: parsing, totals, sorting/filtering, CSV safety).
+- Live (`LIVE=1`): 4 new passed: token decimals on both chains, types (wallet / contract / delegated) and balances equal
+  to single reads at the same block, a full 100-address batch at a fixed block, block fallback.
+- Build passed. Playwright: 87 passed (new: list checks; two-chain scan with different blocks, labels never sent, CSV).
+- Values spot-checked against direct reads: Binance 8 holds 14,000,000,000.000668 USDT on Ethereum; the burn address
+  holds 5,524,547,438 CAKE on BNB Chain. A 6-address × 2-chain scan took under 1 second here.
+
+## M4.2 — Transaction Intelligence V2, Part 1 (design approved 2026-11-20, boards 17–18)
+
+What was built:
+
+- **Evidence levels everywhere** (`lib/tx/assets.ts`): on-chain fact · standard event · verified with the protocol ·
+  reported by a contract · interpretation · not identified. A conclusion is only as strong as its weakest input.
+- **Actions detected** (`lib/tx/actions.ts`): one transaction → many actions (coin and token transfers, NFT moves,
+  mint, burn, wrap/unwrap, pool swaps, liquidity add/remove, permission granted/changed/set/used/removed, router
+  reports, contract creation, Safe and ERC-4337 executions), each with its events and evidence, plus "X of Y events
+  explained" and the list of events we don't identify (never guessed).
+- **Permissions:** granted vs changed vs **used** (an Approval next to a matching Transfer out of the owner) vs removed;
+  value before (read from the chain at block − 1 when the node keeps it, otherwise worked out from events and labelled
+  so), after (from events) and **today** (read now, with the time and a note that it doesn't say when or why it changed).
+  The old "this transaction gave spending permission" warning now appears only when a permission was actually given.
+- **Pools:** Uniswap v2/v3-style Swap, Sync, Mint and Burn events (and PancakeSwap v3's variant). A pool is "verified"
+  only when a known factory lists it (getPair/getPool); otherwise it shows as "not verified". Factories: Uniswap v2/v3,
+  PancakeSwap v2/v3, SushiSwap (Ethereum), Uniswap v2/v3 and Biswap (BNB Chain), all checked on-chain.
+- **Router reports:** KyberSwap `Swapped`/`Exchange`/`ClientData`, read only when the known KyberSwap router emitted
+  them, and labelled "reported". The same event from an unknown contract is ignored.
+- **Coins paid inside contracts:** measured from the sender's balance before and after the block (recent blocks, or any
+  block with an archive provider). A matching router report is upgraded to an on-chain fact; otherwise it stays
+  "reported". When neither is available, the page says the coin side isn't visible.
+- **Route template** (`lib/tx/route.ts`): a connected chain of steps from the sender (any number of hops, wraps and
+  unwraps shown on the node), side payments listed separately ("possible fee (unverified)" only for a small payment of
+  the same token out of the sender), or separate relationships when movements don't connect. Vertical steps on all
+  screens, so long routes fit on phones.
+- **Who was involved:** sender, called contract, router, pools, intermediaries, recipients, possible fee, spenders,
+  tokens; contract or wallet read from the chain.
+- **Neutral wording:** "Sender wallet", never "Your wallet". A "You" badge appears only when the visitor's connected
+  wallet is the sender.
+- **Consistent prices:** every value uses the price at the time when available, otherwise today's price, and says
+  which (the Advanced table's "Value now" column was fixed).
+- **Advanced view agrees with Simple:** each event shows which action explains it, with protocol event names.
+- **Providers:** a node that refuses old data ("archive requests require a token", "missing trie node") is asked last
+  for that kind of request for 10 minutes. Never removed.
+- **Coverage registry** (`config/tx-support.ts`): actions, permissions, pools, router reports, smart wallets and coins
+  inside contracts, each with its level and note.
+
+Works reliably (tested on real transactions): coin transfers, token transfers, failed transactions, contract creation,
+unknown calls with custom events, Uniswap v2 swaps, multi-pool aggregator trades (Uniswap v3), KyberSwap router swaps
+with a PancakeSwap pool (the TATA regression case), approvals and permissions being used.
+
+Partial or not yet decoded: coins paid inside contracts on old blocks without an archive provider; routers other than
+KyberSwap (read from their token events only); Uniswap v4, Curve, Balancer and other pool types; lending, bridges and
+NFT marketplaces (shown as their token movements, not named actions); Safe/ERC-4337 inner calls; execution traces.
+
+## M4.2 checks (2026-11-20, in the cloud workspace)
+
+- `tsc --noEmit`: passed. `eslint`: passed. Prettier: clean.
+- `vitest run`: 152 passed (new: 14 intelligence tests built from the real TATA receipt, 1 provider-refusal test).
+- Live tests (`LIVE=1`): 12 passed, including the TATA swap, a Uniswap v2 swap and a 35-event Uniswap v3 aggregator trade.
+- `next build`: passed. Playwright: 82 passed (new: router swap page test on desktop and mobile), 7 skipped as before.
 
 ## M4 checks (2026-11-20, in the cloud workspace)
 
@@ -309,7 +401,8 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 ## Known issues
 
 - After pulling new files, if the site's styles look out of date, delete the `.next` folder and build again (the build cache once kept an old stylesheet here).
-- Transaction page: execution traces and coins moved inside contracts need our own node (later); "first seen" time for pending transactions needs a mempool watcher (later).
+- Transaction page: execution traces need our own node (later). Coins moved inside contracts are measured from balances only for recent blocks or with an archive provider. "First seen" time for pending transactions needs a mempool watcher (later).
+- TATA and other small tokens can show no USD price: the price engine only reads the main pools against stablecoins and the wrapped coin, above a liquidity floor.
 
 - Transaction page USD values use today's price (historical prices need archive data; planned with the M5.5 indexer).
 - Revert reasons need recent state; for older failed transactions public nodes usually can't replay them, and the page says so.

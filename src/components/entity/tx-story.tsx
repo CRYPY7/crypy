@@ -24,9 +24,11 @@ import type { TxDetails } from "@/lib/chains/types";
 import { formatAmount, shortenId } from "@/lib/format/amount";
 import { formatUsd } from "@/lib/format/money";
 import { localePath } from "@/lib/routes";
+import type { EvidenceLevel } from "@/lib/tx/assets";
 import type { AssetAmount, Evidence, Interpretation, Party } from "@/lib/tx/interpret";
+import { buildRoute } from "@/lib/tx/route";
 import { cn } from "@/lib/utils";
-import { eventTopics } from "@/server/chains/evm/tx-logs";
+import { eventTopics, protocolTopics } from "@/server/chains/evm/tx-logs";
 import { CopyText, LocalTime } from "./tx-client";
 import { formatSmall } from "./tx-sections";
 
@@ -84,7 +86,7 @@ export function usdOfAsset(ctx: StoryContext, asset: AssetAmount): number | null
   return (Number(BigInt(asset.raw)) / 10 ** asset.decimals) * price;
 }
 
-function usdText(value: number, locale: string): string {
+export function usdText(value: number, locale: string): string {
   return value > 0 && value < 0.01 ? `< ${formatUsd(0.01, locale)}` : formatUsd(value, locale);
 }
 
@@ -148,6 +150,8 @@ export function headlineText(ctx: StoryContext): { title: string; sub: string } 
     fn: v.fn ?? "",
     out: formatAsset(ctx, v.amountOut),
     in: formatAsset(ctx, v.amountIn),
+    poolOut: formatAsset(ctx, v.poolOut),
+    via: v.via ?? "",
     outCount: v.outCount ?? 0,
     inCount: v.inCount ?? 0,
     actor: shortenId(tx.from),
@@ -172,6 +176,7 @@ export function headlineText(ctx: StoryContext): { title: string; sub: string } 
     titleKey = subKey = "token-move";
   }
   if (it.kind === "swap" && ((v.outCount ?? 1) > 1 || (v.inCount ?? 1) > 1)) titleKey = subKey = "swapMany";
+  if (it.kind === "swap" && !v.amountIn) titleKey = subKey = v.via ? "swapPartialVia" : "swapPartial";
   if (it.kind === "approval") {
     const main = approvalMain(ctx);
     titleKey =
@@ -184,6 +189,12 @@ export function headlineText(ctx: StoryContext): { title: string; sub: string } 
             : "approvalNoAmount";
   }
   const sub = [s(t, `sub.${subKey}`, values)];
+  if (it.kind === "swap" && v.amountIn) {
+    if (v.via) sub.push(s(t, "sub.via", { dex: v.via }));
+    if (v.app) sub.push(s(t, "sub.app", { app: v.app }));
+    const fee = buildRoute(tx, it.set, ctx.chain.nativeSymbol)?.side.find((e) => e.possibleFee);
+    if (fee) sub.push(s(t, "sub.possibleFee", { amount: formatAsset(ctx, fee.asset), to: shortenId(fee.to) }));
+  }
   if (it.kind === "contract-call" || it.kind === "unknown-call") {
     sub.push(v.movements ? s(t, "sub.movements", { count: v.movements }) : s(t, "sub.noMovements"));
   }
@@ -213,9 +224,34 @@ export function summaryText(ctx: StoryContext, url: string): string {
 
 // ---------- small pieces ----------
 
+const levelTone: Record<EvidenceLevel, string> = {
+  chain: "border-low/40 text-low",
+  protocol: "border-low/40 text-low",
+  event: "border-primary/40 text-primary",
+  reported: "border-primary/40 text-primary",
+  interpreted: "border-high/40 text-high",
+  unknown: "border-border text-muted-foreground",
+};
+
+export function LevelChip({ ctx, level, label }: { ctx: StoryContext; level: EvidenceLevel; label?: string }) {
+  return (
+    <span
+      title={ctx.t(`entity.tx.story.level.${level}Tip`)}
+      className={cn(
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] leading-4",
+        levelTone[level],
+      )}
+    >
+      <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+      {label ?? ctx.t(`entity.tx.story.level.${level}`)}
+    </span>
+  );
+}
+
 const evidenceTone: Record<Evidence, string> = {
   confirmed: "border-low/40 text-low",
   decoded: "border-primary/40 text-primary",
+  reported: "border-primary/40 text-primary",
   likely: "border-high/40 text-high",
   unknown: "border-border text-muted-foreground",
 };
@@ -231,7 +267,7 @@ export function EvidenceChip({ level, label }: { level: Evidence; label: string 
   );
 }
 
-function Tip({ text }: { text: string }) {
+export function Tip({ text }: { text: string }) {
   return (
     <span title={text} className="ms-1 inline-flex align-[-3px] text-muted-foreground">
       <Info className="size-3.5" aria-hidden="true" />
@@ -240,7 +276,7 @@ function Tip({ text }: { text: string }) {
   );
 }
 
-function Box({
+export function Box({
   title,
   icon: Icon,
   right,
@@ -269,7 +305,7 @@ function Box({
   );
 }
 
-function AssetChip({ ctx, asset, muted = false }: { ctx: StoryContext; asset: AssetAmount; muted?: boolean }) {
+export function AssetChip({ ctx, asset, muted = false }: { ctx: StoryContext; asset: AssetAmount; muted?: boolean }) {
   const usd = usdOfAsset(ctx, asset);
   return (
     <span className="inline-flex max-w-full items-center gap-2 rounded-lg border bg-background px-3 py-1.5">
@@ -685,13 +721,10 @@ export function StoryChanges(ctx: StoryContext) {
   const { tx, it, t, chain, locale } = ctx;
   if (tx.status !== "success" || it.changes.length === 0) return null;
   const fee = tx.fee && tx.fee !== "0" ? tx.fee : null;
+  const measured = it.changes.some((c) => c.asset.token === "native" && c.evidence === "chain" && tx.nativeBalance);
+  const reported = it.changes.some((c) => c.evidence === "reported");
   return (
-    <Box
-      id="tx-changes"
-      title={s(t, "changes.title", { wallet: shortenId(it.focus) })}
-      icon={Wallet}
-      right={<EvidenceChip level="decoded" label={s(t, "evidence.fromEvents")} />}
-    >
+    <Box id="tx-changes" title={s(t, "changes.title", { wallet: shortenId(it.focus) })} icon={Wallet}>
       <ul className="divide-y border-t">
         {it.changes.map((change, i) => {
           const usd = usdOfAsset(ctx, change.asset);
@@ -723,6 +756,9 @@ export function StoryChanges(ctx: StoryContext) {
               <span className="w-24 text-end text-muted-foreground tabular-nums">
                 {usd !== null ? usdText(usd, locale) : "—"}
               </span>
+              <span className="hidden w-32 justify-end sm:flex">
+                <LevelChip ctx={ctx} level={change.evidence} label={s(t, `changes.source.${change.evidence}`)} />
+              </span>
             </li>
           );
         })}
@@ -740,7 +776,10 @@ export function StoryChanges(ctx: StoryContext) {
         )}
       </ul>
       <p className="mt-2 text-xs text-muted-foreground">
-        {s(t, "changes.note")} ({priceLabel(ctx)})
+        {s(t, measured ? "changes.noteMeasured" : reported ? "changes.noteReported" : "changes.note", {
+          block: tx.blockNumber ?? "",
+        })}{" "}
+        ({priceLabel(ctx)})
       </p>
     </Box>
   );
@@ -888,7 +927,7 @@ export function StoryApproval(ctx: StoryContext) {
           )}
         </ul>
       </Box>
-      {it.kind === "approval" && (
+      {it.kind === "approval" && !it.set.permissions.some((g) => g.now !== null) && (
         <Box
           id="tx-approval-active"
           title={s(t, "approval.activeTitle")}
@@ -935,9 +974,16 @@ export function StoryNotes(ctx: StoryContext) {
   if (it.kind === "burn") notes.push(s(t, "notes.burn"));
   if (it.kind === "self") notes.push(s(t, "notes.self"));
   if (it.kind === "unknown-call" && tx.status === "success" && tx.call) notes.push(s(t, "notes.unknownFn"));
-  if (tx.status === "success" && (it.kind === "swap" || it.kind === "unwrap" || it.kind === "contract-call")) {
+  const nativeShown = it.changes.some((c) => c.asset.token === "native" && c.evidence !== "event");
+  if (
+    tx.status === "success" &&
+    !nativeShown &&
+    tx.nativeBalance === null &&
+    (it.kind === "swap" || it.kind === "unwrap" || it.kind === "contract-call" || it.kind === "unknown-call")
+  ) {
     notes.push(s(t, "notes.nativeMissing"));
   }
+  if (it.changes.some((c) => c.evidence === "reported")) notes.push(s(t, "notes.reported"));
   if (tx.status !== "pending" && (it.changes.length > 0 || tx.fee)) {
     notes.push(s(t, tx.pricesAtTx ? "notes.pricesAtTx" : "notes.pricesToday"));
   }
@@ -963,6 +1009,18 @@ const eventNames: Record<string, string> = {
   [eventTopics.transferBatch]: "TransferBatch",
   [eventTopics.deposit]: "Deposit",
   [eventTopics.withdrawal]: "Withdrawal",
+  [protocolTopics.v2Swap]: "Swap (v2 pool)",
+  [protocolTopics.v2Sync]: "Sync (v2 pool)",
+  [protocolTopics.v2Mint]: "Mint (v2 pool)",
+  [protocolTopics.v2Burn]: "Burn (v2 pool)",
+  [protocolTopics.v3Swap]: "Swap (v3 pool)",
+  [protocolTopics.pancakeV3Swap]: "Swap (v3 pool)",
+  [protocolTopics.kyberSwapped]: "Swapped",
+  [protocolTopics.kyberExchange]: "Exchange",
+  [protocolTopics.kyberClientData]: "ClientData",
+  [protocolTopics.safeSuccess]: "ExecutionSuccess",
+  [protocolTopics.safeFailure]: "ExecutionFailure",
+  [protocolTopics.userOperation]: "UserOperationEvent",
 };
 
 function Row({
@@ -1107,8 +1165,12 @@ export function AdvancedFacts(ctx: StoryContext) {
 }
 
 export function AdvancedEvents(ctx: StoryContext) {
-  const { tx, t, locale, chain, explorerName } = ctx;
+  const { tx, t, locale, chain, explorerName, it } = ctx;
   if (tx.logCount === 0) return null;
+  // The same actions the Simple view lists, so both views agree on what each event means.
+  const explainedBy = new Map<number, string>();
+  for (const action of it.set.actions)
+    for (const index of action.logs) if (!explainedBy.has(index)) explainedBy.set(index, action.type);
   const a = (key: string, values?: Record<string, string | number>) => s(t, `advanced.${key}`, values);
   return (
     <section aria-labelledby="adv-events" className="flex flex-col gap-3">
@@ -1140,6 +1202,13 @@ export function AdvancedEvents(ctx: StoryContext) {
                     {shortenId(event.address)}
                   </Link>
                   {token?.symbol && <span className="text-muted-foreground">{token.symbol}</span>}
+                  <span className="ms-auto text-xs">
+                    {explainedBy.has(event.index) ? (
+                      <span className="text-low">{s(t, `actionLabel.${explainedBy.get(event.index)}`)}</span>
+                    ) : (
+                      <span className="text-muted-foreground">{s(t, "actions.notIdentified")}</span>
+                    )}
+                  </span>
                 </summary>
                 <dl className="mt-2 grid gap-1 ps-14 text-xs">
                   <dt className="text-muted-foreground">{a("topics")}</dt>

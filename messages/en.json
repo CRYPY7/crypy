@@ -40,7 +40,8 @@
     "soon": "Soon",
     "breadcrumb": "Breadcrumb",
     "recent": "Recently viewed on this device",
-    "clearRecent": "Clear"
+    "clearRecent": "Clear",
+    "new": "New"
   },
   "categories": {
     "all": "All",
@@ -446,6 +447,48 @@
           "a": "Amounts are in the token's smallest unit. Divide by 10 to the power of the token's decimals, or use the Unit Converter for 18-decimal tokens."
         }
       ]
+    },
+    "batch-balance": {
+      "name": "Batch Balance Scanner",
+      "question": "What do all these wallets hold?",
+      "description": "Check coin and token balances for up to 500 addresses at once, on the chains you choose. Read directly from the blockchain.",
+      "input": "A list of addresses",
+      "cta": "Scan a list",
+      "features": [
+        "Paste, type or upload a CSV or TXT list, with optional labels",
+        "Typos, duplicates and wrong checksums are caught before scanning",
+        "Ethereum and BNB Chain, the native coin plus up to 5 tokens",
+        "Every batch read at the same block, straight from the chain",
+        "Totals, USD values from on-chain prices, sorting and filters",
+        "Export to CSV or copy the addresses with or without a balance"
+      ],
+      "howTo": [
+        "Paste your addresses, one per line. Add a label after a comma if you like (0x…,Treasury), or upload a CSV/TXT file.",
+        "Pick the chains and the tokens to check. The native coin (ETH, BNB) is always included.",
+        "Press Scan balances, then sort, filter, copy or export the results."
+      ],
+      "faq": [
+        {
+          "q": "Do I need to connect a wallet?",
+          "a": "No. Balances are public, so any list of addresses can be checked without connecting or signing anything. CRYPY never asks for keys or seed phrases."
+        },
+        {
+          "q": "Is my list stored?",
+          "a": "No. Addresses are sent to CRYPY's server only to read their balances and are not stored or logged. Labels never leave your browser, and the list is never put in the page address."
+        },
+        {
+          "q": "Where do the balances come from?",
+          "a": "Directly from blockchain nodes, all read at the same block. Prices come from on-chain DEX pools; tokens without a reliable price show amounts only."
+        },
+        {
+          "q": "How many addresses can I check?",
+          "a": "Up to 500 addresses on up to 2 chains with up to 6 assets per scan. Very large lists, saved lists and scheduled re-scans are planned for later."
+        },
+        {
+          "q": "Why does an address show as a contract?",
+          "a": "It has smart-contract code on that chain. Wallets that delegate to code (EIP-7702) are shown as delegated wallets."
+        }
+      ]
     }
   },
   "toolPage": {
@@ -675,12 +718,14 @@
         "from": "From",
         "to": "To",
         "amount": "Amount",
-        "value": "Value now",
         "nft": "NFT #{id}",
         "wrap": "Wrapped",
         "unwrap": "Unwrapped",
         "unknownToken": "Unknown token",
-        "truncated": "This transaction has more events than we show. The full list is on {explorer}."
+        "truncated": "This transaction has more events than we show. The full list is on {explorer}.",
+        "valueAtTx": "Value at the time",
+        "valueToday": "Value today",
+        "event": "Event"
       },
       "approvals": {
         "title": "Spending permissions changed",
@@ -722,6 +767,38 @@
           "showTechnicalHint": "Block, gas, function and raw data, in Advanced view"
         },
         "actions": {
+          "title": "{count, plural, one {Action detected (#)} other {Actions detected (#)}}",
+          "coverage": "{explained} of {total} events explained",
+          "coverageTip": "Explaining an event is not the same as fully understanding a transaction, and it is not a safety check.",
+          "more": "{count, plural, one {Show # more action} other {Show # more actions}}",
+          "unexplainedTitle": "{count, plural, one {# event not identified} other {# events not identified}}",
+          "unexplainedNote": "We don't guess what these events mean. Their raw data is in Advanced view.",
+          "notIdentified": "Not identified",
+          "okResult": "succeeded",
+          "failedResult": "failed",
+          "app": "App named in the report: {app}.",
+          "native-transfer": "{from} sent {amount} to {to}.",
+          "token-transfer": "{amount} moved from {from} to {to}.",
+          "nft-transfer": "{amount} moved from {from} to {to}.",
+          "mint": "{amount} was created and sent to {to}.",
+          "burn": "{amount} was sent to a burn address.",
+          "wrap": "{from} wrapped coins into {amount}.",
+          "unwrap": "{from} unwrapped {amount} into {native}.",
+          "pool-swap": "{pool} swapped {in} for {out}.",
+          "pool-swap-unknown": "{pool} recorded a swap; its tokens couldn't be read.",
+          "liquidity-add": "Liquidity added to {pool}: {in} and {out}.",
+          "liquidity-add-unknown": "Liquidity added to {pool}.",
+          "liquidity-remove": "Liquidity removed from {pool}: {in} and {out}.",
+          "liquidity-remove-unknown": "Liquidity removed from {pool}.",
+          "permission-used": "{spender} used {owner}'s permission to move {amount}. Left: {after}.",
+          "permission-granted": "{owner} allowed {spender} to spend {after}.",
+          "permission-modified": "{owner} changed {spender}'s permission to {after}.",
+          "permission-set": "{owner}'s permission for {spender} was set to {after}.",
+          "permission-revoked": "{owner} removed {spender}'s permission for {token}.",
+          "router-swap": "{router} reports it spent {in} and returned {out} to {to}.",
+          "contract-creation": "{from} created the contract {to}.",
+          "smart-wallet": "The smart wallet {from} ran a transaction; it {result}.",
+          "user-operation": "The smart account {from} ran an operation through {router}; it {result}.",
           "copySummary": "Copy summary",
           "copied": "Copied",
           "export": "Export",
@@ -775,7 +852,9 @@
           "contract-call": "Called {fn} on {to}",
           "unknown-call": "Interacted with a contract",
           "failed": "Failed: tried to {intent}",
-          "pending": "Waiting for confirmation"
+          "pending": "Waiting for confirmation",
+          "swapPartial": "Swapped {out} in a pool",
+          "swapPartialVia": "Swapped {out} in a {via} pool"
         },
         "intent": {
           "native-send": "send {amount} to {to}",
@@ -811,7 +890,12 @@
           "failed": "Nothing changed. The network fee of {fee} was still paid.",
           "failedNoFee": "Nothing changed.",
           "pending": "Sent to the network, not yet in a block. When confirmed it will {intent}.",
-          "pendingTime": "{chain} adds a block about every {seconds} seconds; busy times can take longer."
+          "pendingTime": "{chain} adds a block about every {seconds} seconds; busy times can take longer.",
+          "via": "It went through a {dex} pool, verified with the exchange's factory.",
+          "app": "The router reports the app as \"{app}\".",
+          "possibleFee": "{amount} also went to {to}, possibly a fee (not verified).",
+          "swapPartial": "The wallet {from} paid {out} into a pool swap through {to}. The pool paid out {poolOut}; where it went next isn't visible in events. Coins (ETH, BNB) paid inside contracts leave no event, and our nodes no longer keep this block's balances to measure it.",
+          "swapPartialVia": "The wallet {from} paid {out} into a {via} pool (verified with the exchange's factory) through {to}. The pool paid out {poolOut}; where it went next isn't visible in events. Coins (ETH, BNB) paid inside contracts leave no event, and our nodes no longer keep this block's balances to measure it."
         },
         "evidence": {
           "confirmed": "Confirmed on the blockchain",
@@ -822,7 +906,8 @@
           "estimate": "Estimate",
           "notChecked": "Not checked yet",
           "seen": "Seen by the network",
-          "explained": "Explained from the contract's message"
+          "explained": "Explained from the contract's message",
+          "reported": "Relies on a contract's own report"
         },
         "flow": {
           "label": "Transaction flow",
@@ -869,8 +954,18 @@
         "changes": {
           "title": "Changes for {wallet}",
           "fee": "Network fee",
-          "note": "Seen in standard token events. Coins (ETH, BNB) moved inside contracts don't appear in events, so they may be missing.",
-          "none": "No token changes for this wallet in standard events."
+          "note": "From standard token events. Coins (ETH, BNB) moved inside contracts don't appear in events, so they may be missing.",
+          "none": "No token changes for this wallet in standard events.",
+          "noteMeasured": "Tokens: from standard token events. Coins: measured from the sender's balance before and after block {block}; another transaction in the same block could also affect it.",
+          "noteReported": "Tokens: from standard token events. Coins received inside contracts: from the router's own report, not measured independently.",
+          "source": {
+            "chain": "Balance check",
+            "event": "Token event",
+            "reported": "Router report",
+            "protocol": "Verified",
+            "interpreted": "Interpretation",
+            "unknown": "Unknown"
+          }
         },
         "cost": {
           "title": "Cost",
@@ -981,7 +1076,8 @@
           "burn": "Tokens sent to a burn address can't be recovered.",
           "nativeMissing": "Coins (ETH, BNB) paid out inside contracts don't appear in token events, so the coin side of this transaction may not be shown.",
           "self": "Nothing was moved. Wallets send transactions like this to replace a stuck one with the same number.",
-          "unknownFn": "The function isn't in our list. A contract can use any name, so we describe only what the events prove."
+          "unknownFn": "The function isn't in our list. A contract can use any name, so we describe only what the events prove.",
+          "reported": "Part of this result comes from the router's own report (its \"Swapped\" event). We show it as reported because we couldn't check the coin balance independently."
         },
         "events": {
           "title": "All {count} token events",
@@ -1022,7 +1118,116 @@
           "raw": "Raw data",
           "moreEvents": "Only the first {count} events are listed. The full list is on {explorer}."
         },
-        "utc": "({time} UTC)"
+        "utc": "({time} UTC)",
+        "level": {
+          "chain": "On-chain fact",
+          "chainTip": "Read directly from the blockchain's state (status, value, fee, balance or allowance).",
+          "event": "Standard event",
+          "eventTip": "Decoded from a standard event the contract logged (Transfer, Approval, Swap…).",
+          "protocol": "Verified",
+          "protocolTip": "Confirmed with the protocol itself, e.g. a pool its exchange's factory lists.",
+          "reported": "Reported",
+          "reportedTip": "A contract's own report of what it did. Shown as reported, not independently checked.",
+          "interpreted": "Interpretation",
+          "interpretedTip": "A reasonable reading of the facts that isn't proven.",
+          "unknown": "Not identified",
+          "unknownTip": "We can't tell from the data available."
+        },
+        "who": {
+          "sender": "the sender",
+          "senderWallet": "Sender wallet",
+          "you": "You",
+          "pool": "{dex} pool",
+          "poolUnverified": "Pool (not verified)",
+          "token": "{symbol} contract"
+        },
+        "route": {
+          "title": "How the assets moved",
+          "relationsTitle": "Asset movements",
+          "hint": "In the order they happened, from the transaction's events",
+          "relationsIntro": "These movements don't form one connected route, so we list them separately instead of guessing how they relate.",
+          "verifiedPool": "Pool verified",
+          "unverifiedPool": "Not verified",
+          "knownName": "Known name",
+          "wrapped": "Wrapped into {amount}",
+          "unwrapped": "Unwrapped to {amount}",
+          "reported": "reported by the router",
+          "reportedMatched": "reported, matches the balance change",
+          "measured": "measured from the balance",
+          "sentWithCall": "sent with the transaction",
+          "possibleFee": "Possible fee (unverified)",
+          "more": "{count, plural, one {# more movement} other {# more movements}} in Advanced view",
+          "called": "Called contract: {name}"
+        },
+        "actionLabel": {
+          "native-transfer": "Coin transfer",
+          "token-transfer": "Token transfer",
+          "nft-transfer": "NFT transfer",
+          "mint": "Mint",
+          "burn": "Burn",
+          "wrap": "Wrap",
+          "unwrap": "Unwrap",
+          "pool-swap": "Pool swap",
+          "liquidity-add": "Liquidity added",
+          "liquidity-remove": "Liquidity removed",
+          "permission-granted": "Permission granted",
+          "permission-modified": "Permission changed",
+          "permission-set": "Permission set",
+          "permission-used": "Permission used",
+          "permission-revoked": "Permission removed",
+          "router-swap": "Router report",
+          "contract-creation": "Contract created",
+          "smart-wallet": "Smart wallet",
+          "user-operation": "Smart account operation"
+        },
+        "permissions": {
+          "title": "Permissions changed",
+          "heading": "{token} · spender {spender}",
+          "status": {
+            "used": "Used up by this transaction",
+            "granted": "Permission given",
+            "modified": "Permission changed",
+            "set": "Permission set",
+            "revoked": "Permission removed"
+          },
+          "change": {
+            "used": "Used",
+            "granted": "Granted",
+            "modified": "Changed",
+            "set": "Set",
+            "revoked": "Removed"
+          },
+          "before": "Before",
+          "after": "After this transaction",
+          "today": "Today",
+          "unknown": "Unknown",
+          "notRead": "Couldn't be read",
+          "readBefore": "Read from the chain",
+          "derived": "Worked out from events",
+          "readNow": "Read now",
+          "usedBy": "by transfer #{index}",
+          "todayNote": "Today's value was read on {time}. It shows the permission now, not when or why it changed.",
+          "eventsNote": "Tokens report permission changes in Approval events, and not all tokens do it the same way. Values before and after come from this transaction's events unless marked as read from the chain."
+        },
+        "roles": {
+          "sender": "Sender",
+          "called": "Called contract",
+          "created": "New contract",
+          "router": "Router",
+          "pool": "Pool",
+          "intermediary": "Passed assets on",
+          "recipient": "Received",
+          "possible-fee": "Possible fee (unverified)",
+          "spender": "Spender",
+          "token": "Token",
+          "smart-account": "Smart account",
+          "burn": "Burn address"
+        },
+        "parties": {
+          "title": "Who was involved ({count})",
+          "more": "{count, plural, one {Show # more} other {Show # more}}",
+          "note": "Roles come from this transaction's events. Contract or wallet is read from the chain; a name is a label, not a safety check."
+        }
       }
     },
     "otherChains": {
@@ -1222,12 +1427,153 @@
         "decoding": "Function decoding",
         "failure": "Failure reasons",
         "fees": "Fee breakdown",
-        "pricesAtTx": "Price at the time"
+        "pricesAtTx": "Price at the time",
+        "actions": "Actions and event coverage",
+        "permissions": "Permissions: given, used, removed, today's value",
+        "pools": "Liquidity pool swaps",
+        "routerReports": "Router reports",
+        "smartWallets": "Smart wallets (Safe, ERC-4337)",
+        "coinsInside": "Coins paid inside contracts"
       },
       "notes": {
         "failure": "Needs recent blocks on free nodes",
         "pricesAtTx": "Needs recent blocks on free nodes",
-        "decoding": "Well-known functions only"
+        "decoding": "Well-known functions only",
+        "pools": "Uniswap/PancakeSwap/SushiSwap/Biswap v2 and v3 pools are verified with their factory; others show as not verified",
+        "routerReports": "KyberSwap only; other routers are read from their token events",
+        "smartWallets": "Recognised from standard events; not decoded further",
+        "coinsInside": "Measured on recent blocks, or with an archive provider; otherwise from a router's report"
+      }
+    },
+    "batch-balance": {
+      "steps": {
+        "addresses": "Addresses",
+        "chains": "Chains",
+        "assets": "Assets"
+      },
+      "addressesHint": "Paste, type or drop a file",
+      "chainsHint": "Pick one or more",
+      "assetsHint": "Up to 6 per scan",
+      "upload": "Upload CSV or TXT",
+      "example": "Load example",
+      "clear": "Clear",
+      "editorLabel": "Address list, one per line, optional label after a comma",
+      "placeholder": "0x… one address per line\n0x…,Treasury",
+      "dropHere": "Drop a CSV or TXT file",
+      "fileTooBig": "That file is too big. The limit is 1 MB.",
+      "fileUnreadable": "That file couldn't be read as text.",
+      "valid": "{count} valid",
+      "duplicates": "Duplicates merged: {count}",
+      "problems": "Problems: {count} · first on line {line}",
+      "overLimit": "{count} over the limit, not scanned",
+      "countLine": "{count} / {max} addresses · labels after a comma are optional",
+      "notes": {
+        "duplicate": "Duplicate of line {line} · merged",
+        "checksum": "Checksum doesn't match (possible typo) · skipped",
+        "invalid": "Not a valid address · skipped",
+        "over-limit": "Over the {max}-address limit · skipped",
+        "several": "{count} addresses on this line"
+      },
+      "chainsMore": "More chains appear here as CRYPY adds them.",
+      "nativeCoin": "Native coin",
+      "alwaysIncluded": "Always included",
+      "notOnChain": "not a token on {chain} (skipped there)",
+      "onlyOn": "{chain} only",
+      "remove": "Remove {symbol}",
+      "addPlaceholder": "Paste a token contract",
+      "add": "Add",
+      "pick": "or pick:",
+      "checking": "Checking the contract…",
+      "notToken": "This address isn't a token on any supported chain.",
+      "tokenLimit": "Up to 5 tokens per scan.",
+      "alreadyAdded": "This token is already in the list.",
+      "lookupFailed": "Couldn't check this contract right now. Try again in a moment.",
+      "decimals": "{decimals} decimals",
+      "ready": "Ready: {addresses} addresses × {chains} chains × {assets} assets",
+      "readyNone": "Add at least one valid address and pick a chain.",
+      "estimate": "About {requests} blockchain requests",
+      "scan": "Scan balances",
+      "scanning": "Scanning… {done} of {total} batches",
+      "cancel": "Cancel",
+      "trust": {
+        "public": "Public addresses only — never asks for keys or seed phrases",
+        "notStored": "Your list is not stored or logged",
+        "noWallet": "No wallet connection needed"
+      },
+      "complete": "Scan complete",
+      "cancelled": "Scan stopped",
+      "completeLine": "{addresses} addresses · {checks} checks · read at {blocks} · {time} UTC",
+      "blockOn": "block {block} ({chain})",
+      "editList": "Edit list",
+      "scanAgain": "Scan again",
+      "cards": {
+        "total": "Total value",
+        "totalNote": "Priced assets only",
+        "withBalance": "Addresses with a balance",
+        "withBalanceValue": "{count} of {total}",
+        "withBalanceNote": "On at least one chain",
+        "empty": "Empty addresses",
+        "emptyNote": "Nothing on the chains checked",
+        "failed": "Checks that failed",
+        "failedNone": "None",
+        "failedNote": "Retried once; retry them below"
+      },
+      "noPrice": "no reliable price",
+      "searchPlaceholder": "Search address or label",
+      "allChains": "All chains",
+      "hideEmpty": "Hide empty",
+      "copy": "Copy",
+      "copyResults": "Copy results (table)",
+      "copyWithBalance": "Copy addresses with a balance",
+      "copyEmpty": "Copy empty addresses",
+      "copied": "Copied",
+      "export": "Export CSV",
+      "table": {
+        "index": "#",
+        "label": "Label",
+        "address": "Address",
+        "chain": "Chain",
+        "type": "Type",
+        "native": "Native",
+        "value": "Value",
+        "share": "Share",
+        "status": "Status",
+        "total": "Total · {count} rows shown",
+        "sortBy": "Sort by {column}"
+      },
+      "types": {
+        "wallet": "Wallet",
+        "contract": "Contract",
+        "delegated": "Delegated wallet",
+        "unknown": "Unknown"
+      },
+      "status": {
+        "ok": "OK",
+        "failed": "Failed",
+        "pending": "Not read"
+      },
+      "noLabel": "No label",
+      "rowFailed": "Couldn't read this address on {chain}.",
+      "retryRow": "Retry",
+      "unreadable": "Couldn't read this balance",
+      "noRows": "No rows match these filters.",
+      "footer": "Showing {from}–{to} of {count} rows{hidden} · Prices read on-chain from PancakeSwap and Uniswap pools. Tokens without a reliable price show amounts only.",
+      "hiddenEmpty": " ({count} empty rows hidden)",
+      "previous": "Previous",
+      "next": "Next",
+      "sortedBy": "Sorted by value",
+      "copyAddress": "Copy address",
+      "error": {
+        "rateLimited": "Too many scans in a short time. Wait a minute, then retry the failed rows.",
+        "failed": "Some batches couldn't be read. Retry the failed rows below."
+      },
+      "csv": {
+        "label": "Label",
+        "address": "Address",
+        "chain": "Chain",
+        "type": "Type",
+        "value": "Value (USD)",
+        "status": "Status"
       }
     }
   }

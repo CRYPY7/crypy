@@ -1,5 +1,6 @@
 "use client";
 
+import { useWallet } from "@/wallets/wallet-root";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -124,4 +125,16 @@ export function CopyText({
       {!iconOnly && <span>{copied ? copiedLabel : label}</span>}
     </button>
   );
+}
+
+/**
+ * Shows "You" next to an address only when it is the visitor's connected wallet. The page itself never assumes
+ * the sender is the visitor: anyone can look up any transaction.
+ */
+export function YouBadge({ address, label }: { address: string; label: string }) {
+  const { state } = useWallet();
+  if (state.status !== "connected" || !state.address || state.address.toLowerCase() !== address.toLowerCase()) {
+    return null;
+  }
+  return <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">{label}</span>;
 }
