@@ -4,20 +4,22 @@ Last updated: 2026-11-20
 
 ## Milestones
 
-| Milestone                                              | Status                                                         |
-| ------------------------------------------------------ | -------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                        |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                           |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                           |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                           |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending        |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                          |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                           |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                          |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions) |
-| M4.5 Batch Balance Scanner                             | ⏭ Next (design approved 2026-11-20)                            |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                  |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                           |
+| Milestone                                              | Status                                                                            |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                           |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                              |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                              |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                              |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                           |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                             |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                              |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                             |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                    |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                            |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")             |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap) |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                     |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                              |
 
 ## M1 — what was built
 
@@ -148,6 +150,59 @@ and a swap of your own on CRYPY to confirm the wording.
 - Non-standard events are counted ("3 events aren't standard token events") but never interpreted.
 - Cost per page: about 6–9 node requests (batched), cached 15 seconds; no paid API.
 
+## M5.1 — Who holds the liquidity (design approved 2026-11-20, boards 21–23)
+
+Replaces M5's "main pool only, PinkLock/UNCX balance = locked" check, which showed liquidity held inside other
+contracts as "not locked".
+
+- **Every pool:** all registered exchanges (now also ApeSwap, BabySwap, BakerySwap and MDEX on BNB Chain, liquidity
+  only), plus pools GoPlus names, accepted only after the pool's own factory confirms it (`getPair`). Pools under
+  $1,000 are listed but not counted; totals are weighted by each pool's value.
+- **Finding holders (free nodes):** known addresses (burn, owner, token, pool, every registered locker and farm, each
+  exchange's fee collector read from `feeTo()`), GoPlus's largest LP holders (as leads only), everyone in the pool's LP
+  transfers of the last few hours, and the lockers' own lists of locked v3 positions. Every share is then read
+  on-chain. Whatever isn't found is shown as **"Holders not found / Not checked"**, never as safe.
+- **What each holder can do (read on-chain):** burn address; lock contracts from CRYPY's checked list with every lock's
+  end date read from the locker (UNCX v2 Uniswap/SushiSwap/PancakeSwap, PinkLock v1/v2 incl. vesting, Team Finance,
+  UNCX v3); OnlyMoons vaults (trusted only when the factory confirms the vault); Safe multisigs (threshold of signers;
+  1-of-n counts as one person); timelocks (delay); staking farms (PancakeSwap MasterChef v1/v2/v3, SushiSwap
+  MasterChef, Uniswap v3 Staker); the exchange's fee collector; the owner; the token contract; wallets; unidentified
+  contracts. A contract that only calls itself a lock is unidentified.
+- **v3 pools:** positions (NFTs) of the owner, the token, burn addresses, GoPlus leads and registered v3 lockers,
+  valued by their liquidity at the current price; shares by value. A locked position counts only while the locker
+  still holds the NFT.
+- **Lock indexes:** Team Finance and UNCX v3 can't list one token's locks on-chain, so the server keeps an in-memory
+  index of which locks belong to which token/pool (built at server start, gently: one 250-lock read at a time;
+  topped up on each check). Lock terms are always re-read live. While the index is still building, those locks show
+  "terms couldn't be read" (unknown, never protected).
+- **Rules:** protected = burned or locked for more than 30 days; protected ≥ 90% → pass, else low (≥ $100k) or
+  medium; owner ≥ 50% high, ≥ 10% medium, else low; unlocking within 30 days medium from 5%; ended locks count as
+  removable (high from 50%, medium from 10%); unidentified contracts or unread locks a low heuristic note from 1%;
+  holders not found from 5% → "not checked".
+- **Card:** "Who holds the liquidity", full width: totals, a coloured bar, every pool with its holders (type, share,
+  lock or control, status), small pools, empty-pool count and "How we checked".
+
+Real results (2026-11-20): FLOKI main pool — UNCX lock until 2286 (84.2%), Safe 3-of-5 (9.4%), OnlyMoons vault with
+no end date (6.5%), 100% of holders found; ApeSwap/Biswap pools' holders not found (shown as such). A PinkLock v2
+token: 100% in one lock. A Team Finance token (Ethereum): its lock read through the index. A PancakeSwap v3 pool: two
+UNCX v3-locked positions until Nov 2028 (99.9% found). CAKE: LP mostly staked in PancakeSwap farms; fee collector
+named.
+
+Not covered yet (tracked in the roadmap): the complete LP holder list (needs the pool's full transfer history: CRYPY's
+own indexer, M5.5 Stage 2); v3 positions staked in farms or locked in Team Finance/PinkLock; lockers not yet in the
+checked list (GemPad, DxLock, Mudra and others); a live example of a timelock-held pool (logic unit-tested only).
+
+## M5.1 checks (2026-11-20, in the cloud workspace)
+
+- Typecheck, lint, Prettier: passed. Unit tests: 192 passed (15 new: lock timing, locker splits, unread locks, 1-of-n
+  multisigs, pool split, weighting and dust pools, every new rule, GoPlus lead parsing, v3 position values).
+- Live (`LIVE=1`): 7 new passed (registry methods, FLOKI, PinkLock, Team Finance, UNCX v3, CAKE farms, GoPlus pool
+  leads); security live tests still pass.
+- Build passed. Playwright: 95 passed (new: FLOKI liquidity card on desktop and phone). CSS kept within the 72 KB
+  budget by simplifying the card's classes.
+- Found while testing: big bursts of lock-index reads made free nodes time out, and a timed-out node is skipped for a
+  minute by every check, so the index is built one small read at a time.
+
 ## M5 — Token Security (design approved 2026-11-20, boards 19–20)
 
 Owner requirement: designed so new exchanges and blockchains can be added without changing the page.
@@ -168,8 +223,8 @@ Owner requirement: designed so new exchanges and blockchains can be added withou
   EIP-1822, beacon, older ZeppelinOS slots used by USDC, EIP-1167 clones, which are not upgradeable); owner powers
   found in the code (mint, fees, blacklist, pause, limits, cooldown, upgrade, SELFDESTRUCT), including the
   implementation's code for proxies.
-- **Liquidity:** pools on every registered exchange against the wrapped coin and stablecoins, USD value, and who holds
-  the main v2 pool's LP tokens (burned, locked in PinkLock or UNCX, owner, others). Empty pools are counted, not listed.
+- **Liquidity:** pools on every registered exchange against the wrapped coin and stablecoins, USD value. (Who holds the
+  liquidity was replaced by M5.1 above.) Empty pools are counted, not listed.
 - **Outside sources (free, cached):** Sourcify for published source code (1 day); GoPlus for holders and a second opinion
   (1 hour), always shown with its name, compared with CRYPY's own checks ("agrees on 4 of 4"), never mixed in.
   Honeypot.is is not used: its terms forbid offering its functions to others.
@@ -186,7 +241,7 @@ measured), SafeMoon "Risks found" (buying fails with "Pancake: TRANSFER_FAILED")
 fixed clone. GoPlus agreed with CRYPY on every shared check for CAKE, USDC and the four.meme token.
 
 Not covered yet: trade test on v3-only or stablecoin-only tokens ("not checked"), holders without GoPlus, contract
-age and creator, source verification on block explorers.
+age and creator, source verification on block explorers, owner powers from verified source (all tracked in the roadmap).
 
 ## M5 checks (2026-11-20, in the cloud workspace)
 
@@ -440,6 +495,12 @@ Not yet run: Lighthouse score, real phones beyond the SafePal QR test.
 | Visual check: home dark/light, mobile, Urdu RTL, tool page, dialog, language menu | ✅ Looked correct |
 
 Not yet run: Lighthouse score, testing on real phones, checks on the owner's Windows PC.
+
+## Status labels
+
+- ✅ Complete: everything in the milestone's scope is implemented and tested.
+- 🟡 Built, not complete: works and is tested, but named parts are deferred; each is listed in DEVELOPMENT_ROADMAP.md
+  under "Deferred parts" with the milestone it belongs to. Never called complete until that list is empty.
 
 ## Moved to later milestones
 

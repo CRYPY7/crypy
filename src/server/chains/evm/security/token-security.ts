@@ -3,25 +3,28 @@ import { type Hex, erc20Abi, getAddress, parseAbi } from "viem";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { OwnerFacts, PoolFact, ProxyFacts, TokenSecurityFacts } from "@/lib/security/types";
-import { goPlusToken, sourcifyStatus } from "@/server/security/external";
+import { type GoPlusResult, goPlusToken, sourcifyStatus } from "@/server/security/external";
 import { getOnchainPrices } from "../prices";
 import { getEvmClient } from "../providers";
 import { HAS_ROLE_SELECTOR, PROXY_SLOTS, minimalProxyTarget, powersIn, selectorsIn } from "./bytecode";
-import { findPools, poolUsd, readPools } from "./pools";
+import { readPoolHolders } from "./lp-holders";
+import { findPools, poolUsd, readPools, verifyLeadPools } from "./pools";
 import { runTradeTest } from "./trade";
 
 /**
  * Token security facts for an EVM chain. Three rounds of node requests plus two cached outside sources, all in
  * parallel where possible:
  *   1. block, token code, name/symbol/decimals/supply, owner, proxy slots, pool discovery, native price;
- *   2. implementation and owner code, pool reserves and LP holders;
- *   3. the trade simulation on the deepest supported pool.
+ *   2. implementation and owner code, extra pools from GoPlus leads (verified on-chain), pool reserves;
+ *   3. the trade simulation on the deepest supported pool, and who holds each pool's liquidity (lp-holders.ts).
  * Every optional part fails soft: the matching check becomes "not checked".
  */
 const ownerAbi = parseAbi(["function owner() view returns (address)", "function getOwner() view returns (address)"]);
 const beaconAbi = parseAbi(["function implementation() view returns (address)"]);
 const DEAD = new Set(["0x0000000000000000000000000000000000000000", "0x000000000000000000000000000000000000dead"]);
 const OPTIONAL_MS = 6_000;
+/** Liquidity holders: the first check on a server may wait for the Team Finance / UNCX v3 lock index (up to 8 s). */
+const HOLDERS_MS = 14_000;
 
 function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
   return Promise.race([promise.catch(() => fallback), new Promise<T>((r) => setTimeout(() => r(fallback), ms))]);
@@ -37,10 +40,13 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
   const client = getEvmClient(chain);
   const token = getAddress(address.toLowerCase());
   const chainId = Number(chain.caip2.split(":")[1]);
-  const outside = Promise.all([
-    withTimeout(goPlusToken(chainId, token), OPTIONAL_MS, { status: "unavailable" as const }),
-    withTimeout(sourcifyStatus(chainId, token), OPTIONAL_MS, { status: "unknown" as const, provider: "Sourcify" }),
-  ]);
+  const goplusP: Promise<GoPlusResult> = withTimeout(goPlusToken(chainId, token), OPTIONAL_MS, {
+    status: "unavailable" as const,
+  });
+  const sourceP = withTimeout(sourcifyStatus(chainId, token), OPTIONAL_MS, {
+    status: "unknown" as const,
+    provider: "Sourcify",
+  });
 
   // Round 1
   const [block, code, meta, owners, slots, found, prices] = await Promise.all([
@@ -94,8 +100,15 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
       : null,
     owner && !DEAD.has(owner.toLowerCase()) ? client.getCode({ address: owner }).catch(() => null) : null,
     withTimeout(
-      readPools(client, chain.key, token, found, owner && !DEAD.has(owner.toLowerCase()) ? owner : null),
-      OPTIONAL_MS,
+      goplusP.then(async (g) => {
+        // Pools GoPlus knows on exchanges the registry search didn't cover, verified on-chain first.
+        const extra =
+          g.status === "ok"
+            ? await withTimeout(verifyLeadPools(client, chain.key, token, g.leads.pairs, found), OPTIONAL_MS, [])
+            : [];
+        return readPools(client, token, [...found, ...extra]);
+      }),
+      OPTIONAL_MS * 2,
       [],
     ),
   ]);
@@ -121,8 +134,10 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
     admin,
   };
 
-  // Round 3: implementation code (for powers) and the trade test, side by side.
-  const [implCode, trade] = await Promise.all([
+  // Round 3: implementation code (for powers), the trade test and liquidity holders, side by side.
+  const goplus = await goplusP;
+  const liveOwner = owner && !DEAD.has(owner.toLowerCase()) ? owner : null;
+  const [implCode, trade, holders] = await Promise.all([
     implementation ? client.getCode({ address: getAddress(implementation) }).catch(() => null) : null,
     withTimeout(runTradeTest(client, chain.key, token, readings, chain.nativeSymbol), 12_000, {
       outcome: "error" as const,
@@ -134,6 +149,22 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
       transferTax: null,
       reason: null,
     }),
+    withTimeout(
+      readPoolHolders(
+        client,
+        {
+          chain: chain.key,
+          token,
+          owner: liveOwner,
+          leads: goplus.status === "ok" ? goplus.leads.lpHolders : [],
+          block,
+          now: Math.floor(Date.now() / 1000),
+        },
+        readings,
+      ),
+      HOLDERS_MS,
+      new Map(),
+    ),
   ]);
   const codes = [code, ...(implCode && implCode !== "0x" ? [implCode] : [])];
   const roleBased = codes.some((c) => selectorsIn(c).has(HAS_ROLE_SELECTOR));
@@ -149,13 +180,15 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
       dex: r.pool.dex.name,
       protocol: r.pool.dex.protocol,
       address: r.pool.address,
+      fee: r.pool.fee,
+      listed: !r.pool.dex.unlisted,
       pairedWith: q.role === "wrapped-native" ? `W${chain.nativeSymbol}` : stableSymbol(chain.key, q.address),
       liquidityUsd: poolUsd(r, nativeUsd),
-      lp: r.lp,
+      holders: holders.get(r.pool.address.toLowerCase()) ?? null,
     };
   });
 
-  const [goplus, source] = await outside;
+  const source = await sourceP;
   return {
     chain: chain.key,
     address: token,

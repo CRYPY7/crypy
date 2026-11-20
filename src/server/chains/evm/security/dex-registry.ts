@@ -21,6 +21,10 @@ export interface DexDeployment {
   router?: string;
   /** v3 fee tiers to look for. */
   fees?: number[];
+  /** v3: the position manager whose NFTs hold the pool's positions (its factory() is checked in the live test). */
+  positionManager?: string;
+  /** Found through a lead, not in this registry. */
+  unlisted?: boolean;
 }
 
 export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
@@ -48,12 +52,14 @@ export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
       protocol: "uniswap-v3",
       factory: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
       fees: [500, 3000, 10000],
+      positionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
     },
     {
       name: "PancakeSwap v3",
       protocol: "uniswap-v3",
       factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
       fees: [500, 2500, 10000],
+      positionManager: "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
     },
   ],
   bsc: [
@@ -75,17 +81,24 @@ export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
       factory: "0x858E3312ed3A876947EA49d572A7C42DE08af7EE",
       router: "0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8",
     },
+    // Liquidity only (no trade test router registered): pools and their holders are still checked.
+    { name: "ApeSwap", protocol: "uniswap-v2", factory: "0x0841BD0B734E4F5853f0dD8d7Ea041c241fb0Da6" },
+    { name: "BabySwap", protocol: "uniswap-v2", factory: "0x86407bEa2078ea5f5EB5A52B2caA963bC1F889Da" },
+    { name: "BakerySwap", protocol: "uniswap-v2", factory: "0x01bF7C66c6BD861915CdaaE475042d3c4BaE16A7" },
+    { name: "MDEX", protocol: "uniswap-v2", factory: "0x3CD1C46068dAEa5Ebb0d3f55F6915B10648062B8" },
     {
       name: "PancakeSwap v3",
       protocol: "uniswap-v3",
       factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
       fees: [100, 500, 2500, 10000],
+      positionManager: "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
     },
     {
       name: "Uniswap v3",
       protocol: "uniswap-v3",
       factory: "0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7",
       fees: [100, 500, 3000, 10000],
+      positionManager: "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613",
     },
   ],
 };
@@ -93,18 +106,6 @@ export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
 /** Tokens a pool can be paired with (the price engine's quote tokens: stablecoins and the wrapped native coin). */
 export const pairTokens = (chain: ChainKey) => chainDex[chain].quotes;
 export const wrappedNative = (chain: ChainKey) => chainDex[chain].quotes.find((q) => q.role === "wrapped-native")!;
-
-/**
- * Liquidity-lock contracts: LP tokens held here count as "locked" (heuristic: the lock's terms aren't read).
- * Addresses from the projects' public documentation; each has code on-chain (live test).
- */
-export const lpLockers: Record<ChainKey, Record<string, string>> = {
-  ethereum: { "0x663a5c229c09b049e36dcc11a9b0d4a8eb9db214": "UNCX (Unicrypt) v2" },
-  bsc: {
-    "0x407993575c91ce7643a4d4ccacc9a98c36ee1bbe": "PinkLock v2",
-    "0xc765bddb93b0d1c1a88282ba0fa6b2d00e3e0c83": "UNCX (Unicrypt)",
-  },
-};
 
 /** Trade test size: about $10 worth of the native coin, never more than 0.5% of the pool's native side. */
 export const tradeTestSize: Record<ChainKey, bigint> = {

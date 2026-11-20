@@ -47,7 +47,7 @@ export interface BatchResult {
   rows: BatchRow[];
 }
 
-async function accountTypes(
+export async function accountTypes(
   client: PublicClient,
   addresses: `0x${string}`[],
   blockNumber: bigint,

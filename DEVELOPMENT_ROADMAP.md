@@ -171,7 +171,28 @@ Check one or more coins/tokens for a whole list of addresses, on the chains the 
 **Done when:** results for a 500-address list match explorer balances on both chains; invalid, duplicate and
 mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page weight stays within budget.
 
-## M5 — Token · Security (Tool 4) — ✅ built 2026-11-20 (design approved, boards 19–20)
+## Deferred parts (owner rule 2026-11-20: nothing is missed or called complete until this list is done)
+
+| Feature                       | Deferred part                                                                                                                                                      | Planned in                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| M5.1 Liquidity holders        | Complete LP holder list for every pool (needs each pool's full transfer history; free nodes allow only a few hours)                                                | M5.5 Stage 2 indexer                                               |
+| M5.1 Liquidity holders        | v3 positions staked in farms (MasterChef v3, Uniswap v3 Staker) or locked in Team Finance / PinkLock                                                               | M5.5 Stage 2 indexer                                               |
+| M5.1 Liquidity holders        | More lockers in the checked list: GemPad, DxLock (one contract per lock), Mudra, others found in use; each added only after its read methods are verified on-chain | M5.2                                                               |
+| M5.1 Liquidity holders        | A live test on a real timelock-held pool (the logic is unit-tested)                                                                                                | M5.2                                                               |
+| M5 Token Security             | Trade test for v3-only and stablecoin-only tokens (v3 simulator, multi-hop path)                                                                                   | M5.2                                                               |
+| M5 Token Security             | Holder count and top holders from CRYPY's own data (today only from GoPlus)                                                                                        | M5.5 Stage 2 indexer                                               |
+| M5 Token Security             | Contract age and creator                                                                                                                                           | M5.5 Stage 2 indexer                                               |
+| M5 Token Security             | Source verification on block explorers (today Sourcify only)                                                                                                       | M5.2 (free explorer source, if terms allow; else own verification) |
+| M5 Token Security             | Owner powers from verified source code, not only from compiled code                                                                                                | M5.2                                                               |
+| M4.2 Transaction Intelligence | Part 2: more routers and pool types, NFT marketplaces, lending, bridges, smart-wallet inner calls                                                                  | Alongside M5.5 / M6                                                |
+
+## M5.1 — Who holds the liquidity — 🟡 built 2026-11-20 (design approved, boards 21–23)
+
+Every pool and every holder CRYPY can find for free, what each holder can do read on-chain (locks with end dates,
+multisigs, timelocks, farms, vaults), v3 positions by value, weighted totals, and "not found" shown as such. Deferred
+parts are in the table above.
+
+## M5 — Token · Security (Tool 4) — 🟡 built 2026-11-20, not complete (design approved, boards 19–20)
 
 Built with CRYPY's own trade simulation, on-chain reads, Sourcify and GoPlus (second opinion). Next steps for this
 tool: v3 trade simulator, stablecoin-path trades, contract age and creator from our own index (M5.5 Stage 2), more

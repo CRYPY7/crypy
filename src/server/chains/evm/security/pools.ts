@@ -1,11 +1,9 @@
 import "server-only";
 import { type PublicClient, getAddress, parseAbi } from "viem";
 import type { ChainKey } from "@/config/chains";
-import type { PoolFact } from "@/lib/security/types";
-import { type DexDeployment, dexDeployments, lpLockers, pairTokens } from "./dex-registry";
+import { type DexDeployment, dexDeployments, pairTokens } from "./dex-registry";
 
 const ZERO = "0x0000000000000000000000000000000000000000";
-const DEAD = "0x000000000000000000000000000000000000dEaD";
 const v2FactoryAbi = parseAbi(["function getPair(address, address) view returns (address)"]);
 const v3FactoryAbi = parseAbi(["function getPool(address, address, uint24) view returns (address)"]);
 const pairAbi = parseAbi([
@@ -65,32 +63,25 @@ export interface PoolReading {
   quoteReserve: bigint;
   /** Token amount in the pool (raw). */
   tokenReserve: bigint;
-  lp: PoolFact["lp"];
+  /** v2-style pools: LP token supply (raw); null for v3-style pools or when unreadable. */
+  lpSupply: bigint | null;
 }
 
-/** Round 2: reserves (or balances for v3) and, for v2 pools, who holds the LP tokens. */
-export async function readPools(
-  client: PublicClient,
-  chain: ChainKey,
-  token: string,
-  pools: FoundPool[],
-  owner: string | null,
-): Promise<PoolReading[]> {
+/** Round 2: reserves (v2) or pool balances (v3), and the LP token supply. */
+export async function readPools(client: PublicClient, token: string, pools: FoundPool[]): Promise<PoolReading[]> {
   if (pools.length === 0) return [];
-  const lockers = Object.keys(lpLockers[chain] ?? {});
-  const holders = [DEAD, ZERO, ...(owner ? [owner] : []), ...lockers].map((a) => getAddress(a));
-  const contracts = pools.flatMap((p) =>
+  type Read = {
+    address: `0x${string}`;
+    abi: typeof pairAbi;
+    functionName: "getReserves" | "token0" | "totalSupply" | "balanceOf";
+    args?: readonly [`0x${string}`];
+  };
+  const contracts = pools.flatMap((p): Read[] =>
     p.dex.protocol === "uniswap-v2"
       ? [
           { address: getAddress(p.address), abi: pairAbi, functionName: "getReserves" as const },
           { address: getAddress(p.address), abi: pairAbi, functionName: "token0" as const },
           { address: getAddress(p.address), abi: pairAbi, functionName: "totalSupply" as const },
-          ...holders.map((h) => ({
-            address: getAddress(p.address),
-            abi: pairAbi,
-            functionName: "balanceOf" as const,
-            args: [h] as const,
-          })),
         ]
       : [
           // Same balanceOf signature as an ERC-20, so one ABI covers both pool kinds.
@@ -118,27 +109,79 @@ export async function readPools(
     if (pool.dex.protocol !== "uniswap-v2") {
       const quoteReserve = (value() as bigint | null) ?? 0n;
       const tokenReserve = (value() as bigint | null) ?? 0n;
-      return { pool, quoteReserve, tokenReserve, lp: null };
+      return { pool, quoteReserve, tokenReserve, lpSupply: null };
     }
     const reserves = value() as readonly [bigint, bigint, number] | null;
     const token0 = value() as string | null;
-    const supply = (value() as bigint | null) ?? 0n;
-    const balances = holders.map(() => (value() as bigint | null) ?? 0n);
+    const supply = value() as bigint | null;
     const tokenIs0 = token0?.toLowerCase() === token.toLowerCase();
     const [r0, r1] = reserves ? [reserves[0], reserves[1]] : [0n, 0n];
-    const share = (n: bigint) => (supply > 0n ? Number((n * 1_000_000n) / supply) / 1_000_000 : 0);
-    const burned = share(balances[0]! + balances[1]!);
-    const ownerShare = owner ? share(balances[2]!) : 0;
-    const locked = share(balances.slice(owner ? 3 : 2).reduce((a, b) => a + b, 0n));
-    return {
-      pool,
-      quoteReserve: tokenIs0 ? r1 : r0,
-      tokenReserve: tokenIs0 ? r0 : r1,
-      lp:
-        supply > 0n
-          ? { burned, locked, owner: ownerShare, other: Math.max(0, 1 - burned - locked - ownerShare) }
-          : null,
+    return { pool, quoteReserve: tokenIs0 ? r1 : r0, tokenReserve: tokenIs0 ? r0 : r1, lpSupply: supply };
+  });
+}
+
+const pairInfoAbi = parseAbi([
+  "function factory() view returns (address)",
+  "function token0() view returns (address)",
+  "function token1() view returns (address)",
+]);
+
+/**
+ * Pools named by an outside lead (GoPlus) that the registry search didn't find. Each is accepted only if it is a real
+ * v2-style pair: its factory() confirms it with getPair(token0, token1), one side is the scanned token and the other a
+ * known pair token (so it can be valued). Exchanges outside the registry get the name "Other exchange".
+ */
+export async function verifyLeadPools(
+  client: PublicClient,
+  chain: ChainKey,
+  token: string,
+  leads: string[],
+  known: FoundPool[],
+): Promise<FoundPool[]> {
+  const seen = new Set(known.map((p) => p.address.toLowerCase()));
+  const list = [...new Set(leads.map((a) => a.toLowerCase()))].filter((a) => !seen.has(a)).slice(0, 10);
+  if (list.length === 0) return [];
+  const info = await client.multicall({
+    allowFailure: true,
+    contracts: list.flatMap((a) =>
+      (["factory", "token0", "token1"] as const).map(
+        (functionName): { address: `0x${string}`; abi: typeof pairInfoAbi; functionName: typeof functionName } => ({
+          address: getAddress(a),
+          abi: pairInfoAbi,
+          functionName,
+        }),
+      ),
+    ),
+  });
+  const quotes = pairTokens(chain);
+  const candidates = list.flatMap((address, i) => {
+    const [f, t0, t1] = [0, 1, 2].map((j) => info[i * 3 + j]);
+    if (f?.status !== "success" || t0?.status !== "success" || t1?.status !== "success") return [];
+    const [a0, a1] = [String(t0.result).toLowerCase(), String(t1.result).toLowerCase()];
+    const other = a0 === token.toLowerCase() ? a1 : a1 === token.toLowerCase() ? a0 : null;
+    const quote = other ? quotes.find((q) => q.address.toLowerCase() === other) : undefined;
+    return quote ? [{ address, factory: String(f.result), t0: a0, t1: a1, quote }] : [];
+  });
+  if (candidates.length === 0) return [];
+  const confirm = await client.multicall({
+    allowFailure: true,
+    contracts: candidates.map((c) => ({
+      address: getAddress(c.factory),
+      abi: v2FactoryAbi,
+      functionName: "getPair" as const,
+      args: [getAddress(c.t0), getAddress(c.t1)] as const,
+    })),
+  });
+  return candidates.flatMap((c, i) => {
+    const r = confirm[i];
+    if (r?.status !== "success" || String(r.result).toLowerCase() !== c.address) return [];
+    const dex = (dexDeployments[chain] ?? []).find((d) => d.factory.toLowerCase() === c.factory.toLowerCase()) ?? {
+      name: "Other exchange",
+      protocol: "uniswap-v2" as const,
+      factory: getAddress(c.factory),
+      unlisted: true,
     };
+    return [{ dex, address: getAddress(c.address), quote: c.quote, fee: null }];
   });
 }
 

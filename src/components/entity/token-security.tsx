@@ -5,7 +5,6 @@ import {
   CircleCheck,
   CircleX,
   Crown,
-  Droplets,
   FlaskConical,
   Info,
   ListChecks,
@@ -16,7 +15,6 @@ import {
 import type { ReactNode } from "react";
 import type { Locale } from "@/i18n/locales";
 import { formatAmount, shortenId } from "@/lib/format/amount";
-import { formatUsd } from "@/lib/format/money";
 import { localePath } from "@/lib/routes";
 import { pct } from "@/lib/security/evaluate";
 import type { CheckClass, SecurityCheck, SecurityReport } from "@/lib/security/types";
@@ -24,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { dexDeployments } from "@/server/chains/evm/security/dex-registry";
 import { cachedTokenSecurity } from "@/server/services/lookups";
 import { Notice } from "./entity-parts";
+import { LiquidityHoldersCard } from "./token-liquidity";
 import { CopyText } from "./tx-client";
 
 type T = Awaited<ReturnType<typeof getTranslations>>;
@@ -98,6 +97,9 @@ function checkValues(check: SecurityCheck, t: T): Record<string, string | number
   if (typeof v.reason === "string")
     v.reason = v.reason ? t(`${K}.trade.said`, { reason: v.reason }) : t(`${K}.trade.noReason`);
   if (typeof v.usd === "number") v.usd = new Intl.NumberFormat("en", { maximumFractionDigits: 0 }).format(v.usd);
+  // Unix seconds → a UTC date (same "en" formatting as amounts in check texts).
+  if (typeof v.date === "number")
+    v.date = new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(v.date * 1000));
   return v;
 }
 
@@ -237,6 +239,14 @@ export async function TokenSecuritySection({
         </ul>
       </section>
 
+      <LiquidityHoldersCard
+        t={t}
+        report={report}
+        locale={locale}
+        dexes={dexes}
+        right={<ClassChip t={t} cls="verified" />}
+      />
+
       <div className="grid items-start gap-4 lg:grid-cols-[1.35fr_1fr]">
         <div className="flex flex-col gap-4">
           <TradeCard t={t} report={report} locale={locale} dexes={dexes} />
@@ -244,7 +254,6 @@ export async function TokenSecuritySection({
           <ChecksCard t={t} checks={checks} />
         </div>
         <div className="flex flex-col gap-4">
-          <LiquidityCard t={t} report={report} locale={locale} dexes={dexes} />
           <HoldersCard t={t} report={report} locale={locale} />
           <SecondCard t={t} report={report} />
           <Card id="sec-facts" title={t(`${K}.facts.title`)} icon={Info}>
@@ -424,65 +433,6 @@ function ChecksCard({ t, checks }: { t: T; checks: SecurityCheck[] }) {
             ))}
           </ul>
         </details>
-      )}
-    </Card>
-  );
-}
-
-function LiquidityCard({ t, report, locale, dexes }: { t: T; report: SecurityReport; locale: Locale; dexes: string }) {
-  const all = [...report.facts.pools].sort((a, b) => (b.liquidityUsd ?? -1) - (a.liquidityUsd ?? -1));
-  // Empty pools (under $1) are counted but not listed.
-  const pools = all.filter((p) => p.liquidityUsd === null || p.liquidityUsd >= 1);
-  const main = pools[0];
-  const shown = pools.slice(0, 4);
-  return (
-    <Card
-      id="sec-liquidity"
-      title={t(`${K}.liquidity.title`)}
-      icon={Droplets}
-      right={<ClassChip t={t} cls="verified" />}
-    >
-      {!main ? (
-        <p className="text-sm text-muted-foreground">
-          {all.length > 0
-            ? t(`${K}.liquidity.empty`, { count: all.length, dexes })
-            : t(`${K}.liquidity.none`, { dexes })}
-        </p>
-      ) : (
-        <>
-          <ul className="flex flex-col gap-2">
-            {shown.map((p) => (
-              <li key={p.address} className="flex items-center gap-2 text-sm">
-                <span className="min-w-0 flex-1 truncate">
-                  <span className="font-medium">{p.dex}</span>{" "}
-                  <span className="text-muted-foreground">
-                    · <bdi>{report.facts.token.symbol}</bdi> / {p.pairedWith}
-                  </span>
-                </span>
-                <span className="font-semibold tabular-nums">
-                  {p.liquidityUsd !== null ? formatUsd(p.liquidityUsd, locale) : "—"}
-                </span>
-              </li>
-            ))}
-          </ul>
-          {main.lp && (
-            <>
-              <div className="mt-4 flex h-2.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-                <span className="bg-critical" style={{ width: `${main.lp.owner * 100}%` }} />
-                <span className="bg-low" style={{ width: `${main.lp.burned * 100}%` }} />
-                <span className="bg-primary" style={{ width: `${main.lp.locked * 100}%` }} />
-              </div>
-              <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                {(["owner", "burned", "locked", "other"] as const).map((k) => (
-                  <span key={k}>
-                    <b className="text-foreground">{pct(main.lp![k])}</b> {t(`${K}.liquidity.shares.${k}`)}
-                  </span>
-                ))}
-              </p>
-            </>
-          )}
-          <p className="mt-3 text-xs text-muted-foreground">{t(`${K}.liquidity.note`, { count: all.length, dexes })}</p>
-        </>
       )}
     </Card>
   );

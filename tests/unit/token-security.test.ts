@@ -4,19 +4,21 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import goplus from "../fixtures/goplus-cake.json";
 import { compare, evaluate } from "@/lib/security/evaluate";
-import type { TokenSecurityFacts } from "@/lib/security/types";
+import type { PoolFact, TokenSecurityFacts } from "@/lib/security/types";
 import { hasSelfdestruct, minimalProxyTarget, powersIn, selectorsIn } from "@/server/chains/evm/security/bytecode";
 import { taxOf } from "@/server/chains/evm/security/trade";
 import { SOURCE_SHA256 } from "@/server/chains/evm/security/trade-test-v2";
 import { parseGoPlus } from "@/server/security/external";
 
 const OWNER = "0x1111111111111111111111111111111111111111";
+/** Check time (ms). */
+const NOW = 1_790_000_000_000;
 function facts(over: Partial<TokenSecurityFacts> = {}): TokenSecurityFacts {
   return {
     chain: "bsc",
     address: "0x2222222222222222222222222222222222222222",
     block: "1",
-    checkedAt: 0,
+    checkedAt: NOW,
     token: { name: "Example", symbol: "EXM", decimals: 18, totalSupply: "1000" },
     priceUsd: 500,
     trade: {
@@ -37,9 +39,11 @@ function facts(over: Partial<TokenSecurityFacts> = {}): TokenSecurityFacts {
         dex: "PancakeSwap v2",
         protocol: "uniswap-v2",
         address: OWNER,
+        fee: null,
+        listed: true,
         pairedWith: "WBNB",
         liquidityUsd: 500_000,
-        lp: { burned: 1, locked: 0, owner: 0, other: 0 },
+        holders: lpHolders({ burn: 1 }),
       },
     ],
     source: { status: "verified", provider: "Sourcify" },
@@ -47,6 +51,34 @@ function facts(over: Partial<TokenSecurityFacts> = {}): TokenSecurityFacts {
     externalStatus: "unavailable",
     ...over,
   };
+}
+/** Builds a pool's holders from simple shares; lockedFor = [share, days until unlock]. */
+function lpHolders(shares: {
+  burn?: number;
+  owner?: number;
+  wallet?: number;
+  lockedFor?: [number, number];
+}): PoolFact["holders"] {
+  const now = Math.floor(NOW / 1000);
+  const h: NonNullable<PoolFact["holders"]>["holders"] = [];
+  const base = { name: null, lockRead: null, locks: [] };
+  if (shares.burn)
+    h.push({ ...base, address: "0x000000000000000000000000000000000000dEaD", kind: "burn", share: shares.burn });
+  if (shares.owner) h.push({ ...base, address: OWNER, kind: "owner", share: shares.owner });
+  if (shares.wallet) h.push({ ...base, address: OWNER, kind: "wallet", share: shares.wallet });
+  if (shares.lockedFor) {
+    const [share, days] = shares.lockedFor;
+    h.push({
+      ...base,
+      address: OWNER,
+      kind: "locker",
+      name: "UNCX",
+      share,
+      lockRead: "read",
+      locks: [{ share, unlockAt: now + days * 86_400, vesting: false }],
+    });
+  }
+  return { kind: "lp-token", found: h.reduce((s, x) => s + x.share, 0), holders: h, sources: ["known"] };
 }
 const find = (r: ReturnType<typeof evaluate>, id: string) => r.checks.find((c) => c.id === id);
 
@@ -127,12 +159,12 @@ describe("evaluate", () => {
 
   it("liquidity: owner holding LP is high; unprotected LP is low in deep pools, medium in small ones; empty pools", () => {
     const pool = facts().pools[0]!;
-    const lp = (liquidityUsd: number, l: NonNullable<typeof pool.lp>) =>
-      find(evaluate(facts({ pools: [{ ...pool, liquidityUsd, lp: l }] })), "lp");
-    expect(lp(500_000, { burned: 0, locked: 0, owner: 0.92, other: 0.08 })).toMatchObject({ severity: "high" });
-    expect(lp(500_000, { burned: 0.1, locked: 0, owner: 0, other: 0.9 })).toMatchObject({ severity: "low" });
-    expect(lp(20_000, { burned: 0.1, locked: 0, owner: 0, other: 0.9 })).toMatchObject({ severity: "medium" });
-    expect(lp(20_000, { burned: 0.5, locked: 0.45, owner: 0, other: 0.05 })).toMatchObject({ status: "pass" });
+    const lp = (liquidityUsd: number, shares: Parameters<typeof lpHolders>[0]) =>
+      find(evaluate(facts({ pools: [{ ...pool, liquidityUsd, holders: lpHolders(shares) }] })), "lp");
+    expect(lp(500_000, { owner: 0.92, wallet: 0.08 })).toMatchObject({ severity: "high" });
+    expect(lp(500_000, { burn: 0.1, wallet: 0.9 })).toMatchObject({ severity: "low" });
+    expect(lp(20_000, { burn: 0.1, wallet: 0.9 })).toMatchObject({ severity: "medium" });
+    expect(lp(20_000, { burn: 0.5, lockedFor: [0.45, 400], wallet: 0.05 })).toMatchObject({ status: "pass" });
     const empty = evaluate(
       facts({ pools: [{ ...pool, liquidityUsd: 0 }], trade: { ...facts().trade, outcome: "no-liquidity" } }),
     );

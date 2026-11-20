@@ -1515,11 +1515,41 @@
         "lp": {
           "risk": {
             "title": "Liquidity can be removed",
-            "detail": "Only {protected} of the main pool's liquidity is burned or locked."
+            "detail": "Only {protected} of the liquidity is burned or locked for more than 30 days ({pools, plural, one {# pool} other {# pools}}, weighted by value)."
           },
           "pass": {
             "title": "Most liquidity burned or locked",
-            "detail": "{protected} of the main pool's LP tokens."
+            "detail": "{protected} is burned or locked for more than 30 days ({pools, plural, one {# pool} other {# pools}}, weighted by value)."
+          },
+          "owner": {
+            "risk": {
+              "title": "The owner can remove {share} of the liquidity",
+              "detail": "About ${usd}, held in the owner's wallet or positions."
+            }
+          },
+          "soon": {
+            "risk": {
+              "title": "{share} of the liquidity unlocks within 30 days",
+              "detail": "The first lock ends {date}. After that it can be withdrawn."
+            }
+          },
+          "expired": {
+            "risk": {
+              "title": "{share} of the liquidity is in locks that have ended",
+              "detail": "They weren't withdrawn yet, but can be at any moment."
+            }
+          },
+          "unknown": {
+            "risk": {
+              "title": "{share} is held by contracts CRYPY can't read",
+              "detail": "Unidentified contracts, or lock contracts whose terms couldn't be read. They may be safe or not."
+            }
+          },
+          "coverage": {
+            "unchecked": {
+              "title": "Holders of {share} of the liquidity not found",
+              "detail": "Finding every holder needs each pool's full history; CRYPY's own index will add it. This part is never counted as safe."
+            }
           }
         },
         "holders": {
@@ -1568,21 +1598,12 @@
         }
       },
       "lpStates": {
-        "owner": "{owner} of the main pool's LP tokens are in the owner's wallet.",
+        "owner": "{owner} of the liquidity is in the owner's hands; it can be removed at any time.",
         "proxyBurned": "Its admin is a burn address, so it can no longer be upgraded."
       },
       "liquidity": {
         "title": "Liquidity",
         "none": "No pools found on {dexes}.",
-        "verified": "Pool found through the exchange's factory",
-        "shares": {
-          "owner": "owner wallet",
-          "burned": "burned",
-          "locked": "locked",
-          "other": "others"
-        },
-        "note": "{count, plural, one {# pool} other {# pools}} checked on {dexes}. v3 values are estimated from the paired token's side.",
-        "more": "{count} smaller pools",
         "empty": "{count, plural, one {# pool} other {# pools}} found on {dexes}, all empty (under $1)."
       },
       "holders": {
@@ -1617,7 +1638,118 @@
         "decimals": "Decimals",
         "contract": "Contract"
       },
-      "disclaimer": "CRYPY never shows a token as \"safe\". Passing checks don't prove a token is honest, and a contract can change behaviour later. Not financial advice."
+      "disclaimer": "CRYPY never shows a token as \"safe\". Passing checks don't prove a token is honest, and a contract can change behaviour later. Not financial advice.",
+      "lp": {
+        "title": "Who holds the liquidity",
+        "intro": "Liquidity is what lets people sell. Whoever holds it can remove it, and then the price can collapse. CRYPY looked for the holders of every pool and read on-chain what each one can do.",
+        "tiles": {
+          "protected": "Protected: burned, or locked for more than 30 days",
+          "soon": "Unlocks within 30 days",
+          "soonNext": "Next: {date}",
+          "controlled": "Multisig, timelock, farm or exchange",
+          "removable": "Can be removed now",
+          "unknown": "Unidentified contracts or unread locks",
+          "notFound": "Holders not found"
+        },
+        "state": {
+          "burned": "Burned",
+          "locked": "Locked",
+          "soon": "Unlocks soon",
+          "controlled": "Controlled",
+          "owner": "Owner",
+          "expired": "Lock ended",
+          "removable": "Removable now",
+          "unknown": "Unknown",
+          "notFound": "Not checked"
+        },
+        "total": "All counted pools together: {usd} ({count, plural, one {# pool} other {# pools}}). Each pool counts by its value, so a big pool matters more than a small one.",
+        "tooSmall": "No pool is worth {usd} or more, so there are no totals.",
+        "kindLp": "LP tokens",
+        "kindPositions": "Positions (NFTs) · shares measured by value",
+        "foundShare": "holders found for {share}",
+        "unlisted": "exchange not in CRYPY's list; pool confirmed with its factory",
+        "weight": "{share} of all liquidity",
+        "notCounted": "not counted",
+        "fee": "{fee}% fee",
+        "unreadPool": "The holders of this pool couldn't be read this time. Try checking again.",
+        "col": {
+          "holder": "Holder",
+          "type": "Type",
+          "share": "Share",
+          "control": "Lock or control",
+          "status": "Status"
+        },
+        "wallets": "{count} wallets",
+        "largest": "largest {address}",
+        "position": "Position #{id} · {name}",
+        "notFound": {
+          "title": "Holders not found",
+          "detail": "CRYPY couldn't find who holds this part. Finding every holder needs the pool's full history, which CRYPY's own index will provide later. It is never counted as safe."
+        },
+        "small": {
+          "title": "{count, plural, one {# small pool} other {# small pools}}",
+          "detail": "under {usd} each: listed, not counted in the totals"
+        },
+        "empty": "{count, plural, one {# empty pool (under $1) not listed.} other {# empty pools (under $1) not listed.}}",
+        "how": {
+          "title": "How we checked.",
+          "body": "Pools were found on {dexes}, plus pools GoPlus lists once confirmed with their exchange's factory. Holders were found from known addresses (burn addresses, the owner, registered lockers, farms and fee collectors), GoPlus's list of the largest holders, recent LP transfers, and the lockers' own lists of locked v3 positions. Every share and every unlock date was then read from the blockchain. A locker counts only if it is in CRYPY's checked list (UNCX, PinkLock, Team Finance, OnlyMoons vaults); a contract that only calls itself a lock counts as unidentified. A lock protects only until its end date."
+        },
+        "lock": {
+          "forever": "Locked with no end date.",
+          "until": "Locked until {date} (in {days, plural, one {# day} other {# days}}).",
+          "soon": "Unlocks {date}, in {days, plural, one {# day} other {# days}}. Then it can be withdrawn.",
+          "ended": "Lock ended {date} ({days, plural, one {# day} other {# days}} ago) and wasn't withdrawn: it can be withdrawn at any moment.",
+          "vesting": "Released in steps after that."
+        },
+        "control": {
+          "unread": "A lock contract from CRYPY's list, but its lock terms couldn't be read this time.",
+          "noLocks": "A lock contract from CRYPY's list, but it lists no lock for this pool.",
+          "partly": "{share} of it isn't covered by a lock it lists.",
+          "locks": "{count} locks. First: {first}",
+          "multisig": "{threshold} of {signers} signers must agree to remove it. They can still do that at any time.",
+          "multisigOne": "A multisig where one signer (of {signers}) can remove it alone.",
+          "timelock": "Any withdrawal must wait about {hours, plural, one {# hour} other {# hours}} (read from the contract), so it would be visible in advance.",
+          "farm": "Staked by many people, not one holder.",
+          "exchange": "The exchange's fee collector: it earns a small share of every pool.",
+          "owner": "The token's owner can remove it at any time.",
+          "token": "Held by the token's own contract. What it can do depends on that contract's code.",
+          "pool": "Sent back to the pool; it goes with the next withdrawal.",
+          "wallet": "Can be removed at any time.",
+          "contract": "CRYPY can't tell whether this contract can release it. It is not in CRYPY's list of known lockers.",
+          "burn": "Gone for good: nobody can withdraw it."
+        },
+        "kind": {
+          "burn": "Burn address",
+          "locker": "Lock contract",
+          "vault": "Lock vault",
+          "multisig": "Multisig (Safe)",
+          "timelock": "Timelock",
+          "farm": "Staking farm",
+          "exchange": "Exchange fee collector",
+          "owner": "Token owner",
+          "token": "The token's own contract",
+          "pool": "The pool itself",
+          "wallet": "Wallet",
+          "contract": "Unidentified contract",
+          "exchangeOf": "{name} fee collector"
+        },
+        "type": {
+          "burn": "Burned",
+          "locker": "Lock contract",
+          "vault": "Lock vault",
+          "multisig": "Multisig",
+          "timelock": "Timelock",
+          "farm": "Staking farm",
+          "exchange": "Exchange",
+          "owner": "Owner",
+          "token": "Token contract",
+          "pool": "Pool",
+          "wallet": "Wallet",
+          "contract": "Contract, not recognised"
+        },
+        "tiny": "{count, plural, one {# more holder} other {# more holders}} with under 0.05% each ({share} together), counted in every total."
+      }
     }
   },
   "wallet": {

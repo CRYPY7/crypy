@@ -56,7 +56,26 @@ export function parseGoPlus(entry: Record<string, unknown>, fetchedAt: number): 
   };
 }
 
-export type GoPlusResult = { status: "ok"; facts: ExternalFacts } | { status: "unavailable" | "not-listed" };
+/** Addresses GoPlus names: only used as candidates to check on-chain, never as facts. */
+export interface GoPlusLeads {
+  lpHolders: string[];
+  pairs: string[];
+}
+
+const ADDRESS = /^0x[0-9a-fA-F]{40}$/;
+/** Parses GoPlus's LP holder and pair lists into plain addresses. Exported for tests. */
+export function parseGoPlusLeads(entry: Record<string, unknown>): GoPlusLeads {
+  const list = (v: unknown, field: string) =>
+    (Array.isArray(v) ? (v as Record<string, unknown>[]) : [])
+      .map((x) => x?.[field])
+      .filter((a): a is string => typeof a === "string" && ADDRESS.test(a))
+      .map((a) => a.toLowerCase())
+      .slice(0, 30);
+  return { lpHolders: list(entry.lp_holders, "address"), pairs: list(entry.dex, "pair") };
+}
+
+export type GoPlusResult =
+  { status: "ok"; facts: ExternalFacts; leads: GoPlusLeads } | { status: "unavailable" | "not-listed" };
 
 export async function goPlusToken(chainId: number, address: string): Promise<GoPlusResult> {
   "use cache";
@@ -78,7 +97,7 @@ export async function goPlusToken(chainId: number, address: string): Promise<GoP
       return { status: "not-listed" };
     }
     cacheLife({ revalidate: 3600, expire: 86_400 });
-    return { status: "ok", facts: parseGoPlus(entry, Date.now()) };
+    return { status: "ok", facts: parseGoPlus(entry, Date.now()), leads: parseGoPlusLeads(entry) };
   } catch {
     cacheLife({ revalidate: 60, expire: 300 });
     return { status: "unavailable" };

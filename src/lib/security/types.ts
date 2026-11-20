@@ -102,24 +102,73 @@ export interface ProxyFacts {
   admin: string | null;
 }
 
-export interface LpShares {
-  /** Fractions 0–1 of the pool's LP tokens. */
-  burned: number;
-  locked: number;
-  owner: number;
-  other: number;
+/**
+ * Who holds a pool's liquidity. v2-style pools: holders of the LP token. v3-style pools: owners of the position NFTs,
+ * measured by each position's value.
+ */
+export type LpHolderKind =
+  | "burn" // dead or zero address: gone for good
+  | "locker" // a lock contract from CRYPY's registry (one contract, many locks)
+  | "vault" // a one-lock vault made by a registered vault factory (confirmed with the factory)
+  | "multisig" // Safe: several signers must agree
+  | "timelock" // withdrawals wait a fixed delay
+  | "farm" // a registered staking contract (many stakers)
+  | "exchange" // the exchange's protocol-fee collector (factory feeTo)
+  | "owner" // the token's owner
+  | "token" // the token's own contract
+  | "pool" // the pool itself
+  | "wallet" // an ordinary wallet (also EIP-7702 delegated wallets)
+  | "contract"; // a contract CRYPY doesn't recognise
+
+export interface LpLock {
+  /** Share of the pool (0–1) under this lock. */
+  share: number;
+  /** Unix seconds when it can be withdrawn; null = no end date. */
+  unlockAt: number | null;
+  /** Vesting lock: unlockAt is the first release, the rest follows in steps. */
+  vesting: boolean;
+}
+
+export interface LpHolder {
+  address: string;
+  kind: LpHolderKind;
+  /** Name from CRYPY's registry only (lockers, vault factories, farms); never text read from the chain. */
+  name: string | null;
+  /** Share of the pool (0–1). */
+  share: number;
+  /** Lockers and vaults: "read" = every lock was read from the contract; "unread" = the terms couldn't be read. */
+  lockRead: "read" | "unread" | null;
+  locks: LpLock[];
+  multisig?: { threshold: number; signers: number };
+  /** Timelock delay in seconds. */
+  delay?: number;
+  /** v3: the position NFT's id. */
+  position?: string;
+}
+
+export interface PoolHolders {
+  kind: "lp-token" | "positions";
+  /** Share of the pool (0–1) whose holder was found and read. The rest is shown as "not checked". */
+  found: number;
+  holders: LpHolder[];
+  /** How the holders were found. */
+  sources: ("known" | "goplus" | "recent-transfers" | "lock-contracts" | "positions")[];
 }
 
 export interface PoolFact {
   dex: string;
   protocol: string;
   address: string;
+  /** v3 fee tier in hundredths of a basis point (3000 = 0.3%). */
+  fee: number | null;
+  /** False for a pool found through a lead on an exchange that isn't in CRYPY's registry. */
+  listed: boolean;
   /** Symbol of the token paired with the scanned token. */
   pairedWith: string;
   /** USD value of both sides; null without a price for the paired token. */
   liquidityUsd: number | null;
-  /** Only for pools whose LP is a token (v2-style). */
-  lp: LpShares | null;
+  /** null: holders couldn't be read (timeout, unsupported pool design). */
+  holders: PoolHolders | null;
 }
 
 export interface SourceFacts {

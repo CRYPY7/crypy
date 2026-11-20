@@ -3,6 +3,7 @@
  * Thresholds are written here once so the page, the API and any future channel (alerts, reports) agree.
  */
 import { looksLikeLink } from "@/lib/chains/sanitize";
+import { liquiditySummary } from "./liquidity";
 import type {
   CheckClass,
   Comparison,
@@ -28,6 +29,16 @@ export const LP_PROTECTED = 0.9;
 /** Pools at least this deep are usually held by many providers: unprotected LP is a note, not a warning. */
 export const DEEP_POOL_USD = 100_000;
 export const TOP10_HIGH = 0.5;
+/** Shares of all liquidity below this are rounding noise for the liquidity notes. */
+export const LP_NOISE = 0.001;
+/** Owner (or an ended lock) holding at least this much is a warning, not a note. */
+export const LP_OWNER_MEDIUM = 0.1;
+/** Unlocking within 30 days: a warning from this share up. */
+export const LP_SOON_MEDIUM = 0.05;
+/** Unidentified contracts and unread locks are noted from this share up. */
+export const LP_UNKNOWN_NOTE = 0.01;
+/** Holders not found for at least this share: the check says what wasn't checked. */
+export const LP_NOT_FOUND_NOTE = 0.05;
 /** Two tax figures differing by less than this count as the same. */
 const TAX_TOLERANCE = 0.01;
 
@@ -193,19 +204,47 @@ export function evaluate(facts: TokenSecurityFacts): SecurityReport {
     } else if (main.liquidityUsd !== null) {
       add("liquidity", "liquidity", "pass", null, "verified", { usd: Math.round(main.liquidityUsd), dex: main.dex });
     }
-    if (main.lp) {
-      const protectedShare = main.lp.burned + main.lp.locked;
-      if (main.lp.owner >= LP_OWNER_HIGH) {
-        add("lp", "liquidity", "risk", "high", "verified", { owner: pct(main.lp.owner), state: "owner" });
-      } else if (protectedShare >= LP_PROTECTED) {
-        add("lp", "liquidity", "pass", null, "verified", { protected: pct(protectedShare) });
-      } else {
-        const deep = (main.liquidityUsd ?? 0) >= DEEP_POOL_USD;
-        add("lp", "liquidity", "risk", deep ? "low" : "medium", "verified", {
-          protected: pct(protectedShare),
-          state: "unprotected",
-        });
-      }
+  }
+
+  // ---------- who holds the liquidity (all pools worth ≥ $1,000, weighted by value) ----------
+  const summary = liquiditySummary(pools, Math.floor(facts.checkedAt / 1000));
+  if (summary) {
+    const s = summary.split;
+    const protectedShare = s.burned + s.locked;
+    const deep = summary.totalUsd >= DEEP_POOL_USD;
+    const pools_ = summary.counted;
+    if (s.owner >= LP_OWNER_HIGH) {
+      add("lp", "liquidity", "risk", "high", "verified", { owner: pct(s.owner), state: "owner", pools: pools_ });
+    } else if (protectedShare >= LP_PROTECTED) {
+      add("lp", "liquidity", "pass", null, "verified", { protected: pct(protectedShare), pools: pools_ });
+    } else {
+      add("lp", "liquidity", "risk", deep ? "low" : "medium", "verified", {
+        protected: pct(protectedShare),
+        state: "unprotected",
+        pools: pools_,
+      });
+    }
+    if (s.owner >= LP_NOISE && s.owner < LP_OWNER_HIGH) {
+      add("lp.owner", "liquidity", "risk", s.owner >= LP_OWNER_MEDIUM ? "medium" : "low", "verified", {
+        share: pct(s.owner),
+        usd: Math.round(summary.ownerUsd),
+      });
+    }
+    if (s.soon >= LP_NOISE && summary.nextUnlock) {
+      add("lp.soon", "liquidity", "risk", s.soon >= LP_SOON_MEDIUM ? "medium" : "low", "verified", {
+        share: pct(s.soon),
+        date: summary.nextUnlock.at,
+      });
+    }
+    if (s.expired >= LP_NOISE) {
+      const sev: Severity = s.expired >= LP_OWNER_HIGH ? "high" : s.expired >= LP_OWNER_MEDIUM ? "medium" : "low";
+      add("lp.expired", "liquidity", "risk", sev, "verified", { share: pct(s.expired) });
+    }
+    if (s.unknown >= LP_UNKNOWN_NOTE) {
+      add("lp.unknown", "liquidity", "risk", "low", "heuristic", { share: pct(s.unknown) });
+    }
+    if (s.notFound >= LP_NOT_FOUND_NOTE) {
+      add("lp.coverage", "liquidity", "unchecked", null, "unsupported", { share: pct(s.notFound) });
     }
   }
 

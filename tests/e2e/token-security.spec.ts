@@ -23,3 +23,19 @@ test("tool page opens the token page for the chosen chain", async ({ page }) => 
   await page.getByRole("button", { name: "Check token" }).click();
   await expect(page.getByText(/Enter a token contract address/)).toBeVisible();
 });
+
+test("liquidity card: every holder with its lock or control, read on-chain (FLOKI)", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto("/en/token/bsc/0xfb5B838b6cfEEdC2873aB27866079AC55363D37E");
+  const card = page.locator("section", { has: page.getByRole("heading", { name: "Who holds the liquidity" }) });
+  await expect(card).toBeVisible({ timeout: 60_000 });
+  await expect(card.getByText("UNCX (PancakeSwap locker)", { exact: true })).toBeVisible();
+  await expect(card.getByText(/^Locked until /).first()).toBeVisible();
+  await expect(card.getByText(/signers must agree to remove it/)).toBeVisible();
+  await expect(card.getByText("OnlyMoons vault", { exact: true })).toBeVisible();
+  await expect(card.getByText(/Protected: burned, or locked for more than 30 days/)).toBeVisible();
+  await expect(card.getByText(/How we checked\./)).toBeVisible();
+  // Closed pools open on click.
+  await card.getByText(/^ApeSwap · FLOKI/).click();
+  await expect(card.getByText("Holders not found").first()).toBeVisible();
+});

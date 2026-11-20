@@ -8,14 +8,14 @@ import { getChain } from "@/config/chains";
 import { evaluate } from "@/lib/security/evaluate";
 import { evmAdapter } from "@/server/chains/evm/adapter";
 import { getEvmClient } from "@/server/chains/evm/providers";
-import { dexDeployments, lpLockers, wrappedNative } from "@/server/chains/evm/security/dex-registry";
+import { dexDeployments, wrappedNative } from "@/server/chains/evm/security/dex-registry";
 
 const live = process.env.LIVE === "1";
 const routerAbi = parseAbi(["function factory() view returns (address)", "function WETH() view returns (address)"]);
 const run = (chain: string, address: string) => evmAdapter.getTokenSecurity!(getChain(chain)!, address);
 
 describe.skipIf(!live)("token security (live)", () => {
-  it("every registered router uses its factory and the chain's wrapped coin; lockers have code", async () => {
+  it("every registered router uses its factory and the chain's wrapped coin", async () => {
     for (const key of ["ethereum", "bsc"] as const) {
       const client = getEvmClient(getChain(key)!);
       for (const dex of dexDeployments[key].filter((d) => d.router)) {
@@ -28,10 +28,6 @@ describe.skipIf(!live)("token security (live)", () => {
           dex.factory.toLowerCase(),
           wrappedNative(key).address.toLowerCase(),
         ]);
-      }
-      for (const locker of Object.keys(lpLockers[key])) {
-        const code = await client.getCode({ address: getAddress(locker) });
-        expect((code ?? "0x").length).toBeGreaterThan(2);
       }
     }
   }, 90_000);

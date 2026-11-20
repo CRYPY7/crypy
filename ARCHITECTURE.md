@@ -458,11 +458,18 @@ UI (token page Security tab, API)  ← SecurityReport        lib/security/types.
 lib/security/evaluate.ts (pure)    ← TokenSecurityFacts    one rule set for every chain family
 ChainFamilyAdapter.getTokenSecurity                        EVM: server/chains/evm/security/
    token-security.ts  orchestrator, 3 node rounds + cached outside sources
-   dex-registry.ts    exchanges per chain (protocol, factory, router, fee tiers), lockers, test size
-   pools.ts           pool discovery and reading per protocol (uniswap-v2, uniswap-v3)
+   dex-registry.ts    exchanges per chain (protocol, factory, router, fee tiers, v3 position manager), test size
+   pools.ts           pool discovery and reading per protocol (uniswap-v2, uniswap-v3); GoPlus pool leads verified
+                      with the pool's own factory
+   lockers.ts         lock contracts, vault factories and farms CRYPY recognises, and per-locker lock readers
+   locker-index.ts    in-memory index for lockers without a per-token list (Team Finance, UNCX v3); terms re-read live
+   lp-holders.ts      holder discovery, classification (Safe, timelock, vault, farm, fee collector…), v3 values
+   warm.ts            builds the lock indexes at server start (src/instrumentation.ts)
    trade.ts           trade simulators per protocol (uniswap-v2 today) via eth_call + state override
    bytecode.ts        selectors, owner-power dictionary, proxy slots, EIP-1167
-server/security/external.ts        GoPlus (second opinion) and Sourcify, cached, fail soft
+server/security/external.ts        GoPlus (second opinion, plus pool/holder leads) and Sourcify, cached, fail soft
+lib/security/liquidity.ts (pure)   holders → parts (burned, locked, soon, ended, controlled, owner, removable,
+                                   unknown, not found); totals weighted by pool value
 ```
 
 - Evidence classes: verified, simulated, heuristic, external, unsupported. Severity: critical (observed in the trade
@@ -471,6 +478,11 @@ server/security/external.ts        GoPlus (second opinion) and Sourcify, cached,
   (solc 0.8.28 via IR, not a project dependency); bytecode in `trade-test-v2.ts` with the source's SHA-256.
 - Adding a chain family: implement `getTokenSecurity` returning the same facts and set the `tokenSecurity` capability.
   Adding an exchange design: a pool reader in `pools.ts` and a simulator in `trade.ts` for its protocol id.
+- Liquidity holders (M5.1): facts carry each pool's holders (`PoolHolders`: kind, share, locks with end dates,
+  multisig threshold, timelock delay, v3 position id) and the share found. Leads from outside providers are only
+  addresses to check; every share and date is read on-chain. Adding a locker: a registry entry plus its reader,
+  verified by the live test. Free nodes can't serve a pool's full transfer history, so the complete holder list waits
+  for CRYPY's own indexer (M5.5 Stage 2); until then the rest is shown as "not found".
 
 ## 12b. DEX market data (M5.5)
 
