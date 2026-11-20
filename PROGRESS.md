@@ -74,6 +74,10 @@ public nodes in ~0.45 s. Because Alchemy was always tried first, every round wai
 - Simulation (first node 2.5 s, the other 0.4 s per request): after the first page, 1.5 s per transaction with every
   request on the fast node; the first page ~4 s while speeds are learned.
 - `.gitattributes` added (LF line endings everywhere) so Git on Windows stops warning about CRLF.
+- **Fix (owner report: "We couldn't find this transaction"):** with speed ranking, a fast public node could answer
+  "not found" for a transaction it hadn't seen yet (nodes lag or disagree), and that answer was taken as final. Now a
+  null answer to a transaction or receipt lookup makes CRYPY ask every remaining provider at once; "not found" only when
+  none has it (or the rest failed). 6 tests with local fake nodes cover this, hedging, reverts and errors.
 - 3 new unit tests for ranking; 131 unit, 16 live and 81 browser tests passed.
 
 ## M4.1 — Transaction Intelligence (design approved 2026-11-20)

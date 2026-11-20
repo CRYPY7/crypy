@@ -238,6 +238,9 @@ export function resetSpeeds(): void {
  * Like viem's fallback, but the order is decided per request by measured speed. Errors where another node can't help
  * (a revert, a rejected request) are thrown at once, as viem's fallback does.
  */
+/** Lookups where a null answer from one node may only mean that node hasn't seen it (yet). */
+const NOT_FOUND_IS_NOT_FINAL = new Set(["eth_getTransactionByHash", "eth_getTransactionReceipt"]);
+
 export function rankedFallback(providers: Provider[]): Transport {
   return (options) => {
     const transports = new Map(providers.map((provider) => [provider.url, meteredHttp(provider)(options)]));
@@ -256,10 +259,13 @@ export function rankedFallback(providers: Provider[]): Transport {
           let inFlight = 0;
           let settled = false;
           let lastError: unknown = new Error("No provider available");
+          let sawNull = false;
           const finish = (error: unknown) => {
             if (!settled && inFlight === 0 && next >= ordered.length) {
               settled = true;
-              reject(error);
+              // Some nodes said "not found" and the others failed: that is still "not found", not an outage.
+              if (sawNull) resolve(null);
+              else reject(error);
             }
           };
           const start = () => {
@@ -273,10 +279,19 @@ export function rankedFallback(providers: Provider[]): Transport {
               (value) => {
                 clearTimeout(hedge);
                 inFlight -= 1;
-                if (!settled) {
+                if (settled) return;
+                // "I don't have it" from one node isn't final for lookups: nodes lag behind or disagree. Ask every
+                // remaining provider at once; answer null only when none of them has it.
+                if (value === null && NOT_FOUND_IS_NOT_FINAL.has(args.method)) {
+                  sawNull = true;
+                  while (next < ordered.length) start();
+                  if (inFlight > 0) return; // wait for the others
                   settled = true;
-                  resolve(value);
+                  resolve(null);
+                  return;
                 }
+                settled = true;
+                resolve(value);
               },
               (error: unknown) => {
                 clearTimeout(hedge);
