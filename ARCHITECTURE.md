@@ -402,7 +402,17 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 - EVM: `server/chains/evm/tx.ts` reads transaction, receipt, block, head and the called contract's code in parallel; then token info (multicall), revert reason (replay at block − 1, best effort) and current on-chain prices.
 - `server/chains/evm/tx-logs.ts` (pure, unit-tested) interprets only standard events: ERC-20/721 `Transfer`, ERC-1155 `TransferSingle/Batch`, `Approval`, `ApprovalForAll`, and `Deposit/Withdrawal` from the chain's own wrapped coin. Caps: 400 logs, 200 rows.
 - Call data is decoded with the browser-safe Transaction Data Decoder module (`modules/tools/tx-decoder/decode.ts`), shared by the tool and the page.
-- Page sections are server components (`components/entity/tx-sections.tsx`); the only browser code is `AutoRefresh` for pending transactions.
+- **Interpretation (M4.1):** `lib/tx/interpret.ts` turns `TxDetails` into `Interpretation` (kind, evidence, template
+  values, flow, sender's changes, failure category). Deterministic and chain-family-neutral: it only reads normalized
+  fields (status, transfers, approvals, call). A new family supplies `TxDetails` through its adapter and gets the same
+  explanations; family-specific detail stays in its own fields.
+- **Known names:** `config/known-contracts.ts` (per chain, live-tested). **Support table:** `config/tx-support.ts`.
+- **Views:** both Simple (`components/entity/tx-story.tsx`) and Advanced are server-rendered; `html[data-txview]`, set by
+  an inline script from localStorage before paint, shows one. Browser code: view switch, local time, copy buttons,
+  `AutoRefresh` for pending.
+- **API:** `GET /api/v1/tx/<hash>?chain=&format=json|text|raw[&download=1]` (rate-limited, read-only, nothing stored).
+- `TxDetails` also carries `pricesAtTx` (block-time prices when the node has the state), `technical` (chain ID, block
+  hash, index, base/priority fee, max fees), `events` (raw, capped 400), `nonceUsed` (pending) and `checkedAt`.
 
 ## 12b. DEX market data (M5.5)
 

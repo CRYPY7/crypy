@@ -15,7 +15,19 @@ const MAX_TOKENS = 40;
 /** Tokens priced per transaction. */
 const MAX_PRICED = 20;
 
-const errorAbi = parseAbi(["error Error(string message)", "error Panic(uint256 code)"]);
+/** Standard errors we can name. Custom errors outside this list are shown by their 4-byte ID only. */
+const errorAbi = parseAbi([
+  "error Error(string message)",
+  "error Panic(uint256 code)",
+  "error ERC20InsufficientBalance(address sender, uint256 balance, uint256 needed)",
+  "error ERC20InsufficientAllowance(address spender, uint256 allowance, uint256 needed)",
+  "error ERC721InsufficientApproval(address operator, uint256 tokenId)",
+  "error OwnableUnauthorizedAccount(address account)",
+  "error AccessControlUnauthorizedAccount(address account, bytes32 neededRole)",
+  "error EnforcedPause()",
+]);
+const MAX_EVENTS = 400;
+const EVENT_DATA_CHARS = 2 + 512;
 
 const typeNames: Record<string, string> = {
   legacy: "legacy",
@@ -93,8 +105,10 @@ async function readRevertReason(
     if (data) {
       try {
         const decoded = decodeErrorResult({ abi: errorAbi, data });
-        if (decoded.errorName === "Error") return sanitizeTokenText(decoded.args[0], 200) || "none";
-        return `Panic 0x${(decoded.args[0] as bigint).toString(16)}`;
+        if (decoded.errorName === "Error") return sanitizeTokenText(decoded.args[0] as string, 200) || "none";
+        if (decoded.errorName === "Panic") return `Panic 0x${(decoded.args![0] as bigint).toString(16)}`;
+        // Standard named error, e.g. "ERC20InsufficientBalance".
+        return decoded.errorName;
       } catch {
         // Custom error: show its 4-byte selector, never a guessed name.
         return `Custom error ${data.slice(0, 10)}`;
@@ -116,12 +130,14 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
   if (!tx) return null;
 
   const pending = tx.blockNumber === null;
-  const [receipt, block, head, toCode] = await Promise.all([
+  const [receipt, block, head, toCode, latestNonce] = await Promise.all([
     pending ? null : client.getTransactionReceipt({ hash }),
     pending ? null : client.getBlock({ blockNumber: tx.blockNumber! }),
     client.getBlockNumber(),
     // viem returns undefined for "no code"; a failed read becomes null.
     tx.to ? client.getCode({ address: tx.to }).catch(() => null) : null,
+    // Pending only: has the sender already used this nonce elsewhere? (evidence of replacement / cancellation)
+    pending ? client.getTransactionCount({ address: tx.from, blockTag: "latest" }).catch(() => null) : null,
   ]);
 
   const wrapped = chainDex[chain.key]?.quotes.find((q) => q.role === "wrapped-native")?.address;
@@ -147,14 +163,20 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     .filter((token) => token.decimals !== null)
     .slice(0, MAX_PRICED)
     .map((token) => ({ address: token.address, decimals: token.decimals! }));
-  const prices: Record<string, number> = {};
-  try {
-    const quotes = await getOnchainPrices(client, chain, priced);
-    if (quotes.native) prices.native = quotes.native.usd;
-    for (const [address, quote] of quotes.tokens) prices[address.toLowerCase()] = quote.usd;
-  } catch {
-    // Prices are optional: amounts are still shown.
-  }
+  const toRecord = (quotes: Awaited<ReturnType<typeof getOnchainPrices>>) => {
+    const out: Record<string, number> = {};
+    if (quotes.native) out.native = quotes.native.usd;
+    for (const [address, quote] of quotes.tokens) out[address.toLowerCase()] = quote.usd;
+    return out;
+  };
+  // Today's prices, and prices at the transaction's block when the node still keeps that state (recent blocks on
+  // public nodes; any block with an archive provider). Both are optional; they are never mixed.
+  const [nowQuotes, thenQuotes] = await Promise.all([
+    getOnchainPrices(client, chain, priced).catch(() => null),
+    pending ? Promise.resolve(null) : getOnchainPrices(client, chain, priced, tx.blockNumber!).catch(() => null),
+  ]);
+  const prices = nowQuotes ? toRecord(nowQuotes) : {};
+  const pricesAtTx = thenQuotes && thenQuotes.native ? toRecord(thenQuotes) : null;
 
   const gasUsed = receipt?.gasUsed ?? null;
   const gasPrice = receipt?.effectiveGasPrice ?? (pending ? (tx.maxFeePerGas ?? tx.gasPrice ?? null) : null);
@@ -196,5 +218,27 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     tokens,
     revertReason: status === "reverted" ? revertReason : null,
     prices,
+    pricesAtTx,
+    technical: {
+      chainId: chain.evmChainId,
+      blockHash: tx.blockHash ?? null,
+      index: tx.transactionIndex ?? null,
+      baseFee: baseFee !== null && baseFee > 0n ? baseFee.toString() : null,
+      priorityFee:
+        gasPrice !== null && baseFee !== null && baseFee > 0n && !pending && gasPrice >= baseFee
+          ? (gasPrice - baseFee).toString()
+          : null,
+      maxFeePerGas: tx.maxFeePerGas?.toString() ?? null,
+      maxPriorityFeePerGas: tx.maxPriorityFeePerGas?.toString() ?? null,
+    },
+    events: (receipt?.logs ?? []).slice(0, MAX_EVENTS).map((log, i) => ({
+      index: log.logIndex ?? i,
+      address: getAddress(log.address),
+      topics: [...log.topics],
+      data: log.data.slice(0, EVENT_DATA_CHARS),
+      dataBytes: (log.data.length - 2) / 2,
+    })),
+    nonceUsed: pending && latestNonce !== null ? latestNonce > tx.nonce : null,
+    checkedAt: Date.now(),
   };
 }

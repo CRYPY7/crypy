@@ -25,7 +25,8 @@ export type FunctionKey =
   | "add-liquidity"
   | "remove-liquidity"
   | "transfer-ownership"
-  | "renounce-ownership";
+  | "renounce-ownership"
+  | "router-execute";
 
 /** i18n keys under `utilities.tx-decoder.warnings`. */
 export type WarningCode =
@@ -113,6 +114,16 @@ const known: KnownFunction[] = [
     signature: "function approve(address token, address spender, uint160 amount, uint48 expiration)",
     rule: "approval-amount",
     amountParam: "amount",
+  },
+  {
+    key: "router-execute",
+    standard: "Universal Router (Uniswap / PancakeSwap)",
+    signature: "function execute(bytes commands, bytes[] inputs, uint256 deadline)",
+  },
+  {
+    key: "router-execute",
+    standard: "Universal Router (Uniswap / PancakeSwap)",
+    signature: "function execute(bytes commands, bytes[] inputs)",
   },
   { key: "multicall", standard: "Multicall", signature: "function multicall(bytes[] data)", rule: "nested" },
   {
@@ -263,10 +274,10 @@ function isTimeParam(name: string) {
   return name === "deadline" || name === "expiration";
 }
 
-function toValue(type: string, name: string, raw: unknown, depth: number): DecodedValue {
+function toValue(type: string, name: string, raw: unknown, depth: number, nested: boolean): DecodedValue {
   if (type.endsWith("[]")) {
     const itemType = type.slice(0, -2);
-    return { kind: "list", items: (raw as unknown[]).map((item) => toValue(itemType, name, item, depth)) };
+    return { kind: "list", items: (raw as unknown[]).map((item) => toValue(itemType, name, item, depth, nested)) };
   }
   if (type === "address") return { kind: "address", value: getAddress(raw as string) };
   if (type === "bool") return { kind: "bool", value: raw as boolean };
@@ -281,7 +292,8 @@ function toValue(type: string, name: string, raw: unknown, depth: number): Decod
     }
     return { kind: "number", value };
   }
-  if (type === "bytes" && depth < MAX_DEPTH) {
+  // Only functions that really carry calls (multicall) get their bytes decoded as calls; router inputs are not calls.
+  if (type === "bytes" && nested && depth < MAX_DEPTH) {
     // Nested call data (e.g. inside multicall) is decoded too.
     const nested = decodeCallData(raw as string, depth + 1);
     if (nested.status === "decoded" || nested.status === "unknown") return { kind: "call", result: nested };
@@ -344,7 +356,7 @@ export function decodeCallData(raw: string, depth = 0): DecodeResult {
         const { warnings, unlimitedParam } = warningsFor(entry, args);
         const params = entry.abi.inputs.map((input, i) => {
           const name = input.name ?? `arg${i}`;
-          const value = toValue(input.type, name, args[i], depth);
+          const value = toValue(input.type, name, args[i], depth, entry.rule === "nested");
           if (name === unlimitedParam && value.kind === "number") value.unlimited = true;
           return { name, type: input.type, value };
         });

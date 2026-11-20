@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { getTranslations } from "next-intl/server";
-import { ArrowRight, CircleCheck, CircleX, Clock, FileCode2, KeyRound } from "lucide-react";
-import { ChainIcon } from "@/components/chain-icon";
+import { ArrowRight, FileCode2, KeyRound } from "lucide-react";
 import type { ChainConfig } from "@/config/chains";
 import type { Locale } from "@/i18n/locales";
 import type { TxApproval, TxDetails, TxToken, TxTransfer } from "@/lib/chains/types";
@@ -61,86 +60,6 @@ function tokenLabel(token: TxToken | undefined, t: T): string {
   return token.symbol || token.name || shortenId(token.address);
 }
 
-/** One plain-language paragraph at the top of the page. */
-export function TxSummary({ tx, chain, locale, t }: TxView) {
-  const from = shortenId(tx.from);
-  const toToken = tx.to ? tx.tokens[tx.to.toLowerCase()] : undefined;
-  const to = tx.to ? (toToken?.symbol ? `${toToken.symbol} (${shortenId(tx.to)})` : shortenId(tx.to)) : "";
-  const value = BigInt(tx.value) > 0n ? `${formatSmall(tx.value, 18, locale)} ${chain.nativeSymbol}` : null;
-  const sentences: string[] = [];
-  let tone: "ok" | "bad" | "wait" = "ok";
-
-  if (tx.status === "pending") {
-    tone = "wait";
-    sentences.push(t("entity.tx.summary.pending"));
-  } else if (tx.status === "reverted") {
-    tone = "bad";
-    sentences.push(t("entity.tx.summary.failed"));
-  } else if (!tx.to) {
-    sentences.push(t("entity.tx.summary.creation", { from }));
-  } else if (!tx.call) {
-    sentences.push(t("entity.tx.summary.native", { from, to, amount: value ?? `0 ${chain.nativeSymbol}` }));
-  } else {
-    const fn = functionName(tx.call);
-    sentences.push(
-      fn ? t("entity.tx.summary.call", { from, to, fn }) : t("entity.tx.summary.callUnknown", { from, to }),
-    );
-    if (value) sentences.push(t("entity.tx.summary.withValue", { amount: value }));
-  }
-  if (tx.status === "success") {
-    if (tx.transfers.length > 0) sentences.push(t("entity.tx.summary.moved", { count: tx.transfers.length }));
-    if (tx.approvals.length > 0) sentences.push(t("entity.tx.summary.permissions", { count: tx.approvals.length }));
-  }
-
-  const Icon = tone === "ok" ? CircleCheck : tone === "bad" ? CircleX : Clock;
-  return (
-    <section
-      aria-labelledby="tx-summary"
-      className={cn(
-        "flex items-start gap-3 rounded-xl border p-5",
-        tone === "bad" ? "border-critical/40 bg-critical/6" : tone === "wait" ? "border-high/40 bg-high/6" : "bg-card",
-      )}
-    >
-      <Icon
-        className={cn(
-          "mt-0.5 size-5 shrink-0",
-          tone === "ok" ? "text-low" : tone === "bad" ? "text-critical" : "text-high",
-        )}
-        aria-hidden="true"
-      />
-      <div>
-        <h2 id="tx-summary" className="text-sm font-semibold text-muted-foreground">
-          {t("entity.tx.summary.title")}
-        </h2>
-        <p className="mt-1 text-base">{sentences.join(" ")}</p>
-      </div>
-    </section>
-  );
-}
-
-export function FailureReason({ tx, t }: TxView) {
-  if (tx.status !== "reverted") return null;
-  return (
-    <section aria-labelledby="tx-failure" className="rounded-xl border border-critical/40 bg-card p-5">
-      <h2 id="tx-failure" className="font-sans text-lg font-semibold">
-        {t("entity.tx.failure.title")}
-      </h2>
-      {tx.revertReason && tx.revertReason !== "none" ? (
-        <p className="mt-2 text-sm">
-          {t("entity.tx.failure.reason")}{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 break-all" dir="ltr">
-            {tx.revertReason}
-          </code>
-        </p>
-      ) : (
-        <p className="mt-2 text-sm text-muted-foreground">
-          {tx.revertReason === "none" ? t("entity.tx.failure.none") : t("entity.tx.failure.unknown")}
-        </p>
-      )}
-    </section>
-  );
-}
-
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-1 border-b py-3 last:border-b-0 sm:grid-cols-[13rem_1fr] sm:gap-4">
@@ -162,137 +81,6 @@ function Badge({ children, tone = "muted" }: { children: React.ReactNode; tone?:
     >
       {children}
     </span>
-  );
-}
-
-export function TxOverview({ tx, chain, locale, t }: TxView) {
-  const native = chain.nativeSymbol;
-  const nativePrice = tx.prices.native;
-  const usd = (raw: string) => {
-    const value = usdOf(raw, 18, nativePrice);
-    return value !== null && value > 0 ? (
-      <span className="text-muted-foreground"> · {usdText(value, locale)}</span>
-    ) : null;
-  };
-  const pendingText = <span className="text-muted-foreground">{t("entity.tx.facts.pendingValue")}</span>;
-  const percent =
-    tx.gasUsed !== null
-      ? new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 1 }).format(
-          Number(tx.gasUsed) / Number(tx.gasLimit),
-        )
-      : "";
-  const time =
-    tx.timestamp !== null
-      ? new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "medium", timeZone: "UTC" }).format(
-          new Date(tx.timestamp * 1000),
-        ) + " UTC"
-      : null;
-  const contractBadge = (isContract: boolean | null) =>
-    isContract === null ? null : (
-      <Badge tone={isContract ? "high" : "low"}>
-        {isContract ? t("entity.tx.facts.contract") : t("entity.tx.facts.wallet")}
-      </Badge>
-    );
-  const toToken = tx.to ? tx.tokens[tx.to.toLowerCase()] : undefined;
-
-  return (
-    <section aria-label={t("entity.tx.title")} className="rounded-xl border bg-card px-5 py-2">
-      <dl>
-        <Row label={t("entity.tx.facts.time")}>{time ?? pendingText}</Row>
-        <Row label={t("entity.tx.block")}>
-          {tx.blockNumber ? (
-            <span className="technical">
-              {new Intl.NumberFormat(locale).format(BigInt(tx.blockNumber))}
-              {tx.confirmations !== null && (
-                <span className="ms-2 font-sans text-muted-foreground">
-                  · {t("entity.tx.confirmations", { count: tx.confirmations })}
-                </span>
-              )}
-            </span>
-          ) : (
-            pendingText
-          )}
-        </Row>
-        <Row label={t("entity.tx.from")}>
-          <AddressLink address={tx.from} locale={locale} />
-        </Row>
-        <Row label={t("entity.tx.to")}>
-          {tx.to ? (
-            <>
-              <AddressLink address={tx.to} locale={locale} />
-              {contractBadge(tx.toIsContract)}
-              {toToken?.symbol && (
-                <Link
-                  href={localePath(locale, `/token/${chain.key}/${tx.to}`)}
-                  prefetch={false}
-                  className="ms-2 text-sm text-primary hover:underline"
-                >
-                  {toToken.name || toToken.symbol} ({toToken.symbol})
-                </Link>
-              )}
-            </>
-          ) : (
-            <span>{t("entity.tx.contractCreation")}</span>
-          )}
-        </Row>
-        {tx.createdContract && (
-          <Row label={t("entity.tx.facts.created")}>
-            <AddressLink address={tx.createdContract} locale={locale} />
-          </Row>
-        )}
-        <Row label={t("entity.tx.facts.value")}>
-          <span className="tabular-nums">
-            {formatSmall(tx.value, 18, locale)} {native}
-          </span>
-          {usd(tx.value)}
-        </Row>
-        <Row label={t("entity.tx.facts.fee")}>
-          {tx.fee === null ? (
-            pendingText
-          ) : tx.fee === "0" ? (
-            t("entity.tx.facts.freeFee")
-          ) : (
-            <>
-              <span className="tabular-nums">
-                {formatSmall(tx.fee, 18, locale)} {native}
-              </span>
-              {usd(tx.fee)}
-            </>
-          )}
-        </Row>
-        {tx.burnt && (
-          <Row label={t("entity.tx.facts.burnt")}>
-            <span className="tabular-nums">
-              {formatSmall(tx.burnt, 18, locale)} {native}
-            </span>
-          </Row>
-        )}
-        <Row label={tx.gasUsed === null ? t("entity.tx.facts.gasLimit") : t("entity.tx.facts.gasUsed")}>
-          <span className="tabular-nums">
-            {tx.gasUsed === null
-              ? new Intl.NumberFormat(locale).format(BigInt(tx.gasLimit))
-              : t("entity.tx.facts.gasUsedValue", {
-                  used: new Intl.NumberFormat(locale).format(BigInt(tx.gasUsed)),
-                  limit: new Intl.NumberFormat(locale).format(BigInt(tx.gasLimit)),
-                  percent,
-                })}
-          </span>
-        </Row>
-        {tx.gasPrice !== null && (
-          <Row label={tx.status === "pending" ? t("entity.tx.facts.maxGasPrice") : t("entity.tx.facts.gasPrice")}>
-            <span className="tabular-nums">
-              {t("entity.tx.facts.gwei", { value: formatAmount(tx.gasPrice, 9, locale, 4) })}
-            </span>
-          </Row>
-        )}
-        <Row label={t("entity.tx.facts.nonce")}>
-          <span className="tabular-nums">{tx.nonce}</span>
-        </Row>
-        <Row label={t("entity.tx.facts.type")}>
-          {t.has(`entity.tx.types.${tx.type}`) ? t(`entity.tx.types.${tx.type}`) : tx.type}
-        </Row>
-      </dl>
-    </section>
   );
 }
 
@@ -568,18 +356,5 @@ export function TxInput({ tx, t, explorerName }: TxView) {
         <p className="mt-2 text-muted-foreground">{t("entity.tx.input.truncated", { explorer: explorerName })}</p>
       )}
     </details>
-  );
-}
-
-export function TxFootnote({ tx, chain, t }: TxView) {
-  const interpreted = tx.transfers.length + tx.approvals.length;
-  const other = tx.otherEvents;
-  return (
-    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-      <ChainIcon chain={chain.key} size={14} />
-      {t("entity.tx.source", { chain: t(`chains.${chain.key}`) })} {t("entity.tx.events", { count: tx.logCount })}{" "}
-      {other > 0 && !tx.logsTruncated && t("entity.tx.otherEvents", { count: other })}{" "}
-      {(tx.prices.native !== undefined || interpreted > 0) && t("entity.tx.pricesNote")}
-    </p>
   );
 }

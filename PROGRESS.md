@@ -13,6 +13,7 @@ Last updated: 2026-11-20
 | M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending |
 | Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                   |
 | M4 Transaction page                                    | ✅ Done (2026-11-20)                                    |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                   |
 | M4.5 Batch Balance Scanner                             | ⏭ Next (design approved 2026-11-20)                     |
 | M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                           |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                    |
@@ -30,6 +31,60 @@ Last updated: 2026-11-20
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## M4.1 — Transaction Intelligence (design approved 2026-11-20)
+
+The transaction page now explains instead of listing (design boards 11–16).
+
+- **Interpretation engine** (`src/lib/tx/interpret.ts`, pure, unit-tested): classifies send, token send, NFT send, receive,
+  swap, approval, revoke, mint, burn, wrap, unwrap, contract creation, empty self-transaction, contract call and unknown
+  call. Events are evidence; a decoded function name is only a clue (a "transfer" call without a Transfer event is not
+  called a transfer). Each result carries an evidence level: confirmed / decoded / likely / unknown. Output is template
+  keys and values, so every sentence is translatable.
+- **Simple view (default):** headline ("Sent 84.74 USDC to 0xD37A…06B4"), status, network, type, time ago + the visitor's
+  own time + UTC; visual flow (wallet → assets → wallet/contract, exchange both ways, dashed for permissions, failed and
+  pending); progress line (sent → in a block → final after 64 blocks on Ethereum / 15 on BNB Chain); the sender's
+  changes from token events (labelled, with the limit that coins moved inside contracts may be missing); cost in dollars
+  first with a "What is this?" tip; "Good to know" notes; all token events and technical details on demand.
+- **Failed-transaction explainer:** insufficient balance or allowance, price moved (slippage), deadline, access denied,
+  paused, inner token transfer failed, math error, standard named errors (ERC20InsufficientBalance, …), "probably out of
+  gas" only when ≥ 97% of the gas was used, and honest "no message" / "not available" cases. The contract's own message
+  is always shown; "What usually helps" only for well-understood cases.
+- **Approvals:** what the permission means, unlimited vs limited vs whole NFT collection, and "Is it still active?
+  Not checked yet" (no claim either way until the Approval Checker in M6).
+- **Pending:** last checked time, fee shown as a labelled maximum estimate, and "Can it still go through?" from evidence:
+  if the sender already used this nonce, it can't confirm (replaced or cancelled).
+- **Advanced view:** chain ID and CAIP-2, block hash, position in block, nonce, type; gas limit/used, base fee, priority
+  fee (only where the chain has a base fee), effective and max prices, burnt, total; function and parameters; asset
+  movements and permissions; every event in original order with raw topics and data; input data. The choice is
+  remembered on the device and applied before the page draws.
+- **Names for well-known contracts** (`src/config/known-contracts.ts`): 25 routers, aggregators, Permit2, wrapped coins
+  and major tokens on both chains, plus burn addresses; a live test checks each is a real contract.
+- **Decoder:** Universal Router `execute` (Uniswap / PancakeSwap) added; nested calls are only decoded for real multicall
+  functions.
+- **Prices:** today's on-chain price, or the price at the transaction's block when the node still has that state (recent
+  blocks on free nodes; any block with an archive provider). Never mixed; always labelled.
+- **Export:** copy plain summary, copy link, download readable report (text), details (JSON) and the node's raw
+  transaction and receipt (`GET /api/v1/tx/<hash>?chain=&format=text|json|raw`, rate-limited, nothing stored).
+- **Transaction Checker tool page is live** (`/tools/tx-checker`): hash box, how-to, FAQ and a per-network support table
+  (supported / partial) from `src/config/tx-support.ts`.
+
+## M4.1 checks (2026-11-20, in the cloud workspace)
+
+| Check                                                                                                             | Result            |
+| ----------------------------------------------------------------------------------------------------------------- | ----------------- |
+| typecheck, lint, Prettier, i18n check                                                                             | ✅ Passed         |
+| `pnpm test` — 126 unit tests (23 new for the engine: every type, evidence rules, failure categories, net changes) | ✅ Passed         |
+| Live tests (`LIVE=1`) — 16, incl. all 25 known contracts having code and the 10 real transactions                 | ✅ Passed         |
+| `pnpm build`                                                                                                      | ✅ Passed         |
+| `pnpm test:e2e` — 81 browser tests run twice in a row (162 runs; 9 for the transaction page and tool, live data)  | ✅ Passed         |
+| Visual: send, failed, unknown contract call, contract creation, Advanced view, tool page, phone, Arabic RTL       | ✅ Looked correct |
+
+Spec test list coverage: native send, token transfer, failed with message and without, unknown contract call, many
+events, no events, contract creation, not found, pending (M4, real mempool transaction), mobile, Simple/Advanced, RTL —
+checked on real transactions. Covered by unit fixtures only (no clean real example captured yet): approval/revoke,
+swap through a known router, mint, burn, wrap, replaced pending transaction, out of gas. **Owner check:** open an approval
+and a swap of your own on CRYPY to confirm the wording.
 
 ## M4 — Transaction page (Tool 5)
 
@@ -204,6 +259,9 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 - **M9:** reviewed Urdu and Arabic fonts and translations.
 
 ## Known issues
+
+- After pulling new files, if the site's styles look out of date, delete the `.next` folder and build again (the build cache once kept an old stylesheet here).
+- Transaction page: execution traces and coins moved inside contracts need our own node (later); "first seen" time for pending transactions needs a mempool watcher (later).
 
 - Transaction page USD values use today's price (historical prices need archive data; planned with the M5.5 indexer).
 - Revert reasons need recent state; for older failed transactions public nodes usually can't replay them, and the page says so.

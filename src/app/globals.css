@@ -194,3 +194,9 @@ html[data-sidebar="collapsed"] .sidebar .sidebar-item {
 body:has([data-page="home"]) .header-search {
   display: none;
 }
+
+/* Transaction page: Simple view by default, Advanced when html[data-txview="advanced"] (set before paint). */
+html[data-txview="advanced"] .tx-simple,
+html:not([data-txview="advanced"]) .tx-advanced {
+  display: none;
+}

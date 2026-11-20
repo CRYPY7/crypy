@@ -83,6 +83,35 @@ Unit converter (wei/gwei/ETH/BNB), hex/decimal converter, address checksum forma
 
 **Done when:** success / failed / pending / not-found / contract-creation cases match explorers on both chains. → Built and tested 2026-11-20 on real transactions of every case; side-by-side explorer check by the owner pending (see PROGRESS.md).
 
+## M4.1 — Transaction Intelligence (owner request 2026-11-20; design approved; ✅ built 2026-11-20)
+
+Turns the M4 transaction page from an explorer-style list into an explanation: story first, money second, technical
+evidence on demand. Based on the owner's "Universal Transaction Intelligence" spec, adapted to CRYPY's rules.
+
+- **Simple view (default) and Advanced view**, same data, choice remembered on the device.
+- **Headline by action type** (send, receive, swap, approval, revoke, NFT transfer, mint, burn, wrap/unwrap,
+  contract creation, multi-step contract call, unknown) from a deterministic, unit-tested interpretation engine with
+  translatable templates. Decoded function names are treated as clues, not proof.
+- **Visual flow** (sender → action → receiver with asset chips), **token changes per wallet** (labelled "seen in token
+  events"), grouped movements with the original event list expandable.
+- **Failed-transaction explainer:** known error messages and standard custom errors translated to plain English; the
+  original message always shown; "out of gas" only as a likely cause; unknown reasons stated honestly.
+- **Pending:** progress line, last-checked time, fee shown as a labelled maximum estimate, and "replaced or dropped"
+  detected only from evidence (sender's nonce already used).
+- **Names for well-known contracts** (routers, Permit2, wrapped coins, major tokens, null address) from a local list.
+- **Plain cost** with "What is this?" tips; time in the visitor's time zone plus UTC.
+- **Evidence levels** on interpretations (confirmed / decoded / likely / unknown).
+- **USD:** today's on-chain price, labelled; transaction-time price when archive data is available (Alchemy), never mixed.
+- **Advanced view:** chain ID, block hash, index, nonce, full fee breakdown (base/priority/burnt), function and
+  parameters, all events in original order with raw topics, raw transaction/receipt JSON.
+- **Export:** copy plain summary, copy link, download JSON and readable report.
+- **Per-chain support table** (supported / partial / planned) for transaction features; nothing advertised untested.
+- **Later (needs own node):** execution traces and internal native transfers; mempool "first seen" time.
+
+**Done when:** the spec's test list (send, token transfer, approval, failed with known and unknown reason, pending,
+contract creation, unknown contract, many events, no events, not found, provider down, no price, mobile, Simple /
+Advanced consistency, RTL) passes on real transactions of both chains.
+
 ## M4.5 — Batch Balance Scanner (owner request 2026-11-20; design approved 2026-11-20)
 
 Check one or more coins/tokens for a whole list of addresses, on the chains the visitor picks. Own tool page

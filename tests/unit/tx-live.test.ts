@@ -5,7 +5,9 @@
  */
 import { describe, expect, it } from "vitest";
 import { getChain } from "@/config/chains";
+import { knownContractsFor } from "@/config/known-contracts";
 import { evmAdapter } from "@/server/chains/evm/adapter";
+import { getEvmClient } from "@/server/chains/evm/providers";
 
 const live = process.env.LIVE === "1";
 const details = (chain: string, hash: string) => evmAdapter.getTransactionDetails!(getChain(chain)!, hash);
@@ -66,6 +68,16 @@ describe.skipIf(!live)("live transactions", () => {
     const tx = await details("bsc", "0x8b5f3bafa43bcb5c622c68202609236120ef791316c79731c728c442e127f292");
     expect(tx).toMatchObject({ logCount: 24, transfers: [] });
   }, 60_000);
+
+  it("every well-known contract name points at a real contract", async () => {
+    for (const key of ["ethereum", "bsc"]) {
+      const client = getEvmClient(getChain(key)!);
+      for (const address of knownContractsFor(key)) {
+        const code = await client.getCode({ address: address as `0x${string}` });
+        expect(code && code.length > 2, `${key} ${address}`).toBe(true);
+      }
+    }
+  }, 120_000);
 
   it("a made-up hash is not found", async () => {
     expect(await details("bsc", `0x${"ab".repeat(32)}`)).toBeNull();

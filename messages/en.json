@@ -218,14 +218,43 @@
     "tx-checker": {
       "name": "Transaction Checker",
       "question": "Did my transaction go through?",
-      "description": "Status, fees, confirmations and decoded token transfers in plain language.",
+      "description": "Paste a transaction hash and see what happened in plain language: result, assets moved, cost, and why it failed.",
       "input": "Transaction hash",
       "cta": "Check a transaction",
       "features": [
-        "Detects the chain automatically",
-        "Success, failed or pending, with automatic refresh while pending",
-        "Fee in coin and USD, block and confirmations",
-        "Token transfers explained in plain language"
+        "Detects the network automatically",
+        "Plain-language headline: sent, swapped, approved, minted, failed…",
+        "Changes for the sender's wallet and a simple flow",
+        "Failed transactions explained, with the contract's own message",
+        "Pending transactions refresh on their own and show if they were replaced",
+        "Advanced view with fees, function, events and raw data"
+      ],
+      "howTo": [
+        "Paste a transaction hash (0x followed by 64 characters).",
+        "CRYPY finds the network and shows what happened in plain language.",
+        "Switch to Advanced view for gas, function parameters, events and raw data."
+      ],
+      "faq": [
+        {
+          "q": "Do I need to connect my wallet?",
+          "a": "No. Transactions are public, so any hash can be checked without connecting or signing anything."
+        },
+        {
+          "q": "Where does the information come from?",
+          "a": "Directly from blockchain nodes: the transaction, its receipt and its events. Prices are read from on-chain pools. Nothing is bought from a data provider."
+        },
+        {
+          "q": "How sure is the explanation?",
+          "a": "Each explanation shows its evidence: confirmed on the blockchain, decoded from the transaction, or likely. When something can't be identified, CRYPY says so instead of guessing."
+        },
+        {
+          "q": "Why can't I see why my old transaction failed?",
+          "a": "Reading the reason means replaying the transaction on the network state just before it. Free nodes keep that state only for recent blocks, so for older transactions the reason may not be available."
+        },
+        {
+          "q": "Which networks are supported?",
+          "a": "Ethereum and BNB Chain. The table on this page shows exactly which parts work on each network."
+        }
       ]
     },
     "gas-tracker": {
@@ -683,7 +712,318 @@
       "events": "{count, plural, =0 {No events.} one {# event in the receipt.} other {# events in the receipt.}}",
       "otherEvents": "{count, plural, one {# event isn't a standard token event and isn't interpreted.} other {# events aren't standard token events and aren't interpreted.}}",
       "pricesNote": "USD values use today's on-chain prices, not prices at the time of the transaction.",
-      "source": "Read directly from {chain} nodes."
+      "source": "Read directly from {chain} nodes.",
+      "story": {
+        "view": {
+          "label": "View",
+          "simple": "Simple",
+          "advanced": "Advanced",
+          "showTechnical": "Technical details",
+          "showTechnicalHint": "Block, gas, function and raw data, in Advanced view"
+        },
+        "actions": {
+          "copySummary": "Copy summary",
+          "copied": "Copied",
+          "export": "Export",
+          "json": "Details (JSON)",
+          "report": "Readable report (text)",
+          "raw": "Raw transaction and receipt (JSON)",
+          "copyLink": "Copy link"
+        },
+        "status": {
+          "success": "Completed",
+          "reverted": "Failed",
+          "pending": "Waiting"
+        },
+        "kinds": {
+          "native-send": "Transfer",
+          "token-send": "Token transfer",
+          "nft-send": "NFT transfer",
+          "receive": "Received",
+          "swap": "Swap",
+          "approval": "Approval",
+          "revoke": "Permission removed",
+          "mint": "Mint",
+          "burn": "Burn",
+          "wrap": "Wrap",
+          "unwrap": "Unwrap",
+          "creation": "Contract creation",
+          "self": "Empty transaction",
+          "contract-call": "Contract call",
+          "unknown-call": "Contract call"
+        },
+        "attempted": "{kind} (attempted)",
+        "headline": {
+          "native-send": "Sent {amount} to {to}",
+          "token-send": "Sent {amount} to {to}",
+          "token-move": "Moved {amount} from {from} to {to}",
+          "nft-send": "Sent {amount} to {to}",
+          "receive": "Received {amount}",
+          "swap": "Swapped {out} for {in}",
+          "swapMany": "Exchanged {outCount} assets for {inCount} assets",
+          "approvalUnlimited": "Gave unlimited permission to spend {token}",
+          "approval": "Gave permission to spend {amount}",
+          "approvalAll": "Gave full access to all {token} NFTs",
+          "approvalNoAmount": "Gave permission to spend {token}",
+          "revoke": "Removed permission to spend {token}",
+          "mint": "Minted {amount}",
+          "burn": "Destroyed {amount}",
+          "wrap": "Wrapped {amount}",
+          "unwrap": "Unwrapped {amount}",
+          "creation": "Created a new contract",
+          "self": "Sent an empty transaction to itself",
+          "contract-call": "Called {fn} on {to}",
+          "unknown-call": "Interacted with a contract",
+          "failed": "Failed: tried to {intent}",
+          "pending": "Waiting for confirmation"
+        },
+        "intent": {
+          "native-send": "send {amount} to {to}",
+          "token-send": "move {amount} to {to}",
+          "approval": "give {spender} permission to spend {token}",
+          "revoke": "remove {spender}'s permission to spend {token}",
+          "swap": "swap tokens through {to}",
+          "creation": "create a contract",
+          "contract-call": "call {fn} on {to}",
+          "unknown-call": "call a contract ({to})"
+        },
+        "sub": {
+          "native-send": "The wallet {from} sent {amount} to {to}.",
+          "token-send": "The wallet {from} sent {amount} to {to}.",
+          "token-move": "{actor} moved {amount} from {from} to {to}, using a permission.",
+          "nft-send": "{from} sent {amount} to {to}.",
+          "receive": "The wallet {to} received {amount} from {from}.",
+          "swap": "The wallet {from} exchanged {out} for {in} through {to}.",
+          "swapMany": "The wallet {from} gave {outCount} assets and received {inCount} through {to}.",
+          "approval": "The wallet {from} allowed {spender} to move its {token}. No tokens moved in this transaction.",
+          "revoke": "The wallet {from} removed {spender}'s permission to move its {token}. This reduces risk.",
+          "mint": "New tokens were created and sent to {to}.",
+          "burn": "The wallet {from} sent {amount} to a burn address, where nobody can use them.",
+          "wrap": "The wallet {from} turned its coins into the wrapped token, 1 for 1.",
+          "unwrap": "The wallet {from} turned the wrapped token back into coins, 1 for 1.",
+          "creation": "The wallet {from} put a new smart contract on the blockchain.",
+          "self": "Empty transactions like this are often used to cancel or speed up an earlier one.",
+          "contract-call": "The wallet {from} called the function {fn} on {to}.",
+          "unknown-call": "The wallet {from} called a function on {to} that isn't in our list of known functions, so we don't guess what it did.",
+          "movements": "{count, plural, one {# token event was recorded (details below).} other {# token events were recorded (details below).}}",
+          "noMovements": "No standard token events were recorded.",
+          "fee": "The fee was {fee}.",
+          "failed": "Nothing changed. The network fee of {fee} was still paid.",
+          "failedNoFee": "Nothing changed.",
+          "pending": "Sent to the network, not yet in a block. When confirmed it will {intent}.",
+          "pendingTime": "{chain} adds a block about every {seconds} seconds; busy times can take longer."
+        },
+        "evidence": {
+          "confirmed": "Confirmed on the blockchain",
+          "decoded": "Decoded from the transaction",
+          "likely": "Likely, based on token events",
+          "unknown": "Not identified",
+          "fromEvents": "From token events",
+          "estimate": "Estimate",
+          "notChecked": "Not checked yet",
+          "seen": "Seen by the network",
+          "explained": "Explained from the contract's message"
+        },
+        "flow": {
+          "label": "Transaction flow",
+          "from": "From",
+          "to": "To",
+          "wallet": "Wallet",
+          "contract": "Contract",
+          "known": "Contract · known name",
+          "owner": "Owner",
+          "spender": "Spender",
+          "created": "created",
+          "sender": "Sender",
+          "through": "Exchanged through",
+          "intendedTo": "To (intended)",
+          "triedFrom": "From (tried)",
+          "sent": "sent",
+          "receivedBack": "received back",
+          "permission": "gave permission to spend",
+          "permissionOnly": "permission only · nothing was sent",
+          "unlimited": "Unlimited",
+          "calls": "called a contract",
+          "stoppedBy": "stopped by {name}",
+          "afterConfirm": "movements appear after confirmation",
+          "triedToMove": "tried to move",
+          "notMoved": "not moved",
+          "self": "to itself",
+          "copy": "Copy address",
+          "newContract": "New contract",
+          "address": "Address"
+        },
+        "progress": {
+          "label": "Progress",
+          "sent": "Sent",
+          "sentBy": "By {from}",
+          "included": "Included in a block",
+          "block": "Block {block}",
+          "final": "Final",
+          "confirmations": "{count, plural, one {# confirmation} other {# confirmations}}",
+          "waiting": "Waiting…",
+          "failed": "Failed",
+          "reverted": "Reverted by the contract",
+          "seen": "Seen by our node"
+        },
+        "changes": {
+          "title": "Changes for {wallet}",
+          "fee": "Network fee",
+          "note": "Seen in standard token events. Coins (ETH, BNB) moved inside contracts don't appear in events, so they may be missing.",
+          "none": "No token changes for this wallet in standard events."
+        },
+        "cost": {
+          "title": "Cost",
+          "network": "Network",
+          "tip": "Network fees go to the network, not to CRYPY. They are charged even if a transaction fails.",
+          "failed": "Fees are charged even when a transaction fails, because the network still did the work.",
+          "free": "This transaction paid no fee.",
+          "estimateTitle": "Fee (estimate)",
+          "upTo": "Up to {usd}",
+          "upToCoin": "Up to {amount}",
+          "estimateNote": "The final fee is known after confirmation and is usually lower.",
+          "estimateTip": "Gas limit × maximum price per gas. Actual fee = gas used × price paid.",
+          "time": "Time",
+          "yourTime": "{time} (your time)",
+          "networkFee": "Network fee, paid to process the transaction."
+        },
+        "usd": {
+          "atTx": "at the time",
+          "today": "today"
+        },
+        "failure": {
+          "title": "Why did it fail?",
+          "message": {
+            "title": "The contract stopped with a message.",
+            "text": "We don't have a plain-language explanation for this message, so it is shown as written."
+          },
+          "help": "What usually helps:",
+          "balance": {
+            "title": "The sending wallet didn't have enough tokens.",
+            "text": "The contract refused because the balance was lower than the amount it tried to move."
+          },
+          "balanceHelp": "Check the balance, then try again with an amount the wallet holds.",
+          "allowance": {
+            "title": "The spending permission was too low.",
+            "text": "The contract tried to move tokens using a permission (allowance) smaller than the amount."
+          },
+          "allowanceHelp": "Approve at least this amount for the app, then try again.",
+          "slippage": {
+            "title": "The price moved too much.",
+            "text": "The exchange stopped because the trade would have returned less than the minimum the sender accepted."
+          },
+          "slippageHelp": "Try again, or allow a slightly bigger price change (slippage) in the app.",
+          "deadline": {
+            "title": "It arrived too late.",
+            "text": "The transaction was included after the deadline set when it was sent."
+          },
+          "deadlineHelp": "Send it again.",
+          "access": {
+            "title": "This wallet isn't allowed to do that.",
+            "text": "The contract only lets certain addresses, such as its owner, use this function."
+          },
+          "paused": {
+            "title": "The contract is paused.",
+            "text": "Its operators have stopped this function for now."
+          },
+          "token-transfer": {
+            "title": "A token transfer inside it failed.",
+            "text": "The contract tried to move a token and the token refused. Common causes: not enough balance or permission, or a token with transfer restrictions."
+          },
+          "math": {
+            "title": "A calculation failed.",
+            "text": "The contract hit a math error, such as an overflow or a division by zero."
+          },
+          "out-of-gas": {
+            "title": "It probably ran out of gas.",
+            "text": "It used {percent} of the gas it was allowed, so it most likely stopped for lack of gas. This is a likely cause, not a confirmed one."
+          },
+          "out-of-gasHelp": "Try again with a higher gas limit.",
+          "custom": {
+            "title": "The contract stopped with its own error code.",
+            "text": "This error isn't in our list of known errors, so we can't explain it reliably."
+          },
+          "no-message": {
+            "title": "The contract stopped without saying why.",
+            "text": "It gave no error message, so the reason can't be read from the blockchain."
+          },
+          "unavailable": {
+            "title": "The reason isn't available.",
+            "text": "The transaction failed, but the reason can't be read now: that needs the network state just before this block, which our free nodes no longer keep."
+          }
+        },
+        "approval": {
+          "meaningTitle": "What this means",
+          "permission": "This is a permission, not a payment. Apps such as exchanges ask for it before they can move your tokens.",
+          "unlimited": "\"Unlimited\" means the spender can move any amount of this token from the wallet, now or later, without asking again.",
+          "limited": "The spender can move up to {amount} from the wallet without asking again.",
+          "all": "The operator can move every NFT this wallet holds in this collection.",
+          "stays": "The permission stays until it is removed, or until a later transaction changes it.",
+          "revoked": "The permission was set to zero, so the spender can no longer move these tokens.",
+          "activeTitle": "Is it still active?",
+          "activeText": "This page shows what the transaction did {when}. The permission may have changed since.",
+          "checker": "Approval Checker (review and remove permissions) is coming in milestone M6."
+        },
+        "pending": {
+          "title": "Can it still go through?",
+          "yes": "Yes. The sender hasn't used this transaction's number (nonce {nonce}) for another transaction.",
+          "no": "No. The sender already used this transaction's number (nonce {nonce}) for another transaction, so this one was replaced or cancelled and can't confirm.",
+          "unknown": "We couldn't check this right now.",
+          "note": "If the sender replaces or cancels it, this page will say so. We never mark a transaction as dropped without that evidence.",
+          "checked": "Last checked {time} · checks every 15 seconds"
+        },
+        "notes": {
+          "title": "Good to know",
+          "known": "{name} is a name from CRYPY's list of well-known contracts. A name is not a safety check.",
+          "pricesAtTx": "Dollar values use the price at the time of the transaction, read from on-chain pools.",
+          "pricesToday": "Dollar values use today's on-chain price. The price at the time of the transaction isn't available from our nodes.",
+          "toContract": "The receiver is a contract, not a personal wallet.",
+          "burn": "Tokens sent to a burn address can't be recovered.",
+          "nativeMissing": "Coins (ETH, BNB) paid out inside contracts don't appear in token events, so the coin side of this transaction may not be shown.",
+          "self": "Nothing was moved. Wallets send transactions like this to replace a stuck one with the same number.",
+          "unknownFn": "The function isn't in our list. A contract can use any name, so we describe only what the events prove."
+        },
+        "events": {
+          "title": "All {count} token events",
+          "hint": "Every token movement in its original order, including internal hops between contracts"
+        },
+        "nft": "NFT #{id}",
+        "units": "{amount} units",
+        "advanced": {
+          "transaction": "Transaction",
+          "hash": "Hash",
+          "chain": "Network",
+          "chainValue": "{name} · chain ID {id} ({caip})",
+          "block": "Block",
+          "blockHash": "Block hash",
+          "index": "Position in block",
+          "indexTip": "Where the transaction sits inside its block.",
+          "nonceTip": "A sequence number for the sender's transactions.",
+          "fees": "Fees",
+          "gasLimitTip": "The most gas the sender allowed.",
+          "gasUsedTip": "Gas the transaction actually used.",
+          "baseFee": "Base fee",
+          "baseFeeTip": "Set by the network for each block; this part is burnt.",
+          "priorityFee": "Priority fee",
+          "priorityFeeTip": "Tip paid to the block builder.",
+          "effective": "Effective gas price",
+          "maxFee": "Max fee per gas",
+          "maxPriority": "Max priority fee per gas",
+          "total": "Total fee",
+          "events": "Events",
+          "eventsCount": "{count, plural, one {# event in the receipt, original order} other {# events in the receipt, original order}}",
+          "log": "Log",
+          "contract": "Contract",
+          "event": "Event",
+          "notStandard": "Not a standard event",
+          "topics": "Topics",
+          "data": "Data",
+          "dataBytes": "{count, plural, one {# byte} other {# bytes}}",
+          "raw": "Raw data",
+          "moreEvents": "Only the first {count} events are listed. The full list is on {explorer}."
+        },
+        "utc": "({time} UTC)"
+      }
     },
     "otherChains": {
       "label": "Same address on other chains:",
@@ -844,7 +1184,8 @@
         "add-liquidity": "Add tokens to a liquidity pool.",
         "remove-liquidity": "Withdraw tokens from a liquidity pool.",
         "transfer-ownership": "Hand control of this contract to a new owner.",
-        "renounce-ownership": "Give up ownership of this contract permanently."
+        "renounce-ownership": "Give up ownership of this contract permanently.",
+        "router-execute": "Run a list of swap steps through a Universal Router. The steps are packed in \"commands\" and are not decoded here."
       },
       "warnings": {
         "unlimited-approval": "Unlimited approval: the spender can move all of this token from your wallet, now and later, until you revoke it.",
@@ -861,6 +1202,33 @@
       "placeholder": "0x…",
       "submit": "See balances",
       "invalid": "Enter a wallet address: 0x followed by 40 characters (0–9, a–f)."
+    },
+    "tx-checker": {
+      "label": "Transaction hash",
+      "placeholder": "0x… 64 characters",
+      "submit": "Check transaction",
+      "invalid": "A transaction hash is 0x followed by 64 letters (a–f) and numbers.",
+      "supportTitle": "Supported networks",
+      "feature": "Feature",
+      "levels": {
+        "supported": "Supported",
+        "partial": "Partial",
+        "planned": "Planned"
+      },
+      "features": {
+        "lookup": "Find and read transactions",
+        "status": "Success, failed, pending",
+        "assets": "Token and NFT movements",
+        "decoding": "Function decoding",
+        "failure": "Failure reasons",
+        "fees": "Fee breakdown",
+        "pricesAtTx": "Price at the time"
+      },
+      "notes": {
+        "failure": "Needs recent blocks on free nodes",
+        "pricesAtTx": "Needs recent blocks on free nodes",
+        "decoding": "Well-known functions only"
+      }
     }
   }
 }

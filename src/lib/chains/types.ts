@@ -119,6 +119,27 @@ export interface TxDetails extends TxLookup {
   revertReason: string | null;
   /** Current USD prices (not historical): "native" and lower-case token addresses. */
   prices: Record<string, number>;
+  /** USD prices at the transaction's block, when the node still has that state; null otherwise. Never mixed with `prices`. */
+  pricesAtTx: Record<string, number> | null;
+  /** Technical details for the Advanced view. */
+  technical: {
+    /** Chain identifier as the chain defines it (EVM chain id). CAIP-2 is on the chain config. */
+    chainId: number;
+    blockHash: string | null;
+    index: number | null;
+    /** Base fee of the block (wei); null when the chain has none or the tx is pending. */
+    baseFee: string | null;
+    /** Effective tip per gas (wei) = price paid − base fee. */
+    priorityFee: string | null;
+    maxFeePerGas: string | null;
+    maxPriorityFeePerGas: string | null;
+  };
+  /** Every event in the receipt, original order (capped). `data` is shortened for display. */
+  events: { index: number; address: string; topics: string[]; data: string; dataBytes: number }[];
+  /** Pending only: true when the sender already used this nonce in another transaction (so this one can't confirm). */
+  nonceUsed: boolean | null;
+  /** Unix ms when the server read this data. */
+  checkedAt: number;
 }
 
 export interface ChainHead {

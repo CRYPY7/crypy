@@ -60,7 +60,7 @@ export const tools: readonly ToolDefinition[] = [
   { id: "balance-scanner", category: "wallet", icon: "wallet", status: "live", milestone: "M3", featured: true },
   { id: "address-analyzer", category: "wallet", icon: "activity", status: "soon", milestone: "M7" },
   { id: "portfolio", category: "wallet", icon: "chart-pie", status: "soon", milestone: "M8" },
-  { id: "tx-checker", category: "network", icon: "receipt", status: "soon", milestone: "M4", featured: true },
+  { id: "tx-checker", category: "network", icon: "receipt", status: "live", milestone: "M4", featured: true },
   { id: "gas-tracker", category: "network", icon: "fuel", status: "soon", milestone: "M7" },
   { id: "watchlist", category: "monitoring", icon: "bell", status: "soon", milestone: "M8", requiresAccount: true },
   { id: "unit-converter", category: "utilities", icon: "calculator", status: "live", milestone: "M2.5" },

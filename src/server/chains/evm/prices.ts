@@ -82,8 +82,13 @@ function candidatesFor(tokens: TokenToPrice[], config: ChainDex): Candidate[] {
   return out;
 }
 
-async function discoverPools(client: PublicClient, candidates: Candidate[]): Promise<Candidate[]> {
+async function discoverPools(
+  client: PublicClient,
+  candidates: Candidate[],
+  blockNumber?: bigint,
+): Promise<Candidate[]> {
   const results = await client.multicall({
+    blockNumber,
     allowFailure: true,
     batchSize: MULTICALL_BYTES,
     contracts: candidates.map((c) =>
@@ -109,7 +114,7 @@ async function discoverPools(client: PublicClient, candidates: Candidate[]): Pro
 }
 
 /** Reads every found pool and returns, per token, its price in quote units and the quote-side depth. */
-async function readPools(client: PublicClient, pools: Candidate[]) {
+async function readPools(client: PublicClient, pools: Candidate[], blockNumber?: bigint) {
   const calls = pools.flatMap((c) => [
     // Quote-side balance: the liquidity depth measure for both pool types.
     { address: c.quote.address as Hex, abi: erc20Abi, functionName: "balanceOf" as const, args: [c.pool!] as const },
@@ -117,7 +122,12 @@ async function readPools(client: PublicClient, pools: Candidate[]) {
       ? { address: c.token.address as Hex, abi: erc20Abi, functionName: "balanceOf" as const, args: [c.pool!] as const }
       : { address: c.pool!, abi: v3PoolAbi, functionName: "slot0" as const },
   ]);
-  const results = await client.multicall({ allowFailure: true, batchSize: MULTICALL_BYTES, contracts: calls });
+  const results = await client.multicall({
+    blockNumber,
+    allowFailure: true,
+    batchSize: MULTICALL_BYTES,
+    contracts: calls,
+  });
   return pools.flatMap((c, i) => {
     const quoteBal = results[i * 2];
     const second = results[i * 2 + 1];
@@ -170,6 +180,8 @@ export async function getOnchainPrices(
   client: PublicClient,
   chain: ChainConfig,
   tokens: TokenToPrice[],
+  /** Read prices as they were at this block (needs a node that keeps old state). Default: latest. */
+  blockNumber?: bigint,
 ): Promise<ChainPrices> {
   const config = chainDex[chain.key];
   const wrapped = config.quotes.find((q) => q.role === "wrapped-native")!;
@@ -183,7 +195,9 @@ export async function getOnchainPrices(
     await discoverPools(
       client,
       candidatesFor([{ address: wrapped.address, decimals: wrapped.decimals }], nativeConfig),
+      blockNumber,
     ),
+    blockNumber,
   );
   const native = bestPrices(nativeReadings, quoteUsd).get(wrapped.address.toLowerCase()) ?? null;
   if (native) quoteUsd.set(wrapped.address.toLowerCase(), native.usd);
@@ -197,7 +211,11 @@ export async function getOnchainPrices(
     .filter((t) => !result.has(t.address.toLowerCase()))
     .map((t) => ({ address: getAddress(t.address), decimals: t.decimals }));
   if (toPrice.length > 0) {
-    const readings = await readPools(client, await discoverPools(client, candidatesFor(toPrice, config)));
+    const readings = await readPools(
+      client,
+      await discoverPools(client, candidatesFor(toPrice, config), blockNumber),
+      blockNumber,
+    );
     for (const [key, quote] of bestPrices(readings, quoteUsd)) result.set(key, quote);
   }
   return { native, tokens: result };
