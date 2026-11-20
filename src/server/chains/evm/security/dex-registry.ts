@@ -1,0 +1,113 @@
+import "server-only";
+import type { ChainKey } from "@/config/chains";
+import { chainDex } from "../dex";
+
+/**
+ * Exchanges used by token security (pool discovery, liquidity and the trade test), per chain.
+ *
+ * Adding an exchange:
+ *  - another Uniswap-v2-style fork (same factory/router design): one entry here, nothing else;
+ *  - a new exchange design (Uniswap v4, Curve, Solidly…): an entry with its protocol, plus a pool reader and a
+ *    trade simulator registered for that protocol in pools.ts / trade.ts.
+ * Every router was checked on-chain on 2026-11-20: factory() and WETH() match (tests/unit/security-live.test.ts).
+ */
+export type DexProtocol = "uniswap-v2" | "uniswap-v3";
+
+export interface DexDeployment {
+  name: string;
+  protocol: DexProtocol;
+  factory: string;
+  /** Router used by the trade simulator (v2-style). */
+  router?: string;
+  /** v3 fee tiers to look for. */
+  fees?: number[];
+}
+
+export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
+  ethereum: [
+    {
+      name: "Uniswap v2",
+      protocol: "uniswap-v2",
+      factory: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+      router: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+    },
+    {
+      name: "SushiSwap",
+      protocol: "uniswap-v2",
+      factory: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
+      router: "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
+    },
+    {
+      name: "PancakeSwap v2",
+      protocol: "uniswap-v2",
+      factory: "0x1097053Fd2ea711dad45caCcc45EfF7548fCB362",
+      router: "0xEfF92A263d31888d860bD50809A8D171709b7b1c",
+    },
+    {
+      name: "Uniswap v3",
+      protocol: "uniswap-v3",
+      factory: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+      fees: [500, 3000, 10000],
+    },
+    {
+      name: "PancakeSwap v3",
+      protocol: "uniswap-v3",
+      factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
+      fees: [500, 2500, 10000],
+    },
+  ],
+  bsc: [
+    {
+      name: "PancakeSwap v2",
+      protocol: "uniswap-v2",
+      factory: "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73",
+      router: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+    },
+    {
+      name: "Uniswap v2",
+      protocol: "uniswap-v2",
+      factory: "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
+      router: "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
+    },
+    {
+      name: "Biswap",
+      protocol: "uniswap-v2",
+      factory: "0x858E3312ed3A876947EA49d572A7C42DE08af7EE",
+      router: "0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8",
+    },
+    {
+      name: "PancakeSwap v3",
+      protocol: "uniswap-v3",
+      factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
+      fees: [100, 500, 2500, 10000],
+    },
+    {
+      name: "Uniswap v3",
+      protocol: "uniswap-v3",
+      factory: "0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7",
+      fees: [100, 500, 3000, 10000],
+    },
+  ],
+};
+
+/** Tokens a pool can be paired with (the price engine's quote tokens: stablecoins and the wrapped native coin). */
+export const pairTokens = (chain: ChainKey) => chainDex[chain].quotes;
+export const wrappedNative = (chain: ChainKey) => chainDex[chain].quotes.find((q) => q.role === "wrapped-native")!;
+
+/**
+ * Liquidity-lock contracts: LP tokens held here count as "locked" (heuristic: the lock's terms aren't read).
+ * Addresses from the projects' public documentation; each has code on-chain (live test).
+ */
+export const lpLockers: Record<ChainKey, Record<string, string>> = {
+  ethereum: { "0x663a5c229c09b049e36dcc11a9b0d4a8eb9db214": "UNCX (Unicrypt) v2" },
+  bsc: {
+    "0x407993575c91ce7643a4d4ccacc9a98c36ee1bbe": "PinkLock v2",
+    "0xc765bddb93b0d1c1a88282ba0fa6b2d00e3e0c83": "UNCX (Unicrypt)",
+  },
+};
+
+/** Trade test size: about $10 worth of the native coin, never more than 0.5% of the pool's native side. */
+export const tradeTestSize: Record<ChainKey, bigint> = {
+  ethereum: 5_000_000_000_000_000n, // 0.005 ETH
+  bsc: 20_000_000_000_000_000n, // 0.02 BNB
+};

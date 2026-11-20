@@ -47,7 +47,7 @@ test("opens the All tools menu and finds a tool", async ({ page, isMobile }) => 
   await expect(page.getByRole("link", { name: /Token Security Scanner/ })).toBeVisible();
   await page.getByRole("link", { name: /Token Security Scanner/ }).click();
   await expect(page).toHaveURL(/\/en\/tools\/token-security$/);
-  await expect(page.getByText("This tool isn't live yet")).toBeVisible();
+  await expect(page.getByLabel("Token contract address")).toBeVisible();
 });
 
 test("uses a right-to-left layout for Urdu", async ({ page }) => {
@@ -122,3 +122,8 @@ for (const path of [
     expect(Math.round(css / 1024), "CSS KB").toBeLessThanOrEqual(CSS_BUDGET_KB);
   });
 }
+
+test("a tool that isn't live yet says so", async ({ page }) => {
+  await page.goto("/en/tools/approval-checker");
+  await expect(page.getByText("This tool isn't live yet")).toBeVisible();
+});

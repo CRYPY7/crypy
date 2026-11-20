@@ -1,3 +1,4 @@
+import type { TokenSecurityFacts } from "@/lib/security/types";
 import type { ChainConfig, ChainFamily, ChainKey } from "@/config/chains";
 
 /** Token amount without precision loss: raw integer as a string + decimals. */
@@ -309,4 +310,6 @@ export interface ChainFamilyAdapter {
   lookupTransaction(chain: ChainConfig, hash: string): Promise<TxLookup | null>;
   /** Full details for the transaction page; null when the chain doesn't know the hash. */
   getTransactionDetails?(chain: ChainConfig, hash: string): Promise<TxDetails | null>;
+  /** Token security facts (M5). null when the address isn't a token on this chain. */
+  getTokenSecurity?(chain: ChainConfig, address: string): Promise<TokenSecurityFacts | null>;
 }

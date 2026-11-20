@@ -3,6 +3,8 @@ import { cacheLife } from "next/cache";
 import { getChain } from "@/config/chains";
 import type { AddressLookup, TxDetails, TxLookup } from "@/lib/chains/types";
 import { registry } from "@/server/chains/registry";
+import { evaluate } from "@/lib/security/evaluate";
+import type { SecurityReport } from "@/lib/security/types";
 import { type ResolveResult, resolveSearch } from "./resolve";
 
 /**
@@ -60,4 +62,19 @@ export async function cachedTxDetails(chainKey: string, hash: string): Promise<T
 export function explorerLink(chainKey: string, kind: "address" | "tx" | "token", id: string): string | null {
   const found = adapterFor(chainKey);
   return found ? found.adapter.explorerUrl(found.chain, kind, id) : null;
+}
+
+/**
+ * Token security report, cached 5 minutes per token (owners can switch fees or trading at any time, so it stays
+ * short). The adapter supplies facts; the shared rules turn them into checks.
+ */
+export async function cachedTokenSecurity(chainKey: string, address: string): Promise<SecurityReport | null> {
+  "use cache";
+  cacheLife({ stale: 60, revalidate: 300, expire: 900 });
+  const found = adapterFor(chainKey);
+  if (!found?.adapter.getTokenSecurity || !found.chain.capabilities.tokenSecurity) return null;
+  const parsed = found.adapter.parseAddress(address);
+  if (!parsed || parsed.checksumValid === false) return null;
+  const facts = await found.adapter.getTokenSecurity(found.chain, parsed.normalized);
+  return facts ? evaluate(facts) : null;
 }

@@ -59,7 +59,15 @@ export interface ToolDefinition {
 }
 
 export const tools: readonly ToolDefinition[] = [
-  { id: "token-security", category: "security", icon: "shield-alert", status: "soon", milestone: "M5", featured: true },
+  {
+    id: "token-security",
+    category: "security",
+    icon: "shield-alert",
+    status: "live",
+    milestone: "M5",
+    featured: true,
+    isNew: true,
+  },
   { id: "approval-checker", category: "security", icon: "key-round", status: "soon", milestone: "M6", featured: true },
   { id: "balance-scanner", category: "wallet", icon: "wallet", status: "live", milestone: "M3", featured: true },
   { id: "batch-balance", category: "wallet", icon: "layers", status: "live", milestone: "M4.5", isNew: true },

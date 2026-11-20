@@ -1,3 +1,4 @@
+import { getEvmTokenSecurity } from "./security/token-security";
 import "server-only";
 import { getEvmBalances } from "./balances";
 import { type Hex, type PublicClient, erc20Abi, getAddress, isAddress } from "viem";
@@ -123,6 +124,10 @@ export const evmAdapter: ChainFamilyAdapter = {
 
   getTransactionDetails(chain, hash) {
     return getEvmTxDetails(getEvmClient(chain), chain, hash as Hex);
+  },
+
+  getTokenSecurity(chain, address) {
+    return getEvmTokenSecurity(chain, address);
   },
 
   async lookupTransaction(chain, hash): Promise<TxLookup | null> {

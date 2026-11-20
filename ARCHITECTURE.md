@@ -451,6 +451,27 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 - Other chain families plug in by adding the same reader to their adapter; the page lists every live chain with the
   `tokenBalances` capability.
 
+## 12e. Token security (M5)
+
+```
+UI (token page Security tab, API)  ← SecurityReport        lib/security/types.ts
+lib/security/evaluate.ts (pure)    ← TokenSecurityFacts    one rule set for every chain family
+ChainFamilyAdapter.getTokenSecurity                        EVM: server/chains/evm/security/
+   token-security.ts  orchestrator, 3 node rounds + cached outside sources
+   dex-registry.ts    exchanges per chain (protocol, factory, router, fee tiers), lockers, test size
+   pools.ts           pool discovery and reading per protocol (uniswap-v2, uniswap-v3)
+   trade.ts           trade simulators per protocol (uniswap-v2 today) via eth_call + state override
+   bytecode.ts        selectors, owner-power dictionary, proxy slots, EIP-1167
+server/security/external.ts        GoPlus (second opinion) and Sourcify, cached, fail soft
+```
+
+- Evidence classes: verified, simulated, heuristic, external, unsupported. Severity: critical (observed in the trade
+  test only), high, medium, low. Headline levels: serious, risks, warnings, none-found — never "safe".
+- Trade-test contract: `contracts/security/CrypyTradeTestV2.sol`, built with `scripts/build-trade-test.mjs`
+  (solc 0.8.28 via IR, not a project dependency); bytecode in `trade-test-v2.ts` with the source's SHA-256.
+- Adding a chain family: implement `getTokenSecurity` returning the same facts and set the `tokenSecurity` capability.
+  Adding an exchange design: a pool reader in `pools.ts` and a simulator in `trade.ts` for its protocol id.
+
 ## 12b. DEX market data (M5.5)
 
 Three layers; only the bottom one depends on the chain or DEX:

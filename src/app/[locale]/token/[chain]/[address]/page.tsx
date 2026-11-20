@@ -9,13 +9,13 @@ import { locale as localeParam } from "next/root-params";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { getAddress } from "viem";
-import { EntityHeader, EntitySkeleton, FactList, Notice } from "@/components/entity/entity-parts";
+import { EntityHeader, EntitySkeleton, Notice } from "@/components/entity/entity-parts";
 import { getChain } from "@/config/chains";
 import { isLocale } from "@/i18n/locales";
 import { looksLikeLink } from "@/lib/chains/sanitize";
-import { formatAmount } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
 import { OtherChains } from "@/components/entity/other-chains";
+import { TokenSecuritySection } from "@/components/entity/token-security";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedTokenLookup, explorerLink } from "@/server/services/lookups";
 
@@ -128,33 +128,34 @@ async function TokenContent({ params }: { params: Props["params"] }) {
         </Notice>
       )}
 
-      <section aria-labelledby="facts" className="rounded-xl border bg-card p-5">
-        <h2 id="facts" className="mb-4 font-sans text-lg font-semibold">
-          {t("entity.token.facts")}
-        </h2>
-        <FactList
-          items={[
-            {
-              label: t("entity.token.totalSupply"),
-              value: (
-                <span className="technical">
-                  {formatAmount(token.totalSupply.raw, token.decimals, locale, 2)} <bdi>{token.symbol}</bdi>
-                </span>
-              ),
-            },
-            { label: t("entity.token.decimals"), value: <span className="technical">{token.decimals}</span> },
-            { label: t("entity.token.contract"), value: <span className="technical text-sm">{checksummed}</span> },
-          ]}
-        />
-        <Link
-          href={localePath(locale, `/address/${checksummed}`)}
-          className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
-        >
-          {t("entity.token.viewAsAddress")}
-        </Link>
-      </section>
+      <nav aria-label={t("entity.tokenSecurity.tabs.label")} className="-mb-4 flex gap-1 border-b text-sm">
+        <span aria-current="page" className="border-b-2 border-primary px-3 py-2.5 font-semibold">
+          {t("entity.tokenSecurity.tabs.security")}
+        </span>
+        <span className="flex items-center gap-1.5 px-3 py-2.5 text-muted-foreground">
+          {t("entity.tokenSecurity.tabs.market")}
+          <span className="rounded bg-muted px-1.5 text-[10px]">{t("entity.tokenSecurity.tabs.soon")}</span>
+        </span>
+      </nav>
 
-      <Notice title={t("entity.comingSoonTitle")}>{t("entity.token.comingSoon")}</Notice>
+      <Suspense
+        fallback={
+          <div role="status" className="flex flex-col gap-4">
+            <p className="text-sm text-muted-foreground">{t("entity.tokenSecurity.loading")}</p>
+            <div aria-hidden="true" className="h-40 animate-pulse rounded-2xl bg-muted" />
+            <div aria-hidden="true" className="h-64 animate-pulse rounded-2xl bg-muted" />
+          </div>
+        }
+      >
+        <TokenSecuritySection chainKey={chain.key} address={checksummed} locale={locale} />
+      </Suspense>
+
+      <Link
+        href={localePath(locale, `/address/${checksummed}`)}
+        className="text-sm font-semibold text-primary hover:underline"
+      >
+        {t("entity.token.viewAsAddress")}
+      </Link>
     </div>
   );
 }

@@ -148,6 +148,55 @@ and a swap of your own on CRYPY to confirm the wording.
 - Non-standard events are counted ("3 events aren't standard token events") but never interpreted.
 - Cost per page: about 6–9 node requests (batched), cached 15 seconds; no paid API.
 
+## M5 — Token Security (design approved 2026-11-20, boards 19–20)
+
+Owner requirement: designed so new exchanges and blockchains can be added without changing the page.
+
+- **Layers:** a chain-family adapter supplies plain facts (`TokenSecurityFacts`, `lib/security/types.ts`) → one
+  shared, pure rules module turns them into checks (`lib/security/evaluate.ts`) → the page and the API render the
+  report. A new chain family implements `getTokenSecurity` and declares the `tokenSecurity` capability; nothing else
+  changes. A missing fact becomes "not checked".
+- **Exchange registry** (`server/chains/evm/security/dex-registry.ts`): Uniswap v2, SushiSwap, PancakeSwap v2 (Ethereum);
+  PancakeSwap v2, Uniswap v2, Biswap (BNB Chain); Uniswap v3 and PancakeSwap v3 on both. Another Uniswap-v2-style fork
+  is one line; a new exchange design adds a pool reader and a trade simulator for its protocol. Every router is
+  checked on-chain by a live test (factory and wrapped coin match).
+- **Trade test (CRYPY's own, free):** `contracts/security/CrypyTradeTestV2.sol` buys about $10 of the token, transfers 10%
+  to a second address and sells the rest, inside a read-only `eth_call` with a state override. Never deployed; nothing
+  signed or sent. Measures buy, sell and transfer tax and reports the step that failed with the contract's own error.
+  Test size is capped at 0.5% of the pool. A unit test fails if the source changes without rebuilding the bytecode.
+- **Contract reads:** owner (`owner()` / `getOwner()`), renounced or not, wallet or contract owner; proxies (EIP-1967,
+  EIP-1822, beacon, older ZeppelinOS slots used by USDC, EIP-1167 clones, which are not upgradeable); owner powers
+  found in the code (mint, fees, blacklist, pause, limits, cooldown, upgrade, SELFDESTRUCT), including the
+  implementation's code for proxies.
+- **Liquidity:** pools on every registered exchange against the wrapped coin and stablecoins, USD value, and who holds
+  the main v2 pool's LP tokens (burned, locked in PinkLock or UNCX, owner, others). Empty pools are counted, not listed.
+- **Outside sources (free, cached):** Sourcify for published source code (1 day); GoPlus for holders and a second opinion
+  (1 hour), always shown with its name, compared with CRYPY's own checks ("agrees on 4 of 4"), never mixed in.
+  Honeypot.is is not used: its terms forbid offering its functions to others.
+- **Rules:** critical only for what the trade test observed (selling or transfers blocked, a tax of 50% or more); a
+  function found in the code tops out at high, one step lower when the owner is a contract, low once ownership is
+  renounced; a burned proxy admin is low; unprotected LP is low in deep pools (≥ $100k), medium in small ones; empty
+  pools high. There is never a "safe" verdict.
+- **Pages:** the token page now opens on a Security tab (Market marked "Soon"); the Token Security Scanner tool page is
+  live with an address box and chain choice; `GET /api/v1/token/{chain}/{address}/security` returns the report.
+
+Real results (2026-11-20): CAKE and USDT "Some warnings" (a contract owner can mint), USDC "Risks found" (upgradeable
+proxy and mint/blacklist powers held by a wallet), PEPE and FLOKI "No major risks found" (FLOKI's real 0.3% fee
+measured), SafeMoon "Risks found" (buying fails with "Pancake: TRANSFER_FAILED"), a new four.meme token: empty pools,
+fixed clone. GoPlus agreed with CRYPY on every shared check for CAKE, USDC and the four.meme token.
+
+Not covered yet: trade test on v3-only or stablecoin-only tokens ("not checked"), holders without GoPlus, contract
+age and creator, source verification on block explorers.
+
+## M5 checks (2026-11-20, in the cloud workspace)
+
+- Typecheck, lint, Prettier, i18n check: passed. Unit tests: 177 passed (13 new: every rule, code reading, GoPlus
+  parsing from a real answer, source/bytecode guard).
+- Live (`LIVE=1`): 5 new passed (routers and lockers, CAKE, FLOKI's 0.3% fee, USDC's proxy, a non-token contract).
+- Build passed. Playwright: 93 passed (new: token page report, tool page form, a "not live yet" page).
+- A free-plan limit seen while testing: GoPlus stopped answering after about 10 quick calls; the page then shows
+  "not checked" for holders and the second opinion.
+
 ## M4.5 — Batch Balance Scanner (design approved 2026-11-20, boards 8–10)
 
 What was built (`/tools/batch-balance`, Wallet category, "New" badge in the sidebar):

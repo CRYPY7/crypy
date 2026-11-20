@@ -4,6 +4,7 @@ import type { ToolId } from "@/config/tools";
 export const ownRouteTools: readonly ToolId[] = [
   "balance-scanner",
   "batch-balance",
+  "token-security",
   "tx-checker",
   "unit-converter",
   "hex-converter",

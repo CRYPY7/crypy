@@ -133,6 +133,33 @@
         "Upgradeable contract and holder concentration checks",
         "Each finding labelled Verified or Heuristic, with its source and evidence",
         "A list of checks that were run and checks that aren't available"
+      ],
+      "howTo": [
+        "Paste a token's contract address (0x…). Pick the chain if you know it.",
+        "CRYPY simulates a buy, a transfer and a sell, reads the owner's powers, the liquidity and more.",
+        "Read the findings by severity. Each one says how it was checked: verified, simulated, heuristic or from an outside provider."
+      ],
+      "faq": [
+        {
+          "q": "Can CRYPY tell me a token is safe?",
+          "a": "No. CRYPY shows the risks it could check and how each was checked. Passing checks don't prove a token is honest, and owners can change fees or trading later."
+        },
+        {
+          "q": "How does the trade test work?",
+          "a": "CRYPY runs a small test contract inside a read-only call against the real exchange pool: it buys, sends some to another wallet and sells. Nothing is signed or sent, and no wallet is needed."
+        },
+        {
+          "q": "What does \"heuristic\" mean?",
+          "a": "It was inferred from the contract's code, for example a mint function being present. It shows what is possible, not what has happened."
+        },
+        {
+          "q": "Where do holder numbers come from?",
+          "a": "From GoPlus Security, an outside provider, shown with its name. CRYPY doesn't count holders on its own yet."
+        },
+        {
+          "q": "Which chains and exchanges are covered?",
+          "a": "Ethereum and BNB Chain. The trade test uses Uniswap v2, PancakeSwap v2, SushiSwap and Biswap pools; liquidity is also read from Uniswap and PancakeSwap v3."
+        }
       ]
     },
     "approval-checker": {
@@ -1234,6 +1261,363 @@
       "label": "Same address on other chains:",
       "none": "Not in use on the other supported chains.",
       "overview": "All-chains overview"
+    },
+    "tokenSecurity": {
+      "tabs": {
+        "label": "Token sections",
+        "security": "Security",
+        "market": "Market",
+        "soon": "Soon"
+      },
+      "level": {
+        "serious": "Serious risks found",
+        "risks": "Risks found",
+        "warnings": "Some warnings",
+        "none-found": "No major risks found in these checks"
+      },
+      "levelNote": "There is no \"safe\" verdict on CRYPY: these are the signals we could check.",
+      "topRisks": "Top risks: {list}.",
+      "noneFoundNote": "Passing these checks doesn't prove a token is honest, and a contract can change behaviour later.",
+      "checked": "Checked {time} UTC · block {block}",
+      "counts": {
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
+        "passed": "Passed",
+        "unchecked": "Not checked"
+      },
+      "severity": {
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
+        "pass": "Passed",
+        "unchecked": "Not checked"
+      },
+      "class": {
+        "verified": "Verified",
+        "verifiedTip": "Read directly from the blockchain.",
+        "simulated": "Simulated",
+        "simulatedTip": "Measured by simulating trades in a read-only call. Nothing was sent.",
+        "heuristic": "Heuristic",
+        "heuristicTip": "Inferred from the contract's code. A function being there doesn't show whether it is used.",
+        "external": "{provider}",
+        "externalTip": "From an outside provider, shown with its name.",
+        "unsupported": "Not checked",
+        "unsupportedTip": "CRYPY couldn't check this here."
+      },
+      "copyReport": "Copy report",
+      "copied": "Copied",
+      "unavailable": "Security checks aren't available for this token right now. Try again in a minute.",
+      "loading": "Running security checks…",
+      "trade": {
+        "title": "Trade test",
+        "intro": "A buy, a transfer and a sell, simulated against the real {dex} pool inside a read-only call. Nothing was sent.",
+        "buy": "Buy",
+        "sell": "Sell",
+        "transfer": "Transfer to another wallet",
+        "worked": "Worked",
+        "blocked": "Blocked",
+        "notRun": "Not tested",
+        "tax": "Tax {tax}",
+        "said": "Contract said: {reason}",
+        "noReason": "The contract gave no reason.",
+        "footer": "Test size {amount} {symbol} · pool {pool}. Results can change at any time: an owner may switch trading or fees on or off later.",
+        "why": {
+          "noPool": "No pool found on the exchanges CRYPY checks ({dexes}), so there was nothing to trade against.",
+          "unsupportedPool": "Pools exist, but none the trade test supports yet. It currently trades against the native coin on Uniswap-v2-style pools; v3 pools and stablecoin-only pools are planned.",
+          "noLiquidity": "The pool has (almost) no liquidity yet, so a test trade isn't meaningful.",
+          "error": "The trade test couldn't run right now (the node didn't answer in time). Try again in a minute."
+        }
+      },
+      "owner": {
+        "title": "What the owner can do",
+        "state": {
+          "none": "No owner function found",
+          "renounced": "Ownership renounced",
+          "wallet": "Owner: a wallet, not renounced",
+          "contract": "Owner: a contract (often a multisig, timelock or staking contract)"
+        },
+        "power": {
+          "mint": "Mint new tokens",
+          "fees": "Change buy and sell fees",
+          "blacklist": "Block wallets from trading",
+          "pause": "Pause or enable trading",
+          "limits": "Limit how much a wallet can buy or hold",
+          "cooldown": "Add waiting time between trades",
+          "upgrade": "Replace the contract's code",
+          "selfdestruct": "Destroy the contract (SELFDESTRUCT)"
+        },
+        "found": "Found in the code: {functions}",
+        "notUsable": "Can't be used: ownership is renounced.",
+        "byContract": "Held by a contract owner.",
+        "nothing": "None of the common owner powers (mint, fees, blacklist, pause, limits) were found in the code.",
+        "note": "\"Found in the code\" means the function exists. It doesn't show whether or when the owner uses it."
+      },
+      "allChecks": "All checks ({count})",
+      "showAll": "Show all {count} checks",
+      "checks": {
+        "sell": {
+          "risk": {
+            "title": "Selling blocked in the trade test",
+            "detail": "Buying worked but selling failed. {reason}"
+          },
+          "pass": {
+            "title": "Selling worked in the trade test",
+            "detail": "Bought and sold on {dex}."
+          }
+        },
+        "buy": {
+          "risk": {
+            "title": "Buying failed in the trade test",
+            "detail": "Trading may not be open yet, or a limit applies. {reason}"
+          }
+        },
+        "transfer": {
+          "risk": {
+            "title": "Transfers blocked in the trade test",
+            "detail": "A transfer to another wallet failed. {reason}"
+          }
+        },
+        "buyTax": {
+          "risk": {
+            "title": "Buy tax {tax}",
+            "detail": "Measured in the trade test."
+          },
+          "pass": {
+            "title": "No buy tax",
+            "detail": "Measured in the trade test."
+          }
+        },
+        "sellTax": {
+          "risk": {
+            "title": "Sell tax {tax}",
+            "detail": "Measured in the trade test."
+          },
+          "pass": {
+            "title": "No sell tax",
+            "detail": "Measured in the trade test."
+          }
+        },
+        "transferTax": {
+          "risk": {
+            "title": "Transfer tax {tax}",
+            "detail": "Wallet-to-wallet transfers lose part of the amount."
+          },
+          "pass": {
+            "title": "No transfer tax",
+            "detail": "Measured in the trade test."
+          }
+        },
+        "tradeTest": {
+          "unchecked": {
+            "title": "Trade test not run",
+            "detail": "See Trade test."
+          }
+        },
+        "owner": {
+          "risk": {
+            "title": "Owner not renounced",
+            "detail": "An owner address can still use owner-only functions."
+          },
+          "pass": {
+            "title": "No active owner",
+            "detail": "Ownership is renounced or there is no owner function."
+          }
+        },
+        "powers": {
+          "pass": {
+            "title": "No common owner powers found",
+            "detail": "Mint, fees, blacklist, pause and limit functions weren't found in the code."
+          }
+        },
+        "power": {
+          "mint": {
+            "risk": {
+              "title": "Owner can mint new tokens",
+              "detail": "New supply would lower every holder's share."
+            }
+          },
+          "fees": {
+            "risk": {
+              "title": "Owner can change fees",
+              "detail": "Buy or sell fees could be raised later."
+            }
+          },
+          "blacklist": {
+            "risk": {
+              "title": "Owner can block wallets",
+              "detail": "Blocked wallets can't trade or move the token."
+            }
+          },
+          "pause": {
+            "risk": {
+              "title": "Owner can pause or enable trading",
+              "detail": "Trading can be switched off."
+            }
+          },
+          "limits": {
+            "risk": {
+              "title": "Owner can set trade or wallet limits",
+              "detail": "Large buys or sales can be blocked."
+            }
+          },
+          "cooldown": {
+            "risk": {
+              "title": "Owner can add a trade cooldown",
+              "detail": "Wallets may have to wait between trades."
+            }
+          },
+          "upgrade": {
+            "risk": {
+              "title": "Code can be replaced",
+              "detail": "Upgrade functions found in the code."
+            }
+          },
+          "selfdestruct": {
+            "risk": {
+              "title": "Contract contains SELFDESTRUCT",
+              "detail": "Its effect is limited on today's networks, but it's unusual for a token."
+            }
+          }
+        },
+        "proxy": {
+          "risk": {
+            "title": "Upgradeable proxy",
+            "detail": "Its code can be replaced by the proxy's admin."
+          },
+          "pass": {
+            "title": "Not an upgradeable proxy",
+            "detail": "No standard proxy implementation slot found."
+          }
+        },
+        "source": {
+          "pass": {
+            "title": "Source code published",
+            "detail": "Matched on {provider}."
+          },
+          "unchecked": {
+            "title": "Source code not confirmed",
+            "detail": "Not found on {provider}. It may still be published on a block explorer; CRYPY can't check that for free yet."
+          }
+        },
+        "liquidity": {
+          "risk": {
+            "title": "Small liquidity",
+            "detail": "About ${usd} in the main pool ({dex}). Large trades move the price a lot."
+          },
+          "pass": {
+            "title": "Liquidity about ${usd}",
+            "detail": "Main pool: {dex}."
+          }
+        },
+        "lp": {
+          "risk": {
+            "title": "Liquidity can be removed",
+            "detail": "Only {protected} of the main pool's liquidity is burned or locked."
+          },
+          "pass": {
+            "title": "Most liquidity burned or locked",
+            "detail": "{protected} of the main pool's LP tokens."
+          }
+        },
+        "holders": {
+          "risk": {
+            "title": "Top 10 holders own {top10}",
+            "detail": "From {provider}. Burn addresses excluded."
+          },
+          "pass": {
+            "title": "Top 10 holders own {top10}",
+            "detail": "From {provider}. Burn addresses excluded."
+          },
+          "unchecked": {
+            "title": "Holders not checked",
+            "detail": "CRYPY can't count holders on its own yet, and the outside provider had no answer."
+          }
+        },
+        "name": {
+          "risk": {
+            "title": "Suspicious name",
+            "detail": "The name or symbol contains a link or bait words."
+          },
+          "pass": {
+            "title": "Name and symbol look normal",
+            "detail": "No links or bait words."
+          }
+        },
+        "age": {
+          "unchecked": {
+            "title": "Contract age and creator",
+            "detail": "Needs an index of past transactions (planned)."
+          }
+        },
+        "proxyClone": {
+          "title": "A fixed clone, not upgradeable",
+          "detail": "An EIP-1167 minimal clone: it always runs the same contract code, which can't be replaced."
+        },
+        "liquidityState": {
+          "none": {
+            "title": "No liquidity pool found",
+            "detail": "Not on the exchanges CRYPY checks. The token may trade elsewhere, or not at all yet."
+          },
+          "empty": {
+            "title": "Pools are empty",
+            "detail": "{count, plural, one {# pool} other {# pools}} found, but they hold (almost) nothing. The token can't really be traded yet."
+          }
+        }
+      },
+      "lpStates": {
+        "owner": "{owner} of the main pool's LP tokens are in the owner's wallet.",
+        "proxyBurned": "Its admin is a burn address, so it can no longer be upgraded."
+      },
+      "liquidity": {
+        "title": "Liquidity",
+        "none": "No pools found on {dexes}.",
+        "verified": "Pool found through the exchange's factory",
+        "shares": {
+          "owner": "owner wallet",
+          "burned": "burned",
+          "locked": "locked",
+          "other": "others"
+        },
+        "note": "{count, plural, one {# pool} other {# pools}} checked on {dexes}. v3 values are estimated from the paired token's side.",
+        "more": "{count} smaller pools",
+        "empty": "{count, plural, one {# pool} other {# pools}} found on {dexes}, all empty (under $1)."
+      },
+      "holders": {
+        "title": "Holders",
+        "count": "Holders",
+        "top10": "Top 10 hold",
+        "owner": "Owner holds",
+        "creator": "Creator holds",
+        "source": "From {provider}, read {time} UTC. CRYPY can't count holders on its own yet.",
+        "none": "No holder data: {provider} didn't answer or hasn't analysed this token yet."
+      },
+      "second": {
+        "title": "Second opinion",
+        "agree": "{provider} agrees on {agree} of {shared} shared checks.",
+        "none": "No second opinion: {provider} didn't answer or hasn't analysed this token yet.",
+        "different": "Different:",
+        "separate": "{provider}'s results are shown with its name and never mixed into CRYPY's own checks.",
+        "ids": {
+          "honeypot": "selling blocked",
+          "buyTax": "buy tax",
+          "sellTax": "sell tax",
+          "mintable": "can mint",
+          "proxy": "upgradeable proxy",
+          "blacklist": "can block wallets",
+          "renounced": "ownership renounced"
+        },
+        "diff": "{what}: CRYPY {ours}, {provider} {theirs}"
+      },
+      "facts": {
+        "title": "Token facts",
+        "supply": "Total supply",
+        "decimals": "Decimals",
+        "contract": "Contract"
+      },
+      "disclaimer": "CRYPY never shows a token as \"safe\". Passing checks don't prove a token is honest, and a contract can change behaviour later. Not financial advice."
     }
   },
   "wallet": {
@@ -1575,6 +1959,14 @@
         "value": "Value (USD)",
         "status": "Status"
       }
+    },
+    "token-security": {
+      "label": "Token contract address",
+      "placeholder": "0x… token contract",
+      "chain": "Chain",
+      "anyChain": "Find it for me",
+      "submit": "Check token",
+      "invalid": "Enter a token contract address: 0x followed by 40 characters."
     }
   }
 }

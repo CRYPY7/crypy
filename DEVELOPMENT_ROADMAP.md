@@ -171,7 +171,11 @@ Check one or more coins/tokens for a whole list of addresses, on the chains the 
 **Done when:** results for a 500-address list match explorer balances on both chains; invalid, duplicate and
 mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page weight stays within budget.
 
-## M5 — Token · Security (Tool 4)
+## M5 — Token · Security (Tool 4) — ✅ built 2026-11-20 (design approved, boards 19–20)
+
+Built with CRYPY's own trade simulation, on-chain reads, Sourcify and GoPlus (second opinion). Next steps for this
+tool: v3 trade simulator, stablecoin-path trades, contract age and creator from our own index (M5.5 Stage 2), more
+exchanges and lock contracts as config entries.
 
 **Done when:** known-safe and known-scam reference tokens on both chains produce correct, attributed signals.
 
