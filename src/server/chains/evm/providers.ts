@@ -180,6 +180,23 @@ export function isCoolingDown(provider: Provider, now = Date.now()): boolean {
   return until !== undefined && until > now;
 }
 
+/**
+ * When every provider of a chain is resting at once (for example after a burst of heavy checks), failing every request
+ * for up to a minute would make CRYPY look broken. Instead, the provider whose rest ends soonest gets another try now.
+ * Providers over their daily budget stay off (zero-cost rule).
+ */
+export function wakeOneIfAllResting(providers: Provider[], now = Date.now()): void {
+  const withBudget = providers.filter((p) => !budgetExhausted(p));
+  if (withBudget.length === 0 || withBudget.some((p) => !isCoolingDown(p, now))) return;
+  const soonest = withBudget.reduce((x, y) => ((coolDown.get(y.url) ?? 0) < (coolDown.get(x.url) ?? 0) ? y : x));
+  coolDown.delete(soonest.url);
+}
+
+/** Test helper. */
+export function coolDownFor(provider: Provider, ms: number): void {
+  coolDown.set(provider.url, Date.now() + ms);
+}
+
 /** Test helper. */
 export function resetCoolDown(): void {
   coolDown.clear();
@@ -284,6 +301,7 @@ export function rankedFallback(providers: Provider[]): Transport {
           // Try the fastest provider; if it is slow to answer, also ask the next one ("hedging") and take the
           // first answer. Safe because the server only reads: it never sends transactions.
           // Fastest first; providers that recently refused this kind of request (old data) go last.
+          wakeOneIfAllResting(providers);
           const ranked = rankProviders(providers);
           const ordered = [
             ...ranked.filter((p) => !refusesLately(p, args.method)),

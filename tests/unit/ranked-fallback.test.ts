@@ -3,6 +3,7 @@ import type { AddressInfo } from "node:net";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   type Provider,
+  coolDownFor,
   rankedFallback,
   refusesLately,
   resetCoolDown,
@@ -62,6 +63,15 @@ const ask = (method: string) =>
 const TX = { hash: "0x01", blockNumber: "0x10" };
 
 describe("ranked fallback", () => {
+  it("when every node is resting, the one whose rest ends soonest is asked again instead of failing at once", async () => {
+    behaviours.a = { result: "0x1" };
+    behaviours.b = { result: "0x2" };
+    coolDownFor(a, 50_000);
+    coolDownFor(b, 10_000);
+    expect(await ask("eth_blockNumber")).toBe("0x2");
+    expect(hits).toMatchObject({ a: 0, b: 1 });
+  });
+
   it("one node's 'not found' is not final: the other node's answer wins", async () => {
     behaviours.a = { result: null };
     behaviours.b = { result: TX };

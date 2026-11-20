@@ -184,6 +184,13 @@ keeps Sourcify (open) for source checks until the owner decides (options in the 
 Not added yet: GemPad, Mudra and DXLock (newer "personal locker" contracts): their official contract addresses and
 read methods couldn't be confirmed from their own documentation; holdings there show as unidentified contracts.
 
+## M5.2 follow-up (2026-11-20): when every node is resting
+
+On the owner's PC two live tests failed in 1–3 ms: after heavy checks every BNB Chain node was in its one-minute
+rest, so requests failed without asking anyone. Now, when all of a chain's providers are resting at once, the one
+whose rest ends soonest is asked again (`wakeOneIfAllResting`); providers over their daily budget stay off. Unit test
+added; unit tests 198 passed; security live tests 8 of 8 passed.
+
 ## M5.2 checks (2026-11-20, in the cloud workspace)
 
 - Typecheck, lint, Prettier: passed. Unit tests: 197 passed (new: source reading — names, access, limits, comments
