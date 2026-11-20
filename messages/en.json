@@ -1,0 +1,866 @@
+{
+  "meta": {
+    "siteName": "CRYPY",
+    "title": "CRYPY — Wallet safety and research toolkit",
+    "description": "Check any wallet, token or transaction on BNB Chain and Ethereum before you trust it. Non-custodial: no seed phrase, no wallet connection needed."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "status": {
+      "live": "Live",
+      "beta": "Beta",
+      "soon": "Coming soon"
+    },
+    "arrivesIn": "Planned for milestone {milestone}",
+    "open": "Open",
+    "youNeed": "You need:",
+    "betaTranslation": "Beta translation",
+    "languageNotReady": "This language is still being translated, so you're seeing English for now."
+  },
+  "nav": {
+    "main": "Main",
+    "primary": "Primary",
+    "footer": "Footer",
+    "home": "Home",
+    "allTools": "All tools",
+    "tools": "Tools",
+    "portfolio": "Portfolio",
+    "watchlist": "Watchlist",
+    "alerts": "Alerts",
+    "gas": "Gas",
+    "settings": "Settings",
+    "language": "Language",
+    "switchTheme": "Switch between dark and light theme",
+    "homeLink": "CRYPY home",
+    "openWallet": "Wallet",
+    "toolsSidebar": "Tools",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar",
+    "collapse": "Collapse",
+    "soon": "Soon",
+    "breadcrumb": "Breadcrumb",
+    "recent": "Recently viewed on this device",
+    "clearRecent": "Clear"
+  },
+  "categories": {
+    "all": "All",
+    "security": "Security",
+    "wallet": "Wallet",
+    "network": "Network",
+    "monitoring": "Monitoring",
+    "utilities": "Utilities"
+  },
+  "search": {
+    "label": "Search a wallet address, token contract or transaction hash",
+    "placeholder": "0x… address, token contract or transaction hash",
+    "compactPlaceholder": "Address, token or tx hash",
+    "submit": "Scan",
+    "detects": "Detects automatically:",
+    "types": {
+      "address": "Wallet address",
+      "token": "Token contract",
+      "tx": "Transaction hash"
+    },
+    "result": {
+      "invalid": "This doesn't look like an address or transaction hash. Addresses start with 0x and have 40 characters after it; transaction hashes have 64.",
+      "empty": "Paste an address or transaction hash first.",
+      "bad-checksum": "This address doesn't match its checksum, so a character was probably changed or mistyped. Copy it again from the original source, and never send funds to it.",
+      "not-found-tx": "We couldn't find this transaction on Ethereum or BNB Chain. It may be on another network, or not broadcast yet.",
+      "unavailable": "We couldn't reach the blockchain right now. Please try again in a minute.",
+      "rate-limited": "Too many searches in a short time. Please wait a minute and try again.",
+      "error": "Something went wrong. Please try again.",
+      "choose": "Found on more than one chain. Which one do you want to open?"
+    },
+    "checking": "Checking Ethereum and BNB Chain…",
+    "partial": "{chains} couldn't be checked right now, so results may be incomplete.",
+    "lookupAnyway": "Look it up anyway",
+    "close": "Close",
+    "found": {
+      "title": "Found on {count} of {total} chains",
+      "overview": "Open overview on all chains",
+      "inactive": "No activity found on: {chains}",
+      "sentTx": "Has sent transactions",
+      "holds": "Holds {amount} {symbol}",
+      "noBalance": "No coin balance",
+      "open": {
+        "token": "Token page",
+        "account": "Balances",
+        "contract": "Contract"
+      },
+      "kinds": {
+        "account": "Wallet",
+        "delegated": "Wallet (EIP-7702)",
+        "token": "Token contract",
+        "contract": "Smart contract",
+        "tx": "Transaction"
+      }
+    }
+  },
+  "home": {
+    "eyebrow": "Wallet safety and research · BNB Chain · Ethereum",
+    "title": "Check any wallet, token or transaction before you trust it.",
+    "subtitle": "Paste an address, token contract or transaction hash. CRYPY works out what it is and shows balances, risks and activity from real on-chain data — no wallet connection needed.",
+    "trust": {
+      "seedTitle": "Never asks for your seed phrase",
+      "seedText": "No private keys, ever. Read-only by default.",
+      "connectTitle": "No connection required",
+      "connectText": "Scan any public address without connecting a wallet.",
+      "sourceTitle": "Every result shows its source",
+      "sourceText": "Real on-chain data, timestamped and attributed."
+    },
+    "goals": {
+      "title": "What do you want to check?",
+      "subtitle": "Pick a question and we'll open the right tool."
+    },
+    "allTools": {
+      "title": "All tools",
+      "filterLabel": "Filter tools by category"
+    },
+    "worksOn": "Works on"
+  },
+  "tools": {
+    "token-security": {
+      "name": "Token Security Scanner",
+      "question": "Is this token safe to buy?",
+      "description": "Honeypot, tax, mint and ownership risk signals for any token contract.",
+      "input": "Token contract address",
+      "cta": "Check a token",
+      "features": [
+        "Risk signals grouped by severity: Critical, High, Medium, Low",
+        "Honeypot check: can the token actually be sold?",
+        "Buy and sell tax, mint permissions, owner privileges, blacklist and pause functions",
+        "Upgradeable contract and holder concentration checks",
+        "Each finding labelled Verified or Heuristic, with its source and evidence",
+        "A list of checks that were run and checks that aren't available"
+      ]
+    },
+    "approval-checker": {
+      "name": "Approval Checker",
+      "question": "Who can spend my tokens?",
+      "description": "See which contracts can spend your tokens and remove risky permissions in your wallet.",
+      "input": "Your wallet address",
+      "cta": "Check approvals",
+      "features": [
+        "Token approvals and NFT \"approve all\" permissions",
+        "Unlimited approvals and risky spenders highlighted",
+        "Value at risk for each approval",
+        "Revoke one approval at a time, always confirmed in your own wallet",
+        "Clear statement of what was checked and what may be missing"
+      ]
+    },
+    "balance-scanner": {
+      "name": "Balance Scanner",
+      "question": "What's in this wallet?",
+      "description": "Coin and token balances with USD values across supported chains.",
+      "input": "Any wallet address",
+      "cta": "See balances",
+      "features": [
+        "Coin and token balances on Ethereum and BNB Chain at once",
+        "USD values where a reliable price exists, never guessed",
+        "Totals per chain and combined",
+        "Possible spam tokens hidden by default, with the reason",
+        "Every token links to its token page",
+        "No wallet connection needed"
+      ],
+      "howTo": [
+        "Paste any wallet address (it starts with 0x).",
+        "Open the results: balances on every supported chain load together.",
+        "Click a token to see its details; expand hidden tokens to see what was filtered out and why."
+      ],
+      "faq": [
+        {
+          "q": "Do I need to connect my wallet?",
+          "a": "No. Balances are public on the blockchain, so any address can be checked without connecting or signing anything."
+        },
+        {
+          "q": "Where do the balances and prices come from?",
+          "a": "Balances are read from the blockchain itself. USD prices are also read on-chain, from PancakeSwap and Uniswap pools with enough liquidity (at least $5,000 on the quote side). Tokens without such a pool are listed but not counted in the total."
+        },
+        {
+          "q": "Why are some tokens hidden?",
+          "a": "Scammers send worthless tokens to many wallets, often with a website in the name, to lure people to fake sites. CRYPY hides tokens that look like this and shows the reason. Never visit links in token names."
+        },
+        {
+          "q": "Why does the value differ from my wallet app?",
+          "a": "Wallet apps may use other price sources, update at different times, or include tokens without a reliable on-chain price. CRYPY never guesses a price."
+        },
+        {
+          "q": "Which chains are checked?",
+          "a": "Ethereum and BNB Chain. The same address can hold different coins and tokens on each chain, so both are shown."
+        }
+      ]
+    },
+    "address-analyzer": {
+      "name": "Address Analyzer",
+      "question": "What has this wallet done?",
+      "description": "Transfers, activity history and first and last seen for any address.",
+      "input": "Any wallet address",
+      "cta": "See activity",
+      "features": [
+        "Every coin and token sent and received",
+        "First and latest activity and total transactions",
+        "Most-used contracts and addresses",
+        "Filters for incoming, outgoing and contract calls"
+      ]
+    },
+    "portfolio": {
+      "name": "Portfolio Tracker",
+      "question": "All my wallets together",
+      "description": "Group several addresses and see your combined holdings.",
+      "input": "One or more addresses",
+      "cta": "Open portfolio",
+      "features": [
+        "Add several addresses with your own labels",
+        "No account needed: saved in your browser",
+        "Holdings by wallet, by chain and by token"
+      ]
+    },
+    "tx-checker": {
+      "name": "Transaction Checker",
+      "question": "Did my transaction go through?",
+      "description": "Status, fees, confirmations and decoded token transfers in plain language.",
+      "input": "Transaction hash",
+      "cta": "Check a transaction",
+      "features": [
+        "Detects the chain automatically",
+        "Success, failed or pending, with automatic refresh while pending",
+        "Fee in coin and USD, block and confirmations",
+        "Token transfers explained in plain language"
+      ]
+    },
+    "gas-tracker": {
+      "name": "Gas Tracker",
+      "question": "How much will it cost now?",
+      "description": "Current gas prices and the cost of common actions on each chain.",
+      "input": "Nothing — just open it",
+      "cta": "See gas prices",
+      "features": [
+        "Slow, standard and fast gas prices per chain",
+        "Estimated USD cost of transfers, approvals and swaps",
+        "Update time shown, refreshes automatically"
+      ]
+    },
+    "watchlist": {
+      "name": "Watchlist & Alerts",
+      "question": "Tell me when a wallet moves",
+      "description": "Get Telegram alerts when watched wallets send, receive or grant approvals.",
+      "input": "Wallet sign-in and Telegram",
+      "cta": "Set up alerts",
+      "features": [
+        "Save any public address with a label",
+        "Alerts for transfers, large transfers and new approvals",
+        "Delivered on Telegram; pause or delete any time"
+      ]
+    },
+    "unit-converter": {
+      "name": "Unit Converter",
+      "question": "How many gwei is this?",
+      "description": "Convert between wei, gwei and ETH or BNB exactly, without rounding.",
+      "input": "An amount",
+      "cta": "Convert units",
+      "features": [
+        "Wei, gwei and ETH or BNB, both ways",
+        "Exact to the last wei, no rounding",
+        "Runs in your browser"
+      ],
+      "howTo": [
+        "Type an amount into any box: wei, gwei or ETH / BNB.",
+        "The other two boxes update instantly with the exact value.",
+        "Use the copy button next to a value to copy it."
+      ],
+      "faq": [
+        {
+          "q": "What is wei?",
+          "a": "Wei is the smallest unit of ETH: 1 ETH equals 1,000,000,000,000,000,000 wei (10^18). BNB on BNB Chain uses the same 18 decimals, so the same units apply to BNB."
+        },
+        {
+          "q": "What is gwei?",
+          "a": "One gwei is 1,000,000,000 wei (10^9), or 0.000000001 ETH. Gas prices are usually quoted in gwei."
+        },
+        {
+          "q": "How do I work out a transaction fee?",
+          "a": "Multiply the gas used by the gas price. For example, a simple transfer using 21,000 gas at 20 gwei costs 420,000 gwei, which is 0.00042 ETH."
+        },
+        {
+          "q": "Do tokens use the same units?",
+          "a": "Not always. Many tokens use 18 decimals like ETH, but some don't: USDT on Ethereum uses 6 decimals, while USDT on BNB Chain uses 18. Check the token's decimals before converting token amounts."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. The conversion runs entirely in your browser."
+        }
+      ]
+    },
+    "hex-converter": {
+      "name": "Hex Converter",
+      "question": "What number is this hex value?",
+      "description": "Convert hexadecimal and decimal values used on blockchains, up to 256 bits.",
+      "input": "A hex or decimal value",
+      "cta": "Convert",
+      "features": [
+        "Hex to decimal and back",
+        "32-byte form, byte length and signed reading",
+        "Shows text hidden in hex data",
+        "Runs in your browser"
+      ],
+      "howTo": [
+        "Paste a hex value (with or without 0x) or a decimal number.",
+        "See the decimal, hex and 32-byte forms instantly.",
+        "For digits-only input, choose whether it is decimal or hex."
+      ],
+      "faq": [
+        {
+          "q": "Why do blockchains use hex?",
+          "a": "The EVM works with 32-byte words, and node APIs return numbers such as block numbers, balances and gas in hexadecimal (for example 0x10 = 16)."
+        },
+        {
+          "q": "What is the 32-byte form?",
+          "a": "The value padded to 64 hex digits. This is how numbers appear in transaction data and contract storage."
+        },
+        {
+          "q": "What is the signed value?",
+          "a": "Contracts can store signed numbers (int256) using two's complement. When a 32-byte value starts with the top bit set, it represents a negative number, shown here."
+        },
+        {
+          "q": "What is the largest value supported?",
+          "a": "2^256 − 1, the largest number an EVM uint256 can hold."
+        }
+      ]
+    },
+    "address-formatter": {
+      "name": "Address Formatter",
+      "question": "Is this address written correctly?",
+      "description": "Check that an address is written correctly and get its checksummed form. Works for one address or a list.",
+      "input": "An address",
+      "cta": "Check address",
+      "features": [
+        "Detects typing mistakes using the EIP-55 checksum",
+        "Checks up to 500 addresses at once",
+        "Works for every EVM chain",
+        "Runs in your browser"
+      ],
+      "howTo": [
+        "Paste one address, or a list with one address per line.",
+        "Each address is marked as correct, unprotected (no checksum) or mistyped.",
+        "Copy the checksummed form of correct addresses."
+      ],
+      "faq": [
+        {
+          "q": "What is a checksum address?",
+          "a": "EIP-55 mixes upper- and lower-case letters in an address to encode a check. If you mistype a character, the check almost always fails, so the mistake is caught before you send anything."
+        },
+        {
+          "q": "Is an all-lowercase address valid?",
+          "a": "Yes. It is the same address, but it carries no checksum, so a typing mistake could go unnoticed. The checksummed form adds that protection."
+        },
+        {
+          "q": "What should I do if the checksum is wrong?",
+          "a": "Don't use the address. A wrong checksum means a character was changed. Copy the address again from its original source; don't try to fix it by hand."
+        },
+        {
+          "q": "Is the address the same on Ethereum and BNB Chain?",
+          "a": "All EVM chains use the same address format, so the same address can exist on each of them, but balances and contracts differ per chain. Exchange deposit addresses often accept only one network, so always check which network the recipient supports."
+        },
+        {
+          "q": "Does a correct address mean it is safe?",
+          "a": "No. It only means the address is written correctly. Use CRYPY's search to see what the address is before sending to it."
+        }
+      ]
+    },
+    "timestamp-block": {
+      "name": "Timestamp & Block Converter",
+      "question": "Which block was at this time?",
+      "description": "Convert dates to block numbers and back on each chain.",
+      "input": "A date or block number",
+      "cta": "Convert",
+      "features": [
+        "Date to block and block to date",
+        "Per chain"
+      ]
+    },
+    "tx-decoder": {
+      "name": "Transaction Data Decoder",
+      "question": "What does this transaction data mean?",
+      "description": "Turn raw transaction data into a readable function and values, with warnings for risky approvals.",
+      "input": "Raw transaction data",
+      "cta": "Decode",
+      "features": [
+        "Decodes common token, NFT, router and ownership functions",
+        "Warns about unlimited approvals and NFT operator approvals",
+        "Decodes calls inside multicall",
+        "Runs in your browser"
+      ],
+      "howTo": [
+        "Copy the transaction's input data (it starts with 0x) from a block explorer or your wallet's data view.",
+        "Paste it here; it is decoded instantly.",
+        "Read the function, its values and any warnings before you confirm a transaction."
+      ],
+      "faq": [
+        {
+          "q": "What is transaction data?",
+          "a": "The input data tells a contract what to do. The first 4 bytes (the function selector) identify the function, and the rest holds its values in 32-byte words."
+        },
+        {
+          "q": "Where do I find it?",
+          "a": "On a block explorer, open the transaction and look for Input Data (view it as the original hex). Many wallets also show the hex data in an advanced or data tab before you confirm."
+        },
+        {
+          "q": "What is an unlimited approval?",
+          "a": "It lets the spender move any amount of that token from your wallet, now and in the future, until you revoke it. If the spender is malicious or later hacked, those tokens can be taken."
+        },
+        {
+          "q": "Why does it say unknown function?",
+          "a": "CRYPY only decodes a list of well-known functions and never guesses. Different functions can share the same selector, so guessing could show you the wrong meaning."
+        },
+        {
+          "q": "Why are amounts so large?",
+          "a": "Amounts are in the token's smallest unit. Divide by 10 to the power of the token's decimals, or use the Unit Converter for 18-decimal tokens."
+        }
+      ]
+    }
+  },
+  "toolPage": {
+    "backToTools": "All tools",
+    "whatYouGet": "What you'll get",
+    "notLiveTitle": "This tool isn't live yet",
+    "notLiveText": "We only publish tools once they work with real blockchain data and have been tested. This one is planned for milestone {milestone}.",
+    "requiresAccount": "Requires signing in with your wallet.",
+    "howToUse": "How to use it",
+    "faq": "Questions and answers",
+    "runsLocally": "Runs in your browser. Nothing you enter is sent anywhere."
+  },
+  "toolsDialog": {
+    "title": "All tools",
+    "description": "Every CRYPY tool, grouped by what it helps you do.",
+    "searchLabel": "Find a tool",
+    "searchPlaceholder": "Find a tool — e.g. \"approvals\", \"gas\", \"honeypot\"",
+    "noResults": "No tool matches \"{query}\".",
+    "noWalletNeeded": "Every tool works without connecting a wallet unless it says otherwise.",
+    "shortcut": "Ctrl K",
+    "close": "Close"
+  },
+  "settings": {
+    "title": "Settings",
+    "languageTitle": "Language",
+    "languageText": "More languages are being translated and reviewed. Urdu and Arabic come first.",
+    "themeTitle": "Theme",
+    "themeText": "Choose the look that's easiest on your eyes.",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "Match my device"
+  },
+  "footer": {
+    "disclaimer": "CRYPY is non-custodial. Results are signals, not financial advice or safety guarantees.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "risk": "Risk disclosure",
+    "languages": "Languages"
+  },
+  "legal": {
+    "draftNotice": "Draft — this text will be reviewed by a lawyer before CRYPY launches.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "body": [
+        "CRYPY never asks for, collects or stores seed phrases, recovery phrases or private keys.",
+        "Addresses and transaction hashes you search are public blockchain data. CRYPY does not store them, except addresses you choose to save to a watchlist after signing in.",
+        "Your language and theme choices are saved in your browser only.",
+        "Full details, including any analytics and third-party services, will be listed here before launch."
+      ]
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "body": [
+        "CRYPY provides information tools for public blockchain data. It does not hold, move or manage your funds.",
+        "You are responsible for every transaction you confirm in your own wallet.",
+        "Full terms will be published here before launch."
+      ]
+    },
+    "risk": {
+      "title": "Risk Disclosure",
+      "body": [
+        "Crypto assets are risky. Prices can fall to zero and transactions cannot be reversed.",
+        "CRYPY's security checks show signals from automated tools and data providers. No check can prove that a token, contract or wallet is safe.",
+        "Nothing on CRYPY is financial, legal or tax advice. Always do your own research."
+      ]
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This page doesn't exist or has moved.",
+    "home": "Go to the home page"
+  },
+  "chains": {
+    "ethereum": "Ethereum",
+    "bsc": "BNB Chain"
+  },
+  "entity": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "viewOn": "View on {explorer}",
+    "unavailableChain": "Couldn't check {chain} right now. Try again in a minute.",
+    "rateLimited": "Too many requests in a short time. Please wait a minute and refresh.",
+    "comingSoonTitle": "More is on the way",
+    "kinds": {
+      "account": "Wallet",
+      "delegated": "Wallet with delegated code (EIP-7702)",
+      "token": "Token contract",
+      "contract": "Smart contract"
+    },
+    "address": {
+      "title": "Address",
+      "metaTitle": "Address {short}",
+      "perChain": "On each chain",
+      "active": "Has sent transactions",
+      "inactive": "No outgoing transactions",
+      "openToken": "Open token page",
+      "badChecksum": "This address doesn't match its checksum, so a character was probably changed or mistyped. Copy it again from the original source, and never send funds to it.",
+      "comingSoon": "Approvals (M6) and activity history (M7) for this address arrive in upcoming updates.",
+      "balances": {
+        "total": "Total value",
+        "totalNote": "Estimated from current DEX prices. Tokens without a pool deep enough for a reliable price aren't included.",
+        "chainTotal": "Value on {chain}",
+        "pricesBy": "Prices: read on-chain from PancakeSwap and Uniswap pools.",
+        "updated": "Updated {time}",
+        "asset": "Asset",
+        "balance": "Balance",
+        "price": "Price",
+        "value": "Value",
+        "noPrice": "No reliable price",
+        "lessThanCent": "< $0.01",
+        "nativeCoin": "Native coin",
+        "empty": "No coins or tokens on {chain}.",
+        "unpriced": "{count, plural, one {# token has} other {# tokens have}} no reliable price and {count, plural, one {isn't} other {aren't}} counted in the total.",
+        "pricesUnavailable": "Prices are unavailable right now, so only balances are shown. Try again in a minute.",
+        "coverage": {
+          "truncated": "This address has interacted with more than {count} tokens. The first {count} were checked, so some tokens may be missing.",
+          "common-only": "Only well-known tokens were checked on {chain} right now, so some tokens may be missing."
+        },
+        "hidden": "{count, plural, one {# hidden token looks like spam} other {# hidden tokens look like spam}}",
+        "hiddenNote": "Scammers send worthless tokens to many wallets to lure people to fake websites. Never visit links in token names or try to sell or \"claim\" these tokens.",
+        "spam": {
+          "link-in-name": "Website in name",
+          "bait-words": "Bait wording, no price",
+          "unreadable": "Contract doesn't answer"
+        },
+        "rawAmount": "{amount} (raw units)",
+        "totalAll": "Total value · all chains",
+        "totalChain": "Total value · {chain}",
+        "unpricedGroup": "{count, plural, one {# token without a reliable price} other {# tokens without a reliable price}}",
+        "unpricedNote": "These tokens have no DEX pool deep enough for a reliable price, so they aren't counted in the total. Most unknown tokens sent to wallets without asking are worthless or scams: don't try to sell them on unknown websites."
+      },
+      "lookupAnyway": "Look it up anyway",
+      "identity": {
+        "title": "Found on {count} of {total} chains",
+        "subtitle": "What this address is on each network",
+        "noneTitle": "No activity found on any supported chain",
+        "inactive": "No activity found on: {chains}",
+        "filter": "Filter by chain",
+        "all": "All chains",
+        "tokenNote": "On {chain} this address is a token contract ({token}). Its details and checks are on the token page.",
+        "openToken": "Open token page",
+        "shownBelow": "Shown below",
+        "viewChain": "View on this chain",
+        "tokens": "{count, plural, one {# token} other {# tokens}}"
+      }
+    },
+    "token": {
+      "metaTitle": "{symbol} token on {chain}",
+      "notToken": "This address isn't a token contract on {chain}.",
+      "viewAsAddress": "View as address",
+      "facts": "Token facts",
+      "decimals": "Decimals",
+      "totalSupply": "Total supply",
+      "contract": "Contract address",
+      "unnamed": "Unnamed token",
+      "linkWarningTitle": "This token's name contains a web address",
+      "linkWarning": "Scam tokens often put a website in their name to lure people. Never visit links found in token names or claim \"free\" tokens.",
+      "comingSoon": "Full security checks for this token — honeypot, taxes, owner powers and holders — arrive in milestone M5."
+    },
+    "tx": {
+      "title": "Transaction",
+      "metaTitle": "Transaction {short}",
+      "status": {
+        "success": "Success",
+        "reverted": "Failed",
+        "pending": "Pending"
+      },
+      "chain": "Network",
+      "block": "Block",
+      "from": "From",
+      "to": "To",
+      "contractCreation": "Contract creation",
+      "notFound": "We couldn't find this transaction on {chain}.",
+      "notFoundHelp": "It may not have been sent yet, it may have been replaced or dropped, or it may be on another network.",
+      "searchAll": "Search all networks",
+      "confirmations": "{count, plural, one {# confirmation} other {# confirmations}}",
+      "ago": "{time} UTC · {relative}",
+      "summary": {
+        "title": "What happened",
+        "pending": "Waiting to be added to a block. This page refreshes every 15 seconds.",
+        "failed": "This transaction failed. Nothing it tried to do happened, but the network fee was still paid.",
+        "native": "{from} sent {amount} to {to}.",
+        "creation": "{from} created a new contract.",
+        "call": "{from} called {fn} on {to}.",
+        "callUnknown": "{from} called a function on {to} that isn't in our list of known functions.",
+        "withValue": "It also sent {amount}.",
+        "moved": "{count, plural, one {It moved # asset (see below).} other {It moved # assets (see below).}}",
+        "permissions": "{count, plural, one {It changed # spending permission.} other {It changed # spending permissions.}}"
+      },
+      "facts": {
+        "status": "Status",
+        "time": "Time",
+        "confirmations": "Confirmations",
+        "created": "Contract created",
+        "value": "Value sent",
+        "fee": "Network fee",
+        "burnt": "Burnt (base fee)",
+        "gasUsed": "Gas used",
+        "gasUsedValue": "{used} of {limit} ({percent})",
+        "gasPrice": "Gas price",
+        "gwei": "{value} gwei",
+        "nonce": "Nonce",
+        "type": "Type",
+        "freeFee": "0 (sent without a fee)",
+        "wallet": "Wallet",
+        "contract": "Contract",
+        "pendingValue": "Not yet known",
+        "gasLimit": "Gas limit",
+        "maxGasPrice": "Max gas price"
+      },
+      "types": {
+        "legacy": "Legacy (type 0)",
+        "eip2930": "Access list (type 1)",
+        "eip1559": "EIP-1559 (type 2)",
+        "eip4844": "Blob (type 3)",
+        "eip7702": "Account code, EIP-7702 (type 4)"
+      },
+      "failure": {
+        "title": "Why it failed",
+        "reason": "Error message from the contract:",
+        "none": "The contract stopped without an error message.",
+        "unknown": "The error message isn't available: reading it needs the network state just before this block, which our nodes no longer keep."
+      },
+      "transfers": {
+        "title": "Asset movements",
+        "token": "Asset",
+        "from": "From",
+        "to": "To",
+        "amount": "Amount",
+        "value": "Value now",
+        "nft": "NFT #{id}",
+        "wrap": "Wrapped",
+        "unwrap": "Unwrapped",
+        "unknownToken": "Unknown token",
+        "truncated": "This transaction has more events than we show. The full list is on {explorer}."
+      },
+      "approvals": {
+        "title": "Spending permissions changed",
+        "owner": "Owner",
+        "spender": "Spender",
+        "allowance": "Permission",
+        "unlimited": "Unlimited",
+        "all": "All NFTs in this collection",
+        "nft": "NFT #{id}",
+        "removed": "Removed",
+        "alertTitle": "This transaction gave spending permission",
+        "alertText": "The spender can move these tokens from the owner's wallet without asking again, until the permission is removed. Only approve contracts you trust. A tool to review and remove permissions arrives in milestone M6."
+      },
+      "call": {
+        "title": "Function called",
+        "unknown": "This function isn't in our list of known functions, so it is shown as raw data. We never guess a function's meaning.",
+        "mismatch": "The function is known, but this data doesn't match its parameters.",
+        "selector": "Function ID",
+        "params": "Parameters",
+        "nested": "Calls inside",
+        "decoder": "Open in the Transaction Data Decoder",
+        "more": "…and {count} more"
+      },
+      "input": {
+        "title": "Input data",
+        "bytes": "{count, plural, one {# byte} other {# bytes}}",
+        "truncated": "Showing the first 2 KB. The full data is on {explorer}."
+      },
+      "events": "{count, plural, =0 {No events.} one {# event in the receipt.} other {# events in the receipt.}}",
+      "otherEvents": "{count, plural, one {# event isn't a standard token event and isn't interpreted.} other {# events aren't standard token events and aren't interpreted.}}",
+      "pricesNote": "USD values use today's on-chain prices, not prices at the time of the transaction.",
+      "source": "Read directly from {chain} nodes."
+    },
+    "otherChains": {
+      "label": "Same address on other chains:",
+      "none": "Not in use on the other supported chains.",
+      "overview": "All-chains overview"
+    }
+  },
+  "wallet": {
+    "connect": "Connect wallet",
+    "connecting": "Connecting…",
+    "title": "Connect a wallet",
+    "intro": "Connecting only shares your public address. CRYPY never asks for your seed phrase and never sends a transaction without your confirmation in your wallet.",
+    "detected": "Wallets in this browser",
+    "noneDetected": "No browser wallet found. Install MetaMask or open CRYPY inside your mobile wallet's browser, or use WalletConnect.",
+    "walletConnect": "WalletConnect (mobile wallets)",
+    "walletConnectUnavailable": "WalletConnect isn't set up yet.",
+    "scanQr": "Scan with your mobile wallet",
+    "openIn": "Open in {wallet}",
+    "copyLink": "Copy connection link",
+    "back": "Back",
+    "connectedAs": "Connected",
+    "network": "Network",
+    "unsupportedNetwork": "This network isn't supported yet. Balances and tools use Ethereum and BNB Chain.",
+    "viewMyAddress": "View my address",
+    "disconnect": "Disconnect",
+    "close": "Close",
+    "rejected": "Connection was cancelled in your wallet.",
+    "failed": "Couldn't connect. Please try again.",
+    "useMyWallet": "Use my wallet"
+  },
+  "utilities": {
+    "common": {
+      "copy": "Copy",
+      "copied": "Copied",
+      "example": "Try an example",
+      "clear": "Clear"
+    },
+    "unit-converter": {
+      "units": {
+        "wei": "Wei",
+        "gwei": "Gwei",
+        "ether": "ETH / BNB"
+      },
+      "hint": "1 ETH (or BNB) = 1,000,000,000 gwei = 1,000,000,000,000,000,000 wei",
+      "errors": {
+        "format": "Enter a number, like 1.5 or 1e9.",
+        "negative": "Amounts can't be negative.",
+        "comma": "Use a dot for decimals (1.5), not a comma.",
+        "too-precise": "Too many decimal places: wei is the smallest unit.",
+        "too-large": "Too large: the maximum is 2^256 − 1 wei.",
+        "empty": ""
+      }
+    },
+    "hex-converter": {
+      "label": "Hex or decimal value",
+      "placeholder": "0x1a2b or 6699",
+      "readAs": "Read this number as",
+      "decimal": "Decimal",
+      "hex": "Hex",
+      "rows": {
+        "decimal": "Decimal",
+        "hex": "Hex",
+        "padded": "32-byte hex",
+        "bytes": "Size",
+        "signed": "Signed (int256)",
+        "text": "As text"
+      },
+      "bytes": {
+        "one": "# byte",
+        "other": "# bytes"
+      },
+      "detected": {
+        "hex": "Read as hex",
+        "decimal": "Read as decimal"
+      },
+      "errors": {
+        "format": "Use digits 0–9 for decimal, or 0–9 and a–f for hex.",
+        "negative": "Negative numbers aren't supported; paste the 32-byte hex to see its signed value.",
+        "too-large": "Too large: the maximum is 256 bits (2^256 − 1).",
+        "empty": ""
+      }
+    },
+    "address-formatter": {
+      "label": "Addresses (one per line)",
+      "placeholder": "0x…",
+      "summary": "Checked: {total} · Correct: {ok} · Need attention: {problems}",
+      "tooMany": "Only the first {max} addresses are checked.",
+      "copyAll": "Copy all correct addresses",
+      "open": "Look it up",
+      "checksummed": "Checksummed",
+      "status": {
+        "valid": "Correct",
+        "no-checksum": "No checksum",
+        "bad-checksum": "Typing mistake",
+        "missing-prefix": "Missing 0x",
+        "invalid": "Not an address"
+      },
+      "explain": {
+        "valid": "Written correctly, and the checksum matches.",
+        "no-checksum": "Valid format, but all one case, so typos can't be detected. Use the checksummed form below.",
+        "bad-checksum": "The checksum doesn't match, so a character was changed. Don't use this address: copy it again from its original source.",
+        "missing-prefix": "Addresses start with 0x. Here is the full form.",
+        "zero": "This is the zero address. Tokens sent to it are lost forever."
+      },
+      "invalid": {
+        "length": "Wrong length: {length} characters after 0x instead of 40.",
+        "characters": "Contains characters that aren't allowed (only 0–9 and a–f).",
+        "empty": "Empty."
+      }
+    },
+    "tx-decoder": {
+      "label": "Transaction input data",
+      "placeholder": "0xa9059cbb…",
+      "function": "Function",
+      "standard": "Standard",
+      "selector": "Selector",
+      "signature": "Signature",
+      "parameters": "Values",
+      "name": "Name",
+      "type": "Type",
+      "value": "Value",
+      "unlimited": "Unlimited",
+      "yes": "Yes",
+      "no": "No",
+      "nested": "Call {index}",
+      "rawNote": "Amounts are shown in the token's smallest unit. Divide by the token's decimals to get the usual amount.",
+      "known": "Decodes {count} well-known functions. Unknown functions are shown as raw data, never guessed.",
+      "native": "Empty data (0x): a plain transfer of ETH or BNB with no contract call.",
+      "unknownTitle": "Unknown function",
+      "unknownText": "This function isn't in CRYPY's list of well-known functions, so it isn't decoded. The raw 32-byte words are shown below.",
+      "mismatch": "The selector matches a known function, but the data doesn't fit its values. It may be a different function with the same selector. Known function:",
+      "moreWords": "{count} more words not shown.",
+      "extraBytes": "{count} extra bytes at the end.",
+      "errors": {
+        "format": "Transaction data is hex: 0x followed by 0–9 and a–f.",
+        "odd-length": "The data has an odd number of hex digits; part of it may be missing.",
+        "too-short": "Too short: data starts with a 4-byte function selector (8 hex digits).",
+        "too-long": "Too long to decode here (over 100 KB).",
+        "tx-hash": "This looks like a transaction hash, not transaction data. Search it to see the transaction."
+      },
+      "searchHash": "Search this hash",
+      "functions": {
+        "transfer": "Send tokens to an address.",
+        "approve": "Allow another address (the spender) to move your tokens.",
+        "transfer-from": "Move tokens from one address to another using an approval.",
+        "increase-allowance": "Raise how many tokens a spender may move.",
+        "decrease-allowance": "Lower how many tokens a spender may move.",
+        "permit": "Submit a signed token approval (permit) on-chain.",
+        "set-approval-for-all": "Give or remove an operator's control over all your NFTs in this collection.",
+        "nft-safe-transfer": "Send an NFT to an address.",
+        "multi-token-transfer": "Send tokens of one ERC-1155 type to an address.",
+        "multi-token-batch-transfer": "Send several ERC-1155 token types to an address.",
+        "wrap": "Wrap ETH or BNB into WETH or WBNB.",
+        "unwrap": "Unwrap WETH or WBNB back into ETH or BNB.",
+        "permit2-approve": "Allow a spender to move a token through Uniswap Permit2.",
+        "multicall": "Run several calls in one transaction. Each call is decoded below.",
+        "swap": "Swap tokens through a decentralized exchange router.",
+        "add-liquidity": "Add tokens to a liquidity pool.",
+        "remove-liquidity": "Withdraw tokens from a liquidity pool.",
+        "transfer-ownership": "Hand control of this contract to a new owner.",
+        "renounce-ownership": "Give up ownership of this contract permanently."
+      },
+      "warnings": {
+        "unlimited-approval": "Unlimited approval: the spender can move all of this token from your wallet, now and later, until you revoke it.",
+        "approval": "Approval: the spender will be able to move up to this amount of your tokens.",
+        "approval-for-all": "Full NFT access: the operator can transfer every NFT you own in this collection.",
+        "revoke": "This removes an approval, which reduces risk.",
+        "ownership-transfer": "Ownership change: the new owner gets control of the contract's owner-only functions.",
+        "ownership-renounce": "Renounce: nobody will be able to use the contract's owner-only functions afterwards."
+      },
+      "heuristic": "Warnings are based on the function and its values. They don't check who the spender is."
+    },
+    "balance-scanner": {
+      "label": "Wallet address",
+      "placeholder": "0x…",
+      "submit": "See balances",
+      "invalid": "Enter a wallet address: 0x followed by 40 characters (0–9, a–f)."
+    }
+  }
+}

@@ -1,0 +1,196 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * CRYPY design tokens (from the approved V1 mockup).
+ * Dark is the default theme. Severity colours always differ in lightness,
+ * not only in hue, so they stay distinguishable for colour-blind users.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-critical: var(--critical);
+  --color-high: var(--high);
+  --color-medium: var(--medium);
+  --color-low: var(--low);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #f6f7f9;
+  --foreground: #0f1218;
+  --card: #ffffff;
+  --card-foreground: #0f1218;
+  --popover: #ffffff;
+  --popover-foreground: #0f1218;
+  --primary: #1f5fd6;
+  --primary-foreground: #ffffff;
+  --secondary: #eef1f5;
+  --secondary-foreground: #0f1218;
+  --muted: #eef1f5;
+  --muted-foreground: #566072;
+  --accent: #eef1f5;
+  --accent-foreground: #0f1218;
+  --destructive: #c62828;
+  --border: #e1e5eb;
+  --border-strong: #cdd3dc;
+  --input: #cdd3dc;
+  --ring: #1f5fd6;
+  --critical: #c62828;
+  --high: #b45309;
+  --medium: #8a6a00;
+  --low: #1b7a52;
+}
+
+.dark {
+  --background: #0b0d12;
+  --foreground: #e8eaf0;
+  --card: #12151c;
+  --card-foreground: #e8eaf0;
+  --popover: #12151c;
+  --popover-foreground: #e8eaf0;
+  --primary: #5b9bff;
+  --primary-foreground: #0b0d12;
+  --secondary: #1a1e28;
+  --secondary-foreground: #e8eaf0;
+  --muted: #1a1e28;
+  --muted-foreground: #9aa3b5;
+  --accent: #1a1e28;
+  --accent-foreground: #e8eaf0;
+  --destructive: #ff6b6b;
+  --border: #232836;
+  --border-strong: #2f3546;
+  --input: #2f3546;
+  --ring: #5b9bff;
+  --critical: #ff6b6b;
+  --high: #ffa14a;
+  --medium: #f2d15c;
+  --low: #6fd3a6;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
+  }
+  /* Right-to-left scripts use system fonts until reviewed Urdu/Arabic fonts ship (M9). */
+  html:lang(ur),
+  html:lang(ar) {
+    font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Segoe UI", Tahoma, system-ui, sans-serif;
+  }
+  html:lang(ur) :is(h1, h2, h3),
+  html:lang(ar) :is(h1, h2, h3) {
+    font-family: inherit;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Language menu: native popover, placed under its button where the browser supports anchor positioning,
+     otherwise shown centred (the browser default). */
+  .lang-menu-anchor {
+    anchor-name: --lang-menu;
+  }
+  @supports (anchor-name: --a) {
+    .lang-menu-popover {
+      position-anchor: --lang-menu;
+      inset: auto;
+      top: anchor(bottom);
+      right: anchor(right);
+      margin: 6px 0 0;
+    }
+    [dir="rtl"] .lang-menu-popover {
+      right: auto;
+      left: anchor(left);
+    }
+  }
+
+  /* Addresses, hashes and other technical strings: always left-to-right and never translated. */
+  .technical {
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-family: var(--font-mono);
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Desktop tools sidebar: open 15.5rem, collapsed to icons 4rem (state on <html data-sidebar>). */
+.sidebar {
+  width: 17.5rem;
+}
+html[data-sidebar="collapsed"] .sidebar {
+  width: 4rem;
+}
+html[data-sidebar="collapsed"] .sidebar .sidebar-label {
+  display: none;
+}
+html[data-sidebar="collapsed"] .sidebar .sidebar-divider {
+  display: block;
+}
+html[data-sidebar="collapsed"] .sidebar .sidebar-item {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+/* Thin, quiet scrollbar for the sidebar list: almost invisible until hovered. */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.sidebar-scroll:hover,
+.sidebar-scroll:focus-within {
+  scrollbar-color: var(--border) transparent;
+}
+
+/* The home page has its own big search box, so the header one is hidden there (desktop). */
+body:has([data-page="home"]) .header-search {
+  display: none;
+}

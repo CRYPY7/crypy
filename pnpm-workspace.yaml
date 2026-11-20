@@ -1,0 +1,10 @@
+allowBuilds:
+  sharp: false
+  unrs-resolver: false
+  "@parcel/watcher": false
+  "@swc/core": false
+  "@reown/appkit": false
+minimumReleaseAgeExclude:
+  - "@tanstack/query-core@5.108.1"
+  - "@tanstack/react-query@5.108.1"
+  - viem@2.58.2
