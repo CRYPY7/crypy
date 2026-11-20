@@ -8,10 +8,11 @@ import { getAddress, parseAbi } from "viem";
 import { type ChainKey, getChain } from "@/config/chains";
 import type { PoolHolders } from "@/lib/security/types";
 import { getEvmClient } from "@/server/chains/evm/providers";
+import { PROXY_SLOTS } from "@/server/chains/evm/security/bytecode";
 import { dexDeployments } from "@/server/chains/evm/security/dex-registry";
 import { farms, lockers, vaultFactories } from "@/server/chains/evm/security/lockers";
 import { teamFinanceLocks } from "@/server/chains/evm/security/locker-index";
-import { readPoolHolders } from "@/server/chains/evm/security/lp-holders";
+import { classify, readPoolHolders } from "@/server/chains/evm/security/lp-holders";
 import { findPools, readPools, verifyLeadPools } from "@/server/chains/evm/security/pools";
 
 const live = process.env.LIVE === "1";
@@ -58,6 +59,7 @@ describe.skipIf(!live)("liquidity holders (live)", () => {
       "pinklock-v2": "totalLockCountForToken",
       "team-finance": "depositId",
       "uncx-v3": "NONCE",
+      deeplock: "depositId",
     } as const;
     const one = "0x0000000000000000000000000000000000000001";
     for (const key of ["ethereum", "bsc"] as const) {
@@ -68,6 +70,14 @@ describe.skipIf(!live)("liquidity holders (live)", () => {
         // @ts-expect-error one ABI for several read methods
         const r = await client.readContract({ address: getAddress(l.address), abi: lockAbi, functionName: fn, args });
         expect(typeof r, `${key} ${l.name}`).toBe("bigint");
+        // The upgradeable flag matches the proxy slots on-chain.
+        const slots = await Promise.all(
+          Object.values(PROXY_SLOTS).map((slot) => client.getStorageAt({ address: getAddress(l.address), slot })),
+        );
+        expect(
+          slots.some((v) => v && !/^0x0*$/.test(v)),
+          `${key} ${l.name} upgradeable`,
+        ).toBe(l.upgradeable);
       }
       for (const a of [...vaultFactories[key].map((f) => f.factory), ...farms[key].map((f) => f.address)]) {
         expect(((await client.getCode({ address: getAddress(a) })) ?? "0x").length, a).toBeGreaterThan(2);
@@ -150,4 +160,23 @@ describe.skipIf(!live)("liquidity holders (live)", () => {
     expect(pool.holders.some((h) => h.kind === "exchange" && h.name === "PancakeSwap v2")).toBe(true);
     expect(pool.found).toBeLessThan(1); // the rest is many LPs CRYPY can't list yet: reported as "not found"
   }, 90_000);
+
+  it("timelocks are recognised with their delay (Compound-style and OpenZeppelin TimelockController)", async () => {
+    const client = getEvmClient(getChain("ethereum")!);
+    const block = await client.getBlockNumber();
+    const ctx = {
+      chain: "ethereum" as const,
+      token: "0x0000000000000000000000000000000000000002",
+      owner: null,
+      leads: [],
+      block,
+      now: now(),
+    };
+    const uniswap = "0x1a9c8182c09f50c8318d769245bea52c32be35bc"; // Uniswap governance Timelock (delay())
+    const ens = "0xfe89cc7abb2c4183683ab71653c4cdc9b02d44b7"; // ENS DAO TimelockController (getMinDelay())
+    const r = await classify(client, ctx, [uniswap, ens], new Set());
+    expect(r.get(uniswap)).toMatchObject({ kind: "timelock", delay: 172_800 });
+    expect(r.get(ens)).toMatchObject({ kind: "timelock" });
+    expect(r.get(ens)!.delay).toBeGreaterThan(0);
+  }, 60_000);
 });

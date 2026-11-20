@@ -107,6 +107,8 @@ export interface LiquiditySummary {
   nextUnlock: { at: number; share: number } | null;
   /** Share of all liquidity in the owner's hands. */
   ownerUsd: number;
+  /** Share of all liquidity locked in lock contracts whose operator can upgrade them. */
+  upgradeableLocked: number;
 }
 
 /** Weighted across pools by value. null when no pool is worth DUST_POOL_USD or prices are missing. */
@@ -116,11 +118,15 @@ export function liquiditySummary(pools: PoolFact[], now: number): LiquiditySumma
   if (counted.length === 0 || totalUsd <= 0) return null;
   const split = emptySplit();
   let nextUnlock: LiquiditySummary["nextUnlock"] = null;
+  let upgradeableLocked = 0;
   for (const pool of counted) {
     const weight = pool.liquidityUsd! / totalUsd;
     const s = poolSplit(pool, now);
     for (const k of Object.keys(split) as LiquidityPart[]) split[k] += s[k] * weight;
     for (const holder of pool.holders?.holders ?? []) {
+      if (holder.upgradeable)
+        for (const p of holderParts(holder, now))
+          if (p.part === "locked" || p.part === "soon") upgradeableLocked += p.share * weight;
       for (const p of holderParts(holder, now)) {
         if (p.part !== "soon" || p.unlockAt == null) continue;
         if (!nextUnlock || p.unlockAt < nextUnlock.at) nextUnlock = { at: p.unlockAt, share: p.share * weight };
@@ -128,5 +134,5 @@ export function liquiditySummary(pools: PoolFact[], now: number): LiquiditySumma
       }
     }
   }
-  return { totalUsd, counted: counted.length, split, nextUnlock, ownerUsd: split.owner * totalUsd };
+  return { totalUsd, counted: counted.length, split, nextUnlock, ownerUsd: split.owner * totalUsd, upgradeableLocked };
 }

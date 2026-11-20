@@ -465,7 +465,10 @@ ChainFamilyAdapter.getTokenSecurity                        EVM: server/chains/ev
    locker-index.ts    in-memory index for lockers without a per-token list (Team Finance, UNCX v3); terms re-read live
    lp-holders.ts      holder discovery, classification (Safe, timelock, vault, farm, fee collector…), v3 values
    warm.ts            builds the lock indexes at server start (src/instrumentation.ts)
-   trade.ts           trade simulators per protocol (uniswap-v2 today) via eth_call + state override
+   trade.ts           trade test via eth_call + state override: v2 pools through their router, v3 pools called
+                      directly, stablecoin pools after a native → stablecoin hop (contract CrypyTradeTestV3)
+   trade-test.ts      the contract's runtime bytecode, ABI and source hash
+   source.ts          owner powers from verified Solidity source (names, who may call, written limits)
    bytecode.ts        selectors, owner-power dictionary, proxy slots, EIP-1167
 server/security/external.ts        GoPlus (second opinion, plus pool/holder leads) and Sourcify, cached, fail soft
 lib/security/liquidity.ts (pure)   holders → parts (burned, locked, soon, ended, controlled, owner, removable,
@@ -474,10 +477,11 @@ lib/security/liquidity.ts (pure)   holders → parts (burned, locked, soon, ende
 
 - Evidence classes: verified, simulated, heuristic, external, unsupported. Severity: critical (observed in the trade
   test only), high, medium, low. Headline levels: serious, risks, warnings, none-found — never "safe".
-- Trade-test contract: `contracts/security/CrypyTradeTestV2.sol`, built with `scripts/build-trade-test.mjs`
-  (solc 0.8.28 via IR, not a project dependency); bytecode in `trade-test-v2.ts` with the source's SHA-256.
+- Trade-test contract: `contracts/security/CrypyTradeTestV3.sol`, built with `scripts/build-trade-test.mjs`
+  (solc 0.8.28 via IR, not a project dependency); bytecode in `trade-test.ts` with the source's SHA-256.
+  `scripts/verify-trade-test.mjs` runs it against a fee-taking token and a v3-style pool in a local in-memory EVM.
 - Adding a chain family: implement `getTokenSecurity` returning the same facts and set the `tokenSecurity` capability.
-  Adding an exchange design: a pool reader in `pools.ts` and a simulator in `trade.ts` for its protocol id.
+  Adding an exchange design: a pool reader in `pools.ts`, a branch in the trade-test contract and its `KIND` entry.
 - Liquidity holders (M5.1): facts carry each pool's holders (`PoolHolders`: kind, share, locks with end dates,
   multisig threshold, timelock delay, v3 position id) and the share found. Leads from outside providers are only
   addresses to check; every share and date is read on-chain. Adding a locker: a registry entry plus its reader,

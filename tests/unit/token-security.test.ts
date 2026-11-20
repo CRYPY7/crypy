@@ -7,7 +7,7 @@ import { compare, evaluate } from "@/lib/security/evaluate";
 import type { PoolFact, TokenSecurityFacts } from "@/lib/security/types";
 import { hasSelfdestruct, minimalProxyTarget, powersIn, selectorsIn } from "@/server/chains/evm/security/bytecode";
 import { taxOf } from "@/server/chains/evm/security/trade";
-import { SOURCE_SHA256 } from "@/server/chains/evm/security/trade-test-v2";
+import { SOURCE_SHA256 } from "@/server/chains/evm/security/trade-test";
 import { parseGoPlus } from "@/server/security/external";
 
 const OWNER = "0x1111111111111111111111111111111111111111";
@@ -23,7 +23,7 @@ function facts(over: Partial<TokenSecurityFacts> = {}): TokenSecurityFacts {
     priceUsd: 500,
     trade: {
       outcome: "ok",
-      venue: { dex: "PancakeSwap v2", protocol: "uniswap-v2", pool: OWNER, router: OWNER },
+      venue: { dex: "PancakeSwap v2", protocol: "uniswap-v2", pool: OWNER, router: OWNER, via: null },
       amountIn: "1",
       nativeSymbol: "BNB",
       buyTax: 0,
@@ -227,7 +227,7 @@ describe("contract code", () => {
   });
 
   it("the simulated code was built from the published source", () => {
-    const source = readFileSync(new URL("../../contracts/security/CrypyTradeTestV2.sol", import.meta.url));
+    const source = readFileSync(new URL("../../contracts/security/CrypyTradeTestV3.sol", import.meta.url));
     expect(createHash("sha256").update(source).digest("hex")).toBe(SOURCE_SHA256);
   });
 });

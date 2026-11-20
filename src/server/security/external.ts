@@ -1,17 +1,21 @@
 import "server-only";
 import { cacheLife } from "next/cache";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
-import type { ExternalFacts, SourceFacts } from "@/lib/security/types";
+import type { ExternalFacts, PowerFact, SourceFacts } from "@/lib/security/types";
+import { type AbiEntry, powersFromSource } from "@/server/chains/evm/security/source";
 
 /**
  * Outside sources for token security. Both are free and need no key:
  *  - GoPlus Security token API (free plan, royalty-free licence; about 150,000 credits a month): a second opinion,
  *    always shown with its name and never mixed into CRYPY's own checks;
- *  - Sourcify (open, free): whether the contract's source code is published and matches.
+ *  - Sourcify (open, free): whether the contract's source code is published and matches, and the owner powers read
+ *    from that source.
  * Results are cached (GoPlus 1 hour, Sourcify 1 day) to stay well inside the free limits. Any failure → a status the
  * page shows as "not checked", never an error.
  */
 const TIMEOUT_MS = 4_000;
+/** Source files can be large: a little more time than the GoPlus call. */
+const SOURCE_TIMEOUT_MS = 6_000;
 const BURN = new Set(["0x000000000000000000000000000000000000dead", "0x0000000000000000000000000000000000000000"]);
 
 const flag = (v: unknown): boolean | null => (v === "1" || v === 1 ? true : v === "0" || v === 0 ? false : null);
@@ -104,24 +108,49 @@ export async function goPlusToken(chainId: number, address: string): Promise<GoP
   }
 }
 
-export async function sourcifyStatus(chainId: number, address: string): Promise<SourceFacts> {
+/** Sourcify answers bigger than this are not analysed (a token's source is normally far smaller). */
+const MAX_SOURCE_BYTES = 3_000_000;
+
+/**
+ * Whether the contract's source is published and matches on Sourcify, and, when it is, the owner powers read from
+ * that source (who may call each function, limits it checks). Cached 1 day; only the small analysis is kept.
+ */
+export async function sourcifyVerified(
+  chainId: number,
+  address: string,
+): Promise<{ source: SourceFacts; powers: PowerFact[] | null }> {
   "use cache";
+  const unknown = { source: { status: "unknown" as const, provider: "Sourcify" }, powers: null };
   try {
-    const response = await fetch(`https://sourcify.dev/server/v2/contract/${chainId}/${address}`, {
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+    const response = await fetch(`https://sourcify.dev/server/v2/contract/${chainId}/${address}?fields=abi,sources`, {
+      signal: AbortSignal.timeout(SOURCE_TIMEOUT_MS),
       headers: { accept: "application/json" },
     });
     if (response.status === 404) {
       cacheLife({ revalidate: 3600, expire: 86_400 });
-      return { status: "not-found", provider: "Sourcify" };
+      return { source: { status: "not-found", provider: "Sourcify" }, powers: null };
     }
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const json = (await response.json()) as { match?: unknown };
+    const size = Number(response.headers.get("content-length") ?? 0);
+    const json = (size > MAX_SOURCE_BYTES ? {} : await response.json()) as {
+      match?: unknown;
+      abi?: unknown;
+      sources?: Record<string, { content?: unknown }>;
+    };
     cacheLife({ revalidate: 86_400, expire: 604_800 });
     const match = typeof json.match === "string" ? sanitizeTokenText(json.match, 20) : "";
-    return { status: match === "match" || match === "exact_match" ? "verified" : "not-found", provider: "Sourcify" };
+    const verified = match === "match" || match === "exact_match";
+    if (!verified) return { source: { status: "not-found", provider: "Sourcify" }, powers: null };
+    const sources: Record<string, string> = {};
+    for (const [path, file] of Object.entries(json.sources ?? {}))
+      if (typeof file?.content === "string") sources[path] = file.content;
+    const abi = Array.isArray(json.abi) ? (json.abi as AbiEntry[]) : null;
+    return {
+      source: { status: "verified", provider: "Sourcify" },
+      powers: abi && Object.keys(sources).length ? powersFromSource(abi, sources) : null,
+    };
   } catch {
     cacheLife({ revalidate: 60, expire: 300 });
-    return { status: "unknown", provider: "Sourcify" };
+    return unknown;
   }
 }

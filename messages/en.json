@@ -1326,10 +1326,12 @@
         "footer": "Test size {amount} {symbol} · pool {pool}. Results can change at any time: an owner may switch trading or fees on or off later.",
         "why": {
           "noPool": "No pool found on the exchanges CRYPY checks ({dexes}), so there was nothing to trade against.",
-          "unsupportedPool": "Pools exist, but none the trade test supports yet. It currently trades against the native coin on Uniswap-v2-style pools; v3 pools and stablecoin-only pools are planned.",
+          "unsupportedPool": "Pools exist, but none the trade test can use: they are on an exchange design it doesn't simulate yet, or paired with a token other than the native coin or a stablecoin.",
           "noLiquidity": "The pool has (almost) no liquidity yet, so a test trade isn't meaningful.",
           "error": "The trade test couldn't run right now (the node didn't answer in time). Try again in a minute."
-        }
+        },
+        "via": "The pool is paired with {symbol}, so the test first swapped the native coin to {symbol}, then bought with it.",
+        "feeRejected": "The pool rejected the sale: the token took {tax} of the amount on its way into the pool, and v3 pools refuse to be paid less than they are owed."
       },
       "owner": {
         "title": "What the owner can do",
@@ -1353,7 +1355,17 @@
         "notUsable": "Can't be used: ownership is renounced.",
         "byContract": "Held by a contract owner.",
         "nothing": "None of the common owner powers (mint, fees, blacklist, pause, limits) were found in the code.",
-        "note": "\"Found in the code\" means the function exists. It doesn't show whether or when the owner uses it."
+        "note": "\"Found in the code\" means the function exists. It doesn't show whether or when it is used. When the source is verified on Sourcify, CRYPY reads who can call each function and the limits it checks; this is a reading of the source, not a guarantee.",
+        "access": {
+          "owner": "only the owner",
+          "role": "accounts with a role (not removed by renouncing ownership)",
+          "restricted": "a named account other than the owner (not removed by renouncing ownership)",
+          "open": "anyone: no access check found",
+          "unknown": "access check not recognised"
+        },
+        "fromSourceTitle": "From the verified source:",
+        "whoCalls": "who can call it: {access}",
+        "limitLabel": "Limit written in the code:"
       },
       "allChecks": "All checks ({count})",
       "showAll": "Show all {count} checks",
@@ -1366,6 +1378,10 @@
           "pass": {
             "title": "Selling worked in the trade test",
             "detail": "Bought and sold on {dex}."
+          },
+          "feeRejected": {
+            "title": "Selling failed in the trade test",
+            "detail": "The {dex} pool rejects sales because the token takes {tax} of every transfer into it."
           }
         },
         "buy": {
@@ -1550,6 +1566,12 @@
               "title": "Holders of {share} of the liquidity not found",
               "detail": "Finding every holder needs each pool's full history; CRYPY's own index will add it. This part is never counted as safe."
             }
+          },
+          "upgradeable": {
+            "risk": {
+              "title": "{share} is locked in lock contracts that can be upgraded",
+              "detail": "The lock contract's operator can change its code, so these locks are only as safe as that operator."
+            }
           }
         },
         "holders": {
@@ -1595,7 +1617,12 @@
             "title": "Pools are empty",
             "detail": "{count, plural, one {# pool} other {# pools}} found, but they hold (almost) nothing. The token can't really be traded yet."
           }
-        }
+        },
+        "powerOpen": {
+          "title": "Anyone can call {functions}",
+          "detail": "The verified source has no access check on this function, so any wallet can use it."
+        },
+        "powerOthers": "Held by a role or another named account, so renouncing ownership doesn't remove it."
       },
       "lpStates": {
         "owner": "{owner} of the liquidity is in the owner's hands; it can be removed at any time.",
@@ -1717,7 +1744,8 @@
           "pool": "Sent back to the pool; it goes with the next withdrawal.",
           "wallet": "Can be removed at any time.",
           "contract": "CRYPY can't tell whether this contract can release it. It is not in CRYPY's list of known lockers.",
-          "burn": "Gone for good: nobody can withdraw it."
+          "burn": "Gone for good: nobody can withdraw it.",
+          "upgradeable": "This lock contract can be upgraded by its operator, so the lock is only as safe as that operator."
         },
         "kind": {
           "burn": "Burn address",

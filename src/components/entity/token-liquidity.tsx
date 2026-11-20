@@ -124,7 +124,8 @@ function controlText(t: T, h: LpHolder, now: number, locale: Locale): string {
       const first = lockText(t, sorted[0]!.unlockAt, now, locale, sorted[0]!.vesting);
       const covered = h.locks.reduce((s, l) => s + l.share, 0);
       const rest = h.share - covered > 0.0005 ? ` ${t(`${K}.control.partly`, { share: pct(h.share - covered) })}` : "";
-      return (h.locks.length > 1 ? t(`${K}.control.locks`, { count: h.locks.length, first }) : first) + rest;
+      const upgrade = h.upgradeable ? ` ${t(`${K}.control.upgradeable`)}` : "";
+      return (h.locks.length > 1 ? t(`${K}.control.locks`, { count: h.locks.length, first }) : first) + rest + upgrade;
     }
     case "multisig":
       return (h.multisig?.threshold ?? 0) > 1

@@ -119,6 +119,12 @@ function checkText(check: SecurityCheck, t: T): { title: string; detail: string 
   let detail = t(`${base}.detail`, values);
   if (check.id === "lp" && values.state === "owner") detail = t(`${K}.lpStates.owner`, values);
   if (check.id === "proxy" && values.admin === "burned") detail = t(`${K}.lpStates.proxyBurned`);
+  if (check.id.startsWith("power.") && values.access === "open")
+    return { title: t(`${K}.checks.powerOpen.title`, values), detail: t(`${K}.checks.powerOpen.detail`) };
+  if (check.id.startsWith("power.") && (values.access === "role" || values.access === "restricted"))
+    detail = `${detail} ${t(`${K}.checks.powerOthers`)}`;
+  if (check.id === "sell" && values.state === "feeRejected")
+    return { title: t(`${K}.checks.sell.feeRejected.title`), detail: t(`${K}.checks.sell.feeRejected.detail`, values) };
   return { title: t(`${base}.title`, values), detail };
 }
 
@@ -331,8 +337,19 @@ function TradeCard({ t, report, locale, dexes }: { t: T; report: SecurityReport;
               trade.transferTax,
               transferOk === false ? trade.reason : undefined,
             )}
-            {step(t(`${K}.trade.sell`), sellOk, trade.sellTax, sellOk === false ? trade.reason : undefined)}
+            {step(
+              t(`${K}.trade.sell`),
+              sellOk,
+              trade.feeRejected != null ? null : trade.sellTax,
+              sellOk === false && trade.feeRejected == null ? trade.reason : undefined,
+            )}
           </div>
+          {trade.feeRejected != null && (
+            <p className="mt-3 text-sm text-critical">{t(`${K}.trade.feeRejected`, { tax: pct(trade.feeRejected) })}</p>
+          )}
+          {trade.venue!.via && (
+            <p className="mt-3 text-xs text-muted-foreground">{t(`${K}.trade.via`, { symbol: trade.venue!.via })}</p>
+          )}
           <p className="mt-3 text-xs text-muted-foreground">
             {t(`${K}.trade.footer`, {
               amount: formatAmount(trade.amountIn ?? "0", 18, locale, 6),
@@ -358,6 +375,8 @@ function OwnerCard({ t, report, locale }: { t: T; report: SecurityReport; locale
   const state =
     owner.owner === null ? "none" : owner.renounced ? "renounced" : owner.ownerIsContract ? "contract" : "wallet";
   const powers = report.checks.filter((c) => c.id.startsWith("power."));
+  const sourceDetails = (power: string) =>
+    (report.facts.powers.find((p) => p.power === power && p.basis === "source")?.details ?? []).slice(0, 4);
   return (
     <Card id="sec-owner" title={t(`${K}.owner.title`)} icon={Crown}>
       <div className="flex items-center gap-3 rounded-xl border bg-background px-3 py-2.5">
@@ -391,9 +410,31 @@ function OwnerCard({ t, report, locale }: { t: T; report: SecurityReport; locale
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold">{t(`${K}.owner.power.${power}`)}</span>
-                  <span className="technical block text-xs text-muted-foreground" dir="ltr">
-                    {t(`${K}.owner.found`, { functions: String(check.values?.functions ?? "") })}
-                  </span>
+                  {sourceDetails(power).length > 0 ? (
+                    <span className="block text-xs text-muted-foreground">
+                      {t(`${K}.owner.fromSourceTitle`)}
+                      {sourceDetails(power).map((d) => (
+                        <span key={d.signature} className="mt-0.5 block">
+                          <span className="technical" dir="ltr">
+                            {d.signature}
+                          </span>{" "}
+                          · {t(`${K}.owner.whoCalls`, { access: t(`${K}.owner.access.${d.access}`) })}
+                          {d.limits.map((l) => (
+                            <span key={l} className="block">
+                              {t(`${K}.owner.limitLabel`)}{" "}
+                              <span className="technical" dir="ltr">
+                                {l}
+                              </span>
+                            </span>
+                          ))}
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span className="technical block text-xs text-muted-foreground" dir="ltr">
+                      {t(`${K}.owner.found`, { functions: String(check.values?.functions ?? "") })}
+                    </span>
+                  )}
                   {usable === "no" && <span className="block text-xs text-low">{t(`${K}.owner.notUsable`)}</span>}
                   {usable === "contract" && (
                     <span className="block text-xs text-muted-foreground">{t(`${K}.owner.byContract`)}</span>

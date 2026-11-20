@@ -3,7 +3,7 @@ import { type Hex, erc20Abi, getAddress, parseAbi } from "viem";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { OwnerFacts, PoolFact, ProxyFacts, TokenSecurityFacts } from "@/lib/security/types";
-import { type GoPlusResult, goPlusToken, sourcifyStatus } from "@/server/security/external";
+import { type GoPlusResult, goPlusToken, sourcifyVerified } from "@/server/security/external";
 import { getOnchainPrices } from "../prices";
 import { getEvmClient } from "../providers";
 import { HAS_ROLE_SELECTOR, PROXY_SLOTS, minimalProxyTarget, powersIn, selectorsIn } from "./bytecode";
@@ -43,10 +43,8 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
   const goplusP: Promise<GoPlusResult> = withTimeout(goPlusToken(chainId, token), OPTIONAL_MS, {
     status: "unavailable" as const,
   });
-  const sourceP = withTimeout(sourcifyStatus(chainId, token), OPTIONAL_MS, {
-    status: "unknown" as const,
-    provider: "Sourcify",
-  });
+  const notRead = { source: { status: "unknown" as const, provider: "Sourcify" }, powers: null };
+  const sourceP = withTimeout(sourcifyVerified(chainId, token), OPTIONAL_MS, notRead);
 
   // Round 1
   const [block, code, meta, owners, slots, found, prices] = await Promise.all([
@@ -137,18 +135,25 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
   // Round 3: implementation code (for powers), the trade test and liquidity holders, side by side.
   const goplus = await goplusP;
   const liveOwner = owner && !DEAD.has(owner.toLowerCase()) ? owner : null;
-  const [implCode, trade, holders] = await Promise.all([
+  const [implCode, implSource, trade, holders] = await Promise.all([
     implementation ? client.getCode({ address: getAddress(implementation) }).catch(() => null) : null,
-    withTimeout(runTradeTest(client, chain.key, token, readings, chain.nativeSymbol), 12_000, {
-      outcome: "error" as const,
-      venue: null,
-      amountIn: null,
-      nativeSymbol: chain.nativeSymbol,
-      buyTax: null,
-      sellTax: null,
-      transferTax: null,
-      reason: null,
-    }),
+    implementation ? withTimeout(sourcifyVerified(chainId, getAddress(implementation)), OPTIONAL_MS, notRead) : null,
+    withTimeout(
+      runTradeTest(client, chain.key, token, readings, chain.nativeSymbol, nativeUsd, (a) =>
+        stableSymbol(chain.key, a),
+      ),
+      12_000,
+      {
+        outcome: "error" as const,
+        venue: null,
+        amountIn: null,
+        nativeSymbol: chain.nativeSymbol,
+        buyTax: null,
+        sellTax: null,
+        transferTax: null,
+        reason: null,
+      },
+    ),
     withTimeout(
       readPoolHolders(
         client,
@@ -188,7 +193,22 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
     };
   });
 
-  const source = await sourceP;
+  const verified = await sourceP;
+  const source = verified.source;
+  // Powers: from the verified source of the contract that holds the logic (the implementation behind a proxy) when
+  // there is one; otherwise from the compiled code. SELFDESTRUCT and the proxy's own upgrade functions always come
+  // from the compiled code.
+  const logicSource = implementation ? (implSource?.powers ?? null) : verified.powers;
+  const codePowers = powersIn(codes);
+  const powers = logicSource
+    ? [
+        ...logicSource,
+        ...codePowers.filter(
+          (p) =>
+            p.power === "selfdestruct" || (p.power === "upgrade" && !logicSource.some((s) => s.power === "upgrade")),
+        ),
+      ]
+    : codePowers.map((p) => ({ ...p, basis: "code" as const }));
   return {
     chain: chain.key,
     address: token,
@@ -203,7 +223,7 @@ export async function getEvmTokenSecurity(chain: ChainConfig, address: string): 
     priceUsd: nativeUsd,
     trade,
     owner: ownerFacts,
-    powers: powersIn(codes),
+    powers,
     proxy,
     pools,
     source,

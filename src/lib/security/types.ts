@@ -43,7 +43,7 @@ export type TradeOutcome =
   | "ok"
   /** No pool at all on the exchanges CRYPY checks. */
   | "no-pool"
-  /** Pools exist, but none the trade test supports yet (e.g. only v3, or only against a stablecoin). */
+  /** Pools exist, but none the trade test supports (e.g. an exchange design without a simulator). */
   | "unsupported-pool"
   /** A pool exists but holds (almost) nothing. */
   | "no-liquidity"
@@ -62,7 +62,11 @@ export interface TradeVenue {
   /** Exchange design, e.g. "uniswap-v2". Simulators are registered per protocol. */
   protocol: string;
   pool: string;
-  router: string;
+  /** v2-style pools: the router used. v3-style pools are called directly. */
+  router: string | null;
+  /** Symbol of the stablecoin the test bought with (swapped from the native coin first); null when paired with the
+   * wrapped native coin. */
+  via: string | null;
 }
 
 export interface TradeFacts {
@@ -77,14 +81,23 @@ export interface TradeFacts {
   transferTax: number | null;
   /** The contract's own error message for the failed step (sanitized text, or a selector). */
   reason: string | null;
+  /** v3 pools: the sale was rejected because the token took this fee (0–1) on its way into the pool. */
+  feeRejected?: number | null;
 }
 
 export type OwnerPower = "mint" | "fees" | "blacklist" | "pause" | "limits" | "cooldown" | "upgrade" | "selfdestruct";
+
+/** Who may call a function, read from verified source: the owner, a role, another named account, anyone, or not
+ * recognised. */
+export type FunctionAccess = "owner" | "role" | "restricted" | "open" | "unknown";
 
 export interface PowerFact {
   power: OwnerPower;
   /** Function signatures found (or "SELFDESTRUCT"). */
   functions: string[];
+  /** "source": read from verified source code (with access and limits per function); "code": found in compiled code. */
+  basis?: "code" | "source";
+  details?: { signature: string; access: FunctionAccess; limits: string[] }[];
 }
 
 export interface OwnerFacts {
@@ -144,6 +157,8 @@ export interface LpHolder {
   delay?: number;
   /** v3: the position NFT's id. */
   position?: string;
+  /** The lock contract can be upgraded by its operator (its locks are only as safe as that operator). */
+  upgradeable?: boolean;
 }
 
 export interface PoolHolders {

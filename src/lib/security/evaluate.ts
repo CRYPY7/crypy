@@ -7,7 +7,9 @@ import { liquiditySummary } from "./liquidity";
 import type {
   CheckClass,
   Comparison,
+  FunctionAccess,
   OwnerPower,
+  PowerFact,
   SecurityCheck,
   SecurityReport,
   Severity,
@@ -43,6 +45,13 @@ export const LP_NOT_FOUND_NOTE = 0.05;
 const TAX_TOLERANCE = 0.01;
 
 const BAIT = /\b(claim|reward|rewards|airdrop|visit|voucher|bonus|gift|free|access|redeem)\b|\$\s?\d/i;
+
+/** The weakest protection among a power's functions, when read from verified source. */
+export function weakestAccess(power: PowerFact): FunctionAccess | null {
+  if (power.basis !== "source" || !power.details?.length) return null;
+  const order: FunctionAccess[] = ["open", "restricted", "role", "unknown", "owner"];
+  return order.find((a) => power.details!.some((d) => d.access === a)) ?? null;
+}
 
 export const pct = (fraction: number) => `${(Math.round(fraction * 1000) / 10).toString()}%`;
 
@@ -103,7 +112,13 @@ export function evaluate(facts: TokenSecurityFacts): SecurityReport {
     }
     case "sell-failed":
     case "approve-failed":
-      add("sell", "trading", "risk", "critical", "simulated", { ...venue, reason: trade.reason ?? "" });
+      if (trade.feeRejected != null)
+        add("sell", "trading", "risk", "critical", "simulated", {
+          ...venue,
+          state: "feeRejected",
+          tax: pct(trade.feeRejected),
+        });
+      else add("sell", "trading", "risk", "critical", "simulated", { ...venue, reason: trade.reason ?? "" });
       if (trade.buyTax !== null) {
         const s = taxSeverity(trade.buyTax);
         add("buyTax", "trading", s ? "risk" : "pass", s, "simulated", { tax: pct(trade.buyTax) });
@@ -148,13 +163,20 @@ export function evaluate(facts: TokenSecurityFacts): SecurityReport {
           ? !adminBurned
           : ownerActive || owner.roleBased
         : power.power === "selfdestruct" || ownerActive || owner.roleBased;
-    let severity: Severity = usable ? POWER_SEVERITY[power.power] : "low";
+    // Verified source tells who may call it. Anyone, a role or another named account isn't affected by renouncing
+    // ownership; only owner-gated functions follow the owner.
+    const access = weakestAccess(power);
+    const free = access === "open" || access === "role" || access === "restricted";
+    const live = usable || (free && power.power !== "upgrade");
+    let severity: Severity = live ? POWER_SEVERITY[power.power] : "low";
     // A contract owner is often a timelock, multisig or staking contract: still a power, one step less severe.
-    const contractOwner = usable && ownerActive && owner.ownerIsContract === true && power.power !== "upgrade";
+    const contractOwner = live && !free && ownerActive && owner.ownerIsContract === true && power.power !== "upgrade";
     if (contractOwner) severity = LOWER[severity];
     add(`power.${power.power}`, "owner", "risk", severity, "heuristic", {
       functions: power.functions.slice(0, 3).join(", "),
-      usable: usable ? (contractOwner ? "contract" : "yes") : "no",
+      usable: live ? (contractOwner ? "contract" : "yes") : "no",
+      ...(access ? { access } : {}),
+      ...(power.basis === "source" ? { basis: "source" } : {}),
     });
   }
   if (
@@ -239,6 +261,9 @@ export function evaluate(facts: TokenSecurityFacts): SecurityReport {
     if (s.expired >= LP_NOISE) {
       const sev: Severity = s.expired >= LP_OWNER_HIGH ? "high" : s.expired >= LP_OWNER_MEDIUM ? "medium" : "low";
       add("lp.expired", "liquidity", "risk", sev, "verified", { share: pct(s.expired) });
+    }
+    if (summary.upgradeableLocked >= LP_UNKNOWN_NOTE) {
+      add("lp.upgradeable", "liquidity", "risk", "low", "verified", { share: pct(summary.upgradeableLocked) });
     }
     if (s.unknown >= LP_UNKNOWN_NOTE) {
       add("lp.unknown", "liquidity", "risk", "low", "heuristic", { share: pct(s.unknown) });

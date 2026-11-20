@@ -69,6 +69,7 @@ interface Classified {
   multisig?: { threshold: number; signers: number };
   delay?: number;
   vault?: { unlockAt: number | null } | null;
+  upgradeable?: boolean;
 }
 
 /** Classifies addresses: registry and context first, then code probes for unknown contracts. */
@@ -86,8 +87,10 @@ export async function classify(
     else if (ctx.owner && a === ctx.owner.toLowerCase()) out.set(a, { kind: "owner", name: null });
     else if (a === ctx.token.toLowerCase()) out.set(a, { kind: "token", name: null });
     else if (pools.has(a)) out.set(a, { kind: "pool", name: null });
-    else if (lockerAt(ctx.chain, a)) out.set(a, { kind: "locker", name: lockerAt(ctx.chain, a)!.name });
-    else if (farmAt(ctx.chain, a)) out.set(a, { kind: "farm", name: farmAt(ctx.chain, a)!.name });
+    else if (lockerAt(ctx.chain, a)) {
+      const l = lockerAt(ctx.chain, a)!;
+      out.set(a, { kind: "locker", name: l.name, upgradeable: l.upgradeable });
+    } else if (farmAt(ctx.chain, a)) out.set(a, { kind: "farm", name: farmAt(ctx.chain, a)!.name });
     else if (ctx.feeCollectors?.has(a)) out.set(a, { kind: "exchange", name: ctx.feeCollectors.get(a)! });
     else rest.push(a);
   }
@@ -180,6 +183,7 @@ function holderFrom(address: string, c: Classified | undefined, share: number): 
     locks: [],
   };
   if (c?.multisig) holder.multisig = c.multisig;
+  if (c?.upgradeable) holder.upgradeable = true;
   if (c?.delay !== undefined) holder.delay = c.delay;
   if (kind === "vault" && c?.vault) {
     holder.lockRead = "read";

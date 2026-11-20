@@ -4,22 +4,23 @@ Last updated: 2026-11-20
 
 ## Milestones
 
-| Milestone                                              | Status                                                                            |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                                           |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                                              |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                              |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                              |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                           |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                             |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                              |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                             |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                    |
-| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                            |
-| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")             |
-| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap) |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                     |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                              |
+| Milestone                                              | Status                                                                                       |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                                      |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                         |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                         |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                         |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                      |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                        |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                         |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                        |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                               |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                       |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                        |
+| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)            |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                         |
 
 ## M1 — what was built
 
@@ -149,6 +150,51 @@ and a swap of your own on CRYPY to confirm the wording.
 - **Not found:** explains the likely reasons and links to a search across all networks.
 - Non-standard events are counted ("3 events aren't standard token events") but never interpreted.
 - Cost per page: about 6–9 node requests (batched), cached 15 seconds; no paid API.
+
+## M5.2 — Token Security: finishing parts (2026-11-20)
+
+No new screens: the existing Trade test, Owner and Liquidity cards show the new facts.
+
+- **Trade test v3 (new contract `CrypyTradeTestV3.sol`):** one contract for both exchange designs. Uniswap-v2-style
+  pools go through their router; Uniswap-v3-style pools (Uniswap v3, PancakeSwap v3 and forks) are called directly,
+  so no router is needed. Pools paired with a stablecoin are tested by first swapping the native coin to that
+  stablecoin through the chain's main v2 exchange; the card says so. The test picks the deepest supported pool by
+  value. When a v3 pool rejects a sale because the token takes a fee on the way in, the fee is measured and the card
+  explains it (still a failed sale: it can't be sold through that pool).
+- **Owner powers from verified source:** when the source is published on Sourcify (for a proxy: the implementation's
+  source), CRYPY reads every power-like function by its real name, who may call it (owner, role, another named
+  account, anyone, or not recognised) and the limits it checks (shown as written). Renouncing ownership lowers only
+  owner-gated powers; powers held by roles or named accounts stay, and an "anyone can call" power is flagged. Without
+  verified source, powers still come from the compiled code as before. Source text is never executed; names and
+  limits are shown only if they look like plain Solidity.
+- **Lockers:** DeepLock (BNB Chain) added, read per token from the contract. Every locker now carries whether it is
+  upgradeable (checked against the proxy slots by the live test): Team Finance and PinkLock v1 are; their locks show
+  "the lock is only as safe as that operator", with a low note in the report. The old DxSale locker drained in May
+  2026 is not trusted (it counts as an unidentified contract).
+- **Timelocks:** recognised live on real contracts (Uniswap governance Timelock, ENS DAO TimelockController: 48 h).
+
+Real results (2026-11-20): FLOKI 0.3% fee measured as before (v2); a v3-only token traded directly on PancakeSwap v3;
+a USDT-only token traded through BNB → USDT first; SafeMoon's buy still fails. CAKE's mint is owner-only (from
+source); USDC's mint, blacklist and pause belong to named accounts (from the implementation's source).
+
+Decision needed (explorer source check): Etherscan's free API plan is licensed for personal and research use only;
+a commercial site, displaying its data to users, is not allowed. BscScan's API was replaced by Etherscan's. So CRYPY
+keeps Sourcify (open) for source checks until the owner decides (options in the roadmap).
+
+Not added yet: GemPad, Mudra and DXLock (newer "personal locker" contracts): their official contract addresses and
+read methods couldn't be confirmed from their own documentation; holdings there show as unidentified contracts.
+
+## M5.2 checks (2026-11-20, in the cloud workspace)
+
+- Typecheck, lint, Prettier: passed. Unit tests: 197 passed (new: source reading — names, access, limits, comments
+  and strings ignored, unsafe names dropped; renounce rules for role-held and open powers; v3 fee rejection).
+- Contract: `scripts/verify-trade-test.mjs` runs the contract in a local in-memory EVM against a 1%-fee token and a
+  v3-style pool: buy fee, transfer fee and the rejected sale's fee all measured as 1% (4 of 4 passed). The bytecode
+  it compiles equals the production bytecode.
+- Live (`LIVE=1`): 16 passed (new: v3-only and stablecoin-only trade tests, Sourcify source reading for CAKE and the
+  USDC implementation, timelocks, locker upgradeability flags, DeepLock's read method).
+- Build passed. Playwright: 95 passed in total; one batch-scanner test failed once under load and passed when re-run
+  (that page wasn't changed).
 
 ## M5.1 — Who holds the liquidity (design approved 2026-11-20, boards 21–23)
 
