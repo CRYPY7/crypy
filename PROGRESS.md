@@ -61,6 +61,21 @@ nodes can't answer, then retried them on a second node.
 Checks: lint, Prettier, 128 unit tests (2 new for skipping unreachable providers), 16 live tests, clean build, 81 browser
 tests — all passed.
 
+**Follow-up after the owner's `pnpm env:check` (2026-11-20):** from the owner's PC Alchemy answered in ~2.5 s per request,
+public nodes in ~0.45 s. Because Alchemy was always tried first, every round waited ~2.5 s.
+
+- **Speed-ranked rotation:** CRYPY measures every provider's real response time (moving average, forgotten after 10
+  minutes) and tries the fastest working one first. Until measured, the old order applies (Alchemy, extra, public).
+- **Hedging:** if a provider hasn't answered within 2.5× its expected time (0.7–2.5 s), the same read also goes to
+  the next provider and the first answer wins. Reads only; the server never sends transactions.
+- **Old-block reads go to Alchemy only** (archive), recent ones to any node; no archive → skipped.
+- **Free-plan batch limit:** dRPC's free plan rejects more than 3 requests per batch; non-Alchemy providers now get at
+  most 3 per call (larger rounds go out as parallel calls).
+- Simulation (first node 2.5 s, the other 0.4 s per request): after the first page, 1.5 s per transaction with every
+  request on the fast node; the first page ~4 s while speeds are learned.
+- `.gitattributes` added (LF line endings everywhere) so Git on Windows stops warning about CRLF.
+- 3 new unit tests for ranking; 131 unit, 16 live and 81 browser tests passed.
+
 ## M4.1 — Transaction Intelligence (design approved 2026-11-20)
 
 The transaction page now explains instead of listing (design boards 11–16).

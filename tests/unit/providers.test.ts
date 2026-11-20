@@ -75,3 +75,39 @@ describe("unreachable providers", () => {
     resetCoolDown();
   });
 });
+
+describe("speed ranking", () => {
+  const alchemy = { name: "alchemy", kind: "alchemy" as const, url: "https://alchemy.test" };
+  const extra = { name: "extra", kind: "extra" as const, url: "https://extra.test" };
+  const pub = { name: "public", kind: "public" as const, url: "https://public.test" };
+
+  it("keeps the configured preference until speeds are measured", async () => {
+    const { rankProviders, resetSpeeds, resetCoolDown, resetUsage } = await import("@/server/chains/evm/providers");
+    resetSpeeds();
+    resetCoolDown();
+    resetUsage();
+    expect(rankProviders([pub, extra, alchemy]).map((p) => p.name)).toEqual(["alchemy", "extra", "public"]);
+  });
+
+  it("puts the fastest measured provider first and forgets old measurements", async () => {
+    const { rankProviders, recordLatency, resetSpeeds, resetUsage } = await import("@/server/chains/evm/providers");
+    resetSpeeds();
+    resetUsage();
+    const now = 1_000_000;
+    recordLatency(alchemy, 2_500, now);
+    recordLatency(pub, 450, now);
+    expect(rankProviders([alchemy, extra, pub], now).map((p) => p.name)).toEqual(["extra", "public", "alchemy"]);
+    // Ten minutes later the slow measurement is forgotten and Alchemy gets another chance.
+    expect(rankProviders([alchemy, pub], now + 11 * 60_000).map((p) => p.name)).toEqual(["alchemy", "public"]);
+    resetSpeeds();
+  });
+
+  it("averages measurements so one slow answer doesn't flip the order", async () => {
+    const { expectedLatency, recordLatency, resetSpeeds } = await import("@/server/chains/evm/providers");
+    resetSpeeds();
+    recordLatency(pub, 400, 1);
+    recordLatency(pub, 2_000, 2);
+    expect(expectedLatency(pub, 3)).toBe(880);
+    resetSpeeds();
+  });
+});

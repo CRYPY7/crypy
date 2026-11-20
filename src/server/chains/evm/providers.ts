@@ -1,5 +1,14 @@
 import "server-only";
-import { type Chain, type PublicClient, type Transport, createPublicClient, fallback, http } from "viem";
+import {
+  type Chain,
+  type EIP1193RequestFn,
+  type PublicClient,
+  type Transport,
+  createPublicClient,
+  createTransport,
+  http,
+  shouldThrow,
+} from "viem";
 import { bsc, mainnet } from "viem/chains";
 import type { ChainConfig, ChainKey } from "@/config/chains";
 import { serverEnv } from "@/server/env";
@@ -176,8 +185,124 @@ export function resetCoolDown(): void {
   coolDown.clear();
 }
 
+// ---- Speed ranking ----------------------------------------------------------------------------------
+
+/**
+ * Response times measured from real requests (moving average per provider). The rotation tries the fastest working
+ * provider first, so CRYPY adapts to wherever it runs (a PC far from one provider, a VPS close to another).
+ * A provider not measured for a while falls back to its starting estimate, so it gets another chance.
+ */
+interface Speed {
+  ms: number;
+  at: number;
+}
+const speedKey = Symbol.for("crypy.providerSpeed");
+const speeds: Map<string, Speed> = ((globalThis as Record<symbol, Map<string, Speed>>)[speedKey] ??= new Map());
+const SPEED_MEMORY_MS = 10 * 60_000;
+/** Starting estimates keep the configured preference until real measurements exist. */
+const PRIOR_MS: Record<Provider["kind"], number> = { alchemy: 300, extra: 350, public: 450 };
+
+export function recordLatency(provider: Provider, ms: number, now = Date.now()): void {
+  const previous = speeds.get(provider.url);
+  const fresh = previous && now - previous.at < SPEED_MEMORY_MS;
+  speeds.set(provider.url, { ms: fresh ? previous.ms * 0.7 + ms * 0.3 : ms, at: now });
+}
+
+export function expectedLatency(provider: Provider, now = Date.now()): number {
+  const speed = speeds.get(provider.url);
+  return speed && now - speed.at < SPEED_MEMORY_MS ? speed.ms : PRIOR_MS[provider.kind];
+}
+
+/** Providers in the order to try: fastest expected first; cooling-down or over-budget ones last. */
+export function rankProviders(providers: Provider[], now = Date.now()): Provider[] {
+  const usable = (p: Provider) => !isCoolingDown(p, now) && !budgetExhausted(p);
+  return [...providers].sort((a, b) => {
+    const ua = usable(a);
+    const ub = usable(b);
+    if (ua !== ub) return ua ? -1 : 1;
+    return expectedLatency(a, now) - expectedLatency(b, now);
+  });
+}
+
+/** How long to wait for a provider before also asking the next one: 2.5× its expected time, 0.7–2.5 s. */
+export function hedgeDelay(provider: Provider, now = Date.now()): number {
+  return Math.min(2_500, Math.max(700, Math.round(expectedLatency(provider, now) * 2.5)));
+}
+
+/** Test helper. */
+export function resetSpeeds(): void {
+  speeds.clear();
+}
+
+/**
+ * Like viem's fallback, but the order is decided per request by measured speed. Errors where another node can't help
+ * (a revert, a rejected request) are thrown at once, as viem's fallback does.
+ */
+export function rankedFallback(providers: Provider[]): Transport {
+  return (options) => {
+    const transports = new Map(providers.map((provider) => [provider.url, meteredHttp(provider)(options)]));
+    return createTransport({
+      key: "ranked-fallback",
+      name: "Ranked fallback",
+      type: "fallback",
+      retryCount: 0,
+      // Typed loosely like viem's own transports; arguments are passed through unchanged.
+      request: ((args: { method: string; params?: unknown }) =>
+        new Promise<unknown>((resolve, reject) => {
+          // Try the fastest provider; if it is slow to answer, also ask the next one ("hedging") and take the
+          // first answer. Safe because the server only reads: it never sends transactions.
+          const ordered = rankProviders(providers);
+          let next = 0;
+          let inFlight = 0;
+          let settled = false;
+          let lastError: unknown = new Error("No provider available");
+          const finish = (error: unknown) => {
+            if (!settled && inFlight === 0 && next >= ordered.length) {
+              settled = true;
+              reject(error);
+            }
+          };
+          const start = () => {
+            if (settled) return;
+            if (next >= ordered.length) return finish(lastError);
+            const provider = ordered[next++]!;
+            const transport = transports.get(provider.url)!;
+            inFlight += 1;
+            const hedge = setTimeout(start, hedgeDelay(provider));
+            (transport.request as (a: typeof args) => Promise<unknown>)(args).then(
+              (value) => {
+                clearTimeout(hedge);
+                inFlight -= 1;
+                if (!settled) {
+                  settled = true;
+                  resolve(value);
+                }
+              },
+              (error: unknown) => {
+                clearTimeout(hedge);
+                inFlight -= 1;
+                if (settled) return;
+                if (error instanceof Error && shouldThrow(error)) {
+                  settled = true;
+                  reject(error);
+                  return;
+                }
+                lastError = error;
+                if (next < ordered.length) start();
+                else finish(lastError);
+              },
+            );
+          };
+          start();
+        })) as EIP1193RequestFn,
+    });
+  };
+}
+
 export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
-  const inner = http(provider.url, { timeout, retryCount: 0, batch: { batchSize: 20, wait: 10 } });
+  // Free plans often limit batches (dRPC free: 3 per call). Bigger rounds go out as a few parallel calls instead.
+  const batchSize = provider.kind === "alchemy" ? 20 : 3;
+  const inner = http(provider.url, { timeout, retryCount: 0, batch: { batchSize, wait: 10 } });
   return (options) => {
     const transport = inner(options);
     return {
@@ -186,10 +311,18 @@ export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
         if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
         if (isCoolingDown(provider)) throw new ProviderCoolingDownError(provider.name);
         recordUsage(provider, args.method);
+        const started = Date.now();
         try {
-          return await (transport.request as (a: typeof args, o?: unknown) => Promise<unknown>)(args, requestOptions);
+          const result = await (transport.request as (a: typeof args, o?: unknown) => Promise<unknown>)(
+            args,
+            requestOptions,
+          );
+          recordLatency(provider, Date.now() - started);
+          return result;
         } catch (error) {
           if (isUnreachable(error)) coolDown.set(provider.url, Date.now() + COOL_DOWN_MS);
+          // A node's own error answer still tells us how fast it is.
+          else recordLatency(provider, Date.now() - started);
           throw error;
         }
       },
@@ -206,10 +339,7 @@ export function getEvmClient(chain: ChainConfig): PublicClient {
     client = createPublicClient({
       chain: viemChains[chain.key],
       batch: { multicall: { batchSize: 4_096 } },
-      transport: fallback(
-        providersFor(chain).map((provider) => meteredHttp(provider)),
-        { rank: false, retryCount: 1 },
-      ),
+      transport: rankedFallback(providersFor(chain)),
     }) as PublicClient;
     clients.set(chain.key, client);
   }
@@ -219,6 +349,26 @@ export function getEvmClient(chain: ChainConfig): PublicClient {
 /** A single-provider client, for health checks. */
 export function clientFor(chain: ChainConfig, provider: Provider): PublicClient {
   return createPublicClient({ chain: viemChains[chain.key], transport: meteredHttp(provider, 5_000) }) as PublicClient;
+}
+
+const archiveClients = new Map<ChainKey, PublicClient>();
+
+/**
+ * A client for reads at old blocks (failure replay, past prices): only providers that keep full history (Alchemy).
+ * Null when none is configured, so callers skip those reads instead of asking nodes that can't answer.
+ */
+export function archiveClient(chain: ChainConfig): PublicClient | null {
+  const archive = providersFor(chain).filter((provider) => provider.kind === "alchemy");
+  if (archive.length === 0) return null;
+  let client = archiveClients.get(chain.key);
+  if (!client) {
+    client = createPublicClient({
+      chain: viemChains[chain.key],
+      transport: rankedFallback(archive),
+    }) as PublicClient;
+    archiveClients.set(chain.key, client);
+  }
+  return client;
 }
 
 /** The Alchemy provider for Alchemy-only methods (token index), if configured and within budget. */

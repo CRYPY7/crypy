@@ -380,6 +380,11 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 
 - `server/chains/evm/providers.ts`: provider list per chain (Alchemy → `ETH_RPC_URLS`/`BSC_RPC_URLS` → public nodes) behind viem `fallback`; every transport is metered (Alchemy compute units per method; requests for others) against a daily budget and refuses once it is used, so the fallback moves on. Usage lives on `globalThis` (one meter per process); a Redis store replaces it at launch.
 - `server/chains/evm/providers.ts` also skips a provider for 60 s after a timeout, network error, HTTP 5xx or 429 (never after an RPC answer such as a revert); per-request limit 5 s.
+- Provider order is not fixed: `rankedFallback` orders providers per request by measured response time (moving average,
+  10-minute memory, starting estimates Alchemy 300 ms / extra 350 ms / public 450 ms) and hedges a slow provider by also
+  asking the next one after 2.5× its expected time (0.7–2.5 s). Reverts are thrown at once (viem `shouldThrow`).
+  Batches: up to 20 per call for Alchemy, 3 for others (free-plan limits). `archiveClient(chain)` (Alchemy only) serves
+  reads at old blocks.
 - `server/chains/evm/prices.ts` + `dex.ts`: on-chain USD prices. Round 1 finds pools (v2 `getPair`, v3 `getPool` per fee tier) against stablecoins and the wrapped native coin; round 2 reads quote-side balances and v2 balances / v3 `slot0`. Stablecoins = $1; wrapped native priced from stablecoin pools first; deepest pool ≥ $5,000 quote side wins.
 - Adapter methods: `getUsdPrices` (keys `native` and lower-case token addresses), `checkProviders`.
 

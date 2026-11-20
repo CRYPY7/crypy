@@ -1,0 +1,5 @@
+# Keep line endings the same on every computer (Windows included): stops the "LF will be replaced by CRLF" warnings.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.woff2 binary

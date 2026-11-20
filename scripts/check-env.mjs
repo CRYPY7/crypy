@@ -217,7 +217,7 @@ for (const [name, urls] of Object.entries(extraLists)) {
 
 console.log(
   problems === 0
-    ? "\nAll good. Restart `pnpm dev` (Ctrl + C, then pnpm dev) so the site picks up these values.\n"
+    ? "\nAll good. Restart the site (Ctrl + C, then pnpm dev or pnpm start) so it picks up these values.\n"
     : `\n${problems} thing(s) to fix. After fixing, run this check again, then restart pnpm dev.\n`,
 );
 process.exit(problems === 0 ? 0 : 1);

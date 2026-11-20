@@ -6,7 +6,7 @@ import type { TxDetails, TxToken } from "@/lib/chains/types";
 import { decodeCallData } from "@/modules/tools/tx-decoder/decode";
 import { chainDex } from "./dex";
 import { getOnchainPrices } from "./prices";
-import { alchemyProvider } from "./providers";
+import { archiveClient } from "./providers";
 import { parseTxLogs } from "./tx-logs";
 
 /** Raw input shown on the page (hex characters); the full data is on the explorer. */
@@ -178,7 +178,8 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
   const status: TxDetails["status"] = pending ? "pending" : receipt!.status === "success" ? "success" : "reverted";
   // Replaying the failure and reading past prices need the state of an earlier block. Free public nodes keep only
   // recent blocks (about 128), so for older transactions this is tried only with an archive-capable provider.
-  const canReadPast = !pending && (alchemyProvider(chain) !== null || head - tx.blockNumber! <= RECENT_BLOCKS);
+  // Recent blocks: any node. Older blocks: only an archive-capable provider (Alchemy); none → skip.
+  const pastClient = pending ? null : head - tx.blockNumber! <= RECENT_BLOCKS ? client : archiveClient(chain);
   // Prices: token decimals are read inside the price engine's first round, so prices don't wait for names.
   const priced = logTokens.slice(0, MAX_PRICED).map((address) => ({ address, decimals: null }));
 
@@ -191,13 +192,13 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     pending ? client.getTransactionCount({ address: tx.from, blockTag: "latest" }).catch(() => null) : null,
     // The called contract is read too, so the page can say "called transfer on USDC".
     readTokens(client, [...new Set([...(tx.to ? [tx.to.toLowerCase()] : []), ...logTokens])]),
-    status === "reverted" && canReadPast
-      ? withTimeout(readRevertReason(client, { ...tx, input: tx.input }, tx.blockNumber!), OPTIONAL_MS)
+    status === "reverted" && pastClient
+      ? withTimeout(readRevertReason(pastClient, { ...tx, input: tx.input }, tx.blockNumber!), OPTIONAL_MS)
       : null,
     withTimeout(getOnchainPrices(client, chain, priced), PRICES_MS),
     // Prices at the transaction's block, when the node still keeps that state (recent blocks on public nodes;
     // any block with an archive provider). Optional; never mixed with today's prices.
-    canReadPast ? withTimeout(getOnchainPrices(client, chain, priced, tx.blockNumber!), OPTIONAL_MS) : null,
+    pastClient ? withTimeout(getOnchainPrices(pastClient, chain, priced, tx.blockNumber!), OPTIONAL_MS) : null,
   ]);
 
   // Drop the called contract's entry when it isn't a token (nothing readable).
