@@ -121,6 +121,12 @@ for (const [name, legacy] of [
     info(`${name} not set (optional): extra free providers for ${name.startsWith("ETH") ? "Ethereum" : "BNB Chain"}.`);
 }
 
+/** Speed label for one request from this computer. Each page needs about 3 rounds, so ~3× this is added. */
+function speed(ms) {
+  const label = ms < 400 ? "fast" : ms < 1000 ? "ok" : "slow";
+  return `${ms} ms, ${label}`;
+}
+
 // 4. Live Alchemy test (one cheap request per network). The key goes only to Alchemy over HTTPS.
 if (alchemyKey) {
   console.log("\nAlchemy live test:");
@@ -130,6 +136,7 @@ if (alchemyKey) {
   ];
   for (const [label, network] of networks) {
     try {
+      const started = Date.now();
       const response = await fetch(`https://${network}.g.alchemy.com/v2/${alchemyKey}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -138,7 +145,7 @@ if (alchemyKey) {
       });
       const body = await response.json().catch(() => ({}));
       if (response.ok && typeof body.result === "string") {
-        ok(`${label}: working (latest block ${BigInt(body.result).toString()})`);
+        ok(`${label}: working (latest block ${BigInt(body.result).toString()}, ${speed(Date.now() - started)})`);
       } else if (response.status === 401 || response.status === 403) {
         problem(
           `${label}: Alchemy refused the key or this network is not enabled for your app (HTTP ${response.status}).`,
@@ -159,6 +166,7 @@ for (const [name, urls] of Object.entries(extraLists)) {
   console.log(`\n${name} live test:`);
   for (const url of urls) {
     try {
+      const started = Date.now();
       const response = await fetch(url, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -173,10 +181,36 @@ for (const [name, urls] of Object.entries(extraLists)) {
           `${hostOf(url)}: this URL is for chain ${BigInt(body.result)}, not ${expectedChain[name]}. Check it is in the right list.`,
         );
       } else {
-        ok(`${hostOf(url)}: working`);
+        ok(`${hostOf(url)}: working (${speed(Date.now() - started)})`);
       }
     } catch {
       problem(`${hostOf(url)}: could not reach it (internet, firewall or wrong URL).`);
+    }
+  }
+}
+
+// 6. Built-in free public nodes (used last). Read from src/config/chains.ts so the list stays in one place.
+{
+  const config = readFileSync(new URL("../src/config/chains.ts", import.meta.url), "utf8");
+  const publicUrls = [...config.matchAll(/publicRpcUrls:\s*\[([^\]]*)\]/g)].flatMap((m) =>
+    [...m[1].matchAll(/"(https:[^"]+)"/g)].map((u) => u[1]),
+  );
+  console.log("\nBuilt-in public nodes (speed from this computer):");
+  for (const url of publicUrls) {
+    try {
+      const started = Date.now();
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] }),
+        signal: AbortSignal.timeout(10_000),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (response.ok && typeof body.result === "string")
+        ok(`${hostOf(url)}: working (${speed(Date.now() - started)})`);
+      else info(`${hostOf(url)}: not answering right now (HTTP ${response.status}); CRYPY skips it automatically.`);
+    } catch {
+      info(`${hostOf(url)}: can't be reached from this computer; CRYPY skips it automatically.`);
     }
   }
 }

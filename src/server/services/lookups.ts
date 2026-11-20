@@ -44,11 +44,17 @@ export async function cachedTxLookup(chainKey: string, hash: string): Promise<Tx
 /** Full transaction details for the transaction page. Short cache: confirmations and pending status move. */
 export async function cachedTxDetails(chainKey: string, hash: string): Promise<TxDetails | null> {
   "use cache";
-  cacheLife({ stale: 10, revalidate: 15, expire: 120 });
   const found = adapterFor(chainKey);
-  if (!found?.adapter.getTransactionDetails) return null;
-  const parsedHash = found.adapter.parseTxId(hash);
-  return parsedHash ? found.adapter.getTransactionDetails(found.chain, parsedHash) : null;
+  const parsedHash = found?.adapter.getTransactionDetails ? found.adapter.parseTxId(hash) : null;
+  const details = parsedHash ? await found!.adapter.getTransactionDetails!(found!.chain, parsedHash) : null;
+  // Settled transactions no longer change (only their confirmation count grows): keep them for 5 minutes.
+  // Pending, recent and unknown ones are re-read every 15 seconds.
+  if (details && details.status !== "pending" && (details.confirmations ?? 0) >= 64) {
+    cacheLife({ stale: 60, revalidate: 300, expire: 3_600 });
+  } else {
+    cacheLife({ stale: 10, revalidate: 15, expire: 120 });
+  }
+  return details;
 }
 
 export function explorerLink(chainKey: string, kind: "address" | "tx" | "token", id: string): string | null {

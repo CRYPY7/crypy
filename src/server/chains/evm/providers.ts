@@ -140,7 +140,43 @@ export function resetUsage(): void {
  * (so the fallback moves on) once the budget is used up. Concurrent requests are sent as one
  * JSON-RPC batch to save round trips.
  */
-export function meteredHttp(provider: Provider, timeout = 8_000): Transport {
+// ---- Unreachable providers ------------------------------------------------------------------------
+
+/** How long a provider that timed out or couldn't be reached is skipped, so later requests don't wait for it again. */
+export const COOL_DOWN_MS = 60_000;
+type Health = Map<string, number>;
+const healthKey = Symbol.for("crypy.providerCoolDown");
+const coolDown: Health = ((globalThis as Record<symbol, Health>)[healthKey] ??= new Map());
+
+export class ProviderCoolingDownError extends Error {
+  constructor(name: string) {
+    super(`Provider ${name} is skipped for a moment after failing to answer`);
+    this.name = "ProviderCoolingDownError";
+  }
+}
+
+/** Only connection problems count (timeouts, network errors, HTTP 5xx/429), never a node's answer such as a revert. */
+export function isUnreachable(error: unknown): boolean {
+  const name = error instanceof Error ? error.name : "";
+  if (name === "TimeoutError") return true;
+  if (name === "HttpRequestError") {
+    const status = (error as { status?: number }).status;
+    return status === undefined || status === 429 || status >= 500;
+  }
+  return false;
+}
+
+export function isCoolingDown(provider: Provider, now = Date.now()): boolean {
+  const until = coolDown.get(provider.url);
+  return until !== undefined && until > now;
+}
+
+/** Test helper. */
+export function resetCoolDown(): void {
+  coolDown.clear();
+}
+
+export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
   const inner = http(provider.url, { timeout, retryCount: 0, batch: { batchSize: 20, wait: 10 } });
   return (options) => {
     const transport = inner(options);
@@ -148,8 +184,14 @@ export function meteredHttp(provider: Provider, timeout = 8_000): Transport {
       ...transport,
       async request(args: { method: string; params?: unknown }, requestOptions?: unknown) {
         if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
+        if (isCoolingDown(provider)) throw new ProviderCoolingDownError(provider.name);
         recordUsage(provider, args.method);
-        return (transport.request as (a: typeof args, o?: unknown) => Promise<unknown>)(args, requestOptions);
+        try {
+          return await (transport.request as (a: typeof args, o?: unknown) => Promise<unknown>)(args, requestOptions);
+        } catch (error) {
+          if (isUnreachable(error)) coolDown.set(provider.url, Date.now() + COOL_DOWN_MS);
+          throw error;
+        }
       },
     } as ReturnType<Transport>;
   };

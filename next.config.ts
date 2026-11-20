@@ -16,7 +16,7 @@ const contentSecurityPolicy = [
   [
     "connect-src 'self'",
     // Public RPCs used by the browser wallet layer (read-only, no keys)
-    "https://ethereum-rpc.publicnode.com https://cloudflare-eth.com https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org",
+    "https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org",
     // WalletConnect relay and services (only used after the user chooses WalletConnect)
     "wss://relay.walletconnect.org wss://relay.walletconnect.com https://*.walletconnect.org https://*.walletconnect.com https://api.web3modal.org https://*.reown.com",
     isDev ? "ws: wss:" : "",

@@ -10,7 +10,9 @@ import { type ChainDex, type DexConfig, type QuoteToken, chainDex } from "./dex"
  * on the configured DEXes, read each pool's price, and use the pool with the deepest quote-side liquidity.
  * Stablecoins anchor $1; the wrapped native coin is priced from its stablecoin pools first.
  * A pool with less than MIN_DEPTH_USD of quote tokens is ignored, so tiny scam pools can't set a price.
- * Two multicall rounds in total, whatever the number of tokens.
+ * Two multicall rounds in total, whatever the number of tokens: (1) find pools for the native coin and every token,
+ * plus any unknown token decimals; (2) read all pools. The native coin's price is computed first from the same
+ * readings, then used for tokens quoted in the wrapped native coin.
  */
 export const MIN_DEPTH_USD = 5_000;
 /** Calldata bytes per multicall request (a few hundred calls each). */
@@ -31,11 +33,17 @@ export interface PriceQuote {
 
 export interface TokenToPrice {
   address: string;
+  /** Unknown decimals (null) are read in the first round. */
+  decimals: number | null;
+}
+
+interface PricedToken {
+  address: string;
   decimals: number;
 }
 
 interface Candidate {
-  token: TokenToPrice;
+  token: PricedToken;
   quote: QuoteToken;
   dex: DexConfig;
   pool?: Hex;
@@ -68,7 +76,7 @@ export function v3Price(
   return Number.isFinite(price) && price > 0 ? price : null;
 }
 
-function candidatesFor(tokens: TokenToPrice[], config: ChainDex): Candidate[] {
+function candidatesFor(tokens: PricedToken[], config: ChainDex): Candidate[] {
   const out: Candidate[] = [];
   for (const token of tokens) {
     for (const quote of config.quotes) {
@@ -175,7 +183,7 @@ export interface ChainPrices {
   tokens: Map<string, PriceQuote>;
 }
 
-/** USD prices for the native coin and the given tokens, from on-chain DEX pools. */
+/** USD prices for the native coin and the given tokens, from on-chain DEX pools (two rounds). */
 export async function getOnchainPrices(
   client: PublicClient,
   chain: ChainConfig,
@@ -187,36 +195,66 @@ export async function getOnchainPrices(
   const wrapped = config.quotes.find((q) => q.role === "wrapped-native")!;
   const stables = config.quotes.filter((q) => q.role === "stable");
   const quoteUsd = new Map<string, number>(stables.map((q) => [q.address.toLowerCase(), 1]));
+  const isQuote = (address: string) => config.quotes.some((q) => q.address.toLowerCase() === address.toLowerCase());
 
-  // Round 1+2 for the wrapped native coin against stablecoins only.
-  const nativeConfig: ChainDex = { quotes: stables, dexes: config.dexes };
-  const nativeReadings = await readPools(
+  // Tokens to price (quote tokens are priced by the anchor rules). Shared objects: decimals filled after round 1.
+  const seen = new Set<string>();
+  const toPrice: PricedToken[] = [];
+  const unknownDecimals: PricedToken[] = [];
+  for (const token of tokens) {
+    const key = token.address.toLowerCase();
+    if (seen.has(key) || isQuote(key)) continue;
+    seen.add(key);
+    const entry = { address: getAddress(token.address), decimals: token.decimals ?? -1 };
+    toPrice.push(entry);
+    if (token.decimals === null) unknownDecimals.push(entry);
+  }
+
+  // Round 1: pools for the wrapped native coin (against stablecoins) and every token, plus unknown decimals.
+  const nativeCandidates = candidatesFor([{ address: wrapped.address, decimals: wrapped.decimals }], {
+    quotes: stables,
+    dexes: config.dexes,
+  });
+  const tokenCandidates = candidatesFor(toPrice, config);
+  const [pools, decimals] = await Promise.all([
+    discoverPools(client, [...nativeCandidates, ...tokenCandidates], blockNumber),
+    unknownDecimals.length === 0
+      ? Promise.resolve([])
+      : client.multicall({
+          blockNumber,
+          allowFailure: true,
+          contracts: unknownDecimals.map((t) => ({
+            address: t.address as Hex,
+            abi: erc20Abi,
+            functionName: "decimals" as const,
+          })),
+        }),
+  ]);
+  unknownDecimals.forEach((token, i) => {
+    const result = decimals[i];
+    const value = result?.status === "success" ? Number(result.result) : -1;
+    token.decimals = Number.isInteger(value) && value >= 0 && value <= 36 ? value : -1;
+  });
+
+  // Round 2: read every pool that exists (tokens without readable decimals are skipped).
+  const readings = await readPools(
     client,
-    await discoverPools(
-      client,
-      candidatesFor([{ address: wrapped.address, decimals: wrapped.decimals }], nativeConfig),
-      blockNumber,
-    ),
+    pools.filter((c) => c.token.decimals >= 0),
     blockNumber,
   );
-  const native = bestPrices(nativeReadings, quoteUsd).get(wrapped.address.toLowerCase()) ?? null;
-  if (native) quoteUsd.set(wrapped.address.toLowerCase(), native.usd);
+  const wrappedKey = wrapped.address.toLowerCase();
+  const native =
+    bestPrices(
+      readings.filter((r) => r.candidate.token.address.toLowerCase() === wrappedKey),
+      quoteUsd,
+    ).get(wrappedKey) ?? null;
+  if (native) quoteUsd.set(wrappedKey, native.usd);
 
   const result = new Map<string, PriceQuote>();
   for (const stable of stables)
     result.set(stable.address.toLowerCase(), { usd: 1, depthUsd: Infinity, dex: "stablecoin" });
-  if (native) result.set(wrapped.address.toLowerCase(), native);
-
-  const toPrice = tokens
-    .filter((t) => !result.has(t.address.toLowerCase()))
-    .map((t) => ({ address: getAddress(t.address), decimals: t.decimals }));
-  if (toPrice.length > 0) {
-    const readings = await readPools(
-      client,
-      await discoverPools(client, candidatesFor(toPrice, config), blockNumber),
-      blockNumber,
-    );
-    for (const [key, quote] of bestPrices(readings, quoteUsd)) result.set(key, quote);
-  }
+  if (native) result.set(wrappedKey, native);
+  const tokenReadings = readings.filter((r) => r.candidate.token.address.toLowerCase() !== wrappedKey);
+  for (const [key, quote] of bestPrices(tokenReadings, quoteUsd)) result.set(key, quote);
   return { native, tokens: result };
 }

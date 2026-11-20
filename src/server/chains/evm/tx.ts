@@ -6,6 +6,7 @@ import type { TxDetails, TxToken } from "@/lib/chains/types";
 import { decodeCallData } from "@/modules/tools/tx-decoder/decode";
 import { chainDex } from "./dex";
 import { getOnchainPrices } from "./prices";
+import { alchemyProvider } from "./providers";
 import { parseTxLogs } from "./tx-logs";
 
 /** Raw input shown on the page (hex characters); the full data is on the explorer. */
@@ -122,59 +123,95 @@ async function readRevertReason(
   }
 }
 
-export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, hash: Hex): Promise<TxDetails | null> {
-  const tx = await client.getTransaction({ hash }).catch((error: unknown) => {
-    if (error instanceof Error && error.name === "TransactionNotFoundError") return null;
-    throw error;
+/** Optional extras (failure reason, past prices) must never hold the page up: null after `ms`. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T | null> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      () => {
+        clearTimeout(timer);
+        resolve(null);
+      },
+    );
   });
-  if (!tx) return null;
+}
 
-  const pending = tx.blockNumber === null;
-  const [receipt, block, head, toCode, latestNonce] = await Promise.all([
-    pending ? null : client.getTransactionReceipt({ hash }),
-    pending ? null : client.getBlock({ blockNumber: tx.blockNumber! }),
+const OPTIONAL_MS = 2_500;
+/** Blocks for which free public nodes still keep state (they keep ~128; a margin for slow nodes). */
+const RECENT_BLOCKS = 100n;
+const PRICES_MS = 4_000;
+
+/**
+ * Three network rounds in total (each round is one batched request where the provider allows):
+ * 1. transaction + receipt + latest block number;
+ * 2. block, called contract's code, sender nonce (pending), token names, failure reason, price pools (+ decimals);
+ * 3. price pool readings (today and at the transaction's block, in parallel).
+ */
+export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, hash: Hex): Promise<TxDetails | null> {
+  // Round 1
+  const [tx, receiptOrNull, head] = await Promise.all([
+    client.getTransaction({ hash }).catch((error: unknown) => {
+      if (error instanceof Error && error.name === "TransactionNotFoundError") return null;
+      throw error;
+    }),
+    client.getTransactionReceipt({ hash }).catch((error: unknown) => {
+      if (error instanceof Error && error.name === "TransactionReceiptNotFoundError") return null;
+      throw error;
+    }),
     client.getBlockNumber(),
-    // viem returns undefined for "no code"; a failed read becomes null.
-    tx.to ? client.getCode({ address: tx.to }).catch(() => null) : null,
-    // Pending only: has the sender already used this nonce elsewhere? (evidence of replacement / cancellation)
-    pending ? client.getTransactionCount({ address: tx.from, blockTag: "latest" }).catch(() => null) : null,
   ]);
+  if (!tx) return null;
+  const pending = tx.blockNumber === null;
+  // Mined between the two reads of round 1: fetch the receipt once more.
+  const receipt = pending ? null : (receiptOrNull ?? (await client.getTransactionReceipt({ hash })));
 
   const wrapped = chainDex[chain.key]?.quotes.find((q) => q.role === "wrapped-native")?.address;
   const logs = parseTxLogs(
     (receipt?.logs ?? []).map((log) => ({ address: log.address, topics: log.topics, data: log.data })),
     wrapped,
   );
-  // The called contract is looked up too, so the page can say "called transfer on USDC".
-  const calledContract = tx.to && toCode ? [tx.to.toLowerCase()] : [];
-  const tokenAddresses = [
-    ...new Set([...calledContract, ...[...logs.transfers, ...logs.approvals].map((item) => item.token.toLowerCase())]),
-  ];
-
+  const logTokens = [...new Set([...logs.transfers, ...logs.approvals].map((item) => item.token.toLowerCase()))];
   const status: TxDetails["status"] = pending ? "pending" : receipt!.status === "success" ? "success" : "reverted";
-  const [tokens, revertReason] = await Promise.all([
-    readTokens(client, tokenAddresses),
-    status === "reverted"
-      ? readRevertReason(client, { ...tx, input: tx.input }, tx.blockNumber!).catch(() => null)
-      : Promise.resolve(null),
+  // Replaying the failure and reading past prices need the state of an earlier block. Free public nodes keep only
+  // recent blocks (about 128), so for older transactions this is tried only with an archive-capable provider.
+  const canReadPast = !pending && (alchemyProvider(chain) !== null || head - tx.blockNumber! <= RECENT_BLOCKS);
+  // Prices: token decimals are read inside the price engine's first round, so prices don't wait for names.
+  const priced = logTokens.slice(0, MAX_PRICED).map((address) => ({ address, decimals: null }));
+
+  // Rounds 2 and 3 (prices take both; everything else finishes in round 2).
+  const [block, toCode, latestNonce, tokensRaw, revertReason, nowQuotes, thenQuotes] = await Promise.all([
+    pending ? null : client.getBlock({ blockNumber: tx.blockNumber! }),
+    // viem returns undefined for "no code"; a failed read becomes null.
+    tx.to ? client.getCode({ address: tx.to }).catch(() => null) : null,
+    // Pending only: has the sender already used this nonce elsewhere? (evidence of replacement / cancellation)
+    pending ? client.getTransactionCount({ address: tx.from, blockTag: "latest" }).catch(() => null) : null,
+    // The called contract is read too, so the page can say "called transfer on USDC".
+    readTokens(client, [...new Set([...(tx.to ? [tx.to.toLowerCase()] : []), ...logTokens])]),
+    status === "reverted" && canReadPast
+      ? withTimeout(readRevertReason(client, { ...tx, input: tx.input }, tx.blockNumber!), OPTIONAL_MS)
+      : null,
+    withTimeout(getOnchainPrices(client, chain, priced), PRICES_MS),
+    // Prices at the transaction's block, when the node still keeps that state (recent blocks on public nodes;
+    // any block with an archive provider). Optional; never mixed with today's prices.
+    canReadPast ? withTimeout(getOnchainPrices(client, chain, priced, tx.blockNumber!), OPTIONAL_MS) : null,
   ]);
 
-  const priced = Object.values(tokens)
-    .filter((token) => token.decimals !== null)
-    .slice(0, MAX_PRICED)
-    .map((token) => ({ address: token.address, decimals: token.decimals! }));
+  // Drop the called contract's entry when it isn't a token (nothing readable).
+  const tokens = Object.fromEntries(
+    Object.entries(tokensRaw).filter(
+      ([key, token]) => logTokens.includes(key) || token.symbol || token.name || token.decimals !== null,
+    ),
+  );
   const toRecord = (quotes: Awaited<ReturnType<typeof getOnchainPrices>>) => {
     const out: Record<string, number> = {};
     if (quotes.native) out.native = quotes.native.usd;
     for (const [address, quote] of quotes.tokens) out[address.toLowerCase()] = quote.usd;
     return out;
   };
-  // Today's prices, and prices at the transaction's block when the node still keeps that state (recent blocks on
-  // public nodes; any block with an archive provider). Both are optional; they are never mixed.
-  const [nowQuotes, thenQuotes] = await Promise.all([
-    getOnchainPrices(client, chain, priced).catch(() => null),
-    pending ? Promise.resolve(null) : getOnchainPrices(client, chain, priced, tx.blockNumber!).catch(() => null),
-  ]);
   const prices = nowQuotes ? toRecord(nowQuotes) : {};
   const pricesAtTx = thenQuotes && thenQuotes.native ? toRecord(thenQuotes) : null;
 

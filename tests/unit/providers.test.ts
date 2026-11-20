@@ -48,3 +48,30 @@ describe("provider rotation", () => {
     expect(usageSnapshot().find((u) => u.provider === "alchemy")).toMatchObject({ requests: 38_462 });
   });
 });
+
+describe("unreachable providers", () => {
+  it("only connection problems count, never a node's answer", async () => {
+    const { isUnreachable } = await import("@/server/chains/evm/providers");
+    const named = (name: string, extra: Record<string, unknown> = {}) =>
+      Object.assign(new Error("x"), { name, ...extra });
+    expect(isUnreachable(named("TimeoutError"))).toBe(true);
+    expect(isUnreachable(named("HttpRequestError"))).toBe(true);
+    expect(isUnreachable(named("HttpRequestError", { status: 503 }))).toBe(true);
+    expect(isUnreachable(named("HttpRequestError", { status: 429 }))).toBe(true);
+    expect(isUnreachable(named("HttpRequestError", { status: 400 }))).toBe(false);
+    expect(isUnreachable(named("ContractFunctionRevertedError"))).toBe(false);
+    expect(isUnreachable(named("RpcRequestError"))).toBe(false);
+  });
+
+  it("a provider that timed out is skipped for a while, then tried again", async () => {
+    const { COOL_DOWN_MS, isCoolingDown, meteredHttp, resetCoolDown } = await import("@/server/chains/evm/providers");
+    resetCoolDown();
+    const provider = { name: "test", kind: "extra" as const, url: "http://127.0.0.1:9/never" };
+    const transport = meteredHttp(provider, 200)({ chain: undefined, retryCount: 0 });
+    await expect(transport.request({ method: "eth_blockNumber" })).rejects.toThrow();
+    expect(isCoolingDown(provider)).toBe(true);
+    await expect(transport.request({ method: "eth_blockNumber" })).rejects.toThrow(/skipped for a moment/);
+    expect(isCoolingDown(provider, Date.now() + COOL_DOWN_MS + 1)).toBe(false);
+    resetCoolDown();
+  });
+});

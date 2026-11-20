@@ -60,7 +60,7 @@ export const chains: readonly ChainConfig[] = [
     nativeSymbol: "ETH",
     nativeDecimals: 18,
     explorer: { name: "Etherscan", url: "https://etherscan.io" },
-    publicRpcUrls: ["https://ethereum-rpc.publicnode.com", "https://cloudflare-eth.com"],
+    publicRpcUrls: ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org"],
     alchemyNetwork: "eth-mainnet",
     commonTokens: [
       "0xdAC17F958D2ee523a2206206994597C13D831ec7", // USDT

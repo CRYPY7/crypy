@@ -32,6 +32,35 @@ Last updated: 2026-11-20
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
 
+## Speed fix for the transaction page (owner report 2026-11-20)
+
+Owner reported slow transaction pages on his PC. Measured cause: the reader asked the nodes 6–8 questions one after
+another, so every extra bit of network distance was multiplied; old transactions also tried "past" reads that free
+nodes can't answer, then retried them on a second node.
+
+- **3 network requests per transaction** (was 6–8): transaction + receipt + latest block together; then block, contract
+  code, token names, failure reason and price pools together; then pool readings. The price engine itself now needs 2
+  rounds instead of 4 (native coin and tokens together; unknown decimals read in the first round).
+- **Past-state reads only when they can work:** failure-reason replay and transaction-time prices are tried for recent
+  transactions (last ~100 blocks) or when an archive-capable provider (Alchemy) is set; both have a 2.5 s limit, today's
+  prices 4 s. Nothing optional can hold the page up.
+- **Unreachable providers are skipped for 60 seconds** after a timeout, network error, HTTP 5xx or 429 (never after a
+  normal node answer such as a revert). Per-request time limit lowered from 8 s to 5 s.
+- **Settled transactions are cached for 5 minutes** (64+ confirmations); pending and recent ones for 15 seconds.
+- Cloudflare's Ethereum node stopped answering ("Cannot fulfill request"); replaced by the free public dRPC node
+  (`eth.drpc.org`), checked working.
+- `pnpm env:check` now shows each provider's response time from the owner's computer (fast / ok / slow) and also tests
+  the built-in public nodes.
+
+| Measured (same 5 real transactions) | Before    | After     |
+| ----------------------------------- | --------- | --------- |
+| Network requests per transaction    | 6–8       | 3         |
+| With 400 ms added to every request  | 2.6–2.9 s | 1.4–1.6 s |
+| Fast network (this workspace)       | 0.9–1.3 s | 0.3–0.6 s |
+
+Checks: lint, Prettier, 128 unit tests (2 new for skipping unreachable providers), 16 live tests, clean build, 81 browser
+tests — all passed.
+
 ## M4.1 — Transaction Intelligence (design approved 2026-11-20)
 
 The transaction page now explains instead of listing (design boards 11–16).

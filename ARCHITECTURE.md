@@ -379,6 +379,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 ## 10a. Blockchain providers and prices (zero API cost)
 
 - `server/chains/evm/providers.ts`: provider list per chain (Alchemy → `ETH_RPC_URLS`/`BSC_RPC_URLS` → public nodes) behind viem `fallback`; every transport is metered (Alchemy compute units per method; requests for others) against a daily budget and refuses once it is used, so the fallback moves on. Usage lives on `globalThis` (one meter per process); a Redis store replaces it at launch.
+- `server/chains/evm/providers.ts` also skips a provider for 60 s after a timeout, network error, HTTP 5xx or 429 (never after an RPC answer such as a revert); per-request limit 5 s.
 - `server/chains/evm/prices.ts` + `dex.ts`: on-chain USD prices. Round 1 finds pools (v2 `getPair`, v3 `getPool` per fee tier) against stablecoins and the wrapped native coin; round 2 reads quote-side balances and v2 balances / v3 `slot0`. Stablecoins = $1; wrapped native priced from stablecoin pools first; deepest pool ≥ $5,000 quote side wins.
 - Adapter methods: `getUsdPrices` (keys `native` and lower-case token addresses), `checkProviders`.
 
@@ -411,6 +412,10 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   an inline script from localStorage before paint, shows one. Browser code: view switch, local time, copy buttons,
   `AutoRefresh` for pending.
 - **API:** `GET /api/v1/tx/<hash>?chain=&format=json|text|raw[&download=1]` (rate-limited, read-only, nothing stored).
+- **Speed:** the EVM reader makes 3 batched network requests per transaction (round 1: tx, receipt, head; round 2: block,
+  code, token info, failure replay, price pools + decimals; round 3: pool readings). Past-state reads (failure replay,
+  block-time prices) run only for recent blocks or with an archive-capable provider, with 2.5 s limits. Settled
+  transactions are cached 5 minutes.
 - `TxDetails` also carries `pricesAtTx` (block-time prices when the node has the state), `technical` (chain ID, block
   hash, index, base/priority fee, max fees), `events` (raw, capped 400), `nonceUsed` (pending) and `checkedAt`.
 
