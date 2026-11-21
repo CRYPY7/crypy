@@ -2009,6 +2009,35 @@
         "statRecent": "last few hours only",
         "howRecent": "Without the history source, CRYPY reads the last few hours of token transfers straight from the chain, only for tokens this wallet holds now."
       }
+    },
+    "chainScope": {
+      "picker": {
+        "button": "Chains:",
+        "used": "Used",
+        "all": "All",
+        "title": "Which chains?",
+        "usedTitle": "Chains where it's used",
+        "usedDesc": "Recommended. CRYPY checks every chain first and scans only where this address has activity.",
+        "allTitle": "All chains",
+        "allDesc": "Scan every supported chain, used or not.",
+        "pickTitle": "Pick chains",
+        "pickDesc": "Choose one or more chains.",
+        "isUsed": "used",
+        "notUsed": "not used",
+        "cancel": "Cancel",
+        "scan": "Scan {count} chains",
+        "scanOne": "Scan 1 chain",
+        "remembered": "Your choice is kept in the link and remembered on this device."
+      },
+      "scanned": "Scanned on <b>{chains}</b>",
+      "scannedOnly": "Scanned on <b>{chains}</b> only",
+      "notUsed": "No activity found on {chains}",
+      "noneUsed": "No activity found on any supported chain",
+      "scanToo": "Scan these too",
+      "scanAll": "Scan all chains",
+      "leftOutTitle": "{chains}: not checked",
+      "leftOut": "You narrowed the scan, but this wallet is also used on {chains}. Approvals there could still let apps move your tokens.",
+      "checkToo": "Check {chains} too"
     }
   },
   "wallet": {

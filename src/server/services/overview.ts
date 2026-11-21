@@ -20,11 +20,12 @@ const nativeNames: Record<ChainKey, string> = { ethereum: "Ether", bsc: "BNB" };
  * Balances and USD values on every live chain that supports balances. One chain failing never hides the
  * others. Cached briefly per address, so repeat visits and refreshes don't spend provider quota.
  */
-export async function cachedAddressOverview(address: string): Promise<AddressOverview> {
+/** `only`: which chains to scan (from the chain picker); all supported chains when omitted. */
+export async function cachedAddressOverview(address: string, only?: readonly string[]): Promise<AddressOverview> {
   "use cache";
   cacheLife({ stale: 30, revalidate: 60, expire: 300 });
 
-  const targets = liveChains.filter((chain) => chain.capabilities.tokenBalances);
+  const targets = liveChains.filter((chain) => chain.capabilities.tokenBalances && (!only || only.includes(chain.key)));
   const settled = await Promise.allSettled(
     targets.map(async (chain) => {
       const adapter = registry.adapters.find((candidate) => candidate.family === chain.family);

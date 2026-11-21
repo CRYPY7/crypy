@@ -4,26 +4,28 @@ Last updated: 2026-11-21
 
 ## Milestones
 
-| Milestone                                               | Status                                                                                        |
-| ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| M0 Setup and design approval                            | ✅ Done                                                                                       |
-| M1 Foundation                                           | ✅ Done (2026-11-19)                                                                          |
-| M2 Multi-chain core, search routing, wallet connection  | ✅ Done (2026-11-20)                                                                          |
-| M2.5 Free utilities                                     | ✅ Done (2026-11-20)                                                                          |
-| M3 Address overview (Balance Scanner)                   | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
-| Desktop sidebar layout, chain icons, recently viewed    | ✅ Done (2026-11-20, design approved)                                                         |
-| M4 Transaction page                                     | ✅ Done (2026-11-20)                                                                          |
-| M4.1 Transaction Intelligence                           | ✅ Done (2026-11-20, design approved)                                                         |
-| M4.2 Transaction Intelligence V2, Part 1                | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
-| M4.5 Batch Balance Scanner                              | ✅ Built (2026-11-20, design approved)                                                        |
-| M5 Token Security                                       | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
-| M5.2 Token Security: finishing parts                    | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
-| M5.1 Liquidity holders ("Who holds the liquidity")      | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
-| M5.5 Token Market & Charts (own on-chain data)          | Planned (approved 2026-11-20)                                                                 |
-| M6 Approvals and safe revoke                            | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
-| M7 Activity tab (Address Analyzer)                      | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
-| M7 Gas Tracker, Timestamp & Block Converter, new chains | Next (designs approved, boards 31–33)                                                         |
-| M3–M9                                                   | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+| Milestone                                              | Status                                                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                                       |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                          |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                          |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                          |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                         |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                          |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                         |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                        |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
+| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                 |
+| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
+| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
+| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
+| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
+| M7 Base, Arbitrum, Polygon                             | Next                                                                                          |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M1 — what was built
 
@@ -72,6 +74,27 @@ events are searched per held token.
 Not covered yet (tracked in the roadmap): complete approval history (indexer), contract age for spenders,
 single-item NFT approvals, testnet revoke, batch revoke. **Owner checks:** compare your own wallets with Revoke.cash;
 revoke one small real approval and confirm the page shows it gone.
+
+## M7 part 3 — Chain picker on address tools (owner request; design approved 2026-11-21, boards 34–35)
+
+- Overview, Approvals and Activity now have a **"Chains:" picker**: _chains where it's used_ (default), _all
+  chains_, or _pick chains_. The choice goes into the link (`?chains=used|all|bsc,ethereum`) and a first-party cookie
+  (`crypy_chains`, a list of chain names only), so it is remembered on this device; the link wins over the cookie.
+  Tabs carry the choice. Panel under the button on wider screens, bottom sheet on phones; Escape and outside click
+  close it without changes.
+- **"Used" check:** the search lookups every page already does (contract code, sent transactions, coin balance) plus
+  one multicall per remaining chain for its well-known tokens, so a wallet that only received USDT still counts.
+  A chain whose check failed counts as used: a provider outage never narrows a scan.
+- One line says what was scanned and what wasn't ("Scanned on … · No activity found on … · Scan these too").
+- **Safety rule:** on Approvals, used chains left out of a narrowed scan get a warning with a "Check … too" button,
+  so a narrowed scan never looks like a full one.
+- Less work per visit: chains with no sign of use are skipped, which also speeds up large addresses on unused chains.
+- APIs `/api/v1/address/{a}/approvals` and `/activity` accept optional `?chains=`; without it they scan every chain
+  as before. Invalid values return 400.
+
+Checks: typecheck and lint clean; unit 236 passed (9 new: link parsing, order, unknown chains, used/all/pick
+scopes); build passed; browser 90 passed, 7 skipped (8 new chain-picker tests on desktop and phone, live data).
+CSS 73.4 KB raw: the budget is being raised to 80 KB by the owner (decision 2026-11-21).
 
 ## M7 part 2 — Gas Tracker and Timestamp & Block Converter (designs approved 2026-11-21, boards 31–33)
 

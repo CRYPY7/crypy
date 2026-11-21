@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { BalanceCoverage, ChainBalances, RawTokenBalance } from "@/lib/chains/types";
-import { BudgetExhaustedError, type Provider, budgetExhausted, recordUsage } from "./providers";
+import { BudgetExhaustedError, type Provider, budgetExhausted, getEvmClient, recordUsage } from "./providers";
 
 /**
  * Alchemy lists every token an address has EVER held (including ones now at zero), 100 per page.
@@ -103,6 +103,13 @@ async function listCommonTokens(client: PublicClient, chain: ChainConfig, owner:
     const result = results[i];
     return result?.status === "success" && result.result > 0n ? [{ address, raw: result.result }] : [];
   });
+}
+
+/** Whether the address holds any of the chain's well-known tokens (one multicall): a cheap "is it used here" hint. */
+export async function holdsCommonToken(chain: ChainConfig, owner: string): Promise<boolean> {
+  const client = getEvmClient(chain);
+  const held = await listCommonTokens(client, chain, getAddress(owner));
+  return held.length > 0;
 }
 
 /** Name, symbol and decimals for many tokens with batched multicalls. Contract text is sanitized. */

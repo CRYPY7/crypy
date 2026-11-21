@@ -97,7 +97,7 @@ test("loads the tools dialog code only when it is opened", async ({ page }) => {
  * Measured uncompressed (what the browser must parse). Raise only with a written reason in PROGRESS.md.
  */
 const JS_BUDGET_KB = 650;
-const CSS_BUDGET_KB = 72; // One shared, cached file: 62 KB raw ≈ 11 KB gzipped at M4.
+const CSS_BUDGET_KB = 80; // One shared, cached file: 62 KB raw ≈ 11 KB gzipped at M4.
 
 for (const path of [
   "/en",

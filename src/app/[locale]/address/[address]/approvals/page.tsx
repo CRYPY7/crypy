@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { AddressTabs } from "@/components/entity/address-tabs";
 import type { ApprovalsStrings } from "@/components/entity/approvals-shared";
 import { ApprovalsView } from "@/components/entity/approvals-view";
+import { ChainScopeBar } from "@/components/entity/chain-scope";
 import { EntityHeader, EntitySkeleton, Notice } from "@/components/entity/entity-parts";
 import { RecordVisit } from "@/components/recent/recent";
 import { getChain, liveChains } from "@/config/chains";
@@ -16,6 +17,7 @@ import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedApprovals } from "@/server/services/approvals";
+import { chainScopeFor } from "@/server/services/chain-scope";
 import { cachedResolve, explorerLink } from "@/server/services/lookups";
 
 type Props = PageProps<"/[locale]/address/[address]/approvals">;
@@ -26,18 +28,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t("metaTitle", { short: shortenId(address) }), robots: { index: false, follow: false } };
 }
 
-export default function ApprovalsPage({ params }: Props) {
+export default function ApprovalsPage({ params, searchParams }: Props) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <Suspense fallback={<EntitySkeleton />}>
-        <ApprovalsContent params={params} />
+        <ApprovalsContent params={params} searchParams={searchParams} />
       </Suspense>
     </div>
   );
 }
 
-async function ApprovalsContent({ params }: { params: Props["params"] }) {
-  const [{ address }, locale] = await Promise.all([params, localeParam()]);
+async function ApprovalsContent({
+  params,
+  searchParams,
+}: {
+  params: Props["params"];
+  searchParams: Props["searchParams"];
+}) {
+  const [{ address }, query, locale] = await Promise.all([params, searchParams, localeParam()]);
   if (!isLocale(locale)) notFound();
   const t = await getTranslations();
   if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
@@ -60,7 +68,8 @@ async function ApprovalsContent({ params }: { params: Props["params"] }) {
   if (result.status === "unavailable") return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
   if (result.status !== "address") notFound();
 
-  const report = await cachedApprovals(result.address);
+  const scope = await chainScopeFor(result.address, "approvals", query.chains);
+  const report = await cachedApprovals(result.address, scope.scan);
   const basePath = localePath(locale, `/address/${result.address}`);
   const links = result.lookups.flatMap((lookup) => {
     const chain = getChain(lookup.chain);
@@ -92,9 +101,11 @@ async function ApprovalsContent({ params }: { params: Props["params"] }) {
       <AddressTabs
         basePath={basePath}
         current="approvals"
+        chains={typeof query.chains === "string" ? query.chains : undefined}
         labels={t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string }}
         approvalsCount={report.summary.total}
       />
+      <ChainScopeBar scope={scope} path={`${basePath}/approvals`} safety />
       <ApprovalsView
         report={report}
         strings={t.raw("entity.approvals.ui") as ApprovalsStrings}

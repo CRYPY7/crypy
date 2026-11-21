@@ -8,6 +8,7 @@ import { locale as localeParam } from "next/root-params";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { AddressTabs } from "@/components/entity/address-tabs";
+import { ChainScopeBar } from "@/components/entity/chain-scope";
 import { EntityHeader, EntitySkeleton, Notice } from "@/components/entity/entity-parts";
 import { ChainHoldingsSection, TotalValue } from "@/components/entity/holdings";
 import { type ChainKey, getChain } from "@/config/chains";
@@ -19,6 +20,7 @@ import type { ChainHoldings } from "@/lib/portfolio/holdings";
 import { localePath } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { pageRequestAllowed } from "@/server/page-guard";
+import { chainScopeFor } from "@/server/services/chain-scope";
 import { cachedResolve, explorerLink } from "@/server/services/lookups";
 import { type AddressOverview, cachedAddressOverview } from "@/server/services/overview";
 
@@ -92,13 +94,20 @@ async function AddressContent({
   }
   if (result.status === "unavailable") return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
   if (result.status !== "address") notFound();
-  const overview = await cachedAddressOverview(result.address);
+  const scope = await chainScopeFor(result.address, "tokenBalances", query.chains);
+  const overview = await cachedAddressOverview(result.address, scope.scan);
 
-  const views = buildViews(result.lookups, overview);
+  // Only scanned chains are shown; the scope line names the rest.
+  const views = buildViews(
+    result.lookups.filter((l) => scope.scan.includes(l.chain)),
+    overview,
+  );
   const active = views.filter((view) => view.active);
   const inactive = views.filter((view) => !view.active);
-  const unavailable = [...new Set([...overview.unavailable, ...result.unavailable])];
-  const total = views.length + unavailable.filter((chain) => !views.some((view) => view.chain === chain)).length;
+  const unavailable = [...new Set([...overview.unavailable, ...result.unavailable])].filter((c) =>
+    scope.scan.includes(c),
+  );
+  const total = scope.chains.length;
 
   // ?chain=bsc focuses one chain; anything else shows all.
   const filterParam = typeof query.chain === "string" ? query.chain : undefined;
@@ -112,6 +121,7 @@ async function AddressContent({
     return chain && href ? [{ href, label: t("entity.viewOn", { explorer: chain.explorer.name }) }] : [];
   });
   const basePath = localePath(locale, `/address/${result.address}`);
+  const chainsQuery = typeof query.chains === "string" ? query.chains : undefined;
   const shownOverview: AddressOverview = {
     ...overview,
     chains: overview.chains.filter((c) => shown.some((view) => view.chain === c.chain)),
@@ -141,56 +151,65 @@ async function AddressContent({
       <AddressTabs
         basePath={basePath}
         current="overview"
+        chains={chainsQuery}
         labels={t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string }}
       />
 
-      <section aria-labelledby="identity" className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h2 id="identity" className="font-sans text-base font-semibold">
-            {active.length > 0
-              ? t("entity.address.identity.title", { count: active.length, total })
-              : t("entity.address.identity.noneTitle")}
-          </h2>
-          <span className="text-sm text-muted-foreground">{t("entity.address.identity.subtitle")}</span>
-        </div>
-        {active.length > 0 && (
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {active.map((view) => (
-              <li key={view.chain}>
-                <IdentityCard
-                  view={view}
-                  address={result.address}
-                  locale={locale}
-                  selected={focused === view.chain}
-                  pricesAvailable={overview.pricesAvailable}
-                  t={t}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-        {inactive.length > 0 && active.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            {t("entity.address.identity.inactive", {
-              chains: inactive.map((view) => t(`chains.${view.chain}`)).join(", "),
-            })}
-          </p>
-        )}
-        {unavailable.map((chain) => (
-          <p key={chain} className="rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
-            {t("entity.unavailableChain", { chain: t(`chains.${chain}`) })}
-          </p>
-        ))}
-      </section>
+      <ChainScopeBar scope={scope} path={basePath} />
+
+      {scope.scan.length > 0 && (
+        <section aria-labelledby="identity" className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 id="identity" className="font-sans text-base font-semibold">
+              {active.length > 0
+                ? t("entity.address.identity.title", { count: active.length, total })
+                : t("entity.address.identity.noneTitle")}
+            </h2>
+            <span className="text-sm text-muted-foreground">{t("entity.address.identity.subtitle")}</span>
+          </div>
+          {active.length > 0 && (
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {active.map((view) => (
+                <li key={view.chain}>
+                  <IdentityCard
+                    view={view}
+                    address={result.address}
+                    locale={locale}
+                    selected={focused === view.chain}
+                    pricesAvailable={overview.pricesAvailable}
+                    t={t}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+          {inactive.length > 0 && active.length > 0 && (
+            <p className="text-sm text-muted-foreground">
+              {t("entity.address.identity.inactive", {
+                chains: inactive.map((view) => t(`chains.${view.chain}`)).join(", "),
+              })}
+            </p>
+          )}
+          {unavailable.map((chain) => (
+            <p key={chain} className="rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
+              {t("entity.unavailableChain", { chain: t(`chains.${chain}`) })}
+            </p>
+          ))}
+        </section>
+      )}
 
       {active.length > 1 && (
         <nav aria-label={t("entity.address.identity.filter")} className="flex gap-2 overflow-x-auto border-b pb-3">
-          <FilterPill href={basePath} current={!focused}>
+          <FilterPill href={chainsQuery ? `${basePath}?chains=${chainsQuery}` : basePath} current={!focused}>
             {t("entity.address.identity.all")}
             {overview.pricesAvailable && ` · ${formatUsd(overview.totalUsd, locale)}`}
           </FilterPill>
           {active.map((view) => (
-            <FilterPill key={view.chain} href={`${basePath}?chain=${view.chain}`} current={focused === view.chain}>
+            <FilterPill
+              key={view.chain}
+              href={`${basePath}?chain=${view.chain}${chainsQuery ? `&chains=${chainsQuery}` : ""}`}
+              current={focused === view.chain}
+            >
               <ChainIcon chain={view.chain} className="me-1.5" />
               {t(`chains.${view.chain}`)}
               {overview.pricesAvailable && view.holdings && ` · ${formatUsd(view.holdings.totalUsd, locale)}`}

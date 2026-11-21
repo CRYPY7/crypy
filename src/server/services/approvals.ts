@@ -26,11 +26,11 @@ export interface ApprovalsReport {
  * Approvals on every live chain with the `approvals` capability. Held tokens come from the (cached) balance overview
  * so common spenders are checked for each. Cached briefly: approvals change when the user revokes.
  */
-export async function cachedApprovals(owner: string): Promise<ApprovalsReport> {
+export async function cachedApprovals(owner: string, only?: readonly string[]): Promise<ApprovalsReport> {
   "use cache";
   cacheLife({ stale: 15, revalidate: 20, expire: 120 });
-  const overview = await cachedAddressOverview(owner).catch(() => null);
-  const targets = liveChains.filter((chain) => chain.capabilities.approvals);
+  const overview = await cachedAddressOverview(owner, only).catch(() => null);
+  const targets = liveChains.filter((chain) => chain.capabilities.approvals && (!only || only.includes(chain.key)));
   const settled = await Promise.allSettled(
     targets.map(async (chain) => {
       const adapter = registry.adapters.find((a) => a.family === chain.family);

@@ -529,10 +529,24 @@ DEX decoders, per chain family:                      (one per DEX design)
 - Chart: TradingView Lightweight Charts, dynamically imported on the Market tab only, attribution logo kept on.
 - Never shown: guessed prices, unsupported pool types as if complete, buy/swap buttons, promoted tokens.
 
+## 12f. Chain selection on address tools (M7)
+
+- `src/lib/chains/selection.ts`: `ChainSelection` = used | all | pick; `parseSelection` keeps only chains the tool
+  supports, in config order (stable links and cache keys); `resolveScope` returns the chains to scan plus the used
+  and unused chains left out.
+- `src/server/services/chain-scope.ts`: `cachedChainUse` (search lookups + one common-token multicall per remaining
+  chain through the adapter's optional `holdsCommonToken`; chains whose check failed count as used) and
+  `chainScopeFor(address, capability, ?chains)` — link first, then the `crypy_chains` cookie, then "used".
+  `apiChains` does the same for the APIs (no value = all chains, unchanged behaviour).
+- Services take an optional chain list: `cachedAddressOverview(address, only)`, `cachedApprovals(owner, only)`,
+  `cachedActivity(owner, cursor, only)`.
+- UI: `ChainPicker` (client; writes only the link and the cookie) and `ChainScopeBar` (server; scanned line, and
+  on safety pages a warning naming used chains that were not checked).
+
 ## 13. Performance budget
 
 Checked automatically in `tests/e2e/foundation.spec.ts` on `/en`, `/en/tools`, a tool page and settings:
 
 - JavaScript ≤ 650 KB uncompressed per page (M2.5: home ≈ 510 KB uncompressed / 157 KB gzipped, heaviest tool page ≈ 580 KB / 178 KB; most of it is the React/Next.js runtime. An earlier "≈ 120 KB gzipped" M1 figure was a measuring error).
-- CSS ≤ 72 KB uncompressed, one shared cached file (M1: ≈ 9 KB gzipped; M4: 62 KB raw ≈ 11 KB gzipped; raised from 60 KB at M4).
+- CSS ≤ 80 KB uncompressed, one shared cached file (M1: ≈ 9 KB gzipped; M4: 62 KB raw ≈ 11 KB gzipped; raised from 60 KB at M4 and to 80 KB at M7).
   Rules: no new always-loaded client library without a measured reason; wallet SDKs load only when the user opens the connect dialog (verified by `tests/e2e/wallet.spec.ts`); charts and heavy widgets are lazy-loaded.

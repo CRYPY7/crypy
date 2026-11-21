@@ -4,7 +4,7 @@ import { evmBlockAtTime, evmBlockTime } from "./block-time";
 import { getEvmGas } from "./gas";
 import { getEvmTokenSecurity } from "./security/token-security";
 import "server-only";
-import { getEvmBalances } from "./balances";
+import { getEvmBalances, holdsCommonToken } from "./balances";
 import { type Hex, type PublicClient, erc20Abi, getAddress, isAddress } from "viem";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type {
@@ -86,6 +86,10 @@ export const evmAdapter: ChainFamilyAdapter = {
   },
 
   /** Activity: Alchemy's transfer history (free plan), or the last few hours from the chain without it (activity.ts). */
+  holdsCommonToken(chain, address) {
+    return holdsCommonToken(chain, address);
+  },
+
   getGas(chain) {
     return getEvmGas(chain);
   },

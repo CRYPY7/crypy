@@ -324,6 +324,8 @@ export interface ChainFamilyAdapter {
    */
   /** Fee history for the Gas Tracker (M7); chains with the `fees` capability. */
   getGas?(chain: ChainConfig): Promise<GasFacts>;
+  /** Cheap hint for "is this address used here": holds any of the chain's well-known tokens. */
+  holdsCommonToken?(chain: ChainConfig, address: string): Promise<boolean>;
   /** First block at or after a unix time (an estimate for a future time), and a block's time (M7 converter). */
   blockAtTime?(
     chain: ChainConfig,

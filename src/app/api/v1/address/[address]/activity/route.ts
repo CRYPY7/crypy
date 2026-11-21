@@ -3,10 +3,11 @@ import { getAddress } from "viem";
 import { fail, ok } from "@/server/http/response";
 import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedActivity, formatCursor } from "@/server/services/activity";
+import { apiChains } from "@/server/services/chain-scope";
 
 /**
  * GET /api/v1/address/{address}/activity?cursor=bsc:123,ethereum:456 — the wallet's transfers on every supported
- * chain, newest first, with the cursor for older ones. Read-only, rate-limited, cached about a minute. Nothing stored.
+ * chain, newest first, with the cursor for older ones. Optional ?chains=used|all|bsc,ethereum narrows the chains. Read-only, rate-limited, cached about a minute. Nothing stored.
  */
 export async function GET(request: NextRequest, { params }: { params: Promise<{ address: string }> }) {
   const limit = searchLimiter(clientKey(request.headers));
@@ -16,7 +17,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const cursor = request.nextUrl.searchParams.get("cursor");
   if (cursor !== null && !/^[a-z0-9]+:\d+(,[a-z0-9]+:\d+)*$/.test(cursor)) return fail("INVALID_INPUT");
   try {
-    const report = await cachedActivity(getAddress(address.toLowerCase()), cursor);
+    const owner = getAddress(address.toLowerCase());
+    const chains = await apiChains(owner, "activity", request.nextUrl.searchParams.get("chains"));
+    if (chains === null) return fail("INVALID_INPUT");
+    const report = await cachedActivity(owner, cursor, chains);
     return ok({ ...report, next: formatCursor(report.chains) }, { sources: ["rpc", "alchemy"] });
   } catch {
     return fail("UPSTREAM_UNAVAILABLE");

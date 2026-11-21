@@ -29,13 +29,18 @@ export function formatCursor(chains: ChainActivity[]): string | null {
  * Activity on every live chain with the `activity` capability. First page: all chains; next pages (cursor): only
  * the chains that have more. Cached briefly per address and cursor.
  */
-export async function cachedActivity(owner: string, cursor: string | null): Promise<ActivityReport> {
+export async function cachedActivity(
+  owner: string,
+  cursor: string | null,
+  only?: readonly string[],
+): Promise<ActivityReport> {
   "use cache";
   cacheLife({ stale: 30, revalidate: 60, expire: 300 });
   const cursors = parseCursor(cursor);
-  const overview = await cachedAddressOverview(owner).catch(() => null);
+  const overview = await cachedAddressOverview(owner, only).catch(() => null);
   const targets = liveChains.filter(
-    (chain) => chain.capabilities.activity && (cursor === null || cursors.has(chain.key)),
+    (chain) =>
+      chain.capabilities.activity && (!only || only.includes(chain.key)) && (cursor === null || cursors.has(chain.key)),
   );
   const settled = await Promise.allSettled(
     targets.map(async (chain) => {
