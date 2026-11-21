@@ -242,7 +242,7 @@ export function BatchBalanceScanner({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid items-start gap-4 lg:grid-cols-[1.45fr_1fr]">
+      <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Step n={1} title={s.steps.addresses} hint={s.addressesHint}>
           <AddressEditor s={s} text={text} onText={setText} parsed={parsed} />
         </Step>

@@ -331,7 +331,8 @@ crypy/
 
 ## 10. Security design
 
-- No seed phrase / private key fields; no auto signing; revoke actions built server-side as _unsigned_ data and signed only in the user's wallet.
+- No seed phrase / private key fields; no auto signing. The only transaction CRYPY ever prepares is a revoke (M6),
+  built in the browser by `src/wallets/evm/revoke.ts` and signed only in the user's wallet (see §10b).
 - Secrets server-only (`src/server/*` imports `server-only`); only `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` public (domain-restricted to crypy.org + localhost in Reown).
 - CSP `connect-src` lists only the RPC hosts and WalletConnect/Reown services in use; add a host there when adding a provider the browser talks to.
 - Result pages that call providers are rate-limited per visitor (`page-guard.ts`), `noindex` and disallowed in robots.txt.
@@ -339,6 +340,25 @@ crypy/
 - Rate limiting, security headers, plain-text rendering of third-party strings, allow-listed explorer links.
 - Each new family gets a security review before going live.
 - Brand protection: publish the official domain prominently; consider registering common look-alike domains to reduce phishing impersonation.
+
+### 10b. Revoke security review (M6, 2026-11-21)
+
+| Check                                                                                                                                        | How it is enforced                                                                                                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Only three transaction shapes: `approve(spender, 0)`, `setApprovalForAll(operator, false)`, Permit2 `approve(token, spender, 0, 0)`; value 0 | `buildRevoke` + `assertRevoke` decode the final calldata again and re-encode it; anything else throws (unit-tested, incl. `transfer` with the same shape, non-zero amounts, other spender, extra bytes, value)    |
+| Only one module may ask the wallet to send or sign                                                                                           | ESLint `no-restricted-imports` on wagmi hooks and on `wagmi/actions` / `@wagmi/core` signing actions, allowed only in `revoke-runner.ts`; a unit test scans `src/` for any signing call or method name outside it |
+| Connected account must be the wallet that gave the approval                                                                                  | `runRevoke` stops with "Switch to the right account" otherwise; the page is read-only for other wallets                                                                                                           |
+| Right network                                                                                                                                | wallet asked to switch (no signature); refused → nothing sent                                                                                                                                                     |
+| The exact transaction is tested before the wallet opens                                                                                      | `eth_call` from the owner; failure → the wallet is not opened                                                                                                                                                     |
+| The user sees what the wallet will show                                                                                                      | contract, function with arguments, value 0, estimated fee                                                                                                                                                         |
+| Result verified                                                                                                                              | after the receipt, the allowance is read again at the receipt's block                                                                                                                                             |
+| Several revokes                                                                                                                              | one at a time, one wallet confirmation each, stoppable; one-signature batch revoke is a paid tool later                                                                                                           |
+| Checking never needs a wallet; nothing is signed on page load                                                                                | browser tests with a recording fake wallet: no signing method on load, `eth_sendTransaction` only after the click, with the zeroing call                                                                          |
+
+Approval data: GoPlus approval lists are leads only; CRYPY also checks every held token against known spenders
+(routers, aggregators, Permit2), apps' allowances inside Permit2, and recent Approval events of held tokens. Every
+allowance shown is read on-chain at one block. Spender type (wallet / delegated wallet / contract) is read on-chain;
+names come only from CRYPY's own list; source status from Sourcify.
 
 ---
 

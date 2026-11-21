@@ -1,6 +1,6 @@
 # CRYPY — Development Roadmap (V1)
 
-Status: **Approved** — Nov 2026 (rev. 6). **M0–M2.5 done; M3 built (2026-11-20).** Every milestone ends with typecheck, lint, tests and build actually run, PROGRESS.md updated, owner review.
+Status: **Approved** — Nov 2026 (rev. 6). **M0–M2.5 done; M3–M6 built (M6 on 2026-11-21).** Every milestone ends with typecheck, lint, tests and build actually run, PROGRESS.md updated, owner review.
 
 ## M0 — Setup (owner) + design approval
 
@@ -181,6 +181,11 @@ mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page 
 | M5 Token Security             | Contract age and creator                                                                                                                                                                                                                                         | M5.5 Stage 2 indexer         |
 | M5 Token Security             | Source verification on block explorers (today Sourcify only). Etherscan's free plan forbids commercial use; options: (a) keep Sourcify only, (b) Etherscan's paid commercial plan once revenue allows, (c) another free source if its terms allow commercial use | Owner decision               |
 | M5 Token Security             | More lockers: GemPad, Mudra, DXLock personal lockers (official addresses and read methods to be confirmed)                                                                                                                                                       | When addresses are confirmed |
+| M6 Approvals                  | Complete approval history (every Approval event a wallet ever emitted; free nodes search only recent blocks, so approvals that GoPlus doesn't list and that aren't on a token the wallet holds may be missing)                                                   | M5.5 Stage 2 indexer         |
+| M6 Approvals                  | "Contract recently created" reason for unknown spenders (needs contract age)                                                                                                                                                                                     | M5.5 Stage 2 indexer         |
+| M6 Approvals                  | Single-item NFT approvals (`approve(tokenId)`) and Permit2 signed permits not yet used on-chain                                                                                                                                                                  | M7                           |
+| M6 Approvals                  | Revoke tested on a testnet (needs testnet support in the chain registry); mainnet revoke tested only with a rejected wallet request in browser tests                                                                                                             | M7 (testnets) / owner check  |
+| M6 Approvals                  | One-signature batch revoke                                                                                                                                                                                                                                       | Revenue Phase A (paid tool)  |
 | M4.2 Transaction Intelligence | Part 2: more routers and pool types, NFT marketplaces, lending, bridges, smart-wallet inner calls                                                                                                                                                                | Alongside M5.5 / M6          |
 
 ## M5.2 — Token Security: finishing parts — 🟡 built 2026-11-20
@@ -222,9 +227,15 @@ A **Market** tab on the token page, built from CRYPY's own on-chain data (no pai
 - **Stage 3 — professional extras:** more DEX designs (Uniswap v4, Curve, Balancer, Aerodrome/Velodrome, Trader Joe…), whale-trade highlights, faster updates, pool alerts via Watchlist.
 - **Other chains:** EVM chains are added by configuration (factory addresses) for Uniswap-style DEXes; each new DEX design needs its own decoder; Tron (SunSwap), TON and Solana DEXes arrive with their chain-family milestones; Bitcoin has no DEX pools, so the Market tab is not shown there.
 
-## M6 — Address · Approvals + revoke (Tool 3)
+## M6 — Address · Approvals + revoke (Tool 3) — 🟡 built 2026-11-21 (design approved, boards 24–27)
+
+Built: Approvals tab on every address (`/address/{address}/approvals`), Approval Checker tool page live, API
+`GET /api/v1/address/{address}/approvals`, risks per approval, value at risk, filters, single and sequential
+"revoke flagged" in the user's wallet with the security review in ARCHITECTURE.md §10b. Deferred parts are in the
+table above.
 
 **Done when:** approvals match Revoke.cash for test wallets; revoke tested on testnet then mainnet; extra security review passed.
+Owner checks still open: compare 2–3 of your own wallets with Revoke.cash; do one real revoke of a small approval.
 
 ## M7 — Activity (Tool 2), Gas (Tool 6), more EVM chains
 

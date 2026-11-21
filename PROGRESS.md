@@ -1,6 +1,6 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-20
+Last updated: 2026-11-21
 
 ## Milestones
 
@@ -20,6 +20,7 @@ Last updated: 2026-11-20
 | M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses |
 | M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)            |
 | M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                |
+| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)            |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                         |
 
 ## M1 — what was built
@@ -35,6 +36,51 @@ Last updated: 2026-11-20
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## M6 — Approval Checker and safe revoke (design approved 2026-11-20, boards 24–27)
+
+- **Approvals tab** on every address (`/address/{address}/approvals`), with Overview | Approvals | Activity (soon) tabs
+  on both address pages. Works for any address without connecting a wallet.
+- **Finding approvals (free):** GoPlus's approval lists for tokens and NFT collections (leads only, with GoPlus's
+  malicious / doubtful / trusted flags kept and labelled); every token the wallet holds × the contracts people
+  commonly approve (routers, aggregators, Permit2); apps' allowances inside Permit2 for tokens approved to Permit2;
+  recent Approval events of held tokens (free nodes only search events by contract address). Every allowance shown
+  is read on-chain at one block; zero ones are dropped.
+- **Who the spender is:** wallet, wallet with delegated code (EIP-7702) or contract, read on-chain; names only from
+  CRYPY's own list; Sourcify source check for up to 8 unknown contract spenders.
+- **Risks:** malicious (GoPlus) → high (a wallet spender) → check (unknown contract, source not published or
+  unreadable) → known app / contract with published source. Spam tokens (hidden in balances) never need attention.
+  "At risk now" = the smaller of allowance and balance at on-chain prices. Unused (nothing held), unlimited ("also
+  covers tokens you receive later") and Permit2 expiry shown. Never a "safe" verdict.
+- **Page:** summary with "Revoke the N flagged ones", 4 figures, filters (attention, unlimited, tokens, NFTs, chain),
+  groups (needs attention / check these / looks normal / spam tokens), reasons, "How we checked", GoPlus-down and
+  chain-down notices, read-only notice for another connected wallet, phone layout.
+- **Revoke:** see the security review in ARCHITECTURE.md §10b. Preview shows contract, function, value 0 and the fee;
+  the exact transaction is tested with `eth_call` first; account and network checked; the allowance is read again
+  after the receipt. "Revoke flagged" runs one at a time (one confirmation each, stoppable). Batch revoke in one
+  signature stays a paid tool for later.
+- **Approval Checker tool page live** (`/tools/approval-checker`): address box and "Check my connected wallet".
+- **API:** `GET /api/v1/address/{address}/approvals` (rate-limited, cached ~20 s, nothing stored).
+
+Real results (2026-11-21): vitalik.eth — 9 approvals (Uniswap V3 Router, Permit2 and others found by CRYPY's own
+checks; 3 wallet spenders on BNB Chain found through GoPlus). A BNB Chain wallet with two wallet-spender approvals
+(WBNB unused, OINKY). Found while testing: public nodes refuse event searches without a contract address, so recent
+events are searched per held token.
+
+Not covered yet (tracked in the roadmap): complete approval history (indexer), contract age for spenders,
+single-item NFT approvals, testnet revoke, batch revoke. **Owner checks:** compare your own wallets with Revoke.cash;
+revoke one small real approval and confirm the page shows it gone.
+
+## M6 checks (2026-11-21, in the cloud workspace)
+
+- Typecheck, lint, Prettier: passed. Unit tests: 209 passed (11 new: risk rules, spam tokens, unlimited thresholds,
+  GoPlus parsing, revoke calldata guard, "only the revoke runner can send" source scan).
+- Live (`LIVE=1`): approvals 2 passed (known spenders are contracts on both chains; a real wallet read on-chain);
+  security live tests still pass.
+- Build passed. Playwright: 103 passed (new: approvals page with live data, read-only for another wallet, revoke flow
+  with a recording fake wallet — tested first, nothing sent before the click, exact `approve(spender, 0)`, rejection
+  handled — and the tool page; desktop and phone).
+- CSS kept within the 72 KB budget (three near-identical grid classes elsewhere merged).
 
 ## Speed fix for the transaction page (owner report 2026-11-20)
 
@@ -582,6 +628,7 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 
 ## Decisions log
 
+- 2026-11-21: M6 revoke transactions are built in the browser by one reviewed module and checked by decoding them again; only `revoke-runner.ts` may ask the wallet to send (ESLint + source-scan test).
 - 2026-11-20: **Zero API cost (owner rule):** no paid APIs or data services ever; only domain and servers are paid. Free providers rotate with daily budgets; own price engine from DEX pools replaces DefiLlama; self-hosted database/cache/indexer on a VPS at launch; own nodes later.
 
 - 2026-11-20: Addresses are multi-chain: search never hides another chain's identity; the address page is the all-chains view; token pages are per chain with links to the others.

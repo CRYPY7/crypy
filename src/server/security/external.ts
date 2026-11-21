@@ -154,3 +154,88 @@ export async function sourcifyVerified(
     return unknown;
   }
 }
+
+// ---- Approvals (M6) -------------------------------------------------------------------------------------------
+
+/** One approval GoPlus reports for a wallet: only where to look; CRYPY re-reads it on-chain. */
+export interface GoPlusApprovalLead {
+  kind: "token" | "nft-all";
+  token: string;
+  spender: string;
+  /** Unix seconds of the last change, and its transaction, as GoPlus reports them. */
+  at: number | null;
+  tx: string | null;
+  flags: { malicious: boolean; doubt: boolean; trusted: boolean };
+}
+
+const HASH = /^0x[0-9a-fA-F]{64}$/;
+
+/** Parses GoPlus token_approval_security / nft721 / nft1155 answers. Exported for tests; never trusts field types. */
+export function parseGoPlusApprovals(result: unknown, kind: GoPlusApprovalLead["kind"]): GoPlusApprovalLead[] {
+  const out: GoPlusApprovalLead[] = [];
+  for (const item of Array.isArray(result) ? (result as Record<string, unknown>[]) : []) {
+    const token = item?.token_address ?? item?.nft_address;
+    if (typeof token !== "string" || !ADDRESS.test(token)) continue;
+    for (const a of Array.isArray(item.approved_list) ? (item.approved_list as Record<string, unknown>[]) : []) {
+      const spender = a?.approved_contract;
+      if (typeof spender !== "string" || !ADDRESS.test(spender)) continue;
+      // NFT: only "approved for all" matters here; single-item approvals are cleared when the item moves.
+      if (kind === "nft-all" && !(a.approved_for_all === 1 || a.approved_for_all === "1")) continue;
+      const info = (a.address_info ?? {}) as Record<string, unknown>;
+      const behaviours = Array.isArray(info.malicious_behavior) ? info.malicious_behavior : [];
+      const time = Number(a.approved_time);
+      out.push({
+        kind,
+        token: token.toLowerCase(),
+        spender: spender.toLowerCase(),
+        at: Number.isFinite(time) && time > 0 ? (time > 1e12 ? Math.floor(time / 1000) : time) : null,
+        tx: typeof a.hash === "string" && HASH.test(a.hash) ? a.hash : null,
+        flags: {
+          malicious: behaviours.length > 0 || flag(info.malicious_address) === true,
+          doubt: flag(info.doubt_list) === true,
+          trusted: flag(info.trust_list) === true,
+        },
+      });
+    }
+  }
+  return out.slice(0, 300);
+}
+
+export type GoPlusApprovals = { status: "ok"; leads: GoPlusApprovalLead[] } | { status: "unavailable" };
+
+/** GoPlus's approval lists for a wallet (tokens and NFT collections). Cached 5 minutes. */
+export async function goPlusApprovals(chainId: number, owner: string): Promise<GoPlusApprovals> {
+  "use cache";
+  const get = async (path: string) => {
+    const response = await fetch(
+      `https://api.gopluslabs.io/api/v2/${path}/${chainId}?addresses=${owner.toLowerCase()}`,
+      {
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+        headers: { accept: "application/json" },
+      },
+    );
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = (await response.json()) as { code?: number; result?: unknown };
+    if (json.code !== 1) throw new Error("GoPlus error");
+    return json.result;
+  };
+  try {
+    const [tokens, nft721, nft1155] = await Promise.all([
+      get("token_approval_security"),
+      get("nft721_approval_security").catch(() => []),
+      get("nft1155_approval_security").catch(() => []),
+    ]);
+    cacheLife({ revalidate: 300, expire: 900 });
+    return {
+      status: "ok",
+      leads: [
+        ...parseGoPlusApprovals(tokens, "token"),
+        ...parseGoPlusApprovals(nft721, "nft-all"),
+        ...parseGoPlusApprovals(nft1155, "nft-all"),
+      ],
+    };
+  } catch {
+    cacheLife({ revalidate: 60, expire: 300 });
+    return { status: "unavailable" };
+  }
+}

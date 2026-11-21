@@ -1,3 +1,4 @@
+import { getEvmApprovals } from "./approvals";
 import { getEvmTokenSecurity } from "./security/token-security";
 import "server-only";
 import { getEvmBalances } from "./balances";
@@ -74,6 +75,11 @@ export const evmAdapter: ChainFamilyAdapter = {
 
   async getBalances(chain, address) {
     return getEvmBalances(getEvmClient(chain), chain, address, alchemyProvider(chain));
+  },
+
+  /** Approvals: GoPlus leads plus CRYPY's own checks, every allowance re-read on-chain (approvals.ts). */
+  getApprovals(chain, owner, heldTokens) {
+    return getEvmApprovals(chain, owner, heldTokens);
   },
 
   /** Prices from on-chain DEX pools (our own engine; no price API). */

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, lazy, Suspense, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { WALLET_FLAG_KEY, type WalletState, type WalletStrings } from "./types";
+import { WALLET_FLAG_KEY, type WalletActions, type WalletState, type WalletStrings } from "./types";
 
 // The wallet runtime (wagmi, viem, WalletConnect) is downloaded only when it's needed.
 const EvmWalletRuntime = lazy(() => import("./evm/runtime"));
@@ -9,11 +9,14 @@ const EvmWalletRuntime = lazy(() => import("./evm/runtime"));
 interface WalletContextValue {
   state: WalletState;
   openWallet: () => void;
+  /** Loaded with the wallet runtime; null until then. */
+  actions: WalletActions | null;
 }
 
 const WalletContext = createContext<WalletContextValue>({
   state: { status: "disconnected" },
   openWallet: () => {},
+  actions: null,
 });
 
 export function useWallet() {
@@ -40,6 +43,7 @@ export function WalletRoot({
   const [state, setState] = useState<WalletState>({ status: "disconnected" });
   const [loadRuntime, setLoadRuntime] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [actions, setActions] = useState<WalletActions | null>(null);
 
   // Returning user who connected before: load the runtime when the browser is idle and reconnect silently.
   useEffect(() => {
@@ -58,7 +62,7 @@ export function WalletRoot({
     setDialogOpen(true);
   }, []);
 
-  const value = useMemo(() => ({ state, openWallet }), [state, openWallet]);
+  const value = useMemo(() => ({ state, openWallet, actions }), [state, openWallet, actions]);
 
   return (
     <WalletContext.Provider value={value}>
@@ -71,6 +75,7 @@ export function WalletRoot({
             dialogOpen={dialogOpen}
             onDialogOpenChange={setDialogOpen}
             onStateChange={setState}
+            onActions={setActions}
           />
         </Suspense>
       )}

@@ -253,7 +253,7 @@ export async function TokenSecuritySection({
         right={<ClassChip t={t} cls="verified" />}
       />
 
-      <div className="grid items-start gap-4 lg:grid-cols-[1.35fr_1fr]">
+      <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
         <div className="flex flex-col gap-4">
           <TradeCard t={t} report={report} locale={locale} dexes={dexes} />
           <OwnerCard t={t} report={report} locale={locale} />

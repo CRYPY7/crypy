@@ -3,6 +3,19 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import i18next from "eslint-plugin-i18next";
 
+/** Wallet actions that sign or send. Allowed only in the reviewed revoke runner. */
+const signingActions = [
+  "sendTransaction",
+  "sendCalls",
+  "writeContract",
+  "signMessage",
+  "signTypedData",
+  "deployContract",
+  "sendTransactionSync",
+  "writeContractSync",
+  "sendCallsSync",
+];
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -51,10 +64,20 @@ const eslintConfig = defineConfig([
               ],
               message: "Signing and transactions need a reviewed user flow (see ARCHITECTURE.md §10).",
             },
+            ...["wagmi/actions", "@wagmi/core"].map((name) => ({
+              name,
+              importNames: signingActions,
+              message: "Only src/wallets/evm/revoke-runner.ts may ask the wallet to send (reviewed in M6).",
+            })),
           ],
         },
       ],
     },
+  },
+  {
+    // The reviewed revoke flow: may send zeroing revoke transactions only (checked by revoke.ts).
+    files: ["src/wallets/evm/revoke-runner.ts"],
+    rules: { "no-restricted-imports": "off" },
   },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "playwright-report/**", "test-results/**"]),
 ]);

@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { locale as localeParam } from "next/root-params";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { AddressTabs } from "@/components/entity/address-tabs";
 import { EntityHeader, EntitySkeleton, Notice } from "@/components/entity/entity-parts";
 import { ChainHoldingsSection, TotalValue } from "@/components/entity/holdings";
 import { type ChainKey, getChain } from "@/config/chains";
@@ -136,6 +137,13 @@ async function AddressContent({
         copyLabel={t("entity.copy")}
         copiedLabel={t("entity.copied")}
         links={links}
+      />
+      <AddressTabs
+        basePath={basePath}
+        current="overview"
+        labels={
+          t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string; soon: string }
+        }
       />
 
       <section aria-labelledby="identity" className="flex flex-col gap-3">

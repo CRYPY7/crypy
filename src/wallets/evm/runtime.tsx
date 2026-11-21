@@ -3,8 +3,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { WagmiProvider, useConnection } from "wagmi";
-import { WALLET_FLAG_KEY, type WalletState, type WalletStrings } from "../types";
+import { WALLET_FLAG_KEY, type WalletActions, type WalletState, type WalletStrings } from "../types";
 import { createWalletConfig } from "./config";
+import { previewRevoke, runRevoke } from "./revoke-runner";
 import { WalletDialog } from "./wallet-dialog";
 
 const config = createWalletConfig();
@@ -16,13 +17,23 @@ interface RuntimeProps {
   dialogOpen: boolean;
   onDialogOpenChange: (open: boolean) => void;
   onStateChange: (state: WalletState) => void;
+  onActions: (actions: WalletActions) => void;
 }
+
+/** Revoke is the only wallet action (M6). Nothing runs until the user clicks Revoke and confirms in their wallet. */
+const actions: WalletActions = {
+  previewRevoke: (request) => previewRevoke(config, request),
+  revoke: (request, onStep) => runRevoke(config, request, onStep),
+};
 
 /**
  * Loaded on demand. Owns wagmi and reports a simple state to the rest of the app.
- * It never requests a signature or a transaction.
+ * It never requests a signature or a transaction on its own; the revoke action (revoke-runner.ts) runs only when the
+ * user asks for it.
  */
 export default function EvmWalletRuntime(props: RuntimeProps) {
+  const { onActions } = props;
+  useEffect(() => onActions(actions), [onActions]);
   return (
     <WagmiProvider config={config} reconnectOnMount>
       <QueryClientProvider client={queryClient}>

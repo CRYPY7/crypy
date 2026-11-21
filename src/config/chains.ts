@@ -74,7 +74,14 @@ export const chains: readonly ChainConfig[] = [
       "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE", // SHIB
       "0x6982508145454Ce325dDbE47a25d4ec3d2311933", // PEPE
     ],
-    capabilities: { ...none, lookup: true, nativeBalance: true, tokenBalances: true, tokenSecurity: true },
+    capabilities: {
+      ...none,
+      lookup: true,
+      nativeBalance: true,
+      tokenBalances: true,
+      tokenSecurity: true,
+      approvals: true,
+    },
     status: "live",
   },
   {
@@ -100,7 +107,14 @@ export const chains: readonly ChainConfig[] = [
       "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3", // DAI (Binance-Peg)
       "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE", // XRP (Binance-Peg)
     ],
-    capabilities: { ...none, lookup: true, nativeBalance: true, tokenBalances: true, tokenSecurity: true },
+    capabilities: {
+      ...none,
+      lookup: true,
+      nativeBalance: true,
+      tokenBalances: true,
+      tokenSecurity: true,
+      approvals: true,
+    },
     status: "live",
   },
 ];

@@ -82,3 +82,13 @@ export function knownContract(chain: string, address: string | null | undefined)
 export function knownContractsFor(chain: string): string[] {
   return Object.keys(byChain[chain] ?? {});
 }
+
+/** Contracts people commonly approve (routers, aggregators, Permit2): checked for every token a wallet holds. */
+export function knownSpenders(chain: string): string[] {
+  return Object.entries(byChain[chain] ?? {})
+    .filter(([, c]) => c.kind === "router" || c.kind === "aggregator" || c.kind === "permit")
+    .map(([address]) => address);
+}
+
+/** Uniswap Permit2 (same address on every EVM chain): apps get their own allowances inside it. */
+export const PERMIT2 = "0x000000000022d473030f116ddee9f6b43ac78ba3";
