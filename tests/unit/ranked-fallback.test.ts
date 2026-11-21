@@ -110,6 +110,14 @@ describe("ranked fallback", () => {
     expect(refusesLately(a, "eth_getTransactionReceipt")).toBe(true);
   });
 
+  it("when the only awake node refuses old data, a resting node gets one more try", async () => {
+    behaviours.a = { error: { code: -32602, message: "Archive requests require a personal token." } };
+    behaviours.b = { result: TX };
+    coolDownFor(b, 30_000);
+    expect(await ask("eth_getTransactionReceipt")).toEqual(TX);
+    expect(hits).toMatchObject({ a: 1, b: 1 });
+  });
+
   it("a revert is final: no other node is asked", async () => {
     behaviours.a = { error: { code: 3, message: "execution reverted: nope" } };
     behaviours.b = { result: "0x" };

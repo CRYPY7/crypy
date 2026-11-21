@@ -337,8 +337,22 @@ export function rankedFallback(providers: Provider[]): Transport {
               else reject(error);
             }
           };
+          let woke = false;
           const start = () => {
             if (settled) return;
+            if (next >= ordered.length && !woke) {
+              // Everyone else failed or refused, and some providers are only resting after an earlier slow answer:
+              // a rest is a speed measure, not a ban, so the one whose rest ends soonest gets one more try.
+              woke = true;
+              const resting = providers.filter((p) => isCoolingDown(p) && !budgetExhausted(p));
+              if (resting.length > 0) {
+                const soonest = resting.reduce((x, y) =>
+                  (coolDown.get(y.url) ?? 0) < (coolDown.get(x.url) ?? 0) ? y : x,
+                );
+                coolDown.delete(soonest.url);
+                ordered.push(soonest);
+              }
+            }
             if (next >= ordered.length) return finish(lastError);
             const provider = ordered[next++]!;
             const transport = transports.get(provider.url)!;
@@ -376,8 +390,8 @@ export function rankedFallback(providers: Provider[]): Transport {
                 }
                 lastError = error;
                 noteRefusal(provider, args.method, error);
-                if (next < ordered.length) start();
-                else finish(lastError);
+                // start() moves on, gives a resting provider its last try, or finishes.
+                start();
               },
             );
           };

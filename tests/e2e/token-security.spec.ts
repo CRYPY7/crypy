@@ -13,6 +13,7 @@ test("token page shows the security report with evidence labels and no safe verd
 });
 
 test("tool page opens the token page for the chosen chain", async ({ page }) => {
+  test.setTimeout(90_000);
   await page.goto("/en/tools/token-security");
   await page.getByLabel("Token contract address").fill("0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82");
   await page.getByLabel("Chain").selectOption("bsc");

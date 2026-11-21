@@ -5,6 +5,9 @@ const port = 3200;
 export default defineConfig({
   testDir: "./tests/e2e",
   timeout: 30_000,
+  // These tests read live blockchains through free providers. Six parallel browsers made the providers slow down
+  // and rest (seen on the owner's PC), which failed unrelated pages; three keep the run honest and still quick.
+  workers: 3,
   use: {
     baseURL: `http://localhost:${port}`,
     // Each test worker counts as its own visitor, as several people would in real use. Without this, the whole

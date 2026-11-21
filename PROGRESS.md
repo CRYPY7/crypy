@@ -106,6 +106,17 @@ on only after its live checks passed (`tests/unit/chains-live.test.ts`, 19 check
 **Owner action:** in the Alchemy dashboard, enable Base, Arbitrum and Polygon for your app (otherwise those chains use
 public nodes and the recent-only activity), then run `pnpm env:check`.
 
+## M7 follow-up 3 (2026-11-21): a resting node gets one more try
+
+Owner's third run (6 failures, all on live-data pages) showed the remaining gap in the swap case: PublicNode refused
+the old receipt, and the two nodes that have it (Alchemy, BNB Chain's own) were "resting" after slow answers under the
+test load, so the request ended with the refusal. Now, when every awake node has failed or refused, the resting node
+whose rest ends soonest gets one more try: a rest only ranks providers by speed, it never blocks an answer. Unit test
+added. The browser suite now runs 3 browsers at once instead of 6: these tests read live blockchains through free
+providers, and six at once made the providers themselves slow down. One test (tool page → token page) got a longer
+time limit. Here: unit 239 passed; build passed; full browser run 122 passed, 7 skipped, 1 failed (that time limit,
+now raised; the three affected files then passed 36 of 36).
+
 ## M7 follow-up 2 (2026-11-21): a node refusing old data stopped the transaction page
 
 Owner's second full run: 4 failures (TATA swap page, FLOKI liquidity card, each on desktop and phone). The server log
