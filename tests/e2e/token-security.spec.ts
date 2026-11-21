@@ -17,7 +17,8 @@ test("tool page opens the token page for the chosen chain", async ({ page }) => 
   await page.getByLabel("Token contract address").fill("0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82");
   await page.getByLabel("Chain").selectOption("bsc");
   await page.getByRole("button", { name: "Check token" }).click();
-  await expect(page).toHaveURL(/\/en\/token\/bsc\/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82$/);
+  // The link changes when the token page starts to arrive; under a full parallel test run that can take a while.
+  await expect(page).toHaveURL(/\/en\/token\/bsc\/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82$/, { timeout: 60_000 });
   await page.goto("/en/tools/token-security");
   await page.getByLabel("Token contract address").fill("0x123");
   await page.getByRole("button", { name: "Check token" }).click();

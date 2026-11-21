@@ -66,3 +66,9 @@ export async function apiChains(
   const used = selection.mode === "used" ? new Set(await cachedChainUse(address)) : new Set<string>();
   return resolveScope(selection, capable, used).scan;
 }
+
+/** Synchronous check of a ?chains= value (used | all | known chain keys), so bad input is refused before any work. */
+export function validChainsParam(param: string, capability: keyof ChainCapabilities): boolean {
+  const capable = liveChains.filter((c) => c.capabilities[capability]).map((c) => c.key);
+  return parseSelection(param, capable) !== null;
+}

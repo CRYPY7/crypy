@@ -106,6 +106,23 @@ on only after its live checks passed (`tests/unit/chains-live.test.ts`, 19 check
 **Owner action:** in the Alchemy dashboard, enable Base, Arbitrum and Polygon for your app (otherwise those chains use
 public nodes and the recent-only activity), then run `pnpm env:check`.
 
+## M7 follow-up (2026-11-21): owner's full test run
+
+5 of 130 browser tests failed on the owner's PC; causes and fixes:
+
+- **"Too many requests" (2 tests, and the converter test):** all API calls from one visitor shared one budget of 30 a
+  minute, including the Gas Tracker, which polls every 12 s from one shared cache. Now the Gas API has its own budget
+  (120/min, almost free) and the Timestamp & Block Converter its own (30/min). The address APIs check their input
+  first, so a bad request always gets "invalid input", never "too many requests".
+- **Test setup:** each test worker now counts as its own visitor (as several people would), so the full suite no longer
+  runs into the per-visitor limits that protect the site.
+- **FLOKI liquidity card (2 tests):** passed here on its own and in the full run; under the owner's parallel run a
+  locker read timed out. If it fails again, rerun just that test.
+- A tool-page test now waits up to 60 s for the token page instead of 5 s.
+
+Checks: typecheck and lint clean; build passed; full browser run here: 122 passed, 7 skipped, 1 failed (that slow
+tool-page wait, now raised).
+
 ## M7 — Speed for big addresses (2026-11-21)
 
 Measured in the cloud workspace (no Alchemy key; first visit, nothing cached), Approvals tab:
@@ -757,6 +774,9 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 
 ## Known issues
 
+- **Before launch (M9):** per-visitor limits identify visitors by the first `X-Forwarded-For` address. That is safe
+  only behind a proxy that overwrites the header (Vercel does; on our own VPS, nginx must be set to). Otherwise a
+  visitor could send a fake one to get around the limits.
 - After pulling new files, if the site's styles look out of date, delete the `.next` folder and build again (the build cache once kept an old stylesheet here).
 - Transaction page: execution traces need our own node (later). Coins moved inside contracts are measured from balances only for recent blocks or with an archive provider. "First seen" time for pending transactions needs a mempool watcher (later).
 - TATA and other small tokens can show no USD price: the price engine only reads the main pools against stablecoins and the wrapped coin, above a liquidity floor.

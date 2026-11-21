@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server";
 import { liveChains } from "@/config/chains";
 import { registry } from "@/server/chains/registry";
 import { fail, ok } from "@/server/http/response";
-import { clientKey, searchLimiter } from "@/server/rate-limit";
+import { blocksLimiter, clientKey } from "@/server/rate-limit";
 
 /**
  * GET /api/v1/blocks?time=<unix seconds>  → the first block at or after that time on every chain
@@ -10,7 +10,7 @@ import { clientKey, searchLimiter } from "@/server/rate-limit";
  * Read from real block headers. Read-only, rate-limited, nothing stored.
  */
 export async function GET(request: NextRequest) {
-  const limit = searchLimiter(clientKey(request.headers));
+  const limit = blocksLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
   const q = request.nextUrl.searchParams;
   const time = q.get("time");

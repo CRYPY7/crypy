@@ -54,6 +54,13 @@ export function clientKey(headers: Headers): string {
 }
 
 export const searchLimiter = createRateLimiter({ limit: 30, windowMs: 60_000 });
+/**
+ * Endpoints answered from one shared cache (Gas Tracker): nearly free per call, and an open page polls every 12 s,
+ * so they get their own, larger budget instead of using up a visitor's searches.
+ */
+export const sharedCacheLimiter = createRateLimiter({ limit: 120, windowMs: 60_000 });
+/** Timestamp & Block Converter: each lookup reads block headers on every chain. Its own budget. */
+export const blocksLimiter = createRateLimiter({ limit: 30, windowMs: 60_000 });
 export const healthLimiter = createRateLimiter({ limit: 20, windowMs: 60_000 });
 export const pageLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 });
 /** Batch Balance Scanner: one request = up to 100 addresses on one chain; a full 500 × 2 scan is 10 requests. */
