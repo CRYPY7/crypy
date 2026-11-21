@@ -1,3 +1,4 @@
+import { getEvmActivity } from "./activity";
 import { getEvmApprovals } from "./approvals";
 import { getEvmTokenSecurity } from "./security/token-security";
 import "server-only";
@@ -80,6 +81,11 @@ export const evmAdapter: ChainFamilyAdapter = {
   /** Approvals: GoPlus leads plus CRYPY's own checks, every allowance re-read on-chain (approvals.ts). */
   getApprovals(chain, owner, heldTokens) {
     return getEvmApprovals(chain, owner, heldTokens);
+  },
+
+  /** Activity: Alchemy's transfer history (free plan), or the last few hours from the chain without it (activity.ts). */
+  getActivity(chain, owner, before, heldTokens) {
+    return getEvmActivity(chain, owner, before, heldTokens);
   },
 
   /** Prices from on-chain DEX pools (our own engine; no price API). */

@@ -92,9 +92,7 @@ async function ApprovalsContent({ params }: { params: Props["params"] }) {
       <AddressTabs
         basePath={basePath}
         current="approvals"
-        labels={
-          t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string; soon: string }
-        }
+        labels={t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string }}
         approvalsCount={report.summary.total}
       />
       <ApprovalsView

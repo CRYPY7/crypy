@@ -141,9 +141,7 @@ async function AddressContent({
       <AddressTabs
         basePath={basePath}
         current="overview"
-        labels={
-          t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string; soon: string }
-        }
+        labels={t.raw("entity.tabs") as { label: string; overview: string; approvals: string; activity: string }}
       />
 
       <section aria-labelledby="identity" className="flex flex-col gap-3">

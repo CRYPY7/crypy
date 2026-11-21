@@ -221,14 +221,15 @@
     "address-analyzer": {
       "name": "Address Analyzer",
       "question": "What has this wallet done?",
-      "description": "Transfers, activity history and first and last seen for any address.",
+      "description": "Every coin, token and NFT transfer of any address, with first and last activity and scam warnings.",
       "input": "Any wallet address",
       "cta": "See activity",
       "features": [
-        "Every coin and token sent and received",
-        "First and latest activity and total transactions",
-        "Most-used contracts and addresses",
-        "Filters for incoming, outgoing and contract calls"
+        "Every coin, token and NFT sent and received, newest first",
+        "First and latest activity",
+        "Warnings for look-alike (address poisoning) transfers",
+        "Filters, search and CSV export",
+        "Likely spam hidden, never deleted"
       ]
     },
     "portfolio": {
@@ -1784,8 +1785,7 @@
       "label": "Address sections",
       "overview": "Overview",
       "approvals": "Approvals",
-      "activity": "Activity",
-      "soon": "Soon"
+      "activity": "Activity"
     },
     "approvals": {
       "metaTitle": "Approvals of {short}",
@@ -1934,6 +1934,71 @@
         "checkOne": "1 approval to check",
         "checkOther": "{count} approvals to check",
         "checkBody": "None goes to a wallet or an address flagged as malicious, but these go to contracts CRYPY can't fully identify. Revoke the ones you don't recognise or no longer use."
+      }
+    },
+    "activity": {
+      "metaTitle": "Activity of {short}",
+      "title": "Activity",
+      "intro": "Every coin, token and NFT transfer to or from this address, newest first. Never copy an address from your history: scammers send look-alike transfers.",
+      "ui": {
+        "recentOnly": "Full history isn't available right now on {chains}, so only the last few hours of token transfers for tokens this wallet holds are shown (coin transfers can't be found that way). Check again later.",
+        "chainDown": "{chain} couldn't be read right now. Check again in a minute.",
+        "statLast": "Last activity",
+        "statFirst": "First activity",
+        "statFirstUnknown": "not known yet",
+        "statLoaded": "Transfers loaded",
+        "statMore": "older ones available",
+        "statAll": "complete history",
+        "statSpam": "Hidden as likely spam",
+        "statSpamDetail": "airdrops with links, zero-value tokens",
+        "listTitle": "Transfers",
+        "exportCsv": "Export CSV",
+        "checkAgain": "Check again",
+        "filters": "Filter activity",
+        "dir_all": "All",
+        "dir_in": "Received",
+        "dir_out": "Sent",
+        "kind_all": "Any type",
+        "kind_coin": "Coins",
+        "kind_token": "Tokens",
+        "kind_nft": "NFTs",
+        "allChains": "All chains",
+        "search": "Search activity",
+        "searchPlaceholder": "Token, address or tx hash",
+        "range": "Time range",
+        "range_all": "All loaded",
+        "range_1": "Last 24 hours",
+        "range_7": "Last 7 days",
+        "range_30": "Last 30 days",
+        "hideSpam": "Hide likely spam ({count} hidden)",
+        "empty": "No transfers were found for this address on these chains.",
+        "noMatch": "No transfers match these filters.",
+        "unknownTime": "Time not known",
+        "titleIn": "Received {what}",
+        "titleOut": "Sent {what}",
+        "titleSelf": "Moved {what} to itself",
+        "titleSwap": "Swapped {out} for {in}",
+        "titleMulti": "{count} transfers in one transaction",
+        "subSwap": "in one transaction",
+        "subNft": "NFT",
+        "subInternal": "coin sent by a contract",
+        "subCoin": "coin transfer",
+        "subToken": "token transfer",
+        "from": "from",
+        "to": "to",
+        "interpretation": "Interpretation",
+        "heuristic": "Heuristic",
+        "poisoning": "Possible address poisoning: {sender} starts and ends like {lookalike}. Scammers send these so you copy the wrong address later. Never copy addresses from your history.",
+        "loadMore": "Load older activity",
+        "loading": "Loading…",
+        "loadError": "Couldn't load more. Try again.",
+        "showingMore": "Showing {count} · newest first · more available",
+        "showingAll": "Showing all {count}",
+        "howTitle": "How we got this.",
+        "how": "Coin, token and NFT transfers to or from this address from Alchemy's free transfer history, newest first. \"Value now\" uses today's on-chain price, not the price at the time. Swaps are our reading of transfers in one transaction, labelled \"Interpretation\". Likely spam is hidden by default and never deleted.",
+        "noInternal": "On {chains}, coins moved inside contracts (internal transfers) aren't in our free source, so a payment from a contract may be missing.",
+        "statRecent": "last few hours only",
+        "howRecent": "Without the history source, CRYPY reads the last few hours of token transfers straight from the chain, only for tokens this wallet holds now."
       }
     }
   },
@@ -2292,6 +2357,14 @@
       "useConnected": "Check my connected wallet",
       "invalid": "Enter a wallet address: 0x followed by 40 characters.",
       "noConnection": "No wallet connection needed to check. Connect only when you want to revoke."
+    },
+    "address-analyzer": {
+      "label": "Wallet address",
+      "placeholder": "0x… wallet address",
+      "submit": "Show activity",
+      "useConnected": "Show my connected wallet",
+      "invalid": "Enter a wallet address: 0x followed by 40 characters.",
+      "noConnection": "No wallet connection needed: any public address works."
     }
   }
 }

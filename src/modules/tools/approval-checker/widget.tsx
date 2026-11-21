@@ -24,17 +24,20 @@ export function ApprovalCheckerForm({
   strings,
   addressPathPrefix,
   searchPath,
+  section = "approvals",
 }: {
   strings: ApprovalCheckerStrings;
   addressPathPrefix: string;
   searchPath: string;
+  /** Which address section the form opens. */
+  section?: "approvals" | "activity";
 }) {
   const id = useId();
   const router = useRouter();
   const { state } = useWallet();
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
-  const open = (address: string) => router.push(`${addressPathPrefix}${address}/approvals`);
+  const open = (address: string) => router.push(`${addressPathPrefix}${address}/${section}`);
   return (
     <Panel>
       <form

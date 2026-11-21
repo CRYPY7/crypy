@@ -4,24 +4,26 @@ Last updated: 2026-11-21
 
 ## Milestones
 
-| Milestone                                              | Status                                                                                       |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                                                      |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                         |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                         |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                         |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                      |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                        |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                         |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                        |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                               |
-| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                       |
-| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                        |
-| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses |
-| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)            |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                |
-| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)            |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                         |
+| Milestone                                               | Status                                                                                        |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                            | ✅ Done                                                                                       |
+| M1 Foundation                                           | ✅ Done (2026-11-19)                                                                          |
+| M2 Multi-chain core, search routing, wallet connection  | ✅ Done (2026-11-20)                                                                          |
+| M2.5 Free utilities                                     | ✅ Done (2026-11-20)                                                                          |
+| M3 Address overview (Balance Scanner)                   | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
+| Desktop sidebar layout, chain icons, recently viewed    | ✅ Done (2026-11-20, design approved)                                                         |
+| M4 Transaction page                                     | ✅ Done (2026-11-20)                                                                          |
+| M4.1 Transaction Intelligence                           | ✅ Done (2026-11-20, design approved)                                                         |
+| M4.2 Transaction Intelligence V2, Part 1                | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
+| M4.5 Batch Balance Scanner                              | ✅ Built (2026-11-20, design approved)                                                        |
+| M5 Token Security                                       | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
+| M5.2 Token Security: finishing parts                    | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
+| M5.1 Liquidity holders ("Who holds the liquidity")      | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
+| M5.5 Token Market & Charts (own on-chain data)          | Planned (approved 2026-11-20)                                                                 |
+| M6 Approvals and safe revoke                            | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
+| M7 Activity tab (Address Analyzer)                      | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
+| M7 Gas Tracker, Timestamp & Block Converter, new chains | Next (designs approved, boards 31–33)                                                         |
+| M3–M9                                                   | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M1 — what was built
 
@@ -70,6 +72,34 @@ events are searched per held token.
 Not covered yet (tracked in the roadmap): complete approval history (indexer), contract age for spenders,
 single-item NFT approvals, testnet revoke, batch revoke. **Owner checks:** compare your own wallets with Revoke.cash;
 revoke one small real approval and confirm the page shows it gone.
+
+## M7 part 1 — Activity tab (design approved 2026-11-21, boards 28–30)
+
+- **Activity tab** on every address (`/address/{address}/activity`), third tab next to Overview and Approvals; the
+  Address Analyzer tool page is live (`/tools/address-analyzer`) and opens it.
+- **Full history (free):** Alchemy's Transfers API (`alchemy_getAssetTransfers`, 120 compute units per call) read
+  twice per chain (sent and received), coins, tokens and NFTs, zero-value transfers included (needed for the
+  poisoning check). Internal transfers on Ethereum only (Alchemy has none for BNB Chain; the page says so). Block
+  times come with the data on Ethereum and are read from the chain on BNB Chain. 50 per stream per page, merged by
+  block number so paging never skips or repeats a transfer (`completeAbove`). First activity: two extra calls on the
+  first page.
+- **Without Alchemy** (no key, error or daily budget used): the last few hours of token transfers for tokens the
+  wallet holds, read from the chain; coin transfers can't be found that way. The page says so ("last few hours only").
+- **Rules (pure, unit-tested):** likely spam (tokens the balance view hides, links or bait words, zero-value incoming
+  tokens) hidden by default and counted; **address poisoning** (heuristic): a zero or dust transfer whose other side
+  starts and ends like the wallet or like an address it paid; swaps = our reading of one transaction with something
+  out and something else in ("Interpretation").
+- **Page:** last activity, first activity, transfers loaded, spam hidden; filters (received/sent, coins/tokens/NFTs,
+  chain), search, time range, spam switch; grouped by day; "Load older activity"; CSV export built in the browser
+  (formula injection blocked); "How we got this". API: `GET /api/v1/address/{address}/activity?cursor=bsc:N,ethereum:N`.
+- Tool description updated to what is built (the old text promised "total transactions" and "most-used contracts",
+  which aren't part of this design).
+
+Checks (cloud workspace, which has no Alchemy key): unit 221 passed (8 new: Alchemy parsing for every category and
+junk, paging cut-off, look-alikes, poisoning, spam, swap grouping, CSV); the no-Alchemy path read live on BNB Chain;
+build passed (CSS 72.5 KB of 72); browser 109 passed (new: activity tab, tool page, cursor validation).
+**Not verified here:** the Alchemy history path itself. `tests/unit/activity-live.test.ts` checks it with the owner's
+key (ordering, every transfer involves the wallet, page 2 continues without repeats).
 
 ## M6 follow-up (2026-11-21): owner's wallet vs revoke.cash
 

@@ -1,3 +1,4 @@
+import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import type { ApprovalsFacts } from "@/lib/approvals/types";
 import type { TokenSecurityFacts } from "@/lib/security/types";
 import type { ChainConfig, ChainFamily, ChainKey } from "@/config/chains";
@@ -316,6 +317,16 @@ export interface ChainFamilyAdapter {
    * common spenders for each of them.
    */
   getApprovals?(chain: ChainConfig, owner: string, heldTokens: string[]): Promise<ApprovalsFacts>;
+  /**
+   * The wallet's transfers on this chain, newest first (M7). `before`: continue from this block (inclusive), or null
+   * for the newest page. `heldTokens`: used when only recent activity can be read.
+   */
+  getActivity?(
+    chain: ChainConfig,
+    owner: string,
+    before: number | null,
+    heldTokens: string[],
+  ): Promise<{ chain: ChainActivity; transfers: Transfer[] }>;
   /** Token security facts (M5). null when the address isn't a token on this chain. */
   getTokenSecurity?(chain: ChainConfig, address: string): Promise<TokenSecurityFacts | null>;
 }

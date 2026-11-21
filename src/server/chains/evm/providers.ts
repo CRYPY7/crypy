@@ -40,6 +40,7 @@ const ALCHEMY_CU: Record<string, number> = {
   eth_call: 26,
   eth_getLogs: 60,
   alchemy_getTokenBalances: 20,
+  alchemy_getAssetTransfers: 120,
 };
 const DEFAULT_CU = 20;
 

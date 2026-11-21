@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-/** Overview | Approvals | Activity (soon) — sections of an address page. */
+/** Overview | Approvals | Activity — sections of an address page. */
 export function AddressTabs({
   basePath,
   current,
@@ -9,8 +9,8 @@ export function AddressTabs({
   approvalsCount,
 }: {
   basePath: string;
-  current: "overview" | "approvals";
-  labels: { label: string; overview: string; approvals: string; activity: string; soon: string };
+  current: "overview" | "approvals" | "activity";
+  labels: { label: string; overview: string; approvals: string; activity: string };
   approvalsCount?: number;
 }) {
   const tab = (active: boolean) =>
@@ -18,31 +18,27 @@ export function AddressTabs({
       "flex shrink-0 items-center gap-2 border-b-2 px-3 py-2.5 text-sm whitespace-nowrap",
       active ? "border-primary font-semibold" : "border-transparent text-muted-foreground hover:text-foreground",
     );
+  const items = [
+    { key: "overview", href: basePath, label: labels.overview },
+    { key: "approvals", href: `${basePath}/approvals`, label: labels.approvals, count: approvalsCount },
+    { key: "activity", href: `${basePath}/activity`, label: labels.activity },
+  ] as const;
   return (
     <nav aria-label={labels.label} className="flex gap-1 overflow-x-auto border-b">
-      <Link
-        href={basePath}
-        prefetch={false}
-        aria-current={current === "overview" ? "page" : undefined}
-        className={tab(current === "overview")}
-      >
-        {labels.overview}
-      </Link>
-      <Link
-        href={`${basePath}/approvals`}
-        prefetch={false}
-        aria-current={current === "approvals" ? "page" : undefined}
-        className={tab(current === "approvals")}
-      >
-        {labels.approvals}
-        {approvalsCount !== undefined && (
-          <span className="rounded-full bg-muted px-2 text-xs tabular-nums">{approvalsCount}</span>
-        )}
-      </Link>
-      <span aria-disabled="true" className={cn(tab(false), "cursor-default")}>
-        {labels.activity}
-        <span className="rounded-full border px-2 text-xs">{labels.soon}</span>
-      </span>
+      {items.map((item) => (
+        <Link
+          key={item.key}
+          href={item.href}
+          prefetch={false}
+          aria-current={current === item.key ? "page" : undefined}
+          className={tab(current === item.key)}
+        >
+          {item.label}
+          {"count" in item && item.count !== undefined && (
+            <span className="rounded-full bg-muted px-2 text-xs tabular-nums">{item.count}</span>
+          )}
+        </Link>
+      ))}
     </nav>
   );
 }
