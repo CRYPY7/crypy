@@ -17,7 +17,7 @@ const run = (chain: string, address: string) => evmAdapter.getTokenSecurity!(get
 
 describe.skipIf(!live)("token security (live)", () => {
   it("every registered router uses its factory and the chain's wrapped coin", async () => {
-    for (const key of ["ethereum", "bsc"] as const) {
+    for (const key of ["ethereum", "bsc", "base", "arbitrum", "polygon"] as const) {
       const client = getEvmClient(getChain(key)!);
       for (const dex of dexDeployments[key].filter((d) => d.router)) {
         const [factory, weth] = await Promise.all([

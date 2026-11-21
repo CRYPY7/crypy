@@ -4,28 +4,28 @@ Last updated: 2026-11-21
 
 ## Milestones
 
-| Milestone                                              | Status                                                                                         |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                                                        |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                           |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                           |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                           |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                        |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                          |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                           |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                          |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                 |
-| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                         |
-| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                          |
-| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses   |
-| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)              |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                  |
-| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)              |
-| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test  |
-| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                 |
-| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                            |
-| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: balances, approvals, activity, gas, transactions; Token Security deferred |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                           |
+| Milestone                                              | Status                                                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                                       |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                          |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                          |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                          |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                         |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                          |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                         |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                        |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
+| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                 |
+| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
+| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
+| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
+| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
+| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M1 — what was built
 
@@ -105,6 +105,30 @@ on only after its live checks passed (`tests/unit/chains-live.test.ts`, 19 check
 
 **Owner action:** in the Alchemy dashboard, enable Base, Arbitrum and Polygon for your app (otherwise those chains use
 public nodes and the recent-only activity), then run `pnpm env:check`.
+
+## M7 part 5 — Token Security on Base, Arbitrum and Polygon (2026-11-21)
+
+- **Exchanges:** Base: Uniswap v2 (trade-test hop), Uniswap v3, PancakeSwap v3. Arbitrum: SushiSwap (hop), Uniswap v2,
+  Uniswap v3, PancakeSwap v3. Polygon: QuickSwap (hop), SushiSwap, Uniswap v2, Uniswap v3. Every router's factory()
+  and WETH() and every position manager's factory() checked live. Found: Uniswap's Ethereum position-manager address
+  holds unrelated code on Base (Base has its own).
+- **Trade test works on all three** (live): DEGEN on Base and ARB on Arbitrum through Uniswap v3 pools called directly,
+  QUICK on Polygon through the QuickSwap router, LINK on Polygon through a stablecoin pool after a POL → USD hop.
+  Each bought, sent and sold with 0% tax. Test size about $10 (0.005 ETH; 100 POL).
+- **Lockers:** UNCX's current Uniswap v2 locker (same code on every chain, addresses from UNCX's own repository) and
+  UNCX's v3 locker on all three; the 2024 UNCX v2 lockers were also added on Ethereum and BNB Chain. Each answers its
+  read method and is confirmed not upgradeable on-chain. Not listed (deferred): PinkLock (its Ethereum address holds
+  different code on these chains or none), Team Finance (its address on Polygon doesn't answer the lock reads), farms.
+- **Fixed while testing (all tools):** the address/hash boxes on the Token Security, Approval Checker, Balance Scanner
+  and Transaction Checker pages lost text typed before the page had finished loading (seen in a phone test: the
+  scanner then said "enter an address" although one was typed). They now keep it and read it when submitted.
+- **Socket timeout:** responses CRYPY doesn't read (errors, 404s, too-large answers from GoPlus, Sourcify, Alchemy) are
+  now closed at once instead of staying open until the socket's idle timer fired (the "socket idle timeout" uncaught
+  errors in the owner's logs). Couldn't be reproduced here, so this is the likely cause, not a confirmed one.
+
+Checks: typecheck and lint clean; unit 239 passed; live 39 passed (23 new-chain checks incl. 4 trade tests, 8 security,
+8 liquidity incl. the locker registry on all five chains); build passed; full browser run 124 passed, 7 skipped,
+1 failed once ("tool isn't live yet" page; passed 8 of 8 on repeat; its wait raised to 15 s).
 
 ## M7 follow-up 3 (2026-11-21): a resting node gets one more try
 

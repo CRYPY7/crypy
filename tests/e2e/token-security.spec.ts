@@ -12,6 +12,21 @@ test("token page shows the security report with evidence labels and no safe verd
   await expect(main.getByText(/^Safe$/)).toHaveCount(0);
 });
 
+test("Token Security works on the newer chains: a Base token's trade test and liquidity", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto("/en/token/base/0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed");
+  const main = page.locator("#main");
+  await expect(main.getByRole("heading", { name: "Trade test" })).toBeVisible({ timeout: 60_000 });
+  await expect(main.getByText("Worked").first()).toBeVisible();
+  await expect(main.getByRole("heading", { name: "Who holds the liquidity" })).toBeVisible();
+  await expect(main.getByText(/aren't available on Base yet/)).toHaveCount(0);
+  await expect(main.getByText(/^Safe$/)).toHaveCount(0);
+  // The scanner offers every chain where the checks run.
+  await page.goto("/en/tools/token-security");
+  for (const chain of ["Base", "Arbitrum", "Polygon"])
+    await expect(page.getByLabel("Chain").locator("option", { hasText: chain })).toHaveCount(1);
+});
+
 test("tool page opens the token page for the chosen chain", async ({ page }) => {
   test.setTimeout(90_000);
   await page.goto("/en/tools/token-security");

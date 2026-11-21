@@ -5,6 +5,7 @@ import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import { completeAbove } from "@/lib/activity/evaluate";
 import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import { getOnchainPrices } from "./prices";
+import { discardBody } from "@/server/http/discard";
 import {
   BudgetExhaustedError,
   type Provider,
@@ -147,7 +148,10 @@ async function alchemyCall(provider: Provider, params: Record<string, unknown>) 
     signal: AbortSignal.timeout(ALCHEMY_TIMEOUT_MS),
     cache: "no-store",
   });
-  if (!response.ok) throw new Error(`Transfers provider responded ${response.status}`);
+  if (!response.ok) {
+    discardBody(response);
+    throw new Error(`Transfers provider responded ${response.status}`);
+  }
   const json = (await response.json()) as { result?: { transfers?: unknown[]; pageKey?: string }; error?: unknown };
   if (json.error || !json.result) throw new Error("Transfers provider error");
   return { transfers: Array.isArray(json.result.transfers) ? json.result.transfers : [], pageKey: json.result.pageKey };

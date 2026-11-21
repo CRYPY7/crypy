@@ -51,14 +51,15 @@ const none: ChainCapabilities = {
 };
 
 /**
- * Base, Arbitrum and Polygon (M7): balances, approvals, activity and gas are live. Token Security needs each
- * chain's exchanges, trade test and lockers verified first (tracked in the roadmap), so it stays off there.
+ * Base, Arbitrum and Polygon (M7): every tool. Token Security was switched on after its exchanges, trade test and
+ * lockers were checked live on each chain (tests/unit/chains-live.test.ts, liquidity-live, security-live).
  */
 const l2Capabilities: ChainCapabilities = {
   ...none,
   lookup: true,
   nativeBalance: true,
   tokenBalances: true,
+  tokenSecurity: true,
   approvals: true,
   activity: true,
   fees: true,

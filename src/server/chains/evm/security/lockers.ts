@@ -28,8 +28,27 @@ export interface LockerDeployment {
   upgradeable: boolean;
 }
 
+/**
+ * UNCX's current Uniswap v2 locker: one deployment per chain, the same code everywhere (addresses from UNCX's own
+ * repository, liquidity-locker-univ2-contracts; code compared on-chain 2026-11-21).
+ */
+const uncxUniV2 = (address: string): LockerDeployment => ({
+  address,
+  name: "UNCX (Uniswap v2 locker)",
+  upgradeable: false,
+  kind: "uncx-v2",
+});
+/** UNCX's Uniswap v3 locker (addresses from UNCX's repository, liquidity-locker-univ3-contracts). */
+const uncxV3 = (address: string): LockerDeployment => ({
+  address,
+  name: "UNCX (v3 locker)",
+  upgradeable: false,
+  kind: "uncx-v3",
+});
+
 export const lockers: Record<ChainKey, LockerDeployment[]> = {
   ethereum: [
+    { ...uncxUniV2("0x59d7D55DdC58494FbBbca29904f108ece82Ac7FB"), name: "UNCX (Uniswap v2 locker, 2024)" },
     {
       address: "0x663A5C229c09b049E36dCc11a9B0d4a8Eb9db214",
       name: "UNCX (Uniswap v2 locker)",
@@ -62,6 +81,7 @@ export const lockers: Record<ChainKey, LockerDeployment[]> = {
     },
   ],
   bsc: [
+    { ...uncxUniV2("0x7229247bD5cf29FA9B0764Aa1568732be024084b"), name: "UNCX (Uniswap v2 locker, 2024)" },
     {
       address: "0xC765bddB93b0D1c1A88282BA0fa6B2d00E3e0c83",
       name: "UNCX (PancakeSwap locker)",
@@ -94,9 +114,18 @@ export const lockers: Record<ChainKey, LockerDeployment[]> = {
     },
     { address: "0x3f4d6bf08cb7a003488ef082102c2e6418a4551e", name: "DeepLock", upgradeable: false, kind: "deeplock" },
   ],
-  base: [],
-  arbitrum: [],
-  polygon: [],
+  // PinkLock isn't listed on these chains: its Ethereum address holds different code there (or none), and no
+  // official address list was found. Team Finance: its Ethereum address on Polygon doesn't answer the lock reads
+  // (checked 2026-11-21), so it isn't listed either.
+  base: [uncxUniV2("0xc4E637D37113192F4F1F060DaEbD7758De7F4131"), uncxV3("0x231278eDd38B00B07fBd52120CEf685B9BaEBCC1")],
+  arbitrum: [
+    uncxUniV2("0x63F4B2C082B1E0bbA38874567E053800379bF8D7"),
+    uncxV3("0x6b5360B419e0851b4b81644e0F63c1A9778f2506"),
+  ],
+  polygon: [
+    uncxUniV2("0x939d71ADe0Bf94d3F8cf578413bF2a2f248BF58b"),
+    uncxV3("0x40f6301edb774e8B22ADC874f6cb17242BaEB8c4"),
+  ],
 };
 
 /**

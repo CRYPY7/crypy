@@ -32,8 +32,6 @@ export function TokenSecurityForm({
 }) {
   const id = useId();
   const router = useRouter();
-  const [value, setValue] = useState("");
-  const [chain, setChain] = useState("");
   const [error, setError] = useState(false);
   return (
     <Panel>
@@ -42,11 +40,12 @@ export function TokenSecurityForm({
         method="get"
         onSubmit={(event) => {
           event.preventDefault();
-          const address = value.trim();
+          const address = String(new FormData(event.currentTarget).get("q") ?? "").trim();
           if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
             setError(true);
             return;
           }
+          const chain = String(new FormData(event.currentTarget).get("chain") ?? "");
           router.push(chain ? `${tokenPathPrefix}${chain}/${address}` : `${searchPath}?q=${address}`);
         }}
       >
@@ -60,25 +59,17 @@ export function TokenSecurityForm({
             autoComplete="off"
             spellCheck={false}
             dir="ltr"
-            value={value}
             placeholder={strings.placeholder}
             aria-invalid={error || undefined}
             aria-describedby={`${id}-error`}
-            onChange={(event) => {
-              setValue(event.target.value);
-              setError(false);
-            }}
+            // Uncontrolled: text typed before the page finished loading is kept, and read on submit.
+            onChange={() => setError(false)}
             className={`${inputClass} technical`}
           />
           <label className="sr-only" htmlFor={`${id}-chain`}>
             {strings.chain}
           </label>
-          <select
-            id={`${id}-chain`}
-            value={chain}
-            onChange={(event) => setChain(event.target.value)}
-            className={cn(inputClass, "sm:w-48")}
-          >
+          <select id={`${id}-chain`} name="chain" defaultValue="" className={cn(inputClass, "sm:w-48")}>
             <option value="">{strings.anyChain}</option>
             {chains.map((c) => (
               <option key={c.key} value={c.key}>

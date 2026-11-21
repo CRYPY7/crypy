@@ -28,7 +28,6 @@ export function BalanceScanner({
 }) {
   const id = useId();
   const router = useRouter();
-  const [value, setValue] = useState("");
   const [error, setError] = useState(false);
 
   return (
@@ -38,7 +37,7 @@ export function BalanceScanner({
         method="get"
         onSubmit={(event) => {
           event.preventDefault();
-          const address = value.trim();
+          const address = String(new FormData(event.currentTarget).get("q") ?? "").trim();
           if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
             setError(true);
             return;
@@ -56,14 +55,11 @@ export function BalanceScanner({
             autoComplete="off"
             spellCheck={false}
             dir="ltr"
-            value={value}
             placeholder={strings.placeholder}
             aria-invalid={error || undefined}
             aria-describedby={error ? `${id}-error` : undefined}
-            onChange={(event) => {
-              setValue(event.target.value);
-              setError(false);
-            }}
+            // Uncontrolled: text typed before the page finished loading is kept, and read on submit.
+            onChange={() => setError(false)}
             className={`${inputClass} technical`}
           />
           <button type="submit" className={cn(buttonVariants({ size: "xl" }), "shrink-0")}>

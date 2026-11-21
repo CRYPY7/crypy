@@ -101,10 +101,86 @@ export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
       positionManager: "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613",
     },
   ],
-  // Added with Token Security on these chains (roadmap, deferred parts).
-  base: [],
-  arbitrum: [],
-  polygon: [],
+  // Base, Arbitrum, Polygon (2026-11-21). Routers and position managers from the exchanges' own docs, checked on-chain
+  // (router factory() and WETH(), manager factory()). The first v2 router on each chain is the trade test's "hop" to
+  // a stablecoin. Uniswap's Ethereum position-manager address holds unrelated code on Base; Base has its own.
+  base: [
+    {
+      name: "Uniswap v2",
+      protocol: "uniswap-v2",
+      factory: "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
+      router: "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
+    },
+    {
+      name: "Uniswap v3",
+      protocol: "uniswap-v3",
+      factory: "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
+      fees: [100, 500, 3000, 10000],
+      positionManager: "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1",
+    },
+    {
+      name: "PancakeSwap v3",
+      protocol: "uniswap-v3",
+      factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
+      fees: [100, 500, 2500, 10000],
+      positionManager: "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
+    },
+  ],
+  arbitrum: [
+    {
+      name: "SushiSwap",
+      protocol: "uniswap-v2",
+      factory: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+      router: "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+    },
+    {
+      name: "Uniswap v2",
+      protocol: "uniswap-v2",
+      factory: "0xf1D7CC64Fb4452F05c498126312eBE29f30Fbcf9",
+      router: "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
+    },
+    {
+      name: "Uniswap v3",
+      protocol: "uniswap-v3",
+      factory: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+      fees: [100, 500, 3000, 10000],
+      positionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+    },
+    {
+      name: "PancakeSwap v3",
+      protocol: "uniswap-v3",
+      factory: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865",
+      fees: [100, 500, 2500, 10000],
+      positionManager: "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364",
+    },
+  ],
+  polygon: [
+    {
+      name: "QuickSwap",
+      protocol: "uniswap-v2",
+      factory: "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32",
+      router: "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff",
+    },
+    {
+      name: "SushiSwap",
+      protocol: "uniswap-v2",
+      factory: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+      router: "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+    },
+    {
+      name: "Uniswap v2",
+      protocol: "uniswap-v2",
+      factory: "0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C",
+      router: "0xedf6066a2b290C185783862C7F4776A2C8077AD1",
+    },
+    {
+      name: "Uniswap v3",
+      protocol: "uniswap-v3",
+      factory: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+      fees: [100, 500, 3000, 10000],
+      positionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+    },
+  ],
 };
 
 /** Tokens a pool can be paired with (the price engine's quote tokens: stablecoins and the wrapped native coin). */
@@ -115,8 +191,8 @@ export const wrappedNative = (chain: ChainKey) => chainDex[chain].quotes.find((q
 export const tradeTestSize: Record<ChainKey, bigint> = {
   ethereum: 5_000_000_000_000_000n, // 0.005 ETH
   bsc: 20_000_000_000_000_000n, // 0.02 BNB
-  // Token Security isn't live on these chains yet (no exchanges registered for the trade test).
+  // About $10 of the coin, as on the other chains.
   base: 5_000_000_000_000_000n, // 0.005 ETH
   arbitrum: 5_000_000_000_000_000n, // 0.005 ETH
-  polygon: 30_000_000_000_000_000_000n, // 30 POL
+  polygon: 100_000_000_000_000_000_000n, // 100 POL (≈ $7.5 at $0.075)
 };

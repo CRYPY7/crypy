@@ -25,7 +25,6 @@ export function TxChecker({
 }) {
   const id = useId();
   const router = useRouter();
-  const [value, setValue] = useState("");
   const [error, setError] = useState(false);
   return (
     <Panel>
@@ -34,7 +33,7 @@ export function TxChecker({
         method="get"
         onSubmit={(event) => {
           event.preventDefault();
-          const hash = value.trim();
+          const hash = String(new FormData(event.currentTarget).get("q") ?? "").trim();
           if (!/^0x[0-9a-fA-F]{64}$/.test(hash)) {
             setError(true);
             return;
@@ -52,14 +51,11 @@ export function TxChecker({
             autoComplete="off"
             spellCheck={false}
             dir="ltr"
-            value={value}
             placeholder={strings.placeholder}
             aria-invalid={error || undefined}
             aria-describedby={`${id}-error`}
-            onChange={(event) => {
-              setValue(event.target.value);
-              setError(false);
-            }}
+            // Uncontrolled: text typed before the page finished loading is kept, and read on submit.
+            onChange={() => setError(false)}
             className={`${inputClass} technical`}
           />
           <button type="submit" className={cn(buttonVariants({ size: "xl" }), "shrink-0")}>

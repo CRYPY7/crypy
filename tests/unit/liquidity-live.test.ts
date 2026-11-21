@@ -62,7 +62,7 @@ describe.skipIf(!live)("liquidity holders (live)", () => {
       deeplock: "depositId",
     } as const;
     const one = "0x0000000000000000000000000000000000000001";
-    for (const key of ["ethereum", "bsc"] as const) {
+    for (const key of ["ethereum", "bsc", "base", "arbitrum", "polygon"] as const) {
       const client = getEvmClient(getChain(key)!);
       for (const l of lockers[key]) {
         const fn = call[l.kind];

@@ -5,6 +5,7 @@
 import { describe, expect, it } from "vitest";
 import { erc20Abi, getAddress } from "viem";
 import { getChain } from "@/config/chains";
+import { evaluate } from "@/lib/security/evaluate";
 import { evmAdapter } from "@/server/chains/evm/adapter";
 import { chainDex, poolFactories } from "@/server/chains/evm/dex";
 import { getEvmClient } from "@/server/chains/evm/providers";
@@ -66,6 +67,24 @@ describe.skipIf(!live)("new EVM chains (live)", () => {
       expect(BigInt(balances.native.raw)).toBeGreaterThanOrEqual(0n);
     }, 60_000);
   }
+
+  // Token Security: the trade test on each chain's exchange designs (v3 pool called directly, v2 through its router,
+  // and a stablecoin-only pool reached through a hop from the coin).
+  const trades: [string, string, string, Record<string, unknown>][] = [
+    ["base", "DEGEN (Uniswap v3)", "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed", { protocol: "uniswap-v3" }],
+    ["arbitrum", "ARB (Uniswap v3)", "0x912CE59144191C1204E64559FE8253a0e49E6548", { protocol: "uniswap-v3" }],
+    ["polygon", "QUICK (QuickSwap v2)", "0xB5C064F955D8e7F38fE0460C556a72987494eE17", { dex: "QuickSwap" }],
+    ["polygon", "LINK (stablecoin pool, via USD)", "0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39", { via: "USD" }],
+  ];
+  for (const [key, label, token, venue] of trades)
+    it(`${key}: token security trade test, ${label}: bought, sent and sold without tax`, async () => {
+      const facts = await evmAdapter.getTokenSecurity!(getChain(key)!, token);
+      expect(facts).not.toBeNull();
+      expect(facts!.trade).toMatchObject({ outcome: "ok", buyTax: 0, sellTax: 0, transferTax: 0 });
+      expect(facts!.trade!.venue).toMatchObject(venue);
+      // Never a "safe" verdict: the best level is "no major risks found".
+      expect(["none-found", "warnings", "risks", "serious"]).toContain(evaluate(facts!).level);
+    }, 120_000);
 
   it("base: a transaction's fee includes the Ethereum data fee from its receipt", async () => {
     const chain = getChain("base")!;

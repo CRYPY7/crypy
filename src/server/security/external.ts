@@ -3,6 +3,7 @@ import { cacheLife } from "next/cache";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { ExternalFacts, PowerFact, SourceFacts } from "@/lib/security/types";
 import { type AbiEntry, powersFromSource } from "@/server/chains/evm/security/source";
+import { discardBody } from "@/server/http/discard";
 
 /**
  * Outside sources for token security. Both are free and need no key:
@@ -88,7 +89,10 @@ export async function goPlusToken(chainId: number, address: string): Promise<GoP
       `https://api.gopluslabs.io/api/v1/token_security/${chainId}?contract_addresses=${address.toLowerCase()}`,
       { signal: AbortSignal.timeout(TIMEOUT_MS), headers: { accept: "application/json" } },
     );
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      discardBody(response);
+      throw new Error(`HTTP ${response.status}`);
+    }
     const json = (await response.json()) as { code?: number; result?: Record<string, Record<string, unknown>> };
     if (json.code !== 1 || !json.result) {
       cacheLife({ revalidate: 60, expire: 300 });
@@ -127,11 +131,16 @@ export async function sourcifyVerified(
       headers: { accept: "application/json" },
     });
     if (response.status === 404) {
+      discardBody(response);
       cacheLife({ revalidate: 3600, expire: 86_400 });
       return { source: { status: "not-found", provider: "Sourcify" }, powers: null };
     }
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      discardBody(response);
+      throw new Error(`HTTP ${response.status}`);
+    }
     const size = Number(response.headers.get("content-length") ?? 0);
+    if (size > MAX_SOURCE_BYTES) discardBody(response);
     const json = (size > MAX_SOURCE_BYTES ? {} : await response.json()) as {
       match?: unknown;
       abi?: unknown;
@@ -230,7 +239,10 @@ export async function goPlusApprovals(chainId: number, owner: string): Promise<G
         headers: { accept: "application/json" },
       },
     );
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      discardBody(response);
+      throw new Error(`HTTP ${response.status}`);
+    }
     const json = (await response.json()) as { code?: number; result?: unknown };
     // 1 = complete, 2 = "partial data obtained" (still a real list); anything else is an error.
     if (json.code === 2) partial = true;

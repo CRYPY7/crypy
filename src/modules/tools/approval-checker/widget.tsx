@@ -35,7 +35,6 @@ export function ApprovalCheckerForm({
   const id = useId();
   const router = useRouter();
   const { state } = useWallet();
-  const [value, setValue] = useState("");
   const [error, setError] = useState(false);
   const open = (address: string) => router.push(`${addressPathPrefix}${address}/${section}`);
   return (
@@ -45,7 +44,7 @@ export function ApprovalCheckerForm({
         method="get"
         onSubmit={(event) => {
           event.preventDefault();
-          const address = value.trim();
+          const address = String(new FormData(event.currentTarget).get("q") ?? "").trim();
           if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
             setError(true);
             return;
@@ -63,14 +62,11 @@ export function ApprovalCheckerForm({
             autoComplete="off"
             spellCheck={false}
             dir="ltr"
-            value={value}
             placeholder={strings.placeholder}
             aria-invalid={error || undefined}
             aria-describedby={`${id}-error`}
-            onChange={(event) => {
-              setValue(event.target.value);
-              setError(false);
-            }}
+            // Uncontrolled: text typed before the page finished loading is kept, and read on submit.
+            onChange={() => setError(false)}
             className={`${inputClass} technical`}
           />
           <button type="submit" className={cn(buttonVariants({ size: "xl" }), "shrink-0")}>

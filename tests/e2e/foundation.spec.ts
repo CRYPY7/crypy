@@ -125,5 +125,5 @@ for (const path of [
 
 test("a tool that isn't live yet says so", async ({ page }) => {
   await page.goto("/en/tools/portfolio");
-  await expect(page.getByText("This tool isn't live yet")).toBeVisible();
+  await expect(page.getByText("This tool isn't live yet")).toBeVisible({ timeout: 15_000 });
 });

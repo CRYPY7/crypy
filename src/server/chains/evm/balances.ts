@@ -5,6 +5,7 @@ import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { BalanceCoverage, ChainBalances, RawTokenBalance } from "@/lib/chains/types";
 import { BudgetExhaustedError, type Provider, budgetExhausted, getEvmClient, recordUsage } from "./providers";
+import { discardBody } from "@/server/http/discard";
 
 /**
  * Alchemy lists every token an address has EVER held (including ones now at zero), 100 per page.
@@ -82,7 +83,10 @@ export async function listTokensFromAlchemy(
       signal: AbortSignal.timeout(10_000),
       cache: "no-store",
     });
-    if (!response.ok) throw new Error(`Token list provider responded ${response.status}`);
+    if (!response.ok) {
+      discardBody(response);
+      throw new Error(`Token list provider responded ${response.status}`);
+    }
     const result = parseTokenBalancesPage(await response.json());
     tokens.push(...result.tokens);
     onPage?.(result.tokens);
