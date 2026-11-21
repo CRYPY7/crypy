@@ -25,6 +25,7 @@ Last updated: 2026-11-21
 | M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
 | M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
 | M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
+| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); parts 2–3 (accounts, alerts) to come     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M1 — what was built
@@ -40,6 +41,44 @@ Last updated: 2026-11-21
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## M8 Part 1 — Portfolio (design approved 2026-11-21, boards 36–38)
+
+- **Page:** `/tools/portfolio`, now live. No account and no wallet connection needed.
+- **Saved only in this browser** (`localStorage`, key `crypy.portfolio`, versioned): up to 20 public addresses with
+  the visitor's own labels and the last total seen. Read defensively (malformed, duplicate or extra entries dropped).
+  Kept in step across open tabs; works for the visit when storage is blocked. The list is never sent as a list or
+  stored on the server: each wallet is read on its own.
+- **Add wallet dialog:** refuses a pasted seed phrase or private key (cleared at once, never saved, sent or logged),
+  catches wrong EIP-55 checksums, junk and duplicates; labels are trimmed, capped at 40 characters and stripped of
+  invisible and direction-changing characters. "Add my connected wallet" when a wallet is connected (no signing).
+- **Per wallet** (`GET /api/v1/address/{address}/portfolio`, own rate limit of 60 a minute, read-only, nothing stored):
+  balances on the chains the wallet uses; how many approvals need attention (CRYPY's own approval checks, 20 s
+  limit); held tokens GoPlus reports as a honeypot or with a sell tax of 30% or more (the wallet's 8 most valuable
+  tokens outside CRYPY's checked list; 8 s limit; labelled as GoPlus's finding). A check that doesn't finish says so.
+- **Summary:** combined total across wallets and chains; "since you last looked" (kept at least an hour so a refresh
+  doesn't reset it; only when every wallet and price loaded; labelled "not profit or loss"; adding a wallet starts a
+  fresh comparison); tokens with value / without a price; approvals to check; flagged tokens; by-chain bar.
+- **Wallets list:** value, share, chains, badges (approvals to check, flagged tokens, nothing flagged), open, rename,
+  remove. **Safety** section with links to the approvals page and the token report. Never a "safe" verdict.
+- **Top holdings:** merged across wallets; the same asset on several chains is merged only when CRYPY knows it's the
+  same (each chain's coin, or a token on CRYPY's checked list with its address verified per chain). Any other token
+  stays one row per chain and contract, so a look-alike is never merged with a real one. Spam stays hidden.
+- **CSV export** of the holdings (formula-safe cells). Phone layout: stacked cards, scrollable holdings table.
+- **Performance:** the portfolio code loads only when the page opens, not when a link to it is prefetched (the header
+  and tab bar link to it from every page), so other pages stay within the JavaScript budget.
+- **Deferred to M8 parts 2–3:** syncing the portfolio to an account, the "Watch for changes" box on board 36, and
+  history beyond the last total seen.
+
+## M8 Part 1 checks (2026-11-21, in the cloud workspace)
+
+- `tsc --noEmit` and ESLint: clean.
+- Unit tests: 250 passed, 70 skipped (live tests need keys/network flags); new `tests/unit/portfolio.test.ts` (10).
+- `next build`: passed.
+- Browser tests (full suite, 3 workers): 127 passed, 7 skipped, 2 failed on the first run — both were tests that used
+  the Portfolio as the example of a "not live yet" tool. They now use the Watchlist; re-run: 40 of 40 passed in
+  foundation + layout. New `tests/e2e/portfolio.spec.ts` (empty state, seed-phrase refusal, checksum, duplicate, two
+  live wallets with total, holdings, saved snapshot, reload, remove): passed on desktop and mobile.
 
 ## M6 — Approval Checker and safe revoke (design approved 2026-11-20, boards 24–27)
 

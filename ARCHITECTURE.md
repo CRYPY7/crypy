@@ -548,10 +548,24 @@ DEX decoders, per chain family:                      (one per DEX design)
 - Adding an EVM chain: an entry in `config/chains.ts` (CAIP-2, explorer, public nodes, Alchemy network, common
   tokens, capabilities), its viem/wagmi chain, `<CHAIN>_RPC_URLS`, DEX quotes and factories in `server/chains/evm/dex.ts`,
   known contracts, recent-block windows, a badge in `public/chains/`, CSP hosts, and `tests/unit/chains-live.test.ts`.
-- Capabilities decide where each tool appears: Base, Arbitrum and Polygon have everything except `tokenSecurity`.
+- Capabilities decide where each tool appears: Base, Arbitrum and Polygon have every capability, including `tokenSecurity`.
 - Rollup fees: `TxDetails.l1Fee` (OP-stack receipts) is included in `fee`; `GasFacts.l1Fees` holds the estimated
   Ethereum data fee per action (Base GasPriceOracle `getL1FeeUpperBound`, Arbitrum `ArbGasInfo.getPricesInWei`).
 - Finality: `TxDetails.finalized` from the node's `finalized` block; block-count fallbacks only for non-rollups.
+
+## 12h. Portfolio (M8 Part 1)
+
+- Client-only state: `lib/portfolio/storage.ts` (versioned `localStorage` record, defensive parser, 20-wallet cap,
+  "since you last looked" snapshot kept ≥ 1 hour), read through `useSyncExternalStore` so tabs stay in step.
+- Input safety: `lib/portfolio/input.ts` refuses seed phrases and private keys before anything is stored or sent;
+  strict EIP-55 check for mixed-case addresses; label cleaning.
+- Maths: `lib/portfolio/combine.ts` (pure, unit-tested). Cross-chain merging only for each chain's coin and tokens in
+  `config/batch-assets.ts`; everything else is keyed by chain + contract.
+- Server: `server/services/portfolio.ts` → `GET /api/v1/address/{address}/portfolio` = cached overview on the
+  wallet's used chains + approvals summary (timeout 20 s) + GoPlus flags on the top 8 non-listed tokens (timeout 8 s).
+  `portfolioLimiter` 60/min. The browser fetches 3 wallets at a time; an older answer never replaces a newer one.
+- `modules/tools/portfolio/widget.tsx` is a thin client shell that lazy-loads `tracker.tsx`, so route prefetches
+  from the header and tab bar don't add the portfolio code to other pages.
 
 ## 13. Performance budget
 

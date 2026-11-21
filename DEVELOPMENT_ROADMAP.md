@@ -246,10 +246,19 @@ Owner checks still open: compare 2–3 of your own wallets with Revoke.cash; do 
 
 Explorer decision; activity tab (all coin/token transfers sent and received); gas page + widget; timestamp/block converter (other utilities shipped in M2.5); add Base, Arbitrum, Polygon (config only) after verification.
 
-## M8 — Portfolio (Tool 7), accounts, Watchlist & Telegram alerts (Tool 8)
+## M8 — Portfolio (Tool 7), accounts, Watchlist & Telegram alerts (Tool 8) — Part 1 Portfolio 🟡 (2026-11-21)
 
-Portfolio stores CAIP-10 account IDs; Postgres + Drizzle; wallet sign-in (SIWE); Alchemy webhooks; Telegram bot.
-**Done when:** an alert is delivered end-to-end in staging and production.
+Designs approved 2026-11-21 (boards 36–41) with the owner's decisions: PostgreSQL (PGlite in development, real
+Postgres on a VPS at launch); a background checker polling about every minute (needs an always-on server); a Telegram
+bot the owner creates with @BotFather (token only in `.env.local`); limits of 20 Portfolio wallets and 10 watched
+items per account.
+
+- **Part 1 — Portfolio 🟡 built:** browser-saved, no account; combined totals, by chain / wallet / token, safety
+  badges, CSV. Deferred: account sync and "Watch for changes" (parts 2–3).
+- **Part 2 — accounts:** Sign-In with Ethereum (a message to sign, no transaction), Postgres + Drizzle, Watchlist UI
+  (10 items), optional portfolio sync.
+- **Part 3 — alerts:** background checker, Telegram bot, quiet hours, alert history, download and delete account.
+  **Done when:** an alert is delivered end-to-end in staging and production.
 
 ## M9 — Launch readiness
 

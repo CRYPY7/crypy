@@ -88,7 +88,7 @@ export const tools: readonly ToolDefinition[] = [
     featured: true,
     isNew: true,
   },
-  { id: "portfolio", category: "wallet", icon: "chart-pie", status: "soon", milestone: "M8" },
+  { id: "portfolio", category: "wallet", icon: "chart-pie", status: "live", milestone: "M8", isNew: true },
   { id: "tx-checker", category: "network", icon: "receipt", status: "live", milestone: "M4", featured: true },
   {
     id: "gas-tracker",

@@ -241,13 +241,43 @@
     "portfolio": {
       "name": "Portfolio Tracker",
       "question": "All my wallets together",
-      "description": "Group several addresses and see your combined holdings.",
-      "input": "One or more addresses",
+      "description": "See all your wallets together: one total across wallets and chains, by chain, by wallet and by token, with quick safety checks.",
+      "input": "Up to 20 addresses",
       "cta": "Open portfolio",
       "features": [
-        "Add several addresses with your own labels",
-        "No account needed: saved in your browser",
-        "Holdings by wallet, by chain and by token"
+        "Up to 20 wallets with your own labels, no account needed",
+        "Saved only in this browser; nothing is stored on CRYPY's server",
+        "One total across Ethereum, BNB Chain, Base, Arbitrum and Polygon",
+        "By chain, by wallet and top holdings merged across chains",
+        "Approvals that need attention and tokens GoPlus flags, per wallet",
+        "Change since you last looked, and export to CSV"
+      ],
+      "howTo": [
+        "Press Add wallet and paste a public address (0x…). Give it a label like Main or Savings if you like.",
+        "Add more wallets, up to 20. The portfolio is saved in this browser, so it's here next time.",
+        "Open any wallet for its full balances, approvals and activity, or export the holdings to CSV."
+      ],
+      "faq": [
+        {
+          "q": "Do I need to connect a wallet or create an account?",
+          "a": "No. The Portfolio reads public balances from the blockchain. It never asks for keys, seed phrases or signatures. If your wallet is connected, you can add its address with one click."
+        },
+        {
+          "q": "Where is my portfolio saved?",
+          "a": "Only in this browser (local storage). Your list of wallets and labels is never sent to CRYPY as a list or stored on its server; each wallet's balances are read one address at a time and not stored. Clearing your browser data removes the portfolio."
+        },
+        {
+          "q": "What does \"since you last looked\" mean?",
+          "a": "The difference between today's total value and the total the last time you opened the portfolio here. It reflects price changes and transfers, so it's not profit or loss."
+        },
+        {
+          "q": "Why are some tokens combined across chains and others not?",
+          "a": "ETH, BNB, POL and well-known tokens such as USDT and USDC are combined because CRYPY checks their addresses on each chain. Other tokens stay one row per chain, so a look-alike token is never merged with a real one."
+        },
+        {
+          "q": "Which tokens are checked for risks?",
+          "a": "Each wallet's most valuable tokens (up to 8, not counting well-known ones) are checked against GoPlus for a honeypot or a sell tax of 30% or more. It's GoPlus's finding, not a verdict; open the token for CRYPY's full checks. Nothing is ever called safe."
+        }
       ]
     },
     "tx-checker": {
@@ -2471,6 +2501,84 @@
       "badUnix": "Enter digits only: seconds or milliseconds.",
       "noBlock": "That block doesn't exist yet on this chain.",
       "failed": "Couldn't read the chain right now. Try again in a minute."
+    },
+    "portfolio": {
+      "loadingSaved": "Loading your portfolio…",
+      "emptyTitle": "Track all your wallets in one place",
+      "emptyText": "Add the public addresses of your wallets to see one total, split by chain, wallet and token. No account and no keys needed.",
+      "emptyPoint1": "Up to 20 wallets, with your own labels",
+      "emptyPoint2": "Saved only in this browser",
+      "emptyPoint3": "Approvals and risky tokens flagged per wallet",
+      "addWallet": "Add wallet",
+      "addConnected": "Add my connected wallet ({address})",
+      "myWallet": "My wallet",
+      "totalOf": "Total value · {count} wallets",
+      "sinceLast": "{change} since you last looked ({when})",
+      "notProfit": "A change in today's value, not profit or loss.",
+      "loadingWallets": "Loading wallets: {done} of {total}",
+      "refresh": "Refresh",
+      "exportCsv": "Export CSV",
+      "statTokens": "Coins and tokens with value",
+      "statTokensNote": "{count} more without a reliable price",
+      "statApprovals": "Approvals to check",
+      "statFlagged": "Tokens flagged by GoPlus",
+      "inWallets": "in {count} wallets",
+      "noneFound": "None found in the checks that ran",
+      "flaggedBy": "A second opinion from GoPlus",
+      "byChain": "By chain",
+      "someFailed": "{count} wallets couldn't be loaded right now.",
+      "rateLimited": "{count} wallets weren't loaded: too many requests in a minute. Wait a moment, then",
+      "retry": "Try again",
+      "chainsDown": "Not read right now: {chains}. Totals leave these out.",
+      "pricesMissing": "Prices couldn't be read for some chains: their balances are shown without a value.",
+      "walletsTitle": "Wallets",
+      "walletCount": "{count} of {max}",
+      "unnamed": "Unnamed wallet",
+      "notLoaded": "Not loaded",
+      "badgeApprovals": "{count} approvals to check",
+      "badgeFlagged": "{count} flagged tokens",
+      "badgeNothing": "Nothing flagged",
+      "open": "Open",
+      "editLabel": "Rename {name}",
+      "remove": "Remove {name} from the portfolio",
+      "safetyTitle": "Safety",
+      "approvalsIn": "{count} approvals to check in {name}",
+      "onChains": "On {chains}: unlimited or risky permissions to move your tokens.",
+      "reviewApprovals": "Review approvals →",
+      "flagHoneypot": "{symbol} in {name} ({chain}): GoPlus reports it can't be sold (honeypot)",
+      "flagSellTax": "{symbol} in {name} ({chain}): GoPlus reports a {tax} sell tax",
+      "flagSource": "Finding from GoPlus Security, not a CRYPY verdict.",
+      "openReport": "Open token report →",
+      "someUnchecked": "Some wallets' checks didn't finish in time. Open the wallet for its full report.",
+      "safetyNote": "Checks run on the approvals and most valuable tokens of the wallets above. CRYPY never says a wallet or token is safe.",
+      "holdingsTitle": "Top holdings",
+      "holdingsNote": "Across all wallets. The same coin or well-known token on several chains is combined.",
+      "colToken": "Token",
+      "colChains": "Chains",
+      "colAmount": "Amount",
+      "colValue": "Value",
+      "colWallets": "Wallets",
+      "noPrice": "No price",
+      "spamHidden": "{count} likely spam tokens hidden",
+      "showAll": "Show all {count}",
+      "showFewer": "Show fewer",
+      "privacyNote": "Your portfolio is saved only in this browser. CRYPY reads public balances one wallet at a time and doesn't store your list or labels.",
+      "addTitle": "Add a wallet",
+      "editTitle": "Rename wallet",
+      "addText": "Watch-only: paste a public address. CRYPY reads it from the blockchain and can't move anything.",
+      "addressLabel": "Wallet address",
+      "labelLabel": "Label (optional)",
+      "labelPlaceholder": "e.g. Main, Savings, Trading",
+      "watchOnly": "Never paste a seed phrase or private key here, or anywhere else. CRYPY will never ask for them.",
+      "cancel": "Cancel",
+      "add": "Add",
+      "save": "Save",
+      "errEmpty": "Paste a wallet address.",
+      "errInvalid": "That isn't a wallet address. It should start with 0x followed by 40 characters.",
+      "errChecksum": "The capital letters in this address don't match its checksum. It may have a typo; copy it again.",
+      "errSecret": "This looks like a seed phrase or private key. It was cleared and not saved or sent. Never share it with any website.",
+      "errDuplicate": "This wallet is already in your portfolio.",
+      "errFull": "The portfolio holds up to {max} wallets. Remove one to add another."
     }
   }
 }
