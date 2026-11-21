@@ -1,5 +1,6 @@
 import "server-only";
 import Link from "next/link";
+import { getChain } from "@/config/chains";
 import { getTranslations } from "next-intl/server";
 import {
   CircleCheck,
@@ -178,6 +179,10 @@ export async function TokenSecuritySection({
   locale: Locale;
 }) {
   const t = await getTranslations();
+  const chain = getChain(chainKey);
+  // Chains added before their security checks are verified (e.g. Base, Arbitrum, Polygon): say so plainly.
+  if (!chain?.capabilities.tokenSecurity)
+    return <Notice>{t(`${K}.notOnChain`, { chain: t(`chains.${chainKey}`) })}</Notice>;
   const report = await cachedTokenSecurity(chainKey, address).catch(() => null);
   if (!report) return <Notice tone="warning">{t(`${K}.unavailable`)}</Notice>;
   const { facts, counts, checks } = report;

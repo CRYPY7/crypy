@@ -33,7 +33,13 @@ const ZERO = "0x0000000000000000000000000000000000000000";
 const MAX_CANDIDATES = 80;
 const MAX_POSITIONS_PER_OWNER = 30;
 /** Recent LP-transfer window: about 2.5 hours on BNB Chain, 7 hours on Ethereum (within free-node limits). */
-const RECENT_BLOCKS: Record<ChainKey, bigint> = { bsc: 20_000n, ethereum: 2_000n };
+const RECENT_BLOCKS: Record<ChainKey, bigint> = {
+  bsc: 20_000n,
+  ethereum: 2_000n,
+  base: 10_000n,
+  arbitrum: 80_000n,
+  polygon: 10_000n,
+};
 
 const erc20 = parseAbi(["function balanceOf(address) view returns (uint256)"]);
 const feeToAbi = parseAbi(["function feeTo() view returns (address)"]);

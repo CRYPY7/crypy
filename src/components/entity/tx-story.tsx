@@ -43,10 +43,14 @@ export interface StoryContext {
   explorerName: string;
 }
 
-/** Blocks after which we call a transaction final (conservative; Ethereum ≈ 2 epochs, BNB Chain fast finality + margin). */
-const FINAL_AFTER: Record<string, number> = { ethereum: 64, bsc: 15 };
+/**
+ * Fallback when the node can't tell us its finalized block: blocks after which we call a transaction final
+ * (conservative; Ethereum ≈ 2 epochs, BNB Chain fast finality + margin). Rollups (Base, Arbitrum) have no safe
+ * block count: there only the node's own "finalized" answer counts.
+ */
+const FINAL_AFTER: Record<string, number> = { ethereum: 64, bsc: 15, polygon: 256 };
 /** Typical seconds per block, for the pending explanation. */
-const BLOCK_SECONDS: Record<string, number> = { ethereum: 12, bsc: 1 };
+const BLOCK_SECONDS: Record<string, number> = { ethereum: 12, bsc: 1, base: 2, arbitrum: 0.25, polygon: 2 };
 
 const s = (t: T, key: string, values?: Record<string, string | number>) => t(`entity.tx.story.${key}`, values);
 
@@ -666,7 +670,8 @@ export function StoryProgress(ctx: StoryContext) {
   const failed = tx.status === "reverted";
   const pending = tx.status === "pending";
   const confirmations = tx.confirmations ?? 0;
-  const final = confirmations >= (FINAL_AFTER[chain.key] ?? 32);
+  const fallbackBlocks = FINAL_AFTER[chain.key];
+  const final = tx.finalized ?? (fallbackBlocks !== undefined && confirmations >= fallbackBlocks);
   const steps = [
     {
       title: s(t, "progress.sent"),
@@ -1145,6 +1150,11 @@ export function AdvancedFacts(ctx: StoryContext) {
           {tx.burnt && (
             <Row label={t("entity.tx.facts.burnt")}>
               {formatSmall(tx.burnt, 18, locale)} {chain.nativeSymbol}
+            </Row>
+          )}
+          {tx.l1Fee && (
+            <Row label={t("entity.tx.facts.l1Fee")}>
+              {formatSmall(tx.l1Fee, 18, locale)} {chain.nativeSymbol}
             </Row>
           )}
           <Row label={a("total")}>

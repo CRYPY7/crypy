@@ -26,6 +26,9 @@ const schema = z.object({
   /** Extra free providers, comma-separated https URLs (dRPC, Ankr, Chainstack, Infura…). */
   ETH_RPC_URLS: urlList,
   BSC_RPC_URLS: urlList,
+  BASE_RPC_URLS: urlList,
+  ARBITRUM_RPC_URLS: urlList,
+  POLYGON_RPC_URLS: urlList,
   /** Daily budgets (zero-API-cost rule). Alchemy free plan: 30M CU a month ≈ 1M a day. */
   ALCHEMY_DAILY_CU: z.coerce.number().int().positive().default(1_000_000),
   /** Requests per day per extra provider. */
@@ -37,6 +40,9 @@ const parsed = schema.safeParse({
   // ETH_RPC_URL_FALLBACK / BSC_RPC_URL_FALLBACK (M2 names) still work and are added to the lists.
   ETH_RPC_URLS: [process.env.ETH_RPC_URLS, process.env.ETH_RPC_URL_FALLBACK].filter(Boolean).join(",") || undefined,
   BSC_RPC_URLS: [process.env.BSC_RPC_URLS, process.env.BSC_RPC_URL_FALLBACK].filter(Boolean).join(",") || undefined,
+  BASE_RPC_URLS: process.env.BASE_RPC_URLS || undefined,
+  ARBITRUM_RPC_URLS: process.env.ARBITRUM_RPC_URLS || undefined,
+  POLYGON_RPC_URLS: process.env.POLYGON_RPC_URLS || undefined,
   ALCHEMY_DAILY_CU: process.env.ALCHEMY_DAILY_CU || undefined,
   RPC_DAILY_REQUESTS: process.env.RPC_DAILY_REQUESTS || undefined,
 });

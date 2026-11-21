@@ -14,7 +14,13 @@ export interface AddressOverview {
   fetchedAt: string;
 }
 
-const nativeNames: Record<ChainKey, string> = { ethereum: "Ether", bsc: "BNB" };
+const nativeNames: Record<ChainKey, string> = {
+  ethereum: "Ether",
+  bsc: "BNB",
+  base: "Ether",
+  arbitrum: "Ether",
+  polygon: "POL",
+};
 
 /**
  * Balances and USD values on every live chain that supports balances. One chain failing never hides the

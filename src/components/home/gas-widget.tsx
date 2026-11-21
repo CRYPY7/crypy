@@ -25,7 +25,7 @@ export function GasWidget({
         {labels.title}
       </span>
       {report.chains.map((c) => {
-        const cost = actionCost("sendCoin", c.speeds.average, c.coinUsd);
+        const cost = actionCost("sendCoin", c.speeds.average, c.coinUsd, c.l1Fees?.sendCoin);
         return (
           <span key={c.chain} className="inline-flex items-center gap-1.5">
             <ChainIcon chain={c.chain} size={16} />

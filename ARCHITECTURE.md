@@ -543,6 +543,16 @@ DEX decoders, per chain family:                      (one per DEX design)
 - UI: `ChainPicker` (client; writes only the link and the cookie) and `ChainScopeBar` (server; scanned line, and
   on safety pages a warning naming used chains that were not checked).
 
+## 12g. More EVM chains (M7)
+
+- Adding an EVM chain: an entry in `config/chains.ts` (CAIP-2, explorer, public nodes, Alchemy network, common
+  tokens, capabilities), its viem/wagmi chain, `<CHAIN>_RPC_URLS`, DEX quotes and factories in `server/chains/evm/dex.ts`,
+  known contracts, recent-block windows, a badge in `public/chains/`, CSP hosts, and `tests/unit/chains-live.test.ts`.
+- Capabilities decide where each tool appears: Base, Arbitrum and Polygon have everything except `tokenSecurity`.
+- Rollup fees: `TxDetails.l1Fee` (OP-stack receipts) is included in `fee`; `GasFacts.l1Fees` holds the estimated
+  Ethereum data fee per action (Base GasPriceOracle `getL1FeeUpperBound`, Arbitrum `ArbGasInfo.getPricesInWei`).
+- Finality: `TxDetails.finalized` from the node's `finalized` block; block-count fallbacks only for non-rollups.
+
 ## 13. Performance budget
 
 Checked automatically in `tests/e2e/foundation.spec.ts` on `/en`, `/en/tools`, a tool page and settings:

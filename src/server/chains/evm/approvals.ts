@@ -27,15 +27,23 @@ import { dexDeployments } from "./security/dex-registry";
  */
 const APPROVAL = "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925";
 /** Recent-events window: about 2.5 hours on BNB Chain, 7 hours on Ethereum (free-node limits). */
-const RECENT_BLOCKS: Record<string, bigint> = { bsc: 20_000n, ethereum: 2_000n };
+const RECENT_BLOCKS: Record<string, bigint> = {
+  bsc: 20_000n,
+  ethereum: 2_000n,
+  // A few hours: Base and Polygon make a block every ~2 s; Arbitrum every ~0.25 s (kept smaller: public nodes
+  // there are slow to search long ranges).
+  base: 10_000n,
+  polygon: 10_000n,
+  arbitrum: 40_000n,
+};
 const MAX_HELD = 60;
 const MAX_PAIRS = 1_500;
 const MAX_SOURCE_CHECKS = 8;
 const OPTIONAL_MS = 7_000;
 /** GoPlus needs 3–6 s for busy wallets; it has its own 15 s limit per request. */
 const GOPLUS_MS = 16_000;
-/** Recent Approval events: usually well under a second; some public BNB Chain nodes take 5 s or more. */
-const RECENT_MS = 3_000;
+/** Recent Approval events: 0.1–2.5 s on most public nodes; some BNB Chain nodes take 5 s or more for big wallets. */
+const RECENT_MS = 4_000;
 
 const nftAbi = parseAbi([
   "function isApprovedForAll(address owner, address operator) view returns (bool)",

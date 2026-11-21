@@ -188,6 +188,9 @@ mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page 
 | M6 Approvals                  | One-signature batch revoke                                                                                                                                                                                                                                       | Revenue Phase A (paid tool)     |
 | M7 Activity                   | Internal transfers (coins paid by contracts) on BNB Chain: not in Alchemy's data there                                                                                                                                                                           | M5.5 Stage 2 indexer / own node |
 | M7 Activity                   | Total transfer count and value at the time of each transfer (needs full history / archive prices)                                                                                                                                                                | M5.5 Stage 2 indexer            |
+| M7 New chains                 | Token Security on Base, Arbitrum and Polygon (exchanges for the trade test, lockers, farms, live checks per chain)                                                                                                                                               | Next (after owner approval)     |
+| M7 New chains                 | Aerodrome (Solidly-style) pools on Base for prices: tokens that trade only there show no price yet                                                                                                                                                               | M5.5 decoders                   |
+| M7 New chains                 | Internal transfers on Base and Arbitrum in Activity (not in Alchemy's free data)                                                                                                                                                                                 | M5.5 Stage 2 indexer / own node |
 | M4.2 Transaction Intelligence | Part 2: more routers and pool types, NFT marketplaces, lending, bridges, smart-wallet inner calls                                                                                                                                                                | Alongside M5.5 / M6             |
 
 ## M5.2 — Token Security: finishing parts — 🟡 built 2026-11-20
@@ -239,7 +242,7 @@ table above.
 **Done when:** approvals match Revoke.cash for test wallets; revoke tested on testnet then mainnet; extra security review passed.
 Owner checks still open: compare 2–3 of your own wallets with Revoke.cash; do one real revoke of a small approval.
 
-## M7 — Activity (Tool 2), Gas (Tool 6), more EVM chains — Activity 🟡, Gas ✅, Timestamp converter ✅, chain picker ✅ (2026-11-21); next: Base, Arbitrum, Polygon
+## M7 — Activity (Tool 2), Gas (Tool 6), more EVM chains — Activity 🟡, Gas ✅, Timestamp converter ✅, chain picker ✅, Base / Arbitrum / Polygon 🟡 (2026-11-21)
 
 Explorer decision; activity tab (all coin/token transfers sent and received); gas page + widget; timestamp/block converter (other utilities shipped in M2.5); add Base, Arbitrum, Polygon (config only) after verification.
 

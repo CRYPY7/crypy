@@ -101,6 +101,10 @@ export const dexDeployments: Record<ChainKey, DexDeployment[]> = {
       positionManager: "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613",
     },
   ],
+  // Added with Token Security on these chains (roadmap, deferred parts).
+  base: [],
+  arbitrum: [],
+  polygon: [],
 };
 
 /** Tokens a pool can be paired with (the price engine's quote tokens: stablecoins and the wrapped native coin). */
@@ -111,4 +115,8 @@ export const wrappedNative = (chain: ChainKey) => chainDex[chain].quotes.find((q
 export const tradeTestSize: Record<ChainKey, bigint> = {
   ethereum: 5_000_000_000_000_000n, // 0.005 ETH
   bsc: 20_000_000_000_000_000n, // 0.02 BNB
+  // Token Security isn't live on these chains yet (no exchanges registered for the trade test).
+  base: 5_000_000_000_000_000n, // 0.005 ETH
+  arbitrum: 5_000_000_000_000_000n, // 0.005 ETH
+  polygon: 30_000_000_000_000_000_000n, // 30 POL
 };

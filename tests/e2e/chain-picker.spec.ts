@@ -26,7 +26,7 @@ test("picking one chain narrows the scan, keeps it in the link and remembers it"
   await expect(page).toHaveURL(/\?chains=bsc$/, { timeout: 60_000 });
   await expect(main.getByTestId("scanned")).toContainText("Scanned on BNB Chain only", { timeout: 60_000 });
   // This wallet is used on Ethereum too: a safety page never lets a narrowed scan look complete.
-  await expect(main.getByText("Ethereum: not checked")).toBeVisible();
+  await expect(main.getByText(/Ethereum.*: not checked/)).toBeVisible();
   // Tabs carry the choice, and the device remembers it without the link.
   await expect(main.getByRole("link", { name: "Activity" })).toHaveAttribute("href", /\?chains=bsc$/);
   const cookies = await page.context().cookies();

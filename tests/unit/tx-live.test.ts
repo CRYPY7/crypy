@@ -4,7 +4,7 @@
  * Values were cross-checked against direct node reads on 2026-11-20.
  */
 import { describe, expect, it } from "vitest";
-import { getChain } from "@/config/chains";
+import { getChain, liveChains } from "@/config/chains";
 import { knownContractsFor } from "@/config/known-contracts";
 import { evmAdapter } from "@/server/chains/evm/adapter";
 import { getEvmClient } from "@/server/chains/evm/providers";
@@ -72,14 +72,14 @@ describe.skipIf(!live)("live transactions", () => {
   }, 60_000);
 
   it("every well-known contract name points at a real contract", async () => {
-    for (const key of ["ethereum", "bsc"]) {
+    for (const key of liveChains.map((c) => c.key)) {
       const client = getEvmClient(getChain(key)!);
       for (const address of knownContractsFor(key)) {
         const code = await client.getCode({ address: address as `0x${string}` });
         expect(code && code.length > 2, `${key} ${address}`).toBe(true);
       }
     }
-  }, 120_000);
+  }, 300_000);
 
   it("a made-up hash is not found", async () => {
     expect(await details("bsc", `0x${"ab".repeat(32)}`)).toBeNull();

@@ -94,6 +94,9 @@ export const lockers: Record<ChainKey, LockerDeployment[]> = {
     },
     { address: "0x3f4d6bf08cb7a003488ef082102c2e6418a4551e", name: "DeepLock", upgradeable: false, kind: "deeplock" },
   ],
+  base: [],
+  arbitrum: [],
+  polygon: [],
 };
 
 /**
@@ -103,6 +106,9 @@ export const lockers: Record<ChainKey, LockerDeployment[]> = {
 export const vaultFactories: Record<ChainKey, { factory: string; name: string }[]> = {
   ethereum: [],
   bsc: [{ factory: "0x8b0185533313FCb4Cb94e4C4D000b5C7b4DEF9b8", name: "OnlyMoons vault" }],
+  base: [],
+  arbitrum: [],
+  polygon: [],
 };
 
 /** Staking contracts: liquidity staked here belongs to many people, not one holder. */
@@ -116,6 +122,9 @@ export const farms: Record<ChainKey, { address: string; name: string }[]> = {
     { address: "0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652", name: "PancakeSwap farm (MasterChef v2)" },
     { address: "0x556B9306565093C855AEA9AE92A594704c2Cd59e", name: "PancakeSwap farm (MasterChef v3)" },
   ],
+  base: [],
+  arbitrum: [],
+  polygon: [],
 };
 
 export const lockerAt = (chain: ChainKey, address: string) =>

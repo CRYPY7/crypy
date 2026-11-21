@@ -1,7 +1,7 @@
 import "server-only";
 import { cacheLife } from "next/cache";
 import { liveChains } from "@/config/chains";
-import { type GasSpeeds, speeds, trend } from "@/lib/gas/compute";
+import { type GasAction, type GasSpeeds, speeds, trend } from "@/lib/gas/compute";
 import { registry } from "@/server/chains/registry";
 
 export interface ChainGas {
@@ -11,6 +11,8 @@ export interface ChainGas {
   speeds: GasSpeeds;
   trend: { values: number[]; measure: "baseFee" | "tip"; spanSeconds: number | null };
   coinUsd: number | null;
+  /** Rollups: estimated Ethereum data fee per action (wei). */
+  l1Fees: Record<GasAction, number> | null;
 }
 
 export interface GasReport {
@@ -40,6 +42,7 @@ export async function cachedGas(): Promise<GasReport> {
             speeds: speeds(r.value.history),
             trend: { ...trend(r.value.history), spanSeconds: r.value.spanSeconds },
             coinUsd: r.value.coinUsd,
+            l1Fees: r.value.l1Fees,
           },
         ]
       : [],

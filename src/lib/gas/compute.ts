@@ -31,6 +31,15 @@ export const TYPICAL_GAS = {
 } as const;
 export type GasAction = keyof typeof TYPICAL_GAS;
 
+/** Typical signed size of each action in bytes: rollups charge the Ethereum data fee by size. */
+export const TYPICAL_BYTES: Record<GasAction, number> = {
+  sendCoin: 110,
+  sendToken: 180,
+  approve: 180,
+  swap: 400,
+  sendNft: 250,
+};
+
 const median = (values: number[]): number => {
   if (values.length === 0) return 0;
   const sorted = [...values].sort((a, b) => a - b);
@@ -67,9 +76,12 @@ export function trend(history: FeeHistory, points = 60): { values: number[]; mea
   return { values, measure: hasBase ? "baseFee" : "tip" };
 }
 
-/** Cost of an action at a price, in the chain's coin and in dollars (null without a coin price). */
-export function actionCost(action: GasAction, priceGwei: number, coinUsd: number | null) {
-  const coin = (TYPICAL_GAS[action] * priceGwei) / 1e9;
+/**
+ * Cost of an action at a price, in the chain's coin and in dollars (null without a coin price). On rollups,
+ * `l1Wei` adds the estimated Ethereum data fee for the action.
+ */
+export function actionCost(action: GasAction, priceGwei: number, coinUsd: number | null, l1Wei?: number | null) {
+  const coin = (TYPICAL_GAS[action] * priceGwei) / 1e9 + (l1Wei ?? 0) / 1e18;
   return { gas: TYPICAL_GAS[action], coin, usd: coinUsd === null ? null : coin * coinUsd };
 }
 
@@ -88,6 +100,8 @@ export interface GasFacts {
   spanSeconds: number | null;
   /** The chain's coin in dollars (on-chain price), or null. */
   coinUsd: number | null;
+  /** Rollups: estimated Ethereum data fee per action (wei), read from the chain; null on other chains. */
+  l1Fees: Record<GasAction, number> | null;
 }
 
 /** Dollars for fees: small amounts keep two significant digits ("$0.00055") instead of rounding to $0.00. */

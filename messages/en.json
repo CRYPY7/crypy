@@ -600,7 +600,10 @@
   },
   "chains": {
     "ethereum": "Ethereum",
-    "bsc": "BNB Chain"
+    "bsc": "BNB Chain",
+    "base": "Base",
+    "arbitrum": "Arbitrum",
+    "polygon": "Polygon"
   },
   "entity": {
     "copy": "Copy",
@@ -734,7 +737,8 @@
         "contract": "Contract",
         "pendingValue": "Not yet known",
         "gasLimit": "Gas limit",
-        "maxGasPrice": "Max gas price"
+        "maxGasPrice": "Max gas price",
+        "l1Fee": "Ethereum data fee (included in the total)"
       },
       "types": {
         "legacy": "Legacy (type 0)",
@@ -1788,7 +1792,8 @@
           "contract": "Contract, not recognised"
         },
         "tiny": "{count, plural, one {# more holder} other {# more holders}} with under 0.05% each ({share} together), counted in every total."
-      }
+      },
+      "notOnChain": "Token Security checks aren't available on {chain} yet: CRYPY adds them once its trade test and liquidity checks are verified there. The token's details above are read from the chain."
     },
     "tabs": {
       "label": "Address sections",
@@ -2427,14 +2432,15 @@
       "action": "Action",
       "typicalGas": "Typical gas",
       "onChain": "{chain}",
-      "action_sendCoin": "Send coins (ETH / BNB)",
+      "action_sendCoin": "Send coins",
       "action_sendToken": "Send a token",
       "action_approve": "Approve or revoke a token",
       "action_swap": "Swap on a DEX",
       "action_sendNft": "Send an NFT",
       "costsNote": "Typical gas is an estimate: the real amount depends on the token or app, and your wallet shows the exact fee before you confirm. Dollar values use on-chain prices:",
       "howTitle": "How we measure.",
-      "how": "From each chain's last 20 blocks (eth_feeHistory): the next block's base fee plus the tip that 25%, 50% and 90% of included transactions paid. \"Usually the next block\" describes recent blocks, not a promise. Refreshed every 12 seconds while this page is open; no account or wallet needed."
+      "how": "From each chain's last 20 blocks (eth_feeHistory): the next block's base fee plus the tip that 25%, 50% and 90% of included transactions paid. \"Usually the next block\" describes recent blocks, not a promise. Refreshed every 12 seconds while this page is open; no account or wallet needed.",
+      "l1Note": "On {chains}, costs include an estimate of the Ethereum data fee these networks add."
     },
     "timestamp-block": {
       "modes": "Conversion",

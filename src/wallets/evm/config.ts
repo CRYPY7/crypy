@@ -1,11 +1,11 @@
 import { createConfig, createStorage, http } from "wagmi";
-import { bsc, mainnet } from "wagmi/chains";
+import { arbitrum, base, bsc, mainnet, polygon } from "wagmi/chains";
 import { injected } from "wagmi/connectors/injected";
 import { walletConnect } from "wagmi/connectors/walletConnect";
-import { chains } from "@/config/chains";
+import { type ChainKey, chains } from "@/config/chains";
 import { publicEnv } from "@/config/env";
 
-const rpc = (key: "ethereum" | "bsc") => chains.find((chain) => chain.key === key)?.publicRpcUrls[0];
+const rpc = (key: ChainKey) => chains.find((chain) => chain.key === key)?.publicRpcUrls[0];
 
 /**
  * Browser wallet configuration.
@@ -16,7 +16,7 @@ const rpc = (key: "ethereum" | "bsc") => chains.find((chain) => chain.key === ke
 export function createWalletConfig() {
   const projectId = publicEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
   return createConfig({
-    chains: [mainnet, bsc],
+    chains: [mainnet, bsc, base, arbitrum, polygon],
     multiInjectedProviderDiscovery: true,
     connectors: [
       injected({ shimDisconnect: true }),
@@ -38,6 +38,9 @@ export function createWalletConfig() {
     transports: {
       [mainnet.id]: http(rpc("ethereum")),
       [bsc.id]: http(rpc("bsc")),
+      [base.id]: http(rpc("base")),
+      [arbitrum.id]: http(rpc("arbitrum")),
+      [polygon.id]: http(rpc("polygon")),
     },
     storage: createStorage({ storage: typeof window === "undefined" ? undefined : window.localStorage, key: "crypy" }),
     // "ssr: true" makes wagmi restore sessions after rendering, avoiding render-time state updates.

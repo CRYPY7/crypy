@@ -3,7 +3,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { erc20Abi, getAddress } from "viem";
-import { getChain } from "@/config/chains";
+import { getChain, liveChains } from "@/config/chains";
 import { batchAssets } from "@/config/batch-assets";
 import { readBatchBalances } from "@/server/chains/evm/batch";
 import { getEvmClient } from "@/server/chains/evm/providers";
@@ -18,7 +18,7 @@ const BINANCE_8 = "0xF977814e90dA44bFA03b6295A0616a897441aceC";
 
 describe.skipIf(!live)("batch balances (live)", () => {
   it("every picker token has the listed decimals on its chain", async () => {
-    for (const chain of [eth, bsc]) {
+    for (const chain of liveChains) {
       const client = getEvmClient(chain);
       const list = batchAssets.flatMap((a) => (a.chains[chain.key] ? [{ key: a.key, ...a.chains[chain.key]! }] : []));
       const decimals = await client.multicall({

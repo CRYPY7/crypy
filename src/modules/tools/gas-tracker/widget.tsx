@@ -93,7 +93,7 @@ export function GasTracker({
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {cards.map((card) => {
-                  const cost = actionCost("sendCoin", card.gwei, c.coinUsd);
+                  const cost = actionCost("sendCoin", card.gwei, c.coinUsd, c.l1Fees?.sendCoin);
                   return (
                     <div
                       key={card.key}
@@ -141,7 +141,7 @@ export function GasTracker({
           {s.costsTitle}
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[36rem] text-sm">
             <thead>
               <tr className="text-xs text-muted-foreground">
                 <th scope="col" className="py-2 text-start font-medium">
@@ -151,7 +151,7 @@ export function GasTracker({
                   {s.typicalGas}
                 </th>
                 {data.chains.map((c) => (
-                  <th key={c.chain} scope="col" className="py-2 text-end font-medium">
+                  <th key={c.chain} scope="col" className="py-2 ps-3 text-end font-medium">
                     {fill(s.onChain!, { chain: info(c.chain)?.name ?? c.chain })}
                   </th>
                 ))}
@@ -167,9 +167,9 @@ export function GasTracker({
                     {TYPICAL_GAS[a].toLocaleString(locale)}
                   </td>
                   {data.chains.map((c) => {
-                    const cost = actionCost(a, c.speeds.average, c.coinUsd);
+                    const cost = actionCost(a, c.speeds.average, c.coinUsd, c.l1Fees?.[a]);
                     return (
-                      <td key={c.chain} className="py-2.5 text-end font-semibold tabular-nums">
+                      <td key={c.chain} className="py-2.5 ps-3 text-end font-semibold whitespace-nowrap tabular-nums">
                         {cost.usd !== null
                           ? formatFeeUsd(cost.usd, locale)
                           : `${cost.coin.toPrecision(2)} ${info(c.chain)?.coin}`}
@@ -182,10 +182,17 @@ export function GasTracker({
           </table>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
+          {data.chains.some((c) => c.l1Fees) &&
+            `${fill(s.l1Note!, {
+              chains: data.chains
+                .filter((c) => c.l1Fees)
+                .map((c) => info(c.chain)?.name ?? c.chain)
+                .join(", "),
+            })} `}
           {s.costsNote}{" "}
           {data.chains
             .filter((c) => c.coinUsd !== null)
-            .map((c) => `${info(c.chain)?.coin} ${formatFeeUsd(c.coinUsd!, locale)}`)
+            .map((c) => `${info(c.chain)?.name}: ${info(c.chain)?.coin} ${formatFeeUsd(c.coinUsd!, locale)}`)
             .join(" · ")}
         </p>
       </section>

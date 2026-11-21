@@ -104,11 +104,23 @@ const hostOf = (url) => {
   }
 };
 const extraLists = {};
+const chainLabel = {
+  ETH_RPC_URLS: "Ethereum",
+  BSC_RPC_URLS: "BNB Chain",
+  BASE_RPC_URLS: "Base",
+  ARBITRUM_RPC_URLS: "Arbitrum",
+  POLYGON_RPC_URLS: "Polygon",
+};
 for (const [name, legacy] of [
   ["ETH_RPC_URLS", "ETH_RPC_URL_FALLBACK"],
   ["BSC_RPC_URLS", "BSC_RPC_URL_FALLBACK"],
+  ["BASE_RPC_URLS", "BASE_RPC_URLS"],
+  ["ARBITRUM_RPC_URLS", "ARBITRUM_RPC_URLS"],
+  ["POLYGON_RPC_URLS", "POLYGON_RPC_URLS"],
 ]) {
-  const values = [...(entries.get(name) ?? []), ...(entries.get(legacy) ?? [])].filter(Boolean);
+  const values = [...(entries.get(name) ?? []), ...(legacy !== name ? (entries.get(legacy) ?? []) : [])].filter(
+    Boolean,
+  );
   const urls = values.flatMap((value) => value.split(",").map((part) => part.trim())).filter(Boolean);
   if ((entries.get(name)?.length ?? 0) > 1)
     problem(`${name} appears more than once. Put all URLs on one line, separated by commas.`);
@@ -117,8 +129,7 @@ for (const [name, legacy] of [
   extraLists[name] = urls.filter((url) => !bad.includes(url));
   if (extraLists[name].length)
     ok(`${name}: ${extraLists[name].length} extra provider(s): ${extraLists[name].map(hostOf).join(", ")}`);
-  else
-    info(`${name} not set (optional): extra free providers for ${name.startsWith("ETH") ? "Ethereum" : "BNB Chain"}.`);
+  else info(`${name} not set (optional): extra free providers for ${chainLabel[name]}.`);
 }
 
 /** Speed label for one request from this computer. Each page needs about 3 rounds, so ~3× this is added. */
@@ -133,6 +144,9 @@ if (alchemyKey) {
   const networks = [
     ["Ethereum", "eth-mainnet"],
     ["BNB Chain", "bnb-mainnet"],
+    ["Base", "base-mainnet"],
+    ["Arbitrum", "arb-mainnet"],
+    ["Polygon", "polygon-mainnet"],
   ];
   for (const [label, network] of networks) {
     try {
@@ -160,7 +174,13 @@ if (alchemyKey) {
 }
 
 // 5. Live test of each extra provider: must answer and be on the right chain.
-const expectedChain = { ETH_RPC_URLS: 1n, BSC_RPC_URLS: 56n };
+const expectedChain = {
+  ETH_RPC_URLS: 1n,
+  BSC_RPC_URLS: 56n,
+  BASE_RPC_URLS: 8453n,
+  ARBITRUM_RPC_URLS: 42161n,
+  POLYGON_RPC_URLS: 137n,
+};
 for (const [name, urls] of Object.entries(extraLists)) {
   if (!urls.length) continue;
   console.log(`\n${name} live test:`);

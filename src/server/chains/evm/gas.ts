@@ -1,6 +1,7 @@
 import "server-only";
 import type { ChainConfig } from "@/config/chains";
-import type { FeeHistory, GasFacts } from "@/lib/gas/compute";
+import { type PublicClient, parseAbi } from "viem";
+import { type FeeHistory, type GasAction, type GasFacts, TYPICAL_BYTES } from "@/lib/gas/compute";
 import { getOnchainPrices } from "./prices";
 import { getEvmClient } from "./providers";
 
@@ -33,13 +34,14 @@ export async function getEvmGas(chain: ChainConfig): Promise<GasFacts> {
   const history = parseFeeHistory(raw);
   if (!history) throw new Error("Fee history unreadable");
   const oldest = history.newestBlock - history.rewards.length + 1;
-  const [newestBlock, oldestBlock, prices] = await Promise.all([
+  const [newestBlock, oldestBlock, prices, l1Fees] = await Promise.all([
     client.getBlock({ blockNumber: BigInt(history.newestBlock) }).catch(() => null),
     client.getBlock({ blockNumber: BigInt(oldest) }).catch(() => null),
     Promise.race([
       getOnchainPrices(client, chain, []).catch(() => null),
       new Promise<null>((r) => setTimeout(() => r(null), 5_000)),
     ]),
+    readL1Fees(client, chain.key).catch(() => null),
   ]);
   return {
     chain: chain.key,
@@ -47,5 +49,39 @@ export async function getEvmGas(chain: ChainConfig): Promise<GasFacts> {
     history,
     spanSeconds: newestBlock && oldestBlock ? Number(newestBlock.timestamp - oldestBlock.timestamp) : null,
     coinUsd: prices?.native?.usd ?? null,
+    l1Fees,
   };
+}
+
+const actions = Object.keys(TYPICAL_BYTES) as GasAction[];
+
+/**
+ * Rollups charge for posting the transaction to Ethereum on top of gas:
+ * - Base (OP stack): the GasPriceOracle predeploy's getL1FeeUpperBound(size), an upper bound by design;
+ * - Arbitrum: ArbGasInfo.getPricesInWei()[1], the price per byte of Ethereum data (often 0 since blobs).
+ * Other chains: null (no separate data fee).
+ */
+async function readL1Fees(client: PublicClient, chainKey: string): Promise<Record<GasAction, number> | null> {
+  if (chainKey === "base") {
+    const results = await client.multicall({
+      allowFailure: false,
+      contracts: actions.map((a) => ({
+        address: "0x420000000000000000000000000000000000000F" as const,
+        abi: parseAbi(["function getL1FeeUpperBound(uint256) view returns (uint256)"]),
+        functionName: "getL1FeeUpperBound" as const,
+        args: [BigInt(TYPICAL_BYTES[a])] as const,
+      })),
+    });
+    return Object.fromEntries(actions.map((a, i) => [a, Number(results[i])])) as Record<GasAction, number>;
+  }
+  if (chainKey === "arbitrum") {
+    const prices = await client.readContract({
+      address: "0x000000000000000000000000000000000000006C",
+      abi: parseAbi(["function getPricesInWei() view returns (uint256,uint256,uint256,uint256,uint256,uint256)"]),
+      functionName: "getPricesInWei",
+    });
+    const perByte = Number(prices[1]);
+    return Object.fromEntries(actions.map((a) => [a, perByte * TYPICAL_BYTES[a]])) as Record<GasAction, number>;
+  }
+  return null;
 }

@@ -155,7 +155,7 @@ const PRICES_MS = 4_000;
  */
 export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, hash: Hex): Promise<TxDetails | null> {
   // Round 1
-  const [tx, receiptOrNull, head] = await Promise.all([
+  const [tx, receiptOrNull, head, finalizedBlock] = await Promise.all([
     client.getTransaction({ hash }).catch((error: unknown) => {
       if (error instanceof Error && error.name === "TransactionNotFoundError") return null;
       throw error;
@@ -165,6 +165,11 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
       throw error;
     }),
     client.getBlockNumber(),
+    // Finality from the node itself (on rollups: once the batch is final on Ethereum). Optional.
+    client
+      .getBlock({ blockTag: "finalized", includeTransactions: false })
+      .then((b) => b.number)
+      .catch(() => null),
   ]);
   if (!tx) return null;
   const pending = tx.blockNumber === null;
@@ -271,6 +276,14 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
   const gasUsed = receipt?.gasUsed ?? null;
   const gasPrice = receipt?.effectiveGasPrice ?? (pending ? (tx.maxFeePerGas ?? tx.gasPrice ?? null) : null);
   const baseFee = blockData?.baseFeePerGas ?? null;
+  // OP-stack rollups (Base) charge the Ethereum data fee on top of gas; their receipts carry it as l1Fee.
+  const rawL1 = (receipt as { l1Fee?: unknown } | null)?.l1Fee;
+  const l1Fee =
+    typeof rawL1 === "bigint"
+      ? rawL1
+      : typeof rawL1 === "string" && /^0x[0-9a-f]+$/i.test(rawL1)
+        ? BigInt(rawL1)
+        : null;
   const input = tx.input ?? "0x";
   const isCreation = !tx.to;
   const call = isCreation || input === "0x" ? null : decodeCallData(input);
@@ -284,13 +297,15 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     to: tx.to ? getAddress(tx.to) : null,
     timestamp: blockData ? Number(blockData.timestamp) : null,
     confirmations: tx.blockNumber !== null ? Math.max(1, Number(head - tx.blockNumber + 1n)) : null,
+    finalized: tx.blockNumber !== null && finalizedBlock !== null ? tx.blockNumber <= finalizedBlock : null,
     nonce: tx.nonce,
     type: typeNames[tx.type] ?? String(tx.type),
     value: tx.value.toString(),
     gasLimit: tx.gas.toString(),
     gasUsed: gasUsed?.toString() ?? null,
     gasPrice: gasPrice?.toString() ?? null,
-    fee: gasUsed !== null && gasPrice !== null ? (gasUsed * gasPrice).toString() : null,
+    fee: gasUsed !== null && gasPrice !== null ? (gasUsed * gasPrice + (l1Fee ?? 0n)).toString() : null,
+    l1Fee: l1Fee?.toString() ?? null,
     burnt: gasUsed !== null && baseFee !== null && baseFee > 0n ? (gasUsed * baseFee).toString() : null,
     createdContract: receipt?.contractAddress ? getAddress(receipt.contractAddress) : null,
     toIsContract: !tx.to || toCode === null ? null : toCode !== undefined && toCode !== "0x",

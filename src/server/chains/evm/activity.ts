@@ -28,10 +28,22 @@ import {
  */
 export const PAGE_SIZE = 50;
 const ALCHEMY_TIMEOUT_MS = 12_000;
-/** Chains where Alchemy has internal transfers and block times (docs: Transfers API chain support). */
-const INTERNAL = new Set(["ethereum"]);
-const METADATA = new Set(["ethereum"]);
-const RECENT_BLOCKS: Record<string, bigint> = { bsc: 20_000n, ethereum: 2_000n };
+/**
+ * Alchemy Transfers API chain support (docs, 2026-11): internal transfers on Ethereum and Polygon (the docs disagree
+ * about Base, so it is treated as missing and the page says so); block times included on Ethereum, Base, Arbitrum and
+ * Polygon.
+ */
+const INTERNAL = new Set(["ethereum", "polygon"]);
+const METADATA = new Set(["ethereum", "base", "arbitrum", "polygon"]);
+const RECENT_BLOCKS: Record<string, bigint> = {
+  bsc: 20_000n,
+  ethereum: 2_000n,
+  // A few hours: Base and Polygon make a block every ~2 s; Arbitrum every ~0.25 s (kept smaller: public nodes
+  // there are slow to search long ranges).
+  base: 10_000n,
+  polygon: 10_000n,
+  arbitrum: 40_000n,
+};
 
 /** One transfer as Alchemy returns it (fields we read). Exported for tests. */
 export interface AlchemyTransfer {

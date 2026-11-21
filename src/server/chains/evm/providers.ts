@@ -9,7 +9,7 @@ import {
   http,
   shouldThrow,
 } from "viem";
-import { bsc, mainnet } from "viem/chains";
+import { arbitrum, base, bsc, mainnet, polygon } from "viem/chains";
 import type { ChainConfig, ChainKey } from "@/config/chains";
 import { serverEnv } from "@/server/env";
 
@@ -17,14 +17,14 @@ import { serverEnv } from "@/server/env";
  * Free blockchain providers, tried in order, each with a daily budget (zero-API-cost rule).
  *
  *   1. Alchemy free plan (budget in compute units, ~1/30 of the monthly allowance per day)
- *   2. Extra free providers from ETH_RPC_URLS / BSC_RPC_URLS (dRPC, Ankr, Chainstack, Infura…; budget in requests)
+ *   2. Extra free providers from <CHAIN>_RPC_URLS (ETH, BSC, BASE, ARBITRUM, POLYGON) (dRPC, Ankr, Chainstack, Infura…; budget in requests)
  *   3. Free public nodes (no budget; they rate-limit on their own)
  *
  * When a provider's budget for the day is used up it is skipped until midnight UTC, so no free plan
  * runs out and a busy day can't use up the month. Usage is kept in memory per server (shared store at launch).
  */
 
-const viemChains: Record<ChainKey, Chain> = { ethereum: mainnet, bsc };
+const viemChains: Record<ChainKey, Chain> = { ethereum: mainnet, bsc, base, arbitrum, polygon };
 
 export interface Provider {
   /** Safe to show (host name), never the URL, which may contain a key. */
@@ -58,6 +58,15 @@ export function providerLabel(url: string): string {
   }
 }
 
+/** Extra free providers per chain, from `<CHAIN>_RPC_URLS` in .env.local. */
+const extraUrls: Record<ChainKey, string[]> = {
+  ethereum: serverEnv.ETH_RPC_URLS,
+  bsc: serverEnv.BSC_RPC_URLS,
+  base: serverEnv.BASE_RPC_URLS,
+  arbitrum: serverEnv.ARBITRUM_RPC_URLS,
+  polygon: serverEnv.POLYGON_RPC_URLS,
+};
+
 export function providersFor(chain: ChainConfig): Provider[] {
   const list: Provider[] = [];
   if (serverEnv.ALCHEMY_API_KEY && chain.alchemyNetwork) {
@@ -67,7 +76,7 @@ export function providersFor(chain: ChainConfig): Provider[] {
       url: `https://${chain.alchemyNetwork}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
     });
   }
-  const extra = chain.key === "ethereum" ? serverEnv.ETH_RPC_URLS : serverEnv.BSC_RPC_URLS;
+  const extra = extraUrls[chain.key];
   for (const url of extra) list.push({ name: providerLabel(url), kind: "extra", url });
   for (const url of chain.publicRpcUrls) list.push({ name: `public:${providerLabel(url)}`, kind: "public", url });
   return list;

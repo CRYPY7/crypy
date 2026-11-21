@@ -178,6 +178,8 @@ export interface TxDetails extends TxLookup {
   /** Unix seconds of the block, null while pending. */
   timestamp: number | null;
   confirmations: number | null;
+  /** The node's "finalized" block includes this transaction; null when the node couldn't say. */
+  finalized: boolean | null;
   nonce: number;
   /** "legacy" | "eip2930" | "eip1559" | "eip4844" | "eip7702" or the raw type. */
   type: string;
@@ -187,8 +189,10 @@ export interface TxDetails extends TxLookup {
   gasUsed: string | null;
   /** Price actually paid per gas unit (wei). */
   gasPrice: string | null;
-  /** gasUsed × gasPrice (wei). */
+  /** gasUsed × gasPrice, plus the L1 data fee on rollups that charge it separately (wei). */
   fee: string | null;
+  /** Rollups like Base: the part of the fee paid for posting the transaction to Ethereum (wei); null elsewhere. */
+  l1Fee: string | null;
   /** Part of the fee destroyed by the base fee (wei); null when the chain has no base fee. */
   burnt: string | null;
   createdContract: string | null;
