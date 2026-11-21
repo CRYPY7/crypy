@@ -45,3 +45,8 @@ next-env.d.ts
 /playwright-report
 /test-results
 /playwright-run.txt
+/server-log.txt
+/crash-reports/
+/crash-check.txt
+/full-check.txt
+/build-log.txt

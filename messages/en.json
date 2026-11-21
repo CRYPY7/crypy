@@ -674,7 +674,7 @@
         "unpriced": "{count, plural, one {# token has} other {# tokens have}} no reliable price and {count, plural, one {isn't} other {aren't}} counted in the total.",
         "pricesUnavailable": "Prices are unavailable right now, so only balances are shown. Try again in a minute.",
         "coverage": {
-          "truncated": "This address has interacted with more than {count} tokens. The first {count} were checked, so some tokens may be missing.",
+          "truncated": "This address has a very long token list (mostly unsolicited airdrops), so CRYPY checked the first {count} entries to keep the page fast. Some tokens may be missing.",
           "common-only": "Only well-known tokens were checked on {chain} right now, so some tokens may be missing."
         },
         "hidden": "{count, plural, one {# hidden token looks like spam} other {# hidden tokens look like spam}}",

@@ -42,6 +42,22 @@ Last updated: 2026-11-21
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
 
+## Big-wallet speed (2026-11-21, measured on the owner's PC with Alchemy)
+
+- Measured with an opt-in timing log (`CRYPY_DEBUG_TIMING=1`): for big wallets Alchemy's token list (10 pages read one
+  after another) took 6–15 s per chain and prices 2–10 s, so Vitalik's address page took about 19 s with nothing else
+  running and over 30 s under the test load. Normal wallets: 1 page, 1–3 s.
+- **Token list time limit:** no further page is requested after 5 s (`TOKEN_LIST_BUDGET_MS`); the page then says how
+  many entries were checked and that some tokens may be missing.
+- **Well-known tokens are never missed:** when the list is cut off, each chain's well-known tokens (USDT, USDC, WETH…)
+  are read directly from the chain (one multicall) and added; they are also priced first. Live test
+  `tests/unit/balances-truncated-live.test.ts` (Vitalik's USDT found with a faked cut-off list); unit test for the time
+  limit.
+- Each chain is priced as soon as its own balances arrive (a slow chain no longer delays the others).
+- Result on the owner's PC: full suite 3.3–3.6 min instead of 4.4; Vitalik's page 22 s under test load.
+- Check scripts: `scripts/crash-check.cmd` (one big wallet three ways) and `scripts/full-check.cmd` (build, server
+  with memory and timing logs, full browser suite, Windows crash records), each writing a text report.
+
 ## M8 Part 1 follow-up (2026-11-21): GoPlus shared between pages and the Portfolio
 
 Owner's run: 126 passed, 3 failed. Causes:
@@ -894,6 +910,12 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 
 ## Known issues
 
+- **Investigating (2026-11-21): server crash on the owner's Windows PC.** Under the full browser suite the app server
+  sometimes exits with Windows code 0xC0000409 (a native "fail-fast" abort inside Node, not a JavaScript error). Seen
+  in 3 of 5 full runs on the owner's PC (Node v26.13.1), each time while the two-wallet Portfolio test was loading;
+  never in this Linux workspace. Ruled out: memory (peak 633 MB, no Node crash report), and a single big wallet (the
+  Binance wallet opened alone three ways never crashed it). Windows logs no crash record. Next: isolate with and
+  without the Portfolio test; production runs on Linux, where it hasn't appeared.
 - **Before launch (M9):** per-visitor limits identify visitors by the first `X-Forwarded-For` address. That is safe
   only behind a proxy that overwrites the header (Vercel does; on our own VPS, nginx must be set to). Otherwise a
   visitor could send a fake one to get around the limits.

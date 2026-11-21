@@ -97,7 +97,7 @@ export async function ChainHoldingsSection({
         <Notice tone="warning">
           {t(`entity.address.balances.coverage.${holdings.coverage}`, {
             chain: chainName,
-            count: new Intl.NumberFormat(locale).format(MAX_TOKEN_PAGES * 100),
+            count: new Intl.NumberFormat(locale).format(holdings.checkedEntries ?? MAX_TOKEN_PAGES * 100),
           })}
         </Notice>
       )}

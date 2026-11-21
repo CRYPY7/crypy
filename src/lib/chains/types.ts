@@ -274,6 +274,8 @@ export interface ChainBalances {
   native: Amount;
   tokens: RawTokenBalance[];
   coverage: BalanceCoverage;
+  /** How many token-list entries were read (including zero balances), when a token index was used. */
+  checkedEntries?: number;
 }
 
 /** Provider label: "alchemy", a host name such as "ankr.com", or "public:<host>". */

@@ -26,3 +26,25 @@ export function watchNetworkErrors(): void {
     );
   });
 }
+
+/**
+ * Opt-in memory log (set CRYPY_DEBUG_MEMORY=1): every 30 s, the server's memory in MB. Used to find whether the
+ * server grows until it crashes under load. Prints numbers only.
+ */
+export function watchMemory(): void {
+  if (process.env.CRYPY_DEBUG_MEMORY !== "1") return;
+  const mb = (n: number) => Math.round(n / 1_048_576);
+  const timer = setInterval(() => {
+    const m = process.memoryUsage();
+    console.warn(
+      `[crypy] memory: rss ${mb(m.rss)} MB, heap ${mb(m.heapUsed)}/${mb(m.heapTotal)} MB, ` +
+        `external ${mb(m.external)} MB, buffers ${mb(m.arrayBuffers)} MB`,
+    );
+  }, 30_000);
+  timer.unref();
+}
+
+/** Opt-in timing log (set CRYPY_DEBUG_TIMING=1): where slow pages spend their time. Durations and counts only. */
+export function logTiming(message: string): void {
+  if (process.env.CRYPY_DEBUG_TIMING === "1") console.warn(`[crypy] timing ${message}`);
+}

@@ -5,6 +5,7 @@ import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { BalanceCoverage, ChainBalances, RawTokenBalance } from "@/lib/chains/types";
 import { BudgetExhaustedError, type Provider, budgetExhausted, getEvmClient, recordUsage } from "./providers";
+import { logTiming } from "@/server/diagnostics";
 import { discardBody } from "@/server/http/discard";
 
 /**
@@ -13,6 +14,12 @@ import { discardBody } from "@/server/http/discard";
  * Cost: 20 compute units per page; results are cached per address.
  */
 export const MAX_TOKEN_PAGES = 10;
+/**
+ * Alchemy's token list is read one page after another (each needs the previous page's key). Wallets that received
+ * thousands of airdropped tokens need all 10 pages, which took 6–15 s on the owner's PC. After this long, no further
+ * page is requested and the list is marked as cut off (the page says some tokens may be missing).
+ */
+export const TOKEN_LIST_BUDGET_MS = 5_000;
 const PAGE_SIZE = 100;
 /** Metadata reads per multicall batch (3 calls per token). */
 const METADATA_BATCH = 100;
@@ -44,7 +51,11 @@ export interface ListedToken {
  * Parses one page of Alchemy `alchemy_getTokenBalances`. Zero and errored balances are dropped.
  * Exported for unit tests with recorded responses.
  */
-export function parseTokenBalancesPage(json: unknown): { tokens: ListedToken[]; pageKey: string | null } {
+export function parseTokenBalancesPage(json: unknown): {
+  tokens: ListedToken[];
+  pageKey: string | null;
+  entries: number;
+} {
   const parsed = tokenBalancesSchema.parse(json);
   if (parsed.error || !parsed.result) throw new Error("Token list provider returned an error");
   const tokens: ListedToken[] = [];
@@ -53,7 +64,7 @@ export function parseTokenBalancesPage(json: unknown): { tokens: ListedToken[]; 
     const raw = BigInt(entry.tokenBalance);
     if (raw > 0n) tokens.push({ address: getAddress(entry.contractAddress), raw });
   }
-  return { tokens, pageKey: parsed.result.pageKey ?? null };
+  return { tokens, pageKey: parsed.result.pageKey ?? null, entries: parsed.result.tokenBalances.length };
 }
 
 /** Every ERC-20/BEP-20 token the address has a balance in, from Alchemy's token index. */
@@ -62,9 +73,11 @@ export async function listTokensFromAlchemy(
   owner: string,
   /** Called with each page as it arrives, so its token details can be read while the next page loads. */
   onPage?: (tokens: ListedToken[]) => void,
-): Promise<{ tokens: ListedToken[]; truncated: boolean }> {
+): Promise<{ tokens: ListedToken[]; truncated: boolean; entries: number }> {
   const tokens: ListedToken[] = [];
+  let entries = 0;
   let pageKey: string | null = null;
+  const started = Date.now();
   for (let page = 0; page < MAX_TOKEN_PAGES; page++) {
     const options: Record<string, unknown> = { maxCount: PAGE_SIZE };
     if (pageKey) options.pageKey = pageKey;
@@ -89,11 +102,20 @@ export async function listTokensFromAlchemy(
     }
     const result = parseTokenBalancesPage(await response.json());
     tokens.push(...result.tokens);
+    entries += result.entries;
     onPage?.(result.tokens);
     pageKey = result.pageKey;
-    if (!pageKey) return { tokens, truncated: false };
+    if (pageKey && Date.now() - started > TOKEN_LIST_BUDGET_MS) {
+      logTiming(`alchemy token list: ${page + 1} pages (time budget), ${entries} entries, ${Date.now() - started} ms`);
+      return { tokens, truncated: true, entries };
+    }
+    if (!pageKey) {
+      logTiming(`alchemy token list: ${page + 1} pages, ${entries} entries, ${Date.now() - started} ms`);
+      return { tokens, truncated: false, entries };
+    }
   }
-  return { tokens, truncated: true };
+  logTiming(`alchemy token list: ${MAX_TOKEN_PAGES} pages (cut off), ${entries} entries, ${Date.now() - started} ms`);
+  return { tokens, truncated: true, entries };
 }
 
 /** Balances of the chain's well-known tokens, read directly from the contracts (no key needed). */
@@ -220,6 +242,7 @@ export async function getEvmBalances(
 
   let tokensPromise: Promise<RawTokenBalance[]>;
   let coverage: BalanceCoverage;
+  let checkedEntries: number | undefined;
   try {
     if (!alchemy) throw new Error("No token index configured");
     // Each page's token details are read while the next page is listed.
@@ -229,8 +252,19 @@ export async function getEvmBalances(
       read.catch(() => {}); // If listing fails later, these reads are dropped: never an unhandled rejection.
       pages.push(read);
     });
+    if (result.truncated) {
+      // A cut-off list must never miss the well-known tokens: check them directly (one multicall) and add any the
+      // list didn't reach.
+      const seen = new Set(result.tokens.map((t) => t.address.toLowerCase()));
+      const extra = listCommonTokens(client, chain, owner)
+        .then((common) => common.filter((t) => !seen.has(t.address.toLowerCase())))
+        .then((missing) => (missing.length ? readMetadata(client, chain.key, missing) : []))
+        .catch(() => [] as RawTokenBalance[]);
+      pages.push(extra);
+    }
     tokensPromise = Promise.all(pages).then((parts) => parts.flat());
     coverage = result.truncated ? "truncated" : "full";
+    checkedEntries = result.entries;
   } catch {
     // Honest fallback: only well-known tokens, and the page says so.
     const listed = await listCommonTokens(client, chain, owner);
@@ -244,5 +278,6 @@ export async function getEvmBalances(
     native: { raw: native.toString(), decimals: chain.nativeDecimals },
     tokens,
     coverage,
+    ...(checkedEntries !== undefined ? { checkedEntries } : {}),
   };
 }

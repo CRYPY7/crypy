@@ -3,7 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { chains } from "@/config/chains";
 import type { ChainBalances } from "@/lib/chains/types";
 import { amountToNumber, buildChainHoldings, spamReason } from "@/lib/portfolio/holdings";
-import { MAX_TOKEN_PAGES, listTokensFromAlchemy, parseTokenBalancesPage } from "@/server/chains/evm/balances";
+import {
+  MAX_TOKEN_PAGES,
+  TOKEN_LIST_BUDGET_MS,
+  listTokensFromAlchemy,
+  parseTokenBalancesPage,
+} from "@/server/chains/evm/balances";
 import { resetUsage } from "@/server/chains/evm/providers";
 
 const native = { symbol: "BNB", name: "BNB", priceKey: "coingecko:binancecoin" };
@@ -144,9 +149,10 @@ describe("Alchemy token list paging", () => {
   const contract = (i: number) => `0x${i.toString(16).padStart(40, "0")}`;
 
   /** Pages of 100 entries where only every 25th still has a balance, like a wallet that traded many tokens. */
-  function mockPages(pageCount: number) {
+  function mockPages(pageCount: number, delayMs = 0) {
     const calls: unknown[] = [];
     vi.stubGlobal("fetch", async (_url: string, init: RequestInit) => {
+      if (delayMs) await new Promise((r) => setTimeout(r, delayMs));
       const body = JSON.parse(String(init.body)) as { params: [string, string, { pageKey?: string }] };
       calls.push(body.params[2]);
       const page = Number(body.params[2].pageKey ?? 0);
@@ -180,5 +186,19 @@ describe("Alchemy token list paging", () => {
     const result = await listTokensFromAlchemy(TEST_ALCHEMY, "0x0000000000000000000000000000000000000001");
     expect(calls).toHaveLength(MAX_TOKEN_PAGES);
     expect(result.truncated).toBe(true);
+    expect(result.entries).toBe(MAX_TOKEN_PAGES * 100);
+  });
+
+  it("stops asking for more pages once the time budget is used, and says the list was cut", async () => {
+    const perPage = Math.ceil(TOKEN_LIST_BUDGET_MS / 3);
+    vi.useFakeTimers();
+    const calls = mockPages(MAX_TOKEN_PAGES, perPage);
+    const pending = listTokensFromAlchemy(TEST_ALCHEMY, "0x0000000000000000000000000000000000000001");
+    await vi.advanceTimersByTimeAsync(TOKEN_LIST_BUDGET_MS * 2);
+    const result = await pending;
+    vi.useRealTimers();
+    expect(calls.length).toBeLessThan(MAX_TOKEN_PAGES);
+    expect(result.truncated).toBe(true);
+    expect(result.entries).toBe(calls.length * 100);
   });
 });

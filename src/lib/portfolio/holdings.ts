@@ -25,6 +25,8 @@ export interface Holding {
 export interface ChainHoldings {
   chain: ChainKey;
   coverage: BalanceCoverage;
+  /** Token-list entries read, when the list was cut off (for the "some may be missing" note). */
+  checkedEntries?: number;
   /** Native coin first, then tokens by value (highest first), then unpriced tokens by name. */
   visible: Holding[];
   /** Likely spam, hidden by default. */
@@ -106,6 +108,7 @@ export function buildChainHoldings(
   return {
     chain: balances.chain,
     coverage: balances.coverage,
+    ...(balances.checkedEntries !== undefined ? { checkedEntries: balances.checkedEntries } : {}),
     visible: all,
     hidden,
     unpricedCount: visible.filter((holding) => holding.valueUsd === undefined).length,
