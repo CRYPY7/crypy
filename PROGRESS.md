@@ -106,6 +106,17 @@ on only after its live checks passed (`tests/unit/chains-live.test.ts`, 19 check
 **Owner action:** in the Alchemy dashboard, enable Base, Arbitrum and Polygon for your app (otherwise those chains use
 public nodes and the recent-only activity), then run `pnpm env:check`.
 
+## M7 follow-up (2026-11-21): owner's run after Token Security on the new chains
+
+- Browser suite on the owner's PC: **125 passed, 0 failed.** Live: 38 of 39.
+- The one live failure was stale data, not a bug: the CAKE test expected PancakeSwap's fee collector to hold LP in the
+  CAKE/BNB pool; it now holds none (checked on-chain: balance 0, fees withdrawn), and CRYPY correctly lists only
+  holders with a share. The test now checks the rule (named whenever it holds LP) against the live balance.
+- "socket idle timeout" still appeared once, so closing unread responses was not the cause. It doesn't happen here
+  (this workspace has no Alchemy key, and it seems tied to that path). Added a monitor that only observes such escaped
+  network errors and prints the full stack once, with provider keys removed (unit-tested), so the owner's next log
+  shows where it comes from. Next.js keeps the server running when it happens.
+
 ## M7 part 5 — Token Security on Base, Arbitrum and Polygon (2026-11-21)
 
 - **Exchanges:** Base: Uniswap v2 (trade-test hop), Uniswap v3, PancakeSwap v3. Arbitrum: SushiSwap (hop), Uniswap v2,

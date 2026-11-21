@@ -157,7 +157,21 @@ describe.skipIf(!live)("liquidity holders (live)", () => {
     const { byPool } = await holdersOf("bsc", "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82");
     const pool = byPool("0x0eD7e52944161450477ee417DE9Cd3a859b14fD0");
     expect(pool.holders.filter((h) => h.kind === "farm").reduce((s, h) => s + h.share, 0)).toBeGreaterThan(0.3);
-    expect(pool.holders.some((h) => h.kind === "exchange" && h.name === "PancakeSwap v2")).toBe(true);
+    // The exchange's fee collector is named whenever it holds LP. It doesn't always: on 2026-11-21 PancakeSwap's
+    // collector held none of this pool (fees withdrawn), so the test checks the rule rather than today's balance.
+    const client = getEvmClient(getChain("bsc")!);
+    const feeTo = await client.readContract({
+      address: getAddress("0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73"),
+      abi: parseAbi(["function feeTo() view returns (address)"]),
+      functionName: "feeTo",
+    });
+    const collectorLp = await client.readContract({
+      address: getAddress("0x0eD7e52944161450477ee417DE9Cd3a859b14fD0"),
+      abi: parseAbi(["function balanceOf(address) view returns (uint256)"]),
+      functionName: "balanceOf",
+      args: [feeTo],
+    });
+    expect(pool.holders.some((h) => h.kind === "exchange" && h.name === "PancakeSwap v2")).toBe(collectorLp > 0n);
     expect(pool.found).toBeLessThan(1); // the rest is many LPs CRYPY can't list yet: reported as "not found"
   }, 90_000);
 
