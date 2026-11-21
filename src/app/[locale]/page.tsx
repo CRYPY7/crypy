@@ -6,12 +6,14 @@ import { FileText, Lock, ShieldCheck } from "lucide-react";
 import { UniversalSearch } from "@/components/search/universal-search";
 import { getSearchStrings } from "@/components/search/search-strings";
 import { ChainIcon } from "@/components/chain-icon";
+import { GasWidget } from "@/components/home/gas-widget";
 import { RecentList } from "@/components/recent/recent";
 import { chains } from "@/config/chains";
 import { ToolIcon } from "@/components/tool-icon";
 import { ToolsGrid } from "@/components/tools/tools-grid";
 import { UseMyWalletLink } from "@/wallets/connect-button";
 import { isLocale } from "@/i18n/locales";
+import { localePath } from "@/lib/routes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { siteUrl } from "@/config/env";
 import { getCategoryLabels, getToolViews } from "@/lib/tools-view";
@@ -96,6 +98,16 @@ export default async function HomePage() {
             </span>
           ))}
         </div>
+        <GasWidget
+          locale={locale}
+          href={localePath(locale, "/tools/gas-tracker")}
+          labels={{
+            title: t("home.gas.title"),
+            send: t("home.gas.send"),
+            open: t("home.gas.open"),
+            gwei: t("home.gas.gwei"),
+          }}
+        />
         <RecentList title={t("nav.recent")} clear={t("nav.clearRecent")} locale={locale} />
 
         <ul className="mt-10 grid gap-3 text-start sm:grid-cols-3">

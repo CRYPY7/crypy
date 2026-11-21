@@ -7,6 +7,8 @@ export const ownRouteTools: readonly ToolId[] = [
   "token-security",
   "approval-checker",
   "address-analyzer",
+  "gas-tracker",
+  "timestamp-block",
   "tx-checker",
   "unit-converter",
   "hex-converter",

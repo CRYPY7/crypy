@@ -37,6 +37,9 @@ export async function toolOgImage(id: string) {
   });
 }
 
+/** Tools that never send what you type anywhere (the timestamp converter reads block times from the chain). */
+const BROWSER_ONLY: readonly string[] = ["unit-converter", "hex-converter", "address-formatter", "tx-decoder"];
+
 export async function ToolPage({
   tool,
   locale,
@@ -119,7 +122,7 @@ export async function ToolPage({
       <p className="mt-6 max-w-3xl text-base">{t(`tools.${tool.id}.description`)}</p>
       {live ? (
         <>
-          {tool.category === "utilities" && (
+          {BROWSER_ONLY.includes(tool.id) && (
             <p className="mt-2 text-sm text-muted-foreground">{t("toolPage.runsLocally")}</p>
           )}
           <section className="mt-6" aria-label={t(`tools.${tool.id}.name`)}>

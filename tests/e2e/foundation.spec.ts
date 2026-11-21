@@ -73,11 +73,11 @@ test("sends security headers", async ({ request }) => {
 });
 
 test("language menu keeps the current page", async ({ page }) => {
-  await page.goto("/en/tools/gas-tracker", { waitUntil: "networkidle" });
+  await page.goto("/en/tools/portfolio", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Language" }).first().click();
   const english = page.getByRole("link", { name: "English" }).first();
   await expect(english).toBeVisible();
-  await expect(english).toHaveAttribute("href", "/en/tools/gas-tracker");
+  await expect(english).toHaveAttribute("href", "/en/tools/portfolio");
 });
 
 test("loads the tools dialog code only when it is opened", async ({ page }) => {
@@ -124,6 +124,6 @@ for (const path of [
 }
 
 test("a tool that isn't live yet says so", async ({ page }) => {
-  await page.goto("/en/tools/gas-tracker");
+  await page.goto("/en/tools/portfolio");
   await expect(page.getByText("This tool isn't live yet")).toBeVisible();
 });

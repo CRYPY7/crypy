@@ -239,7 +239,7 @@ table above.
 **Done when:** approvals match Revoke.cash for test wallets; revoke tested on testnet then mainnet; extra security review passed.
 Owner checks still open: compare 2–3 of your own wallets with Revoke.cash; do one real revoke of a small approval.
 
-## M7 — Activity (Tool 2), Gas (Tool 6), more EVM chains — Activity 🟡 built 2026-11-21; rest next
+## M7 — Activity (Tool 2), Gas (Tool 6), more EVM chains — Activity 🟡, Gas ✅, Timestamp converter ✅ (2026-11-21); next: chain picker (approved boards 34–35), then Base, Arbitrum, Polygon
 
 Explorer decision; activity tab (all coin/token transfers sent and received); gas page + widget; timestamp/block converter (other utilities shipped in M2.5); add Base, Arbitrum, Polygon (config only) after verification.
 

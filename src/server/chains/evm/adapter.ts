@@ -1,5 +1,7 @@
 import { getEvmActivity } from "./activity";
 import { getEvmApprovals } from "./approvals";
+import { evmBlockAtTime, evmBlockTime } from "./block-time";
+import { getEvmGas } from "./gas";
 import { getEvmTokenSecurity } from "./security/token-security";
 import "server-only";
 import { getEvmBalances } from "./balances";
@@ -84,6 +86,18 @@ export const evmAdapter: ChainFamilyAdapter = {
   },
 
   /** Activity: Alchemy's transfer history (free plan), or the last few hours from the chain without it (activity.ts). */
+  getGas(chain) {
+    return getEvmGas(chain);
+  },
+
+  blockAtTime(chain, time) {
+    return evmBlockAtTime(chain, time);
+  },
+
+  blockTime(chain, block) {
+    return evmBlockTime(chain, block);
+  },
+
   getActivity(chain, owner, before, heldTokens) {
     return getEvmActivity(chain, owner, before, heldTokens);
   },

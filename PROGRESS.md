@@ -73,6 +73,26 @@ Not covered yet (tracked in the roadmap): complete approval history (indexer), c
 single-item NFT approvals, testnet revoke, batch revoke. **Owner checks:** compare your own wallets with Revoke.cash;
 revoke one small real approval and confirm the page shows it gone.
 
+## M7 part 2 — Gas Tracker and Timestamp & Block Converter (designs approved 2026-11-21, boards 31–33)
+
+- **Gas Tracker live** (`/tools/gas-tracker`): one `eth_feeHistory` call per chain (1,024 blocks, tips at the 25th,
+  50th and 90th percentile) gives low / average / high priority (next base fee + median tip of the last 20 blocks),
+  the base fee, and a trend line (base fee on Ethereum; typical tip on BNB Chain, which has no base fee). Cost of
+  sending coins and tokens, approving or revoking, swapping and sending an NFT, at typical gas and on-chain prices;
+  small fees keep two significant digits ("$0.00055") instead of "$0.00". Refreshes every 12 s while visible; shared
+  server cache ~10 s; API `GET /api/v1/gas`. Numbers render per request (never baked in at build time).
+- **Home page gas widget** ("Gas now"), loaded after the page.
+- **Timestamp & Block Converter live** (`/tools/timestamp-block`): date → first block at or after it on every chain
+  (interpolation then bisection over real block headers, ~1–3 s), block → date, Unix ↔ date in the browser; future
+  dates give a labelled estimate. API `GET /api/v1/blocks?time=` / `?block=&chain=`.
+- "Runs in your browser" note now only on tools that truly never send input (the converter reads the chain).
+- Fixed: the dev-mode "params outside Suspense" error on not-yet-live tool pages.
+
+Checks: unit 227 passed (11 new: speeds, no-base-fee chains, trend, costs, fee formatting, fee-history parsing,
+date/Unix inputs); live 4 passed (both chains: ordered speeds; the block found for a date is the first at or after
+it); build passed; browser 115 passed (new: Gas Tracker, home widget, converter on desktop and phone). CSS 72.3 of
+72 KB rounded: kept in budget by merging near-identical classes; the budget is nearly used up.
+
 ## M7 part 1 — Activity tab (design approved 2026-11-21, boards 28–30)
 
 - **Activity tab** on every address (`/address/{address}/activity`), third tab next to Overview and Approvals; the

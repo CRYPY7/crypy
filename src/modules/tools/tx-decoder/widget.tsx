@@ -184,7 +184,7 @@ function Result({ result, context }: { result: Exclude<DecodeResult, { status: "
           <h4 className="text-sm font-semibold">{strings.parameters}</h4>
           <dl className="mt-2 divide-y divide-border rounded-xl border border-border">
             {result.params.map((param) => (
-              <div key={param.name} className="grid gap-1 p-3 sm:grid-cols-[minmax(8rem,12rem)_1fr] sm:gap-4">
+              <div key={param.name} className="grid gap-1 p-3 sm:grid-cols-[12rem_1fr] sm:gap-4">
                 <dt className="technical text-sm">
                   {param.name}
                   <span className="ms-2 text-xs text-muted-foreground">{param.type}</span>

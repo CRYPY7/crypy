@@ -63,7 +63,7 @@ function tokenLabel(token: TxToken | undefined, t: T): string {
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid gap-1 border-b py-3 last:border-b-0 sm:grid-cols-[13rem_1fr] sm:gap-4">
+    <div className="grid gap-1 border-b py-3 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:gap-4">
       <dt className="text-sm text-muted-foreground">{label}</dt>
       <dd className="min-w-0 text-sm break-words">{children}</dd>
     </div>

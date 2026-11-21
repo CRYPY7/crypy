@@ -1,5 +1,6 @@
 import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import type { ApprovalsFacts } from "@/lib/approvals/types";
+import type { GasFacts } from "@/lib/gas/compute";
 import type { TokenSecurityFacts } from "@/lib/security/types";
 import type { ChainConfig, ChainFamily, ChainKey } from "@/config/chains";
 
@@ -321,6 +322,14 @@ export interface ChainFamilyAdapter {
    * The wallet's transfers on this chain, newest first (M7). `before`: continue from this block (inclusive), or null
    * for the newest page. `heldTokens`: used when only recent activity can be read.
    */
+  /** Fee history for the Gas Tracker (M7); chains with the `fees` capability. */
+  getGas?(chain: ChainConfig): Promise<GasFacts>;
+  /** First block at or after a unix time (an estimate for a future time), and a block's time (M7 converter). */
+  blockAtTime?(
+    chain: ChainConfig,
+    time: number,
+  ): Promise<{ chain: string; block: number; time: number; estimate: boolean }>;
+  blockTime?(chain: ChainConfig, block: number): Promise<{ chain: string; block: number; time: number } | null>;
   getActivity?(
     chain: ChainConfig,
     owner: string,

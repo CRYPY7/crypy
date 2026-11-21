@@ -90,12 +90,26 @@ export const tools: readonly ToolDefinition[] = [
   },
   { id: "portfolio", category: "wallet", icon: "chart-pie", status: "soon", milestone: "M8" },
   { id: "tx-checker", category: "network", icon: "receipt", status: "live", milestone: "M4", featured: true },
-  { id: "gas-tracker", category: "network", icon: "fuel", status: "soon", milestone: "M7" },
+  {
+    id: "gas-tracker",
+    category: "network",
+    icon: "fuel",
+    status: "live",
+    milestone: "M7",
+    isNew: true,
+  },
   { id: "watchlist", category: "monitoring", icon: "bell", status: "soon", milestone: "M8", requiresAccount: true },
   { id: "unit-converter", category: "utilities", icon: "calculator", status: "live", milestone: "M2.5" },
   { id: "hex-converter", category: "utilities", icon: "binary", status: "live", milestone: "M2.5" },
   { id: "address-formatter", category: "utilities", icon: "at-sign", status: "live", milestone: "M2.5" },
-  { id: "timestamp-block", category: "utilities", icon: "clock", status: "soon", milestone: "M7" },
+  {
+    id: "timestamp-block",
+    category: "utilities",
+    icon: "clock",
+    status: "live",
+    milestone: "M7",
+    isNew: true,
+  },
   { id: "tx-decoder", category: "utilities", icon: "code-xml", status: "live", milestone: "M2.5" },
 ];
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { locale as localeParam } from "next/root-params";
 import { ToolPage, toolMetadata } from "@/components/tools/tool-page";
 import { getTool, toolIds } from "@/config/tools";
@@ -17,7 +18,17 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/tools/[t
   return toolMetadata(toolId, locale);
 }
 
-export default async function ToolLandingPage({ params }: PageProps<"/[locale]/tools/[toolId]">) {
+// Params are read inside a Suspense boundary so navigation can show the page shell at once (Next.js instant
+// navigation check); every known tool id is still prerendered by generateStaticParams.
+export default function ToolLandingPage({ params }: PageProps<"/[locale]/tools/[toolId]">) {
+  return (
+    <Suspense>
+      <Landing params={params} />
+    </Suspense>
+  );
+}
+
+async function Landing({ params }: { params: PageProps<"/[locale]/tools/[toolId]">["params"] }) {
   const [{ toolId }, locale] = await Promise.all([params, localeParam()]);
   const tool = getTool(toolId);
   if (!tool || !isLocale(locale) || ownRouteTools.includes(tool.id)) notFound();

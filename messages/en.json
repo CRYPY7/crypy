@@ -117,7 +117,13 @@
       "title": "All tools",
       "filterLabel": "Filter tools by category"
     },
-    "worksOn": "Works on"
+    "worksOn": "Works on",
+    "gas": {
+      "title": "Gas now",
+      "send": "{usd} to send",
+      "open": "Gas Tracker →",
+      "gwei": "{value} gwei"
+    }
   },
   "tools": {
     "token-security": {
@@ -293,9 +299,10 @@
       "input": "Nothing — just open it",
       "cta": "See gas prices",
       "features": [
-        "Slow, standard and fast gas prices per chain",
-        "Estimated USD cost of transfers, approvals and swaps",
-        "Update time shown, refreshes automatically"
+        "Low, average and high priority fees per chain",
+        "Cost in dollars of sends, approvals, swaps and NFT transfers",
+        "Base fee trend over the last 1,024 blocks",
+        "Refreshes every 12 seconds, update time shown"
       ]
     },
     "watchlist": {
@@ -428,12 +435,14 @@
     "timestamp-block": {
       "name": "Timestamp & Block Converter",
       "question": "Which block was at this time?",
-      "description": "Convert dates to block numbers and back on each chain.",
+      "description": "Find the block at any date on each chain, the date of any block, and convert Unix timestamps.",
       "input": "A date or block number",
       "cta": "Convert",
       "features": [
-        "Date to block and block to date",
-        "Per chain"
+        "Date to block on every chain at once",
+        "Block number to date and time",
+        "Unix timestamp to date, in your browser",
+        "Read from real block times, never estimated (future dates labelled as estimates)"
       ]
     },
     "tx-decoder": {
@@ -2365,6 +2374,66 @@
       "useConnected": "Show my connected wallet",
       "invalid": "Enter a wallet address: 0x followed by 40 characters.",
       "noConnection": "No wallet connection needed: any public address works."
+    },
+    "gas-tracker": {
+      "chainDown": "{chain} fees couldn't be read right now. Trying again every 12 seconds.",
+      "low": "Low priority",
+      "average": "Average",
+      "high": "High priority",
+      "lowNote": "usually within a few blocks",
+      "averageNote": "usually the next block",
+      "highNote": "for busy moments",
+      "updated": "block {block} · updated {seconds} s ago",
+      "toSend": "{usd} to send coins",
+      "baseFee": "Base fee now",
+      "noBaseFee": "No base fee on this chain",
+      "trendLabel": "Fee trend over recent blocks",
+      "trendBase": "base fee, last 1,024 blocks ({span})",
+      "trendTip": "typical tip paid, last 1,024 blocks ({span})",
+      "hours": "~{n} h",
+      "minutes": "~{n} min",
+      "costsTitle": "What common actions cost now (average)",
+      "action": "Action",
+      "typicalGas": "Typical gas",
+      "onChain": "{chain}",
+      "action_sendCoin": "Send coins (ETH / BNB)",
+      "action_sendToken": "Send a token",
+      "action_approve": "Approve or revoke a token",
+      "action_swap": "Swap on a DEX",
+      "action_sendNft": "Send an NFT",
+      "costsNote": "Typical gas is an estimate: the real amount depends on the token or app, and your wallet shows the exact fee before you confirm. Dollar values use on-chain prices:",
+      "howTitle": "How we measure.",
+      "how": "From each chain's last 20 blocks (eth_feeHistory): the next block's base fee plus the tip that 25%, 50% and 90% of included transactions paid. \"Usually the next block\" describes recent blocks, not a promise. Refreshed every 12 seconds while this page is open; no account or wallet needed."
+    },
+    "timestamp-block": {
+      "modes": "Conversion",
+      "mode_date": "Date → block",
+      "mode_block": "Block → date",
+      "mode_unix": "Unix timestamp ↔ date",
+      "dateLabel": "Date and time",
+      "zoneLabel": "Time zone",
+      "zoneUtc": "UTC",
+      "zoneLocal": "My time zone",
+      "findBlocks": "Find blocks",
+      "working": "Reading the chain…",
+      "estimate": "Estimate: this time is in the future",
+      "copy": "Copy",
+      "copied": "Copied",
+      "chainDown": "{chain} couldn't be read right now.",
+      "dateNote": "The first block at or after this time on each chain, found by reading real block times (a few node requests). Future dates show the expected block, labelled as an estimate.",
+      "chainLabel": "Chain",
+      "blockLabel": "Block number",
+      "findTime": "Find date",
+      "blockResult": "Block {block} on {chain}:",
+      "yourTime": "your time {time}",
+      "unixIs": "Unix {unix}",
+      "unixLabel": "Timestamp (seconds or milliseconds)",
+      "unixNote": "Converted in your browser; nothing is sent.",
+      "badDate": "Choose a date and time.",
+      "badBlock": "Enter a block number (digits only).",
+      "badUnix": "Enter digits only: seconds or milliseconds.",
+      "noBlock": "That block doesn't exist yet on this chain.",
+      "failed": "Couldn't read the chain right now. Try again in a minute."
     }
   }
 }
