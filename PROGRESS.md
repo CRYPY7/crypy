@@ -106,6 +106,16 @@ on only after its live checks passed (`tests/unit/chains-live.test.ts`, 19 check
 **Owner action:** in the Alchemy dashboard, enable Base, Arbitrum and Polygon for your app (otherwise those chains use
 public nodes and the recent-only activity), then run `pnpm env:check`.
 
+## M7 follow-up 2 (2026-11-21): a node refusing old data stopped the transaction page
+
+Owner's second full run: 4 failures (TATA swap page, FLOKI liquidity card, each on desktop and phone). The server log
+showed the cause for the swap: PublicNode's BNB Chain node now answers receipts of older transactions with "Archive
+requests require a personal token", sent as an "invalid parameters" error. CRYPY treated that error as a final answer
+and never asked the next node (BNB Chain's own node has the receipt; checked). Now a refusal of old data always hands
+over to the next node and is remembered for 10 minutes, as other refusals already were. A unit test covers it with a
+fake node giving exactly that answer. The FLOKI card reads older lock data through the same path, so it is likely the
+same cause; it passed here.
+
 ## M7 follow-up (2026-11-21): owner's full test run
 
 5 of 130 browser tests failed on the owner's PC; causes and fixes:

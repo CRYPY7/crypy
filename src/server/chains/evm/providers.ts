@@ -283,6 +283,13 @@ export function noteRefusal(provider: Provider, method: string, error: unknown):
   if (REFUSAL_PATTERN.test(text)) refusals.set(`${provider.url}|${method}`, Date.now() + REFUSAL_MS);
 }
 
+/** The error is a node refusing old data, not an answer about the request itself. */
+export function isRefusal(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const details = (error as { details?: unknown }).details;
+  return REFUSAL_PATTERN.test(`${error.message} ${typeof details === "string" ? details : ""}`);
+}
+
 export function refusesLately(provider: Provider, method: string): boolean {
   const until = refusals.get(`${provider.url}|${method}`);
   if (until === undefined) return false;
@@ -359,7 +366,10 @@ export function rankedFallback(providers: Provider[]): Transport {
                 clearTimeout(hedge);
                 inFlight -= 1;
                 if (settled) return;
-                if (error instanceof Error && shouldThrow(error)) {
+                // A node that refuses old data ("archive requests require a personal token") answers with an
+                // "invalid parameters" error, which would otherwise end the request: ask the next provider instead.
+                const refused = isRefusal(error);
+                if (!refused && error instanceof Error && shouldThrow(error)) {
                   settled = true;
                   reject(error);
                   return;

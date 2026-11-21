@@ -99,6 +99,17 @@ describe("ranked fallback", () => {
     expect(Date.now() - started).toBeLessThan(2_000);
   });
 
+  it("a node refusing old data with 'invalid parameters' hands over to the next node", async () => {
+    // As PublicNode answers for older receipts on BNB Chain (seen 2026-11-21).
+    behaviours.a = {
+      error: { code: -32602, message: "Archive requests require a personal token. Get one at: https://example.org" },
+    };
+    behaviours.b = { result: TX };
+    expect(await ask("eth_getTransactionReceipt")).toEqual(TX);
+    expect(hits).toMatchObject({ a: 1, b: 1 });
+    expect(refusesLately(a, "eth_getTransactionReceipt")).toBe(true);
+  });
+
   it("a revert is final: no other node is asked", async () => {
     behaviours.a = { error: { code: 3, message: "execution reverted: nope" } };
     behaviours.b = { result: "0x" };
