@@ -1,8 +1,8 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { ChainIcon } from "@/components/chain-icon";
 import { CHAINS_COOKIE, CHAINS_PARAM, type ChainSelection, formatSelection } from "@/lib/chains/selection";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,8 @@ export interface ChainPickerStrings {
   scan: string;
   scanOne: string;
   remembered: string;
+  /** Shown on the button while the new scan loads. */
+  updating: string;
 }
 
 /**
@@ -45,6 +47,7 @@ export function ChainPicker({
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
   const [mode, setMode] = useState(selection.mode);
   const [picked, setPicked] = useState<string[]>(selection.mode === "pick" ? selection.chains : []);
   const panel = useRef<HTMLDivElement>(null);
@@ -92,7 +95,8 @@ export function ChainPicker({
     url.searchParams.set(CHAINS_PARAM, value);
     url.searchParams.delete("chain");
     setOpen(false);
-    router.push(`${url.pathname}${url.search}`, { scroll: false });
+    // A narrowed or widened scan can take a while on busy wallets: the button shows it is working until it lands.
+    startTransition(() => router.push(`${url.pathname}${url.search}`, { scroll: false }));
   }
 
   const label =
@@ -126,6 +130,7 @@ export function ChainPicker({
         type="button"
         aria-haspopup="dialog"
         aria-expanded={open}
+        aria-busy={pending || undefined}
         aria-controls={open ? id : undefined}
         onClick={() => (open ? close() : setOpen(true))}
         className={cn(
@@ -146,6 +151,12 @@ export function ChainPicker({
         <span>
           {s.button} <b>{label}</b>
         </span>
+        {pending && (
+          <span role="status" className="flex items-center gap-1 text-muted-foreground">
+            <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
+            {s.updating}
+          </span>
+        )}
         <ChevronDown aria-hidden="true" className="size-4 text-muted-foreground" />
       </button>
       {open && (

@@ -22,7 +22,8 @@ test("picking one chain narrows the scan, keeps it in the link and remembers it"
   await dialog.getByRole("radio", { name: /Pick chains/ }).check();
   await dialog.getByRole("checkbox", { name: /BNB Chain/ }).check();
   await dialog.getByRole("button", { name: "Scan 1 chain" }).click();
-  await expect(page).toHaveURL(/\?chains=bsc$/);
+  // The link changes when the new scan arrives (busy wallets on a slow connection can take a while).
+  await expect(page).toHaveURL(/\?chains=bsc$/, { timeout: 60_000 });
   await expect(main.getByTestId("scanned")).toContainText("Scanned on BNB Chain only", { timeout: 60_000 });
   // This wallet is used on Ethereum too: a safety page never lets a narrowed scan look complete.
   await expect(main.getByText("Ethereum: not checked")).toBeVisible();

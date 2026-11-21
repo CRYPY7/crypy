@@ -2027,7 +2027,8 @@
         "cancel": "Cancel",
         "scan": "Scan {count} chains",
         "scanOne": "Scan 1 chain",
-        "remembered": "Your choice is kept in the link and remembered on this device."
+        "remembered": "Your choice is kept in the link and remembered on this device.",
+        "updating": "Scanning…"
       },
       "scanned": "Scanned on <b>{chains}</b>",
       "scannedOnly": "Scanned on <b>{chains}</b> only",
