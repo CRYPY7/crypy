@@ -1942,7 +1942,8 @@
         "badgeDisputed": "GoPlus: flagged",
         "checkOne": "1 approval to check",
         "checkOther": "{count} approvals to check",
-        "checkBody": "None goes to a wallet or an address flagged as malicious, but these go to contracts CRYPY can't fully identify. Revoke the ones you don't recognise or no longer use."
+        "checkBody": "None goes to a wallet or an address flagged as malicious, but these go to contracts CRYPY can't fully identify. Revoke the ones you don't recognise or no longer use.",
+        "recentSkipped": "Your approvals of the last few hours couldn't be searched on {chains} right now (the node was slow). Approvals found by the other checks are shown; check again in a minute."
       }
     },
     "activity": {

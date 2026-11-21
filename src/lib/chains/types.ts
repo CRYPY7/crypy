@@ -317,7 +317,8 @@ export interface ChainFamilyAdapter {
    * Approvals the wallet has given on this chain (M6). `heldTokens`: token contracts the wallet holds, used to check
    * common spenders for each of them.
    */
-  getApprovals?(chain: ChainConfig, owner: string, heldTokens: string[]): Promise<ApprovalsFacts>;
+  /** `heldTokens` may still be loading: work that doesn't need it (e.g. outside lists) starts at once. */
+  getApprovals?(chain: ChainConfig, owner: string, heldTokens: string[] | Promise<string[]>): Promise<ApprovalsFacts>;
   /**
    * The wallet's transfers on this chain, newest first (M7). `before`: continue from this block (inclusive), or null
    * for the newest page. `heldTokens`: used when only recent activity can be read.
@@ -336,7 +337,8 @@ export interface ChainFamilyAdapter {
     chain: ChainConfig,
     owner: string,
     before: number | null,
-    heldTokens: string[],
+    /** May still be loading: only the no-history fallback waits for it. */
+    heldTokens: string[] | Promise<string[]>,
   ): Promise<{ chain: ChainActivity; transfers: Transfer[] }>;
   /** Token security facts (M5). null when the address isn't a token on this chain. */
   getTokenSecurity?(chain: ChainConfig, address: string): Promise<TokenSecurityFacts | null>;

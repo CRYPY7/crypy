@@ -34,6 +34,8 @@ const MAX_SOURCE_CHECKS = 8;
 const OPTIONAL_MS = 7_000;
 /** GoPlus needs 3–6 s for busy wallets; it has its own 15 s limit per request. */
 const GOPLUS_MS = 16_000;
+/** Recent Approval events: usually well under a second; some public BNB Chain nodes take 5 s or more. */
+const RECENT_MS = 3_000;
 
 const nftAbi = parseAbi([
   "function isApprovedForAll(address owner, address operator) view returns (bool)",
@@ -61,12 +63,19 @@ interface Candidate {
 export async function getEvmApprovals(
   chain: ChainConfig,
   owner: string,
-  heldTokens: string[],
+  heldTokensInput: string[] | Promise<string[]>,
 ): Promise<ApprovalsFacts> {
   const client = getEvmClient(chain);
   const wallet = getAddress(owner);
   const chainId = Number(chain.caip2.split(":")[1]);
-  const block = await client.getBlockNumber();
+  // Outside lists don't need the block or the held tokens: start them first (they are the slowest part).
+  const goplusRequest = withTimeout(goPlusApprovals(chainId, wallet), GOPLUS_MS, {
+    status: "unavailable" as const,
+  });
+  const [block, heldTokens] = await Promise.all([
+    client.getBlockNumber(),
+    Promise.resolve(heldTokensInput).catch(() => [] as string[]),
+  ]);
   const key = (kind: string, token: string, spender: string) =>
     `${kind}|${token.toLowerCase()}|${spender.toLowerCase()}`;
   const candidates = new Map<string, Candidate>();
@@ -88,8 +97,12 @@ export async function getEvmApprovals(
 
   // 1. Leads: GoPlus and recent events, side by side.
   const [goplus, recent] = await Promise.all([
-    withTimeout(goPlusApprovals(chainId, wallet), GOPLUS_MS, { status: "unavailable" as const }),
-    recentApprovals(client, chain.key, wallet, block, heldTokens.slice(0, MAX_HELD)),
+    goplusRequest,
+    // A supplementary source: a slow node must not hold the page up (the page then says events weren't searched).
+    withTimeout(recentApprovals(client, chain.key, wallet, block, heldTokens.slice(0, MAX_HELD)), RECENT_MS, {
+      read: false,
+      items: [],
+    }),
   ]);
   if (goplus.status !== "unavailable") for (const lead of goplus.leads) add({ ...lead, lead }, "goplus");
   for (const r of recent.items) add(r, "recent-logs");
@@ -113,7 +126,7 @@ export async function getEvmApprovals(
   // 3. Read every candidate on-chain at one block.
   const list = [...candidates.values()];
   const tokens = [...new Set(list.map((c) => c.token))];
-  const [reads, meta, balances] = await Promise.all([
+  const [reads, meta, balances, blockHeader] = await Promise.all([
     client.multicall({
       allowFailure: true,
       blockNumber: block,
@@ -154,6 +167,7 @@ export async function getEvmApprovals(
         args: [wallet] as const,
       })),
     }),
+    client.getBlock({ blockNumber: block }),
   ]);
   const tokenInfo = new Map<
     string,
@@ -170,6 +184,16 @@ export async function getEvmApprovals(
       balance: bal?.status === "success" ? String(bal.result) : null,
     });
   });
+  // Prices for "at risk now" only need the token list: read them while the steps below run.
+  const pricesRequest = withTimeout(
+    getOnchainPrices(
+      client,
+      chain,
+      tokens.map((t) => ({ address: t, decimals: tokenInfo.get(t)?.decimals ?? null })),
+    ),
+    OPTIONAL_MS,
+    null,
+  );
   const live = list.flatMap((c, i): { c: Candidate; allowance: bigint | null }[] => {
     const r = reads[i];
     if (r?.status !== "success") return [];
@@ -201,7 +225,7 @@ export async function getEvmApprovals(
         })),
       })
     : [];
-  const blockTime = Number((await client.getBlock({ blockNumber: block })).timestamp);
+  const blockTime = Number(blockHeader.timestamp);
   const permitLive = permitPairs.flatMap((p, i) => {
     const r = permitReads[i];
     if (r?.status !== "success") return [];
@@ -253,15 +277,7 @@ export async function getEvmApprovals(
   };
 
   // 6. Prices for "at risk now".
-  const prices = await withTimeout(
-    getOnchainPrices(
-      client,
-      chain,
-      tokens.map((t) => ({ address: t, decimals: tokenInfo.get(t)?.decimals ?? null })),
-    ),
-    OPTIONAL_MS,
-    null,
-  );
+  const prices = await pricesRequest;
   const priceOf = (t: string) => prices?.tokens.get(t.toLowerCase())?.usd ?? null;
   const atRisk = (token: string, allowance: bigint) => {
     const info = tokenInfo.get(token);

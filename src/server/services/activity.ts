@@ -37,7 +37,8 @@ export async function cachedActivity(
   "use cache";
   cacheLife({ stale: 30, revalidate: 60, expire: 300 });
   const cursors = parseCursor(cursor);
-  const overview = await cachedAddressOverview(owner, only).catch(() => null);
+  // Not awaited here: the history source doesn't need balances, so it starts at once.
+  const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
   const targets = liveChains.filter(
     (chain) =>
       chain.capabilities.activity && (!only || only.includes(chain.key)) && (cursor === null || cursors.has(chain.key)),
@@ -46,13 +47,16 @@ export async function cachedActivity(
     targets.map(async (chain) => {
       const adapter = registry.adapters.find((a) => a.family === chain.family);
       if (!adapter?.getActivity) throw new Error("Activity not supported");
-      const holdings = overview?.chains.find((c) => c.chain === chain.key);
-      const held = [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
-        h.kind === "token" && h.address ? [h.address] : [],
-      );
+      const held = overviewRequest.then((overview) => {
+        const holdings = overview?.chains.find((c) => c.chain === chain.key);
+        return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
+          h.kind === "token" && h.address ? [h.address] : [],
+        );
+      });
       return adapter.getActivity(chain, owner, cursors.get(chain.key) ?? null, held);
     }),
   );
+  const overview = await overviewRequest;
   const chains: ChainActivity[] = settled.map((r, i) =>
     r.status === "fulfilled"
       ? r.value.chain

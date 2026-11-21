@@ -129,6 +129,10 @@ export function ApprovalsView({
   const chainNames = (keys: string[]) => keys.map((k) => chainInfo(k)?.name ?? k).join(", ");
   const goplusDown = report.chains.filter((c) => c.sources.goplus === "unavailable").map((c) => c.chain);
   const goplusPartial = report.chains.filter((c) => c.sources.goplus === "partial").map((c) => c.chain);
+  // Recent Approval events have a time limit; when a slow node missed it, say so.
+  const recentSkipped = report.chains
+    .filter((c) => c.sources.knownSpenders && !c.sources.recentLogs)
+    .map((c) => c.chain);
 
   return (
     <div className="flex flex-col gap-5">
@@ -147,6 +151,11 @@ export function ApprovalsView({
       {goplusPartial.length > 0 && (
         <p role="note" className="rounded-xl border p-4 text-sm text-muted-foreground">
           {fill(s.goplusPartial!, { chains: chainNames(goplusPartial) })}
+        </p>
+      )}
+      {recentSkipped.length > 0 && (
+        <p role="note" className="rounded-xl border p-4 text-sm text-muted-foreground">
+          {fill(s.recentSkipped!, { chains: chainNames(recentSkipped) })}
         </p>
       )}
       {goplusDown.length > 0 && (

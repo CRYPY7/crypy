@@ -29,19 +29,23 @@ export interface ApprovalsReport {
 export async function cachedApprovals(owner: string, only?: readonly string[]): Promise<ApprovalsReport> {
   "use cache";
   cacheLife({ stale: 15, revalidate: 20, expire: 120 });
-  const overview = await cachedAddressOverview(owner, only).catch(() => null);
+  // Not awaited here: each chain starts its outside lookups while the balances load.
+  const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
   const targets = liveChains.filter((chain) => chain.capabilities.approvals && (!only || only.includes(chain.key)));
   const settled = await Promise.allSettled(
     targets.map(async (chain) => {
       const adapter = registry.adapters.find((a) => a.family === chain.family);
       if (!adapter?.getApprovals) throw new Error("Approvals not supported");
-      const holdings = overview?.chains.find((c) => c.chain === chain.key);
-      const held = [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
-        h.kind === "token" && h.address ? [h.address] : [],
-      );
+      const held = overviewRequest.then((overview) => {
+        const holdings = overview?.chains.find((c) => c.chain === chain.key);
+        return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
+          h.kind === "token" && h.address ? [h.address] : [],
+        );
+      });
       return adapter.getApprovals(chain, owner, held);
     }),
   );
+  const overview = await overviewRequest;
   // Tokens the balance view hides as likely spam: approvals on them never need attention.
   const spam = new Set(
     (overview?.chains ?? []).flatMap((c) =>

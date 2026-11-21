@@ -15,6 +15,8 @@ export const MAX_TOKEN_PAGES = 10;
 const PAGE_SIZE = 100;
 /** Metadata reads per multicall batch (3 calls per token). */
 const METADATA_BATCH = 100;
+/** Metadata batches read at the same time (each is one multicall). */
+const METADATA_PARALLEL = 4;
 
 const tokenBalancesSchema = z.object({
   result: z
@@ -57,6 +59,8 @@ export function parseTokenBalancesPage(json: unknown): { tokens: ListedToken[]; 
 export async function listTokensFromAlchemy(
   provider: Provider,
   owner: string,
+  /** Called with each page as it arrives, so its token details can be read while the next page loads. */
+  onPage?: (tokens: ListedToken[]) => void,
 ): Promise<{ tokens: ListedToken[]; truncated: boolean }> {
   const tokens: ListedToken[] = [];
   let pageKey: string | null = null;
@@ -81,6 +85,7 @@ export async function listTokensFromAlchemy(
     if (!response.ok) throw new Error(`Token list provider responded ${response.status}`);
     const result = parseTokenBalancesPage(await response.json());
     tokens.push(...result.tokens);
+    onPage?.(result.tokens);
     pageKey = result.pageKey;
     if (!pageKey) return { tokens, truncated: false };
   }
@@ -112,40 +117,92 @@ export async function holdsCommonToken(chain: ChainConfig, owner: string): Promi
   return held.length > 0;
 }
 
-/** Name, symbol and decimals for many tokens with batched multicalls. Contract text is sanitized. */
-async function readMetadata(client: PublicClient, tokens: ListedToken[]): Promise<RawTokenBalance[]> {
-  const out: RawTokenBalance[] = [];
-  for (let i = 0; i < tokens.length; i += METADATA_BATCH) {
-    const batch = tokens.slice(i, i + METADATA_BATCH);
-    const results = await client.multicall({
-      allowFailure: true,
-      contracts: batch.flatMap((token) => [
-        { address: token.address, abi: erc20Abi, functionName: "name" as const },
-        { address: token.address, abi: erc20Abi, functionName: "symbol" as const },
-        { address: token.address, abi: erc20Abi, functionName: "decimals" as const },
-      ]),
-    });
-    batch.forEach((token, j) => {
-      const [name, symbol, decimals] = [results[j * 3], results[j * 3 + 1], results[j * 3 + 2]];
-      const dec = decimals?.status === "success" ? Number(decimals.result) : NaN;
-      const validDecimals = Number.isInteger(dec) && dec >= 0 && dec <= 255;
-      const info =
-        validDecimals && symbol?.status === "success"
-          ? {
-              name: sanitizeTokenText(name?.status === "success" ? name.result : "", 64),
-              symbol: sanitizeTokenText(symbol.result, 32),
-              decimals: dec,
-            }
-          : null;
-      out.push({
-        address: token.address,
-        // Without readable decimals the amount can't be shown correctly; it is kept raw and flagged.
-        balance: { raw: token.raw.toString(), decimals: info?.decimals ?? 0 },
-        info,
-      });
-    });
+type TokenInfo = NonNullable<RawTokenBalance["info"]>;
+
+/**
+ * Name, symbol and decimals never change for a deployed token, so readable ones are kept in memory (per chain,
+ * bounded). Unreadable tokens are not kept: the read may have failed for a passing reason.
+ */
+const METADATA_CACHE_MAX = 50_000;
+const metadataCache: Map<string, TokenInfo> = ((
+  globalThis as { __crypyTokenMeta?: Map<string, TokenInfo> }
+).__crypyTokenMeta ??= new Map());
+
+function rememberMetadata(key: string, info: TokenInfo) {
+  if (metadataCache.size >= METADATA_CACHE_MAX) {
+    // Drop the oldest tenth (Map keeps insertion order).
+    let n = METADATA_CACHE_MAX / 10;
+    for (const k of metadataCache.keys()) {
+      metadataCache.delete(k);
+      if (--n <= 0) break;
+    }
   }
-  return out;
+  metadataCache.set(key, info);
+}
+
+/**
+ * Name, symbol and decimals for many tokens: known ones from memory, the rest with batched multicalls, several
+ * batches at once. Contract text is sanitized. Output keeps the input order.
+ */
+async function readMetadata(client: PublicClient, chainKey: string, tokens: ListedToken[]): Promise<RawTokenBalance[]> {
+  const key = (address: string) => `${chainKey}:${address.toLowerCase()}`;
+  const known = new Map<string, TokenInfo | null>();
+  const missing = tokens.filter((token) => {
+    const hit = metadataCache.get(key(token.address));
+    if (hit) known.set(token.address, hit);
+    return !hit;
+  });
+  const batches: ListedToken[][] = [];
+  for (let i = 0; i < missing.length; i += METADATA_BATCH) batches.push(missing.slice(i, i + METADATA_BATCH));
+  let next = 0;
+  const worker = async () => {
+    while (next < batches.length) {
+      const batch = batches[next++]!;
+      await readMetadataBatch(client, batch, (address, info) => {
+        known.set(address, info);
+        if (info) rememberMetadata(key(address), info);
+      });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(METADATA_PARALLEL, batches.length) }, worker));
+  return tokens.map((token) => {
+    const info = known.get(token.address) ?? null;
+    return {
+      address: token.address,
+      // Without readable decimals the amount can't be shown correctly; it is kept raw and flagged.
+      balance: { raw: token.raw.toString(), decimals: info?.decimals ?? 0 },
+      info,
+    };
+  });
+}
+
+async function readMetadataBatch(
+  client: PublicClient,
+  batch: ListedToken[],
+  found: (address: string, info: TokenInfo | null) => void,
+): Promise<void> {
+  const results = await client.multicall({
+    allowFailure: true,
+    contracts: batch.flatMap((token) => [
+      { address: token.address, abi: erc20Abi, functionName: "name" as const },
+      { address: token.address, abi: erc20Abi, functionName: "symbol" as const },
+      { address: token.address, abi: erc20Abi, functionName: "decimals" as const },
+    ]),
+  });
+  batch.forEach((token, j) => {
+    const [name, symbol, decimals] = [results[j * 3], results[j * 3 + 1], results[j * 3 + 2]];
+    const dec = decimals?.status === "success" ? Number(decimals.result) : NaN;
+    const validDecimals = Number.isInteger(dec) && dec >= 0 && dec <= 255;
+    const info =
+      validDecimals && symbol?.status === "success"
+        ? {
+            name: sanitizeTokenText(name?.status === "success" ? name.result : "", 64),
+            symbol: sanitizeTokenText(symbol.result, 32),
+            decimals: dec,
+          }
+        : null;
+    found(token.address, info);
+  });
 }
 
 export async function getEvmBalances(
@@ -157,20 +214,27 @@ export async function getEvmBalances(
   const owner = getAddress(address);
   const nativePromise = client.getBalance({ address: owner });
 
-  let listed: ListedToken[];
+  let tokensPromise: Promise<RawTokenBalance[]>;
   let coverage: BalanceCoverage;
   try {
     if (!alchemy) throw new Error("No token index configured");
-    const result = await listTokensFromAlchemy(alchemy, owner);
-    listed = result.tokens;
+    // Each page's token details are read while the next page is listed.
+    const pages: Promise<RawTokenBalance[]>[] = [];
+    const result = await listTokensFromAlchemy(alchemy, owner, (page) => {
+      const read = readMetadata(client, chain.key, page);
+      read.catch(() => {}); // If listing fails later, these reads are dropped: never an unhandled rejection.
+      pages.push(read);
+    });
+    tokensPromise = Promise.all(pages).then((parts) => parts.flat());
     coverage = result.truncated ? "truncated" : "full";
   } catch {
     // Honest fallback: only well-known tokens, and the page says so.
-    listed = await listCommonTokens(client, chain, owner);
+    const listed = await listCommonTokens(client, chain, owner);
+    tokensPromise = readMetadata(client, chain.key, listed);
     coverage = "common-only";
   }
 
-  const [native, tokens] = await Promise.all([nativePromise, readMetadata(client, listed)]);
+  const [native, tokens] = await Promise.all([nativePromise, tokensPromise]);
   return {
     chain: chain.key,
     native: { raw: native.toString(), decimals: chain.nativeDecimals },

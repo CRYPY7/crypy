@@ -75,6 +75,29 @@ Not covered yet (tracked in the roadmap): complete approval history (indexer), c
 single-item NFT approvals, testnet revoke, batch revoke. **Owner checks:** compare your own wallets with Revoke.cash;
 revoke one small real approval and confirm the page shows it gone.
 
+## M7 — Speed for big addresses (2026-11-21)
+
+Measured in the cloud workspace (no Alchemy key; first visit, nothing cached), Approvals tab:
+
+| Address                          | Before | After |
+| -------------------------------- | ------ | ----- |
+| Zero address (huge, junk tokens) | 6.9 s  | 3.9 s |
+| Test wallet 0x8894…D4E3          | 5.2 s  | 3.8 s |
+
+- **Approvals:** GoPlus (the slowest source, 2–3 s; up to 6 s for very busy wallets) now starts at once instead of
+  after the balances; the block header and prices are read alongside other steps.
+- **Recent Approval events** now have a 3 s limit: one public BNB Chain node took 5 s+ for the zero address. When the
+  limit is hit, the page says "your approvals of the last few hours couldn't be searched" instead of staying silent.
+- **Activity:** the Alchemy history no longer waits for the balances (they are only needed for the no-Alchemy fallback).
+- **Balances with Alchemy:** each 100-token page's names and decimals are read while the next page is listed, 4
+  batches at a time instead of one after another; token details (which never change) are remembered in memory, so
+  repeat and popular tokens cost nothing. The Alchemy path itself can't be timed here (no key): **owner check** —
+  open the zero address with your key and compare with the ~8.5 s from before.
+- The remaining floor is GoPlus's own answer time; repeat visits within ~20 s come from the cache.
+
+Checks: typecheck and lint clean; unit 237 passed (1 new: token details keep their order and are read once);
+build passed; browser 33 passed (approvals, activity, chain picker, address).
+
 ## M7 part 3 — Chain picker on address tools (owner request; design approved 2026-11-21, boards 34–35)
 
 - Overview, Approvals and Activity now have a **"Chains:" picker**: _chains where it's used_ (default), _all

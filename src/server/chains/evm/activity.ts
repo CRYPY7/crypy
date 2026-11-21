@@ -369,7 +369,7 @@ export async function getEvmActivity(
   chain: ChainConfig,
   owner: string,
   before: number | null,
-  heldTokens: string[],
+  heldTokensInput: string[] | Promise<string[]>,
 ): Promise<{ chain: ChainActivity; transfers: Transfer[] }> {
   const client = getEvmClient(chain);
   const provider = alchemyProvider(chain);
@@ -398,6 +398,7 @@ export async function getEvmActivity(
       transfers: [],
     };
   }
+  const heldTokens = await Promise.resolve(heldTokensInput).catch(() => [] as string[]);
   const list = await recentPage(chain, client, owner, heldTokens).catch(() => null);
   if (list === null)
     return {
