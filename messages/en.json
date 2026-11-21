@@ -1072,7 +1072,8 @@
           "unavailable": {
             "title": "The reason isn't available.",
             "text": "The transaction failed, but the reason can't be read now: that needs the network state just before this block, which our free nodes no longer keep."
-          }
+          },
+          "messageLabel": "The contract's message"
         },
         "approval": {
           "meaningTitle": "What this means",

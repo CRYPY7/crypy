@@ -886,7 +886,7 @@ export function StoryFailure(ctx: StoryContext) {
       <p className="mt-1 text-sm text-muted-foreground">{s(t, `failure.${failure.category}.text`, { percent })}</p>
       {failure.raw && (
         <div className="mt-3 rounded-lg border bg-background px-3.5 py-2.5 text-sm">
-          <p className="text-xs text-muted-foreground">{s(t, "failure.message")}</p>
+          <p className="text-xs text-muted-foreground">{s(t, "failure.messageLabel")}</p>
           <p className="technical mt-1 break-all" dir="ltr">
             {failure.raw}
           </p>
