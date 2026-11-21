@@ -5,7 +5,7 @@ import { encodeFunctionData, maxUint256 } from "viem";
 import { isUnlimited, rateApproval, rateApprovals, summarize } from "@/lib/approvals/evaluate";
 import type { ApprovalFact } from "@/lib/approvals/types";
 import { parseGoPlusApprovals } from "@/server/security/external";
-import { PERMIT2_ADDRESS, REVOKE_SELECTORS, assertRevoke, buildRevoke, revokeAbi } from "@/wallets/evm/revoke";
+import { PERMIT2_ADDRESSES, REVOKE_SELECTORS, assertRevoke, buildRevoke, revokeAbi } from "@/wallets/evm/revoke";
 import type { RevokeRequest } from "@/wallets/types";
 
 const TOKEN = "0x55d398326f99059fF775485246999027B3197955";
@@ -19,10 +19,20 @@ const fact = (
   return {
     kind: "token",
     token: { address: TOKEN, symbol: "USDT", name: "Tether", decimals: 18 },
-    spender: { address: SPENDER, type: "contract", name: null, sourceVerified: null, goplus: null, ...spender },
+    spender: {
+      address: SPENDER,
+      type: "contract",
+      name: null,
+      sourceVerified: null,
+      goplus: null,
+      createdAt: null,
+      goplusName: null,
+      ...spender,
+    },
     allowance: maxUint256.toString(),
     unlimited: true,
     expiresAt: null,
+    permit2: null,
     balance: "1000",
     priceUsd: 1,
     atRiskUsd: 10,
@@ -33,13 +43,15 @@ const fact = (
 };
 
 describe("approval risks", () => {
-  it("GoPlus malicious wins over everything", () => {
+  it("GoPlus malicious wins over GoPlus trust and over a wallet or unknown contract", () => {
+    const r = rateApproval(fact({ spender: { goplus: { malicious: true, doubt: false, trusted: true } } }));
+    expect([r.risk, r.attention, r.reason]).toEqual(["malicious", true, "malicious"]);
+  });
+  it("disputed: GoPlus flags a contract that CRYPY's own list names (e.g. 0x AllowanceHolder) → check, both views", () => {
     const r = rateApproval(
-      fact({ spender: { name: "Router", goplus: { malicious: true, doubt: false, trusted: true } } }),
+      fact({ spender: { name: "0x AllowanceHolder", goplus: { malicious: true, doubt: true, trusted: false } } }),
     );
-    expect(r.risk).toBe("malicious");
-    expect(r.attention).toBe(true);
-    expect(r.reason).toBe("malicious");
+    expect([r.risk, r.attention, r.reason]).toEqual(["check", false, "disputed"]);
   });
   it("a plain or delegated wallet as spender is high risk", () => {
     expect(rateApproval(fact({ spender: { type: "wallet" } })).risk).toBe("high");
@@ -136,7 +148,8 @@ describe("GoPlus approval leads", () => {
 });
 
 describe("revoke transactions (the only transactions CRYPY builds)", () => {
-  const req = (kind: RevokeRequest["kind"]): RevokeRequest => ({
+  const req = (kind: RevokeRequest["kind"], permit2: string = PERMIT2_ADDRESSES[0]): RevokeRequest => ({
+    ...(kind === "permit2" ? { permit2 } : {}),
     chainId: 56,
     owner: OWNER,
     kind,
@@ -155,7 +168,12 @@ describe("revoke transactions (the only transactions CRYPY builds)", () => {
     const nft = buildRevoke(req("nft-all"));
     expect(nft.data.slice(0, 10)).toBe(REVOKE_SELECTORS.setApprovalForAll);
     const p2 = buildRevoke(req("permit2"));
-    expect([p2.to, p2.data.slice(0, 10)]).toEqual([PERMIT2_ADDRESS, REVOKE_SELECTORS.permit2]);
+    expect([p2.to, p2.data.slice(0, 10)]).toEqual([PERMIT2_ADDRESSES[0], REVOKE_SELECTORS.permit2]);
+    const pancake = buildRevoke(req("permit2", PERMIT2_ADDRESSES[1]));
+    expect(pancake.to).toBe(PERMIT2_ADDRESSES[1]);
+    // Only listed Permit2 contracts; and the transaction must go to the one named in the request.
+    expect(() => buildRevoke(req("permit2", SPENDER))).toThrow(/unknown Permit2/);
+    expect(() => assertRevoke(pancake, req("permit2"))).toThrow(/Permit2/);
   });
 
   it("refuses anything that isn't exactly a revoke", () => {
@@ -205,5 +223,36 @@ describe("spam tokens", () => {
     expect(list.every((a) => a.spamToken && !a.attention)).toBe(true);
     expect(list.map((a) => a.reason).sort()).toEqual(["malicious", "spamToken"]);
     expect(summarize(list)).toMatchObject({ attention: 0, malicious: 0, walletSpenders: 0 });
+  });
+});
+
+describe("new contracts and GoPlus spender details", () => {
+  it("an unknown contract created shortly before the approval is flagged as new", () => {
+    const day = 86_400;
+    const at = 1_790_000_000;
+    const recent = rateApproval(
+      fact({ spender: { sourceVerified: false, createdAt: at - 3 * day }, lastChange: { at, tx: null } }),
+    );
+    expect([recent.risk, recent.reason]).toEqual(["check", "newContract"]);
+    const old = rateApproval(
+      fact({ spender: { sourceVerified: false, createdAt: at - 400 * day }, lastChange: { at, tx: null } }),
+    );
+    expect(old.reason).toBe("unknownContract");
+    expect(rateApproval(fact({ spender: { sourceVerified: false, createdAt: at } })).reason).toBe("unknownContract");
+  });
+
+  it("reads the spender's creation time from GoPlus", () => {
+    const [lead] = parseGoPlusApprovals(
+      [
+        {
+          token_address: TOKEN,
+          approved_list: [
+            { approved_contract: SPENDER, approved_time: 1795161967, address_info: { deployed_time: 1731965020 } },
+          ],
+        },
+      ],
+      "token",
+    );
+    expect(lead!.spenderCreatedAt).toBe(1731965020);
   });
 });

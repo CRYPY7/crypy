@@ -1841,7 +1841,7 @@
         "unlimitedNote": "also covers tokens you receive later",
         "allItems": "All items in the collection",
         "expires": "expires {date}",
-        "viaPermit2": "Permit2 → {name}",
+        "viaPermit2": "{permit2} → {name}",
         "nftCount": "{count} NFTs",
         "noPrice": "No price",
         "unknownDate": "Not known",
@@ -1923,7 +1923,16 @@
         "groupSpam": "Spam tokens ({count})",
         "groupSpamNote": "tokens CRYPY hides as likely spam: nothing of value at risk",
         "badgeSpam": "Likely spam token",
-        "reasonSpamToken": "This token looks like spam (CRYPY hides it in balances), so nothing of value is at risk. Revoking is optional; never visit links in the token's name."
+        "reasonSpamToken": "This token looks like spam (CRYPY hides it in balances), so nothing of value is at risk. Revoking is optional; never visit links in the token's name.",
+        "reasonNewContract": "This contract was created {days} days before your approval and isn't on CRYPY's list of known apps. New unknown contracts are a common way scams drain wallets: check it's an app you meant to use.",
+        "goplusPartial": "GoPlus sent a partial list on {chains}, which is common for busy wallets. CRYPY used it together with its own checks; some approvals may still be missing.",
+        "badgeNewContract": "New contract",
+        "goplusName": "Named by GoPlus: {name}",
+        "reasonDisputed": "GoPlus lists this address as malicious, but CRYPY's own list identifies it as {name}, an official contract. Phishing sites sometimes send approvals through official contracts, so revoke it if you don't remember approving it yourself.",
+        "badgeDisputed": "GoPlus: flagged",
+        "checkOne": "1 approval to check",
+        "checkOther": "{count} approvals to check",
+        "checkBody": "None goes to a wallet or an address flagged as malicious, but these go to contracts CRYPY can't fully identify. Revoke the ones you don't recognise or no longer use."
       }
     }
   },

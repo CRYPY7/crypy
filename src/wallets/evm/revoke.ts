@@ -11,7 +11,11 @@
 import { type Hex, decodeFunctionData, encodeFunctionData, getAddress, isAddress, parseAbi } from "viem";
 import type { RevokeRequest } from "../types";
 
-export const PERMIT2_ADDRESS = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
+/** The Permit2 deployments a revoke may target: Uniswap's and PancakeSwap's (same interface). */
+export const PERMIT2_ADDRESSES = [
+  "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+  "0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768",
+] as const;
 
 export const revokeAbi = parseAbi([
   "function approve(address spender, uint256 amount) returns (bool)",
@@ -37,6 +41,8 @@ function checkRequest(r: RevokeRequest) {
   if (!Number.isInteger(r.chainId) || r.chainId <= 0) throw new Error("Revoke: bad chain");
   for (const a of [r.owner, r.token, r.spender])
     if (!isAddress(a, { strict: false })) throw new Error("Revoke: bad address");
+  if (r.kind === "permit2" && !PERMIT2_ADDRESSES.some((p) => p.toLowerCase() === r.permit2?.toLowerCase()))
+    throw new Error("Revoke: unknown Permit2");
 }
 
 export function buildRevoke(r: RevokeRequest): RevokeTx {
@@ -58,7 +64,7 @@ export function buildRevoke(r: RevokeRequest): RevokeTx {
     };
   else
     tx = {
-      to: PERMIT2_ADDRESS,
+      to: getAddress(r.permit2!),
       data: encodeFunctionData({ abi: permit2RevokeAbi, functionName: "approve", args: [token, spender, 0n, 0] }),
       value: 0n,
     };
@@ -73,7 +79,7 @@ export function assertRevoke(tx: { to: string; data: string; value?: bigint }, r
   const same = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
   const selector = tx.data.slice(0, 10).toLowerCase();
   if (r.kind === "permit2") {
-    if (!same(tx.to, PERMIT2_ADDRESS) || selector !== REVOKE_SELECTORS.permit2)
+    if (!same(tx.to, r.permit2!) || selector !== REVOKE_SELECTORS.permit2)
       throw new Error("Revoke: not a Permit2 revoke");
     const { args } = decodeFunctionData({ abi: permit2RevokeAbi, data: tx.data as Hex });
     if (!same(args[0], r.token) || !same(args[1], r.spender) || args[2] !== 0n || args[3] !== 0)

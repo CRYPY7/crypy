@@ -44,6 +44,8 @@ export interface RevokeRequest {
   /** Token or NFT collection contract. */
   token: string;
   spender: string;
+  /** kind "permit2" only: the Permit2 contract that holds the allowance (Uniswap's or PancakeSwap's). */
+  permit2?: string;
 }
 
 export type RevokeStep = "checking" | "switching" | "testing" | "confirm" | "pending" | "verifying";

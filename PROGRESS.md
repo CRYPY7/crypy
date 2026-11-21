@@ -71,6 +71,27 @@ Not covered yet (tracked in the roadmap): complete approval history (indexer), c
 single-item NFT approvals, testnet revoke, batch revoke. **Owner checks:** compare your own wallets with Revoke.cash;
 revoke one small real approval and confirm the page shows it gone.
 
+## M6 follow-up (2026-11-21): owner's wallet vs revoke.cash
+
+Owner check: CRYPY showed 0 approvals for a BNB Chain wallet where revoke.cash shows 94. Causes found and fixed:
+
+- **GoPlus "partial data" was treated as a failure.** For busy wallets GoPlus answers with code 2 ("partial data
+  obtained") and still sends the list; it also took 3–6 s, over CRYPY's 4 s limit. Now code 2 is accepted (the page
+  says the list may be partial), with a 15 s limit for approval lists. Result: **94 of 94** approvals found, matching
+  revoke.cash.
+- **0x AllowanceHolder** (official 0x contract, docs.0x.org) is flagged as malicious by GoPlus. It is now on CRYPY's
+  list, and when GoPlus flags a contract CRYPY's list names, the approval shows as **"Check — GoPlus: flagged"** with
+  both views explained, instead of "Malicious".
+- **PancakeSwap Permit2** (developer.pancakeswap.finance) and PancakeSwap Universal Router added; app allowances are
+  read from both Permit2 deployments, and revoke supports both (guarded the same way).
+- **New contracts:** an unknown spender created less than 30 days before the approval is flagged "New contract"
+  (creation time from GoPlus, labelled).
+- GoPlus's contract name is shown as "Named by GoPlus: …" for spenders not on CRYPY's list (a label only).
+- Summary now says "N approvals to check" when nothing is flagged but unknown contracts remain.
+
+Checks: unit 212 passed; live 14 passed (incl. the new contracts having code on their chains); build passed;
+browser 102 passed + 1 recently-viewed test that timed out once on live data and passed on re-run.
+
 ## M6 checks (2026-11-21, in the cloud workspace)
 
 - Typecheck, lint, Prettier: passed. Unit tests: 209 passed (11 new: risk rules, spam tokens, unlimited thresholds,

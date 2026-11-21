@@ -17,6 +17,10 @@ export interface KnownContract {
 
 const shared: Record<string, KnownContract> = {
   "0x000000000022d473030f116ddee9f6b43ac78ba3": { name: "Uniswap Permit2", kind: "permit" },
+  // PancakeSwap's own Permit2 deployment (developer.pancakeswap.finance), on BNB Chain and Ethereum.
+  "0x31c2f6fcff4f8759b3bd5bf0e1084a055615c768": { name: "PancakeSwap Permit2", kind: "permit" },
+  // 0x AllowanceHolder for Cancun chains incl. Ethereum and BNB Chain (docs.0x.org, core concepts: contracts).
+  "0x0000000000001ff3684f28c67538d4d072c22734": { name: "0x AllowanceHolder", kind: "aggregator" },
   "0x111111125421ca6dc452d289314280a0f8842a65": { name: "1inch Aggregation Router v6", kind: "aggregator" },
   "0x1111111254eeb25477b68fb85ed929f73a960582": { name: "1inch Aggregation Router v5", kind: "aggregator" },
   // Same address on Ethereum and BNB Chain (KyberSwap docs: MetaAggregationRouterV2).
@@ -63,6 +67,7 @@ const byChain: Record<string, Record<string, KnownContract>> = {
     ...shared,
     "0x10ed43c718714eb63d5aa57b78b54704e256024e": { name: "PancakeSwap Router v2", kind: "router" },
     "0x13f4ea83d0bd40e75c8222255bc855a974568dd4": { name: "PancakeSwap Smart Router v3", kind: "router" },
+    "0xd9c500dff816a1da21a48a732d3498bf09dc9aeb": { name: "PancakeSwap Universal Router", kind: "router" },
     "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { name: "Wrapped BNB (WBNB)", kind: "wrapped" },
     "0x55d398326f99059ff775485246999027b3197955": { name: "Tether USD (USDT)", kind: "token" },
     "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { name: "USD Coin (USDC)", kind: "token" },
@@ -92,3 +97,5 @@ export function knownSpenders(chain: string): string[] {
 
 /** Uniswap Permit2 (same address on every EVM chain): apps get their own allowances inside it. */
 export const PERMIT2 = "0x000000000022d473030f116ddee9f6b43ac78ba3";
+/** Every Permit2 deployment CRYPY reads app allowances from (same interface). */
+export const PERMIT2_CONTRACTS = [PERMIT2, "0x31c2f6fcff4f8759b3bd5bf0e1084a055615c768"] as const;

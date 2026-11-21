@@ -21,7 +21,7 @@ import {
 } from "wagmi/actions";
 import { formatEther, getAddress, parseAbi } from "viem";
 import type { RevokeOutcome, RevokePreview, RevokeRequest, RevokeStep } from "../types";
-import { PERMIT2_ADDRESS, assertRevoke, buildRevoke, describeRevoke } from "./revoke";
+import { assertRevoke, buildRevoke, describeRevoke } from "./revoke";
 
 const readAbi = parseAbi([
   "function allowance(address owner, address spender) view returns (uint256)",
@@ -136,7 +136,7 @@ export async function runRevoke(
     else {
       const [amount] = await readContract(config, {
         ...at,
-        address: PERMIT2_ADDRESS,
+        address: getAddress(r.permit2!),
         abi: readAbi,
         functionName: "allowance",
         args: [account, getAddress(r.token), getAddress(r.spender)],

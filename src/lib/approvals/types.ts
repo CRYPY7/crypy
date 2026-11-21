@@ -20,6 +20,10 @@ export interface SpenderFacts {
   sourceVerified: boolean | null;
   /** GoPlus's view of the spender (second opinion, labelled). null when GoPlus didn't answer or doesn't know it. */
   goplus: { malicious: boolean; doubt: boolean; trusted: boolean } | null;
+  /** When the spender contract was created (unix seconds), as GoPlus reports it; null when unknown. */
+  createdAt: number | null;
+  /** The contract name GoPlus reports (a label only, shown as GoPlus's; never used to trust a spender). */
+  goplusName: string | null;
 }
 
 export interface ApprovalFact {
@@ -31,6 +35,8 @@ export interface ApprovalFact {
   unlimited: boolean;
   /** permit2 only: when the allowance expires (unix seconds). */
   expiresAt: number | null;
+  /** permit2 only: the Permit2 contract holding this allowance (Uniswap's or PancakeSwap's). */
+  permit2: string | null;
   /** What the wallet holds: raw token amount, or NFT count. null when unreadable. */
   balance: string | null;
   priceUsd: number | null;
@@ -49,5 +55,5 @@ export interface ApprovalsFacts {
   checkedAt: number;
   approvals: ApprovalFact[];
   /** Which discovery sources answered this time. */
-  sources: { goplus: "ok" | "unavailable"; recentLogs: boolean; knownSpenders: boolean };
+  sources: { goplus: "ok" | "partial" | "unavailable"; recentLogs: boolean; knownSpenders: boolean };
 }

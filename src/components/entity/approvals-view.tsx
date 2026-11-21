@@ -59,6 +59,7 @@ export function ApprovalsView({
   const isOwner = state.status === "connected" && state.address?.toLowerCase() === report.owner.toLowerCase();
   const sum = report.summary;
   const attentionLive = live.filter((r) => r.attention);
+  const checkLive = live.filter((r) => r.risk === "check" && !r.spamToken);
   const attentionUsd = attentionLive.reduce((t, r) => t + (r.atRiskUsd ?? 0), 0);
 
   const counts = {
@@ -103,6 +104,7 @@ export function ApprovalsView({
       kind: r.kind,
       token: r.token.address,
       spender: r.spender.address,
+      ...(r.permit2 ? { permit2: r.permit2 } : {}),
     };
     return { id: r.id, request, approval: r, chain: info };
   };
@@ -125,7 +127,8 @@ export function ApprovalsView({
     .join(" · ");
   const timeText = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }).format(report.checkedAt);
   const chainNames = (keys: string[]) => keys.map((k) => chainInfo(k)?.name ?? k).join(", ");
-  const goplusDown = report.chains.filter((c) => c.sources.goplus !== "ok").map((c) => c.chain);
+  const goplusDown = report.chains.filter((c) => c.sources.goplus === "unavailable").map((c) => c.chain);
+  const goplusPartial = report.chains.filter((c) => c.sources.goplus === "partial").map((c) => c.chain);
 
   return (
     <div className="flex flex-col gap-5">
@@ -141,6 +144,11 @@ export function ApprovalsView({
           {fill(s.chainDown!, { chain: chainInfo(chain)?.name ?? chain })}
         </p>
       ))}
+      {goplusPartial.length > 0 && (
+        <p role="note" className="rounded-xl border p-4 text-sm text-muted-foreground">
+          {fill(s.goplusPartial!, { chains: chainNames(goplusPartial) })}
+        </p>
+      )}
       {goplusDown.length > 0 && (
         <p role="note" className="rounded-xl border border-high/50 bg-high/8 p-4 text-sm">
           {fill(s.goplusDown!, { chains: chainNames(goplusDown) })}
@@ -160,7 +168,9 @@ export function ApprovalsView({
             {live.length === 0
               ? s.noneFoundTitle
               : attentionLive.length === 0
-                ? s.noneAttention
+                ? checkLive.length > 0
+                  ? fill(checkLive.length === 1 ? s.checkOne! : s.checkOther!, { count: checkLive.length })
+                  : s.noneAttention
                 : attentionLive.length === 1
                   ? s.attentionOne
                   : fill(s.attentionOther!, { count: attentionLive.length })}
@@ -169,7 +179,9 @@ export function ApprovalsView({
             {live.length === 0
               ? fill(s.noneFoundBody!, { chains: chainNames(report.chains.map((c) => c.chain)) })
               : attentionLive.length === 0
-                ? s.noneAttentionBody
+                ? checkLive.length > 0
+                  ? s.checkBody
+                  : s.noneAttentionBody
                 : attentionUsd > 0
                   ? fill(s.attentionBody!, { usd: formatUsd(attentionUsd, locale) })
                   : s.attentionBodyNoPrice}
@@ -357,6 +369,12 @@ function tinyOr(formatted: string, locale: string): string {
   return /^[0.,\s]+$/.test(formatted) ? `< ${(0.0001).toLocaleString(locale)}` : formatted;
 }
 
+/** Permit2 deployments, by address (product names are not translated). */
+const PERMIT2_NAMES: Record<string, string> = {
+  "0x000000000022d473030f116ddee9f6b43ac78ba3": "Uniswap Permit2",
+  "0x31c2f6fcff4f8759b3bd5bf0e1084a055615c768": "PancakeSwap Permit2",
+};
+
 const riskTone: Record<RatedApproval["risk"], string> = {
   malicious: "bg-critical/8 text-critical",
   high: "bg-critical/8 text-critical",
@@ -405,7 +423,9 @@ function ApprovalRow({
         : r.spender.type === null
           ? s.spenderUnreadable
           : (r.spender.name ?? s.spenderContract);
-  const spenderTitle = r.kind === "permit2" ? fill(s.viaPermit2!, { name: spenderKind! }) : spenderKind;
+  const permit2Name = PERMIT2_NAMES[r.permit2?.toLowerCase() ?? ""] ?? "Permit2";
+  const spenderTitle =
+    r.kind === "permit2" ? fill(s.viaPermit2!, { permit2: permit2Name, name: spenderKind! }) : spenderKind;
   const riskLabel = {
     malicious: s.badgeMalicious,
     high: s.badgeHigh,
@@ -423,20 +443,18 @@ function ApprovalRow({
           : r.allowance;
   const dateFmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" });
   const last = r.lastChange;
-  const reason =
-    r.reason === "malicious"
-      ? fill(s.reasonMalicious!, { symbol: r.token.symbol })
-      : r.reason === "wallet"
-        ? s.reasonWallet
-        : r.reason === "unknownContract"
-          ? s.reasonUnknownContract
-          : r.reason === "unreadable"
-            ? s.reasonUnreadable
-            : r.reason === "spamToken"
-              ? s.reasonSpamToken
-              : r.reason === "unused"
-                ? fill(s.reasonUnused!, { symbol: r.token.symbol })
-                : null;
+  const days = Math.max(0, Math.round(((r.lastChange?.at ?? 0) - (r.spender.createdAt ?? 0)) / 86_400));
+  const reasonText: Record<NonNullable<RatedApproval["reason"]>, string> = {
+    malicious: fill(s.reasonMalicious!, { symbol: r.token.symbol }),
+    wallet: s.reasonWallet!,
+    disputed: fill(s.reasonDisputed!, { name: r.spender.name ?? "" }),
+    newContract: fill(s.reasonNewContract!, { days }),
+    unknownContract: s.reasonUnknownContract!,
+    unreadable: s.reasonUnreadable!,
+    spamToken: s.reasonSpamToken!,
+    unused: fill(s.reasonUnused!, { symbol: r.token.symbol }),
+  };
+  const reason = r.reason ? reasonText[r.reason] : null;
 
   return (
     <li className="flex flex-col gap-2 border-b px-4 py-3 last:border-b-0">
@@ -465,9 +483,14 @@ function ApprovalRow({
             {r.spender.goplus?.doubt && !r.spender.goplus.malicious && (
               <Badge className="bg-high/14 text-high">{s.badgeGoplusDoubt}</Badge>
             )}
+            {r.reason === "disputed" && <Badge className="bg-high/14 text-high">{s.badgeDisputed}</Badge>}
+            {r.reason === "newContract" && <Badge className="bg-high/14 text-high">{s.badgeNewContract}</Badge>}
             {r.unused && <Badge className="bg-muted text-muted-foreground">{s.badgeUnused}</Badge>}
             {r.spamToken && <Badge className="bg-muted text-muted-foreground">{s.badgeSpam}</Badge>}
           </span>
+          {!r.spender.name && r.spender.goplusName && (
+            <span className="text-xs text-muted-foreground">{fill(s.goplusName!, { name: r.spender.goplusName })}</span>
+          )}
           <Link
             href={`${addressPath}/${r.spender.address}`}
             prefetch={false}
@@ -478,8 +501,8 @@ function ApprovalRow({
         </div>
         {/* Phone: allowance, value and date side by side; wider screens: table cells. */}
         <div className="grid grid-cols-3 gap-2 sm:contents">
-          <div className="flex min-w-0 flex-col text-sm break-all">
-            <span className={cn(r.unlimited && "font-semibold")}>{allowance}</span>
+          <div className="flex min-w-0 flex-col text-sm">
+            <span className={cn("break-all", r.unlimited && "font-semibold")}>{allowance}</span>
             {r.kind === "token" && r.unlimited && (
               <span className="text-xs text-muted-foreground">{s.unlimitedNote}</span>
             )}

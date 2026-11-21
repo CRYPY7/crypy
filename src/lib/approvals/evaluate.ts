@@ -11,7 +11,11 @@
 import type { ApprovalFact } from "./types";
 
 export type ApprovalRisk = "malicious" | "high" | "check" | "known" | "normal";
-export type ApprovalReason = "malicious" | "wallet" | "unknownContract" | "unused" | "unreadable" | "spamToken";
+export type ApprovalReason =
+  "malicious" | "wallet" | "disputed" | "newContract" | "unknownContract" | "unused" | "unreadable" | "spamToken";
+
+/** An unknown contract created this soon before the approval is a common drainer pattern. */
+export const NEW_CONTRACT_DAYS = 30;
 
 export interface RatedApproval extends ApprovalFact {
   risk: ApprovalRisk;
@@ -43,8 +47,12 @@ const ORDER: Record<ApprovalRisk, number> = { malicious: 0, high: 1, check: 2, n
 export function rateApproval(a: ApprovalFact, spamToken = false): RatedApproval {
   const s = a.spender;
   const unused = a.balance !== null && BigInt(a.balance) === 0n;
+  // GoPlus flags it, but CRYPY's own list names it as an official contract (phishing sites also route approvals
+  // through official contracts): "check", with both views shown; never known-good, never hidden.
+  const disputed = Boolean(s.goplus?.malicious && s.name && s.type === "contract");
   let risk: ApprovalRisk;
-  if (s.goplus?.malicious) risk = "malicious";
+  if (disputed) risk = "check";
+  else if (s.goplus?.malicious) risk = "malicious";
   else if (s.type === "wallet" || s.type === "delegated") risk = "high";
   else if (s.name || s.goplus?.trusted) risk = "known";
   else if (s.sourceVerified === true) risk = "normal";
@@ -54,15 +62,26 @@ export function rateApproval(a: ApprovalFact, spamToken = false): RatedApproval 
       ? "malicious"
       : risk === "high"
         ? "wallet"
-        : risk === "check"
-          ? s.type === null
-            ? "unreadable"
-            : "unknownContract"
-          : unused
-            ? "unused"
-            : null;
+        : disputed
+          ? "disputed"
+          : risk === "check"
+            ? s.type === null
+              ? "unreadable"
+              : isNewContract(a)
+                ? "newContract"
+                : "unknownContract"
+            : unused
+              ? "unused"
+              : null;
   const attention = (risk === "malicious" || risk === "high") && !spamToken;
   return { ...a, risk, attention, unused, spamToken, reason: spamToken && risk !== "malicious" ? "spamToken" : reason };
+}
+
+/** Created less than NEW_CONTRACT_DAYS before the approval (both times known). */
+export function isNewContract(a: ApprovalFact): boolean {
+  const created = a.spender.createdAt;
+  const at = a.lastChange?.at;
+  return created !== null && at != null && at >= created && at - created < NEW_CONTRACT_DAYS * 86_400;
 }
 
 /** Riskiest first, then the most value at risk. */

@@ -166,6 +166,10 @@ export interface GoPlusApprovalLead {
   at: number | null;
   tx: string | null;
   flags: { malicious: boolean; doubt: boolean; trusted: boolean };
+  /** When GoPlus says the spender contract was created (unix seconds); null when unknown. */
+  spenderCreatedAt: number | null;
+  /** The spender's contract name as GoPlus reports it (sanitized), or null. */
+  spenderName: string | null;
 }
 
 const HASH = /^0x[0-9a-fA-F]{64}$/;
@@ -184,6 +188,7 @@ export function parseGoPlusApprovals(result: unknown, kind: GoPlusApprovalLead["
       const info = (a.address_info ?? {}) as Record<string, unknown>;
       const behaviours = Array.isArray(info.malicious_behavior) ? info.malicious_behavior : [];
       const time = Number(a.approved_time);
+      const created = Number(info.deployed_time);
       out.push({
         kind,
         token: token.toLowerCase(),
@@ -195,28 +200,41 @@ export function parseGoPlusApprovals(result: unknown, kind: GoPlusApprovalLead["
           doubt: flag(info.doubt_list) === true,
           trusted: flag(info.trust_list) === true,
         },
+        spenderName: typeof info.contract_name === "string" ? sanitizeTokenText(info.contract_name, 48) || null : null,
+        spenderCreatedAt:
+          Number.isFinite(created) && created > 0 ? (created > 1e12 ? Math.floor(created / 1000) : created) : null,
       });
     }
   }
-  return out.slice(0, 300);
+  return out.slice(0, 1000);
 }
 
-export type GoPlusApprovals = { status: "ok"; leads: GoPlusApprovalLead[] } | { status: "unavailable" };
+/**
+ * "partial": GoPlus answered with code 2 ("partial data obtained"): the list it has, possibly incomplete. Busy wallets
+ * often get this answer; the leads are still used and the page says the list may be incomplete.
+ */
+export type GoPlusApprovals = { status: "ok" | "partial"; leads: GoPlusApprovalLead[] } | { status: "unavailable" };
+
+/** Approval lists take GoPlus several seconds for busy wallets (measured: 3–6 s). */
+const APPROVALS_TIMEOUT_MS = 15_000;
 
 /** GoPlus's approval lists for a wallet (tokens and NFT collections). Cached 5 minutes. */
 export async function goPlusApprovals(chainId: number, owner: string): Promise<GoPlusApprovals> {
   "use cache";
+  let partial = false;
   const get = async (path: string) => {
     const response = await fetch(
       `https://api.gopluslabs.io/api/v2/${path}/${chainId}?addresses=${owner.toLowerCase()}`,
       {
-        signal: AbortSignal.timeout(TIMEOUT_MS),
+        signal: AbortSignal.timeout(APPROVALS_TIMEOUT_MS),
         headers: { accept: "application/json" },
       },
     );
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const json = (await response.json()) as { code?: number; result?: unknown };
-    if (json.code !== 1) throw new Error("GoPlus error");
+    // 1 = complete, 2 = "partial data obtained" (still a real list); anything else is an error.
+    if (json.code === 2) partial = true;
+    else if (json.code !== 1) throw new Error("GoPlus error");
     return json.result;
   };
   try {
@@ -227,7 +245,7 @@ export async function goPlusApprovals(chainId: number, owner: string): Promise<G
     ]);
     cacheLife({ revalidate: 300, expire: 900 });
     return {
-      status: "ok",
+      status: partial ? "partial" : "ok",
       leads: [
         ...parseGoPlusApprovals(tokens, "token"),
         ...parseGoPlusApprovals(nft721, "nft-all"),
