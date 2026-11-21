@@ -23,10 +23,15 @@ export interface ApprovalsReport {
 }
 
 /**
- * Approvals on every live chain with the `approvals` capability. Held tokens come from the (cached) balance overview
+ * Approvals on every live chain with the `approvals` capability. `priority` "background" (Portfolio badges) lets
+ * page reports go first for GoPlus's free capacity. Held tokens come from the (cached) balance overview
  * so common spenders are checked for each. Cached briefly: approvals change when the user revokes.
  */
-export async function cachedApprovals(owner: string, only?: readonly string[]): Promise<ApprovalsReport> {
+export async function cachedApprovals(
+  owner: string,
+  only?: readonly string[],
+  priority: "page" | "background" = "page",
+): Promise<ApprovalsReport> {
   "use cache";
   cacheLife({ stale: 15, revalidate: 20, expire: 120 });
   // Not awaited here: each chain starts its outside lookups while the balances load.
@@ -42,7 +47,7 @@ export async function cachedApprovals(owner: string, only?: readonly string[]): 
           h.kind === "token" && h.address ? [h.address] : [],
         );
       });
-      return adapter.getApprovals(chain, owner, held);
+      return adapter.getApprovals(chain, owner, held, priority);
     }),
   );
   const overview = await overviewRequest;

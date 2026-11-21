@@ -564,6 +564,10 @@ DEX decoders, per chain family:                      (one per DEX design)
 - Server: `server/services/portfolio.ts` → `GET /api/v1/address/{address}/portfolio` = cached overview on the
   wallet's used chains + approvals summary (timeout 20 s) + GoPlus flags on the top 8 non-listed tokens (timeout 8 s).
   `portfolioLimiter` 60/min. The browser fetches 3 wallets at a time; an older answer never replaces a newer one.
+- GoPlus pace (`server/security/goplus-budget.ts`): ≤ 30 real calls a minute per server; `priority` "page"
+  (default) or "background" (Portfolio, first 8 slots of a minute only); 60 s pause on a limit answer; one log line
+  per minute with counts. `goPlusToken`, `goPlusApprovals`, `cachedApprovals` and the adapter's `getApprovals` take
+  the priority. In memory per process (a shared store is needed with several servers).
 - `modules/tools/portfolio/widget.tsx` is a thin client shell that lazy-loads `tracker.tsx`, so route prefetches
   from the header and tab bar don't add the portfolio code to other pages.
 

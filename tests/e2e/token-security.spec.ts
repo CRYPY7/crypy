@@ -48,8 +48,19 @@ test("liquidity card: every holder with its lock or control, read on-chain (FLOK
   await expect(card).toBeVisible({ timeout: 60_000 });
   await expect(card.getByText("UNCX (PancakeSwap locker)", { exact: true })).toBeVisible();
   await expect(card.getByText(/^Locked until /).first()).toBeVisible();
-  await expect(card.getByText(/signers must agree to remove it/)).toBeVisible();
-  await expect(card.getByText("OnlyMoons vault", { exact: true })).toBeVisible();
+  // FLOKI's Safe (3 of 5) and OnlyMoons vault are found through GoPlus's list of LP holders. When GoPlus doesn't
+  // answer (free-plan limits), that part must show as "Holders not found", never as safe.
+  const goPlusDown = await page
+    .locator("section", { has: page.getByRole("heading", { name: "Holders" }) })
+    .getByText(/GoPlus didn't answer/)
+    .isVisible();
+  if (goPlusDown) {
+    // Any mix is fine as long as what wasn't found says so (the Safe may still be found from recent LP transfers).
+    await expect(card.getByText(/signers must agree to remove it|Holders not found \d/).first()).toBeVisible();
+  } else {
+    await expect(card.getByText(/signers must agree to remove it/)).toBeVisible();
+    await expect(card.getByText("OnlyMoons vault", { exact: true })).toBeVisible();
+  }
   await expect(card.getByText(/Protected: burned, or locked for more than 30 days/)).toBeVisible();
   await expect(card.getByText(/How we checked\./)).toBeVisible();
   // Closed pools open on click.

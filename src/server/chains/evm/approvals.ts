@@ -6,6 +6,7 @@ import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import { isUnlimited } from "@/lib/approvals/evaluate";
 import type { ApprovalFact, ApprovalsFacts, SpenderFacts } from "@/lib/approvals/types";
 import { type GoPlusApprovalLead, goPlusApprovals, sourcifyVerified } from "@/server/security/external";
+import type { GoPlusPriority } from "@/server/security/goplus-budget";
 import { accountTypes } from "./batch";
 import { getOnchainPrices } from "./prices";
 import { getEvmClient } from "./providers";
@@ -72,12 +73,13 @@ export async function getEvmApprovals(
   chain: ChainConfig,
   owner: string,
   heldTokensInput: string[] | Promise<string[]>,
+  priority: GoPlusPriority = "page",
 ): Promise<ApprovalsFacts> {
   const client = getEvmClient(chain);
   const wallet = getAddress(owner);
   const chainId = Number(chain.caip2.split(":")[1]);
   // Outside lists don't need the block or the held tokens: start them first (they are the slowest part).
-  const goplusRequest = withTimeout(goPlusApprovals(chainId, wallet), GOPLUS_MS, {
+  const goplusRequest = withTimeout(goPlusApprovals(chainId, wallet, priority), GOPLUS_MS, {
     status: "unavailable" as const,
   });
   const [block, heldTokens] = await Promise.all([

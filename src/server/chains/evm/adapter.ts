@@ -81,8 +81,8 @@ export const evmAdapter: ChainFamilyAdapter = {
   },
 
   /** Approvals: GoPlus leads plus CRYPY's own checks, every allowance re-read on-chain (approvals.ts). */
-  getApprovals(chain, owner, heldTokens) {
-    return getEvmApprovals(chain, owner, heldTokens);
+  getApprovals(chain, owner, heldTokens, priority) {
+    return getEvmApprovals(chain, owner, heldTokens, priority);
   },
 
   /** Activity: Alchemy's transfer history (free plan), or the last few hours from the chain without it (activity.ts). */

@@ -42,6 +42,31 @@ Last updated: 2026-11-21
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
 
+## M8 Part 1 follow-up (2026-11-21): GoPlus shared between pages and the Portfolio
+
+Owner's run: 126 passed, 3 failed. Causes:
+
+- **FLOKI liquidity card (2 tests):** GoPlus didn't answer during the run (the page's Holders and Second opinion cards
+  said so). FLOKI's Safe and OnlyMoons vault are found through GoPlus's LP-holder list, so that share correctly showed
+  as "Holders not found" and was never counted as safe. A likely cause was found: the Portfolio's badges could send
+  up to about 8 GoPlus token checks per wallet plus GoPlus approval lists for every chain, enough to use up GoPlus's
+  free pace (150 compute units a minute) that the token and approval pages need.
+- **Fix: one shared GoPlus pace** (`server/security/goplus-budget.ts`): at most 30 real GoPlus calls a minute per
+  server (cached answers are free); token and approval pages go first; the Portfolio's checks run at "background"
+  priority and may use only the first 8 slots of a minute; when GoPlus answers "too many requests", all calls pause
+  for 60 s. Refused calls show as "not checked", as before. The server logs one line per minute with counts when
+  anything was held back or failed (no addresses).
+- **Portfolio honesty:** "Nothing flagged" now appears only for a wallet whose checks all ran; otherwise the Safety
+  section says some checks didn't run and why.
+- **Recently viewed (1 test, phone):** the test left the address page before the page's browser code had saved the
+  visit; it now waits for the save. Not a site bug: the visit is saved as soon as the page has loaded.
+- The FLOKI test now accepts any honest mix when GoPlus is down (Safe found from recent LP transfers, or "Holders not
+  found"), and still requires the full holder list when GoPlus answers.
+
+Checks: typecheck and lint clean; unit 255 passed (5 new for the pace); build passed; full browser run 129 passed,
+7 skipped, 0 failed. Server log in that run: "GoPlus last minute: 30 sent, 4 failed, 4 page and 38 background calls
+held back", so the free plan's limit is close to 30 calls a minute under the test load.
+
 ## M8 Part 1 — Portfolio (design approved 2026-11-21, boards 36–38)
 
 - **Page:** `/tools/portfolio`, now live. No account and no wallet connection needed.

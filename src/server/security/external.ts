@@ -4,6 +4,7 @@ import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { ExternalFacts, PowerFact, SourceFacts } from "@/lib/security/types";
 import { type AbiEntry, powersFromSource } from "@/server/chains/evm/security/source";
 import { discardBody } from "@/server/http/discard";
+import { type GoPlusPriority, isLimitMessage, noteGoPlusFailure, pauseGoPlus, takeGoPlusSlot } from "./goplus-budget";
 
 /**
  * Outside sources for token security. Both are free and need no key:
@@ -82,19 +83,38 @@ export function parseGoPlusLeads(entry: Record<string, unknown>): GoPlusLeads {
 export type GoPlusResult =
   { status: "ok"; facts: ExternalFacts; leads: GoPlusLeads } | { status: "unavailable" | "not-listed" };
 
-export async function goPlusToken(chainId: number, address: string): Promise<GoPlusResult> {
+/**
+ * GoPlus's token report. `priority` decides who goes first when the free plan's pace is used up (goplus-budget.ts);
+ * a refused call is "unavailable" for a short time, so it is tried again soon.
+ */
+export async function goPlusToken(
+  chainId: number,
+  address: string,
+  priority: GoPlusPriority = "page",
+): Promise<GoPlusResult> {
   "use cache";
+  if (!takeGoPlusSlot(priority)) {
+    cacheLife({ revalidate: 30, expire: 60 });
+    return { status: "unavailable" };
+  }
   try {
     const response = await fetch(
       `https://api.gopluslabs.io/api/v1/token_security/${chainId}?contract_addresses=${address.toLowerCase()}`,
       { signal: AbortSignal.timeout(TIMEOUT_MS), headers: { accept: "application/json" } },
     );
     if (!response.ok) {
+      if (response.status === 429) pauseGoPlus();
       discardBody(response);
       throw new Error(`HTTP ${response.status}`);
     }
-    const json = (await response.json()) as { code?: number; result?: Record<string, Record<string, unknown>> };
+    const json = (await response.json()) as {
+      code?: number;
+      message?: string;
+      result?: Record<string, Record<string, unknown>>;
+    };
     if (json.code !== 1 || !json.result) {
+      if (isLimitMessage(json.message)) pauseGoPlus();
+      noteGoPlusFailure();
       cacheLife({ revalidate: 60, expire: 300 });
       return { status: "unavailable" };
     }
@@ -107,6 +127,7 @@ export async function goPlusToken(chainId: number, address: string): Promise<GoP
     cacheLife({ revalidate: 3600, expire: 86_400 });
     return { status: "ok", facts: parseGoPlus(entry, Date.now()), leads: parseGoPlusLeads(entry) };
   } catch {
+    noteGoPlusFailure();
     cacheLife({ revalidate: 60, expire: 300 });
     return { status: "unavailable" };
   }
@@ -227,11 +248,16 @@ export type GoPlusApprovals = { status: "ok" | "partial"; leads: GoPlusApprovalL
 /** Approval lists take GoPlus several seconds for busy wallets (measured: 3–6 s). */
 const APPROVALS_TIMEOUT_MS = 15_000;
 
-/** GoPlus's approval lists for a wallet (tokens and NFT collections). Cached 5 minutes. */
-export async function goPlusApprovals(chainId: number, owner: string): Promise<GoPlusApprovals> {
+/** GoPlus's approval lists for a wallet (tokens and NFT collections). Cached 5 minutes. Paced like goPlusToken. */
+export async function goPlusApprovals(
+  chainId: number,
+  owner: string,
+  priority: GoPlusPriority = "page",
+): Promise<GoPlusApprovals> {
   "use cache";
   let partial = false;
   const get = async (path: string) => {
+    if (!takeGoPlusSlot(priority)) throw new Error("GoPlus pace");
     const response = await fetch(
       `https://api.gopluslabs.io/api/v2/${path}/${chainId}?addresses=${owner.toLowerCase()}`,
       {
@@ -240,13 +266,18 @@ export async function goPlusApprovals(chainId: number, owner: string): Promise<G
       },
     );
     if (!response.ok) {
+      if (response.status === 429) pauseGoPlus();
       discardBody(response);
       throw new Error(`HTTP ${response.status}`);
     }
-    const json = (await response.json()) as { code?: number; result?: unknown };
+    const json = (await response.json()) as { code?: number; message?: string; result?: unknown };
+    if (isLimitMessage(json.message)) pauseGoPlus();
     // 1 = complete, 2 = "partial data obtained" (still a real list); anything else is an error.
     if (json.code === 2) partial = true;
-    else if (json.code !== 1) throw new Error("GoPlus error");
+    else if (json.code !== 1) {
+      noteGoPlusFailure();
+      throw new Error("GoPlus error");
+    }
     return json.result;
   };
   try {

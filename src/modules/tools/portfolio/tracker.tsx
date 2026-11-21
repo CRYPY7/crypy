@@ -45,8 +45,8 @@ interface FlaggedToken {
 
 interface WalletReport {
   overview: { chains: ChainHoldings[]; unavailable: string[]; pricesAvailable: boolean };
-  approvals: { attention: number; chains: string[] } | null;
-  flagged: { tokens: FlaggedToken[]; checked: number } | null;
+  approvals: { attention: number; chains: string[]; partial: boolean } | null;
+  flagged: { tokens: FlaggedToken[]; checked: number; skipped: number } | null;
 }
 
 type LoadState = { status: "loading" } | { status: "ok"; report: WalletReport } | { status: "error"; limited: boolean };
@@ -218,8 +218,9 @@ export default function PortfolioTracker({
   const approvalWallets = reports.filter((r) => (r.report.approvals?.attention ?? 0) > 0);
   const approvalCount = approvalWallets.reduce((n, r) => n + r.report.approvals!.attention, 0);
   const flagged = reports.flatMap((r) => (r.report.flagged?.tokens ?? []).map((t) => ({ ...t, wallet: r.wallet })));
-  const approvalsUnchecked = reports.filter((r) => r.report.approvals === null).length;
-  const flagsUnchecked = reports.filter((r) => r.report.flagged === null).length;
+  const fullyChecked = (r: WalletReport) =>
+    r.approvals !== null && !r.approvals.partial && r.flagged !== null && r.flagged.skipped === 0;
+  const someUnchecked = reports.some((r) => !fullyChecked(r.report));
   const unavailableChains = [...new Set(reports.flatMap((r) => r.report.overview.unavailable))];
   const pricesMissing = reports.some((r) => !r.report.overview.pricesAvailable);
 
@@ -493,9 +494,7 @@ export default function PortfolioTracker({
                 <div className="flex min-w-36 flex-wrap justify-end gap-1">
                   {attention > 0 && <Badge tone="warn">{fill(s.badgeApprovals!, { count: attention })}</Badge>}
                   {risky > 0 && <Badge tone="bad">{fill(s.badgeFlagged!, { count: risky })}</Badge>}
-                  {report && !attention && !risky && report.approvals && report.flagged && (
-                    <Badge>{s.badgeNothing}</Badge>
-                  )}
+                  {report && !attention && !risky && fullyChecked(report) && <Badge>{s.badgeNothing}</Badge>}
                 </div>
                 <div className="flex items-center gap-1">
                   <a
@@ -536,7 +535,7 @@ export default function PortfolioTracker({
       </Panel>
 
       {/* Safety */}
-      {(approvalCount > 0 || flagged.length > 0 || approvalsUnchecked > 0 || flagsUnchecked > 0) && (
+      {(approvalCount > 0 || flagged.length > 0 || someUnchecked) && (
         <Panel>
           <h2 className="text-lg font-semibold">{s.safetyTitle}</h2>
           <div className="mt-3 flex flex-col gap-3">
@@ -578,9 +577,7 @@ export default function PortfolioTracker({
                 </div>
               </div>
             ))}
-            {(approvalsUnchecked > 0 || flagsUnchecked > 0) && (
-              <p className="text-sm text-muted-foreground">{s.someUnchecked}</p>
-            )}
+            {someUnchecked && <p className="text-sm text-muted-foreground">{s.someUnchecked}</p>}
           </div>
           <p className="mt-3 text-xs text-muted-foreground">{s.safetyNote}</p>
         </Panel>

@@ -86,6 +86,10 @@ test("entity pages show breadcrumbs and appear under recently viewed", async ({ 
   const crumbs = page.getByRole("navigation", { name: "Breadcrumb" });
   await expect(crumbs).toBeVisible({ timeout: 30_000 });
   await expect(crumbs.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/en");
+  // The visit is saved by the page's browser code once it has loaded; leave only after that.
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("crypy.recent") ?? ""), { timeout: 30_000 })
+    .toContain(address);
   await page.goto("/en");
   const recent = page.getByTestId("recent");
   await expect(recent.getByRole("link", { name: /0xd8dA…6045/ })).toHaveAttribute("href", `/en/address/${address}`);

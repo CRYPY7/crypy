@@ -14,6 +14,9 @@ import { type AddressOverview, cachedAddressOverview } from "./overview";
  *  - flagged tokens: held tokens that GoPlus reports as a honeypot or with a high sell tax. This is GoPlus's finding,
  *    shown with its name; the token's own page runs CRYPY's full checks. Only the wallet's most valuable tokens are
  *    checked (FLAG_CHECKS), and never well-known tokens from CRYPY's checked list.
+ *
+ * Both use GoPlus at "background" priority: page reports go first for its free capacity, and anything skipped is
+ * reported as not checked.
  */
 export interface FlaggedToken {
   chain: ChainKey;
@@ -26,8 +29,10 @@ export interface FlaggedToken {
 export interface PortfolioWalletReport {
   overview: AddressOverview;
   /** null when the approval check didn't finish in time or failed. */
-  approvals: { attention: number; chains: ChainKey[] } | null;
-  flagged: { tokens: FlaggedToken[]; checked: number } | null;
+  /** `partial`: GoPlus's approval list wasn't read on some chain, so approvals found only there may be missing. */
+  approvals: { attention: number; chains: ChainKey[]; partial: boolean } | null;
+  /** `skipped`: tokens GoPlus couldn't check right now (unavailable, or its free capacity kept for page reports). */
+  flagged: { tokens: FlaggedToken[]; checked: number; skipped: number } | null;
 }
 
 const APPROVALS_MS = 20_000;
@@ -51,11 +56,13 @@ async function flaggedTokens(overview: AddressOverview): Promise<PortfolioWallet
     .filter((h) => h.kind === "token" && h.address && !wellKnown.has(`${h.chain}:${h.address.toLowerCase()}`))
     .sort((a, b) => (b.valueUsd ?? 0) - (a.valueUsd ?? 0))
     .slice(0, FLAG_CHECKS);
+  let skipped = 0;
   const results = await Promise.all(
     candidates.map(async (h): Promise<FlaggedToken | null> => {
       const chain = getChain(h.chain);
       if (!chain?.capabilities.tokenSecurity) return null;
-      const result = await goPlusToken(chain.evmChainId, h.address!);
+      const result = await goPlusToken(chain.evmChainId, h.address!, "background");
+      if (result.status === "unavailable") skipped += 1;
       if (result.status !== "ok") return null;
       const { honeypot, sellTax } = result.facts;
       if (honeypot === true)
@@ -65,7 +72,11 @@ async function flaggedTokens(overview: AddressOverview): Promise<PortfolioWallet
       return null;
     }),
   );
-  return { tokens: results.filter((r): r is FlaggedToken => r !== null), checked: candidates.length };
+  return {
+    tokens: results.filter((r): r is FlaggedToken => r !== null),
+    checked: candidates.length - skipped,
+    skipped,
+  };
 }
 
 export async function portfolioWallet(address: string): Promise<PortfolioWalletReport> {
@@ -75,8 +86,9 @@ export async function portfolioWallet(address: string): Promise<PortfolioWalletR
   const overview = await cachedAddressOverview(address, balanceChains);
   const [approvals, flagged] = await Promise.all([
     withTimeout(
-      cachedApprovals(address, approvalChains).then((r) => ({
+      cachedApprovals(address, approvalChains, "background").then((r) => ({
         attention: r.summary.attention,
+        partial: r.unavailable.length > 0 || r.chains.some((c) => c.sources.goplus === "unavailable"),
         chains: [...new Set(r.chains.filter((c) => c.approvals.some((a) => a.attention)).map((c) => c.chain))],
       })),
       APPROVALS_MS,

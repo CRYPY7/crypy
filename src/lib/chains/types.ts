@@ -322,7 +322,13 @@ export interface ChainFamilyAdapter {
    * common spenders for each of them.
    */
   /** `heldTokens` may still be loading: work that doesn't need it (e.g. outside lists) starts at once. */
-  getApprovals?(chain: ChainConfig, owner: string, heldTokens: string[] | Promise<string[]>): Promise<ApprovalsFacts>;
+  /** `background`: a nice-to-have check (Portfolio badges) that yields outside-source capacity to page reports. */
+  getApprovals?(
+    chain: ChainConfig,
+    owner: string,
+    heldTokens: string[] | Promise<string[]>,
+    priority?: "page" | "background",
+  ): Promise<ApprovalsFacts>;
   /**
    * The wallet's transfers on this chain, newest first (M7). `before`: continue from this block (inclusive), or null
    * for the newest page. `heldTokens`: used when only recent activity can be read.

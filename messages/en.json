@@ -276,7 +276,7 @@
         },
         {
           "q": "Which tokens are checked for risks?",
-          "a": "Each wallet's most valuable tokens (up to 8, not counting well-known ones) are checked against GoPlus for a honeypot or a sell tax of 30% or more. It's GoPlus's finding, not a verdict; open the token for CRYPY's full checks. Nothing is ever called safe."
+          "a": "Each wallet's most valuable tokens (up to 8, not counting well-known ones) are checked against GoPlus for a honeypot or a sell tax of 30% or more. It's GoPlus's finding, not a verdict; open the token for CRYPY's full checks. GoPlus's free capacity is shared, and token and approval pages go first: when a check is skipped, the portfolio says so. Nothing is ever called safe."
         }
       ]
     },
@@ -2549,7 +2549,7 @@
       "flagSellTax": "{symbol} in {name} ({chain}): GoPlus reports a {tax} sell tax",
       "flagSource": "Finding from GoPlus Security, not a CRYPY verdict.",
       "openReport": "Open token report →",
-      "someUnchecked": "Some wallets' checks didn't finish in time. Open the wallet for its full report.",
+      "someUnchecked": "Some checks didn't run for every wallet: they didn't finish in time, or GoPlus's free capacity was kept for token and approval pages. Refresh in a minute, or open the wallet for its full report.",
       "safetyNote": "Checks run on the approvals and most valuable tokens of the wallets above. CRYPY never says a wallet or token is safe.",
       "holdingsTitle": "Top holdings",
       "holdingsNote": "Across all wallets. The same coin or well-known token on several chains is combined.",
