@@ -1,4 +1,5 @@
 import "server-only";
+import { limitedFetch } from "@/server/http/limit";
 import { cacheLife } from "next/cache";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { ExternalFacts, PowerFact, SourceFacts } from "@/lib/security/types";
@@ -98,7 +99,7 @@ export async function goPlusToken(
     return { status: "unavailable" };
   }
   try {
-    const response = await fetch(
+    const response = await limitedFetch(
       `https://api.gopluslabs.io/api/v1/token_security/${chainId}?contract_addresses=${address.toLowerCase()}`,
       { signal: AbortSignal.timeout(TIMEOUT_MS), headers: { accept: "application/json" } },
     );
@@ -147,10 +148,13 @@ export async function sourcifyVerified(
   "use cache";
   const unknown = { source: { status: "unknown" as const, provider: "Sourcify" }, powers: null };
   try {
-    const response = await fetch(`https://sourcify.dev/server/v2/contract/${chainId}/${address}?fields=abi,sources`, {
-      signal: AbortSignal.timeout(SOURCE_TIMEOUT_MS),
-      headers: { accept: "application/json" },
-    });
+    const response = await limitedFetch(
+      `https://sourcify.dev/server/v2/contract/${chainId}/${address}?fields=abi,sources`,
+      {
+        signal: AbortSignal.timeout(SOURCE_TIMEOUT_MS),
+        headers: { accept: "application/json" },
+      },
+    );
     if (response.status === 404) {
       discardBody(response);
       cacheLife({ revalidate: 3600, expire: 86_400 });
@@ -258,7 +262,7 @@ export async function goPlusApprovals(
   let partial = false;
   const get = async (path: string) => {
     if (!takeGoPlusSlot(priority)) throw new Error("GoPlus pace");
-    const response = await fetch(
+    const response = await limitedFetch(
       `https://api.gopluslabs.io/api/v2/${path}/${chainId}?addresses=${owner.toLowerCase()}`,
       {
         signal: AbortSignal.timeout(APPROVALS_TIMEOUT_MS),

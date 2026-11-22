@@ -553,6 +553,14 @@ DEX decoders, per chain family:                      (one per DEX design)
   Ethereum data fee per action (Base GasPriceOracle `getL1FeeUpperBound`, Arbitrum `ArbGasInfo.getPricesInWei`).
 - Finality: `TxDetails.finalized` from the node's `finalized` block; block-count fallbacks only for non-rollups.
 
+## 12i. Outbound request cap
+
+- `server/http/limit.ts` `limitedFetch`: every outbound request (viem transports via `fetchFn`, Alchemy token and
+  transfer lists, GoPlus, Sourcify) shares one cap, `MAX_IN_FLIGHT` = 32 per server process. Added after a native Node
+  abort on Windows under heavy parallel load. With several server processes, each has its own cap.
+- `TOKEN_LIST_BUDGET_MS` (5 s) bounds Alchemy's sequential token-list paging; a cut-off list still reads each chain's
+  well-known tokens directly and prices them first.
+
 ## 12h. Portfolio (M8 Part 1)
 
 - Client-only state: `lib/portfolio/storage.ts` (versioned `localStorage` record, defensive parser, 20-wallet cap,

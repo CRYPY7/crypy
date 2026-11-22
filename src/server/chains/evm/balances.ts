@@ -1,4 +1,5 @@
 import "server-only";
+import { limitedFetch } from "@/server/http/limit";
 import { type Hex, type PublicClient, erc20Abi, getAddress } from "viem";
 import { z } from "zod";
 import type { ChainConfig } from "@/config/chains";
@@ -84,7 +85,7 @@ export async function listTokensFromAlchemy(
     // Metered like every other request: once today's budget is used, fall back to well-known tokens.
     if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
     recordUsage(provider, "alchemy_getTokenBalances");
-    const response = await fetch(provider.url, {
+    const response = await limitedFetch(provider.url, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

@@ -42,6 +42,18 @@ Last updated: 2026-11-21
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
 
+## Server stability under load (2026-11-21)
+
+- **Shared request cap:** at most 32 outbound requests in flight per server; extra ones wait their turn (released as
+  soon as the answer's headers arrive, so a slot can't leak). Unit-tested (never above the cap, every request
+  completes, failures free their slot). The opt-in memory log now also prints requests in flight, the most at once
+  and how many waited.
+- Evidence on the owner's PC (Node v26.13.1, Alchemy key): before, 3 of 5 full runs ended with the server aborting
+  (0xC0000409); isolation runs showed it needed the Portfolio test and the rest of the suite together. After: 2 of 2
+  full runs 129 passed, 7 skipped, 0 failed, no crash; demand reached the cap and up to 263 requests waited per 30 s.
+- Here: unit 258 passed; full browser run 129 passed.
+- `scripts/full-check-no-portfolio.cmd` and `scripts/full-check-portfolio-only.cmd` added for isolation runs.
+
 ## Big-wallet speed (2026-11-21, measured on the owner's PC with Alchemy)
 
 - Measured with an opt-in timing log (`CRYPY_DEBUG_TIMING=1`): for big wallets Alchemy's token list (10 pages read one
@@ -910,12 +922,13 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 
 ## Known issues
 
-- **Investigating (2026-11-21): server crash on the owner's Windows PC.** Under the full browser suite the app server
-  sometimes exits with Windows code 0xC0000409 (a native "fail-fast" abort inside Node, not a JavaScript error). Seen
-  in 3 of 5 full runs on the owner's PC (Node v26.13.1), each time while the two-wallet Portfolio test was loading;
-  never in this Linux workspace. Ruled out: memory (peak 633 MB, no Node crash report), and a single big wallet (the
-  Binance wallet opened alone three ways never crashed it). Windows logs no crash record. Next: isolate with and
-  without the Portfolio test; production runs on Linux, where it hasn't appeared.
+- **Fixed (2026-11-21): server crash on the owner's Windows PC.** Under the full browser suite the app server sometimes
+  exited with Windows code 0xC0000409 (a native abort inside Node v26.13.1, no JavaScript error, normal memory): 3 of
+  5 full runs. Isolated on the owner's PC: the suite without the two-wallet Portfolio test passed with no crash, and
+  the Portfolio test alone (6 times, 3 at once) passed with no crash; only both together crashed, i.e. too many
+  outbound requests at once. Fix: one server-wide cap of 32 outbound requests in flight (`server/http/limit.ts`, used
+  by every provider, Alchemy, GoPlus and Sourcify call). Then 2 of 2 full runs: 129 passed, no crash. Not seen on
+  Linux; production runs on Linux.
 - **Before launch (M9):** per-visitor limits identify visitors by the first `X-Forwarded-For` address. That is safe
   only behind a proxy that overwrites the header (Vercel does; on our own VPS, nginx must be set to). Otherwise a
   visitor could send a fake one to get around the limits.

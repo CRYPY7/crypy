@@ -1,4 +1,5 @@
 import "server-only";
+import { limitedFetch } from "@/server/http/limit";
 import { type PublicClient, getAddress, pad, parseAbiItem } from "viem";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
@@ -141,7 +142,7 @@ export function parseAlchemyTransfer(
 async function alchemyCall(provider: Provider, params: Record<string, unknown>) {
   if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
   recordUsage(provider, "alchemy_getAssetTransfers");
-  const response = await fetch(provider.url, {
+  const response = await limitedFetch(provider.url, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "alchemy_getAssetTransfers", params: [params] }),

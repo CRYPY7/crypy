@@ -1,4 +1,5 @@
 import "server-only";
+import { limitedFetch } from "@/server/http/limit";
 import {
   type Chain,
   type EIP1193RequestFn,
@@ -404,7 +405,12 @@ export function rankedFallback(providers: Provider[]): Transport {
 export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
   // Free plans often limit batches (dRPC free: 3 per call). Bigger rounds go out as a few parallel calls instead.
   const batchSize = provider.kind === "alchemy" ? 20 : 3;
-  const inner = http(provider.url, { timeout, retryCount: 0, batch: { batchSize, wait: 10 } });
+  const inner = http(provider.url, {
+    timeout,
+    retryCount: 0,
+    batch: { batchSize, wait: 10 },
+    fetchFn: limitedFetch,
+  });
   return (options) => {
     const transport = inner(options);
     return {

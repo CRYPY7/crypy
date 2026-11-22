@@ -1,4 +1,5 @@
 import "server-only";
+import { takeFetchStats } from "@/server/http/limit";
 
 /** Removes provider keys from text before it is logged (Alchemy keys sit in URL paths: /v2/<key>). */
 export function redactKeys(text: string): string {
@@ -36,9 +37,11 @@ export function watchMemory(): void {
   const mb = (n: number) => Math.round(n / 1_048_576);
   const timer = setInterval(() => {
     const m = process.memoryUsage();
+    const f = takeFetchStats();
     console.warn(
       `[crypy] memory: rss ${mb(m.rss)} MB, heap ${mb(m.heapUsed)}/${mb(m.heapTotal)} MB, ` +
-        `external ${mb(m.external)} MB, buffers ${mb(m.arrayBuffers)} MB`,
+        `external ${mb(m.external)} MB, buffers ${mb(m.arrayBuffers)} MB; ` +
+        `requests in flight ${f.active}, most ${f.peak}, waited ${f.queued}`,
     );
   }, 30_000);
   timer.unref();

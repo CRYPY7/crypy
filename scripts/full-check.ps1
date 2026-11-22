@@ -1,5 +1,6 @@
 # CRYPY full check: starts the app server with a log, runs the whole browser test suite against it,
 # then collects Windows' crash records for node.exe. Results: full-check.txt, server-log.txt, playwright-run.txt.
+param([string]$TestArgs = "")
 $ErrorActionPreference = "Continue"
 Set-Location (Split-Path $PSScriptRoot -Parent)
 $out = Join-Path (Get-Location) "full-check.txt"
@@ -7,6 +8,7 @@ $start = Get-Date
 function Note($text) { $text | Out-File $out -Append -Encoding utf8; Write-Host $text }
 "CRYPY full check $($start.ToString('s'))" | Out-File $out -Encoding utf8
 Note "node: $(node -v)"
+Note "test arguments: $TestArgs"
 
 Write-Host "Building the site (about 1 minute)..."
 cmd.exe /c "pnpm build > build-log.txt 2>&1"
@@ -24,7 +26,7 @@ Note "server ready: $ready"
 
 if ($ready) {
   Write-Host "Running the browser tests (about 5 minutes)..."
-  cmd.exe /c "pnpm test:e2e > playwright-run.txt 2>&1"
+  cmd.exe /c "pnpm test:e2e $TestArgs > playwright-run.txt 2>&1"
   $summary = Select-String -Path "playwright-run.txt" -Pattern "^\s+\d+ (passed|failed|skipped|flaky)" | ForEach-Object { $_.Line.Trim() }
   Note "tests: $($summary -join ', ')"
   if (Alive) { Note "server still running at the end" } else { Note "SERVER STOPPED during the tests" }
