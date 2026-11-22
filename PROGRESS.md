@@ -264,6 +264,25 @@ Changes:
 - Checks here: typecheck, lint, Prettier; unit 326 passed; build; browser 177 passed, 0 failed. nginx file rendered
   and reviewed here (nginx itself can't run in this workspace); the server tests it before using it.
 
+### Fast everywhere: Cloudflare in front (owner request 2026-11-22: "fast for everyone, USA or Asia")
+
+Plan (zero cost: Cloudflare's free plan): visitors connect to Cloudflare's nearest location (300+ cities); the site's
+scripts, styles, fonts and images are cached there; pages travel to the San Francisco server over Cloudflare's
+network. The owner moves crypy.org's nameservers from Namecheap to Cloudflare and keeps the server.
+
+Server changes, so this works safely:
+
+- **Visitor addresses:** behind Cloudflare every request comes from Cloudflare's servers, which would have put all
+  visitors into one rate-limit bucket. `nginx-site.sh` now writes `/etc/nginx/conf.d/cloudflare-realip.conf`:
+  the visitor's address is taken from `CF-Connecting-IP`, **only** for requests from Cloudflare's published ranges
+  (downloaded each time, with a built-in fallback list), so nobody can fake it. Harmless without Cloudflare.
+- **Certificates** are now obtained and renewed through files (`certbot --webroot`), served by every site block,
+  so renewal also works through Cloudflare's https redirect. `enable-https.sh` checks that both names reach the
+  server by reading back a test file (works with and without Cloudflare); `--renew` gets a fresh certificate once
+  to switch an existing one to this method.
+- Cloudflare settings for the owner: SSL "Full (strict)", Always Use HTTPS, Email Address Obfuscation off and
+  Rocket Loader off (both inject scripts that the Content Security Policy blocks).
+
 ## M9 Part 2 — Accessibility and speed (2026-11-22)
 
 **Accessibility.** axe (WCAG 2.2 AA + best practices) on 23 page/state combinations × phone and desktop, dark and

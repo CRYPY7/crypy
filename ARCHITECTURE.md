@@ -406,7 +406,8 @@ Accepted (documented):
   several.
 
 Implemented by `scripts/server/setup.sh` and `nginx-site.sh` (M9 Part 3: HTTP/2, `/_next/static` served by nginx from
-disk with year-long immutable caching, upstream keep-alive, https and apex redirects); `CRYPY_PREVIEW=1` adds `X-Robots-Tag: noindex, nofollow` and a
+disk with year-long immutable caching, upstream keep-alive, https and apex redirects; behind Cloudflare the visitor
+address comes from `CF-Connecting-IP` only for Cloudflare's ranges; certificates by webroot); `CRYPY_PREVIEW=1` adds `X-Robots-Tag: noindex, nofollow` and a
 disallow-all robots.txt until the official launch. Launch requirements for the VPS (nginx in front of `next start`): TLS; `proxy_set_header Host $host`,
 `X-Real-IP $remote_addr`, `X-Forwarded-For $proxy_add_x_forwarded_for`, `X-Forwarded-Proto $scheme`;
 `client_max_body_size 64k`; the app listening on 127.0.0.1 only; `.env` readable by the app user only; PostgreSQL

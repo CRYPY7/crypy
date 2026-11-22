@@ -12,6 +12,31 @@ CERT_DIR="/etc/letsencrypt/live/${DOMAIN}"
 SITE="/etc/nginx/sites-available/crypy"
 [ "$(id -u)" -eq 0 ] || { echo "Run as root."; exit 1; }
 
+# Behind Cloudflare (optional CDN): requests arrive from Cloudflare's servers. Take the visitor's own address from
+# CF-Connecting-IP, but only when the request really comes from Cloudflare (its published ranges), so rate limits keep
+# working per visitor and nobody else can fake the header. Harmless without Cloudflare.
+CF_CONF="/etc/nginx/conf.d/cloudflare-realip.conf"
+CF_V4="$(curl -fsS --max-time 10 https://www.cloudflare.com/ips-v4 2>/dev/null || true)"
+CF_V6="$(curl -fsS --max-time 10 https://www.cloudflare.com/ips-v6 2>/dev/null || true)"
+if ! echo "$CF_V4" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+$'; then
+  CF_V4="173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 141.101.64.0/18 108.162.192.0/18
+190.93.240.0/20 188.114.96.0/20 197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13 104.24.0.0/14
+172.64.0.0/13 131.0.72.0/22"
+fi
+if ! echo "$CF_V6" | grep -qE '^[0-9a-f:]+/[0-9]+$'; then
+  CF_V6="2400:cb00::/32 2606:4700::/32 2803:f800::/32 2405:b500::/32 2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32"
+fi
+{
+  echo "# Written by scripts/server/nginx-site.sh: visitor addresses behind Cloudflare."
+  for range in $CF_V4 $CF_V6; do
+    if echo "$range" | grep -qE '^[0-9a-f.:]+/[0-9]+$'; then echo "set_real_ip_from $range;"; fi
+  done
+  echo "real_ip_header CF-Connecting-IP;"
+} > "$CF_CONF"
+
+# Certificates are obtained and renewed through files in this folder (works with and without Cloudflare).
+mkdir -p /var/www/html/.well-known/acme-challenge
+
 # nginx (user www-data) must be able to read the static files: the folders above them may be entered, nothing more.
 chmod o+x /opt/crypy "$APP_DIR"
 [ -d "$APP_DIR/.next" ] && chmod o+x "$APP_DIR/.next"
@@ -71,7 +96,8 @@ server {
     ssl_certificate_key ${CERT_DIR}/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-    return 301 https://${DOMAIN}\$request_uri;
+    location /.well-known/acme-challenge/ { root /var/www/html; }
+    location / { return 301 https://${DOMAIN}\$request_uri; }
 }
 
 server {
@@ -83,6 +109,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 ${COMMON}
+    location /.well-known/acme-challenge/ { root /var/www/html; }
 ${STATIC}
 
     location / {${PROXY}
@@ -97,6 +124,7 @@ server {
     listen [::]:80;
     server_name ${DOMAIN} www.${DOMAIN};
 ${COMMON}
+    location /.well-known/acme-challenge/ { root /var/www/html; }
 ${STATIC}
 
     location / {${PROXY}
