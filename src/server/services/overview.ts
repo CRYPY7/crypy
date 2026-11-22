@@ -31,7 +31,11 @@ const nativeNames: Record<ChainKey, string> = {
 export async function cachedAddressOverview(address: string, only?: readonly string[]): Promise<AddressOverview> {
   "use cache";
   cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+  return addressOverview(address, only);
+}
 
+/** The same without the page cache, for the background alerts checker (runs outside page requests). */
+export async function addressOverview(address: string, only?: readonly string[]): Promise<AddressOverview> {
   const targets = liveChains.filter((chain) => chain.capabilities.tokenBalances && (!only || only.includes(chain.key)));
   // Each chain is priced as soon as its own balances arrive: a slow chain never holds up the others' prices.
   const MAX_PRICED = 300;

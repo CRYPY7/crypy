@@ -6,7 +6,11 @@ import "server-only";
  * page loads, Node itself aborted (exit code 0xC0000409, no JavaScript error, normal memory). Each part alone never
  * crashed; together they did. Keeping the number of open requests bounded also spares the free providers.
  */
-export const MAX_IN_FLIGHT = 32;
+export const MAX_IN_FLIGHT = (() => {
+  // Diagnosis only (scripts/full-check-cap16.cmd): a different cap without a code change. Bounded 4–64.
+  const n = Number(process.env.CRYPY_MAX_IN_FLIGHT);
+  return Number.isInteger(n) && n >= 4 && n <= 64 ? n : 32;
+})();
 
 interface Gate {
   active: number;
@@ -43,11 +47,83 @@ function release(): void {
  */
 export async function limitedFetch(input: string | URL | Request, init?: RequestInit): Promise<Response> {
   await acquire();
+  const host = hostOf(input);
+  hosts.set(host, (hosts.get(host) ?? 0) + 1);
   try {
-    return await fetch(input, init);
+    return capBody(await fetch(input, init), host, init?.body);
   } finally {
+    const left = (hosts.get(host) ?? 1) - 1;
+    if (left > 0) hosts.set(host, left);
+    else hosts.delete(host);
     release();
   }
+}
+
+/**
+ * Largest answer read from any provider. Real answers are far smaller (a full token list is a few MB); found on the
+ * owner's PC: the server's main thread stuck for a minute while its memory grew by GBs, then Node aborted. A body
+ * parsed as JSON in one piece can't be interrupted, so an oversized answer is cut off here as a failed request
+ * (callers already treat failures as "this source didn't answer") and logged with its host and method.
+ */
+export const MAX_RESPONSE_BYTES = 32 * 1_048_576;
+
+const logged = new Set<string>();
+
+function capBody(response: Response, host: string, requestBody: unknown): Response {
+  if (!response.body) return response;
+  const length = Number(response.headers.get("content-length"));
+  const method =
+    typeof requestBody === "string"
+      ? (/"method"\s*:\s*"([^"]{1,60})"/.exec(requestBody.slice(0, 2_000))?.[1] ?? "")
+      : "";
+  const tooLarge = (bytes: number) => {
+    const key = `${host} ${method}`;
+    if (!logged.has(key)) {
+      logged.add(key);
+      console.warn(
+        `[crypy] answer too large from ${host}${method ? ` (${method})` : ""}: over ${Math.round(bytes / 1_048_576)} MB, not read`,
+      );
+    }
+    return new Error(`answer from ${host} is larger than ${MAX_RESPONSE_BYTES / 1_048_576} MB`);
+  };
+  if (Number.isFinite(length) && length > MAX_RESPONSE_BYTES) {
+    void response.body.cancel().catch(() => undefined);
+    throw tooLarge(length);
+  }
+  let seen = 0;
+  const counted = response.body.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        seen += chunk.byteLength;
+        if (seen > MAX_RESPONSE_BYTES) controller.error(tooLarge(seen));
+        else controller.enqueue(chunk);
+      },
+      flush() {
+        // Opt-in log of large (but allowed) answers, to see which sources send the most.
+        if (seen > 8 * 1_048_576 && process.env.CRYPY_DEBUG_MEMORY === "1")
+          console.warn(
+            `[crypy] large answer from ${host}${method ? ` (${method})` : ""}: ${Math.round(seen / 1_048_576)} MB`,
+          );
+      },
+    }),
+  );
+  return new Response(counted, { status: response.status, statusText: response.statusText, headers: response.headers });
+}
+
+/** Requests waiting for an answer, by host name only (no paths: they can hold API keys). For the opt-in memory log. */
+const hostStore = globalThis as typeof globalThis & { __crypyFetchHosts?: Map<string, number> };
+const hosts = (hostStore.__crypyFetchHosts ??= new Map<string, number>());
+
+function hostOf(input: string | URL | Request): string {
+  try {
+    return new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url).hostname;
+  } catch {
+    return "?";
+  }
+}
+
+export function inFlightHosts(): string {
+  return [...hosts].map(([h, n]) => `${h} ${n}`).join(", ") || "none";
 }
 
 /** For the opt-in memory log and tests: requests in flight now, the most at once since the last read, and how many waited. */

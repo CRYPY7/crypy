@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, count, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq } from "drizzle-orm";
 import { getAddress } from "viem";
 import { getChain } from "@/config/chains";
 import { cleanLabel } from "@/lib/portfolio/input";
@@ -14,7 +14,7 @@ import {
   watchOnlyDefaults,
 } from "@/lib/watchlist/rules";
 import { type Db, getDb } from "@/server/db/client";
-import { accounts, sessions, users, watchItems } from "@/server/db/schema";
+import { accounts, alerts, portfolios, sessions, users, watchItems } from "@/server/db/schema";
 
 /** A person's watchlist (M8). Every query is scoped to the signed-in user's id. */
 type Row = typeof watchItems.$inferSelect;
@@ -26,6 +26,7 @@ const toItem = (row: Row): WatchItem => ({
   target: row.target,
   label: row.label,
   rules: row.rules as WatchItem["rules"],
+  muted: row.muted,
   createdAt: row.createdAt.toISOString(),
 });
 
@@ -81,7 +82,7 @@ export async function addWatchItem(
 export async function updateWatchItem(
   userId: string,
   id: string,
-  patch: { label?: string; rules?: unknown },
+  patch: { label?: string; rules?: unknown; muted?: boolean },
   db?: Db,
 ): Promise<WatchItem | null | "invalid"> {
   const database = db ?? (await getDb());
@@ -92,6 +93,7 @@ export async function updateWatchItem(
   if (!row) return null;
   const values: Partial<Row> = {};
   if (patch.label !== undefined) values.label = cleanLabel(patch.label);
+  if (patch.muted !== undefined) values.muted = patch.muted;
   if (patch.rules !== undefined) {
     // The rules must fit the item's kind (an address can't get token rules and the reverse).
     const parsed = (row.kind === "token" ? tokenRulesSchema : addressRulesSchema).safeParse(patch.rules);
@@ -131,10 +133,27 @@ export async function exportAccount(userId: string, db?: Db) {
     wallets: wallets.map((w) => ({ accountId: w.accountId, addedAt: w.createdAt.toISOString() })),
     sessions: signedIn.map((s) => ({ startedAt: s.createdAt.toISOString(), expiresAt: s.expiresAt.toISOString() })),
     watchlist: await listWatchItems(userId, database),
+    telegram: user?.telegramChatId
+      ? { chatId: user.telegramChatId, username: user.telegramUsername, linkedAt: user.telegramLinkedAt?.toISOString() }
+      : null,
+    quietHours: user ? { on: user.quietOn, start: user.quietStart, end: user.quietEnd, timeZone: user.timeZone } : null,
+    alerts: (await database.select().from(alerts).where(eq(alerts.userId, userId)).orderBy(desc(alerts.createdAt))).map(
+      (a) => ({
+        at: a.createdAt.toISOString(),
+        kind: a.kind,
+        chain: a.chain,
+        title: a.title,
+        details: a.details,
+        status: a.status,
+        sentAt: a.sentAt?.toISOString() ?? null,
+      }),
+    ),
+    portfolio: (await database.select().from(portfolios).where(eq(portfolios.userId, userId)))[0]?.data ?? null,
   };
 }
 
-/** Deletes the person and everything linked to them (wallets, sessions, watchlist: ON DELETE CASCADE). */
+/** Deletes the person and everything linked to them (wallets, sessions, watchlist, Telegram link, alert history,
+ * synced portfolio: ON DELETE CASCADE). */
 export async function deleteAccount(userId: string, db?: Db): Promise<void> {
   const database = db ?? (await getDb());
   await database.delete(users).where(eq(users.id, userId));

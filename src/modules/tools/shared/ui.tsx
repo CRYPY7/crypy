@@ -19,8 +19,16 @@ export function fill(template: string, values: Record<string, string | number>):
 export const inputClass =
   "w-full rounded-xl border border-input bg-card px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/25 aria-invalid:border-critical";
 
-export function Panel({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("rounded-2xl border border-border bg-card p-4 sm:p-6", className)}>{children}</div>;
+export function Panel({
+  children,
+  className,
+  ...rest
+}: { children: ReactNode; className?: string } & Omit<React.HTMLAttributes<HTMLDivElement>, "className" | "children">) {
+  return (
+    <div {...rest} className={cn("rounded-2xl border border-border bg-card p-4 sm:p-6", className)}>
+      {children}
+    </div>
+  );
 }
 
 /** A labelled result with a copy button. Technical values are always LTR and never translated. */

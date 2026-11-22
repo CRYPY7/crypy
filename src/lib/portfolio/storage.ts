@@ -74,3 +74,29 @@ export function nextSnapshot(
   if (now - previous.at < SNAPSHOT_MIN_AGE_MS) return { compareTo: previous, keep: previous };
   return { compareTo: previous, keep: { totalUsd, at: now } };
 }
+
+/**
+ * Combining this browser's list with the copy kept on the account (sync turned on): every wallet from both, this
+ * browser's order first, a label from here unless it is empty, at most MAX_WALLETS. The snapshot stays this browser's.
+ */
+export function mergePortfolios(local: PortfolioData, account: PortfolioData): PortfolioData {
+  const wallets: SavedWallet[] = [];
+  const byAddress = new Map(account.wallets.map((w) => [w.address.toLowerCase(), w]));
+  for (const w of local.wallets) {
+    const other = byAddress.get(w.address.toLowerCase());
+    wallets.push(w.label || !other ? w : { ...w, label: other.label });
+    byAddress.delete(w.address.toLowerCase());
+  }
+  for (const w of byAddress.values()) wallets.push(w);
+  return { wallets: wallets.slice(0, MAX_WALLETS), snapshot: local.snapshot };
+}
+
+/** Same wallets, labels and order (the snapshot is per browser and not compared). */
+export function sameWallets(a: PortfolioData, b: PortfolioData): boolean {
+  return (
+    a.wallets.length === b.wallets.length &&
+    a.wallets.every(
+      (w, i) => w.address.toLowerCase() === b.wallets[i]!.address.toLowerCase() && w.label === b.wallets[i]!.label,
+    )
+  );
+}

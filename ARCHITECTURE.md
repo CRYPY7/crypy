@@ -392,7 +392,8 @@ ETHERSCAN_API_KEY=            # M7
 BSCTRACE_API_KEY=             # M7
 DATABASE_URL=                 # M8: real PostgreSQL (production); empty = PGlite in .data/pglite
 PGLITE_DIR=                   # M8: PGlite folder, or "memory" (browser tests)
-TELEGRAM_BOT_TOKEN=           # M8
+TELEGRAM_BOT_TOKEN=           # M8 Part 3: alerts bot (server-only)
+CRYPY_WORKER=                 # M8 Part 3: "off" stops the checker and the bot
 ALCHEMY_WEBHOOK_SIGNING_KEY=  # M8
 # Future families add their keys here (e.g. TRONGRID_API_KEY)
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
@@ -575,11 +576,22 @@ DEX decoders, per chain family:                      (one per DEX design)
   Ethereum data fee per action (Base GasPriceOracle `getL1FeeUpperBound`, Arbitrum `ArbGasInfo.getPricesInWei`).
 - Finality: `TxDetails.finalized` from the node's `finalized` block; block-count fallbacks only for non-rollups.
 
-## 12i. Outbound request cap
+## 12i. Outbound requests: cap, size limit, HTTP/1.1
 
 - `server/http/limit.ts` `limitedFetch`: every outbound request (viem transports via `fetchFn`, Alchemy token and
   transfer lists, GoPlus, Sourcify) shares one cap, `MAX_IN_FLIGHT` = 32 per server process. Added after a native Node
   abort on Windows under heavy parallel load. With several server processes, each has its own cap.
+- Answers over `MAX_RESPONSE_BYTES` (32 MB) are cut off as a failed request and logged once per host and JSON-RPC
+  method (a body parsed as JSON in one piece can't be interrupted; provider data is untrusted).
+- `server/http/agent.ts` `preferHttp1()` (run from `instrumentation.ts` at start): Node 26's fetch (undici 8) would use
+  HTTP/2 with providers that offer it; under load on Windows that crashed the server (memory +11 GB in seconds, main
+  thread stuck in native code, 0xC0000409). The global dispatcher(s) (`Symbol.for("undici.globalDispatcher.N")`; in
+  undici 8, slot 2 holds the agent and slot 1 a wrapper around it) are replaced with the same classes and
+  `allowH2: false`. `CRYPY_HTTP2=on` keeps the default for diagnosis.
+- Opt-in diagnostics (`CRYPY_DEBUG_MEMORY=1`, `server/diagnostics.ts`): memory every 30 s and on sudden growth, the
+  computer's free memory falling fast, and a watchdog worker thread that, when the main thread stops answering for
+  3 s, writes the requests in progress and (if it can pause it) the JavaScript stack to
+  `.crash-reports/blocked-main-thread.txt`.
 - `TOKEN_LIST_BUDGET_MS` (5 s) bounds Alchemy's sequential token-list paging; a cut-off list still reads each chain's
   well-known tokens directly and prices them first.
 
@@ -612,6 +624,34 @@ DEX decoders, per chain family:                      (one per DEX design)
 - UI: `modules/tools/watchlist/widget.tsx` lazy-loads `panel.tsx`; the personal part loads only in the browser after
   the session check. Tool status `beta` = working page with a named missing part (sidebar label "Beta").
 - Single-server for now: the background checker (Part 3) runs in the always-on server process.
+
+## 12k. Alerts (M8 Part 3)
+
+- **Worker** (`server/alerts/worker.ts`, started from `instrumentation.ts`; `CRYPY_WORKER=off` stops it): checker
+  every 60 s, delivery every 10 s, housekeeping hourly, Telegram bot. One server process per database and bot token.
+- **Checker** (`server/alerts/checker.ts`):
+  - Per chain: cursor in `checker_cursors`, confirmations per chain, at most 15 min of catch-up.
+  - `eth_getLogs` with topic lists (≤ 100 wallets per query): Transfer from / to, and Approval / ApprovalForAll /
+    Permit2 Approval by owner. Through `logsClient` (every provider except Alchemy); step 25–100 blocks, adaptive.
+  - Coin balances via Multicall3 `getEthBalance`, remembered in memory. Changes explained by
+    `coinTransfersInRange` (Alchemy).
+  - Token details and prices (`getOnchainPrices`); `getTransaction` only where the sender matters; approvals
+    confirmed on-chain.
+  - Hourly: `addressOverview` (uncached) for value drop; `tokenSecurityReport(…, "background")` for security and
+    liquidity snapshots in `watch_items.state`.
+  - `checkerStatus()` per chain is shown on the page.
+- **Rules and text** (pure, `lib/alerts/`): `events.ts` (decoding), `build.ts` (who gets what; spam rules; hourly
+  comparisons), `format.ts` (Telegram HTML with escaping, buttons, summary), `quiet.ts`.
+- **Delivery** (`server/alerts/deliver.ts`): `alerts` table (dedupe key per user; statuses queued / sent / muted /
+  no-channel / failed), quiet hours per user, summary above 5, about 1 message per second per chat, 403 →
+  Telegram unlinked.
+- **Telegram** (`server/telegram/api.ts`, `bot.ts`, `server/services/telegram.ts`): token server-only
+  (`TELEGRAM_BOT_TOKEN`); long polling; link codes hashed, 10 minutes; `/start`, `/stop`, mute callbacks scoped to
+  the chat's own account. `TELEGRAM_API_URL` may only point to Telegram or to this machine (tests).
+- **APIs:** `GET /api/v1/alerts` (settings, history, bot, checker), `POST|DELETE /api/v1/alerts/telegram`,
+  `POST /api/v1/alerts/telegram/test`, `PATCH /api/v1/alerts/settings`, `GET|PUT|DELETE /api/v1/portfolio`,
+  `PATCH /api/v1/watchlist/{id}` with `muted`.
+- **Tests:** browser tests use a stand-in Telegram server (`tests/e2e/fake-telegram.ts`, `CRYPY_FAKE_TELEGRAM=1`).
 
 ## 13. Performance budget
 

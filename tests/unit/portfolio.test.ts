@@ -198,3 +198,32 @@ describe("combinePortfolio", () => {
     expect(csv).toContain(",BSC,1,2.00,1");
   });
 });
+
+describe("keeping the portfolio on the account", async () => {
+  const { mergePortfolios, sameWallets } = await import("@/lib/portfolio/storage");
+  const w = (address: string, label = "") => ({ address, label, addedAt: 1 });
+  const A = "0x000000000000000000000000000000000000dEaD";
+  const B = "0x1111111111111111111111111111111111111111";
+  const C = "0x2222222222222222222222222222222222222222";
+
+  it("merges both lists: this browser's order first, a label from here unless empty, every wallet once", () => {
+    const local = { wallets: [w(A, "Cold"), w(B)], snapshot: { totalUsd: 5, at: 1 } };
+    const account = { wallets: [w(B, "Ones"), w(C, "Hot")], snapshot: null };
+    const merged = mergePortfolios(local, account);
+    expect(merged.wallets.map((x) => [x.address, x.label])).toEqual([
+      [A, "Cold"],
+      [B, "Ones"],
+      [C, "Hot"],
+    ]);
+    expect(merged.snapshot).toEqual(local.snapshot);
+    expect(sameWallets(merged, mergePortfolios(merged, account))).toBe(true);
+  });
+
+  it("never more than 20 wallets", () => {
+    const many = (n: number, offset: number) =>
+      Array.from({ length: n }, (_, i) => w(`0x${(i + offset).toString(16).padStart(40, "0")}`));
+    expect(
+      mergePortfolios({ wallets: many(15, 0), snapshot: null }, { wallets: many(15, 100), snapshot: null }).wallets,
+    ).toHaveLength(20);
+  });
+});

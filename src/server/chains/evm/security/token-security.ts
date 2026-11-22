@@ -1,4 +1,5 @@
 import "server-only";
+import type { GoPlusPriority } from "@/server/security/goplus-budget";
 import { type Hex, erc20Abi, getAddress, parseAbi } from "viem";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
@@ -36,11 +37,16 @@ function slotAddress(value: Hex | undefined | null): string | null {
   return /^0x0{40}$/.test(address) ? null : getAddress(address);
 }
 
-export async function getEvmTokenSecurity(chain: ChainConfig, address: string): Promise<TokenSecurityFacts | null> {
+export async function getEvmTokenSecurity(
+  chain: ChainConfig,
+  address: string,
+  /** "background" for the alerts checker, so token pages keep GoPlus first. */
+  priority: GoPlusPriority = "page",
+): Promise<TokenSecurityFacts | null> {
   const client = getEvmClient(chain);
   const token = getAddress(address.toLowerCase());
   const chainId = Number(chain.caip2.split(":")[1]);
-  const goplusP: Promise<GoPlusResult> = withTimeout(goPlusToken(chainId, token), OPTIONAL_MS, {
+  const goplusP: Promise<GoPlusResult> = withTimeout(goPlusToken(chainId, token, priority), OPTIONAL_MS, {
     status: "unavailable" as const,
   });
   const notRead = { source: { status: "unknown" as const, provider: "Sourcify" }, powers: null };

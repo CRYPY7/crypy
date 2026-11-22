@@ -278,7 +278,7 @@ const NOT_FOUND_IS_NOT_FINAL = new Set(["eth_getTransactionByHash", "eth_getTran
 const REFUSAL_MS = 10 * 60_000;
 const refusals = new Map<string, number>();
 const REFUSAL_PATTERN =
-  /archive|missing trie node|pruned|historical state|state (?:is )?not available|header not found/i;
+  /archive|missing trie node|pruned|historical state|state (?:is )?not available|header not found|block range|range (?:is )?too (?:large|wide|big)|too many blocks|exceeds? (?:the )?(?:max(?:imum)? )?(?:block )?range|query returned more than|free tier/i;
 
 export function noteRefusal(provider: Provider, method: string, error: unknown): void {
   const text = error instanceof Error ? `${error.message} ${(error as { details?: string }).details ?? ""}` : "";
@@ -497,6 +497,23 @@ export function archiveClient(chain: ChainConfig): PublicClient | null {
       transport: rankedFallback(archive),
     }) as PublicClient;
     archiveClients.set(chain.key, client);
+  }
+  return client;
+}
+
+const logsClients = new Map<ChainKey, PublicClient>();
+
+/**
+ * A client for wide event searches (the alerts checker): every provider except Alchemy, whose free plan allows only
+ * 10 blocks per eth_getLogs. Callers fall back to getEvmClient (Alchemy included) with 10-block steps when this fails.
+ */
+export function logsClient(chain: ChainConfig): PublicClient {
+  const others = providersFor(chain).filter((provider) => provider.kind !== "alchemy");
+  if (others.length === 0) return getEvmClient(chain);
+  let client = logsClients.get(chain.key);
+  if (!client) {
+    client = createPublicClient({ chain: viemChains[chain.key], transport: rankedFallback(others) }) as PublicClient;
+    logsClients.set(chain.key, client);
   }
   return client;
 }

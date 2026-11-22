@@ -339,20 +339,20 @@
     "watchlist": {
       "name": "Watchlist & Alerts",
       "question": "Tell me when a wallet moves",
-      "description": "Watch up to 10 wallets and tokens with your own alert choices. Sign in with your wallet: no password, no email.",
-      "input": "Wallet sign-in (a signed message, no transaction)",
+      "description": "Get a Telegram message when a wallet you watch sends, receives or gives a new approval, or a token's security or liquidity changes. Sign in with your wallet: no password, no email.",
+      "input": "Wallet sign-in (a signed message, no transaction) and Telegram",
       "cta": "Set up alerts",
       "features": [
         "Sign in with your wallet: a free signed message, never a transaction",
-        "Watch up to 10 addresses (on every supported chain) or tokens",
-        "Per item: transfers sent or received above an amount, new approvals, big value drops, token security changes",
-        "Download your data or delete your account at any time",
-        "Telegram alerts and the background checker arrive in the next update (Beta)"
+        "Watch up to 10 addresses (on every supported chain) or tokens, checked about every minute",
+        "Per item: coins and tokens sent or received above an amount, new approvals, big drops in value, token security and liquidity changes",
+        "Alerts in Telegram with quiet hours, plus a history on this page",
+        "Download your data or delete your account at any time"
       ],
       "howTo": [
         "Press Sign in and approve the message in your wallet. Check that it names this site and says it's not a transaction.",
         "Add a wallet or a token to watch, give it a label, and choose what should trigger an alert.",
-        "When Telegram alerts go live, connect Telegram once and alerts arrive there."
+        "Press Connect Telegram, open our bot and press Start. Alerts arrive there from then on."
       ],
       "faq": [
         {
@@ -364,12 +364,16 @@
           "a": "A plain-text message that starts with this site's address and says it is a message, not a transaction. If any site asks you to sign a transfer, approval or permit to log in, don't sign it."
         },
         {
-          "q": "What does CRYPY store?",
-          "a": "Your wallet address, your watchlist with labels and alert choices, and your sign-in sessions (only a scrambled form of the session code). No email, no IP address. You can download all of it, or delete your account and everything with it, at any time."
+          "q": "How quickly do alerts arrive?",
+          "a": "Transfers and approvals are checked about every minute, a few blocks behind the newest so a short chain reorganisation doesn't cause false alerts. Value drops and token security and liquidity are checked every hour. During your quiet hours alerts wait and arrive together when they end."
         },
         {
-          "q": "Are alerts sent already?",
-          "a": "Not yet. The watchlist is saved now; the background checker and Telegram delivery are the next update. The page says so until they're live."
+          "q": "Can I trust every alert?",
+          "a": "Alerts come from CRYPY's own reads of the blockchain. Fake tokens and look-alike transfers are filtered out: tokens without a market price aren't reported as received, and approvals are confirmed on-chain first. Token alerts are signals, never a safe verdict. The bot never asks you to connect a wallet, sign anything or share a seed phrase."
+        },
+        {
+          "q": "What does CRYPY store?",
+          "a": "Your wallet address, your watchlist with labels and alert choices, your Telegram chat id, your alert history (90 days), your sign-in sessions (only a scrambled form of the session code) and, if you choose, your portfolio list. No email, no IP address. You can download all of it, or delete your account and everything with it, at any time."
         }
       ]
     },
@@ -2604,7 +2608,19 @@
       "errChecksum": "The capital letters in this address don't match its checksum. It may have a typo; copy it again.",
       "errSecret": "This looks like a seed phrase or private key. It was cleared and not saved or sent. Never share it with any website.",
       "errDuplicate": "This wallet is already in your portfolio.",
-      "errFull": "The portfolio holds up to {max} wallets. Remove one to add another."
+      "errFull": "The portfolio holds up to {max} wallets. Remove one to add another.",
+      "syncLocalOnly": "Saved on this device only (no account).",
+      "syncSignIn": "Sign in with your wallet",
+      "syncOptional": "to keep it on all your devices — optional.",
+      "syncOn": "Kept on your account: the same list on every device where you sign in. Turn off to keep it on this device only.",
+      "syncOff": "Keep this list on your account too, so it's on every device where you sign in.",
+      "syncConnectFirst": "Connect a wallet first, then press Sign in again. Signing in is a free message, not a transaction.",
+      "syncRejected": "You declined the message in your wallet. Nothing was signed.",
+      "syncError": "Couldn't reach your account right now. Your list is safe in this browser; try again in a moment.",
+      "watchTitle": "Watch for changes",
+      "watchText": "Get a Telegram message when one of these wallets sends or receives, or gives a new approval.",
+      "watchButton": "Set up alerts",
+      "watchNote": "Needs a free sign-in with your wallet (a message to sign, no transaction). Up to 10 watched items; you choose which of your {count} wallets."
     },
     "watchlist": {
       "loading": "Loading…",
@@ -2625,8 +2641,6 @@
       "errRateLimited": "Too many tries in a minute. Wait a moment, then try again.",
       "errSignInFailed": "Sign-in didn't work. Try again; if it keeps failing, reload the page.",
       "errUnavailable": "The account service isn't available right now. Try again in a minute.",
-      "betaTitle": "Beta: alerts aren't sent yet",
-      "betaText": "Your watchlist and alert choices are saved now. The background checker and Telegram delivery come in the next update; until then nothing is sent.",
       "watchTitle": "Watchlist",
       "watching": "Watching {count} of {max}",
       "watchAnother": "Watch an address or token",
@@ -2645,7 +2659,7 @@
       "ruleSentOwnHint": "Coins or tokens sent from this wallet",
       "ruleSentHint": "Coins or tokens sent from this address",
       "ruleReceived": "Received",
-      "ruleReceivedHint": "A minimum hides dust and spam tokens",
+      "ruleReceivedHint": "A minimum hides dust and spam; tokens without a market price are never reported",
       "ruleApprovals": "New approval given",
       "ruleApprovalsHint": "Who can now move tokens from this wallet, with a link to revoke",
       "ruleDrop": "Big drop in value",
@@ -2658,10 +2672,9 @@
       "above": "Only above {amount}",
       "amountFor": "{rule}: minimum amount for {name}",
       "whereTitle": "Where alerts go",
-      "whereText": "Telegram comes in the next update: you'll open CRYPY's bot and press Start once. Alerts never ask you to connect a wallet or sign anything.",
       "accountTitle": "Your account",
       "signedInAs": "Signed in as",
-      "accountText": "with a signed message: no password, no email. CRYPY stores only your wallet address, your watchlist and your sessions.",
+      "accountText": "with a signed message: no password, no email. CRYPY stores your wallet address, your watchlist, your Telegram chat id, your alert history and, if you choose, your portfolio list.",
       "signOut": "Sign out",
       "download": "Download my data",
       "deleteAccount": "Delete account",
@@ -2689,7 +2702,61 @@
       "errSecret": "This looks like a seed phrase or private key. It was cleared and not saved or sent. Never share it with any website.",
       "errDuplicateOrFull": "Already watched, or the watchlist is full (10 items). Remove one to add another.",
       "errSignedOut": "You were signed out. Sign in again to continue.",
-      "errSave": "That change couldn't be saved. Try again."
+      "errSave": "That change couldn't be saved. Try again.",
+      "checkedEveryMinute": "Checked about every minute",
+      "checkerOff": "Alerts aren't being checked on this server right now.",
+      "chainsNotChecked": "Not being checked right now: {chains}. CRYPY's server can't search these networks at the moment.",
+      "mutedBadge": "Muted",
+      "mute": "Mute alerts for {name}",
+      "unmute": "Turn alerts back on for {name}",
+      "tgUnavailable": "Telegram alerts aren't set up on this server yet. Your watchlist is saved and alerts are kept in the history below.",
+      "tgConnectText": "Connect Telegram once to get alerts there. Our bot only sends alerts.",
+      "tgConnect": "Connect Telegram",
+      "tgNeverAsks": "Alerts never ask you to connect a wallet or sign anything, so a fake \"CRYPY\" bot is easy to spot.",
+      "tgStepText": "Open our bot and press Start. The code links your Telegram to this account and expires in 10 minutes.",
+      "tgQrAlt": "QR code that opens the CRYPY alerts bot in Telegram",
+      "tgOpen": "Open Telegram",
+      "tgOrSend": "or send",
+      "tgToBot": "to {bot}",
+      "tgCode": "Code:",
+      "tgWaiting": "Waiting for Telegram… this page updates by itself.",
+      "tgExpired": "That code expired before it was used. Get a new one.",
+      "tgNewCode": "Get a new code",
+      "tgConnectedAs": "connected as {name}",
+      "tgConnected": "connected",
+      "tgFromBot": "Messages come from {bot}. Only alerts; it never asks for anything.",
+      "tgSendTest": "Send test",
+      "tgTestSent": "Test sent. Check Telegram.",
+      "tgError": "That didn't work. Try again in a moment.",
+      "tgDisconnect": "Disconnect Telegram",
+      "tgDisconnectTitle": "Disconnect Telegram?",
+      "tgDisconnectText": "Alerts stop going to Telegram. They're still kept in the history here, and you can connect again at any time.",
+      "tgDisconnectConfirm": "Disconnect",
+      "emailLater": "Email alerts later.",
+      "quietOnText": "Quiet hours {start}–{end} (alerts wait until they end)",
+      "quietOffText": "No quiet hours (alerts arrive at any time)",
+      "quietChange": "Change",
+      "quietTitle": "Quiet hours",
+      "quietText": "Alerts found during quiet hours wait and arrive together when they end.",
+      "quietUse": "Use quiet hours",
+      "quietFrom": "From",
+      "quietTo": "To",
+      "quietZone": "In your time zone: {zone}",
+      "quietInvalid": "Enter both times, for example 23:00 and 07:00.",
+      "recentTitle": "Recent alerts",
+      "recentAll": "All",
+      "recentFewer": "Fewer",
+      "recentEmpty": "No alerts yet. They'll appear here and in Telegram.",
+      "recentOlder": "Load older alerts",
+      "statusWaiting": "Waiting to be sent (quiet hours)",
+      "statusNoChannel": "Not sent: Telegram wasn't connected",
+      "statusFailed": "Couldn't be sent to Telegram",
+      "statusMuted": "Not sent: muted",
+      "importTitle": "Watch your Portfolio wallets",
+      "importText": "Watch {count} wallet(s) from this browser's Portfolio, with their labels? You can change what each one alerts on afterwards.",
+      "importNone": "Every wallet in this browser's Portfolio is already watched.",
+      "importButton": "Watch {count} wallet(s)",
+      "importNotNow": "Not now"
     }
   }
 }

@@ -71,10 +71,19 @@ export function explorerLink(chainKey: string, kind: "address" | "tx" | "token",
 export async function cachedTokenSecurity(chainKey: string, address: string): Promise<SecurityReport | null> {
   "use cache";
   cacheLife({ stale: 60, revalidate: 300, expire: 900 });
+  return tokenSecurityReport(chainKey, address);
+}
+
+/** The same without the page cache, for the background alerts checker (GoPlus at background priority there). */
+export async function tokenSecurityReport(
+  chainKey: string,
+  address: string,
+  priority: "page" | "background" = "page",
+): Promise<SecurityReport | null> {
   const found = adapterFor(chainKey);
   if (!found?.adapter.getTokenSecurity || !found.chain.capabilities.tokenSecurity) return null;
   const parsed = found.adapter.parseAddress(address);
   if (!parsed || parsed.checksumValid === false) return null;
-  const facts = await found.adapter.getTokenSecurity(found.chain, parsed.normalized);
+  const facts = await found.adapter.getTokenSecurity(found.chain, parsed.normalized, priority);
   return facts ? evaluate(facts) : null;
 }

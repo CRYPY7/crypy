@@ -13,6 +13,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { PortfolioAccount, WatchForChanges } from "./account";
 import { ChainIcon } from "@/components/chain-icon";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { formatUsd } from "@/lib/format/money";
@@ -317,6 +318,9 @@ export default function PortfolioTracker({
             <li className="rounded-xl border border-border p-3">{s.emptyPoint2}</li>
             <li className="rounded-xl border border-border p-3">{s.emptyPoint3}</li>
           </ul>
+          <div className="w-full max-w-xl text-start">
+            <PortfolioAccount s={s} data={data} save={writeSaved} />
+          </div>
         </Panel>
         {addDialog}
       </>
@@ -388,6 +392,7 @@ export default function PortfolioTracker({
             tone={flagged.length ? "bad" : undefined}
           />
         </dl>
+        <PortfolioAccount s={s} data={data} save={writeSaved} />
 
         {summary.byChain.length > 0 && summary.totalUsd > 0 && (
           <div className="mt-5">
@@ -582,6 +587,8 @@ export default function PortfolioTracker({
           <p className="mt-3 text-xs text-muted-foreground">{s.safetyNote}</p>
         </Panel>
       )}
+
+      <WatchForChanges s={s} watchlistPath={`/${locale}/tools/watchlist`} count={data.wallets.length} />
 
       {/* Holdings */}
       {summary.holdings.length > 0 && (

@@ -192,6 +192,13 @@ mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page 
 | M7 New chains                 | Aerodrome (Solidly-style) pools on Base for prices: tokens that trade only there show no price yet                                                                                                                                                               | M5.5 decoders                           |
 | M7 New chains                 | Internal transfers on Base and Arbitrum in Activity (not in Alchemy's free data)                                                                                                                                                                                 | M5.5 Stage 2 indexer / own node         |
 | M4.2 Transaction Intelligence | Part 2: more routers and pool types, NFT marketplaces, lending, bridges, smart-wallet inner calls                                                                                                                                                                | Alongside M5.5 / M6                     |
+| M8 Alerts                     | Email alerts (board 39: "Email alerts later")                                                                                                                                                                                                                    | After V1                                |
+| M8 Alerts                     | Telegram messages and bot replies in other languages (English only now)                                                                                                                                                                                          | M9 translations                         |
+| M8 Alerts                     | ERC-1155 transfers and single-NFT approvals (`approve(tokenId)`)                                                                                                                                                                                                 | With M6's single-NFT approvals          |
+| M8 Alerts                     | Coin transfers with transaction details where Alchemy has none (internal transfers on BNB Chain, Base, Arbitrum; any chain without Alchemy): reported as balance changes                                                                                         | M5.5 Stage 2 indexer / own node         |
+| M8 Alerts                     | Running the checker and bot on several servers at once (needs a shared lock; one server per database and bot token for now)                                                                                                                                      | When scaling past one VPS               |
+| Server stability              | Outbound HTTP/2 (Node 26 default) turned off after it crashed the server on Windows; re-test HTTP/2 on a later Node/undici and on the Linux VPS before turning it back on                                                                                        | Before launch (M9)                      |
+| Server stability              | Trace the harmless "unhandledRejection … getEthBalance … zero data" log line from free nodes                                                                                                                                                                     | M9 security review                      |
 
 ## M5.2 — Token Security: finishing parts — 🟡 built 2026-11-20
 
@@ -246,7 +253,7 @@ Owner checks still open: compare 2–3 of your own wallets with Revoke.cash; do 
 
 Explorer decision; activity tab (all coin/token transfers sent and received); gas page + widget; timestamp/block converter (other utilities shipped in M2.5); add Base, Arbitrum, Polygon (config only) after verification.
 
-## M8 — Portfolio (Tool 7), accounts, Watchlist & Telegram alerts (Tool 8) — Parts 1–2 🟡 (2026-11-22)
+## M8 — Portfolio (Tool 7), accounts, Watchlist & Telegram alerts (Tool 8) — Parts 1–3 built 🟡 (2026-11-22)
 
 Designs approved 2026-11-21 (boards 36–41) with the owner's decisions: PostgreSQL (PGlite in development, real
 Postgres on a VPS at launch); a background checker polling about every minute (needs an always-on server); a Telegram
@@ -258,8 +265,8 @@ items per account.
 - **Part 2 — accounts 🟡 built (2026-11-22, Beta):** Sign-In with Ethereum (a message to sign, no transaction),
   Postgres + Drizzle (PGlite in development), Watchlist (10 items) with alert choices, download and delete account.
   Deferred to Part 3: optional portfolio sync.
-- **Part 3 — alerts:** background checker, Telegram bot, quiet hours, alert history, optional portfolio sync. Removes
-  the Beta label.
+- **Part 3 — alerts 🟡 built (2026-11-22):** background checker, Telegram bot, quiet hours, alert history, Portfolio
+  sync and "Watch for changes". Beta label removed. Open: the owner's real-Telegram test below.
   **Done when:** an alert is delivered end-to-end in staging and production.
 
 ## M9 — Launch readiness

@@ -2,13 +2,13 @@
 
 import {
   Bell,
+  BellOff,
   Coins,
   Download,
   KeyRound,
   LogOut,
   Pencil,
   Plus,
-  Send,
   ShieldCheck,
   Trash2,
   TriangleAlert,
@@ -18,32 +18,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChainIcon } from "@/components/chain-icon";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { checkWalletInput, cleanLabel } from "@/lib/portfolio/input";
+import { PORTFOLIO_KEY, type SavedWallet, parsePortfolio } from "@/lib/portfolio/storage";
 import { cn } from "@/lib/utils";
 import { type AddressRules, MAX_WATCH_ITEMS, type TokenRules, type WatchItem } from "@/lib/watchlist/rules";
 import { Panel, fill, inputClass } from "@/modules/tools/shared/ui";
 import { useWallet } from "@/wallets/wallet-root";
 import type { WatchlistProps } from "./widget";
 
-type Strings = Record<string, string>;
-const AMOUNTS = [null, 100, 1_000, 10_000, 100_000, 1_000_000] as const;
-const short = (a: string) => `${a.slice(0, 6)}…${a.slice(-4)}`;
-
-async function api<T>(
-  path: string,
-  init?: RequestInit,
-): Promise<{ ok: true; data: T } | { ok: false; status: number }> {
-  try {
-    const response = await fetch(path, {
-      ...init,
-      credentials: "same-origin",
-      headers: { Accept: "application/json", ...(init?.body ? { "Content-Type": "application/json" } : {}) },
-    });
-    const body = (await response.json().catch(() => null)) as { ok?: boolean; data?: T } | null;
-    return body?.ok && body.data !== undefined ? { ok: true, data: body.data } : { ok: false, status: response.status };
-  } catch {
-    return { ok: false, status: 0 };
-  }
-}
+import { RecentAlerts, WhereAlertsGo, useAlerts } from "./alerts";
+import { AMOUNTS, type Strings, api, primaryButton, secondaryButton, short } from "./common";
 
 export default function WatchlistPanel({
   strings: s,
@@ -237,11 +220,53 @@ function SignedIn({
 }) {
   const [adding, setAdding] = useState(false);
   const [renaming, setRenaming] = useState<WatchItem | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [code, setCode] = useState<Parameters<typeof WhereAlertsGo>[0]["code"]>(null);
   const list = items ?? [];
   const full = list.length >= MAX_WATCH_ITEMS;
+  const alerts = useAlerts();
+  // Arriving from Portfolio's "Set up alerts": offer to watch its wallets (read from this browser, never sent before
+  // the person clicks).
+  const [fromPortfolio, setFromPortfolio] = useState<SavedWallet[] | null>(() => {
+    if (new URLSearchParams(window.location.search).get("add") !== "portfolio") return null;
+    try {
+      return parsePortfolio(window.localStorage.getItem(PORTFOLIO_KEY)).wallets;
+    } catch {
+      return null;
+    }
+  });
+  const watchedAddresses = new Set(list.filter((i) => i.kind === "address").map((i) => i.target.toLowerCase()));
+  const toImport = (fromPortfolio ?? []).filter((w) => !watchedAddresses.has(w.address.toLowerCase()));
+  const closeImport = () => {
+    setFromPortfolio(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("add");
+    window.history.replaceState(null, "", url);
+  };
+  const importWallets = async () => {
+    for (const w of toImport.slice(0, MAX_WATCH_ITEMS - list.length)) {
+      const result = await api<{ item: WatchItem }>("/api/v1/watchlist", {
+        method: "POST",
+        body: JSON.stringify({ kind: "address", target: w.address, label: w.label }),
+      });
+      if (result.ok) setItems((prev) => [...(prev ?? []), result.data.item]);
+      else {
+        setError(result.status === 409 ? s.errDuplicateOrFull! : s.errSave!);
+        break;
+      }
+    }
+    closeImport();
+  };
+  const unchecked = alerts.data
+    ? Object.entries(alerts.data.checker.chains)
+        .filter(([, c]) => !c.ok)
+        .map(([key]) => chainNames[key] ?? key)
+    : [];
+  const [error, setError] = useState<string | null>(null);
 
-  const patch = async (item: WatchItem, body: { label?: string; rules?: AddressRules | TokenRules }) => {
+  const patch = async (
+    item: WatchItem,
+    body: { label?: string; rules?: AddressRules | TokenRules; muted?: boolean },
+  ) => {
     const before = item;
     setItems((prev) => prev?.map((i) => (i.id === item.id ? ({ ...i, ...body } as WatchItem) : i)) ?? prev);
     const result = await api<{ item: WatchItem }>(`/api/v1/watchlist/${item.id}`, {
@@ -262,18 +287,7 @@ function SignedIn({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div
-        className="flex items-start gap-3 rounded-2xl border border-medium/40 bg-medium/8 p-4 text-sm"
-        data-testid="alerts-not-live"
-      >
-        <Bell className="mt-0.5 size-5 shrink-0 text-medium" aria-hidden="true" />
-        <div>
-          <p className="font-medium">{s.betaTitle}</p>
-          <p className="text-muted-foreground">{s.betaText}</p>
-        </div>
-      </div>
-
+    <div className="grid items-start gap-4 lg:grid-cols-[1.6fr_1fr]">
       <Panel className="p-0 sm:p-0">
         <div className="flex flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-5">
           <div>
@@ -281,12 +295,43 @@ function SignedIn({
             <p className="text-sm text-muted-foreground" data-testid="watch-count">
               {fill(s.watching!, { count: list.length, max: MAX_WATCH_ITEMS })}
             </p>
+            <p className="text-xs text-muted-foreground">
+              {alerts.data && !alerts.data.checker.running ? s.checkerOff : s.checkedEveryMinute}
+            </p>
+            {unchecked.length > 0 && (
+              <p className="mt-1 text-xs text-medium" data-testid="chains-not-checked">
+                {fill(s.chainsNotChecked!, { chains: unchecked.join(", ") })}
+              </p>
+            )}
           </div>
           <button type="button" onClick={() => setAdding(true)} disabled={full || !items} className={primaryButton}>
             <Plus className="size-4" aria-hidden="true" />
             {s.watchAnother}
           </button>
         </div>
+        {items && fromPortfolio && (
+          <div
+            className="mx-4 mt-3 flex flex-col gap-2 rounded-xl border border-primary/40 bg-primary/8 p-3 sm:mx-6"
+            data-testid="import-portfolio"
+          >
+            <p className="text-sm font-medium">{s.importTitle}</p>
+            <p className="text-sm text-muted-foreground">
+              {toImport.length === 0
+                ? s.importNone
+                : fill(s.importText!, { count: Math.min(toImport.length, MAX_WATCH_ITEMS - list.length) })}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {toImport.length > 0 && list.length < MAX_WATCH_ITEMS && (
+                <button type="button" className={primaryButton} onClick={() => void importWallets()}>
+                  {fill(s.importButton!, { count: Math.min(toImport.length, MAX_WATCH_ITEMS - list.length) })}
+                </button>
+              )}
+              <button type="button" className={secondaryButton} onClick={closeImport}>
+                {s.importNotNow}
+              </button>
+            </div>
+          </div>
+        )}
         {error && (
           <p role="alert" className="px-4 pt-2 text-sm text-critical sm:px-6">
             {error}
@@ -335,21 +380,28 @@ function SignedIn({
                 onRules={(rules) => void patch(item, { rules })}
                 onRename={() => setRenaming(item)}
                 onRemove={() => void remove(item)}
+                onMute={() => void patch(item, { muted: !item.muted })}
               />
             ))}
           </ul>
         )}
       </Panel>
 
-      <Panel className="flex items-start gap-3">
-        <Send className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-        <div>
-          <h2 className="font-semibold">{s.whereTitle}</h2>
-          <p className="text-sm text-muted-foreground">{s.whereText}</p>
-        </div>
-      </Panel>
-
-      <AccountPanel s={s} account={account} onSignedOut={onSignedOut} />
+      <div className="flex flex-col gap-4">
+        {alerts.data ? (
+          <>
+            <WhereAlertsGo s={s} data={alerts.data} refresh={alerts.refresh} code={code} setCode={setCode} />
+            <RecentAlerts s={s} data={alerts.data} locale={locale} />
+          </>
+        ) : (
+          <Panel>
+            <p className="text-sm text-muted-foreground" aria-busy={alerts.data === undefined}>
+              {alerts.data === null ? s.errUnavailable : s.loading}
+            </p>
+          </Panel>
+        )}
+        <AccountPanel s={s} account={account} onSignedOut={onSignedOut} />
+      </div>
 
       {adding && (
         <AddDialog
@@ -388,6 +440,7 @@ function ItemRow({
   onRules,
   onRename,
   onRemove,
+  onMute,
 }: {
   item: WatchItem;
   own: boolean;
@@ -398,6 +451,7 @@ function ItemRow({
   onRules: (rules: AddressRules | TokenRules) => void;
   onRename: () => void;
   onRemove: () => void;
+  onMute: () => void;
 }) {
   const name = item.label || (item.kind === "token" ? s.unnamedToken! : s.unnamedWallet!);
   const usd = (n: number) =>
@@ -437,6 +491,18 @@ function ItemRow({
           </div>
         </div>
         <div className="flex items-center gap-1">
+          {item.muted && (
+            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground" data-testid="muted-badge">
+              {s.mutedBadge}
+            </span>
+          )}
+          <IconButton label={fill(item.muted ? s.unmute! : s.mute!, { name })} onClick={onMute}>
+            {item.muted ? (
+              <Bell className="size-4" aria-hidden="true" />
+            ) : (
+              <BellOff className="size-4" aria-hidden="true" />
+            )}
+          </IconButton>
           <IconButton label={fill(s.rename!, { name })} onClick={onRename}>
             <Pencil className="size-4" aria-hidden="true" />
           </IconButton>
@@ -839,8 +905,3 @@ function IconButton({ label, onClick, children }: { label: string; onClick: () =
     </button>
   );
 }
-
-const primaryButton =
-  "inline-flex h-10 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50";
-const secondaryButton =
-  "inline-flex h-10 items-center gap-2 rounded-xl border border-border px-4 text-sm font-medium hover:bg-muted disabled:opacity-50";

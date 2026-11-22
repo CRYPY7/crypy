@@ -145,7 +145,7 @@ export const chains: readonly ChainConfig[] = [
     nativeSymbol: "ETH",
     nativeDecimals: 18,
     explorer: { name: "BaseScan", url: "https://basescan.org" },
-    publicRpcUrls: ["https://base-rpc.publicnode.com", "https://mainnet.base.org"],
+    publicRpcUrls: ["https://base-rpc.publicnode.com", "https://mainnet.base.org", "https://base.drpc.org"],
     alchemyNetwork: "base-mainnet",
     commonTokens: [
       "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC

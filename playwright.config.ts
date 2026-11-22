@@ -1,6 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
+import { FAKE_TELEGRAM_TOKEN, fakeTelegramUrl } from "./tests/e2e/fake-telegram";
 
 const port = 3200;
+/** Telegram tests use a stand-in Telegram server, never the real bot (see tests/e2e/fake-telegram.ts). */
+const fakeTelegram = process.env.CRYPY_FAKE_TELEGRAM === "1";
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -8,6 +11,7 @@ export default defineConfig({
   // These tests read live blockchains through free providers. Six parallel browsers made the providers slow down
   // and rest (seen on the owner's PC), which failed unrelated pages; three keep the run honest and still quick.
   workers: 3,
+  globalSetup: "./tests/e2e/fake-telegram.ts",
   use: {
     baseURL: `http://localhost:${port}`,
     // Each test worker counts as its own visitor, as several people would in real use. Without this, the whole
@@ -23,6 +27,9 @@ export default defineConfig({
     url: `http://localhost:${port}/en`,
     reuseExistingServer: !process.env.CI,
     // A fresh database for each run, separate from the one used in development.
-    env: { PGLITE_DIR: "memory" },
+    env: {
+      PGLITE_DIR: "memory",
+      ...(fakeTelegram ? { TELEGRAM_API_URL: fakeTelegramUrl, TELEGRAM_BOT_TOKEN: FAKE_TELEGRAM_TOKEN } : {}),
+    },
   },
 });

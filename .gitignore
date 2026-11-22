@@ -53,3 +53,7 @@ next-env.d.ts
 
 # Local database (PGlite)
 /.data/
+/install-log.txt
+.crash-reports/
+memory-log.txt
+isolate-*.log

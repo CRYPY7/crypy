@@ -44,6 +44,21 @@ const schema = z.object({
     .regex(/^(memory|[A-Za-z0-9._\/-]+)$/, "PGLITE_DIR must be a simple relative folder or 'memory'")
     .refine((v) => !v.includes(".."), "PGLITE_DIR must stay inside the project")
     .default(".data/pglite"),
+  /** M8 Part 3: the Telegram bot's token from @BotFather. Without it, alerts are kept in the history but not sent. */
+  TELEGRAM_BOT_TOKEN: z
+    .string()
+    .regex(/^\d{5,15}:[A-Za-z0-9_-]{30,64}$/, "TELEGRAM_BOT_TOKEN looks malformed")
+    .optional(),
+  /** Tests only: a stand-in Telegram server on this machine. Production always uses Telegram's own address. */
+  TELEGRAM_API_URL: z
+    .url({ protocol: /^https?$/ })
+    .refine(
+      (v) => v.startsWith("https://api.telegram.org") || /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(v),
+      "TELEGRAM_API_URL may only point to Telegram or to this machine (tests)",
+    )
+    .default("https://api.telegram.org"),
+  /** The background checker and the Telegram bot run in the server process unless this is "off". */
+  CRYPY_WORKER: z.enum(["on", "off"]).default("on"),
 });
 
 const parsed = schema.safeParse({
@@ -58,6 +73,9 @@ const parsed = schema.safeParse({
   RPC_DAILY_REQUESTS: process.env.RPC_DAILY_REQUESTS || undefined,
   DATABASE_URL: process.env.DATABASE_URL || undefined,
   PGLITE_DIR: process.env.PGLITE_DIR || undefined,
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || undefined,
+  TELEGRAM_API_URL: process.env.TELEGRAM_API_URL || undefined,
+  CRYPY_WORKER: process.env.CRYPY_WORKER || undefined,
 });
 
 if (!parsed.success) {

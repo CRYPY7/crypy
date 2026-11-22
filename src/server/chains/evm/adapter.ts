@@ -156,8 +156,8 @@ export const evmAdapter: ChainFamilyAdapter = {
     return getEvmTxDetails(getEvmClient(chain), chain, hash as Hex);
   },
 
-  getTokenSecurity(chain, address) {
-    return getEvmTokenSecurity(chain, address);
+  getTokenSecurity(chain, address, priority) {
+    return getEvmTokenSecurity(chain, address, priority);
   },
 
   async lookupTransaction(chain, hash): Promise<TxLookup | null> {

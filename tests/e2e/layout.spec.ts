@@ -8,7 +8,7 @@ test.describe("desktop tools sidebar", () => {
     const sidebar = page.getByRole("complementary", { name: "Tools" });
     await expect(sidebar).toBeVisible();
     await expect(sidebar.getByRole("link", { name: "Unit Converter" })).toHaveAttribute("aria-current", "page");
-    await expect(sidebar.getByRole("link", { name: /Watchlist.*Beta/ })).toBeVisible();
+    await expect(sidebar.getByRole("link", { name: /Watchlist/ })).toBeVisible();
     await sidebar.getByRole("link", { name: "Hex Converter" }).click();
     await expect(page).toHaveURL(/\/en\/tools\/hex-converter$/);
     await expect(sidebar.getByRole("link", { name: "Hex Converter" })).toHaveAttribute("aria-current", "page");

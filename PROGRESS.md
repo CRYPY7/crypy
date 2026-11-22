@@ -30,6 +30,78 @@ Last updated: 2026-11-22
 | M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (Beta, boards 39–41); alerts are not sent until Part 3                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
+
+The Watchlist is live (no longer Beta).
+
+- **Background checker** (`server/alerts/checker.ts`), inside the server process, about every minute:
+  - Per chain, each round: the new blocks since last time, a few blocks behind the newest (reorganisation margin;
+    after a pause at most 15 minutes back).
+  - Three event searches cover every watched wallet at once: tokens sent, tokens received, new approvals. Plus one
+    coin-balance read for all of them. The cost stays flat as more people watch.
+  - Searches go to the free providers that allow wallet-wide searches (dRPC ≤ 100 blocks, Infura, Ankr, Chainstack,
+    NodeReal, Arbitrum's own node), never Alchemy (10 blocks on its free plan). The step adapts (25–100 blocks).
+  - A chain no provider can search is named on the page ("Not being checked right now") and in the server log, with
+    what to add.
+  - Coin transfers: a balance change is explained with the transaction from Alchemy when available, otherwise
+    reported as a balance change. Without Alchemy, a drop together with a token send is treated as the fee.
+  - Hourly, a few items per round: wallet value (big drop in a day, complete readings only), and token security
+    and liquidity compared with last time. The first reading is a baseline, never an alert.
+- **Spam and fakes** (anyone can emit events naming any wallet):
+  - Received: no zero amounts, NFTs or tokens without a market price.
+  - Sent: an unpriced token or an NFT counts only when the wallet sent the transaction itself.
+  - Approvals: read back on-chain (allowance / operator / Permit2), for priced tokens only. Permit2 events must
+    come from a real Permit2 contract. Collection-wide NFT approvals must be sent by the wallet.
+- **Telegram bot** (@crypyalertsbot; `server/telegram/`):
+  - Long polling (works without a public web address). `/start CODE` links the chat (code 10 minutes, single use,
+    only its hash stored), `/stop` disconnects, anything else gets help.
+  - "Mute this wallet / token" buttons. A blocked bot disconnects the account automatically.
+  - Messages escape all labels (no HTML injection), link only to CRYPY pages, and never ask to connect a wallet or
+    sign anything. On a local server the link goes in the text (Telegram only allows public links in buttons).
+- **Delivery** (`server/alerts/deliver.ts`): every 10 s.
+  - Each event is stored once (dedupe key). Quiet hours (default 23:00–07:00 in the person's time zone) hold
+    alerts; more than 5 waiting go out as one summary.
+  - About 1 message per second per chat. A failing send is retried for up to a day, then marked failed.
+  - History is kept 90 days.
+- **Page** (boards 39–40):
+  - "Where alerts go": connect with QR code, "Open Telegram" or `/start CODE`; the page updates by itself. Then
+    connected as @name, Send test, quiet hours (Change), Disconnect Telegram, "Email alerts later".
+  - Recent alerts with All / Load older, and the status of each (waiting, not sent, muted).
+  - "Checked about every minute". Mute / unmute per item.
+- **Portfolio** (board 36, deferred from Part 1):
+  - "Saved on this device only (no account). Sign in with your wallet to keep it on all your devices — optional",
+    then a switch to keep the list on the account (merged across devices, checked like the browser copy).
+  - "Watch for changes" → "Set up alerts" opens the Watchlist, which offers (on a click) to watch the Portfolio's
+    wallets.
+- **Your data:** the download now includes Telegram, quiet hours, alert history and the synced portfolio; deleting
+  the account removes all of it.
+- `pnpm env:check` now tests the Telegram token and says when Telegram can't be reached from the computer (for
+  example where Telegram is blocked: turn on a VPN for the whole computer while testing).
+
+Deferred (in the roadmap table): email alerts; alerts in other languages (with M9 translations); ERC-1155 transfers
+and single-NFT approvals; coin transfers on chains without Alchemy details (reported as balance changes); running
+the checker on several servers at once (needs a shared lock).
+
+### M8 Part 3 checks (2026-11-22, in the cloud workspace)
+
+- Typecheck, ESLint, Prettier, i18n check: passed. Build passed.
+- Unit: 306 passed, 72 skipped (live tests), 0 failed. New: event decoding, alert rules (spam, thresholds, swaps,
+  approvals, value drop, security and liquidity changes), quiet hours, message escaping and buttons, digest, Telegram
+  linking and bot commands, mute, delivery (quiet hours, summary, blocked bot), portfolio merge.
+- Live (`LIVE=1`): the checker read 30 real Ethereum blocks for Uniswap's router: 20 transfers → 9 priced alerts
+  linking their transactions, in 0.6 s. Found while testing: the public PublicNode and BNB Chain nodes refuse
+  wallet-wide searches, so a chain without a suitable provider is now named instead of failing silently.
+- Browser (with a stand-in Telegram server), final build: 141 passed, 7 skipped, 2 failed (the FLOKI liquidity card
+  under full load, the known free GoPlus limit; 8 of 8 when the Token Security file ran alone). An earlier run had
+  the batch scanner fail once (4 of 4 alone); a free BNB Chain endpoint added in this round that answers "rate
+  limit" as a normal reply was removed as a precaution. New: connect Telegram with the code (page updates by itself), Send test, quiet hours, Mute from a
+  Telegram button and unmute on the page, disconnect; Portfolio "Set up alerts" offer; account sync restoring the
+  list in an empty browser.
+- On the owner's PC the full check first crashed the server; found and fixed (HTTP/2 in Node 26, not the alerts) —
+  see "Server crash on the owner's PC" below. 2 of 2 runs since then kept the server up.
+- **Owner check still open:** connect the real bot (VPN on, since Telegram is blocked where the owner is), watch a
+  wallet and send it a small amount; the alert must arrive in Telegram (the roadmap's "Done when").
+
 ## Alchemy per-second pacing (owner decision 2026-11-22)
 
 Alchemy emailed that the account "hit its first rate limit". Its dashboard: 676.5K of 30M monthly CU used (2%), peak
@@ -136,6 +208,35 @@ sync to the account.
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## Server crash on the owner's PC: HTTP/2 in Node 26 (2026-11-22)
+
+- **Symptom:** with M8 Part 3 on the owner's PC (Windows 11, 8 GB RAM, Node v26.13.1), the full check usually ended
+  with the server aborting (0xC0000409) 1–3 minutes in. 6 of 8 runs crashed — **with and without the alerts worker**,
+  so the worker was not the cause (an earlier clean run without it was luck).
+- **What the new diagnostics showed:** the server's committed memory jumped from ~1 GB to ~12 GB in about 30 s (outside
+  the JavaScript heap, so Node's own memory log never saw it), the main thread stopped answering for up to a minute
+  (the watchdog could not pause it, so it was stuck outside JavaScript), during the heaviest address pages (a whale
+  wallet, vitalik.eth overview and approvals). A V8 sample log showed HTTP/2 sessions in use for outbound requests.
+- **Cause:** Node 26's built-in fetch (undici 8) switched to HTTP/2 by default for servers that offer it (Alchemy,
+  dRPC, Ankr, …). Ruled out by test runs: WebAssembly trap handlers, WebAssembly memory/code limits, opening the
+  database during load, the Telegram bot, the alerts delivery, oversized provider answers.
+- **Fix:** outbound requests use HTTP/1.1 again (`src/server/http/agent.ts`, applied at server start; the server log
+  says `outbound HTTP version: http/1.1 (…)` when the memory log is on, and always prints a line if it can't apply it).
+  `CRYPY_HTTP2=on` keeps Node's default (diagnosis only). Unit-tested, including undici 8's two dispatcher slots.
+- **Result on the owner's PC:** 2 of 2 full runs with the server up to the end, its memory at most ~1.1 GB:
+  140 passed / 3 failed and 137 passed / 6 failed (timeouts of the heaviest live pages under the full suite on an
+  8 GB PC, and the FLOKI trade test — the known live-data flakes; they pass alone).
+- **Also added (kept):** provider answers over 32 MB are refused as a failed request and logged with host and method
+  (third-party data is untrusted; none was seen); the built-in database opens before the first request when the
+  alerts worker is on; opt-in diagnostics (`CRYPY_DEBUG_MEMORY=1`): sudden-growth lines, a main-thread watchdog that
+  writes `.crash-reports/blocked-main-thread.txt` with the requests in progress, Node fatal-error reports, and the
+  full check's per-process memory table (`memory-log.txt`).
+- **Known, harmless:** an "unhandledRejection … getEthBalance … zero data" line can appear when a free node answers
+  an empty result; the request is already handled as failed. To be traced later.
+- Diagnosis launchers in `scripts/` (`full-check-no-bot`, `-delivery-only`, `-checker-only`, `-no-trap`,
+  `-wasm-cap`, `-prof`) were only for this hunt and can be deleted.
+- Here: typecheck, lint passed; unit 313 passed, 72 skipped; browser 143 passed, 7 skipped, 0 failed.
 
 ## Server stability under load (2026-11-21)
 

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { fakeTelegramUrl } from "./fake-telegram";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 
 /**
@@ -77,7 +78,7 @@ async function signIn(page: Page) {
   const main = page.locator("#main");
   await main.getByRole("button", { name: "Connect wallet and sign in" }).click();
   await page.getByRole("button", { name: "Test Wallet" }).click();
-  await expect(main.getByTestId("alerts-not-live")).toBeVisible({ timeout: 30_000 });
+  await expect(main.getByTestId("watch-count")).toBeVisible({ timeout: 30_000 });
 }
 
 test("nothing is signed until the click; the message names this site and isn't a transaction", async ({ page }) => {
@@ -98,7 +99,7 @@ test("nothing is signed until the click; the message names this site and isn't a
 
   // Still signed in after a reload (httpOnly cookie), without asking the wallet again.
   await page.reload();
-  await expect(main.getByTestId("alerts-not-live")).toBeVisible({ timeout: 30_000 });
+  await expect(main.getByTestId("watch-count")).toBeVisible({ timeout: 30_000 });
   expect(signed).toHaveLength(1);
 });
 
@@ -197,4 +198,157 @@ test("account APIs need a session and refuse other sites", async ({ request, bas
   expect(crossSite.status()).toBe(403);
   const sameSite = await request.post("/api/v1/auth/nonce", { headers: { Origin: baseURL! } });
   expect(sameSite.status()).toBe(200);
+});
+
+const fakeTelegram = process.env.CRYPY_FAKE_TELEGRAM === "1";
+const telegramCalls = async (page: Page) =>
+  (await (await page.request.get(`${fakeTelegramUrl}/__calls`)).json()) as {
+    method: string;
+    body: Record<string, unknown>;
+  }[];
+
+test("Telegram: connect with the code, test message, quiet hours, mute from Telegram, disconnect", async ({
+  page,
+}, testInfo) => {
+  test.skip(!fakeTelegram, "Needs the stand-in Telegram server (CRYPY_FAKE_TELEGRAM=1).");
+  test.setTimeout(120_000);
+  const chatId = 4_000 + testInfo.parallelIndex * 10 + (testInfo.project.name === "mobile" ? 1 : 0);
+  await setUp(page);
+  await page.goto("/en/tools/watchlist");
+  await signIn(page);
+  const main = page.locator("#main");
+  const where = main.getByTestId("where-alerts-go");
+  await expect(main.getByText("Checked about every minute", { exact: true })).toBeVisible();
+  await expect(main.getByTestId("recent-alerts")).toContainText("No alerts yet");
+
+  // Connect: the page shows a code, a QR code and the bot link; the person presses Start in Telegram.
+  await where.getByRole("button", { name: "Connect Telegram" }).click();
+  const command = (await where.getByTestId("telegram-command").textContent())!.trim();
+  expect(command).toMatch(/^\/start [2-9A-Z]{8}$/);
+  await expect(where.getByRole("img", { name: /QR code/ })).toBeVisible();
+  await expect(where.getByRole("link", { name: /Open Telegram/ })).toHaveAttribute(
+    "href",
+    `https://t.me/crypy_test_bot?start=${command.slice(7)}`,
+  );
+  await page.request.post(`${fakeTelegramUrl}/__push`, {
+    data: {
+      message: {
+        message_id: 1,
+        chat: { id: chatId, type: "private" },
+        from: { id: chatId, is_bot: false, username: `tester${chatId}` },
+        text: command,
+      },
+    },
+  });
+  // The page updates by itself.
+  await expect(where.getByTestId("telegram-connected")).toContainText(`@tester${chatId}`, { timeout: 20_000 });
+  const toChat = async () => (await telegramCalls(page)).filter((c) => c.body.chat_id === String(chatId));
+  expect((await toChat()).some((c) => String(c.body.text).includes("Connected to CRYPY"))).toBe(true);
+
+  await where.getByRole("button", { name: "Send test" }).click();
+  await expect(where.getByText("Test sent. Check Telegram.")).toBeVisible();
+  const sample = (await toChat()).find((c) => String(c.body.text).includes("Test alert from CRYPY"))!;
+  expect(String(sample.body.text)).toContain("never asks you to connect a wallet or sign");
+  expect(sample.body.parse_mode).toBe("HTML");
+
+  // Quiet hours.
+  await expect(where.getByTestId("quiet-hours")).toContainText("23:00–07:00");
+  await where.getByRole("button", { name: "Change" }).click();
+  const dialog = page.getByRole("dialog", { name: "Quiet hours" });
+  await dialog.getByLabel("From").fill("22:00");
+  await dialog.getByLabel("To").fill("06:30");
+  await dialog.getByRole("button", { name: "Save" }).click();
+  await expect(where.getByTestId("quiet-hours")).toContainText("22:00–06:30");
+
+  // "Mute this wallet" pressed in Telegram mutes the item; the page can turn it back on.
+  await main.getByRole("button", { name: /Watch my wallet/ }).click();
+  const item = main.getByTestId("watch-item").first();
+  await expect(item).toBeVisible();
+  const { items } = (await (await page.request.get("/api/v1/watchlist")).json()).data as { items: { id: string }[] };
+  await page.request.post(`${fakeTelegramUrl}/__push`, {
+    data: {
+      callback_query: {
+        id: `cb${chatId}`,
+        from: { id: chatId, is_bot: false },
+        message: { message_id: 5, chat: { id: chatId, type: "private" } },
+        data: `mute:${items[0]!.id}`,
+      },
+    },
+  });
+  await expect
+    .poll(async () => (await telegramCalls(page)).some((c) => c.body.callback_query_id === `cb${chatId}`), {
+      timeout: 15_000,
+    })
+    .toBe(true);
+  await page.reload();
+  await expect(item.getByTestId("muted-badge")).toBeVisible({ timeout: 30_000 });
+  await item.getByRole("button", { name: /Turn alerts back on/ }).click();
+  await expect(item.getByTestId("muted-badge")).toBeHidden();
+
+  // Disconnect.
+  await where.getByRole("button", { name: "Disconnect Telegram" }).click();
+  await page
+    .getByRole("alertdialog", { name: "Disconnect Telegram?" })
+    .getByRole("button", { name: "Disconnect" })
+    .click();
+  await expect(where.getByRole("button", { name: "Connect Telegram" })).toBeVisible();
+  await expect
+    .poll(async () => (await toChat()).some((c) => String(c.body.text).includes("Disconnected from CRYPY")), {
+      timeout: 10_000,
+    })
+    .toBe(true);
+});
+
+test("Portfolio: 'Set up alerts' offers its wallets; keeping the list on the account restores it elsewhere", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  const { address } = await setUp(page);
+  // Two quiet (empty) wallets in this browser's Portfolio.
+  const a = "0x000000000000000000000000000000000000dEaD";
+  const b = "0x1111111111111111111111111111111111111111";
+  await page.goto("/en");
+  await page.evaluate(
+    ({ a, b }) =>
+      localStorage.setItem(
+        "crypy.portfolio",
+        JSON.stringify({
+          v: 1,
+          wallets: [
+            { address: a, label: "Cold", addedAt: 1 },
+            { address: b, label: "Ones", addedAt: 2 },
+          ],
+        }),
+      ),
+    { a, b },
+  );
+  await page.goto("/en/tools/portfolio");
+  const main = page.locator("#main");
+  await expect(main.getByTestId("watch-for-changes")).toBeVisible({ timeout: 30_000 });
+  await expect(main.getByTestId("portfolio-account")).toContainText("Saved on this device only");
+  await main.getByRole("link", { name: "Set up alerts" }).click();
+  await expect(page).toHaveURL(/\/en\/tools\/watchlist\?add=portfolio$/);
+  await signIn(page);
+  const offer = main.getByTestId("import-portfolio");
+  await offer.getByRole("button", { name: "Watch 2 wallet(s)" }).click();
+  await expect(main.getByTestId("watch-item")).toHaveCount(2);
+  await expect(main.getByTestId("watch-item").first()).toContainText("Cold");
+  await expect(page).toHaveURL(/\/en\/tools\/watchlist$/);
+
+  // Signed in now: Portfolio offers to keep the list on the account.
+  await page.goto("/en/tools/portfolio");
+  const sync = main.getByTestId("portfolio-account").getByRole("switch");
+  await expect(sync).not.toBeChecked({ timeout: 30_000 });
+  // The switch changes once the account has saved the list.
+  await sync.click();
+  await expect(sync).toBeChecked();
+  const saved = (await (await page.request.get("/api/v1/portfolio")).json()).data.portfolio as { wallets: unknown[] };
+  expect(saved.wallets).toHaveLength(2);
+
+  // Another browser (empty storage, same account): the list comes back from the account.
+  await page.evaluate(() => localStorage.removeItem("crypy.portfolio"));
+  await page.reload();
+  await expect(main.getByText("Cold", { exact: true }).first()).toBeVisible({ timeout: 30_000 });
+  await expect(main.getByText("Ones", { exact: true }).first()).toBeVisible();
+  expect(address).toMatch(/^0x/);
 });

@@ -15,6 +15,7 @@ const ok = (text) => console.log(`  OK    ${text}`);
 const bad = (text) => console.log(`  FIX   ${text}`);
 const info = (text) => console.log(`  INFO  ${text}`);
 const warn = (text) => console.log(`  BUSY  ${text}`);
+const note = (text) => console.log(`  NOTE  ${text}`);
 let problems = 0;
 const problem = (text) => {
   problems += 1;
@@ -219,6 +220,34 @@ for (const [name, urls] of Object.entries(extraLists)) {
       }
     } catch {
       problem(`${hostOf(url)}: could not reach it (internet, firewall or wrong URL).`);
+    }
+  }
+}
+
+// Telegram bot (M8 alerts): the token's format, and whether Telegram answers from this computer. The token goes only
+// to Telegram over HTTPS and is never printed.
+{
+  const token = (entries.get("TELEGRAM_BOT_TOKEN") ?? []).at(-1)?.trim() ?? "";
+  console.log("\nTelegram alerts bot:");
+  if (!token) {
+    info("TELEGRAM_BOT_TOKEN not set (optional): alerts are kept in the history but not sent to Telegram.");
+  } else if (!/^\d{5,15}:[A-Za-z0-9_-]{30,64}$/.test(token)) {
+    problem("TELEGRAM_BOT_TOKEN doesn't look like a token from @BotFather (digits, a colon, then letters).");
+  } else {
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${token}/getMe`, {
+        signal: AbortSignal.timeout(10_000),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (body.ok && body.result?.username) ok(`Telegram answers: the token belongs to @${body.result.username}`);
+      else if (response.status === 401 || response.status === 404)
+        problem("Telegram refused the token. Copy it again from @BotFather (/mybots → your bot → API Token).");
+      else note(`Telegram answered HTTP ${response.status}; try again in a minute.`);
+    } catch {
+      note(
+        "Telegram can't be reached from this computer (blocked network?). The token looks fine. Turn on a VPN for the " +
+          "whole computer while testing alerts here; the server at launch connects directly.",
+      );
     }
   }
 }

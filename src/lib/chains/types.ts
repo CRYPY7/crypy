@@ -353,5 +353,10 @@ export interface ChainFamilyAdapter {
     heldTokens: string[] | Promise<string[]>,
   ): Promise<{ chain: ChainActivity; transfers: Transfer[] }>;
   /** Token security facts (M5). null when the address isn't a token on this chain. */
-  getTokenSecurity?(chain: ChainConfig, address: string): Promise<TokenSecurityFacts | null>;
+  /** `priority` "background": the alerts checker, which lets token pages use GoPlus first. */
+  getTokenSecurity?(
+    chain: ChainConfig,
+    address: string,
+    priority?: "page" | "background",
+  ): Promise<TokenSecurityFacts | null>;
 }

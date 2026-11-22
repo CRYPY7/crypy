@@ -434,3 +434,44 @@ export async function getEvmActivity(
     transfers: await addValues(client, chain, capped),
   };
 }
+
+/**
+ * Coin (not token) transfers of one wallet in a block range, for the alerts checker: called only after the wallet's
+ * coin balance changed, to say what happened. Null without Alchemy (the checker then reports the balance change).
+ */
+export async function coinTransfersInRange(
+  chain: ChainConfig,
+  owner: string,
+  fromBlock: bigint,
+  toBlock: bigint,
+): Promise<{ hash: string; from: string; to: string; raw: bigint; internal: boolean }[] | null> {
+  const provider = alchemyProvider(chain);
+  if (!provider) return null;
+  const category = ["external", ...(INTERNAL.has(chain.key) ? ["internal"] : [])];
+  const range = { fromBlock: `0x${fromBlock.toString(16)}`, toBlock: `0x${toBlock.toString(16)}` };
+  const pages = await Promise.all(
+    (["fromAddress", "toAddress"] as const).map((dir) =>
+      alchemyCall(provider, { category, ...range, [dir]: owner, excludeZeroValue: true, maxCount: "0x32" }),
+    ),
+  );
+  const seen = new Set<string>();
+  const out: { hash: string; from: string; to: string; raw: bigint; internal: boolean }[] = [];
+  for (const raw of pages.flatMap((p) => p.transfers) as AlchemyTransfer[]) {
+    if (!raw || typeof raw.hash !== "string" || !HASH.test(raw.hash)) continue;
+    if (!ADDRESS.test(raw.from ?? "") || !ADDRESS.test(raw.to ?? "")) continue;
+    const key = raw.uniqueId ?? `${raw.hash}:${raw.from}:${raw.to}:${raw.rawContract?.value}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const value = raw.rawContract?.value;
+    const amount = typeof value === "string" && /^0x[0-9a-fA-F]+$/.test(value) ? BigInt(value) : 0n;
+    if (amount === 0n) continue;
+    out.push({
+      hash: raw.hash.toLowerCase(),
+      from: raw.from.toLowerCase(),
+      to: raw.to!.toLowerCase(),
+      raw: amount,
+      internal: raw.category === "internal",
+    });
+  }
+  return out;
+}

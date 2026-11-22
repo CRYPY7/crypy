@@ -64,6 +64,8 @@ export const watchItemInput = z.discriminatedUnion("kind", [
 
 export const watchItemPatch = z.strictObject({
   label: z.string().max(200).optional(),
+  /** "Mute this wallet": no alerts for it until unmuted. */
+  muted: z.boolean().optional(),
   rules: z.union([addressRulesSchema, tokenRulesSchema]).optional(),
 });
 
@@ -77,5 +79,6 @@ export interface WatchItem {
   target: string;
   label: string;
   rules: AddressRules | TokenRules;
+  muted: boolean;
   createdAt: string;
 }

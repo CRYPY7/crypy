@@ -123,12 +123,10 @@ for (const path of [
   });
 }
 
-test("a Beta tool works and says what isn't live yet", async ({ page }) => {
+test("the watchlist asks to sign in and explains alerts", async ({ page }) => {
   await page.goto("/en/tools/watchlist");
   await expect(page.getByRole("heading", { name: "Sign in to use the watchlist" })).toBeVisible({ timeout: 30_000 });
-  await expect(page.locator("#main")).toContainText(
-    "Telegram alerts and the background checker arrive in the next update",
-  );
+  await expect(page.locator("#main")).toContainText("Alerts in Telegram with quiet hours");
 });
 
 test("an unknown tool address shows the not-found page", async ({ page }) => {
