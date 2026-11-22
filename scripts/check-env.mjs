@@ -14,6 +14,7 @@ const root = process.cwd();
 const ok = (text) => console.log(`  OK    ${text}`);
 const bad = (text) => console.log(`  FIX   ${text}`);
 const info = (text) => console.log(`  INFO  ${text}`);
+const warn = (text) => console.log(`  BUSY  ${text}`);
 let problems = 0;
 const problem = (text) => {
   problems += 1;
@@ -186,15 +187,28 @@ for (const [name, urls] of Object.entries(extraLists)) {
   console.log(`\n${name} live test:`);
   for (const url of urls) {
     try {
-      const started = Date.now();
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_chainId", params: [] }),
-        signal: AbortSignal.timeout(10_000),
-      });
+      const ask = () =>
+        fetch(url, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_chainId", params: [] }),
+          signal: AbortSignal.timeout(10_000),
+        });
+      let started = Date.now();
+      let response = await ask();
+      if (response.status === 429) {
+        // Free plans refuse bursts with "too many requests": that says nothing about the URL. Ask once more.
+        await new Promise((resolve) => setTimeout(resolve, 3_000));
+        started = Date.now();
+        response = await ask();
+      }
       const body = await response.json().catch(() => ({}));
-      if (!response.ok || typeof body.result !== "string") {
+      if (response.status === 429) {
+        warn(
+          `${hostOf(url)}: busy right now ("too many requests" twice). Not a URL or key problem: CRYPY rests it ` +
+            `and uses the other providers. If it says this every time, its free plan may not cover this chain.`,
+        );
+      } else if (!response.ok || typeof body.result !== "string") {
         problem(`${hostOf(url)}: no valid answer (HTTP ${response.status}). Check the URL or key.`);
       } else if (BigInt(body.result) !== expectedChain[name]) {
         problem(

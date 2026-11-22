@@ -56,6 +56,10 @@ limit was. Owner decision: stay on the free plan (zero-API-cost rule) and pace r
   token lists fell back to well-known tokens only (one wallet on 4 chains at the same moment), labelled on the page.
   More free providers reduce this further. A "socket idle timeout" network error (known since M7, server kept
   running) appeared again.
+- **Free providers added by the owner (2026-11-22):** 5 extra on Ethereum and BNB Chain (dRPC, Ankr, Chainstack,
+  NodeReal, Infura), 3 on Base, Arbitrum and Polygon (dRPC, Ankr, Infura); 24 of 25 answered in `pnpm env:check`.
+  dRPC on BNB Chain answered "too many requests" in 2 of 3 checks (free-plan limit, not a URL problem). The check now
+  asks once more after 3 s and reports a still-busy provider as BUSY instead of something to fix.
 - **Owner actions:** add free providers (dRPC, Ankr, Chainstack, NodeReal, Infura) to `.env.local` to add capacity
   for free; set an Alchemy usage alert. Later steps already planned: Redis cache on the launch VPS, own nodes.
 
