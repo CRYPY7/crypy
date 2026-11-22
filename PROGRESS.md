@@ -282,6 +282,15 @@ Server changes, so this works safely:
   to switch an existing one to this method.
 - Cloudflare settings for the owner: SSL "Full (strict)", Always Use HTTPS, Email Address Obfuscation off and
   Rocket Loader off (both inject scripts that the Content Security Policy blocks).
+- **Abuse protection (owner question 2026-11-22):** `cloudflare-only.sh on` limits the web ports (80/443) to
+  Cloudflare's published ranges, so bots can't skip Cloudflare by calling the server's address directly (it was
+  public in DNS before Cloudflare); SSH unchanged; `off` reopens them. Owner's Cloudflare settings: Bot Fight Mode on,
+  one free rate-limiting rule for `/api/` (per visitor, 10-second window). Free provider plans can't bill, so abuse
+  can slow the site or use up a day's free quota (the site then falls back to public nodes) but can't cost money.
+- **Live (2026-11-22, checked from outside):** crypy.org answers through Cloudflare over HTTP/2 with HTTP/3
+  offered; static files are served from Cloudflare's cache (`cf-cache-status: HIT`, cached for a year); pages and
+  the API pass through uncached (`DYNAMIC`, `no-store`); http and www redirect to https://crypy.org; the preview's
+  `noindex` and disallow-all robots.txt are in place; the owner switched certificate renewal with `--renew`.
 
 ## M9 Part 2 — Accessibility and speed (2026-11-22)
 

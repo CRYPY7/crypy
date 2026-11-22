@@ -69,6 +69,9 @@ editing nginx by hand). Useful on the server: `systemctl status crypy`, `journal
 `/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out until the
 official launch; remove it from the server's `.env.local` and run `update.sh` to launch.
 
+Behind Cloudflare, `bash /opt/crypy/app/scripts/server/cloudflare-only.sh on` lets only Cloudflare reach the web
+ports (run it again now and then to refresh Cloudflare's address list; `off` undoes it).
+
 Only one running server may use the Telegram bot token: when the live site has it, set `CRYPY_WORKER=off` in your
 PC's `.env.local` (or use a second test bot there).
 
