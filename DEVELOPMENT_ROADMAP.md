@@ -278,6 +278,8 @@ Urdu + Arabic translations & RTL QA; security review; accessibility & performanc
   ARCHITECTURE.md §10d.
 - **Part 2 — Accessibility and speed 🟡 (2026-11-22):** 0 axe violations (WCAG 2.2 AA) with automated tests; layout
   shifts removed; home, tools and the Gas Tracker at 90–92 on simulated mobile. Open part in the table below.
+- **Part 3 — Friends preview online 🟡 (2026-11-22):** server scripts for one DigitalOcean droplet (nginx, systemd,
+  PostgreSQL, HTTPS, backups, updates); search engines blocked until the official launch. Owner's first setup pending.
 - **Next parts (proposed order):** Urdu translations
   (reviewed by the owner) and RTL QA, Arabic as preview until a native review; legal pages (lawyer review before
   launch); VPS setup and deploy (one VPS: nginx, `next start`, PostgreSQL, backups; staging first), then the alerts

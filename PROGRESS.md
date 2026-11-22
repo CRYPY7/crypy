@@ -31,6 +31,7 @@ Last updated: 2026-11-22
 | M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
 | M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
 | M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
+| M9 Part 3 Online (friends preview)                     | 🟡 Server scripts built 2026-11-22; owner's first setup on DigitalOcean pending               |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -214,6 +215,28 @@ sync to the account.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
 
+## M9 Part 3 — Going online: friends preview (owner request 2026-11-22)
+
+Owner decisions: DigitalOcean (account created), domain crypy.org (owned), public GitHub repository, **friends
+preview** first (live and fully working, hidden from search engines until the official launch).
+
+- **Server scripts** (`scripts/server/`, for Ubuntu 24.04):
+  - `setup.sh` (run once as root): system updates and automatic security updates; firewall (SSH, HTTP, HTTPS only);
+    fail2ban; 2 GB swap; Node.js 26 and pnpm 12.22.0; PostgreSQL on this server only with a random password;
+    a `crypy` system user; the code in `/opt/crypy/app`; the keys pasted into the server's `.env.local` (mode 600;
+    the server's own lines for site address, database and preview always win); build; a systemd service on
+    127.0.0.1:3000 (restarts by itself; can write only to its own folder); nginx with the headers from §10d and a
+    64 KB body limit; daily database backups kept 14 days.
+  - `enable-https.sh`: checks that both names point to the server, then a free Let's Encrypt certificate with
+    automatic renewal and http → https.
+  - `update.sh`: pulls the latest code, installs, builds, restarts and checks that the site answers.
+- **Preview mode** (`CRYPY_PREVIEW=1`, set by `setup.sh`): robots.txt disallows everything and every response
+  carries `X-Robots-Tag: noindex, nofollow`. Removing it and running `update.sh` is the official launch switch.
+  Unit test added; checked on a production build.
+- README: "Putting it online" with the steps.
+- Not tested here: the scripts on a real server (this workspace can't create one); `bash -n` and ShellCheck pass.
+  The owner's first run is the test; any problem will be fixed in the scripts.
+
 ## M9 Part 2 — Accessibility and speed (2026-11-22)
 
 **Accessibility.** axe (WCAG 2.2 AA + best practices) on 23 page/state combinations × phone and desktop, dark and
@@ -260,6 +283,18 @@ languages are `noindex` on purpose).
 
 Checks here: typecheck, lint, Prettier; unit 324 passed, 72 skipped; build passed; browser 175 passed, 7 skipped,
 0 failed (including the 32 new accessibility tests).
+
+Owner's PC full check (2026-11-22): 171 passed, 4 failed, server up, no crash. All 4 were page loads timing out
+under the full suite on the 8 GB PC. Follow-up:
+
+- The address and breadcrumb tests waited for the whole live stream to finish loading; they now wait for the content
+  they check (same time limits).
+- The tools-dialog accessibility test pressed Ctrl+K before the page's code had loaded; it now repeats the shortcut
+  until the dialog opens.
+- Found with it, a real bug: in the Batch Balance Scanner, a list typed or pasted before the page's code had loaded
+  was in the box but not checked or scanned. The editor now takes it over when the page finishes loading (as the
+  other tools' address boxes already did). New regression test with slowed page code.
+- Here: browser 177 passed, 7 skipped, 0 failed.
 
 ## M9 Part 1 — Security review (2026-11-22)
 

@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 /** Uses live blockchain data (free providers or public nodes; prices read on-chain from DEX pools). */
 test("address page shows real balances and values on both chains", async ({ page }) => {
-  await page.goto("/en/address/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+  // The page streams its live data; wait for the content below, not for the whole stream to finish loading.
+  await page.goto("/en/address/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", { waitUntil: "commit" });
   await expect(page.getByRole("heading", { name: "Total value" })).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText(/^\$[\d,]+\.\d{2}$/).first()).toBeVisible();
   for (const chain of ["Ethereum", "BNB Chain"]) {

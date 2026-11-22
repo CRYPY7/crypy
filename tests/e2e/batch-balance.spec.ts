@@ -39,3 +39,15 @@ test("scans both chains, each at its own block, and never sends labels", async (
   const file = await download;
   expect(file.suggestedFilename()).toMatch(/^crypy-balances-.*\.csv$/);
 });
+
+test("a list typed before the page's code has loaded is kept", async ({ page }) => {
+  await page.route("**/_next/static/chunks/**", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 2_000));
+    await route.continue();
+  });
+  await page.goto("/en/tools/batch-balance", { waitUntil: "commit" });
+  const box = page.getByRole("textbox", { name: /Address list/ });
+  await box.fill(`${BINANCE_8},Binance 8`);
+  await expect(page.getByText("1 valid")).toBeVisible({ timeout: 20_000 });
+  await expect(box).toHaveValue(`${BINANCE_8},Binance 8`);
+});

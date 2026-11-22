@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText, Upload, X } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { fill } from "@/modules/tools/shared/ui";
 import { cn } from "@/lib/utils";
 import { EXAMPLE_LIST, type LineNote, MAX_ADDRESSES, MAX_INPUT_CHARS, type ParsedList } from "./parse";
@@ -43,6 +43,15 @@ export function AddressEditor({
   const file = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [fileError, setFileError] = useState("");
+
+  // Text typed or pasted before the page's code finished loading is in the box but not yet in the list: take it over
+  // once (the same rule as the other tools' address boxes).
+  useEffect(() => {
+    const typed = area.current?.value ?? "";
+    if (typed && typed !== text) onText(typed.slice(0, MAX_INPUT_CHARS));
+    // Only on first load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const lines = useMemo(() => text.split(/\r?\n/), [text]);
   const notes = useMemo(() => {

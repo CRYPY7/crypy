@@ -33,15 +33,18 @@ for (const theme of ["dark", "light"] as const) {
       "/ur",
     ]) {
       test(`no accessibility violations: ${path}`, async ({ page }) => {
-        await page.goto(path, { waitUntil: "networkidle" });
+        await page.goto(path, { waitUntil: "load" });
         await expectNoViolations(page);
       });
     }
 
     test("no accessibility violations: the tools dialog", async ({ page }) => {
-      await page.goto("/en", { waitUntil: "networkidle" });
-      await page.keyboard.press("Control+k");
-      await expect(page.getByRole("dialog")).toBeVisible();
+      await page.goto("/en", { waitUntil: "load" });
+      // The shortcut works once the page's code has loaded; press again until it opens.
+      await expect(async () => {
+        await page.keyboard.press("Control+k");
+        await expect(page.getByRole("dialog")).toBeVisible({ timeout: 1_000 });
+      }).toPass({ timeout: 20_000 });
       await expectNoViolations(page);
     });
   });
@@ -58,7 +61,7 @@ test("no accessibility violations: a transaction and an address's approvals (liv
 });
 
 test("the search box shows a visible focus ring for keyboard users", async ({ page }) => {
-  await page.goto("/en", { waitUntil: "networkidle" });
+  await page.goto("/en", { waitUntil: "load" });
   const form = page.locator("main form[role=search]");
   await form.locator("input").focus();
   const ring = await form.evaluate((el) => getComputedStyle(el).boxShadow);

@@ -82,7 +82,7 @@ test("entity pages show breadcrumbs and appear under recently viewed", async ({ 
   const address = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";
   await page.goto("/en");
   await expect(page.getByTestId("recent")).toHaveCount(0);
-  await page.goto(`/en/address/${address}`);
+  await page.goto(`/en/address/${address}`, { waitUntil: "commit" });
   const crumbs = page.getByRole("navigation", { name: "Breadcrumb" });
   await expect(crumbs).toBeVisible({ timeout: 30_000 });
   await expect(crumbs.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/en");

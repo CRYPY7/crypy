@@ -47,6 +47,30 @@ Restart `pnpm dev` after changing `.env.local`. Check your keys any time with `p
 | `pnpm i18n:check`              | Validates all translation files against English                                                                                           |
 | `pnpm format`                  | Formats the code with Prettier                                                                                                            |
 
+## Putting it online (one server)
+
+CRYPY runs on one Ubuntu 24.04 server (for example a DigitalOcean droplet, 2 GB RAM): nginx in front, the app as a
+service on `127.0.0.1:3000`, PostgreSQL for accounts and alerts, a free Let's Encrypt certificate. All of it is set
+up by the scripts in `scripts/server/` (see ARCHITECTURE.md §10d for the security settings they apply).
+
+1. **Server:** log in as root (`ssh root@<server-ip>`) and run, with your repository's address:
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/<you>/<repo>/main/scripts/server/setup.sh -o setup.sh
+   bash setup.sh https://github.com/<you>/<repo>.git crypy.org
+   ```
+   It asks you to paste your keys into the server's `.env.local` (the same keys as on your PC; never in a chat).
+2. **Domain:** at your registrar, point `crypy.org` and `www.crypy.org` to the server's IP (two DNS `A` records).
+3. **HTTPS:** once the domain points to the server: `bash /opt/crypy/app/scripts/server/enable-https.sh crypy.org`.
+4. **Updates later:** commit and push from your PC, then on the server:
+   `bash /opt/crypy/app/scripts/server/update.sh`.
+
+Useful on the server: `systemctl status crypy`, `journalctl -u crypy -n 100 --no-pager` (the app's log), backups in
+`/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out until the
+official launch; remove it from the server's `.env.local` and run `update.sh` to launch.
+
+Only one running server may use the Telegram bot token: when the live site has it, set `CRYPY_WORKER=off` in your
+PC's `.env.local` (or use a second test bot there).
+
 ## Project layout
 
 ```
