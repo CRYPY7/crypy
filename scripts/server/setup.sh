@@ -181,7 +181,7 @@ CRON
 
 say "Waiting for the site to answer"
 for _ in $(seq 1 30); do
-  if curl -fsS -o /dev/null http://127.0.0.1:3000/en; then break; fi
+  if curl -fs -o /dev/null http://127.0.0.1:3000/en; then break; fi
   sleep 2
 done
 if curl -fsS -o /dev/null http://127.0.0.1:3000/en; then
