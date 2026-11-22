@@ -35,6 +35,7 @@ Last updated: 2026-11-22
 | M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
 | SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending               |
 | SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                           |
+| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -217,6 +218,47 @@ sync to the account.
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## SEO Phase 3 — Gas by chain and daily token checks (design approved 2026-11-22, boards 46–50)
+
+Owner decision: about 10 tokens per chain chosen by CRYPY (50 in total); nobody can pay to be listed.
+
+- **Gas by chain** (`/gas/ethereum`, `/gas/bnb-chain`, `/gas/base`, `/gas/arbitrum`, `/gas/polygon`): the Gas
+  Tracker's live card for that chain only (same numbers, refreshed every 12 seconds), a short explanation written for
+  each chain (Ethereum's burned base fee; BNB Chain without a base fee; Base's Ethereum data fee; Arbitrum's data
+  cost inside the gas and first-come ordering; Polygon's gwei vs dollars), three questions per chain with FAQ
+  structured data, links to the other chains, the Gas Tracker and the gas guide. The Gas Tracker links to each
+  chain's page.
+- **Curated token list** (`config/seo-pages.ts`): each chain's 10 well-known tokens, the same contracts its
+  `commonTokens` already lists (checked on-chain by the live tests; a unit test makes sure nothing else gets in).
+- **Daily checks:** a new table `token_checks` (migration `0002_token_checks`) holds CRYPY's own security report per
+  token with its time. The background worker checks the never-checked tokens first and then the oldest ones, 4
+  every 10 minutes, at background priority for GoPlus, so all 50 are checked about once a day without bursts (a fresh
+  server has them all within about 2 hours). Pages and the sitemap only read what is saved; a visitor or a crawler
+  never starts a check.
+- **Token checks list** (`/tokens`): every curated token by chain with its result, whether the test trade could sell
+  it, the measured buy and sell tax and the check time; jump links per chain; a box to check any token. Linked from
+  the Token Security Scanner and the footer.
+- **One token's check** (`/tokens/<chain>/<token>`, e.g. `/tokens/ethereum/usdc`): name, chain, contract with copy,
+  the check time and "Run a fresh check" (the live token page), then the full report exactly as on the live token
+  page (the view is now shared: `TokenSecurityReportView`), "About this check" (not an audit, owners can change
+  settings), three questions answered from the saved report ("Can I sell…", "…buy or sell tax", "Is … safe?" — never
+  yes), learn links and other checked tokens. Before the first check is saved, the page says so, links to a live
+  check and is `noindex`.
+- **Sitemap:** now built per request: the 5 gas pages and `/tokens` always, and each token page only once its first
+  check is saved, with that check's date.
+- **404s:** unknown gas chains and tokens outside the list answer 404 (`/tokens/bsc/cake` too: links use
+  `bnb-chain`).
+- Differences from the boards: the gas page reuses the Gas Tracker's own card (same layout as the tracker) instead of a
+  separate design; the token page shows the full report as on the live token page instead of a shorter summary; chain
+  filters on the list are jump links (no browser code).
+- Checked with real data here: USDC (Ethereum) "Risks found" (blacklist, mint, upgradeable proxy), CAKE (BNB Chain)
+  "Some warnings", PEPE "No major risks found in these checks", each saved and shown with its time.
+- Checks here: typecheck, lint, Prettier, i18n check; unit 363 passed, 72 skipped (8 new: list rules, check order,
+  summaries, save and read with the real migration, a worker round with a failing token); build passed; browser 216 passed,
+  12 skipped, 0 failed (new: gas page for one chain staying one chain after the refresh, Gas Tracker links, the list
+  of 50, a token waiting for its first check (noindex, live-check link), 404s and the sitemap; accessibility on the
+  gas and token-checks pages).
 
 ## SEO Phase 2 — Learn hub (design approved 2026-11-22, boards 42–45)
 

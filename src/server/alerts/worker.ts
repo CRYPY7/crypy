@@ -3,6 +3,7 @@ import { getDb } from "@/server/db/client";
 import { serverEnv } from "@/server/env";
 import { redactKeys } from "@/server/redact";
 import { pruneLinkCodes } from "@/server/services/telegram";
+import { runDueTokenChecks } from "@/server/services/token-checks";
 import { startTelegramBot } from "@/server/telegram/bot";
 import { checkRound } from "./checker";
 import { deliverQueued } from "./deliver";
@@ -19,6 +20,7 @@ import { pruneAlerts } from "./store";
 const CHECK_MS = 60_000;
 const DELIVER_MS = 10_000;
 const HOUSEKEEPING_MS = 60 * 60_000;
+const TOKEN_CHECKS_MS = 10 * 60_000;
 
 const startedKey = Symbol.for("crypy.alertsWorker");
 const store = globalThis as typeof globalThis & { [startedKey]?: boolean };
@@ -96,5 +98,17 @@ export function startAlertsWorker(): void {
     },
     "housekeeping",
   );
+  // Daily security checks for the curated token pages (SEO Phase 3): a few every 10 minutes, oldest first.
+  if (!skip.has("token-checks"))
+    every(
+      TOKEN_CHECKS_MS,
+      async () => {
+        const { checked, failed } = await runDueTokenChecks();
+        if (checked) console.log(`[crypy] token checks: ${checked} saved`);
+        if (failed.length) throw new Error(`not checked this round: ${failed.join(", ")}`);
+      },
+      "token-checks",
+      60_000,
+    );
   if (!skip.has("bot")) startTelegramBot();
 }

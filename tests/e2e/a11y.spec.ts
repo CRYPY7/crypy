@@ -33,6 +33,8 @@ for (const theme of ["dark", "light"] as const) {
       "/ur",
       "/en/learn",
       "/en/learn/token-approvals",
+      "/en/gas/ethereum",
+      "/en/tokens",
     ]) {
       test(`no accessibility violations: ${path}`, async ({ page }) => {
         await page.goto(path, { waitUntil: "load" });

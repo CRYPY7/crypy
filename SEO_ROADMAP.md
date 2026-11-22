@@ -115,7 +115,7 @@ exchanged links, no spam.
 | ----------------------- | ------------------------- |
 | 1 Technical and on-page | ✅ Built (2026-11-22)     |
 | 2 Learn hub             | ✅ Built (2026-11-22)     |
-| 3 Indexable data pages  | Waiting for design        |
+| 3 Indexable data pages  | ✅ Built (2026-11-22)     |
 | 4 Languages             | With the M9 translations  |
 | 5 Measure and improve   | After Search Console data |
 | 6 Reputation and links  | After Phase 2             |

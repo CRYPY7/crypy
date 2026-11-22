@@ -111,6 +111,9 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           <Link href={learnPath(locale)} className="hover:text-foreground">
             {t("nav.learn")}
           </Link>
+          <Link href={localePath(locale, "/tokens")} className="hover:text-foreground">
+            {t("tokenChecks.nav")}
+          </Link>
           <Link href={localePath(locale, "/legal/privacy")} className="hover:text-foreground">
             {t("footer.privacy")}
           </Link>

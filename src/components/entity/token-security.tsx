@@ -185,6 +185,23 @@ export async function TokenSecuritySection({
     return <Notice>{t(`${K}.notOnChain`, { chain: t(`chains.${chainKey}`) })}</Notice>;
   const report = await cachedTokenSecurity(chainKey, address).catch(() => null);
   if (!report) return <Notice tone="warning">{t(`${K}.unavailable`)}</Notice>;
+  return <TokenSecurityReportView report={report} chainKey={chainKey} locale={locale} />;
+}
+
+/**
+ * The full report: summary, liquidity, trade test, owner, every check, holders and the second opinion. Used for live
+ * checks (token page) and for saved daily checks (curated token pages), so both always look the same.
+ */
+export async function TokenSecurityReportView({
+  report,
+  chainKey,
+  locale,
+}: {
+  report: SecurityReport;
+  chainKey: string;
+  locale: Locale;
+}) {
+  const t = await getTranslations();
   const { facts, counts, checks } = report;
   const risks = checks.filter((c) => c.status === "risk");
   const top = risks

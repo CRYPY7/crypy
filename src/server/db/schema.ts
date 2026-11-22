@@ -150,6 +150,19 @@ export const portfolios = pgTable("portfolios", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Saved token security checks for the curated token pages (SEO Phase 3): CRYPY's own report, re-run about once a day
+ * by the background worker. Public data only; nothing about visitors.
+ */
+export const tokenChecks = pgTable("token_checks", {
+  /** "<chain key>:<lower-case address>" */
+  id: text("id").primaryKey(),
+  chain: text("chain").notNull(),
+  slug: text("slug").notNull(),
+  report: jsonb("report").notNull(),
+  checkedAt: timestamp("checked_at", { withTimezone: true }).notNull(),
+});
+
 export const schema = {
   users,
   accounts,
@@ -158,6 +171,7 @@ export const schema = {
   watchItems,
   telegramLinkCodes,
   alerts,
+  tokenChecks,
   checkerCursors,
   portfolios,
 };

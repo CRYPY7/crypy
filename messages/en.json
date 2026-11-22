@@ -2958,5 +2958,171 @@
     "notTranslated": "This guide isn't translated yet, so it is shown in English.",
     "learnMore": "Learn more",
     "relatedTools": "Related tools"
+  },
+  "gasChain": {
+    "seoTitle": "{chain} Gas Price Now: Live Gwei and Fees | CRYPY",
+    "title": "{chain} gas price now",
+    "intro": "Live gas prices in gwei and what common actions cost in dollars, read directly from the chain and refreshed every 12 seconds.",
+    "howTitle": "How gas works on {chain}",
+    "questions": "Questions",
+    "otherChains": "Gas on other chains",
+    "compareAll": "Compare all chains in the Gas Tracker",
+    "guideLink": "Read: Gas fees explained",
+    "byChain": "Gas by chain:",
+    "chains": {
+      "ethereum": {
+        "description": "Live Ethereum gas price in gwei: low, average and high, with what sending ETH, tokens, approvals and swaps costs in dollars right now.",
+        "how": [
+          "Every Ethereum transaction pays the block's base fee, which is burned, plus a priority fee (a tip) for the validator. A new block arrives about every 12 seconds, and the base fee rises or falls depending on how full the previous block was.",
+          "Your wallet sets a maximum fee: you pay the base fee plus your tip, never more than that maximum. A failed transaction still pays for the gas it used."
+        ],
+        "faq": [
+          {
+            "q": "Why does the gas price change so often?",
+            "a": "The base fee is recalculated for every block from how full the previous one was, so it can move every 12 seconds. Busy moments, such as a popular token launch, push it up quickly."
+          },
+          {
+            "q": "Which speed should I choose?",
+            "a": "Average suits most transactions. Choose low when you can wait, and high when it must go through quickly, such as a time-sensitive swap."
+          },
+          {
+            "q": "Why did I pay a different amount than shown here?",
+            "a": "The cost depends on how much gas your transaction actually uses: a complex swap uses more than the typical amounts shown here. The base fee can also change between the moment you look and the moment your transaction is included."
+          }
+        ]
+      },
+      "bsc": {
+        "description": "Live BNB Chain gas price in gwei: low, average and high, with what sending BNB, tokens, approvals and swaps costs in dollars right now.",
+        "how": [
+          "BNB Chain has no base fee: the gas price you set is the whole price, and it goes to the validators. Blocks come much faster than on Ethereum, and the price usually stays low and steady.",
+          "Fees are paid in BNB, so keep a little BNB in your wallet even if you only hold tokens."
+        ],
+        "faq": [
+          {
+            "q": "Why are BNB Chain fees so low?",
+            "a": "Its blocks have room for many transactions and come quickly, so the gas price usually stays close to the minimum validators accept. Busy moments can still raise it."
+          },
+          {
+            "q": "Do I need BNB to send tokens on BNB Chain?",
+            "a": "Yes. Every transaction is paid in BNB, even when you send USDT or another token."
+          },
+          {
+            "q": "Which speed should I choose?",
+            "a": "Average suits most transactions. Choose low when you can wait, and high when it must go through quickly, such as a time-sensitive swap."
+          }
+        ]
+      },
+      "base": {
+        "description": "Live Base gas price in gwei, with what sending ETH, tokens, approvals and swaps costs in dollars, including the Ethereum data fee.",
+        "how": [
+          "Base is a rollup built on Ethereum. Each transaction pays a small network fee on Base (a base fee plus a tip, like Ethereum) and a data fee for publishing its data on Ethereum.",
+          "Both parts are usually small. CRYPY's costs include an estimate of the data fee, read from the chain. Fees are paid in ETH on Base."
+        ],
+        "faq": [
+          {
+            "q": "Why is Base cheaper than Ethereum?",
+            "a": "Base bundles many transactions together and publishes them to Ethereum at once, so each transaction pays only a small share."
+          },
+          {
+            "q": "What is the Ethereum data fee?",
+            "a": "The part of your fee that pays for publishing your transaction's data on Ethereum. It follows Ethereum's own fees, so it is lower when Ethereum is quiet."
+          },
+          {
+            "q": "Do I need ETH on Base?",
+            "a": "Yes. Fees on Base are paid in ETH that is on Base, not on Ethereum."
+          }
+        ]
+      },
+      "arbitrum": {
+        "description": "Live Arbitrum gas price in gwei, with what sending ETH, tokens, approvals and swaps costs in dollars right now, read from the chain.",
+        "how": [
+          "Arbitrum One is a rollup built on Ethereum. The cost of publishing transaction data to Ethereum is charged as extra gas, so it is already part of the gas used and of the costs shown here.",
+          "Transactions are ordered in the order they arrive, so a higher tip usually doesn't make them faster. Fees are paid in ETH on Arbitrum."
+        ],
+        "faq": [
+          {
+            "q": "Does a higher tip make my transaction faster on Arbitrum?",
+            "a": "Usually not. Arbitrum orders transactions in the order they arrive, so the priority tip has little effect."
+          },
+          {
+            "q": "Why is Arbitrum cheaper than Ethereum?",
+            "a": "It bundles many transactions and publishes them to Ethereum together, so each one pays only a small share."
+          },
+          {
+            "q": "Do I need ETH on Arbitrum?",
+            "a": "Yes. Fees are paid in ETH that is on Arbitrum, not on Ethereum."
+          }
+        ]
+      },
+      "polygon": {
+        "description": "Live Polygon gas price in gwei, with what sending POL, tokens, approvals and swaps costs in dollars right now, read from the chain.",
+        "how": [
+          "Polygon works like Ethereum: each transaction pays a base fee, which is burned, plus a tip for the validator. Fees are paid in POL.",
+          "Gas prices in gwei look high on Polygon because POL is worth far less than ETH. What matters is the cost in dollars shown here."
+        ],
+        "faq": [
+          {
+            "q": "Why is the Polygon gas price in gwei so high?",
+            "a": "A gwei is a share of one POL, and POL is worth much less than ETH. A few hundred gwei on Polygon usually costs far less than a few gwei on Ethereum."
+          },
+          {
+            "q": "Do I need POL to send tokens on Polygon?",
+            "a": "Yes. Every transaction is paid in POL, even when you send USDC or another token."
+          },
+          {
+            "q": "Which speed should I choose?",
+            "a": "Average suits most transactions. Choose low when you can wait, and high when it must go through quickly, such as a time-sensitive swap."
+          }
+        ]
+      }
+    }
+  },
+  "tokenChecks": {
+    "seoTitle": "Token Security Checks: Daily Scam and Tax Tests | CRYPY",
+    "seoDescription": "Daily automated security checks of 50 well-known tokens on 5 chains: can they be sold, buy and sell taxes, owner powers and liquidity.",
+    "nav": "Token checks",
+    "title": "Token security checks",
+    "intro": "CRYPY's automated checks of well-known tokens, run again every day: can it be sold, what it takes in tax, what the owner can change and who holds the liquidity. Results are signals, never a promise that a token is safe.",
+    "checkAny": "Check any token",
+    "chainsLabel": "Jump to a chain",
+    "colToken": "Token",
+    "colResult": "Result",
+    "colSell": "Can be sold (test)",
+    "colTax": "Buy / sell tax",
+    "colChecked": "Checked",
+    "sellYes": "Yes",
+    "sellNo": "No",
+    "sellNoPool": "No pool found",
+    "sellUnchecked": "Not checked",
+    "tax": "{buy} / {sell}",
+    "notMeasured": "Not measured",
+    "pending": "Being checked",
+    "selection": "Which tokens are listed: well-known tokens with deep liquidity on each chain, chosen by CRYPY. Nobody can pay to be listed or to change a result.",
+    "fromToolPage": "See daily checks of well-known tokens",
+    "page": {
+      "seoTitle": "{symbol} on {chain}: Token Security Check | CRYPY",
+      "seoDescription": "{symbol} on {chain}: sell test, buy and sell tax, owner powers and liquidity from CRYPY's daily automated check. Results are signals, not promises.",
+      "title": "{name} ({symbol}) token security check",
+      "pendingTitle": "{symbol} on {chain}: token security check",
+      "checked": "Checked {time} UTC · checked again every day",
+      "fresh": "Run a fresh check",
+      "aboutTitle": "About this check",
+      "about": "This page shows CRYPY's automated check of the {symbol} contract on {chain}, saved about once a day. It covers selling, taxes, owner powers and liquidity, and labels how each finding was checked. It is not an audit or an endorsement, and owners can change settings after a check. For the latest data, run a fresh check.",
+      "preparingTitle": "This check is being prepared",
+      "preparingText": "CRYPY hasn't saved a check of {symbol} on {chain} yet; it usually appears within two hours. You can run a live check now.",
+      "questions": "Questions",
+      "sellQ": "Can I sell {symbol}?",
+      "sellOk": "In CRYPY's last test trade, {symbol} could be bought, sent and sold. Token rules can change later, so check again before a large trade.",
+      "sellNo": "In CRYPY's last test trade, the trade didn't complete. The trade test above shows which step failed; don't buy until you know why.",
+      "sellUnchecked": "CRYPY's last check couldn't run a test trade for {symbol} (no supported pool, or the simulation didn't run). The trade test above says why.",
+      "taxQ": "Does {symbol} have a buy or sell tax?",
+      "taxA": "In CRYPY's last test trade it took {buy} on buying, {sell} on selling and {transfer} on a transfer.",
+      "taxNone": "Taxes weren't measured in the last check, because the test trade didn't complete.",
+      "safeQ": "Is {symbol} safe?",
+      "safeA": "No check can prove a token is safe. CRYPY's last check says \"{level}\", with {high} high and {medium} medium findings. Read the findings above and decide for yourself.",
+      "related": "Other checked tokens on {chain}",
+      "allChecks": "All token checks",
+      "learn": "Learn more"
+    }
   }
 }

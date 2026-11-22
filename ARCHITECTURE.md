@@ -709,6 +709,20 @@ DEX decoders, per chain family:                      (one per DEX design)
   canonical, structured data, no duplicate titles). Search titles and descriptions are separate from on-page names
   (`tools.<id>.seoTitle` / `seoDescription`, `seo.*`, `learn.seo*`). IndexNow runs after each server update.
 
+## 12m. Indexable data pages (SEO Phase 3)
+
+- `config/seo-pages.ts`: readable chain names for links (`bsc` → `bnb-chain`) and the curated token list (each chain's
+  `commonTokens`, 10 per chain).
+- Gas by chain: `app/[locale]/gas/[chain]` renders `GasTrackerWorkspace` with `only` (the client filters the shared
+  12-second refresh to that chain) plus per-chain text from `gasChain.chains.<key>`.
+- Token checks: table `token_checks` (id `<chain>:<lower-case address>`, report JSON, `checked_at`);
+  `server/services/token-checks.ts` (`dueTokens` pure order, `runDueTokenChecks` 4 per round, `savedCheck`,
+  `allSavedChecks`); the alerts worker runs a round every 10 minutes (`CRYPY_WORKER_SKIP=token-checks` turns it off;
+  browser tests do). Reports come from `tokenSecurityReport(…, "background")`; pages only read the table.
+- `components/entity/token-security.tsx` exports `TokenSecurityReportView` (any report) next to
+  `TokenSecuritySection` (fetches the live one), so saved and live checks render the same.
+- `app/sitemap.ts` is built per request (`connection()`), listing token pages only once a check is saved.
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

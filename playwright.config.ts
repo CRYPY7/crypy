@@ -29,6 +29,8 @@ export default defineConfig({
     // A fresh database for each run, separate from the one used in development.
     env: {
       PGLITE_DIR: "memory",
+      // The daily token checks would add live network load to every test run; their logic has unit tests.
+      CRYPY_WORKER_SKIP: "token-checks",
       ...(fakeTelegram ? { TELEGRAM_API_URL: fakeTelegramUrl, TELEGRAM_BOT_TOKEN: FAKE_TELEGRAM_TOKEN } : {}),
     },
   },

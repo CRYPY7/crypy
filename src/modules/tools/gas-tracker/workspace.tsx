@@ -6,7 +6,7 @@ import type { Locale } from "@/i18n/locales";
 import { cachedGas } from "@/server/services/gas";
 import { type GasStrings, GasTracker } from "./widget";
 
-export async function GasTrackerWorkspace({ locale }: { locale: Locale }) {
+export async function GasTrackerWorkspace({ locale, only }: { locale: Locale; only?: string }) {
   // Live numbers: render per request (inside the page's Suspense boundary), never at build time.
   await connection();
   const t = await getTranslations();
@@ -19,6 +19,7 @@ export async function GasTrackerWorkspace({ locale }: { locale: Locale }) {
       initial={report}
       strings={t.raw("utilities.gas-tracker") as GasStrings}
       locale={locale}
+      only={only}
       chains={liveChains
         .filter((c) => c.capabilities.fees)
         .map((c) => ({ key: c.key, name: t(`chains.${c.key}`), coin: c.nativeSymbol }))}

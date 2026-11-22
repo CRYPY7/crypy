@@ -45,16 +45,22 @@ export function GasTracker({
   strings: s,
   locale,
   chains,
+  only,
 }: {
   initial: GasReport;
   strings: GasStrings;
   locale: string;
   chains: GasChainInfo[];
+  /** Show one chain only (the per-chain gas pages); the shared refresh still covers every chain. */
+  only?: string;
 }) {
   const { report, now } = useGas(initial);
   const info = (key: string) => chains.find((c) => c.key === key);
   const actions = Object.keys(TYPICAL_GAS) as GasAction[];
-  const data = report ?? initial;
+  const all = report ?? initial;
+  const data = only
+    ? { chains: all.chains.filter((c) => c.chain === only), unavailable: all.unavailable.filter((c) => c === only) }
+    : all;
   const hours = (sec: number) =>
     sec >= 3600 ? fill(s.hours!, { n: (sec / 3600).toFixed(1) }) : fill(s.minutes!, { n: Math.round(sec / 60) });
 
@@ -65,7 +71,7 @@ export function GasTracker({
           {fill(s.chainDown!, { chain: info(c)?.name ?? c })}
         </p>
       ))}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className={cn("grid gap-4", !only && "lg:grid-cols-2")}>
         {data.chains.map((c) => {
           const chain = info(c.chain);
           const cards = [
