@@ -10,6 +10,13 @@ import { MAX_TOKEN_PAGES } from "@/server/chains/evm/balances";
 import type { AddressOverview } from "@/server/services/overview";
 import { Notice } from "./entity-parts";
 
+/**
+ * Collapsed lists (tokens without a price, likely spam) show at most this many rows per chain. Big wallets hold
+ * thousands of airdropped tokens: listing them all made the page 4 MB (0.5 MB compressed), slow on phones and far
+ * from the server. The count in the heading stays complete, and a line says how many aren't listed.
+ */
+export const COLLAPSED_ROWS = 50;
+
 /** Server-rendered holdings: no JavaScript is sent for this section. */
 export async function TotalValue({
   overview,
@@ -141,7 +148,7 @@ export async function ChainHoldingsSection({
           </summary>
           <p className="mt-2 text-sm text-muted-foreground">{t("entity.address.balances.unpricedNote")}</p>
           <ul className="mt-3 flex flex-col divide-y divide-border text-sm">
-            {unpriced.map((holding) => (
+            {unpriced.slice(0, COLLAPSED_ROWS).map((holding) => (
               <li key={holding.address} className="flex items-center justify-between gap-3 py-2">
                 <span className="min-w-0">
                   <Link
@@ -161,6 +168,11 @@ export async function ChainHoldingsSection({
               </li>
             ))}
           </ul>
+          {unpriced.length > COLLAPSED_ROWS && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("entity.address.balances.moreNotListed", { count: unpriced.length - COLLAPSED_ROWS })}
+            </p>
+          )}
         </details>
       )}
 
@@ -171,7 +183,7 @@ export async function ChainHoldingsSection({
           </summary>
           <p className="mt-2 text-sm text-high">{t("entity.address.balances.hiddenNote")}</p>
           <ul className="mt-3 flex flex-col divide-y divide-border text-sm">
-            {holdings.hidden.map((holding) => (
+            {holdings.hidden.slice(0, COLLAPSED_ROWS).map((holding) => (
               <li key={holding.address} className="flex flex-wrap items-center justify-between gap-2 py-2">
                 <span className="min-w-0">
                   <span className="font-medium">{holding.symbol}</span>{" "}
@@ -184,6 +196,11 @@ export async function ChainHoldingsSection({
               </li>
             ))}
           </ul>
+          {holdings.hidden.length > COLLAPSED_ROWS && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("entity.address.balances.moreNotListed", { count: holdings.hidden.length - COLLAPSED_ROWS })}
+            </p>
+          )}
         </details>
       )}
     </section>

@@ -12,7 +12,9 @@ for name in "$DOMAIN" "www.$DOMAIN"; do
     exit 1
   fi
 done
-certbot --nginx --non-interactive --agree-tos --register-unsafely-without-email --redirect \
+# Certificate only; the site file (HTTPS, HTTP/2, redirects) is written by nginx-site.sh. Renewal is automatic.
+certbot certonly --nginx --non-interactive --agree-tos --register-unsafely-without-email \
+  --deploy-hook "systemctl reload nginx" \
   -d "$DOMAIN" -d "www.$DOMAIN"
-systemctl reload nginx
+bash /opt/crypy/app/scripts/server/nginx-site.sh "$DOMAIN"
 echo "HTTPS is on: https://${DOMAIN}/en"

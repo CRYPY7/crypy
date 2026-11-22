@@ -35,7 +35,7 @@ export async function cachedActivity(
   only?: readonly string[],
 ): Promise<ActivityReport> {
   "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+  cacheLife({ stale: 30, revalidate: 60, expire: 1800 }); // M9 speed: a repeat visit within 30 min opens at once (refreshed in the background)
   const cursors = parseCursor(cursor);
   // Not awaited here: the history source doesn't need balances, so it starts at once.
   const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);

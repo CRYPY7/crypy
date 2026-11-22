@@ -15,7 +15,7 @@ import { cachedResolve } from "./lookups";
  */
 export async function cachedChainUse(address: string): Promise<string[]> {
   "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+  cacheLife({ stale: 30, revalidate: 60, expire: 1800 }); // M9 speed: a repeat visit within 30 min opens at once (refreshed in the background)
   const resolved = await cachedResolve(address);
   const lookups = resolved.status === "address" ? resolved.lookups : [];
   const used = new Set(lookups.filter(isActiveLookup).map((l) => l.chain));

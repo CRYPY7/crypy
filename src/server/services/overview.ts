@@ -30,7 +30,7 @@ const nativeNames: Record<ChainKey, string> = {
 /** `only`: which chains to scan (from the chain picker); all supported chains when omitted. */
 export async function cachedAddressOverview(address: string, only?: readonly string[]): Promise<AddressOverview> {
   "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+  cacheLife({ stale: 30, revalidate: 60, expire: 1800 }); // M9 speed: a repeat visit within 30 min opens at once (refreshed in the background)
   return addressOverview(address, only);
 }
 

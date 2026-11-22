@@ -13,7 +13,7 @@ import { type ResolveResult, resolveSearch } from "./resolve";
  */
 export async function cachedResolve(input: string): Promise<ResolveResult> {
   "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 300 });
+  cacheLife({ stale: 30, revalidate: 60, expire: 1800 });
   return resolveSearch(input, registry);
 }
 

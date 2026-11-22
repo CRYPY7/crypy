@@ -64,7 +64,8 @@ up by the scripts in `scripts/server/` (see ARCHITECTURE.md §10d for the securi
 4. **Updates later:** commit and push from your PC, then on the server:
    `bash /opt/crypy/app/scripts/server/update.sh`.
 
-Useful on the server: `systemctl status crypy`, `journalctl -u crypy -n 100 --no-pager` (the app's log), backups in
+The web server settings live in `scripts/server/nginx-site.sh` (run by the other scripts; run it again instead of
+editing nginx by hand). Useful on the server: `systemctl status crypy`, `journalctl -u crypy -n 100 --no-pager` (the app's log), backups in
 `/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out until the
 official launch; remove it from the server's `.env.local` and run `update.sh` to launch.
 

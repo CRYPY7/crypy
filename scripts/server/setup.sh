@@ -141,34 +141,7 @@ systemctl daemon-reload
 systemctl enable crypy
 systemctl restart crypy
 
-cat > /etc/nginx/sites-available/crypy <<NGINX
-# CRYPY: nginx in front of the app (see ARCHITECTURE.md §10d for why each header is set).
-server {
-    listen 80;
-    listen [::]:80;
-    server_name ${DOMAIN} www.${DOMAIN};
-
-    client_max_body_size 64k;
-    server_tokens off;
-
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_set_header Connection "";
-        proxy_read_timeout 120s;
-        # Pages stream their live data: pass it on as it arrives.
-        proxy_buffering off;
-    }
-}
-NGINX
-ln -sf /etc/nginx/sites-available/crypy /etc/nginx/sites-enabled/crypy
-rm -f /etc/nginx/sites-enabled/default
-nginx -t
-systemctl reload nginx
+bash "$APP_DIR/scripts/server/nginx-site.sh" "$DOMAIN"
 
 say "7/7 Daily database backup"
 mkdir -p /var/backups/crypy

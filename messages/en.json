@@ -718,6 +718,7 @@
         "totalAll": "Total value · all chains",
         "totalChain": "Total value · {chain}",
         "unpricedGroup": "{count, plural, one {# token without a reliable price} other {# tokens without a reliable price}}",
+        "moreNotListed": "{count, plural, one {# more isn't listed here, to keep the page fast.} other {# more aren't listed here, to keep the page fast.}}",
         "unpricedNote": "These tokens have no DEX pool deep enough for a reliable price, so they aren't counted in the total. Most unknown tokens sent to wallets without asking are worthless or scams: don't try to sell them on unknown websites."
       },
       "lookupAnyway": "Look it up anyway",

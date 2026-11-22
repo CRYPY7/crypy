@@ -237,6 +237,33 @@ preview** first (live and fully working, hidden from search engines until the of
 - Not tested here: the scripts on a real server (this workspace can't create one); `bash -n` and ShellCheck pass.
   The owner's first run is the test; any problem will be fixed in the scripts.
 
+### Live server speed (owner report 2026-11-22: "pages take time to load on the live server")
+
+The friends preview went live on crypy.org (DigitalOcean, San Francisco, 2 GB). Measured on the live site:
+
+- Static pages answer in about 0.3–0.7 s and are compressed (home 22 KB). But nginx spoke only **HTTP/1.1**, so a
+  page's ~15 script and style files queued over a few connections: slow from far away.
+- **vitalik.eth's address page was 4.1 MB (560 KB compressed)**: with the Alchemy key, big wallets list thousands of
+  airdropped tokens, and every one was in the page twice (as HTML and as page data) inside the collapsed "no reliable
+  price" and "likely spam" groups.
+- First visits to data pages take 5–11 s on the server (approvals and token security for big wallets: GoPlus and
+  on-chain checks); the page shows its frame at once and fills in as data arrives. Repeat visits come from the
+  cache.
+
+Changes:
+
+- **nginx** (`scripts/server/nginx-site.sh`, now used by setup, HTTPS and update): HTTP/2; the site's static files
+  (`/_next/static`) sent by nginx straight from disk, compressed and cached for a year; kept-alive connections to the
+  app; http and www redirected to https://crypy.org. A new file is swapped in only if `nginx -t` accepts it,
+  otherwise the previous one stays. HTTPS now uses `certbot certonly` with a reload hook on renewal.
+- **Collapsed token lists** show at most 50 rows per chain, with "N more aren't listed here, to keep the page fast";
+  the counts in the headings stay complete. For vitalik.eth that is at most 500 rows instead of about 3,200 (to be measured on the live site after the update).
+- **Background refresh:** balances, activity, chain checks and search keep serving the last result for up to
+  30 minutes while refreshing in the background (was 5), so a repeat visit opens at once. Approvals and token
+  security keep their short windows (safety data).
+- Checks here: typecheck, lint, Prettier; unit 326 passed; build; browser 177 passed, 0 failed. nginx file rendered
+  and reviewed here (nginx itself can't run in this workspace); the server tests it before using it.
+
 ## M9 Part 2 — Accessibility and speed (2026-11-22)
 
 **Accessibility.** axe (WCAG 2.2 AA + best practices) on 23 page/state combinations × phone and desktop, dark and
