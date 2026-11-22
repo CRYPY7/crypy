@@ -4,6 +4,8 @@ import { siteUrl } from "@/config/env";
 import { alertLink, escapeHtml } from "@/lib/alerts/format";
 import { getDb, type Db } from "@/server/db/client";
 import { watchItems } from "@/server/db/schema";
+import { createRateLimiter } from "@/server/rate-limit";
+import { redactKeys } from "@/server/redact";
 import { linkTelegramChat, unlinkTelegramChat, userByChat } from "@/server/services/telegram";
 import {
   TelegramConflictError,
@@ -32,6 +34,9 @@ const HELP = () =>
   ].join("\n");
 
 type Reply = (chatId: string, html: string) => Promise<void>;
+
+/** Security review (M9): at most 10 "/start CODE" tries per chat in 10 minutes. */
+const startAttempts = createRateLimiter({ limit: 10, windowMs: 10 * 60_000 });
 const reply: Reply = (chatId, html) => sendTelegramMessage(chatId, html);
 
 /** One incoming update. Exported for tests. */
@@ -74,6 +79,11 @@ export async function handleUpdate(update: TelegramUpdate, db?: Db, send: Reply 
   const [command, argument = ""] = message.text.trim().split(/\s+/, 2);
 
   if (command === "/start" && argument) {
+    // Codes can't be guessed in practice (8 characters, 10 minutes), and this keeps it that way.
+    if (!startAttempts(chatId, now.getTime()).allowed) {
+      await send(chatId, "Too many tries. Wait a few minutes, then use a new code from the Watchlist page.");
+      return;
+    }
     const result = await linkTelegramChat(argument, chatId, message.from?.username ?? null, now, database);
     if (result.ok) {
       await send(
@@ -124,7 +134,7 @@ export function startTelegramBot(): void {
       const bot = await getBot();
       console.log(`[crypy] Telegram bot @${bot.username} is running`);
     } catch (error) {
-      console.warn(`[crypy] Telegram bot couldn't start: ${(error as Error).message}`);
+      console.warn(`[crypy] Telegram bot couldn't start: ${redactKeys((error as Error).message)}`);
     }
     for (;;) {
       try {
@@ -136,7 +146,7 @@ export function startTelegramBot(): void {
         for (const update of updates) {
           state.offset = update.update_id + 1;
           await handleUpdate(update).catch((error: unknown) =>
-            console.warn(`[crypy] Telegram update not handled: ${(error as Error).message}`),
+            console.warn(`[crypy] Telegram update not handled: ${redactKeys((error as Error).message)}`),
           );
         }
         state.conflictLogged = false;

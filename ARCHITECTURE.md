@@ -375,6 +375,41 @@ names come only from CRYPY's own list; source status from Sourcify.
 | Abuse                                                                | `authLimiter` 20/min, `accountLimiter` 60/min per visitor; 10-item limit checked with a row lock                                                                                                                         |
 | Data kept                                                            | wallet address (CAIP-10), watchlist, session dates; no email, no IP; download and delete at any time                                                                                                                     |
 
+### 10d. Security review before launch (M9, 2026-11-22)
+
+Reviewed: every API route (24), sign-in and sessions, revoke (§10b), alerts and the Telegram bot, outbound requests,
+logs, headers, raw HTML, SQL, redirects and dependencies.
+
+| Finding                                                                                                                              | Fix                                                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rate limits used the **first** `X-Forwarded-For` entry, which the visitor chooses: a script could get a fresh limit on every request | `clientKey`: `X-Real-IP` (set by nginx / Vercel), else the **last** `X-Forwarded-For` entry; IPv6 counted per /64. nginx must set `X-Real-IP $remote_addr`                                  |
+| Request bodies were read whole (`request.json()`) before any size check; the Origin check doesn't stop scripts                       | `server/http/body.ts` `readBodyText` / `readBodyJson` stream the body and stop at a cap (2–48 KB per route; batch 16 KB). All 7 routes with a body use it. nginx `client_max_body_size 64k` |
+| Behind nginx the app sees `http`, so the session cookie would have lost `Secure` in production                                       | `isHttps`: request protocol, `X-Forwarded-Proto: https`, or an https `NEXT_PUBLIC_SITE_URL`                                                                                                 |
+| `GET /auth/session`, `POST /auth/sign-out`, `DELETE /account` had no rate limit                                                      | `sessionLimiter` (120/min), `authLimiter`, `accountLimiter`                                                                                                                                 |
+| Error messages logged by the alerts worker and bot could include provider URLs with keys (viem errors print the request URL)         | `server/redact.ts`: every URL keeps only scheme and host; Telegram tokens removed; used by the worker, bot, start-up and network-error logs                                                 |
+| A Telegram chat could try link codes without limit (8 characters, 10 minutes: not guessable in practice)                             | at most 10 `/start CODE` tries per chat per 10 minutes                                                                                                                                      |
+
+Checked and fine: zod or strict parsing on every input; same-origin check on every changing request; SameSite=Lax,
+httpOnly cookie with only its hash stored; Drizzle parameters only (no raw SQL); `dangerouslySetInnerHTML` only for
+our own static scripts and JSON-LD with `<` escaped; redirects only to paths we build; Telegram mute buttons scoped
+to the chat's own account; `TELEGRAM_API_URL` limited to Telegram or this machine; no CORS headers (API readable by
+our pages only); `Cache-Control: no-store` on every API answer; provider answers capped at 32 MB; secrets only in
+`src/server` (`server-only`).
+
+Accepted (documented):
+
+- `script-src 'unsafe-inline'`: needed for static pages without nonces (Next.js inlines its page data). React escapes
+  all text, and no third-party text is ever put into raw HTML.
+- `pnpm audit --prod`: zod 3 inside WalletConnect's browser code (our own validation uses zod 4.6.7, patched) and
+  minimatch inside the shadcn CLI (used at build time only). Neither handles visitor input on our server.
+- Rate limits and the Alchemy/GoPlus pacing are kept in memory: right for one server; a shared store is needed with
+  several.
+
+Launch requirements for the VPS (nginx in front of `next start`): TLS; `proxy_set_header Host $host`,
+`X-Real-IP $remote_addr`, `X-Forwarded-For $proxy_add_x_forwarded_for`, `X-Forwarded-Proto $scheme`;
+`client_max_body_size 64k`; the app listening on 127.0.0.1 only; `.env` readable by the app user only; PostgreSQL
+not exposed to the internet.
+
 ---
 
 ## 11. Environment variables

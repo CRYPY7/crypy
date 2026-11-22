@@ -266,12 +266,19 @@ items per account.
   Postgres + Drizzle (PGlite in development), Watchlist (10 items) with alert choices, download and delete account.
   Deferred to Part 3: optional portfolio sync.
 - **Part 3 — alerts 🟡 built (2026-11-22):** background checker, Telegram bot, quiet hours, alert history, Portfolio
-  sync and "Watch for changes". Beta label removed. Open: the owner's real-Telegram test below.
+  sync and "Watch for changes". Beta label removed. Owner's real-Telegram test passed on his PC (2026-11-22).
   **Done when:** an alert is delivered end-to-end in staging and production.
 
-## M9 — Launch readiness
+## M9 — Launch readiness — in progress (owner decisions 2026-11-22)
 
 Urdu + Arabic translations & RTL QA; security review; accessibility & performance; legal pages; production deploy to crypy.org.
+
+- **Part 1 — Security review ✅ (2026-11-22):** 6 findings fixed; accepted items and nginx launch requirements in
+  ARCHITECTURE.md §10d.
+- **Next parts (proposed order):** accessibility and performance (Lighthouse ≥ 90 on mobile); Urdu translations
+  (reviewed by the owner) and RTL QA, Arabic as preview until a native review; legal pages (lawyer review before
+  launch); VPS setup and deploy (one VPS: nginx, `next start`, PostgreSQL, backups; staging first), then the alerts
+  "Done when" on staging and production.
 
 ## After V1 — revenue phases (approved 2026-11-19)
 

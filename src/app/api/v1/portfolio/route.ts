@@ -4,6 +4,7 @@ import { parsePortfolio, serializePortfolio } from "@/lib/portfolio/storage";
 import { currentUser, sameOrigin } from "@/server/auth/request";
 import { getDb } from "@/server/db/client";
 import { portfolios } from "@/server/db/schema";
+import { readBodyText } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { accountLimiter, clientKey } from "@/server/rate-limit";
 
@@ -38,7 +39,7 @@ export async function PUT(request: NextRequest) {
   if (!sameOrigin(request).ok) return fail("FORBIDDEN");
   const limit = accountLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
-  const text = await request.text().catch(() => "");
+  const text = await readBodyText(request, MAX_BODY);
   if (!text || text.length > MAX_BODY) return fail("INVALID_INPUT");
   const portfolio = parsePortfolio(text);
   try {

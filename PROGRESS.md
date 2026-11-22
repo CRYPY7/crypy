@@ -25,9 +25,11 @@ Last updated: 2026-11-22
 | M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
 | M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
 | M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
-| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); parts 2–3 (accounts, alerts) to come     |
+| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3       |
 | Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                   |
-| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (Beta, boards 39–41); alerts are not sent until Part 3                    |
+| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                            |
+| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
+| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -99,8 +101,9 @@ the checker on several servers at once (needs a shared lock).
   list in an empty browser.
 - On the owner's PC the full check first crashed the server; found and fixed (HTTP/2 in Node 26, not the alerts) —
   see "Server crash on the owner's PC" below. 2 of 2 runs since then kept the server up.
-- **Owner check still open:** connect the real bot (VPN on, since Telegram is blocked where the owner is), watch a
-  wallet and send it a small amount; the alert must arrive in Telegram (the roadmap's "Done when").
+- **Owner check passed (2026-11-22):** with a VPN on (Telegram is blocked where the owner is), the owner connected the
+  real bot (@crypyalertsbot), watched wallets and received the alerts in Telegram; everything worked. Still to repeat
+  on staging and production at launch (the roadmap's "Done when").
 
 ## Alchemy per-second pacing (owner decision 2026-11-22)
 
@@ -133,7 +136,8 @@ limit was. Owner decision: stay on the free plan (zero-API-cost rule) and pace r
   dRPC on BNB Chain answered "too many requests" in 2 of 3 checks (free-plan limit, not a URL problem). The check now
   asks once more after 3 s and reports a still-busy provider as BUSY instead of something to fix.
 - **Owner actions:** add free providers (dRPC, Ankr, Chainstack, NodeReal, Infura) to `.env.local` to add capacity
-  for free; set an Alchemy usage alert. Later steps already planned: Redis cache on the launch VPS, own nodes.
+  for free. (Usage alerts are a paid Alchemy feature, so instead: check the dashboard's usage now and then; the
+  server's per-minute pacing line shows CU used.) Later steps already planned: Redis cache on the launch VPS, own nodes.
 
 ## M8 Part 2 — Wallet sign-in, database and Watchlist (design approved 2026-11-21, boards 39–41)
 
@@ -208,6 +212,31 @@ sync to the account.
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## M9 Part 1 — Security review (2026-11-22)
+
+Owner decisions (2026-11-22): M9 starts with the security review; hosting on **one VPS** (site, PostgreSQL, alerts
+worker; about $6–12 a month); the owner reviews the **Urdu** text; Arabic stays marked as preview until a native
+speaker reviews it.
+
+Reviewed every API route, sign-in and sessions, revoke, alerts and the Telegram bot, outbound requests, logs, headers,
+raw HTML, SQL, redirects and dependencies. Six findings, all fixed (details in ARCHITECTURE.md §10d):
+
+- Rate limits could be dodged by sending a made-up `X-Forwarded-For` → the key now comes from the address our own
+  proxy sets; IPv6 counted per /64.
+- Request bodies had no size cap before reading → every API with a body now stops reading at 2–48 KB.
+- The session cookie would have lost `Secure` behind nginx → https is detected from the proxy and the site address.
+- Three account routes had no rate limit → added.
+- Logged errors could contain provider URLs with keys → every logged URL keeps only its host; Telegram tokens removed.
+- Unlimited link-code tries per Telegram chat → 10 per 10 minutes.
+
+Accepted and documented: inline scripts in the CSP (static pages), two audit warnings in build-time and browser
+wallet libraries, in-memory limits (one server). Launch requirements for nginx are listed in §10d.
+
+Checks here: typecheck, lint, Prettier (generated `drizzle/meta` now ignored); unit 324 passed, 72 skipped (13 new:
+client key and IPv6, body caps, Secure cookie behind a proxy, log redaction, code-try limit); build passed; browser
+142 passed, 7 skipped, 1 failed (the batch scanner's first test under the full run, the known cold-start flake;
+8 of 8 when that file ran alone).
 
 ## Server crash on the owner's PC: HTTP/2 in Node 26 (2026-11-22)
 
@@ -1125,9 +1154,9 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
   outbound requests at once. Fix: one server-wide cap of 32 outbound requests in flight (`server/http/limit.ts`, used
   by every provider, Alchemy, GoPlus and Sourcify call). Then 2 of 2 full runs: 129 passed, no crash. Not seen on
   Linux; production runs on Linux.
-- **Before launch (M9):** per-visitor limits identify visitors by the first `X-Forwarded-For` address. That is safe
-  only behind a proxy that overwrites the header (Vercel does; on our own VPS, nginx must be set to). Otherwise a
-  visitor could send a fake one to get around the limits.
+- **Fixed (2026-11-22, M9 security review):** per-visitor limits used the first `X-Forwarded-For` address, which a
+  visitor can fake. They now use the address our proxy sets (`X-Real-IP`, else the last `X-Forwarded-For` entry); on
+  the VPS, nginx must set `X-Real-IP` (launch requirements in ARCHITECTURE.md §10d).
 - After pulling new files, if the site's styles look out of date, delete the `.next` folder and build again (the build cache once kept an old stylesheet here).
 - Transaction page: execution traces need our own node (later). Coins moved inside contracts are measured from balances only for recent blocks or with an archive provider. "First seen" time for pending transactions needs a mempool watcher (later).
 - TATA and other small tokens can show no USD price: the price engine only reads the main pools against stablecoins and the wrapped coin, above a liquidity floor.
@@ -1147,6 +1176,8 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 
 ## Decisions log
 
+- 2026-11-22: M9 order: security review first. Hosting: one VPS (site, PostgreSQL, alerts worker). The owner reviews
+  Urdu; Arabic stays a preview language until a native speaker reviews it.
 - 2026-11-21: M6 revoke transactions are built in the browser by one reviewed module and checked by decoding them again; only `revoke-runner.ts` may ask the wallet to send (ESLint + source-scan test).
 - 2026-11-20: **Zero API cost (owner rule):** no paid APIs or data services ever; only domain and servers are paid. Free providers rotate with daily budgets; own price engine from DEX pools replaces DefiLlama; self-hosted database/cache/indexer on a VPS at launch; own nodes later.
 

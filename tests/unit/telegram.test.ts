@@ -118,6 +118,14 @@ describe("connecting Telegram", () => {
     await db.delete(watchItems).where(eq(watchItems.id, item!.id));
   });
 
+  it("a chat that keeps guessing codes is stopped after 10 tries", async () => {
+    for (let i = 0; i < 10; i++) await handleUpdate(startUpdate(`/start WRONG${i}XX`, 9_001), db, send);
+    expect(replies.every((r) => r.includes("isn't valid"))).toBe(true);
+    const { code } = await tg.createLinkCode(userId);
+    await handleUpdate(startUpdate(`/start ${code}`, 9_001), db, send);
+    expect(replies.at(-1)).toContain("Too many tries");
+  });
+
   it("anything else gets the help text, which never asks for a wallet or a signature", async () => {
     await handleUpdate(startUpdate("hello"), db, send);
     expect(replies[0]).toContain("never asks you to connect a wallet");

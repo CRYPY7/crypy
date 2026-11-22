@@ -1,6 +1,7 @@
 import "server-only";
 import { getDb } from "@/server/db/client";
 import { serverEnv } from "@/server/env";
+import { redactKeys } from "@/server/redact";
 import { pruneLinkCodes } from "@/server/services/telegram";
 import { startTelegramBot } from "@/server/telegram/bot";
 import { checkRound } from "./checker";
@@ -37,7 +38,7 @@ function every(ms: number, task: () => Promise<unknown>, label: string, firstDel
       await task();
       lastError = "";
     } catch (error) {
-      const message = (error as Error)?.message ?? "failed";
+      const message = redactKeys((error as Error)?.message ?? "failed");
       // The same error again isn't repeated in the log every minute.
       if (message !== lastError) console.warn(`[crypy] alerts ${label}: ${message}`);
       lastError = message;

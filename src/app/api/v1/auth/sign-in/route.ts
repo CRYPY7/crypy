@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { sameOrigin, sessionCookie } from "@/server/auth/request";
 import { signIn } from "@/server/auth/session";
+import { readBodyJson } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { authLimiter, clientKey } from "@/server/rate-limit";
 
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
   if (!site.ok) return fail("FORBIDDEN");
   const limit = authLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
-  const parsed = body.safeParse(await request.json().catch(() => null));
+  const parsed = body.safeParse(await readBodyJson(request, 48_000));
   if (!parsed.success) return fail("INVALID_INPUT");
   try {
     const result = await signIn({ ...parsed.data, domain: site.host, origin: site.origin });

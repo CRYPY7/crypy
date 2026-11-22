@@ -1,5 +1,6 @@
 import "server-only";
 import type { NextRequest } from "next/server";
+import { siteUrl } from "@/config/env";
 import { SESSION_COOKIE, SESSION_DAYS, type SessionUser, sessionUser } from "./session";
 
 /**
@@ -28,13 +29,24 @@ export async function currentUser(request: NextRequest): Promise<SessionUser | n
   return sessionUser(sessionToken(request));
 }
 
+/**
+ * True when the visitor reached the site over https. Behind nginx on the VPS the app itself sees plain http, so the
+ * proxy's `X-Forwarded-Proto` and the configured public address count too (security review, M9: without this the
+ * session cookie would have lost its Secure flag in production).
+ */
+export function isHttps(request: NextRequest): boolean {
+  if (request.nextUrl.protocol === "https:") return true;
+  if (request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() === "https") return true;
+  return siteUrl.protocol === "https:";
+}
+
 /** httpOnly session cookie; Secure on https (http://localhost is only used on the owner's PC). */
 export function sessionCookie(request: NextRequest, token: string): string {
-  const secure = request.nextUrl.protocol === "https:" ? "; Secure" : "";
+  const secure = isHttps(request) ? "; Secure" : "";
   return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_DAYS * 86_400}${secure}`;
 }
 
 export function clearedSessionCookie(request: NextRequest): string {
-  const secure = request.nextUrl.protocol === "https:" ? "; Secure" : "";
+  const secure = isHttps(request) ? "; Secure" : "";
   return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`;
 }

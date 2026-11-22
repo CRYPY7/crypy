@@ -4,6 +4,7 @@ import { getChain } from "@/config/chains";
 import { MAX_BATCH_ADDRESSES, MAX_BATCH_TOKENS, readBatchBalances } from "@/server/chains/evm/batch";
 import { getOnchainPrices } from "@/server/chains/evm/prices";
 import { getEvmClient } from "@/server/chains/evm/providers";
+import { readBodyJson } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { batchLimiter, clientKey } from "@/server/rate-limit";
 
@@ -36,16 +37,8 @@ export async function POST(request: NextRequest) {
   const limit = batchLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
 
-  const length = Number(request.headers.get("content-length") ?? "0");
-  if (length > MAX_BODY_BYTES) return fail("INVALID_INPUT");
-  let json: unknown;
-  try {
-    const text = await request.text();
-    if (text.length > MAX_BODY_BYTES) return fail("INVALID_INPUT");
-    json = JSON.parse(text);
-  } catch {
-    return fail("INVALID_INPUT");
-  }
+  const json = await readBodyJson(request, MAX_BODY_BYTES);
+  if (json === null) return fail("INVALID_INPUT");
   const parsed = body.safeParse(json);
   if (!parsed.success) return fail("INVALID_INPUT");
   const chain = getChain(parsed.data.chain);

@@ -31,6 +31,7 @@ export async function register() {
     await openDatabaseBeforeTraffic();
     startAlertsWorker();
   } catch (error) {
-    console.warn(`[crypy] alerts didn't start: ${(error as Error).message}`);
+    const { redactKeys } = await import("@/server/redact");
+    console.warn(`[crypy] alerts didn't start: ${redactKeys((error as Error).message)}`);
   }
 }

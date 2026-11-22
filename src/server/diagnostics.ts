@@ -3,13 +3,9 @@ import { freemem } from "node:os";
 import { Server } from "node:http";
 import { Worker } from "node:worker_threads";
 import { inFlightHosts, takeFetchStats } from "@/server/http/limit";
+import { redactKeys } from "@/server/redact";
 
-/** Removes provider keys from text before it is logged (Alchemy keys sit in URL paths: /v2/<key>). */
-export function redactKeys(text: string): string {
-  return text
-    .replace(/\/v2\/[A-Za-z0-9_-]{8,}/g, "/v2/[key]")
-    .replace(/([?&](?:key|apikey|api_key|token)=)[^&\s]+/gi, "$1[key]");
-}
+export { redactKeys } from "@/server/redact";
 
 /**
  * Network errors that escape every handler (seen on the owner's PC: undici "socket idle timeout", only with an Alchemy

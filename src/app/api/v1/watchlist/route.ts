@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { watchItemInput } from "@/lib/watchlist/rules";
 import { currentUser, sameOrigin } from "@/server/auth/request";
+import { readBodyJson } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { accountLimiter, clientKey } from "@/server/rate-limit";
 import { addWatchItem, listWatchItems } from "@/server/services/watchlist";
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
   if (!sameOrigin(request).ok) return fail("FORBIDDEN");
   const limit = accountLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
-  const parsed = watchItemInput.safeParse(await request.json().catch(() => null));
+  const parsed = watchItemInput.safeParse(await readBodyJson(request, 8_000));
   if (!parsed.success) return fail("INVALID_INPUT");
   try {
     const user = await currentUser(request);

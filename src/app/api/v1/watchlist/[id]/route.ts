@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { watchItemPatch } from "@/lib/watchlist/rules";
 import { currentUser, sameOrigin } from "@/server/auth/request";
+import { readBodyJson } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { accountLimiter, clientKey } from "@/server/rate-limit";
 import { removeWatchItem, updateWatchItem } from "@/server/services/watchlist";
@@ -15,7 +16,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   if (!isId(id)) return fail("INVALID_INPUT");
   const limit = accountLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
-  const parsed = watchItemPatch.safeParse(await request.json().catch(() => null));
+  const parsed = watchItemPatch.safeParse(await readBodyJson(request, 8_000));
   if (!parsed.success) return fail("INVALID_INPUT");
   try {
     const user = await currentUser(request);

@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import QRCode from "qrcode";
 import { z } from "zod";
 import { currentUser, sameOrigin } from "@/server/auth/request";
+import { readBodyText } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { accountLimiter, clientKey } from "@/server/rate-limit";
 import {
@@ -24,7 +25,15 @@ export async function POST(request: NextRequest) {
   if (!sameOrigin(request).ok) return fail("FORBIDDEN");
   const limit = accountLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
-  const parsed = body.safeParse(await request.json().catch(() => ({})));
+  const raw = await readBodyText(request, 2_000);
+  if (raw === null) return fail("INVALID_INPUT");
+  let json: unknown = {};
+  try {
+    if (raw) json = JSON.parse(raw);
+  } catch {
+    return fail("INVALID_INPUT");
+  }
+  const parsed = body.safeParse(json);
   if (!parsed.success) return fail("INVALID_INPUT");
   if (!telegramConfigured()) return fail("UPSTREAM_UNAVAILABLE");
   try {

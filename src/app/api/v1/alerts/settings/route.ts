@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { currentUser, sameOrigin } from "@/server/auth/request";
+import { readBodyJson } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { accountLimiter, clientKey } from "@/server/rate-limit";
 import { isTimeZone, updateQuietHours } from "@/server/services/telegram";
@@ -15,7 +16,7 @@ export async function PATCH(request: NextRequest) {
   if (!sameOrigin(request).ok) return fail("FORBIDDEN");
   const limit = accountLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
-  const parsed = body.safeParse(await request.json().catch(() => null));
+  const parsed = body.safeParse(await readBodyJson(request, 2_000));
   if (!parsed.success || !isTimeZone(parsed.data.quiet.timeZone)) return fail("INVALID_INPUT");
   try {
     const user = await currentUser(request);
