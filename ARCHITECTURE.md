@@ -332,7 +332,8 @@ crypy/
 ## 10. Security design
 
 - No seed phrase / private key fields; no auto signing. The only transaction CRYPY ever prepares is a revoke (M6),
-  built in the browser by `src/wallets/evm/revoke.ts` and signed only in the user's wallet (see §10b).
+  built in the browser by `src/wallets/evm/revoke.ts` and signed only in the user's wallet (see §10b). The only
+  message CRYPY ever asks to sign is the sign-in message (M8, see §10c).
 - Secrets server-only (`src/server/*` imports `server-only`); only `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` public (domain-restricted to crypy.org + localhost in Reown).
 - CSP `connect-src` lists only the RPC hosts and WalletConnect/Reown services in use; add a host there when adding a provider the browser talks to.
 - Result pages that call providers are rate-limited per visitor (`page-guard.ts`), `noindex` and disallowed in robots.txt.
@@ -360,6 +361,20 @@ Approval data: GoPlus approval lists are leads only; CRYPY also checks every hel
 allowance shown is read on-chain at one block. Spender type (wallet / delegated wallet / contract) is read on-chain;
 names come only from CRYPY's own list; source status from Sourcify.
 
+### 10c. Sign-in security review (M8 Part 2, 2026-11-22)
+
+| Check                                                                | How it is enforced                                                                                                                                                                                                       |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Only a plain-text message, never a transaction, typed data or permit | `sign-in-runner.ts` is the only module besides `revoke-runner.ts` allowed wallet actions, and ESLint allows it only `signMessage`; a unit test scans `src/` and checks it has exactly one `signMessage(` call            |
+| Nothing is signed without a click                                    | browser test with a recording fake wallet: no `personal_sign` on load or connect; one after the click                                                                                                                    |
+| The text names this site and says it isn't a transaction             | `buildSignInMessage` / `checkSignInMessage` (shared): domain and origin must match the page (browser) and the request host (server); fixed statement; no extra resources, request id or not-before; rebuilt and compared |
+| Replay                                                               | one-time code stored on the server, deleted before the signature is checked; message valid 10 minutes                                                                                                                    |
+| Smart-contract wallets                                               | `verifyMessage` locally, then ERC-1271/6492 through the chain's client                                                                                                                                                   |
+| Session                                                              | 32 random bytes in an httpOnly, SameSite=Lax cookie (Secure on https), 30 days; the database holds only its SHA-256; sign-out and account deletion remove it                                                             |
+| Cross-site requests                                                  | every changing request needs `Origin` host = `Host`; tested (403)                                                                                                                                                        |
+| Abuse                                                                | `authLimiter` 20/min, `accountLimiter` 60/min per visitor; 10-item limit checked with a row lock                                                                                                                         |
+| Data kept                                                            | wallet address (CAIP-10), watchlist, session dates; no email, no IP; download and delete at any time                                                                                                                     |
+
 ---
 
 ## 11. Environment variables
@@ -375,8 +390,8 @@ GOPLUS_APP_KEY=               # M5 (if required)
 GOPLUS_APP_SECRET=
 ETHERSCAN_API_KEY=            # M7
 BSCTRACE_API_KEY=             # M7
-DATABASE_URL=                 # M8
-SESSION_SECRET=               # M8
+DATABASE_URL=                 # M8: real PostgreSQL (production); empty = PGlite in .data/pglite
+PGLITE_DIR=                   # M8: PGlite folder, or "memory" (browser tests)
 TELEGRAM_BOT_TOKEN=           # M8
 ALCHEMY_WEBHOOK_SIGNING_KEY=  # M8
 # Future families add their keys here (e.g. TRONGRID_API_KEY)
@@ -578,6 +593,18 @@ DEX decoders, per chain family:                      (one per DEX design)
   the priority. In memory per process (a shared store is needed with several servers).
 - `modules/tools/portfolio/widget.tsx` is a thin client shell that lazy-loads `tracker.tsx`, so route prefetches
   from the header and tab bar don't add the portfolio code to other pages.
+
+## 12j. Accounts and Watchlist (M8 Part 2)
+
+- Database: `server/db/schema.ts` (Drizzle), `server/db/client.ts` → `getDb()` opens `pg` when `DATABASE_URL` is set,
+  else PGlite; runs `drizzle/` migrations on first use. New migrations: edit the schema, `pnpm db:generate`.
+- Auth: `lib/auth/sign-in-message.ts` (shared rules), `server/auth/session.ts` (codes, sign-in, sessions),
+  `server/auth/request.ts` (same-site check, cookie). Routes under `/api/v1/auth/*` and `/api/v1/account*`.
+- Watchlist: `lib/watchlist/rules.ts` (zod rules and defaults, 10 items), `server/services/watchlist.ts`,
+  `/api/v1/watchlist` and `/api/v1/watchlist/{id}`. Watch items keep `chain` empty for addresses (every chain).
+- UI: `modules/tools/watchlist/widget.tsx` lazy-loads `panel.tsx`; the personal part loads only in the browser after
+  the session check. Tool status `beta` = working page with a named missing part (sidebar label "Beta").
+- Single-server for now: the background checker (Part 3) runs in the always-on server process.
 
 ## 13. Performance budget
 

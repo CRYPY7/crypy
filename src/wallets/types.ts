@@ -73,4 +73,10 @@ export interface RevokePreview {
 export interface WalletActions {
   previewRevoke(request: RevokeRequest): Promise<RevokePreview>;
   revoke(request: RevokeRequest, onStep: (step: RevokeStep) => void): Promise<RevokeOutcome>;
+  /** M8: sign in with a signed message (sign-in-runner.ts). Runs only when the person clicks "Sign in". */
+  signIn(): Promise<SignInOutcome>;
 }
+
+export type SignInOutcome =
+  | { status: "signed-in"; address: string }
+  | { status: "no-wallet" | "unsupported-chain" | "rejected" | "rate-limited" | "failed" };

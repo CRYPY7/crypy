@@ -70,3 +70,8 @@ export const batchLimiter = createRateLimiter({ limit: 40, windowMs: 60_000 });
  * Its own budget, so it doesn't use up a visitor's searches.
  */
 export const portfolioLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 });
+
+/** M8: sign-in steps (one-time code, signature check). Low, since a person signs in rarely. */
+export const authLimiter = createRateLimiter({ limit: 20, windowMs: 60_000 });
+/** M8: a signed-in person's own data (watchlist, account). */
+export const accountLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 });

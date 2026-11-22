@@ -194,7 +194,7 @@ describe("revoke transactions (the only transactions CRYPY builds)", () => {
     expect(() => buildRevoke({ ...r, spender: "0x123" })).toThrow(/address/);
   });
 
-  it("only the reviewed revoke runner can ask a wallet to send or sign", () => {
+  it("only the reviewed revoke and sign-in runners can ask a wallet to send or sign", () => {
     const files: string[] = [];
     const walk = (dir: string) => {
       for (const name of readdirSync(dir)) {
@@ -207,7 +207,16 @@ describe("revoke transactions (the only transactions CRYPY builds)", () => {
     const signing =
       /\b(sendTransaction|writeContract|signMessage|signTypedData|sendCalls|useSendTransaction|useWriteContract|useSignMessage|useSignTypedData|useSendCalls|eth_sendTransaction|eth_sign|personal_sign)\b/;
     const users = files.filter((f) => signing.test(readFileSync(f, "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "")));
-    expect(users.map((f) => f.replaceAll("\\", "/"))).toEqual(["src/wallets/evm/revoke-runner.ts"]);
+    expect(users.map((f) => f.replaceAll("\\", "/")).sort()).toEqual([
+      "src/wallets/evm/revoke-runner.ts",
+      "src/wallets/evm/sign-in-runner.ts",
+    ]);
+    // The sign-in runner may only ask for a message signature: never a transaction, typed data or calls.
+    const signIn = readFileSync("src/wallets/evm/sign-in-runner.ts", "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+    expect(signIn).not.toMatch(
+      /\b(sendTransaction|writeContract|signTypedData|sendCalls|eth_sendTransaction|eth_sign\b)/,
+    );
+    expect(signIn.match(/\bsignMessage\(/g)).toHaveLength(1);
   });
 });
 

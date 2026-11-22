@@ -57,7 +57,7 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
                         )}
                         {tool.status !== "live" && (
                           <span className="sidebar-label shrink-0 rounded bg-muted px-1 text-[10px] leading-4 text-muted-foreground">
-                            {t("nav.soon")}
+                            {tool.status === "beta" ? t("nav.beta") : t("nav.soon")}
                           </span>
                         )}
                       </Link>

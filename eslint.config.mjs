@@ -79,6 +79,20 @@ const eslintConfig = defineConfig([
     files: ["src/wallets/evm/revoke-runner.ts"],
     rules: { "no-restricted-imports": "off" },
   },
+  {
+    // The reviewed sign-in flow (M8): may ask for a message signature (signMessage) on CRYPY's sign-in text, nothing else.
+    files: ["src/wallets/evm/sign-in-runner.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        ...["wagmi/actions", "@wagmi/core"].map((name) => ({
+          name,
+          importNames: signingActions.filter((action) => action !== "signMessage"),
+          message: "The sign-in runner may only ask for a message signature.",
+        })),
+      ],
+    },
+  },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "playwright-report/**", "test-results/**"]),
 ]);
 

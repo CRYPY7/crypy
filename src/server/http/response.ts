@@ -4,7 +4,18 @@ import "server-only";
  * Every API response uses the same envelope. Messages are codes, not English text,
  * so the browser shows them in the user's language.
  */
-export type ErrorCode = "INVALID_INPUT" | "RATE_LIMITED" | "NOT_FOUND" | "UPSTREAM_UNAVAILABLE" | "INTERNAL";
+export type ErrorCode =
+  | "INVALID_INPUT"
+  | "RATE_LIMITED"
+  | "NOT_FOUND"
+  | "UPSTREAM_UNAVAILABLE"
+  | "INTERNAL"
+  /** M8: no valid sign-in session. */
+  | "UNAUTHORIZED"
+  /** M8: a state-changing request that didn't come from CRYPY's own pages. */
+  | "FORBIDDEN"
+  /** M8: e.g. the watchlist is full, or the item is already watched. */
+  | "CONFLICT";
 
 export interface ApiMeta {
   sources: string[];
@@ -28,6 +39,9 @@ const statusFor: Record<ErrorCode, number> = {
   NOT_FOUND: 404,
   UPSTREAM_UNAVAILABLE: 503,
   INTERNAL: 500,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  CONFLICT: 409,
 };
 
 export function fail(code: ErrorCode, headers?: HeadersInit) {

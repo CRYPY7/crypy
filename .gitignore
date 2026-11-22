@@ -50,3 +50,6 @@ next-env.d.ts
 /crash-check.txt
 /full-check.txt
 /build-log.txt
+
+# Local database (PGlite)
+/.data/

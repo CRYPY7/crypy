@@ -1,6 +1,6 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-21
+Last updated: 2026-11-22
 
 ## Milestones
 
@@ -26,7 +26,68 @@ Last updated: 2026-11-21
 | M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
 | M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
 | M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); parts 2–3 (accounts, alerts) to come     |
+| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (Beta, boards 39–41); alerts are not sent until Part 3                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## M8 Part 2 — Wallet sign-in, database and Watchlist (design approved 2026-11-21, boards 39–41)
+
+The Watchlist page works and is marked **Beta**: alerts are **not sent yet**. The page says so in a notice, in the
+tool description and in the FAQ. Part 3 adds the background checker and Telegram delivery.
+
+Built:
+
+- **Database:** Drizzle ORM. PGlite (PostgreSQL inside Node, files in `.data/pglite`) when `DATABASE_URL` is not
+  set; real PostgreSQL through `pg` when it is. The migration in `drizzle/` runs on first use. Tables: users,
+  accounts (CAIP-10 wallet ids), sessions, sign-in codes, watch items.
+- **Sign in with your wallet (SIWE, EIP-4361):** one-time code from the server; the message names this site, says
+  it is a message and not a transaction, and expires in 10 minutes. The browser and the server check the same
+  rules. Signatures are checked locally, and through the chain for smart-contract wallets (ERC-1271/6492). Session:
+  a random code in an httpOnly cookie for 30 days; only its SHA-256 is stored.
+- **Reviewed module:** `src/wallets/evm/sign-in-runner.ts` is the second module allowed to ask the wallet for
+  anything, and only for `signMessage`. ESLint and a unit test enforce this.
+- **Watchlist:** up to 10 items per account (addresses on every chain, or a token on a chain with Token Security).
+  Each item has its own alert choices: sent / received above an amount, new approvals, big drop in value, token
+  security changes, liquidity changes. Rename and remove; changes save immediately and roll back if saving fails.
+- **Your data:** download everything as JSON, sign out, or delete the account and everything with it.
+- **Protection:** same-site check on every change, rate limits (sign-in 20/min, account 60/min), zod validation,
+  10-item limit enforced inside a database transaction, seed phrases refused in the add form.
+- The wallet window closes by itself when sign-in continues after connecting, so the page stays visible while the
+  wallet asks.
+
+Not done yet (Part 3): background checker, Telegram bot and linking, quiet hours, alert history, optional Portfolio
+sync to the account.
+
+### M8 Part 2 checks (2026-11-22, in the cloud workspace)
+
+- Typecheck ✅, ESLint ✅, Prettier ✅.
+- Unit tests: 273 passed, 71 skipped (live-network tests), 0 failed. New: database, sign-in message rules, sessions
+  (real signatures from a throwaway key), watchlist rules and limits.
+- Build ✅.
+- Browser tests: 137 passed, 7 skipped, 2 failed in the full run. The 2 failures were the FLOKI liquidity card while
+  the free GoPlus limit was reached (the log shows calls held back); the Token Security file passed 8 of 8 when run
+  again alone. New Watchlist tests (8 of 8, desktop and mobile): nothing signed before the click; the signed text
+  names the site and says it is not a transaction; declining signs nothing; add, alert choices, rename, remove;
+  seed phrase refused; download; delete account; 401 without a session; 403 from another site. The wallet test
+  (no signing on connect) still passes.
+- Owner's PC run (2026-11-22): 131 passed, 8 failed (all 8 Watchlist tests); sign-in failed in the owner's browser
+  ("Sign-in didn't work"). See the follow-up below.
+
+### M8 Part 2 follow-up (2026-11-22): sign-in failed on the owner's PC
+
+- **Cause:** PGlite creates only the last folder of its path. The database folder is `.data/pglite` and `.data` didn't
+  exist, so opening the database failed and every sign-in request answered 503. The cloud tests missed it because
+  they ran the database in memory. Reproduced here in folder mode.
+- **Fix:** the folder is created (with its parents) before PGlite opens it. A failed open is now logged in one line
+  (`[crypy] database didn't open …`, connection strings removed) instead of only answering 503.
+- **Tests:** new `tests/unit/db-disk.test.ts` opens the database in a folder whose parent doesn't exist; it fails
+  without the fix and passes with it. Watchlist and wallet browser tests: 12 of 12 against a server using a real folder.
+- `scripts/full-check.ps1` now gives its server an in-memory database, so test accounts never go into the owner's own
+  `.data/pglite`. `node scripts/db-check.mjs disk` opens the database outside Next.js for diagnosis.
+- The build warning about tracing the whole project (from `process.cwd()` in the database client) is gone.
+- Checks here: typecheck, lint, Prettier, unit 274 passed, build passed.
+- **Owner's PC after the fix (2026-11-22, `full-check.cmd`): 139 passed, 7 skipped, 0 failed; no crash; no database
+  errors in the server log.** The check now also stops a CRYPY server left running on port 3000 or 3200 before it
+  builds.
 
 ## M1 — what was built
 

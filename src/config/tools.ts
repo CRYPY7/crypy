@@ -98,7 +98,7 @@ export const tools: readonly ToolDefinition[] = [
     milestone: "M7",
     isNew: true,
   },
-  { id: "watchlist", category: "monitoring", icon: "bell", status: "soon", milestone: "M8", requiresAccount: true },
+  { id: "watchlist", category: "monitoring", icon: "bell", status: "beta", milestone: "M8", requiresAccount: true },
   { id: "unit-converter", category: "utilities", icon: "calculator", status: "live", milestone: "M2.5" },
   { id: "hex-converter", category: "utilities", icon: "binary", status: "live", milestone: "M2.5" },
   { id: "address-formatter", category: "utilities", icon: "at-sign", status: "live", milestone: "M2.5" },

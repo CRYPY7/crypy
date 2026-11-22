@@ -6,6 +6,7 @@ import { WagmiProvider, useConnection } from "wagmi";
 import { WALLET_FLAG_KEY, type WalletActions, type WalletState, type WalletStrings } from "../types";
 import { createWalletConfig } from "./config";
 import { previewRevoke, runRevoke } from "./revoke-runner";
+import { runSignIn } from "./sign-in-runner";
 import { WalletDialog } from "./wallet-dialog";
 
 const config = createWalletConfig();
@@ -20,16 +21,20 @@ interface RuntimeProps {
   onActions: (actions: WalletActions) => void;
 }
 
-/** Revoke is the only wallet action (M6). Nothing runs until the user clicks Revoke and confirms in their wallet. */
+/**
+ * The only wallet actions: revoke (M6) and sign-in (M8). Nothing runs until the person clicks Revoke or Sign in and
+ * confirms in their wallet.
+ */
 const actions: WalletActions = {
   previewRevoke: (request) => previewRevoke(config, request),
   revoke: (request, onStep) => runRevoke(config, request, onStep),
+  signIn: () => runSignIn(config),
 };
 
 /**
  * Loaded on demand. Owns wagmi and reports a simple state to the rest of the app.
- * It never requests a signature or a transaction on its own; the revoke action (revoke-runner.ts) runs only when the
- * user asks for it.
+ * It never requests a signature or a transaction on its own; revoke (revoke-runner.ts) and sign-in (sign-in-runner.ts)
+ * run only when the person asks for them.
  */
 export default function EvmWalletRuntime(props: RuntimeProps) {
   const { onActions } = props;

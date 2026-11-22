@@ -9,7 +9,9 @@ import { ownRouteTools } from "@/modules/tools/own-route";
 
 /** Landing pages for tools that aren't live yet. Working tools have their own folders next to this one. */
 export function generateStaticParams() {
-  return toolIds.filter((id) => !ownRouteTools.includes(id)).map((toolId) => ({ toolId }));
+  const soon = toolIds.filter((id) => !ownRouteTools.includes(id)).map((toolId) => ({ toolId }));
+  // Every tool has its own page now; keep one placeholder so the route stays valid for future tools (it 404s).
+  return soon.length ? soon : [{ toolId: "upcoming" }];
 }
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/tools/[toolId]">): Promise<Metadata> {

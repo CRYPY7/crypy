@@ -9,6 +9,8 @@ const EvmWalletRuntime = lazy(() => import("./evm/runtime"));
 interface WalletContextValue {
   state: WalletState;
   openWallet: () => void;
+  /** Closes the wallet window (used when a flow continues on the page after connecting). */
+  closeWallet: () => void;
   /** Loaded with the wallet runtime; null until then. */
   actions: WalletActions | null;
 }
@@ -16,6 +18,7 @@ interface WalletContextValue {
 const WalletContext = createContext<WalletContextValue>({
   state: { status: "disconnected" },
   openWallet: () => {},
+  closeWallet: () => {},
   actions: null,
 });
 
@@ -62,7 +65,9 @@ export function WalletRoot({
     setDialogOpen(true);
   }, []);
 
-  const value = useMemo(() => ({ state, openWallet, actions }), [state, openWallet, actions]);
+  const closeWallet = useCallback(() => setDialogOpen(false), []);
+
+  const value = useMemo(() => ({ state, openWallet, closeWallet, actions }), [state, openWallet, closeWallet, actions]);
 
   return (
     <WalletContext.Provider value={value}>

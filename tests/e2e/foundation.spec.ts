@@ -123,9 +123,15 @@ for (const path of [
   });
 }
 
-test("a tool that isn't live yet says so", async ({ page }) => {
+test("a Beta tool works and says what isn't live yet", async ({ page }) => {
   await page.goto("/en/tools/watchlist");
-  await expect(page.getByRole("heading", { name: "This tool isn't live yet" }).filter({ visible: true })).toBeVisible({
-    timeout: 15_000,
-  });
+  await expect(page.getByRole("heading", { name: "Sign in to use the watchlist" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.locator("#main")).toContainText(
+    "Telegram alerts and the background checker arrive in the next update",
+  );
+});
+
+test("an unknown tool address shows the not-found page", async ({ page }) => {
+  const response = await page.goto("/en/tools/upcoming");
+  expect(response?.status()).toBe(404);
 });

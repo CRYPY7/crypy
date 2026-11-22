@@ -57,7 +57,8 @@ export async function ToolPage({
   const features = t.raw(`tools.${tool.id}.features`) as string[];
   const howTo = t.has(`tools.${tool.id}.howTo`) ? (t.raw(`tools.${tool.id}.howTo`) as string[]) : [];
   const faq = t.has(`tools.${tool.id}.faq`) ? (t.raw(`tools.${tool.id}.faq`) as { q: string; a: string }[]) : [];
-  const live = tool.status === "live" && Boolean(children);
+  // Beta tools work but have a named part still missing (the tool itself says which).
+  const live = (tool.status === "live" || tool.status === "beta") && Boolean(children);
 
   const url = (path: string) => new URL(localePath(locale, path), siteUrl).toString();
   return (

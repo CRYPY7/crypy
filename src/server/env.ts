@@ -33,6 +33,17 @@ const schema = z.object({
   ALCHEMY_DAILY_CU: z.coerce.number().int().positive().default(1_000_000),
   /** Requests per day per extra provider. */
   RPC_DAILY_REQUESTS: z.coerce.number().int().positive().default(50_000),
+  /** M8: PostgreSQL for accounts and the watchlist (production). Without it, PGlite keeps a local database. */
+  DATABASE_URL: z
+    .string()
+    .regex(/^postgres(ql)?:\/\//, "DATABASE_URL must start with postgres:// or postgresql://")
+    .optional(),
+  /** PGlite folder (relative to the project) when DATABASE_URL isn't set; "memory" keeps nothing on disk. */
+  PGLITE_DIR: z
+    .string()
+    .regex(/^(memory|[A-Za-z0-9._\/-]+)$/, "PGLITE_DIR must be a simple relative folder or 'memory'")
+    .refine((v) => !v.includes(".."), "PGLITE_DIR must stay inside the project")
+    .default(".data/pglite"),
 });
 
 const parsed = schema.safeParse({
@@ -45,6 +56,8 @@ const parsed = schema.safeParse({
   POLYGON_RPC_URLS: process.env.POLYGON_RPC_URLS || undefined,
   ALCHEMY_DAILY_CU: process.env.ALCHEMY_DAILY_CU || undefined,
   RPC_DAILY_REQUESTS: process.env.RPC_DAILY_REQUESTS || undefined,
+  DATABASE_URL: process.env.DATABASE_URL || undefined,
+  PGLITE_DIR: process.env.PGLITE_DIR || undefined,
 });
 
 if (!parsed.success) {

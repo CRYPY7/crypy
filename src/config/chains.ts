@@ -226,3 +226,8 @@ export function getChainByCaip(caip2: string): ChainConfig | undefined {
 }
 
 export const liveChains = chains.filter((chain) => chain.status === "live");
+
+/** A live EVM chain by its numeric chain id (e.g. from a signed message). */
+export function getChainByEvmId(id: number): ChainConfig | undefined {
+  return liveChains.find((chain) => chain.family === "evm" && chain.evmChainId === id);
+}

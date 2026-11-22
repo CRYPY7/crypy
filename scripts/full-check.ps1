@@ -10,12 +10,26 @@ function Note($text) { $text | Out-File $out -Append -Encoding utf8; Write-Host 
 Note "node: $(node -v)"
 Note "test arguments: $TestArgs"
 
+# A running CRYPY server (pnpm start on 3000, or a leftover test server on 3200) locks files the build replaces.
+foreach ($port in 3000, 3200) {
+  $owners = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique
+  foreach ($id in $owners) {
+    $proc = Get-Process -Id $id -ErrorAction SilentlyContinue
+    if ($proc -and $proc.ProcessName -eq "node") {
+      taskkill /PID $id /T /F 2>&1 | Out-Null
+      Note "stopped the server that was running on port $port (start it again with pnpm start)"
+    }
+  }
+}
+
 Write-Host "Building the site (about 1 minute)..."
 cmd.exe /c "pnpm build > build-log.txt 2>&1"
 Note "build exit code: $LASTEXITCODE"
 
 $env:CRYPY_DEBUG_MEMORY = "1"
 $env:CRYPY_DEBUG_TIMING = "1"
+# Test accounts go to a throwaway in-memory database, never to your own .data/pglite.
+$env:PGLITE_DIR = "memory"
 $server = Start-Process -FilePath "cmd.exe" -ArgumentList "/c pnpm start --port 3200 > server-log.txt 2>&1" -PassThru -WindowStyle Minimized
 function Alive {
   try { Invoke-WebRequest -UseBasicParsing -Uri "http://localhost:3200/en" -TimeoutSec 15 | Out-Null; return $true } catch { return $false }

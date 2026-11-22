@@ -41,7 +41,8 @@
     "breadcrumb": "Breadcrumb",
     "recent": "Recently viewed on this device",
     "clearRecent": "Clear",
-    "new": "New"
+    "new": "New",
+    "beta": "Beta"
   },
   "categories": {
     "all": "All",
@@ -338,13 +339,38 @@
     "watchlist": {
       "name": "Watchlist & Alerts",
       "question": "Tell me when a wallet moves",
-      "description": "Get Telegram alerts when watched wallets send, receive or grant approvals.",
-      "input": "Wallet sign-in and Telegram",
+      "description": "Watch up to 10 wallets and tokens with your own alert choices. Sign in with your wallet: no password, no email.",
+      "input": "Wallet sign-in (a signed message, no transaction)",
       "cta": "Set up alerts",
       "features": [
-        "Save any public address with a label",
-        "Alerts for transfers, large transfers and new approvals",
-        "Delivered on Telegram; pause or delete any time"
+        "Sign in with your wallet: a free signed message, never a transaction",
+        "Watch up to 10 addresses (on every supported chain) or tokens",
+        "Per item: transfers sent or received above an amount, new approvals, big value drops, token security changes",
+        "Download your data or delete your account at any time",
+        "Telegram alerts and the background checker arrive in the next update (Beta)"
+      ],
+      "howTo": [
+        "Press Sign in and approve the message in your wallet. Check that it names this site and says it's not a transaction.",
+        "Add a wallet or a token to watch, give it a label, and choose what should trigger an alert.",
+        "When Telegram alerts go live, connect Telegram once and alerts arrive there."
+      ],
+      "faq": [
+        {
+          "q": "Why do I need to sign in?",
+          "a": "Alerts run on CRYPY's server even when your browser is closed, so the server needs to know what to watch for you. Your wallet is your login: you sign a short message, which costs nothing and can't move funds. There is no password or email."
+        },
+        {
+          "q": "What exactly do I sign?",
+          "a": "A plain-text message that starts with this site's address and says it is a message, not a transaction. If any site asks you to sign a transfer, approval or permit to log in, don't sign it."
+        },
+        {
+          "q": "What does CRYPY store?",
+          "a": "Your wallet address, your watchlist with labels and alert choices, and your sign-in sessions (only a scrambled form of the session code). No email, no IP address. You can download all of it, or delete your account and everything with it, at any time."
+        },
+        {
+          "q": "Are alerts sent already?",
+          "a": "Not yet. The watchlist is saved now; the background checker and Telegram delivery are the next update. The page says so until they're live."
+        }
       ]
     },
     "unit-converter": {
@@ -2579,6 +2605,91 @@
       "errSecret": "This looks like a seed phrase or private key. It was cleared and not saved or sent. Never share it with any website.",
       "errDuplicate": "This wallet is already in your portfolio.",
       "errFull": "The portfolio holds up to {max} wallets. Remove one to add another."
+    },
+    "watchlist": {
+      "loading": "Loading…",
+      "signInTitle": "Sign in to use the watchlist",
+      "signInIntro": "Alerts need an account so the server knows what to watch for you. Your wallet is your login: no password, no email.",
+      "step1Title": "Sign in with your wallet",
+      "step1Text": "Connect a wallet if you haven't, then press Sign in. Portfolio and every other tool keep working without signing in.",
+      "step2Title": "Sign the message in your wallet",
+      "step2Text": "Your wallet shows a short text. Check that it starts with {site} and says it's a message, not a transaction: it costs nothing and can't move your funds.",
+      "step2Warning": "If a site ever asks you to sign something that mentions a transfer, approval or permit to log in, don't sign it.",
+      "signIn": "Sign in",
+      "connectAndSignIn": "Connect wallet and sign in",
+      "signingIn": "Waiting for your wallet…",
+      "noAccountNeeded": "Signing in is only needed for the watchlist and alerts.",
+      "errNoWallet": "Connect a wallet first, then press Sign in.",
+      "errChain": "Switch your wallet to Ethereum, BNB Chain, Base, Arbitrum or Polygon, then try again.",
+      "errRejected": "You declined the message in your wallet. Nothing was signed.",
+      "errRateLimited": "Too many tries in a minute. Wait a moment, then try again.",
+      "errSignInFailed": "Sign-in didn't work. Try again; if it keeps failing, reload the page.",
+      "errUnavailable": "The account service isn't available right now. Try again in a minute.",
+      "betaTitle": "Beta: alerts aren't sent yet",
+      "betaText": "Your watchlist and alert choices are saved now. The background checker and Telegram delivery come in the next update; until then nothing is sent.",
+      "watchTitle": "Watchlist",
+      "watching": "Watching {count} of {max}",
+      "watchAnother": "Watch an address or token",
+      "emptyTitle": "Nothing watched yet",
+      "emptyText": "Add a wallet or a token to choose what should trigger an alert.",
+      "watchMine": "Watch my wallet ({address})",
+      "myWallet": "My wallet",
+      "unnamedWallet": "Unnamed wallet",
+      "unnamedToken": "Unnamed token",
+      "badgeOwn": "Your wallet (signed)",
+      "badgeWatchOnly": "Watch-only",
+      "badgeToken": "Token",
+      "rename": "Rename {name}",
+      "remove": "Stop watching {name}",
+      "ruleSent": "Sent",
+      "ruleSentOwnHint": "Coins or tokens sent from this wallet",
+      "ruleSentHint": "Coins or tokens sent from this address",
+      "ruleReceived": "Received",
+      "ruleReceivedHint": "A minimum hides dust and spam tokens",
+      "ruleApprovals": "New approval given",
+      "ruleApprovalsHint": "Who can now move tokens from this wallet, with a link to revoke",
+      "ruleDrop": "Big drop in value",
+      "ruleDropHint": "More than {percent}% in a day",
+      "ruleSecurity": "Security result changed",
+      "ruleSecurityHint": "For example: selling starts failing, or a new owner power appears",
+      "ruleLiquidity": "Liquidity lock ends or liquidity is removed",
+      "ruleLiquidityHint": "Checked every hour",
+      "anyAmount": "Any amount",
+      "above": "Only above {amount}",
+      "amountFor": "{rule}: minimum amount for {name}",
+      "whereTitle": "Where alerts go",
+      "whereText": "Telegram comes in the next update: you'll open CRYPY's bot and press Start once. Alerts never ask you to connect a wallet or sign anything.",
+      "accountTitle": "Your account",
+      "signedInAs": "Signed in as",
+      "accountText": "with a signed message: no password, no email. CRYPY stores only your wallet address, your watchlist and your sessions.",
+      "signOut": "Sign out",
+      "download": "Download my data",
+      "deleteAccount": "Delete account",
+      "deleteConfirmTitle": "Delete your account?",
+      "deleteConfirmText": "This deletes your watchlist and signs you out on every device. It can't be undone. Your wallet and its funds are not affected.",
+      "deleteConfirm": "Delete everything",
+      "cancel": "Cancel",
+      "save": "Save",
+      "add": "Watch",
+      "addTitle": "Watch an address or token",
+      "addText": "Public addresses only. CRYPY reads them from the blockchain and can't move anything.",
+      "kindLabel": "What to watch",
+      "kindAddress": "Wallet or address",
+      "kindToken": "Token",
+      "chainLabel": "Network",
+      "addressLabel": "Address",
+      "tokenLabel": "Token contract address",
+      "labelLabel": "Label (optional)",
+      "labelPlaceholder": "e.g. Main, Savings, Exchange",
+      "neverSecret": "Never paste a seed phrase or private key here, or anywhere else. CRYPY will never ask for them.",
+      "renameTitle": "Rename",
+      "errEmpty": "Paste an address.",
+      "errInvalid": "That isn't an address. It should start with 0x followed by 40 characters.",
+      "errChecksum": "The capital letters in this address don't match its checksum. It may have a typo; copy it again.",
+      "errSecret": "This looks like a seed phrase or private key. It was cleared and not saved or sent. Never share it with any website.",
+      "errDuplicateOrFull": "Already watched, or the watchlist is full (10 items). Remove one to add another.",
+      "errSignedOut": "You were signed out. Sign in again to continue.",
+      "errSave": "That change couldn't be saved. Try again."
     }
   }
 }

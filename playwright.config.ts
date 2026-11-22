@@ -22,5 +22,7 @@ export default defineConfig({
     command: `pnpm start --port ${port}`,
     url: `http://localhost:${port}/en`,
     reuseExistingServer: !process.env.CI,
+    // A fresh database for each run, separate from the one used in development.
+    env: { PGLITE_DIR: "memory" },
   },
 });
