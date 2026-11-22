@@ -31,7 +31,8 @@ Last updated: 2026-11-22
 | M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
 | M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
 | M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
-| M9 Part 3 Online (friends preview)                     | 🟡 Server scripts built 2026-11-22; owner's first setup on DigitalOcean pending               |
+| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified        |
+| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -214,6 +215,28 @@ sync to the account.
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## M9 Part 4 — Public beta (owner request 2026-11-22)
+
+The owner asked to open the site to everyone and to search engines now, as a beta.
+
+- **Search engines:** the preview switch (`CRYPY_PREVIEW=1`) is removed on the server; robots.txt then allows the site
+  (result pages and the API stay blocked) and lists the sitemap: home, all tools, the 15 tool pages, settings and the
+  3 legal pages, English only (Urdu and Arabic stay `noindex` until reviewed). Every page already had its own title,
+  description, canonical link, preview image and structured data (checked on the live site).
+- **Beta label** next to the logo ("CRYPY is in beta…" on hover). On phones narrower than 390 px it sits under the
+  name, so the header stays on one row (checked at 360–1280 px).
+- **English texts for five chains:** the site description and eight texts (search progress, FAQs, features, the wallet
+  notice) still said "Ethereum and BNB Chain"; they now name Ethereum, BNB Chain, Base, Arbitrum and Polygon.
+- **Legal pages rewritten** to describe what CRYPY really does: no seed phrases or keys; lookups go to providers from
+  the server, not the visitor's browser; what stays in the browser; the three cookies (plus Cloudflare's security
+  cookie); wallet connection and sign-in; what an account stores; Telegram and 90-day alert history; download and
+  delete; 14-day backups; server logs about two weeks; no selling of data. Terms and risk updated for the beta. Each
+  legal page now has its own description. The notice says they haven't been reviewed by a lawyer yet.
+- **Still open:** lawyer review and a contact address on the legal pages; the owner adds crypy.org to Google Search
+  Console and Bing Webmaster Tools and submits the sitemap.
+- Checks here: typecheck, lint, Prettier, i18n check; unit 326 passed, 72 skipped; build passed; browser (layout,
+  accessibility, foundation, utilities) 84 passed, 6 skipped (desktop-only tests on the phone profile).
 
 ## M9 Part 3 — Going online: friends preview (owner request 2026-11-22)
 

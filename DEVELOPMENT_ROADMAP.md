@@ -279,11 +279,15 @@ Urdu + Arabic translations & RTL QA; security review; accessibility & performanc
 - **Part 2 — Accessibility and speed 🟡 (2026-11-22):** 0 axe violations (WCAG 2.2 AA) with automated tests; layout
   shifts removed; home, tools and the Gas Tracker at 90–92 on simulated mobile. Open part in the table below.
 - **Part 3 — Friends preview online 🟡 (2026-11-22):** server scripts for one DigitalOcean droplet (nginx, systemd,
-  PostgreSQL, HTTPS, backups, updates); search engines blocked until the official launch. Owner's first setup pending.
-- **Next parts (proposed order):** Urdu translations
-  (reviewed by the owner) and RTL QA, Arabic as preview until a native review; legal pages (lawyer review before
-  launch); VPS setup and deploy (one VPS: nginx, `next start`, PostgreSQL, backups; staging first), then the alerts
-  "Done when" on staging and production.
+  PostgreSQL, HTTPS, backups, updates). Live on crypy.org behind Cloudflare (free), server reachable only through
+  Cloudflare, Bot Fight Mode and an `/api/` rate-limiting rule on.
+- **Part 4 — Public beta 🟡 (owner request 2026-11-22):** search engines allowed (preview switch removed), "Beta"
+  label next to the logo, English texts updated for all five chains, legal pages rewritten to describe what CRYPY
+  actually does and labelled "not reviewed by a lawyer yet". Still open: lawyer review of the legal pages and a
+  contact address on them; Google Search Console and Bing Webmaster set up by the owner.
+- **Next parts (proposed order):** Urdu translations (reviewed by the owner) and RTL QA, Arabic as preview until a
+  native review; lawyer review of the legal pages; a staging copy, then the alerts "Done when" on staging and
+  production.
 
 ## After V1 — revenue phases (approved 2026-11-19)
 

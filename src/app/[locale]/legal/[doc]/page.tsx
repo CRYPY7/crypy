@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/legal/[d
   const [{ doc }, locale] = await Promise.all([params, localeParam()]);
   if (!isDoc(doc) || !isLocale(locale)) return {};
   const t = await getTranslations(`legal.${doc}`);
-  return { title: t("title"), ...pageAlternates(locale, `/legal/${doc}`) };
+  return { title: t("title"), description: t("description"), ...pageAlternates(locale, `/legal/${doc}`) };
 }
 
 export default async function LegalPage({ params }: PageProps<"/[locale]/legal/[doc]">) {

@@ -2,7 +2,7 @@
   "meta": {
     "siteName": "CRYPY",
     "title": "CRYPY — Wallet safety and research toolkit",
-    "description": "Check any wallet, token or transaction on BNB Chain and Ethereum before you trust it. Non-custodial: no seed phrase, no wallet connection needed."
+    "description": "Check any wallet, token or transaction before you trust it, on Ethereum, BNB Chain, Base, Arbitrum and Polygon. Free, non-custodial, no wallet connection needed."
   },
   "common": {
     "skipToContent": "Skip to content",
@@ -15,7 +15,9 @@
     "open": "Open",
     "youNeed": "You need:",
     "betaTranslation": "Beta translation",
-    "languageNotReady": "This language is still being translated, so you're seeing English for now."
+    "languageNotReady": "This language is still being translated, so you're seeing English for now.",
+    "beta": "Beta",
+    "betaSiteLabel": "CRYPY is in beta: features may change and results can be incomplete."
   },
   "nav": {
     "main": "Main",
@@ -73,7 +75,7 @@
       "error": "Something went wrong. Please try again.",
       "choose": "Found on more than one chain. Which one do you want to open?"
     },
-    "checking": "Checking Ethereum and BNB Chain…",
+    "checking": "Checking every supported chain…",
     "partial": "{chains} couldn't be checked right now, so results may be incomplete.",
     "lookupAnyway": "Look it up anyway",
     "close": "Close",
@@ -165,7 +167,7 @@
         },
         {
           "q": "Which chains and exchanges are covered?",
-          "a": "Ethereum and BNB Chain. The trade test uses Uniswap v2, PancakeSwap v2, SushiSwap and Biswap pools; liquidity is also read from Uniswap and PancakeSwap v3."
+          "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon. The trade test uses each chain's main exchanges, v2 and v3 pools (Uniswap, PancakeSwap, SushiSwap, Biswap and QuickSwap, depending on the chain); liquidity is read from the same exchanges and a few more on BNB Chain."
         }
       ]
     },
@@ -190,7 +192,7 @@
       "input": "Any wallet address",
       "cta": "See balances",
       "features": [
-        "Coin and token balances on Ethereum and BNB Chain at once",
+        "Coin and token balances on Ethereum, BNB Chain, Base, Arbitrum and Polygon at once",
         "USD values where a reliable price exists, never guessed",
         "Totals per chain and combined",
         "Possible spam tokens hidden by default, with the reason",
@@ -221,7 +223,7 @@
         },
         {
           "q": "Which chains are checked?",
-          "a": "Ethereum and BNB Chain. The same address can hold different coins and tokens on each chain, so both are shown."
+          "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon. The same address can hold different coins and tokens on each chain, so each chain is shown separately."
         }
       ]
     },
@@ -319,7 +321,7 @@
         },
         {
           "q": "Which networks are supported?",
-          "a": "Ethereum and BNB Chain. The table on this page shows exactly which parts work on each network."
+          "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon. The table on this page shows exactly which parts work on each network."
         }
       ]
     },
@@ -483,7 +485,7 @@
           "a": "Don't use the address. A wrong checksum means a character was changed. Copy the address again from its original source; don't try to fix it by hand."
         },
         {
-          "q": "Is the address the same on Ethereum and BNB Chain?",
+          "q": "Is the address the same on every EVM chain?",
           "a": "All EVM chains use the same address format, so the same address can exist on each of them, but balances and contracts differ per chain. Exchange deposit addresses often accept only one network, so always check which network the recipient supports."
         },
         {
@@ -554,7 +556,7 @@
       "features": [
         "Paste, type or upload a CSV or TXT list, with optional labels",
         "Typos, duplicates and wrong checksums are caught before scanning",
-        "Ethereum and BNB Chain, the native coin plus up to 5 tokens",
+        "Ethereum, BNB Chain, Base, Arbitrum and Polygon, the native coin plus up to 5 tokens",
         "Every batch read at the same block, straight from the chain",
         "Totals, USD values from on-chain prices, sorting and filters",
         "Export to CSV or copy the addresses with or without a balance"
@@ -626,29 +628,41 @@
     "languages": "Languages"
   },
   "legal": {
-    "draftNotice": "Draft — this text will be reviewed by a lawyer before CRYPY launches.",
+    "draftNotice": "Beta: this page describes how CRYPY works today. It hasn't been reviewed by a lawyer yet and may change.",
     "privacy": {
       "title": "Privacy Policy",
+      "description": "What CRYPY stores, what it never collects, the cookies it uses and the services involved.",
       "body": [
-        "CRYPY never asks for, collects or stores seed phrases, recovery phrases or private keys.",
-        "Addresses and transaction hashes you search are public blockchain data. CRYPY does not store them, except addresses you choose to save to a watchlist after signing in.",
-        "Your language and theme choices are saved in your browser only.",
-        "Full details, including any analytics and third-party services, will be listed here before launch."
+        "CRYPY never asks for, collects or stores seed phrases, recovery phrases or private keys. No CRYPY page or message will ever ask you for them.",
+        "Addresses, tokens and transaction hashes you look up are public blockchain data. To answer, CRYPY's server asks blockchain data providers (such as Alchemy, Infura, Ankr, dRPC and public nodes) and security services (GoPlus, Sourcify) about them. These requests come from CRYPY's server, not your browser, so the providers don't see your IP address. CRYPY doesn't keep a record of who looked up what; results are cached for a short time to keep the site fast.",
+        "Without an account, your language, theme, portfolio list, recently viewed items and display choices are saved only in your own browser. The portfolio's addresses are sent one at a time to look up their balances and are not stored.",
+        "Cookies: CRYPY uses only cookies it needs to work: NEXT_LOCALE (your language), crypy_chains (which chains to scan) and crypy_session (only after you sign in). There are no advertising or analytics cookies and no tracking scripts. Cloudflare, which protects the site, may set its own security cookie (such as __cf_bm) to tell people apart from bots.",
+        "Connecting a wallet is optional. CRYPY only reads your public address from it, and connecting never asks you to sign anything. If you connect through WalletConnect, the connection runs through Reown's WalletConnect service.",
+        "Signing in with your wallet is optional and needed only for the Watchlist and alerts. It is a signed message, never a transaction. CRYPY then stores your wallet address, your watchlist with its labels and alert choices, your quiet hours and time zone, and a session code (only its fingerprint). If you choose to keep your portfolio on your account, its addresses and labels are stored too.",
+        "If you connect Telegram for alerts, CRYPY stores your Telegram chat ID and username to send alerts there, and keeps your alert history for 90 days. Telegram delivers the messages under its own privacy policy.",
+        "While signed in, you can download everything CRYPY holds about your account, or delete your account, which removes all of it at once. Database backups are kept for 14 days, so deleted data also disappears from them within that time.",
+        "Like most websites, CRYPY's server and Cloudflare keep technical logs (IP address, page requested, time and browser type) to keep the site secure and working, for example to enforce request limits. CRYPY's server logs are kept for about two weeks.",
+        "CRYPY does not sell personal data or share it with advertisers."
       ]
     },
     "terms": {
       "title": "Terms of Use",
+      "description": "The rules for using CRYPY's free blockchain tools while the site is in beta.",
       "body": [
-        "CRYPY provides information tools for public blockchain data. It does not hold, move or manage your funds.",
-        "You are responsible for every transaction you confirm in your own wallet.",
-        "Full terms will be published here before launch."
+        "CRYPY provides free information tools for public blockchain data. It is in beta: features may change, and results can be incomplete or wrong.",
+        "CRYPY never holds, moves or manages your funds. Actions such as revoking an approval are transactions you review and confirm in your own wallet. You are responsible for every transaction you confirm and for its network fee.",
+        "Results come from blockchain nodes and outside data providers, which can be delayed, incomplete or wrong. Security checks show risk signals, never a guarantee that a token, contract or wallet is safe. Alerts can arrive late or not at all, so don't rely on them as your only protection.",
+        "Please use CRYPY fairly: don't send automated bulk requests that work around its limits, and don't try to break, overload or misuse the site.",
+        "CRYPY is provided as it is, without warranties. As far as the law allows, CRYPY is not liable for losses from using the site or relying on its results."
       ]
     },
     "risk": {
       "title": "Risk Disclosure",
+      "description": "Crypto risks, and why no security check can prove that a token, contract or wallet is safe.",
       "body": [
         "Crypto assets are risky. Prices can fall to zero and transactions cannot be reversed.",
         "CRYPY's security checks show signals from automated tools and data providers. No check can prove that a token, contract or wallet is safe.",
+        "Scammers create look-alike tokens and addresses. Always check the full address before you send anything.",
         "Nothing on CRYPY is financial, legal or tax advice. Always do your own research."
       ]
     }
@@ -2123,7 +2137,7 @@
     "back": "Back",
     "connectedAs": "Connected",
     "network": "Network",
-    "unsupportedNetwork": "This network isn't supported yet. Balances and tools use Ethereum and BNB Chain.",
+    "unsupportedNetwork": "This network isn't supported yet. CRYPY supports Ethereum, BNB Chain, Base, Arbitrum and Polygon.",
     "viewMyAddress": "View my address",
     "disconnect": "Disconnect",
     "close": "Close",

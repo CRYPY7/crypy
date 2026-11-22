@@ -7,7 +7,7 @@ import { UniversalSearch } from "@/components/search/universal-search";
 import { getSearchStrings } from "@/components/search/search-strings";
 import { ConnectButton } from "@/wallets/connect-button";
 
-export function Logo({ label }: { label: string }) {
+export function Logo({ label, beta }: { label: string; beta?: { text: string; label: string } }) {
   return (
     <span className="flex items-center gap-2.5">
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="text-primary">
@@ -20,8 +20,19 @@ export function Logo({ label }: { label: string }) {
           strokeLinejoin="round"
         />
       </svg>
-      <span className="font-heading text-xl font-bold tracking-wider" translate="no">
-        CRYPY
+      {/* On phones narrower than 390 px the label sits under the name, so the header stays on one row. */}
+      <span className="flex items-center gap-2.5 max-[389px]:flex-col max-[389px]:items-start max-[389px]:gap-0.5">
+        <span className="font-heading text-xl font-bold tracking-wider max-[389px]:leading-none" translate="no">
+          CRYPY
+        </span>
+        {beta && (
+          <span
+            title={beta.label}
+            className="rounded-full border border-primary/40 px-1.5 py-px text-[0.625rem] leading-tight font-semibold tracking-wide text-primary uppercase"
+          >
+            {beta.text}
+          </span>
+        )}
       </span>
       <span className="sr-only">{label}</span>
     </span>
@@ -36,7 +47,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
     <header className="z-40 border-b bg-background lg:sticky lg:top-0 lg:h-16">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6 lg:h-full lg:max-w-none lg:flex-nowrap lg:px-5 lg:py-0">
         <Link href={localePath(locale)} className="rounded-md">
-          <Logo label={t("nav.homeLink")} />
+          <Logo label={t("nav.homeLink")} beta={{ text: t("common.beta"), label: t("common.betaSiteLabel") }} />
         </Link>
         <nav aria-label={t("nav.main")} className="hidden items-center gap-1 md:flex md:ms-2 lg:hidden">
           <AllToolsButton label={t("nav.allTools")} />

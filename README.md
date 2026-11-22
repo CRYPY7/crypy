@@ -66,8 +66,9 @@ up by the scripts in `scripts/server/` (see ARCHITECTURE.md §10d for the securi
 
 The web server settings live in `scripts/server/nginx-site.sh` (run by the other scripts; run it again instead of
 editing nginx by hand). Useful on the server: `systemctl status crypy`, `journalctl -u crypy -n 100 --no-pager` (the app's log), backups in
-`/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out until the
-official launch; remove it from the server's `.env.local` and run `update.sh` to launch.
+`/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out; removing it
+from the server's `.env.local` and running `update.sh` opens the site to search engines (done for crypy.org's public
+beta on 2026-11-22).
 
 Behind Cloudflare, `bash /opt/crypy/app/scripts/server/cloudflare-only.sh on` lets only Cloudflare reach the web
 ports (run it again now and then to refresh Cloudflare's address list; `off` undoes it).
