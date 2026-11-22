@@ -85,11 +85,14 @@ export function UniversalSearch({
   locale,
   variant = "hero",
   className,
+  formLabel,
 }: {
   strings: SearchStrings;
   locale: Locale;
   variant?: "hero" | "compact";
   className?: string;
+  /** Names the search landmark when a page has a second search box besides the header's. */
+  formLabel?: string;
 }) {
   const id = useId();
   const router = useRouter();
@@ -166,6 +169,7 @@ export function UniversalSearch({
     <div ref={rootRef} className={cn(!hero && "relative", className)}>
       <form
         role="search"
+        aria-label={formLabel}
         action={localePath(locale, "/search")}
         method="get"
         onSubmit={submit}

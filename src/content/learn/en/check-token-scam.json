@@ -1,0 +1,145 @@
+{
+  "title": "How to check if a token is a scam before you buy",
+  "seoTitle": "How to Check if a Crypto Token Is a Scam | CRYPY",
+  "description": "Five checks that catch most scam tokens before you buy: can you sell it, what taxes it takes, what the owner can change, and who controls the liquidity.",
+  "summary": "Five checks that catch most scam tokens: selling, taxes, owner powers, liquidity and holders.",
+  "inShort": [
+    "Most scam tokens fail at least one of five checks: selling, taxes, owner powers, liquidity and holders.",
+    "A test trade shows whether you can actually sell, and how much is taken on the way.",
+    "Passing every check is not a guarantee: owners can change settings after you buy."
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "heading": "Why scam tokens are so common",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Anyone can create a token in minutes and add it to a decentralized exchange. There is no listing review, so the same tools that let honest projects launch also let scammers copy a popular name, add a little liquidity and wait for buyers."
+        },
+        {
+          "type": "p",
+          "text": "Most scams follow a handful of patterns. You can check for all of them before you buy, using only public blockchain data."
+        }
+      ]
+    },
+    {
+      "id": "sell",
+      "heading": "1. Can you sell it?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A **honeypot** lets you buy but blocks or drains every sale. The most reliable check is a test trade: buy a small amount, send some to another wallet, then sell, and see what happens at each step."
+        },
+        {
+          "type": "p",
+          "text": "The [Token Security Scanner](tool:token-security) runs that test against the token's real exchange pool inside a read-only simulation. Nothing is signed or sent, and no wallet is needed."
+        },
+        {
+          "type": "tip",
+          "text": "Read more in [What is a honeypot token, and how to spot one](guide:honeypot-token)."
+        }
+      ]
+    },
+    {
+      "id": "taxes",
+      "heading": "2. How much does it take on each trade?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Some tokens take a fee on every buy, sell or transfer. A small fee can be legitimate, but a sell tax of 30, 50 or 99% turns a token into a trap even if selling technically works."
+        },
+        {
+          "type": "p",
+          "text": "Look at the measured tax, not the number a project announces. The test trade measures what actually arrives at each step."
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "heading": "3. What can the owner still change?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Many token contracts keep special powers for their owner. The ones to look for:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Mint:** create new tokens and sell them into the pool.",
+            "**Fees:** raise the buy or sell tax at any time.",
+            "**Blacklist or pause:** stop chosen wallets, or everyone, from moving tokens.",
+            "**Upgrade:** replace the contract's code entirely (a proxy contract)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "An owner that has **renounced ownership** can no longer use owner-only powers, but powers held by other roles or accounts may remain. A contract whose source code is published (verified) is easier to check than one that only exposes compiled code."
+        }
+      ]
+    },
+    {
+      "id": "liquidity",
+      "heading": "4. Who controls the liquidity?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The liquidity pool is where buyers and sellers trade. If the people behind the token can withdraw that liquidity, they can take everyone's money in one transaction: a \"rug pull\"."
+        },
+        {
+          "type": "p",
+          "text": "Check how much liquidity there is, and whether the pool's share tokens are **burned** or **locked** in a known lock contract, and until when. See [What is a liquidity lock, and why it matters](guide:liquidity-lock)."
+        }
+      ]
+    },
+    {
+      "id": "holders",
+      "heading": "5. Who holds the supply?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "If one or two wallets hold most of the supply, they can crash the price by selling. Large holdings by exchanges, burn addresses or lock contracts are usually fine; large holdings by unknown wallets deserve a closer look."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "What a check can't tell you",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every check describes the token as it is right now. Owners can change taxes, pause trading or mint later, and some tokens behave differently for different wallets. Treat good results as \"no major risks found\", never as \"safe\"."
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "heading": "Check a token with CRYPY",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Copy the token's contract address from a source you trust, such as the project's official site or a block explorer.",
+            "Paste it into the [Token Security Scanner](tool:token-security) and pick the chain if you know it.",
+            "Read the findings from most to least severe. Each one says how it was checked: verified on-chain, simulated, a heuristic, or from an outside provider.",
+            "If anything critical shows up, such as selling being blocked, don't buy."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is a token safe if all checks pass?",
+      "a": "No. It means no major risk was found in what could be checked. Owners can change settings later, so keep amounts you can afford to lose."
+    },
+    {
+      "q": "Do I need to connect my wallet?",
+      "a": "No. The Token Security Scanner only needs the token's contract address."
+    },
+    {
+      "q": "Which chains can I check?",
+      "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon."
+    }
+  ]
+}

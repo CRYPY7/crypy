@@ -1,0 +1,99 @@
+{
+  "title": "What is a honeypot token, and how to spot one",
+  "seoTitle": "What Is a Honeypot Token and How to Spot One | CRYPY",
+  "description": "A honeypot token lets you buy but never sell. Learn the tricks honeypots use and how a test trade shows whether a token can really be sold before you buy.",
+  "summary": "A token you can buy but never sell. How it works and how a test trade reveals it.",
+  "inShort": [
+    "A honeypot is a token you can buy but can't sell, or can only sell at a huge loss.",
+    "The trap is written into the token's contract, so the chart can look normal.",
+    "A test trade before you buy is the most reliable way to find it."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "What a honeypot is",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A honeypot token is built so that buying works and selling doesn't. The price chart only shows buys, so it often rises steadily, which attracts more buyers. When someone tries to sell, the transaction fails, or nearly everything is taken as a fee."
+        },
+        {
+          "type": "p",
+          "text": "The people behind it can usually still sell their own tokens, so they take the money that buyers put in."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Common tricks",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Sales blocked for everyone except chosen wallets:** the contract only lets an allowed list transfer tokens to the pool.",
+            "**Blacklisting after you buy:** your wallet is added to a block list, so later transfers fail.",
+            "**A sell tax close to 100%:** the sale technically succeeds, but you receive almost nothing.",
+            "**Limits that only hit sells:** a tiny maximum sell amount, or a cooldown that never ends.",
+            "**Settings changed later:** the token trades normally at launch, then the owner switches the trap on."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spot",
+      "heading": "How to spot one",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Reading the contract code can reveal some tricks, but code can be hidden behind a proxy or written to be confusing. The most reliable check is to watch what happens in a real trade: buy, transfer and sell."
+        },
+        {
+          "type": "p",
+          "text": "Doing that with your own money is risky. A simulation does the same steps against the real pool without sending anything."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "How CRYPY's test trade works",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The [Token Security Scanner](tool:token-security) runs a small test contract inside a read-only call against the token's real exchange pool. It buys about $10 worth, sends part of it to a second address, then sells the rest. It reports which step failed, if any, with the contract's own error, and the tax measured at each step."
+        },
+        {
+          "type": "p",
+          "text": "Nothing is signed, sent or paid, and no wallet is needed. The test uses the deepest pool it supports for that token."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "What a test trade can't show",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A simulation shows how the token behaves right now, for a fresh wallet. It can't promise the owner won't switch on a block or raise the tax tomorrow. That is why the scanner also lists the owner's powers, such as changing fees or blacklisting."
+        },
+        {
+          "type": "warning",
+          "text": "If a token can't be sold in the test, don't buy it, however good the chart looks."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Can a token become a honeypot after I buy?",
+      "a": "Yes, if the owner kept powers such as blacklisting, pausing or changing fees. Check the owner's powers as well as the test trade."
+    },
+    {
+      "q": "Does the test trade cost anything?",
+      "a": "No. It is a read-only simulation: nothing is sent to the blockchain."
+    },
+    {
+      "q": "Why does a honeypot's chart look so good?",
+      "a": "Because only buys go through. Steady buying with almost no selling pushes the price up."
+    }
+  ]
+}

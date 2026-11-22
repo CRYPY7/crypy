@@ -1,0 +1,95 @@
+{
+  "title": "Why did my transaction fail? Common errors in plain English",
+  "seoTitle": "Why Did My Transaction Fail? Common Errors Explained | CRYPY",
+  "description": "Out of gas, slippage, insufficient allowance, expired deadline: what common blockchain transaction errors mean, why you still paid a fee, and what helps.",
+  "summary": "Out of gas, slippage, insufficient allowance and more: what each error means and what helps.",
+  "inShort": [
+    "A failed transaction is undone, but you still pay for the gas it used.",
+    "Most failures come from a few causes: gas, slippage, allowance, balance or deadlines.",
+    "The contract's error message usually says which one."
+  ],
+  "sections": [
+    {
+      "id": "fee",
+      "heading": "Why you paid a fee for nothing",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "When a transaction fails inside a block, every change it tried to make is undone: no tokens move. But validators still did the work of running it up to the point it failed, so the network fee for the gas it used is kept."
+        },
+        {
+          "type": "p",
+          "text": "A transaction that never made it into a block (for example one rejected by your wallet or replaced) costs nothing."
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "heading": "Common errors and what they mean",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Out of gas:** the gas limit was too low for what the transaction had to do. It usually used nearly all of its gas limit. Try again with the wallet's suggested limit.",
+            "**Insufficient funds for gas:** you don't have enough ETH, BNB or POL to pay the fee, even if you hold tokens. Keep a little of the chain's coin for fees.",
+            "**Slippage (\"too little received\", \"INSUFFICIENT_OUTPUT_AMOUNT\"):** the price moved between sending and execution by more than your tolerance. Try again, or raise slippage a little for volatile tokens.",
+            "**Deadline expired (\"EXPIRED\", \"Transaction too old\"):** a swap waited too long before being included. Try again, maybe with a higher priority fee.",
+            "**Insufficient allowance (\"transfer amount exceeds allowance\"):** the app wasn't approved to spend that much of your token. Approve first, then retry.",
+            "**Insufficient balance (\"transfer amount exceeds balance\"):** you tried to send or swap more than you hold.",
+            "**Transfer failed (\"TRANSFER_FAILED\"):** often a token that blocks or taxes transfers. If it happens when selling, check the token: see [What is a honeypot token](guide:honeypot-token).",
+            "**Paused or not allowed:** the contract is paused, or your address isn't permitted to do that."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonce",
+      "heading": "Stuck or replaced transactions",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Transactions from one wallet go in order, numbered by a **nonce**. If an earlier transaction is waiting with a low fee, later ones wait behind it. Most wallets let you speed it up or cancel it by sending a replacement with the same nonce and a higher fee."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Find out why yours failed",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Paste the transaction hash into the [Transaction Checker](tool:tx-checker). It shows the result, the contract's own error message when the node still has the data to read it, a plain-English explanation of well-known errors, and how much gas was used."
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "heading": "Avoiding failed transactions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Keep some of the chain's coin for fees.",
+            "Use the gas limit your wallet suggests.",
+            "For volatile tokens, a slightly higher slippage tolerance avoids failures; very high slippage invites bad prices.",
+            "If a wallet warns that a transaction is likely to fail, don't send it."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Can I get the fee back for a failed transaction?",
+      "a": "No. The fee pays for the work the network did, even though the result was undone."
+    },
+    {
+      "q": "My tokens left my wallet but the transaction failed. Where are they?",
+      "a": "If the transaction failed, nothing moved. Check your balance again, and check the transaction on the Transaction Checker to be sure which one you are looking at."
+    },
+    {
+      "q": "Why does the error message say nothing useful?",
+      "a": "Some contracts fail without a message, and some nodes can't replay older transactions. The Transaction Checker says when the reason isn't available instead of guessing."
+    }
+  ]
+}

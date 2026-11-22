@@ -200,7 +200,7 @@ Wallet connection remains optional and never auto-signs, in every family. The ru
 /[locale]/portfolio · watchlist · gas · tools · tools/[toolId] · settings · docs · legal/*
 ```
 
-Global navigation: header "All tools" menu (grouped, searchable, recent tools), Ctrl+K tool palette, mobile bottom tab bar (Home, Tools, Portfolio, Alerts, Settings).
+Global navigation: header "All tools" menu (grouped, searchable, recent tools), Ctrl+K tool palette, mobile bottom tab bar (Home, Tools, Learn, Portfolio, Alerts; Settings is in the footer).
 
 Desktop (lg, 1024 px and wider) adds a left tools sidebar (`src/components/layout/sidebar.tsx`): server-rendered
 links grouped by category, plus two tiny client pieces (current-page marker, collapse button). The collapsed state
@@ -445,7 +445,9 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 - V1 implements only the EVM family (Ethereum, BNB Chain); other chains are shown only after their adapter passes contract tests and verification.
 - Feature parity across families is not possible (e.g. Bitcoin has no token approvals); unsupported features are hidden or labelled per chain.
 - Provider coverage limits token discovery, prices and security findings; gaps are shown, never estimated.
-- With `cacheComponents`, unknown dynamic params (e.g. `/en/tools/unknown`) render the not-found page with `noindex` but HTTP status 200 (streamed response). Acceptable for SEO; revisit if Next.js adds `dynamicParams=false` support.
+- Unknown addresses answer 404 (SEO Phase 1): `/<locale>/tools/<unknown>` and `/<locale>/learn/<unknown>` are
+  rewritten to the not-found page with status 404 in `proxy.ts` (the streamed route itself would already have sent
+  200), and `app/[locale]/[...missing]` shows CRYPY's own not-found page for every other unknown address.
 - The browser's native popover with CSS anchor positioning is used for the language menu; browsers without anchor positioning show it centred.
 
 ---
@@ -690,6 +692,22 @@ DEX decoders, per chain family:                      (one per DEX design)
   `POST /api/v1/alerts/telegram/test`, `PATCH /api/v1/alerts/settings`, `GET|PUT|DELETE /api/v1/portfolio`,
   `PATCH /api/v1/watchlist/{id}` with `muted`.
 - **Tests:** browser tests use a stand-in Telegram server (`tests/e2e/fake-telegram.ts`, `CRYPY_FAKE_TELEGRAM=1`).
+
+## 12l. Learn guides and SEO (SEO_ROADMAP.md)
+
+- **Content:** one JSON file per guide and language, `src/content/learn/<locale>/<slug>.json` (types in
+  `src/content/learn/types.ts`); the index (`src/content/learn/index.ts`, server-only) holds each guide's topic,
+  tool, related guides and dates, and falls back to English for a missing translation. `slugs.ts` lists the slugs
+  alone for the request proxy (404 for unknown guides) without loading any text.
+- **Safe rendering:** guide text is plain text with two marks (`**bold**`, `[label](tool:<id>)` / `(guide:<slug>)`),
+  turned into React elements by `components/learn/inline-text.tsx`; no HTML is ever injected, and links can only point
+  inside CRYPY. A unit test checks every link target, lengths of search titles and descriptions, and the structure.
+- **Pages:** `/learn` and `/learn/<slug>`, static; Article, BreadcrumbList and FAQPage structured data; in the
+  sitemap with each guide's real update date. Tool pages link to their guides and to related tools
+  (`config/related-tools.ts`).
+- **SEO guards:** `tests/e2e/seo.spec.ts` checks every sitemap page (title 15–60, description 110–160, one H1,
+  canonical, structured data, no duplicate titles). Search titles and descriptions are separate from on-page names
+  (`tools.<id>.seoTitle` / `seoDescription`, `seo.*`, `learn.seo*`). IndexNow runs after each server update.
 
 ## 13. Performance budget
 

@@ -16,7 +16,7 @@ apply to every phase:
 
 Checked on crypy.org: all 20 sitemap pages answer 200, each has one H1, a canonical link, hreflang (`en` and
 `x-default`), Open Graph and Twitter cards, and preview images. Tool pages carry BreadcrumbList and WebApplication
-structured data; 10 of 15 also have FAQPage. Lighthouse SEO score was 100 on every indexable page.
+structured data; 10 of 14 also have FAQPage. Lighthouse SEO score was 100 on every indexable page.
 
 | Finding                                                                                                         | Impact | Phase |
 | --------------------------------------------------------------------------------------------------------------- | ------ | ----- |
@@ -114,7 +114,7 @@ exchanged links, no spam.
 | Phase                   | Status                    |
 | ----------------------- | ------------------------- |
 | 1 Technical and on-page | ✅ Built (2026-11-22)     |
-| 2 Learn hub             | Waiting for design        |
+| 2 Learn hub             | ✅ Built (2026-11-22)     |
 | 3 Indexable data pages  | Waiting for design        |
 | 4 Languages             | With the M9 translations  |
 | 5 Measure and improve   | After Search Console data |

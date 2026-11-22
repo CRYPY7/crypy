@@ -3,16 +3,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
-import { CircleAlert } from "lucide-react";
+import { BookOpen, CircleAlert } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
 import { cn } from "@/lib/utils";
 import { ToolIcon } from "@/components/tool-icon";
 import { siteUrl } from "@/config/env";
+import { relatedTools } from "@/config/related-tools";
+import { getGuides } from "@/content/learn";
 import { type ToolDefinition, getTool } from "@/config/tools";
 import type { Locale } from "@/i18n/locales";
 import { ogImage } from "@/lib/og";
 import { pageAlternates } from "@/lib/metadata";
-import { localePath } from "@/lib/routes";
+import { learnPath, localePath, toolPath } from "@/lib/routes";
 
 /**
  * Shared tool page: header, the working tool (when live), how-to, features, FAQ and structured data.
@@ -64,6 +66,8 @@ export async function ToolPage({
   const faq = t.has(`tools.${tool.id}.faq`) ? (t.raw(`tools.${tool.id}.faq`) as { q: string; a: string }[]) : [];
   // Beta tools work but have a named part still missing (the tool itself says which).
   const live = (tool.status === "live" || tool.status === "beta") && Boolean(children);
+  // Guides that lead to this tool, and the next useful tools (SEO_ROADMAP.md, Phase 2).
+  const guides = getGuides(locale).filter((guide) => guide.tool === tool.id);
 
   const url = (path: string) => new URL(localePath(locale, path), siteUrl).toString();
   return (
@@ -198,6 +202,58 @@ export async function ToolPage({
           </div>
         </section>
       )}
+
+      {guides.length > 0 && (
+        <section className="mt-10 max-w-3xl" aria-labelledby="learn-more">
+          <h2 id="learn-more" className="text-xl font-semibold">
+            {t("learn.learnMore")}
+          </h2>
+          <ul className="mt-3 flex flex-col gap-2">
+            {guides.map((guide) => (
+              <li key={guide.slug}>
+                <Link
+                  href={learnPath(locale, guide.slug)}
+                  className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3 hover:border-border-strong"
+                >
+                  <BookOpen className="size-5 shrink-0 text-primary" aria-hidden="true" />
+                  <span className="flex min-w-0 flex-col">
+                    <span className="font-medium">{guide.title}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {t("learn.readTime", { minutes: guide.minutes })}
+                    </span>
+                  </span>
+                  <span aria-hidden="true" className="ms-auto text-muted-foreground rtl:-scale-x-100">
+                    →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section className="mt-10 max-w-3xl" aria-labelledby="related-tools">
+        <h2 id="related-tools" className="text-xl font-semibold">
+          {t("learn.relatedTools")}
+        </h2>
+        <ul className="mt-3 grid gap-3 sm:grid-cols-3">
+          {relatedTools[tool.id].map((id) => {
+            const related = getTool(id);
+            return (
+              <li key={id}>
+                <Link
+                  href={toolPath(locale, id)}
+                  className="flex h-full flex-col gap-2 rounded-xl border bg-card p-4 hover:border-border-strong"
+                >
+                  {related && <ToolIcon name={related.icon} className="size-5 text-primary" />}
+                  <span className="font-semibold">{t(`tools.${id}.name`)}</span>
+                  <span className="text-sm text-muted-foreground">{t(`tools.${id}.description`)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
     </article>
   );
 }

@@ -1,0 +1,84 @@
+{
+  "title": "Address poisoning: the look-alike address scam",
+  "seoTitle": "Address Poisoning: The Look-Alike Address Scam | CRYPY",
+  "description": "Scammers send tiny transfers from addresses that look like yours, hoping you copy the wrong one. Learn how address poisoning works and how to avoid it.",
+  "summary": "Tiny transfers from addresses that look like yours, so you copy the wrong one.",
+  "inShort": [
+    "Scammers create addresses that start and end like ones you use.",
+    "They send tiny or zero-value transfers so the fake address appears in your history.",
+    "Never copy an address from your transaction history: compare every character."
+  ],
+  "sections": [
+    {
+      "id": "how",
+      "heading": "How the scam works",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Addresses are long, so most people only glance at the first and last few characters. Scammers generate addresses that match those characters for an address you use, such as an exchange deposit address or a friend's wallet."
+        },
+        {
+          "type": "p",
+          "text": "Then they make that look-alike address appear in your history, using a transfer of zero or a tiny amount, or a fake token. Next time you copy an address from your history, you may copy theirs and send real money to the scammer."
+        }
+      ]
+    },
+    {
+      "id": "example",
+      "heading": "What it looks like",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "You send USDT to 0x7a3F…9c21. Minutes later your history shows a 0 USDT transfer involving 0x7a3F…9c21, but in the middle the characters are different. The amount is zero, so nothing seems to have happened. That entry is the bait."
+        }
+      ]
+    },
+    {
+      "id": "avoid",
+      "heading": "How to avoid it",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Copy addresses from the original source (the exchange's deposit page, the person's own message), never from your history.",
+            "Compare the whole address, not just the start and end.",
+            "Save trusted addresses in your wallet's address book.",
+            "For a large amount to a new address, send a small amount first and have the recipient confirm it arrived."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Zero-value and tiny transfers you didn't expect are a warning sign, not a mistake. Don't interact with them."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "How CRYPY flags it",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The [Address Analyzer](tool:address-analyzer) lists a wallet's transfers and marks likely poisoning: zero or tiny transfers from an address that starts and ends like the wallet itself, or like an address the wallet has paid. It is a heuristic warning, so it can miss some cases or flag a harmless one."
+        },
+        {
+          "type": "tip",
+          "text": "Spam and poisoning transfers are hidden by default to keep your history readable. One switch shows them."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Can a zero-value transfer take my money?",
+      "a": "No. It can't move your funds by itself. The danger is copying the look-alike address later."
+    },
+    {
+      "q": "Why can someone send a transfer that seems to come from my wallet?",
+      "a": "Some token contracts let anyone emit a zero-amount transfer record naming any address. It moves nothing, but it shows up in histories."
+    },
+    {
+      "q": "Does a checksum protect me?",
+      "a": "No. A look-alike address is a valid address, so it passes the checksum. Only comparing the full address helps."
+    }
+  ]
+}

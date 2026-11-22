@@ -31,6 +31,8 @@ for (const theme of ["dark", "light"] as const) {
       "/en/tools/gas-tracker",
       "/en/settings",
       "/ur",
+      "/en/learn",
+      "/en/learn/token-approvals",
     ]) {
       test(`no accessibility violations: ${path}`, async ({ page }) => {
         await page.goto(path, { waitUntil: "load" });

@@ -15,7 +15,7 @@ import { isLocale, localeConfigs, locales } from "@/i18n/locales";
 import { pageAlternates } from "@/lib/metadata";
 import { chains } from "@/config/chains";
 import { WalletRoot } from "@/wallets/wallet-root";
-import { localePath, toolPath } from "@/lib/routes";
+import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { getCategoryLabels, getToolViews } from "@/lib/tools-view";
 
 // Self-hosted at build time: no requests to Google from the visitor's browser.
@@ -132,13 +132,13 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
                 tools: t("nav.tools"),
                 portfolio: t("nav.portfolio"),
                 alerts: t("nav.alerts"),
-                settings: t("nav.settings"),
+                learn: t("nav.learn"),
               }}
               hrefs={{
                 home: localePath(locale),
                 portfolio: toolPath(locale, "portfolio"),
                 alerts: toolPath(locale, "watchlist"),
-                settings: localePath(locale, "/settings"),
+                learn: learnPath(locale),
               }}
             />
             <ToolsDialogLoader

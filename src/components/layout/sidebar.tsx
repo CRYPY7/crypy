@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { House } from "lucide-react";
+import { BookOpen, House } from "lucide-react";
 import { Suspense } from "react";
 import { ToolIcon } from "@/components/tool-icon";
 import { type ToolCategory, tools } from "@/config/tools";
 import type { Locale } from "@/i18n/locales";
-import { localePath, toolPath } from "@/lib/routes";
+import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { SidebarActiveMarker, SidebarCollapseButton } from "./sidebar-controls";
 
 const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "utilities"];
@@ -32,6 +32,19 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
         <Link href={localePath(locale)} data-sidebar-href={localePath(locale)} className={item} title={t("nav.home")}>
           <House className="size-[18px] shrink-0" aria-hidden="true" />
           <span className="sidebar-label truncate">{t("nav.home")}</span>
+        </Link>
+        <Link
+          href={learnPath(locale)}
+          data-sidebar-href={learnPath(locale)}
+          prefetch={false}
+          className={item}
+          title={t("nav.learn")}
+        >
+          <BookOpen className="size-[18px] shrink-0 text-primary" aria-hidden="true" />
+          <span className="sidebar-label min-w-0 flex-1 truncate">{t("nav.learn")}</span>
+          <span className="sidebar-label shrink-0 rounded bg-low/15 px-1 text-[10px] leading-4 text-low">
+            {t("nav.new")}
+          </span>
         </Link>
         {order.map((category) => (
           <div key={category} className="mt-2.5">

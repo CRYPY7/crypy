@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { Bell, ChartPie, House, LayoutGrid, Settings } from "lucide-react";
+import { Bell, BookOpen, ChartPie, House, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { openToolsDialog } from "./open-tools";
 
@@ -13,14 +13,14 @@ export interface TabBarStrings {
   tools: string;
   portfolio: string;
   alerts: string;
-  settings: string;
+  learn: string;
 }
 
 const itemClass =
   "flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-semibold text-muted-foreground aria-[current=page]:text-primary hover:text-foreground";
 
 /** Bottom navigation on phones; every tool is one tap away via "Tools". */
-type TabHrefs = Record<"home" | "portfolio" | "alerts" | "settings", string>;
+type TabHrefs = Record<"home" | "portfolio" | "alerts" | "learn", string>;
 
 export function MobileTabBar(props: { strings: TabBarStrings; hrefs: TabHrefs }) {
   // Reading the URL suspends on dynamic pages; the fallback is the same bar without the active marker.
@@ -60,6 +60,10 @@ function TabBarView({
           <LayoutGrid className="size-5" aria-hidden="true" />
           {strings.tools}
         </button>
+        <Link href={hrefs.learn} aria-current={current(hrefs.learn)} className={itemClass}>
+          <BookOpen className="size-5" aria-hidden="true" />
+          {strings.learn}
+        </Link>
         <Link href={hrefs.portfolio} aria-current={current(hrefs.portfolio)} className={itemClass}>
           <ChartPie className="size-5" aria-hidden="true" />
           {strings.portfolio}
@@ -67,10 +71,6 @@ function TabBarView({
         <Link href={hrefs.alerts} aria-current={current(hrefs.alerts)} className={itemClass}>
           <Bell className="size-5" aria-hidden="true" />
           {strings.alerts}
-        </Link>
-        <Link href={hrefs.settings} aria-current={current(hrefs.settings)} className={itemClass}>
-          <Settings className="size-5" aria-hidden="true" />
-          {strings.settings}
         </Link>
       </div>
     </nav>

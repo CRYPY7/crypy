@@ -17,3 +17,8 @@ export function switchLocalePath(pathname: string, next: Locale): string {
   parts[1] = next;
   return parts.join("/") || `/${next}`;
 }
+
+/** The Learn hub, or one guide when a slug is given. */
+export function learnPath(locale: Locale, slug?: string): string {
+  return localePath(locale, slug ? `/learn/${slug}` : "/learn");
+}

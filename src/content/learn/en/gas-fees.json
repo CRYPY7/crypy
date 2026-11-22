@@ -1,0 +1,111 @@
+{
+  "title": "Gas fees explained: gwei, base fee and priority fee",
+  "seoTitle": "Gas Fees Explained: Gwei, Base Fee and Priority Fee | CRYPY",
+  "description": "What you pay when you send a transaction: gas units, gwei, the base fee and the priority fee, why fees change, rollup costs, and how to pay less.",
+  "summary": "Where your fee goes, why it changes, and how to pay less.",
+  "inShort": [
+    "Fee = gas used × gas price. Gas measures work; the price is set by demand.",
+    "On Ethereum and similar chains the price has two parts: a base fee (burned) and a tip.",
+    "You pay less when the network is quiet, or on a cheaper chain."
+  ],
+  "sections": [
+    {
+      "id": "gas",
+      "heading": "Gas and gas price",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Every action on the blockchain costs **gas**, a measure of how much work it needs. A simple coin transfer uses 21,000 gas; a token swap can use 100,000 or more."
+        },
+        {
+          "type": "p",
+          "text": "You pay a **gas price** for each unit, quoted in **gwei** (one billionth of a coin). The fee is gas used × gas price, paid in the chain's own coin: ETH, BNB or POL."
+        },
+        {
+          "type": "tip",
+          "text": "Converting between wei, gwei and ether: [Wei, gwei and ether explained](guide:wei-gwei-ether)."
+        }
+      ]
+    },
+    {
+      "id": "1559",
+      "heading": "Base fee and priority fee",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "On Ethereum and chains that work like it, the gas price has two parts:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Base fee:** set by the network for each block, rising when blocks are full and falling when they aren't. It is burned.",
+            "**Priority fee (tip):** an extra amount for the validator. A higher tip usually gets you included sooner when the network is busy."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Your wallet also sets a **max fee**: the most you are willing to pay per unit. You pay the base fee plus your tip, never more than the max. BNB Chain has no base fee, so its gas price is simply the price."
+        }
+      ]
+    },
+    {
+      "id": "limit",
+      "heading": "Gas limit",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The gas limit is the most gas a transaction may use. If it runs out, the transaction fails and you still pay for the gas used. Wallets estimate the limit for you; lowering it by hand rarely saves anything."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "heading": "Base and Arbitrum: an extra part",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Base and Arbitrum are rollups: they publish their transactions' data on Ethereum. Part of your fee pays for that, so the cost depends on Ethereum's fees too, even though the network fee itself is tiny."
+        }
+      ]
+    },
+    {
+      "id": "less",
+      "heading": "How to pay less",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Send when the network is quieter: the trend in the [Gas Tracker](tool:gas-tracker) shows whether fees are rising or falling.",
+            "Use a lower speed when you aren't in a hurry.",
+            "Use a cheaper chain for small amounts.",
+            "Avoid approvals and transactions you don't need."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "See current fees",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The [Gas Tracker](tool:gas-tracker) shows live low, average and high prices for Ethereum, BNB Chain, Base, Arbitrum and Polygon, and what a send, approval, swap or NFT transfer costs in dollars right now."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why did I pay a fee for a failed transaction?",
+      "a": "The network did the work up to the point it failed, and that work is paid for. See Why did my transaction fail."
+    },
+    {
+      "q": "Can I change the fee after sending?",
+      "a": "Only by replacing the transaction: most wallets have a speed-up option that sends the same transaction with a higher fee."
+    },
+    {
+      "q": "Where does the base fee go?",
+      "a": "It is burned, removed from circulation. The tip goes to the validator."
+    }
+  ]
+}

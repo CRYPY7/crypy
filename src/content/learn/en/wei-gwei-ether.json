@@ -1,0 +1,83 @@
+{
+  "title": "Wei, gwei and ether: crypto units explained",
+  "seoTitle": "Wei, Gwei and Ether: Crypto Units Explained | CRYPY",
+  "description": "How wei, gwei and ether relate, why gas is quoted in gwei, and why token amounts depend on decimals. Quick conversions for ETH, BNB and POL amounts.",
+  "summary": "The units behind every amount and gas price, with quick conversions.",
+  "inShort": [
+    "1 ETH = 1,000,000,000 gwei = 1,000,000,000,000,000,000 wei.",
+    "Gas prices use gwei because the numbers stay readable.",
+    "Tokens have their own decimals: 6 for USDC on Ethereum, 18 for most others."
+  ],
+  "sections": [
+    {
+      "id": "units",
+      "heading": "The units",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**wei:** the smallest unit. Blockchains store every amount as a whole number of wei.",
+            "**gwei:** 1,000,000,000 wei (10⁹). Gas prices are quoted in gwei.",
+            "**ether (ETH):** 1,000,000,000,000,000,000 wei (10¹⁸)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "The same units apply to BNB on BNB Chain and POL on Polygon: 1 BNB is 10¹⁸ wei, and gas there is quoted in gwei too."
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "heading": "Quick conversions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "0.001 ETH = 1,000,000 gwei",
+            "1 gwei = 0.000000001 ETH",
+            "A gas price of 20 gwei × 21,000 gas = 420,000 gwei = 0.00042 ETH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "heading": "Token decimals",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Tokens store amounts in their own smallest unit, and each token says how many **decimals** it uses. Most use 18, like ETH. USDC and USDT on Ethereum use 6, so 1 USDT is stored as 1,000,000. The same token on another chain can use different decimals: USDT on BNB Chain uses 18."
+        },
+        {
+          "type": "warning",
+          "text": "Raw amounts in transaction data are in the smallest unit. Reading them with the wrong decimals makes an amount look a trillion times bigger or smaller than it is."
+        }
+      ]
+    },
+    {
+      "id": "convert",
+      "heading": "Convert exactly",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The [Unit Converter](tool:unit-converter) converts between wei, gwei, ETH and BNB exactly, with no rounding, including amounts in scientific notation. It runs in your browser; nothing is sent."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why not just use ETH for gas prices?",
+      "a": "Gas prices in ETH would be numbers like 0.000000015. Gwei keeps them readable: 15 gwei."
+    },
+    {
+      "q": "Where does the name wei come from?",
+      "a": "It honours Wei Dai, a cryptography pioneer. Gwei means giga-wei: a billion wei."
+    },
+    {
+      "q": "Do all tokens use 18 decimals?",
+      "a": "No. Most do, but stablecoins often use 6 on Ethereum. Always check the token's decimals before reading raw amounts."
+    }
+  ]
+}

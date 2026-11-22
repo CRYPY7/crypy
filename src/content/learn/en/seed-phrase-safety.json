@@ -1,0 +1,107 @@
+{
+  "title": "Your seed phrase: why no website should ever ask for it",
+  "seoTitle": "Seed Phrase Safety: Never Share Your Recovery Phrase | CRYPY",
+  "description": "Your seed phrase controls everything in your wallet. Learn why no website, app or support agent should ever ask for it, and the tricks scammers use.",
+  "summary": "The one rule that protects everything in your wallet, and the tricks used to break it.",
+  "inShort": [
+    "Your seed phrase (12 or 24 words) gives full control of your wallet to whoever has it.",
+    "No real website, app, exchange or support agent will ever ask for it.",
+    "If you typed it anywhere online, move your funds to a new wallet right away."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "What the seed phrase is",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "When you create a wallet such as MetaMask or Trust Wallet, it shows you a recovery phrase of 12 or 24 words. Those words are the wallet: anyone who has them can recreate it on their own device and move everything in it. Nobody can reverse that transfer."
+        },
+        {
+          "type": "p",
+          "text": "Your password only unlocks the app on your own device. The seed phrase is the master key."
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "heading": "The rule",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Never type your seed phrase into a website, a form, a chat or an app you didn't install to restore your own wallet.** No exchange, wallet company, airdrop, support team or security tool needs it."
+        },
+        {
+          "type": "p",
+          "text": "CRYPY never asks for it. Every CRYPY tool works with public addresses only, and the forms where you save addresses refuse a pasted seed phrase."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Tricks scammers use",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Fake support:** someone replies to your question on social media or Discord and offers help, then sends you to a form that asks for your phrase.",
+            "**\"Validate\", \"sync\" or \"unlock\" your wallet:** sites claiming your wallet must be verified to receive an airdrop or fix an error.",
+            "**Fake wallet apps and browser extensions:** copies of real wallets that send your phrase to the scammer when you restore.",
+            "**Wallet \"recovery\" or balance-checker tools** that ask for the phrase to \"scan\" it.",
+            "**Screenshots and cloud notes:** a phrase saved in photos, email or a cloud drive can be stolen with that account."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "heading": "How to store it",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Write it on paper (or metal) and keep it somewhere safe and private, ideally in two places.",
+            "Don't photograph it, type it into a notes app or store it in the cloud.",
+            "For larger amounts, consider a hardware wallet: the phrase stays offline, and transactions are confirmed on the device."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Connecting a wallet to a website is different: the site only sees your public address, and your wallet asks you before signing anything."
+        }
+      ]
+    },
+    {
+      "id": "exposed",
+      "heading": "If you think it was exposed",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Create a new wallet with a new seed phrase, on a device you trust.",
+            "Move your funds from the old wallet to the new one immediately, most valuable first.",
+            "Stop using the old wallet, and revoke its approvals if you keep anything in it."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Scammers often move funds within minutes. Act first; investigate later."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is my private key the same as my seed phrase?",
+      "a": "Not exactly: the seed phrase creates all of the wallet's private keys. Both must stay secret, and no website should ask for either."
+    },
+    {
+      "q": "Can CRYPY see my seed phrase when I connect my wallet?",
+      "a": "No. Connecting only shares your public address. The phrase never leaves your wallet."
+    },
+    {
+      "q": "A support agent says they need it to fix my account. Is that true?",
+      "a": "No. Real support never needs your seed phrase. It is a scam."
+    }
+  ]
+}

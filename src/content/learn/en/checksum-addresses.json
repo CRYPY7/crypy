@@ -1,0 +1,82 @@
+{
+  "title": "Checksum addresses (EIP-55): why letter case matters",
+  "seoTitle": "Checksum Addresses (EIP-55): Why Letter Case Matters | CRYPY",
+  "description": "Why Ethereum addresses mix upper- and lower-case letters, how the EIP-55 checksum catches typos, and what it can't protect you from.",
+  "summary": "How mixed upper and lower case letters catch typos in addresses.",
+  "inShort": [
+    "Mixed upper and lower case in an address is a built-in typo check (EIP-55).",
+    "A mistyped checksummed address almost always fails the check.",
+    "It can't catch a look-alike address a scammer created: that one is valid."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "What a checksum address is",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "An Ethereum-style address is 40 hexadecimal characters after 0x. Letters a to f can be written in upper or lower case, and the blockchain treats both the same. EIP-55 uses that freedom: the pattern of capitals is calculated from a hash of the address itself."
+        },
+        {
+          "type": "p",
+          "text": "If one character is changed by mistake, the expected pattern no longer matches, and wallets can warn you before you send."
+        }
+      ]
+    },
+    {
+      "id": "cases",
+      "heading": "All lower case, all upper case, mixed",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Mixed case:** a checksummed address. Wallets can check it.",
+            "**All lower case or all upper case:** valid, but carries no check. A typo can't be caught."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "The same address is used on every EVM chain: Ethereum, BNB Chain, Base, Arbitrum and Polygon share the same format."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "What it can't protect you from",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A checksum only catches accidental typos. A look-alike address that a scammer generated is a real, valid address with its own correct checksum. See [Address poisoning](guide:address-poisoning)."
+        },
+        {
+          "type": "warning",
+          "text": "Never \"fix\" an address that fails the checksum by changing its letters until it passes. Get the correct address again from its source."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Check an address",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The [Address Formatter](tool:address-formatter) checks whether an address is written correctly and gives its checksummed form, for one address or a list of up to 500. It runs in your browser; nothing is sent."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is a lower-case address wrong?",
+      "a": "No. It is valid, it just has no typo check built in."
+    },
+    {
+      "q": "My wallet says the checksum is invalid. What should I do?",
+      "a": "Don't send. Copy the address again from the original source; it most likely contains a typo."
+    },
+    {
+      "q": "Does Bitcoin use the same checksum?",
+      "a": "No. EIP-55 is for Ethereum-style addresses. Other blockchains have their own address formats and checks."
+    }
+  ]
+}

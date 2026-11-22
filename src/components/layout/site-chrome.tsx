@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { type Locale, localeConfigs, selectableLocales } from "@/i18n/locales";
-import { localePath, toolPath } from "@/lib/routes";
+import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { AllToolsButton, LanguageMenu, ThemeToggle } from "./header-controls";
 import { UniversalSearch } from "@/components/search/universal-search";
 import { getSearchStrings } from "@/components/search/search-strings";
@@ -69,6 +69,12 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           >
             {t("nav.gas")}
           </Link>
+          <Link
+            href={learnPath(locale)}
+            className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            {t("nav.learn")}
+          </Link>
         </nav>
         <UniversalSearch
           locale={locale}
@@ -102,6 +108,9 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-x-8 gap-y-4 px-4 py-8 text-sm text-muted-foreground sm:px-6">
         <p className="max-w-md">{t("footer.disclaimer")}</p>
         <nav aria-label={t("nav.footer")} className="flex flex-wrap gap-x-5 gap-y-2">
+          <Link href={learnPath(locale)} className="hover:text-foreground">
+            {t("nav.learn")}
+          </Link>
           <Link href={localePath(locale, "/legal/privacy")} className="hover:text-foreground">
             {t("footer.privacy")}
           </Link>

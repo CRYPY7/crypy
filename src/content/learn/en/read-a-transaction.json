@@ -1,0 +1,105 @@
+{
+  "title": "How to read a transaction: from, to, value, gas and logs",
+  "seoTitle": "How to Read a Blockchain Transaction, Field by Field | CRYPY",
+  "description": "What every field of a blockchain transaction means: status, from, to, value, fee, gas, nonce, input data and logs. Learn to read any transaction on an explorer.",
+  "summary": "What every field on an explorer means, and where token transfers really appear.",
+  "inShort": [
+    "Value only shows the chain's own coin. Token transfers appear in the logs.",
+    "\"To\" is often a contract, not the person who received the money.",
+    "The fee is the gas used times the gas price."
+  ],
+  "sections": [
+    {
+      "id": "basics",
+      "heading": "The basics",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Transaction hash:** the transaction's unique ID (0x followed by 64 characters).",
+            "**Status:** success, failed, or pending (not yet in a block).",
+            "**Block and time:** which block included it, and when.",
+            "**Confirmations:** how many blocks came after it. The more, the more final."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fromto",
+      "heading": "From and to",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**From** is the wallet that signed and paid for the transaction. **To** is the address it called. For a simple coin transfer, \"to\" is the recipient. For anything involving tokens, swaps or apps, \"to\" is usually a contract, and the real recipients appear in the logs."
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "heading": "Value: only the chain's own coin",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The **value** field shows how much ETH, BNB or POL was sent directly. When you send USDT or swap tokens, value is often 0, because tokens move inside the token's contract and are recorded as events (logs). That surprises many people."
+        }
+      ]
+    },
+    {
+      "id": "fee",
+      "heading": "Fee and gas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Gas used:** how much work the transaction needed.",
+            "**Gas limit:** the most it was allowed to use.",
+            "**Gas price:** the price per unit of gas, usually in gwei.",
+            "**Fee:** gas used × gas price, paid in the chain's coin. On Ethereum part of it (the base fee) is burned."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Fees explained in detail: [Gas fees explained](guide:gas-fees)."
+        }
+      ]
+    },
+    {
+      "id": "input",
+      "heading": "Nonce and input data",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The **nonce** is the transaction's number in the sender's sequence. **Input data** is the encoded function call: which function of the contract was called, with which values. Explorers and the [Transaction Data Decoder](tool:tx-decoder) turn it into a readable form when the function is known."
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "heading": "Logs: what actually happened",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Contracts record **events** as they run: token transfers, approvals, swaps. These logs are where you see which tokens moved, from whom, to whom and how much."
+        },
+        {
+          "type": "p",
+          "text": "The [Transaction Checker](tool:tx-checker) reads all of this and explains it in one sentence, such as \"Sent 84.74 USDC to 0xD37A…06B4\", with the assets moved, the cost and any permission changed."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does my token transfer show a value of 0?",
+      "a": "Value only counts the chain's own coin. Token amounts are recorded in the logs as Transfer events."
+    },
+    {
+      "q": "The \"to\" address isn't the person I paid. Did it go wrong?",
+      "a": "Probably not. For token transfers, \"to\" is the token contract. The Transfer event shows the real recipient."
+    },
+    {
+      "q": "What does pending mean?",
+      "a": "The transaction was sent but isn't in a block yet. It can still be confirmed, replaced or dropped."
+    }
+  ]
+}

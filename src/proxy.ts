@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { LOCALE_COOKIE, detectableLocales, isLocale } from "@/i18n/locales";
 import { negotiateLocale } from "@/i18n/negotiate";
 import { toolIds } from "@/config/tools";
+import { guideSlugs } from "@/content/learn/slugs";
 
 /**
  * Sends visitors without a language prefix (e.g. "/tools") to their language ("/en/tools").
@@ -12,10 +13,11 @@ export function proxy(request: NextRequest) {
   const firstSegment = pathname.split("/")[1];
 
   if (isLocale(firstSegment)) {
-    // Unknown tool addresses get a real 404 status. The tool route streams, so its own not-found answer would
+    // Unknown tool and guide addresses get a real 404 status. The tool route streams, so its own not-found answer would
     // already have sent 200 (a "soft 404" for search engines).
-    const [, , section, toolId, ...rest] = pathname.split("/");
-    if (section === "tools" && toolId && rest.length === 0 && !(toolIds as readonly string[]).includes(toolId)) {
+    const [, , section, id, ...rest] = pathname.split("/");
+    const known: Record<string, readonly string[]> = { tools: toolIds, learn: guideSlugs };
+    if (id && rest.length === 0 && known[section] && !known[section].includes(id)) {
       const url = request.nextUrl.clone();
       url.pathname = `/${firstSegment}/not-found`;
       return NextResponse.rewrite(url, { status: 404 });

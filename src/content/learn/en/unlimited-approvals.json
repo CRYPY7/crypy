@@ -1,0 +1,98 @@
+{
+  "title": "Are unlimited approvals dangerous?",
+  "seoTitle": "Are Unlimited Token Approvals Dangerous? | CRYPY",
+  "description": "Unlimited approvals save fees but cover every token of that kind you will ever hold. Learn when they are risky, how Permit2 differs, and when to limit them.",
+  "summary": "Why \"unlimited\" also covers tokens you receive later, and when it's worth limiting.",
+  "inShort": [
+    "An unlimited approval covers every token of that kind in your wallet, now and later.",
+    "It is only as safe as the contract you gave it to.",
+    "Limit or revoke approvals for apps you don't use often."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "What \"unlimited\" means",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "When you approve a token, the app chooses the amount. Many choose the largest number possible, so you never have to approve again. Your wallet may show it as \"unlimited\" or as a very long number."
+        },
+        {
+          "type": "p",
+          "text": "The approval doesn't move anything by itself. It means the spender contract may move any amount of that token from your wallet, at any time, without asking you again."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "When it is a problem",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**The contract is hacked.** Attackers can use existing approvals to drain wallets that approved it.",
+            "**The contract was malicious.** A scam site's \"claim\" button can be an approval for the scammer's contract.",
+            "**You forgot about it.** An approval from years ago still works today, for tokens you received since."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "A limited approval caps the damage at the amount you approved. An unlimited one doesn't."
+        }
+      ]
+    },
+    {
+      "id": "permit2",
+      "heading": "Permit2 approvals",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Some apps, including Uniswap and PancakeSwap, use **Permit2**: you approve the Permit2 contract once per token, then sign separate permissions for each app, with an amount and an expiry date."
+        },
+        {
+          "type": "p",
+          "text": "Check both levels: the approval to Permit2 itself, and the app permissions inside it. The [Approval Checker](tool:approval-checker) reads both and shows when each Permit2 permission expires."
+        }
+      ]
+    },
+    {
+      "id": "nft",
+      "heading": "NFT \"approve for all\"",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "NFT collections have a wider permission that covers every NFT you hold in the collection. It is common on marketplaces, and a frequent target of phishing. Treat it like an unlimited token approval."
+        }
+      ]
+    },
+    {
+      "id": "habits",
+      "heading": "Good habits",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "When your wallet lets you, edit the amount to what you plan to use.",
+            "Revoke approvals for apps you no longer use, especially on tokens worth a lot.",
+            "Keep large holdings in a wallet you don't use to try new apps.",
+            "Check your approvals now and then with the [Approval Checker](tool:approval-checker)."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Should I revoke every unlimited approval?",
+      "a": "Not necessarily. For a well-known app you use often, revoking means approving again (and paying a fee) next time. Focus on apps you no longer use and contracts you don't recognize."
+    },
+    {
+      "q": "Is a limited approval safe?",
+      "a": "Safer, because the spender can move at most that amount. It is still a permission: revoke it if you don't need it."
+    },
+    {
+      "q": "Why does my wallet show a huge number instead of \"unlimited\"?",
+      "a": "\"Unlimited\" is just the largest number the token's contract can store. Wallets show it in different ways."
+    }
+  ]
+}

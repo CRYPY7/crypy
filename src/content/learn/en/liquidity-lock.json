@@ -1,0 +1,90 @@
+{
+  "title": "What is a liquidity lock, and why it matters",
+  "seoTitle": "What Is a Liquidity Lock and Why It Matters | CRYPY",
+  "description": "Who can pull the money out of a token's trading pool? Learn how liquidity is held, what burned and locked liquidity mean, and what a lock does not protect.",
+  "summary": "Who can pull the money out of a token's pool, and what a lock really protects.",
+  "inShort": [
+    "A token's pool holds the coins buyers paid in. Whoever holds the pool's share tokens can withdraw them.",
+    "Burned or locked shares can't be withdrawn, or not until the lock ends.",
+    "A lock doesn't stop an owner from minting, raising taxes or selling their own tokens."
+  ],
+  "sections": [
+    {
+      "id": "pool",
+      "heading": "How a liquidity pool works",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "On exchanges like Uniswap and PancakeSwap, a token trades against a pool that holds two assets, for example the token and ETH or BNB. Whoever adds liquidity receives **pool shares** (LP tokens, or a position NFT on newer pool designs) that can later be exchanged back for their part of the pool."
+        },
+        {
+          "type": "p",
+          "text": "When people buy the token, they put ETH or BNB into the pool. Whoever holds most of the pool shares can take most of that out."
+        }
+      ]
+    },
+    {
+      "id": "rug",
+      "heading": "How a rug pull happens",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "In a rug pull, the people behind a token withdraw the pool's liquidity in one transaction. The price collapses and holders can't sell for anything meaningful. It is one of the most common ways token buyers lose money."
+        }
+      ]
+    },
+    {
+      "id": "protected",
+      "heading": "Burned, locked or held",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Burned:** the pool shares were sent to an address nobody controls. That liquidity can never be withdrawn.",
+            "**Locked:** the shares sit in a lock contract until a set date. Check the end date: a lock ending next week protects little.",
+            "**Held by a multisig or timelock:** several signers, or a delay, stand between the shares and a withdrawal. Better than one person, but not the same as locked.",
+            "**Held by a wallet or the owner:** can be withdrawn at any moment."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "A contract that only calls itself a lock isn't proof. CRYPY counts a lock only when it is a lock contract on its checked list, and reads the end date from that contract."
+        }
+      ]
+    },
+    {
+      "id": "notcover",
+      "heading": "What a lock does not protect",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "A liquidity lock only stops the locked shares from being withdrawn. It doesn't stop the owner from minting new tokens and selling them, raising the sell tax, blocking sales or dumping a large supply they hold. Check those risks too: see [How to check if a token is a scam](guide:check-token-scam)."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Check who holds a token's liquidity",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "The [Token Security Scanner](tool:token-security) lists a token's pools and, for each pool, who holds the shares it could find: burn addresses, lock contracts with their end dates, multisigs, farms, the owner and plain wallets. Shares it can't attribute are shown as not found, never counted as safe."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is burned liquidity better than locked?",
+      "a": "Burned liquidity can never be withdrawn, so it is permanent. A lock protects only until its end date."
+    },
+    {
+      "q": "Does a liquidity lock mean a token is safe?",
+      "a": "No. It covers one risk. Owners can still mint, change taxes or sell their own tokens."
+    },
+    {
+      "q": "Why does the check say some holders were not found?",
+      "a": "Finding every holder of a pool needs its full history, which free data sources don't always provide. CRYPY shows that part as not checked rather than guessing."
+    }
+  ]
+}

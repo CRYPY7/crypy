@@ -44,7 +44,8 @@
     "recent": "Recently viewed on this device",
     "clearRecent": "Clear",
     "new": "New",
-    "beta": "Beta"
+    "beta": "Beta",
+    "learn": "Learn"
   },
   "categories": {
     "all": "All",
@@ -2919,6 +2920,43 @@
   "seo": {
     "homeTitle": "CRYPY: Free Crypto Wallet, Token & Transaction Checker",
     "toolsTitle": "All Free Crypto Wallet & Token Tools | CRYPY",
-    "toolsDescription": "15 free tools to check wallets, tokens and transactions on Ethereum, BNB Chain, Base, Arbitrum and Polygon: token scanner, approvals, gas and more."
+    "toolsDescription": "14 free tools to check wallets, tokens and transactions on Ethereum, BNB Chain, Base, Arbitrum and Polygon: token scanner, approvals, gas and more."
+  },
+  "learn": {
+    "seoTitle": "Crypto Safety Guides: Scams, Approvals, Gas | CRYPY",
+    "seoDescription": "Plain-English guides to scam tokens, honeypots, token approvals, failed transactions, gas fees and seed phrase safety, each with a free CRYPY tool.",
+    "title": "Learn to spot crypto risks before they cost you",
+    "intro": "Short, plain-English guides to scam tokens, approvals, failed transactions and gas. Each one ends with the free CRYPY tool that checks it for you.",
+    "topicsLabel": "Topics",
+    "allTopics": "All guides",
+    "topics": {
+      "token-scams": "Token scams",
+      "approvals": "Approvals",
+      "transactions": "Transactions",
+      "gas-units": "Gas & units",
+      "wallet-safety": "Wallet safety"
+    },
+    "startHere": "Start here",
+    "checkNowTitle": "Check something now",
+    "checkNowText": "Paste an address, token contract or transaction hash. No wallet connection needed.",
+    "guideCount": "{count, plural, one {# guide} other {# guides}}",
+    "allGuidesHeading": "All guides",
+    "readTime": "{minutes} min read",
+    "toolLabel": "Tool:",
+    "noTool": "All tools",
+    "byline": "By CRYPY",
+    "updated": "Updated {date}",
+    "inShort": "In short",
+    "onThisPage": "On this page",
+    "questions": "Questions",
+    "relatedGuides": "Related guides",
+    "ctaTitle": "Check it yourself with the {tool}",
+    "ctaButton": "Open {tool}",
+    "ctaAllTitle": "Free tools that never ask for your seed phrase",
+    "ctaAllText": "Check wallets, tokens, approvals and transactions using public data only.",
+    "ctaAllButton": "Browse all tools",
+    "notTranslated": "This guide isn't translated yet, so it is shown in English.",
+    "learnMore": "Learn more",
+    "relatedTools": "Related tools"
   }
 }

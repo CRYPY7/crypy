@@ -34,6 +34,7 @@ Last updated: 2026-11-22
 | M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified        |
 | M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
 | SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending               |
+| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                           |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -217,6 +218,37 @@ sync to the account.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
 
+## SEO Phase 2 — Learn hub (design approved 2026-11-22, boards 42–45)
+
+- **12 guides** (`src/content/learn/en/<slug>.json`, one structured file per guide and language; English is the
+  source and the fallback): checking a token for scams, honeypots, liquidity locks, token approvals and revoking,
+  unlimited approvals, address poisoning, seed phrase safety, failed transactions, reading a transaction, gas fees,
+  wei/gwei/ether and checksum addresses. 300–680 words each (2–3 minutes), written to match what each CRYPY tool
+  really does, including its limits; never a "safe" claim. Inline text allows only **bold** and links to CRYPY tools
+  and guides, rendered as React elements (no HTML).
+- **Pages:** `/learn` (title and intro, "Start here" guide, a quick-check search box, all guides with topic
+  filters) and `/learn/<slug>` (topic, title, lead, byline with update date and reading time, "In short", sections,
+  approvals diagram, warnings and tips, questions, a call to action for the guide's tool, related guides; "On this
+  page" beside the article on desktop and folded on phones). Every guide is in the server-rendered HTML; the topic
+  filter only changes what shows.
+- **Structured data:** Article (dates, author and publisher CRYPY, image), BreadcrumbList and FAQPage on each guide;
+  CollectionPage + ItemList on the hub. Each guide has its own preview image.
+- **Links both ways:** each tool page now ends with "Learn more" (its guides) and "Related tools" (three next steps,
+  `config/related-tools.ts`); guides link to their tool in the text, in the side box and at the end.
+- **Navigation:** "Learn" in the desktop sidebar (under Home), the tablet header and the footer; on phones the bottom
+  tabs are Home, Tools, Learn, Portfolio, Alerts (Settings moved to the footer link, as in board 44).
+- **SEO:** the hub and the 12 guides are in the sitemap (guides with their real update date) and checked by the
+  automated SEO test; unknown guide addresses answer 404; a guide opened in a language it isn't translated into shows
+  the English text with a notice and is `noindex`.
+- Differences from the boards: the side box on a guide links to the tool instead of holding an address box (one
+  tool page per job, no duplicate forms); reading times are measured from the text (2–3 minutes).
+- Found while testing: the hub's search box and the header's had the same accessible name; the hub's now has its own.
+- Checks here: typecheck, lint, Prettier, i18n check; unit 355 passed, 72 skipped (29 new content checks: search
+  title and description lengths, every link points to a real tool or guide, related guides, section anchors, no raw
+  HTML, English fallback, reading time); build passed; browser 198 passed, 12 skipped, 0 failed (new: hub and
+  topic filter, guide page and its "On this page" links, structured data, tool-page links, Learn in the navigation,
+  404 and English fallback; accessibility on the hub and a guide in both themes; SEO checks on all 13 new pages).
+
 ## SEO Phase 1 — Technical and on-page (owner request 2026-11-22)
 
 Owner request: "very good SEO for the whole website", first. Full plan in **SEO_ROADMAP.md** (6 phases, based on an
@@ -229,7 +261,7 @@ audit of the live site's 20 sitemap pages). Phase 1, built:
 - **Content on the four thin tool pages:** how-to steps and 5–6 FAQ answers for the Approval Checker, Address
   Analyzer, Gas Tracker and Timestamp & Block Converter, in the existing layout (so FAQ structured data too). Every
   answer follows what the tool really does, including what may be missing.
-- **All-tools page:** CollectionPage + ItemList structured data (15 tools).
+- **All-tools page:** CollectionPage + ItemList structured data (14 tools).
 - **Icons:** `favicon.ico` (16/32/48 px), Apple touch icon (180 px), web manifest with 192/512 px and maskable
   icons; the Organization structured data now uses a 512 px PNG logo.
 - **Real 404s:** unknown tool addresses answered 200 (a "soft 404"); now 404. Every unknown address under a language
@@ -253,7 +285,7 @@ audit of the live site's 20 sitemap pages). Phase 1, built:
 The owner asked to open the site to everyone and to search engines now, as a beta.
 
 - **Search engines:** the preview switch (`CRYPY_PREVIEW=1`) is removed on the server; robots.txt then allows the site
-  (result pages and the API stay blocked) and lists the sitemap: home, all tools, the 15 tool pages, settings and the
+  (result pages and the API stay blocked) and lists the sitemap: home, all tools, the 14 tool pages, settings and the
   3 legal pages, English only (Urdu and Arabic stay `noindex` until reviewed). Every page already had its own title,
   description, canonical link, preview image and structured data (checked on the live site).
 - **Beta label** next to the logo ("CRYPY is in beta…" on hover). On phones narrower than 390 px it sits under the

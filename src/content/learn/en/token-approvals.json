@@ -1,0 +1,116 @@
+{
+  "title": "Token approvals explained, and how to revoke them",
+  "seoTitle": "Token Approvals Explained: How to Revoke Them | CRYPY",
+  "description": "Apps you used may still be allowed to spend your tokens. Learn what a token approval is, when it becomes dangerous, and how to check and revoke yours.",
+  "summary": "Every app you used may still be allowed to spend your tokens. How to find and remove them.",
+  "inShort": [
+    "An approval lets a contract move one of your tokens without asking you again.",
+    "It stays active until you remove it, even after you stop using the app.",
+    "Removing one is a small transaction you confirm in your own wallet."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "What is a token approval?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Before an exchange or other app can move a token from your wallet, you give it permission once. That permission is the approval: it names the contract (the **spender**) and how much of the token it may move."
+        },
+        {
+          "type": "figure",
+          "kind": "approval",
+          "labels": [
+            "Your wallet",
+            "holds 1,200 USDT",
+            "Permission: spend USDT",
+            "up to: unlimited",
+            "Exchange contract",
+            "can move it without asking"
+          ],
+          "caption": "An approval is a standing permission. The tokens stay in your wallet until the contract uses it.",
+          "alt": "Your wallet gives an exchange contract permission to spend an unlimited amount of USDT."
+        },
+        {
+          "type": "p",
+          "text": "For NFTs there is a wider version: **approve for all**, which lets the spender move every NFT you hold in that collection."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Why approvals can become dangerous",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Many apps ask for an unlimited amount so you don't have to approve again next time. If that contract is later hacked, or was malicious from the start, it can move all of that token from your wallet, including tokens you receive later."
+        },
+        {
+          "type": "p",
+          "text": "Approvals are also the target of many phishing sites: a fake page asks you to \"claim\" or \"verify\" something, and the transaction you confirm is really an approval for the scammer's contract."
+        },
+        {
+          "type": "warning",
+          "text": "Revoking is never needed to \"unlock\" or \"verify\" a wallet. A site or message that says so, or that asks for your seed phrase, is a scam."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "How to check your approvals",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Paste your wallet address into the [Approval Checker](tool:approval-checker). It looks for approvals on Ethereum, BNB Chain, Base, Arbitrum and Polygon, reads each one on-chain, and puts the ones that need attention first: unknown contracts, unlimited amounts and spenders flagged by security data."
+        },
+        {
+          "type": "p",
+          "text": "Checking doesn't need your wallet: anyone can look up any address, because approvals are public."
+        }
+      ]
+    },
+    {
+      "id": "revoke",
+      "heading": "How to revoke an approval",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Open the [Approval Checker](tool:approval-checker) and check your address, or connect your wallet and check it. Connecting never asks you to sign.",
+            "Look at **Needs attention** first, and decide which approvals you no longer need.",
+            "Click **Revoke** next to one. CRYPY tests the transaction first and shows what it does and the fee.",
+            "Check the details in your wallet and confirm. Once the transaction is in a block, the allowance is zero."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Revoking sets the allowance to zero. Your tokens don't move."
+        }
+      ]
+    },
+    {
+      "id": "keep",
+      "heading": "When to keep an approval",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Approvals for apps you use often, ideally limited to the amount you trade, are normal. Revoking them only means you approve again, and pay a fee, next time. Focus on approvals for apps you no longer use, contracts you don't recognize, and unlimited approvals on tokens worth a lot."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Does revoking cost money?",
+      "a": "Yes, a small network fee, because revoking is a blockchain transaction."
+    },
+    {
+      "q": "Will revoking move my tokens?",
+      "a": "No. It only removes the permission. Your tokens stay in your wallet."
+    },
+    {
+      "q": "Can I check without connecting my wallet?",
+      "a": "Yes. Approvals are public, so you can check any address. Revoking needs your wallet, because only you can change your own permissions."
+    }
+  ]
+}
