@@ -287,6 +287,12 @@ Server changes, so this works safely:
   public in DNS before Cloudflare); SSH unchanged; `off` reopens them. Owner's Cloudflare settings: Bot Fight Mode on,
   one free rate-limiting rule for `/api/` (per visitor, 10-second window). Free provider plans can't bill, so abuse
   can slow the site or use up a day's free quota (the site then falls back to public nodes) but can't cost money.
+  First run of the script closed the web ports to everyone (a `grep` with no match stopped it under `set -e` before the
+  Cloudflare rules were added, so the site showed error 522 for a few minutes). Fixed: the search can't stop the script,
+  and if no Cloudflare rule ends up added it reopens the ports itself. On the server, git must run as `crypy`
+  (`sudo -u crypy git -C /opt/crypy/app pull --ff-only`), as `update.sh` does. **Verified 2026-11-22:** site works
+  through Cloudflare; `ufw` holds the Cloudflare rules; `http://159.89.155.81` no longer answers (owner checked);
+  Bot Fight Mode and the `/api/` rate-limiting rule are on.
 - **Live (2026-11-22, checked from outside):** crypy.org answers through Cloudflare over HTTP/2 with HTTP/3
   offered; static files are served from Cloudflare's cache (`cf-cache-status: HIT`, cached for a year); pages and
   the API pass through uncached (`DYNAMIC`, `no-store`); http and www redirect to https://crypy.org; the preview's
