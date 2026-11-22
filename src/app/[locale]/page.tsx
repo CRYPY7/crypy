@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { locale as localeParam } from "next/root-params";
@@ -17,12 +18,20 @@ import { localePath } from "@/lib/routes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { siteUrl } from "@/config/env";
 import { getCategoryLabels, getToolViews } from "@/lib/tools-view";
+import { pageAlternates } from "@/lib/metadata";
 
 const goalStyle: Record<string, string> = {
   security: "bg-critical/12 text-critical",
   wallet: "bg-primary/12 text-primary",
   network: "bg-low/12 text-low",
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await localeParam();
+  if (!isLocale(locale)) return {};
+  const t = await getTranslations("seo");
+  return { title: { absolute: t("homeTitle") }, ...pageAlternates(locale) };
+}
 
 export default async function HomePage() {
   const locale = await localeParam();
@@ -65,7 +74,7 @@ export default async function HomePage() {
             "@type": "Organization",
             name: t("meta.siteName"),
             url: siteUrl.toString(),
-            logo: new URL("/icon.svg", siteUrl).toString(),
+            logo: new URL("/icons/icon-512.png", siteUrl).toString(),
           },
         ]}
       />

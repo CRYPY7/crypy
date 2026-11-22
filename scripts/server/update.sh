@@ -12,6 +12,7 @@ bash "$APP_DIR/scripts/server/nginx-site.sh" "${DOMAIN:-crypy.org}"
 for _ in $(seq 1 30); do curl -fs -o /dev/null http://127.0.0.1:3000/en && break; sleep 2; done
 if curl -fsS -o /dev/null http://127.0.0.1:3000/en; then
   echo "Updated and running."
+  bash "$APP_DIR/scripts/server/indexnow.sh" || true
 else
   echo "Not answering yet. Check: journalctl -u crypy -n 80 --no-pager"
   exit 1

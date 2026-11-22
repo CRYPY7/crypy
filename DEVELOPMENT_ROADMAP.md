@@ -285,6 +285,8 @@ Urdu + Arabic translations & RTL QA; security review; accessibility & performanc
   label next to the logo, English texts updated for all five chains, legal pages rewritten to describe what CRYPY
   actually does and labelled "not reviewed by a lawyer yet". Still open: lawyer review of the legal pages and a
   contact address on them; Google Search Console and Bing Webmaster set up by the owner.
+- **SEO (owner priority 2026-11-22):** own plan in SEO_ROADMAP.md. Phase 1 (technical and on-page) ✅ built;
+  Phases 2–3 (Learn hub, gas-by-chain and curated token pages) need designs first.
 - **Next parts (proposed order):** Urdu translations (reviewed by the owner) and RTL QA, Arabic as preview until a
   native review; lawyer review of the legal pages; a staging copy, then the alerts "Done when" on staging and
   production.

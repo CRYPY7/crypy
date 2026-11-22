@@ -22,7 +22,12 @@ export async function toolMetadata(id: string, locale: Locale): Promise<Metadata
   const tool = getTool(id);
   if (!tool) return {};
   const t = await getTranslations(`tools.${tool.id}`);
-  return { title: t("name"), description: t("description"), ...pageAlternates(locale, `/tools/${tool.id}`) };
+  // Search titles and descriptions use the words people search for; the page itself keeps the short tool name.
+  return {
+    title: t.has("seoTitle") ? { absolute: t("seoTitle") } : t("name"),
+    description: t.has("seoDescription") ? t("seoDescription") : t("description"),
+    ...pageAlternates(locale, `/tools/${tool.id}`),
+  };
 }
 
 /** Open Graph image for a tool. Latin font only for now: English text until reviewed non-Latin fonts ship (M9). */

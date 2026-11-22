@@ -11,7 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await localeParam();
   if (!isLocale(locale)) return {};
   const t = await getTranslations("settings");
-  return { title: t("title"), ...pageAlternates(locale, "/settings") };
+  // Personal preferences only: nothing for search engines (kept out of the sitemap too).
+  return { title: t("title"), ...pageAlternates(locale, "/settings"), robots: { index: false, follow: true } };
 }
 
 export default async function SettingsPage() {

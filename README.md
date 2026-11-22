@@ -70,6 +70,9 @@ editing nginx by hand). Useful on the server: `systemctl status crypy`, `journal
 from the server's `.env.local` and running `update.sh` opens the site to search engines (done for crypy.org's public
 beta on 2026-11-22).
 
+After each update, `update.sh` also runs `indexnow.sh`, which tells Bing and other IndexNow search engines about the
+sitemap's pages. SEO plan and status: `SEO_ROADMAP.md`.
+
 Behind Cloudflare, `bash /opt/crypy/app/scripts/server/cloudflare-only.sh on` lets only Cloudflare reach the web
 ports (run it again now and then to refresh Cloudflare's address list; `off` undoes it).
 

@@ -33,6 +33,7 @@ Last updated: 2026-11-22
 | M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
 | M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified        |
 | M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
+| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending               |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -215,6 +216,37 @@ sync to the account.
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## SEO Phase 1 — Technical and on-page (owner request 2026-11-22)
+
+Owner request: "very good SEO for the whole website", first. Full plan in **SEO_ROADMAP.md** (6 phases, based on an
+audit of the live site's 20 sitemap pages). Phase 1, built:
+
+- **Search titles and descriptions** (`tools.<id>.seoTitle` / `seoDescription`, `seo.*`): each tool page, the home
+  page and the all-tools page now have a title of 42–57 characters with the words people search for (for example
+  "Token Approval Checker: Find & Revoke Approvals | CRYPY", "Gas Tracker: Live Gwei Prices on 5 Chains | CRYPY")
+  and a description of 123–153 characters. The names on the pages are unchanged.
+- **Content on the four thin tool pages:** how-to steps and 5–6 FAQ answers for the Approval Checker, Address
+  Analyzer, Gas Tracker and Timestamp & Block Converter, in the existing layout (so FAQ structured data too). Every
+  answer follows what the tool really does, including what may be missing.
+- **All-tools page:** CollectionPage + ItemList structured data (15 tools).
+- **Icons:** `favicon.ico` (16/32/48 px), Apple touch icon (180 px), web manifest with 192/512 px and maskable
+  icons; the Organization structured data now uses a 512 px PNG logo.
+- **Real 404s:** unknown tool addresses answered 200 (a "soft 404"); now 404. Every unknown address under a language
+  also showed the framework's bare 404 page; it now shows CRYPY's own page (header, navigation, link home) with a
+  404 status. `/EN/...` redirects once to `/en/...`.
+- **Sitemap:** Settings removed and marked `noindex` (19 pages).
+- **IndexNow:** a key file in `public/` and `scripts/server/indexnow.sh`, run by `update.sh` after each update:
+  tells Bing, Yandex and other IndexNow engines about the sitemap's pages (skipped while the site is in preview).
+- **Automated SEO checks** (`tests/e2e/seo.spec.ts`): every sitemap page answers 200 with a 15–60 character title,
+  a 110–160 character description (legal pages 70+), exactly one H1, a canonical link to itself, no `noindex`,
+  valid structured data and no duplicate titles; unknown tools answer 404; Settings is `noindex`; icons, manifest and
+  the IndexNow key are served.
+- **Owner steps:** Google Search Console (domain property, TXT record in Cloudflare, submit `sitemap.xml`), Bing
+  Webmaster Tools (import from Google), Cloudflare Web Analytics off.
+- Checks here: typecheck, lint, Prettier, i18n check; unit 326 passed, 72 skipped; build passed; browser 178
+  passed, 12 skipped (desktop-only and live-key tests), 0 failed, including the 3 new SEO tests. `indexnow.sh`
+  passes ShellCheck; it runs for real on the server after the next update.
 
 ## M9 Part 4 — Public beta (owner request 2026-11-22)
 

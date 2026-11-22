@@ -5,15 +5,7 @@ import { selectableLocales } from "@/i18n/locales";
 
 /** Only reviewed languages are listed, so search engines never index unfinished translations. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = [
-    "",
-    "/tools",
-    "/settings",
-    "/legal/privacy",
-    "/legal/terms",
-    "/legal/risk",
-    ...toolIds.map((id) => `/tools/${id}`),
-  ];
+  const paths = ["", "/tools", "/legal/privacy", "/legal/terms", "/legal/risk", ...toolIds.map((id) => `/tools/${id}`)];
   const complete = selectableLocales.filter((config) => config.status === "complete");
   return complete.flatMap((config) =>
     paths.map((path) => ({

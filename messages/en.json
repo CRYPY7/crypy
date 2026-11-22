@@ -2,7 +2,7 @@
   "meta": {
     "siteName": "CRYPY",
     "title": "CRYPY — Wallet safety and research toolkit",
-    "description": "Check any wallet, token or transaction before you trust it, on Ethereum, BNB Chain, Base, Arbitrum and Polygon. Free, non-custodial, no wallet connection needed."
+    "description": "Check any wallet, token or transaction before you trust it, on Ethereum, BNB Chain, Base, Arbitrum and Polygon. Free, non-custodial, no wallet needed."
   },
   "common": {
     "skipToContent": "Skip to content",
@@ -169,7 +169,9 @@
           "q": "Which chains and exchanges are covered?",
           "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon. The trade test uses each chain's main exchanges, v2 and v3 pools (Uniswap, PancakeSwap, SushiSwap, Biswap and QuickSwap, depending on the chain); liquidity is read from the same exchanges and a few more on BNB Chain."
         }
-      ]
+      ],
+      "seoTitle": "Token Security Scanner: Honeypot, Tax & Rug Check | CRYPY",
+      "seoDescription": "Free token scam check: CRYPY test-trades a token to find honeypots and buy or sell taxes, then checks owner powers and liquidity locks on 5 EVM chains."
     },
     "approval-checker": {
       "name": "Approval Checker",
@@ -183,6 +185,40 @@
         "Value at risk for each approval",
         "Revoke one approval at a time, always confirmed in your own wallet",
         "Clear statement of what was checked and what may be missing"
+      ],
+      "seoTitle": "Token Approval Checker: Find & Revoke Approvals | CRYPY",
+      "seoDescription": "See which contracts can spend your tokens on Ethereum, BNB Chain, Base, Arbitrum and Polygon, with risk flags, and revoke risky approvals in your wallet.",
+      "howTo": [
+        "Paste a wallet address, or connect your wallet and choose \"Check my connected wallet\". Connecting is optional and never asks you to sign.",
+        "CRYPY finds the wallet's approvals on every supported chain and reads each one on-chain.",
+        "Start with \"Needs attention\": each approval shows the spender, how much it can take and why it was flagged.",
+        "To remove one, click Revoke and confirm the transaction in your own wallet. It costs a small network fee."
+      ],
+      "faq": [
+        {
+          "q": "What is a token approval?",
+          "a": "A permission you gave a contract, such as an exchange, to move a token from your wallet. It stays active until you remove it, even after you stop using the app."
+        },
+        {
+          "q": "Why are unlimited approvals risky?",
+          "a": "An unlimited approval lets the spender take all of that token, including tokens you receive later. If the contract is hacked or malicious, it can move them without asking you again."
+        },
+        {
+          "q": "Does revoking cost anything?",
+          "a": "Yes, a small network fee, because revoking is a blockchain transaction. CRYPY shows the fee and tests the transaction before your wallet asks you to confirm."
+        },
+        {
+          "q": "Can CRYPY move my funds?",
+          "a": "No. CRYPY never holds keys. A revoke only sets the allowance to zero, and your wallet always shows the transaction for you to approve or reject."
+        },
+        {
+          "q": "Is the list complete?",
+          "a": "Not always. CRYPY combines several free sources and reads every result on-chain, but some older approvals, for example of tokens you no longer hold, may be missing. The page says what was checked."
+        },
+        {
+          "q": "Which chains are covered?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon."
+        }
       ]
     },
     "balance-scanner": {
@@ -225,7 +261,9 @@
           "q": "Which chains are checked?",
           "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon. The same address can hold different coins and tokens on each chain, so each chain is shown separately."
         }
-      ]
+      ],
+      "seoTitle": "Wallet Balance Checker: Tokens & USD Value | CRYPY",
+      "seoDescription": "Check any wallet's coin and token balances with USD values on Ethereum, BNB Chain, Base, Arbitrum and Polygon. Free, no wallet connection needed."
     },
     "address-analyzer": {
       "name": "Address Analyzer",
@@ -239,6 +277,36 @@
         "Warnings for look-alike (address poisoning) transfers",
         "Filters, search and CSV export",
         "Likely spam hidden, never deleted"
+      ],
+      "seoTitle": "Wallet Address Analyzer: Transfer History | CRYPY",
+      "seoDescription": "See every coin, token and NFT transfer of any wallet, its first and last activity, and warnings for spam and address poisoning. Free, on 5 chains.",
+      "howTo": [
+        "Paste any wallet address. No wallet connection is needed.",
+        "By default CRYPY scans the chains where the address has been used; you can pick other chains.",
+        "Browse transfers by day, filter by sent or received, coins, tokens or NFTs, and search by token or address.",
+        "Load older activity, or export the list to CSV."
+      ],
+      "faq": [
+        {
+          "q": "What is address poisoning?",
+          "a": "Scammers send tiny or zero-value transfers from an address that starts and ends like one you use, hoping you copy it from your history next time. CRYPY flags these look-alike transfers. Always compare the full address before you send."
+        },
+        {
+          "q": "Why is some activity hidden?",
+          "a": "Spam tokens and likely fake transfers are hidden by default to keep the list readable. They are counted, never deleted, and one switch shows them."
+        },
+        {
+          "q": "How far back does the history go?",
+          "a": "The full history of coin, token and NFT transfers, loaded page by page. If the full-history source isn't available, the page says so and shows only recent token transfers."
+        },
+        {
+          "q": "Are transfers made by contracts included?",
+          "a": "On Ethereum and Polygon, coins sent by contracts (internal transfers) are included. On BNB Chain, Base and Arbitrum they may be missing, and the page says so."
+        },
+        {
+          "q": "Which chains are covered?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon."
+        }
       ]
     },
     "portfolio": {
@@ -281,7 +349,9 @@
           "q": "Which tokens are checked for risks?",
           "a": "Each wallet's most valuable tokens (up to 8, not counting well-known ones) are checked against GoPlus for a honeypot or a sell tax of 30% or more. It's GoPlus's finding, not a verdict; open the token for CRYPY's full checks. GoPlus's free capacity is shared, and token and approval pages go first: when a check is skipped, the portfolio says so. Nothing is ever called safe."
         }
-      ]
+      ],
+      "seoTitle": "Crypto Portfolio Tracker for Multiple Wallets | CRYPY",
+      "seoDescription": "Track up to 20 wallets in one view: total value by chain, wallet and token, with approval and scam-token checks. No sign-up; saved in your browser."
     },
     "tx-checker": {
       "name": "Transaction Checker",
@@ -323,7 +393,9 @@
           "q": "Which networks are supported?",
           "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon. The table on this page shows exactly which parts work on each network."
         }
-      ]
+      ],
+      "seoTitle": "Transaction Hash Checker: Status & Details | CRYPY",
+      "seoDescription": "Paste a transaction hash to see if it went through, what moved, what it cost and why it failed, in plain English. Works on 5 EVM chains."
     },
     "gas-tracker": {
       "name": "Gas Tracker",
@@ -336,6 +408,35 @@
         "Cost in dollars of sends, approvals, swaps and NFT transfers",
         "Base fee trend over the last 1,024 blocks",
         "Refreshes every 12 seconds, update time shown"
+      ],
+      "seoTitle": "Gas Tracker: Live Gwei Prices on 5 Chains | CRYPY",
+      "seoDescription": "Live gas prices in gwei for Ethereum, BNB Chain, Base, Arbitrum and Polygon, with the cost in USD to send, swap or approve.",
+      "howTo": [
+        "Open the page: prices load for every supported chain and refresh every 12 seconds.",
+        "Pick a speed: low when you can wait, average for most transactions, high when it must go through quickly.",
+        "Check the cost table to see what a send, approval, swap or NFT transfer costs in dollars right now."
+      ],
+      "faq": [
+        {
+          "q": "What is gwei?",
+          "a": "A small unit of a chain's coin: 1 gwei is one billionth of an ETH, BNB or POL. Gas prices are quoted in gwei per unit of gas."
+        },
+        {
+          "q": "What are the base fee and the priority fee?",
+          "a": "On Ethereum and similar chains, every transaction pays the block's base fee, which is burned, plus a priority fee (a tip) for the validator. A higher tip usually gets you in sooner. BNB Chain has no base fee, so its price is just the gas price."
+        },
+        {
+          "q": "How are the low, average and high prices worked out?",
+          "a": "From recent blocks read directly from each chain: the next block's base fee plus the tips that transactions actually paid, at three levels."
+        },
+        {
+          "q": "Why do Base and Arbitrum costs include an extra part?",
+          "a": "On these networks part of the fee pays for publishing the transaction's data on Ethereum. CRYPY's costs include an estimate of that part, read from the chain."
+        },
+        {
+          "q": "When is gas cheapest?",
+          "a": "When the network is less busy. The trend line shows whether fees are rising or falling, so you can wait for a quieter moment if your transaction isn't urgent."
+        }
       ]
     },
     "watchlist": {
@@ -377,7 +478,9 @@
           "q": "What does CRYPY store?",
           "a": "Your wallet address, your watchlist with labels and alert choices, your Telegram chat id, your alert history (90 days), your sign-in sessions (only a scrambled form of the session code) and, if you choose, your portfolio list. No email, no IP address. You can download all of it, or delete your account and everything with it, at any time."
         }
-      ]
+      ],
+      "seoTitle": "Wallet Watchlist & Telegram Alerts | CRYPY",
+      "seoDescription": "Get Telegram alerts when a wallet you watch sends, receives or approves, or when a token's security or liquidity changes. Sign in with your wallet."
     },
     "unit-converter": {
       "name": "Unit Converter",
@@ -416,7 +519,9 @@
           "q": "Is anything I type sent to a server?",
           "a": "No. The conversion runs entirely in your browser."
         }
-      ]
+      ],
+      "seoTitle": "Wei to Gwei to ETH Converter (Exact) | CRYPY",
+      "seoDescription": "Convert wei, gwei, ETH and BNB exactly, with no rounding, including amounts in scientific notation. Runs in your browser; nothing is sent."
     },
     "hex-converter": {
       "name": "Hex Converter",
@@ -452,7 +557,9 @@
           "q": "What is the largest value supported?",
           "a": "2^256 − 1, the largest number an EVM uint256 can hold."
         }
-      ]
+      ],
+      "seoTitle": "Hex to Decimal Converter for Blockchain | CRYPY",
+      "seoDescription": "Convert hexadecimal to decimal and back for blockchain values up to 256 bits, with signed int256, 32-byte form and text. Runs in your browser."
     },
     "address-formatter": {
       "name": "Address Formatter",
@@ -492,7 +599,9 @@
           "q": "Does a correct address mean it is safe?",
           "a": "No. It only means the address is written correctly. Use CRYPY's search to see what the address is before sending to it."
         }
-      ]
+      ],
+      "seoTitle": "Ethereum Address Checksum Checker (EIP-55) | CRYPY",
+      "seoDescription": "Check that an Ethereum or BNB Chain address is written correctly and get its EIP-55 checksum form, for one address or up to 500 at once."
     },
     "timestamp-block": {
       "name": "Timestamp & Block Converter",
@@ -505,6 +614,35 @@
         "Block number to date and time",
         "Unix timestamp to date, in your browser",
         "Read from real block times, never estimated (future dates labelled as estimates)"
+      ],
+      "seoTitle": "Block Number by Date & Timestamp Converter | CRYPY",
+      "seoDescription": "Find the block number at any date on Ethereum, BNB Chain, Base, Arbitrum and Polygon, the date of any block, and convert Unix timestamps.",
+      "howTo": [
+        "Enter a date and time to find the block at that moment on every chain.",
+        "Or enter a block number and pick a chain to see when that block was produced.",
+        "Or paste a Unix timestamp to turn it into a date (this part runs in your browser)."
+      ],
+      "faq": [
+        {
+          "q": "How is the block for a date found?",
+          "a": "CRYPY reads real block times from each chain and narrows down to the first block produced at or after your date. It usually takes a second or two."
+        },
+        {
+          "q": "What is a Unix timestamp?",
+          "a": "The number of seconds since 1 January 1970 (UTC). Blockchains record each block's time this way."
+        },
+        {
+          "q": "Why is the block number different on each chain?",
+          "a": "Each chain started at a different time and produces blocks at its own pace (about every 12 seconds on Ethereum, faster on the others), so the same moment has a different block number on each."
+        },
+        {
+          "q": "Can I enter a future date?",
+          "a": "Yes. CRYPY estimates the block from the chain's recent pace and labels the result as an estimate."
+        },
+        {
+          "q": "Which chains are covered?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum and Polygon."
+        }
       ]
     },
     "tx-decoder": {
@@ -545,7 +683,9 @@
           "q": "Why are amounts so large?",
           "a": "Amounts are in the token's smallest unit. Divide by 10 to the power of the token's decimals, or use the Unit Converter for 18-decimal tokens."
         }
-      ]
+      ],
+      "seoTitle": "Transaction Input Data Decoder (Calldata) | CRYPY",
+      "seoDescription": "Decode raw transaction input data into a readable function and values, with warnings for unlimited approvals. Runs in your browser; nothing is sent."
     },
     "batch-balance": {
       "name": "Batch Balance Scanner",
@@ -587,7 +727,9 @@
           "q": "Why does an address show as a contract?",
           "a": "It has smart-contract code on that chain. Wallets that delegate to code (EIP-7702) are shown as delegated wallets."
         }
-      ]
+      ],
+      "seoTitle": "Batch Wallet Balance Checker: 500 Addresses | CRYPY",
+      "seoDescription": "Check coin and token balances for up to 500 addresses at once on Ethereum, BNB Chain, Base, Arbitrum and Polygon, then export to CSV. Free."
     }
   },
   "toolPage": {
@@ -2773,5 +2915,10 @@
       "importButton": "Watch {count} wallet(s)",
       "importNotNow": "Not now"
     }
+  },
+  "seo": {
+    "homeTitle": "CRYPY: Free Crypto Wallet, Token & Transaction Checker",
+    "toolsTitle": "All Free Crypto Wallet & Token Tools | CRYPY",
+    "toolsDescription": "15 free tools to check wallets, tokens and transactions on Ethereum, BNB Chain, Base, Arbitrum and Polygon: token scanner, approvals, gas and more."
   }
 }
