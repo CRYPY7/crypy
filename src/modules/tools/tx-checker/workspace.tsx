@@ -28,7 +28,12 @@ export async function TxCheckerWorkspace({ locale }: { locale: Locale }) {
         <h2 id="tx-support" className="font-sans text-lg font-semibold">
           {raw.supportTitle}
         </h2>
-        <div className="overflow-x-auto rounded-xl border bg-card">
+        <div
+          tabIndex={0}
+          role="group"
+          aria-labelledby="tx-support"
+          className="overflow-x-auto rounded-xl border bg-card"
+        >
           <table className="w-full min-w-[480px] text-sm">
             <thead>
               <tr className="text-xs text-muted-foreground">

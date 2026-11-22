@@ -30,6 +30,7 @@ Last updated: 2026-11-22
 | M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                            |
 | M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
 | M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
+| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
@@ -212,6 +213,53 @@ sync to the account.
 - Security: Content Security Policy and security headers, no `X-Powered-By`, lint rule blocking secret environment variables in components.
 - SEO: per-page titles and descriptions, canonical URLs, sitemap.xml, robots.txt.
 - Performance: all pages pre-rendered as static HTML; automated budget tests. (The "≈ 120 KB gzipped" figure reported at the end of M1 was a measuring mistake: a stale server was missing some files. The correct M1 figure was ≈ 180 KB gzipped. See the M2 section for current numbers.)
+
+## M9 Part 2 — Accessibility and speed (2026-11-22)
+
+**Accessibility.** axe (WCAG 2.2 AA + best practices) on 23 page/state combinations × phone and desktop, dark and
+light: 4 kinds of problems found, all fixed; now 0.
+
+- Language button: its accessible name didn't contain the visible text ("EN" / "English") → name is now
+  "Language: English" with the visible text inside it.
+- Light theme contrast: small severity chips (New, high, check…) were 3.5–4.2:1 → severity colours darkened
+  (critical #b71f1f, high #9a4507, medium #7a5e00, low #126040) and secondary text #4e5768; all ≥ 4.5:1. Dark theme
+  unchanged.
+- Sideways-scrolling tables (gas costs, transaction transfers, support table) couldn't be reached by keyboard → they
+  take focus now.
+- The "translation not reviewed" notice sat outside any landmark → it is an `aside`.
+- Keyboard walk: every stop has a visible focus indicator except bare text boxes (search, tools dialog, activity
+  search, batch token box) → focus rings added. Tools dialog: focus moves in, stays in, Escape closes.
+- New `tests/e2e/a11y.spec.ts` (32 tests): axe on home, all tools, a tool page, the Gas Tracker, settings, Urdu and
+  the tools dialog in both themes, plus a live transaction and approvals page; and the search box's focus ring.
+  New dev-only dependency `@axe-core/playwright` 4.14.0 (pinned; used only by tests).
+
+**Speed (Lighthouse, mobile, simulated slow 4G and 4× slower CPU, median of 3 runs in the cloud workspace):**
+
+| Page                       | Before | After | Notes                                              |
+| -------------------------- | ------ | ----- | -------------------------------------------------- |
+| Home                       | 85–95  | 92    | layout shift from the gas line removed             |
+| All tools                  | 86     | 91    |                                                    |
+| Unit Converter             | 88–93  | 90    |                                                    |
+| Gas Tracker                | 68     | 90    | shift 0.21 → 0; less work per number               |
+| Token Security (tool page) | 87     | 87    | measured LCP in a real browser 0.35 s              |
+| Address (vitalik.eth)      | 86     | 81    | simulated; measured LCP 1.5 s with a 4× slower CPU |
+| Transaction                | 56–66  | 76    | shift 0.22–0.31 → 0                                |
+
+Accessibility, Best practices: 100 on every page measured; SEO 100 on indexable pages (result pages and preview
+languages are `noindex` on purpose).
+
+- **Layout shifts (CLS) now 0 on every page measured.** Causes fixed: the home gas line and the Gas Tracker's live
+  fees arrived after the page and pushed text down (space is now kept); entity pages' loading placeholders were
+  shorter than one screen, so the footer jumped (placeholders are now at least one screen tall); the transaction
+  page's "your time" re-wrapped its line when it appeared (an invisible placeholder of the same length holds it).
+- **Less main-thread work:** number formatters are created once and reused (`lib/format/intl.ts`); pages with
+  hundreds of amounts created two per amount.
+- What's left is mostly React and Next.js themselves (about 390 KB of framework JavaScript, ~120 KB compressed) and,
+  on data pages, the simulated time to stream the live content. Real-world numbers come from PageSpeed Insights on
+  the production server (roadmap).
+
+Checks here: typecheck, lint, Prettier; unit 324 passed, 72 skipped; build passed; browser 175 passed, 7 skipped,
+0 failed (including the 32 new accessibility tests).
 
 ## M9 Part 1 — Security review (2026-11-22)
 

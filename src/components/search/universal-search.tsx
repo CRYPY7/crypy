@@ -171,7 +171,8 @@ export function UniversalSearch({
         onSubmit={submit}
         aria-busy={loading}
         className={cn(
-          "flex items-center gap-2 border bg-card",
+          // Visible focus for keyboard users (the input itself has no outline; WCAG 2.4.7).
+          "flex items-center gap-2 border bg-card focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1 focus-within:ring-offset-background",
           hero ? "flex-wrap rounded-2xl border-border-strong p-2" : "h-10 rounded-lg px-3",
         )}
       >

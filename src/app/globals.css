@@ -58,7 +58,7 @@
   --secondary: #eef1f5;
   --secondary-foreground: #0f1218;
   --muted: #eef1f5;
-  --muted-foreground: #566072;
+  --muted-foreground: #4e5768; /* 4.5:1 on tinted severity chips too (M9) */
   --accent: #eef1f5;
   --accent-foreground: #0f1218;
   --destructive: #c62828;
@@ -66,10 +66,11 @@
   --border-strong: #cdd3dc;
   --input: #cdd3dc;
   --ring: #1f5fd6;
-  --critical: #c62828;
-  --high: #b45309;
-  --medium: #8a6a00;
-  --low: #1b7a52;
+  /* Severity colours: dark enough for 4.5:1 contrast as small text on their own tinted chips (M9 accessibility). */
+  --critical: #b71f1f;
+  --high: #9a4507;
+  --medium: #7a5e00;
+  --low: #126040;
 }
 
 .dark {

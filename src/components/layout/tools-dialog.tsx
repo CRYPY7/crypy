@@ -63,7 +63,7 @@ export function ToolsDialog({ tools, categories, icons, strings, open, onOpenCha
         showCloseButton={false}
         className="top-4 max-h-[calc(100dvh-2rem)] w-full translate-y-0 gap-0 overflow-hidden p-0 sm:max-w-3xl md:top-16"
       >
-        <div className="flex items-center gap-3 border-b px-4 py-3">
+        <div className="flex items-center gap-3 border-b px-4 py-3 focus-within:ring-2 focus-within:ring-ring focus-within:ring-inset">
           <DialogTitle className="sr-only">{strings.title}</DialogTitle>
           <DialogDescription className="sr-only">{strings.description}</DialogDescription>
           <Search className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />

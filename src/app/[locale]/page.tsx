@@ -98,16 +98,19 @@ export default async function HomePage() {
             </span>
           ))}
         </div>
-        <GasWidget
-          locale={locale}
-          href={localePath(locale, "/tools/gas-tracker")}
-          labels={{
-            title: t("home.gas.title"),
-            send: t("home.gas.send"),
-            open: t("home.gas.open"),
-            gwei: t("home.gas.gwei"),
-          }}
-        />
+        {/* Space kept for the gas line, which loads after the page, so the text below doesn't jump. */}
+        <div className="mt-6 flex min-h-[9.625rem] items-start justify-center sm:min-h-[6.125rem] lg:min-h-[4.375rem]">
+          <GasWidget
+            locale={locale}
+            href={localePath(locale, "/tools/gas-tracker")}
+            labels={{
+              title: t("home.gas.title"),
+              send: t("home.gas.send"),
+              open: t("home.gas.open"),
+              gwei: t("home.gas.gwei"),
+            }}
+          />
+        </div>
         <RecentList title={t("nav.recent")} clear={t("nav.clearRecent")} locale={locale} />
 
         <ul className="mt-10 grid gap-3 text-start sm:grid-cols-3">

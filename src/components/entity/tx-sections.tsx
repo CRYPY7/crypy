@@ -103,7 +103,12 @@ export function TxTransfers({ tx, chain, locale, t, explorerName }: TxView) {
       <h2 id="tx-transfers" className="font-sans text-lg font-semibold">
         {t("entity.tx.transfers.title")}
       </h2>
-      <div className="overflow-x-auto rounded-xl border bg-card">
+      <div
+        tabIndex={0}
+        role="group"
+        aria-labelledby="tx-transfers"
+        className="overflow-x-auto rounded-xl border bg-card"
+      >
         <table className="w-full min-w-[640px] text-sm">
           <thead>
             <tr className="text-start text-xs text-muted-foreground">

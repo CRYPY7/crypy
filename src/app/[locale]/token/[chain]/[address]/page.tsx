@@ -140,7 +140,7 @@ async function TokenContent({ params }: { params: Props["params"] }) {
 
       <Suspense
         fallback={
-          <div role="status" className="flex flex-col gap-4">
+          <div role="status" className="flex min-h-[100svh] flex-col gap-4">
             <p className="text-sm text-muted-foreground">{t("entity.tokenSecurity.loading")}</p>
             <div aria-hidden="true" className="h-40 animate-pulse rounded-2xl bg-muted" />
             <div aria-hidden="true" className="h-64 animate-pulse rounded-2xl bg-muted" />

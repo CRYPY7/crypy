@@ -690,6 +690,18 @@ DEX decoders, per chain family:                      (one per DEX design)
 
 ## 13. Performance budget
 
+Rules added in M9 (accessibility and speed):
+
+- **No layout shift:** content that arrives after the page (live data, browser-only values) gets its space up front:
+  loading placeholders for streamed sections are at least one screen tall (`min-h-[100svh]`), the home gas line has a
+  reserved height per breakpoint, and browser-only text (local time) renders an invisible same-length placeholder.
+- **Formatters:** use `numberFormat()` / `decimalSeparator()` from `lib/format/intl.ts` in anything that runs per
+  item; never `new Intl.NumberFormat` in a loop.
+- **Accessibility:** `tests/e2e/a11y.spec.ts` runs axe (WCAG 2.2 AA + best practices) on the main pages in both
+  themes and fails on any violation. Text boxes without their own outline get a `focus-within` ring on their frame;
+  sideways-scrolling regions are focusable (`tabIndex={0}`, `role="group"`, labelled). Light-theme severity colours
+  are dark enough for 4.5:1 on their own 14–15% tints.
+
 Checked automatically in `tests/e2e/foundation.spec.ts` on `/en`, `/en/tools`, a tool page and settings:
 
 - JavaScript ≤ 650 KB uncompressed per page (M2.5: home ≈ 510 KB uncompressed / 157 KB gzipped, heaviest tool page ≈ 580 KB / 178 KB; most of it is the React/Next.js runtime. An earlier "≈ 120 KB gzipped" M1 figure was a measuring error).

@@ -85,9 +85,13 @@ export function Notice({
   );
 }
 
+/**
+ * Placeholder while an entity page loads. At least one screen tall, so the footer and anything after it stay out of
+ * view until the real content arrives (no layout shift when it replaces this).
+ */
 export function EntitySkeleton() {
   return (
-    <div aria-hidden="true" className="flex animate-pulse flex-col gap-4">
+    <div aria-hidden="true" className="flex min-h-[100svh] animate-pulse flex-col gap-4">
       <div className="h-4 w-32 rounded bg-muted" />
       <div className="h-8 w-64 rounded bg-muted" />
       <div className="h-10 w-full max-w-xl rounded-lg bg-muted" />

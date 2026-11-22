@@ -94,10 +94,11 @@ function LanguageMenuView({
       <button
         type="button"
         popoverTarget={popoverId}
-        aria-label={label}
         className={cn(buttonVariants({ variant: "outline", size: "md" }), "lang-menu-anchor")}
       >
         <Globe aria-hidden="true" />
+        {/* The visible language name stays part of the button's name (WCAG 2.5.3 label in name). */}
+        <span className="sr-only">{label}: </span>
         <span className="hidden lg:inline">{currentOption?.nativeName ?? current}</span>
         <span className="lg:hidden">{current.toUpperCase()}</span>
       </button>

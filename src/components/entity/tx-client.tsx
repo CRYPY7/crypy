@@ -73,7 +73,11 @@ export function ShowAdvanced({ title, hint }: { title: string; hint: string }) {
   );
 }
 
-/** Time in the visitor's own time zone (rendered after load; the server shows UTC next to it). */
+/**
+ * Time in the visitor's own time zone (rendered after load; the server shows UTC next to it). Until then an invisible
+ * placeholder of the same length (the UTC time in the same format) keeps the line from re-wrapping when the local
+ * time appears (no layout shift).
+ */
 export function LocalTime({ timestamp, template }: { timestamp: number; template: string }) {
   const [text, setText] = useState<string | null>(null);
   useEffect(() => {
@@ -84,7 +88,18 @@ export function LocalTime({ timestamp, template }: { timestamp: number; template
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setText(template.replace("{time}", time));
   }, [timestamp, template]);
-  return text ? <span>{text}</span> : null;
+  if (text) return <span>{text}</span>;
+  const placeholder = template.replace(
+    "{time}",
+    new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(
+      new Date(timestamp * 1000),
+    ),
+  );
+  return (
+    <span aria-hidden="true" className="invisible">
+      {placeholder}
+    </span>
+  );
 }
 
 export function CopyText({

@@ -125,8 +125,9 @@ export async function LanguageNotice({ locale }: { locale: Locale }) {
   if (localeConfigs[locale].status === "complete") return null;
   const t = await getTranslations("common");
   return (
-    <div role="note" className="border-b bg-muted px-4 py-2 text-center text-sm">
-      {localeConfigs[locale].status === "beta" ? t("betaTranslation") : t("languageNotReady")}
-    </div>
+    // A landmark (aside), so screen-reader users can find it and every part of the page sits in a landmark.
+    <aside className="border-b bg-muted px-4 py-2 text-center text-sm">
+      <p role="note">{localeConfigs[locale].status === "beta" ? t("betaTranslation") : t("languageNotReady")}</p>
+    </aside>
   );
 }

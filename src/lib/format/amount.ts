@@ -1,3 +1,4 @@
+import { decimalSeparator, numberFormat } from "./intl";
 /**
  * Formats a raw on-chain integer amount without floating-point loss (rounds half up).
  * formatAmount("1234567890000000000000", 18, "en") → "1,234.5679"
@@ -19,10 +20,9 @@ export function formatAmount(raw: string, decimals: number, locale: string, maxF
   const whole = value / base;
   const fraction = shownDecimals > 0 ? (value % base).toString().padStart(shownDecimals, "0").replace(/0+$/, "") : "";
 
-  const wholeText = new Intl.NumberFormat(locale, { useGrouping: true }).format(whole);
-  const decimalSeparator =
-    new Intl.NumberFormat(locale).formatToParts(1.1).find((part) => part.type === "decimal")?.value ?? ".";
-  const text = fraction ? `${wholeText}${decimalSeparator}${fraction}` : wholeText;
+  const wholeText = numberFormat(locale, { useGrouping: true }).format(whole);
+  const separator = decimalSeparator(locale);
+  const text = fraction ? `${wholeText}${separator}${fraction}` : wholeText;
   return negative && value !== 0n ? `-${text}` : text;
 }
 

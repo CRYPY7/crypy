@@ -249,7 +249,7 @@ export function ActivityView({ owner, initial, hiddenTokens, names, strings: s, 
             ))}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <label className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border px-3 text-sm sm:max-w-sm">
+          <label className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border px-3 text-sm sm:max-w-sm focus-within:ring-2 focus-within:ring-ring">
             <Search aria-hidden="true" className="size-4 text-muted-foreground" />
             <span className="sr-only">{s.search}</span>
             <input

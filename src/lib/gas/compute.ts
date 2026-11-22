@@ -1,3 +1,4 @@
+import { numberFormat } from "@/lib/format/intl";
 /**
  * Gas Tracker maths (M7), pure and chain-family neutral. Input: a chain's fee history (eth_feeHistory shape, already
  * parsed to numbers in wei). Output: three speeds, the base fee, a trend line and the cost of common actions.
@@ -88,7 +89,7 @@ export function actionCost(action: GasAction, priceGwei: number, coinUsd: number
 /** "0.37", "8.3", "0.05", "12": readable gwei with a few significant digits. */
 export function formatGwei(value: number, locale = "en"): string {
   const digits = value >= 10 ? 0 : value >= 1 ? 1 : value >= 0.01 ? 3 : 4;
-  return value.toLocaleString(locale, { maximumFractionDigits: digits, minimumFractionDigits: 0 });
+  return numberFormat(locale, { maximumFractionDigits: digits, minimumFractionDigits: 0 }).format(value);
 }
 
 /** What a chain-family adapter returns for the Gas Tracker. */
@@ -110,5 +111,5 @@ export function formatFeeUsd(usd: number, locale = "en"): string {
     usd > 0 && usd < 1
       ? { style: "currency", currency: "USD", maximumSignificantDigits: 2 }
       : { style: "currency", currency: "USD" };
-  return new Intl.NumberFormat(locale, options).format(usd);
+  return numberFormat(locale, options).format(usd);
 }

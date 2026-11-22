@@ -140,7 +140,8 @@ export function GasTracker({
         <h2 id="gas-costs" className="mb-3 text-base font-semibold">
           {s.costsTitle}
         </h2>
-        <div className="overflow-x-auto">
+        {/* Scrolls sideways on phones; focusable so keyboard users can scroll it too. */}
+        <div tabIndex={0} role="group" aria-labelledby="gas-costs" className="overflow-x-auto">
           <table className="w-full min-w-[36rem] text-sm">
             <thead>
               <tr className="text-xs text-muted-foreground">

@@ -21,7 +21,8 @@ export default async function Page() {
   return (
     <ToolPage tool={tool} locale={locale} wide>
       {/* Live fees: rendered per request (cached ~10 s), so the static page never shows old numbers. */}
-      <Suspense fallback={<div className="h-64 animate-pulse rounded-xl bg-muted" />}>
+      {/* At least one screen tall, so the text below doesn't jump when the fees arrive. */}
+      <Suspense fallback={<div aria-hidden="true" className="min-h-[100svh] animate-pulse rounded-xl bg-muted" />}>
         <GasTrackerWorkspace locale={locale} />
       </Suspense>
     </ToolPage>

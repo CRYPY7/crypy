@@ -489,7 +489,7 @@ function AssetPicker({
         </div>
       ))}
       {!full && (
-        <div className="rounded-xl border border-dashed px-3 py-2.5">
+        <div className="rounded-xl border border-dashed px-3 py-2.5 focus-within:ring-2 focus-within:ring-ring">
           <form
             className="flex gap-2"
             onSubmit={(e) => {

@@ -19,7 +19,7 @@ export function GasWidget({
   const { report } = useGas(null);
   if (!report || report.chains.length === 0) return null;
   return (
-    <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-xl border bg-card px-4 py-2.5 text-sm">
+    <div className="inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-xl border bg-card px-4 py-2.5 text-sm">
       <span className="flex items-center gap-1.5 text-muted-foreground">
         <Fuel aria-hidden="true" className="size-4 text-primary" />
         {labels.title}

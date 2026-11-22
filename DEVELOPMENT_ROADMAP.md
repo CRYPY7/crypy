@@ -199,6 +199,7 @@ mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page 
 | M8 Alerts                     | Running the checker and bot on several servers at once (needs a shared lock; one server per database and bot token for now)                                                                                                                                      | When scaling past one VPS               |
 | Server stability              | Outbound HTTP/2 (Node 26 default) turned off after it crashed the server on Windows; re-test HTTP/2 on a later Node/undici and on the Linux VPS before turning it back on                                                                                        | Before launch (M9)                      |
 | Server stability              | Trace the harmless "unhandledRejection … getEthBalance … zero data" log line from free nodes                                                                                                                                                                     | M9 security review                      |
+| M9 Speed                      | Lighthouse mobile ≥ 90 on every page: address and transaction pages score 76–81 in simulation (live content streams in; measured LCP 1.2–1.5 s), Token Security tool page 87. Re-measure with PageSpeed Insights on the production server, then decide           | M9 deploy                               |
 
 ## M5.2 — Token Security: finishing parts — 🟡 built 2026-11-20
 
@@ -275,7 +276,9 @@ Urdu + Arabic translations & RTL QA; security review; accessibility & performanc
 
 - **Part 1 — Security review ✅ (2026-11-22):** 6 findings fixed; accepted items and nginx launch requirements in
   ARCHITECTURE.md §10d.
-- **Next parts (proposed order):** accessibility and performance (Lighthouse ≥ 90 on mobile); Urdu translations
+- **Part 2 — Accessibility and speed 🟡 (2026-11-22):** 0 axe violations (WCAG 2.2 AA) with automated tests; layout
+  shifts removed; home, tools and the Gas Tracker at 90–92 on simulated mobile. Open part in the table below.
+- **Next parts (proposed order):** Urdu translations
   (reviewed by the owner) and RTL QA, Arabic as preview until a native review; legal pages (lawyer review before
   launch); VPS setup and deploy (one VPS: nginx, `next start`, PostgreSQL, backups; staging first), then the alerts
   "Done when" on staging and production.
