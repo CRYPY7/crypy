@@ -1,4 +1,5 @@
 import "server-only";
+import { AlchemyBusyError, noteAlchemyLimited, takeAlchemyNow, waitForAlchemy } from "./alchemy-pace";
 import { limitedFetch } from "@/server/http/limit";
 import {
   type Chain,
@@ -307,7 +308,12 @@ export function resetRefusals(): void {
 
 export function rankedFallback(providers: Provider[]): Transport {
   return (options) => {
-    const transports = new Map(providers.map((provider) => [provider.url, meteredHttp(provider)(options)]));
+    // With other providers to turn to, a read never waits for Alchemy's per-second budget; with Alchemy alone
+    // (old-block reads), it waits its turn.
+    const pace: AlchemyPace = providers.some((p) => p.kind !== "alchemy") ? "skip" : "wait";
+    const transports = new Map(
+      providers.map((provider) => [provider.url, meteredHttp(provider, 5_000, pace)(options)]),
+    );
     return createTransport({
       key: "ranked-fallback",
       name: "Ranked fallback",
@@ -402,7 +408,15 @@ export function rankedFallback(providers: Provider[]): Transport {
   };
 }
 
-export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
+/** How a request to Alchemy handles its per-second budget: go to another provider at once, or wait (up to 3 s). */
+export type AlchemyPace = "skip" | "wait";
+const ALCHEMY_MAX_WAIT_MS = 3_000;
+
+function isTooManyRequests(error: unknown): boolean {
+  return error instanceof Error && error.name === "HttpRequestError" && (error as { status?: number }).status === 429;
+}
+
+export function meteredHttp(provider: Provider, timeout = 5_000, pace: AlchemyPace = "wait"): Transport {
   // Free plans often limit batches (dRPC free: 3 per call). Bigger rounds go out as a few parallel calls instead.
   const batchSize = provider.kind === "alchemy" ? 20 : 3;
   const inner = http(provider.url, {
@@ -418,6 +432,12 @@ export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
       async request(args: { method: string; params?: unknown }, requestOptions?: unknown) {
         if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
         if (isCoolingDown(provider)) throw new ProviderCoolingDownError(provider.name);
+        if (provider.kind === "alchemy") {
+          const units = alchemyUnits(args.method);
+          if (pace === "skip") {
+            if (!takeAlchemyNow(units)) throw new AlchemyBusyError();
+          } else await waitForAlchemy(units, ALCHEMY_MAX_WAIT_MS);
+        }
         recordUsage(provider, args.method);
         const started = Date.now();
         try {
@@ -428,7 +448,9 @@ export function meteredHttp(provider: Provider, timeout = 5_000): Transport {
           recordLatency(provider, Date.now() - started);
           return result;
         } catch (error) {
-          if (isUnreachable(error)) coolDown.set(provider.url, Date.now() + COOL_DOWN_MS);
+          // Alchemy's "too many requests" is about this second, not an outage: pause it briefly instead of a minute.
+          if (provider.kind === "alchemy" && isTooManyRequests(error)) noteAlchemyLimited();
+          else if (isUnreachable(error)) coolDown.set(provider.url, Date.now() + COOL_DOWN_MS);
           // A node's own error answer still tells us how fast it is.
           else recordLatency(provider, Date.now() - started);
           throw error;

@@ -7,7 +7,9 @@ import { completeAbove } from "@/lib/activity/evaluate";
 import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import { getOnchainPrices } from "./prices";
 import { discardBody } from "@/server/http/discard";
+import { noteAlchemyLimited, waitForAlchemy } from "./alchemy-pace";
 import {
+  alchemyUnits,
   BudgetExhaustedError,
   type Provider,
   alchemyProvider,
@@ -141,6 +143,7 @@ export function parseAlchemyTransfer(
 
 async function alchemyCall(provider: Provider, params: Record<string, unknown>) {
   if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
+  await waitForAlchemy(alchemyUnits("alchemy_getAssetTransfers"), 4_000);
   recordUsage(provider, "alchemy_getAssetTransfers");
   const response = await limitedFetch(provider.url, {
     method: "POST",
@@ -150,6 +153,7 @@ async function alchemyCall(provider: Provider, params: Record<string, unknown>) 
     cache: "no-store",
   });
   if (!response.ok) {
+    if (response.status === 429) noteAlchemyLimited();
     discardBody(response);
     throw new Error(`Transfers provider responded ${response.status}`);
   }

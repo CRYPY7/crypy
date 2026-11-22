@@ -26,8 +26,38 @@ Last updated: 2026-11-22
 | M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
 | M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
 | M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); parts 2–3 (accounts, alerts) to come     |
+| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                   |
 | M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (Beta, boards 39–41); alerts are not sent until Part 3                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Alchemy per-second pacing (owner decision 2026-11-22)
+
+Alchemy emailed that the account "hit its first rate limit". Its dashboard: 676.5K of 30M monthly CU used (2%), peak
+275.7 of 300 CU per second, in short bursts during test runs. The monthly allowance was never at risk; the per-second
+limit was. Owner decision: stay on the free plan (zero-API-cost rule) and pace requests instead of upgrading.
+
+- **Pacer** (`server/chains/evm/alchemy-pace.ts`): one budget of 250 CU per second for all chains together (Alchemy's
+  limit is per account), each request in a batch counted on its own.
+  - Ordinary reads go to Alchemy only when its budget has room; otherwise straight to the next provider (other free
+    providers, then public nodes), with no waiting and no penalty for Alchemy.
+  - Alchemy-only calls (token list, transfer history, old-block reads) wait their turn (token list up to 2 s per page,
+    history 4 s, old blocks 3 s) and go before ordinary reads. If the wait would be longer, the page says that part
+    isn't available, as before.
+  - If Alchemy still answers "too many requests", it is paused for 2 s (was: skipped for a whole minute, which
+    turned big-wallet token lists into "well-known tokens only" for that minute).
+  - One server log line per minute when pacing did anything: CU used, reads sent elsewhere, waits, refusals.
+- **Tests:** 8 new (budget maths, priority of Alchemy-only calls, pause after 429, and fake-node tests showing a busy
+  Alchemy hands reads to the next provider without being benched). This workspace has no Alchemy key, so the real
+  Alchemy path is checked on the owner's PC (the per-minute log line).
+- Checks here: typecheck, lint, Prettier, unit 282 passed, build passed, browser 139 passed, 7 skipped, 0 failed.
+- **Owner's PC (full check with the real Alchemy key): 139 passed, 7 skipped, 0 failed, no crash. Alchemy answered
+  "too many requests" 0 times** (log: 8,188 and 12,084 CU in the two busiest minutes; 272 and 341 reads sent to other
+  providers; 11 and 14 Alchemy-only calls not sent because the wait would pass their limit). In that run 4 of 62
+  token lists fell back to well-known tokens only (one wallet on 4 chains at the same moment), labelled on the page.
+  More free providers reduce this further. A "socket idle timeout" network error (known since M7, server kept
+  running) appeared again.
+- **Owner actions:** add free providers (dRPC, Ankr, Chainstack, NodeReal, Infura) to `.env.local` to add capacity
+  for free; set an Alchemy usage alert. Later steps already planned: Redis cache on the launch VPS, own nodes.
 
 ## M8 Part 2 — Wallet sign-in, database and Watchlist (design approved 2026-11-21, boards 39–41)
 

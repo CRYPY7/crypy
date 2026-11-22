@@ -5,7 +5,15 @@ import { z } from "zod";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { BalanceCoverage, ChainBalances, RawTokenBalance } from "@/lib/chains/types";
-import { BudgetExhaustedError, type Provider, budgetExhausted, getEvmClient, recordUsage } from "./providers";
+import { noteAlchemyLimited, waitForAlchemy } from "./alchemy-pace";
+import {
+  BudgetExhaustedError,
+  type Provider,
+  alchemyUnits,
+  budgetExhausted,
+  getEvmClient,
+  recordUsage,
+} from "./providers";
 import { logTiming } from "@/server/diagnostics";
 import { discardBody } from "@/server/http/discard";
 
@@ -84,6 +92,8 @@ export async function listTokensFromAlchemy(
     if (pageKey) options.pageKey = pageKey;
     // Metered like every other request: once today's budget is used, fall back to well-known tokens.
     if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
+    // Shares Alchemy's per-second budget; waits at most 2 s (the whole list has a 5 s time budget).
+    await waitForAlchemy(alchemyUnits("alchemy_getTokenBalances"), 2_000);
     recordUsage(provider, "alchemy_getTokenBalances");
     const response = await limitedFetch(provider.url, {
       method: "POST",
@@ -98,6 +108,7 @@ export async function listTokensFromAlchemy(
       cache: "no-store",
     });
     if (!response.ok) {
+      if (response.status === 429) noteAlchemyLimited();
       discardBody(response);
       throw new Error(`Token list provider responded ${response.status}`);
     }

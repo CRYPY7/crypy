@@ -421,6 +421,13 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   Batches: up to 20 per call for Alchemy, 3 for others (free-plan limits). `archiveClient(chain)` (Alchemy only) serves
   reads at old blocks.
 - `server/chains/evm/prices.ts` + `dex.ts`: on-chain USD prices. Round 1 finds pools (v2 `getPair`, v3 `getPool` per fee tier) against stablecoins and the wrapped native coin; round 2 reads quote-side balances and v2 balances / v3 `slot0`. Stablecoins = $1; wrapped native priced from stablecoin pools first; deepest pool ≥ $5,000 quote side wins.
+- Alchemy per-second budget (`server/chains/evm/alchemy-pace.ts`): one token bucket of 250 CU/s per server process
+  for every chain (the free plan allows 300 CU/s per account). `meteredHttp(provider, timeout, pace)`: "skip" inside
+  a rotation with other providers (no budget → `AlchemyBusyError`, next provider at once, no cool-down), "wait"
+  where Alchemy is the only source (archive client, health checks; up to 3 s). Alchemy-only HTTP calls (token list,
+  transfers) use `waitForAlchemy`; reservations may put the bucket into debt, so they go before ordinary reads.
+  An Alchemy 429 pauses it for 2 s instead of the 60 s outage cool-down. With several server processes, each has its
+  own bucket: lower `ALCHEMY_CU_PER_SECOND` accordingly or move it to the shared Redis store.
 - Adapter methods: `getUsdPrices` (keys `native` and lower-case token addresses), `checkProviders`.
 
 ## 11a. Balances (M3)
