@@ -11,7 +11,8 @@ MODE="${1:-on}"
 remove_web_rules() {
   # Delete every existing rule for ports 80/443 (numbered from the bottom so numbers stay valid).
   while true; do
-    n="$(ufw status numbered | grep -E '(80,443/tcp|Nginx Full|80/tcp|443/tcp)' | head -1 | sed -E 's/^\[ *([0-9]+)\].*/\1/')"
+    # "|| true": when no rule is left, grep finds nothing; without it the strict mode above would stop the script here.
+    n="$(ufw status numbered | grep -E '(80,443/tcp|Nginx Full|80/tcp|443/tcp)' | head -1 | sed -E 's/^\[ *([0-9]+)\].*/\1/' || true)"
     [ -n "$n" ] || break
     ufw --force delete "$n" >/dev/null
   done
@@ -31,11 +32,15 @@ echo "$V6" | grep -qE '^[0-9a-f:]+/[0-9]+$' || { echo "Couldn't download Cloudfl
 
 ufw allow OpenSSH >/dev/null
 remove_web_rules
+trap 'echo "Something failed; reopening the web ports so the site stays up."; ufw allow "Nginx Full" >/dev/null' ERR
 for range in $V4 $V6; do
   echo "$range" | grep -qE '^[0-9a-f.:]+/[0-9]+$' || continue
   ufw allow proto tcp from "$range" to any port 80,443 comment "Cloudflare" >/dev/null
 done
 ufw --force enable >/dev/null
+trap - ERR
+COUNT="$(ufw status | grep -c 'Cloudflare' || true)"
+[ "$COUNT" -gt 0 ] || { echo "No Cloudflare rules were added; reopening the web ports."; ufw allow "Nginx Full"; exit 1; }
 # Refresh nginx's list of Cloudflare addresses too (visitor address for rate limits).
 DOMAIN="$(ls /etc/letsencrypt/live 2>/dev/null | grep -v README | head -1)"
 bash /opt/crypy/app/scripts/server/nginx-site.sh "${DOMAIN:-crypy.org}" >/dev/null
