@@ -1,0 +1,84 @@
+{
+  "title": "Envenenamiento de direcciones: la estafa de la dirección parecida",
+  "seoTitle": "Envenenamiento de direcciones: la estafa | CRYPY",
+  "description": "Los estafadores envían transferencias diminutas desde direcciones parecidas a las tuyas para que copies la equivocada. Así funciona y así se evita.",
+  "summary": "Transferencias diminutas desde direcciones parecidas a las tuyas, para que copies la equivocada.",
+  "inShort": [
+    "Los estafadores crean direcciones que empiezan y terminan como las que tú usas.",
+    "Envían transferencias diminutas o de valor cero para que la dirección falsa aparezca en tu historial.",
+    "Nunca copies una dirección de tu historial de transacciones: compara cada carácter."
+  ],
+  "sections": [
+    {
+      "id": "how",
+      "heading": "Cómo funciona la estafa",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Las direcciones son largas, así que la mayoría de la gente solo mira los primeros y los últimos caracteres. Los estafadores generan direcciones que coinciden en esos caracteres con una dirección que usas, como la dirección de depósito de un exchange o la billetera de un amigo."
+        },
+        {
+          "type": "p",
+          "text": "Luego hacen que esa dirección parecida aparezca en tu historial, con una transferencia de cero o de una cantidad diminuta, o con un token falso. La próxima vez que copies una dirección de tu historial, quizá copies la suya y le envíes dinero real al estafador."
+        }
+      ]
+    },
+    {
+      "id": "example",
+      "heading": "Cómo se ve",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Envías USDT a 0x7a3F…9c21. Minutos después, tu historial muestra una transferencia de 0 USDT con 0x7a3F…9c21, pero los caracteres del medio son distintos. La cantidad es cero, así que parece que no pasó nada. Esa entrada es el cebo."
+        }
+      ]
+    },
+    {
+      "id": "avoid",
+      "heading": "Cómo evitarlo",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Copia las direcciones desde la fuente original (la página de depósito del exchange, el propio mensaje de la persona), nunca desde tu historial.",
+            "Compara la dirección completa, no solo el principio y el final.",
+            "Guarda las direcciones de confianza en la libreta de direcciones de tu billetera.",
+            "Para una cantidad grande a una dirección nueva, envía primero una cantidad pequeña y pide a quien recibe que confirme que llegó."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Las transferencias inesperadas de valor cero o diminutas son una señal de alerta, no un error. No interactúes con ellas."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "Cómo lo marca CRYPY",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El [Analizador de direcciones](tool:address-analyzer) lista las transferencias de una billetera y marca el probable envenenamiento: transferencias de cero o diminutas desde una dirección que empieza y termina como la propia billetera, o como una dirección a la que la billetera pagó. Es un aviso heurístico, así que puede pasar por alto algunos casos o marcar uno inofensivo."
+        },
+        {
+          "type": "tip",
+          "text": "Las transferencias de spam y de envenenamiento se ocultan por defecto para que tu historial se lea mejor. Un interruptor las muestra."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Una transferencia de valor cero puede quitarme dinero?",
+      "a": "No. No puede mover tus fondos por sí misma. El peligro es copiar más tarde la dirección parecida."
+    },
+    {
+      "q": "¿Por qué alguien puede enviar una transferencia que parece salir de mi billetera?",
+      "a": "Algunos contratos de tokens permiten que cualquiera emita un registro de transferencia de cantidad cero con cualquier dirección. No mueve nada, pero aparece en los historiales."
+    },
+    {
+      "q": "¿El checksum me protege?",
+      "a": "No. Una dirección parecida es una dirección válida, así que pasa el checksum. Lo único que ayuda es comparar la dirección completa."
+    }
+  ]
+}

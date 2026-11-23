@@ -1,0 +1,83 @@
+{
+  "title": "Wei, gwei e ether: as unidades cripto explicadas",
+  "seoTitle": "Wei, gwei e ether: unidades cripto explicadas | CRYPY",
+  "description": "Como wei, gwei e ether se relacionam, por que o gás é cotado em gwei e por que valores de tokens dependem das casas decimais. Conversões de ETH, BNB e POL.",
+  "summary": "As unidades por trás de todo valor e preço do gás, com conversões rápidas.",
+  "inShort": [
+    "1 ETH = 1.000.000.000 gwei = 1.000.000.000.000.000.000 wei.",
+    "Os preços do gás usam gwei porque os números ficam legíveis.",
+    "Os tokens têm as próprias casas decimais: 6 para o USDC na Ethereum, 18 para a maioria dos outros."
+  ],
+  "sections": [
+    {
+      "id": "units",
+      "heading": "As unidades",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**wei:** a menor unidade. As blockchains guardam todo valor como um número inteiro de wei.",
+            "**gwei:** 1.000.000.000 wei (10⁹). Os preços do gás são cotados em gwei.",
+            "**ether (ETH):** 1.000.000.000.000.000.000 wei (10¹⁸)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "As mesmas unidades valem para o BNB na BNB Chain e o POL na Polygon: 1 BNB são 10¹⁸ wei, e o gás lá também é cotado em gwei."
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "heading": "Conversões rápidas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "0,001 ETH = 1.000.000 gwei",
+            "1 gwei = 0,000000001 ETH",
+            "Um preço do gás de 20 gwei × 21.000 de gás = 420.000 gwei = 0,00042 ETH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "heading": "Casas decimais dos tokens",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Os tokens guardam valores na própria menor unidade, e cada token diz quantas **casas decimais** usa. A maioria usa 18, como o ETH. USDC e USDT na Ethereum usam 6, então 1 USDT é guardado como 1.000.000. O mesmo token em outra rede pode usar casas decimais diferentes: o USDT na BNB Chain usa 18."
+        },
+        {
+          "type": "warning",
+          "text": "Os valores brutos nos dados das transações estão na menor unidade. Lê-los com as casas decimais erradas faz um valor parecer um trilhão de vezes maior ou menor do que é."
+        }
+      ]
+    },
+    {
+      "id": "convert",
+      "heading": "Converta com exatidão",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O [Conversor de unidades](tool:unit-converter) converte entre wei, gwei, ETH e BNB com exatidão, sem arredondar, inclusive valores em notação científica. Funciona no seu navegador; nada é enviado."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Por que não usar simplesmente ETH nos preços do gás?",
+      "a": "Os preços do gás em ETH seriam números como 0,000000015. O gwei os mantém legíveis: 15 gwei."
+    },
+    {
+      "q": "De onde vem o nome wei?",
+      "a": "É uma homenagem a Wei Dai, um pioneiro da criptografia. Gwei significa giga-wei: um bilhão de wei."
+    },
+    {
+      "q": "Todos os tokens usam 18 casas decimais?",
+      "a": "Não. A maioria usa, mas as stablecoins muitas vezes usam 6 na Ethereum. Sempre confira as casas decimais do token antes de ler valores brutos."
+    }
+  ]
+}

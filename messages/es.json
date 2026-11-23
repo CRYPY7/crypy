@@ -1,1 +1,3220 @@
-{}
+{
+  "meta": {
+    "siteName": "CRYPY",
+    "title": "CRYPY — Herramientas de seguridad e investigación para billeteras",
+    "description": "Revisa cualquier billetera, token o transacción antes de confiar en ella, en Ethereum, BNB Chain, Base, Arbitrum y Polygon. Gratis y sin custodia."
+  },
+  "common": {
+    "skipToContent": "Saltar al contenido",
+    "status": {
+      "live": "Disponible",
+      "beta": "Beta",
+      "soon": "Próximamente"
+    },
+    "arrivesIn": "Previsto para la etapa {milestone}",
+    "open": "Abrir",
+    "youNeed": "Necesitas:",
+    "betaTranslation": "Traducción beta: aún no la ha revisado un hablante nativo",
+    "languageNotReady": "Este idioma todavía se está traduciendo, así que por ahora ves el texto en inglés.",
+    "beta": "Beta",
+    "betaSiteLabel": "CRYPY está en beta: las funciones pueden cambiar y los resultados pueden estar incompletos."
+  },
+  "nav": {
+    "main": "Principal",
+    "primary": "Navegación principal",
+    "footer": "Pie de página",
+    "home": "Inicio",
+    "allTools": "Todas las herramientas",
+    "tools": "Herramientas",
+    "portfolio": "Portafolio",
+    "watchlist": "Seguimiento",
+    "alerts": "Alertas",
+    "gas": "Gas",
+    "settings": "Ajustes",
+    "language": "Idioma",
+    "switchTheme": "Cambiar entre tema oscuro y claro",
+    "homeLink": "Inicio de CRYPY",
+    "openWallet": "Billetera",
+    "toolsSidebar": "Herramientas",
+    "collapseSidebar": "Contraer la barra lateral",
+    "expandSidebar": "Expandir la barra lateral",
+    "collapse": "Contraer",
+    "soon": "Pronto",
+    "breadcrumb": "Ruta de navegación",
+    "recent": "Visto recientemente en este dispositivo",
+    "clearRecent": "Borrar",
+    "new": "Nuevo",
+    "beta": "Beta",
+    "learn": "Aprende",
+    "status": "Estado"
+  },
+  "categories": {
+    "all": "Todas",
+    "security": "Seguridad",
+    "wallet": "Billetera",
+    "network": "Red",
+    "monitoring": "Monitoreo",
+    "utilities": "Utilidades"
+  },
+  "search": {
+    "label": "Busca una dirección de billetera, un contrato de token o un hash de transacción",
+    "placeholder": "Dirección 0x…, contrato de token o hash de transacción",
+    "compactPlaceholder": "Dirección, token o hash de tx",
+    "submit": "Analizar",
+    "detects": "Detecta automáticamente:",
+    "types": {
+      "address": "Dirección de billetera",
+      "token": "Contrato de token",
+      "tx": "Hash de transacción"
+    },
+    "result": {
+      "invalid": "Esto no parece una dirección ni un hash de transacción. Las direcciones empiezan con 0x seguido de 40 caracteres; los hashes de transacción tienen 64.",
+      "empty": "Primero pega una dirección o un hash de transacción.",
+      "bad-checksum": "Esta dirección no coincide con su checksum, así que probablemente se cambió o se escribió mal un carácter. Cópiala otra vez desde la fuente original y nunca le envíes fondos.",
+      "not-found-tx": "No encontramos esta transacción en ninguna red compatible. Puede estar en otra red o no haberse enviado todavía.",
+      "unavailable": "No pudimos conectar con la blockchain en este momento. Inténtalo de nuevo en un minuto.",
+      "rate-limited": "Demasiadas búsquedas en poco tiempo. Espera un minuto e inténtalo de nuevo.",
+      "error": "Algo salió mal. Inténtalo de nuevo.",
+      "choose": "Se encontró en más de una cadena. ¿Cuál quieres abrir?"
+    },
+    "checking": "Revisando todas las cadenas compatibles…",
+    "partial": "No se pudo revisar {chains} en este momento, así que los resultados pueden estar incompletos.",
+    "lookupAnyway": "Buscarla de todos modos",
+    "close": "Cerrar",
+    "found": {
+      "title": "Encontrada en {count} de {total} cadenas",
+      "overview": "Abrir el resumen de todas las cadenas",
+      "inactive": "Sin actividad en: {chains}",
+      "sentTx": "Ha enviado transacciones",
+      "holds": "Tiene {amount} {symbol}",
+      "noBalance": "Sin saldo de la moneda",
+      "open": {
+        "token": "Página del token",
+        "account": "Saldos",
+        "contract": "Contrato"
+      },
+      "kinds": {
+        "account": "Billetera",
+        "delegated": "Billetera (EIP-7702)",
+        "token": "Contrato de token",
+        "contract": "Contrato inteligente",
+        "tx": "Transacción"
+      }
+    }
+  },
+  "home": {
+    "eyebrow": "Seguridad e investigación de billeteras · Gratis · Sin custodia",
+    "title": "Revisa cualquier billetera, token o transacción antes de confiar en ella.",
+    "subtitle": "Pega una dirección, un contrato de token o un hash de transacción. CRYPY identifica qué es y te muestra saldos, riesgos y actividad con datos reales de la blockchain, sin conectar tu billetera.",
+    "trust": {
+      "seedTitle": "Nunca te pide tu frase semilla",
+      "seedText": "Jamás pedimos claves privadas. Solo lectura por defecto.",
+      "connectTitle": "No hace falta conectar nada",
+      "connectText": "Analiza cualquier dirección pública sin conectar una billetera.",
+      "sourceTitle": "Cada resultado muestra su fuente",
+      "sourceText": "Datos reales de la blockchain, con fecha, hora y origen."
+    },
+    "goals": {
+      "title": "¿Qué quieres revisar?",
+      "subtitle": "Elige una pregunta y abriremos la herramienta adecuada."
+    },
+    "allTools": {
+      "title": "Todas las herramientas",
+      "filterLabel": "Filtrar herramientas por categoría"
+    },
+    "worksOn": "Funciona en",
+    "gas": {
+      "title": "Gas ahora",
+      "send": "{usd} por envío",
+      "open": "Rastreador de gas →",
+      "gwei": "{value} gwei"
+    }
+  },
+  "tools": {
+    "token-security": {
+      "name": "Escáner de seguridad de tokens",
+      "question": "¿Es seguro comprar este token?",
+      "description": "Señales de riesgo de honeypot, impuestos, emisión y propiedad para cualquier contrato de token.",
+      "input": "Dirección del contrato del token",
+      "cta": "Revisar un token",
+      "features": [
+        "Señales de riesgo agrupadas por gravedad: crítica, alta, media y baja",
+        "Prueba de honeypot: ¿de verdad se puede vender el token?",
+        "Impuesto de compra y venta, permisos de emisión, privilegios del dueño, lista negra y funciones de pausa",
+        "Revisión de contratos actualizables y de concentración de holders",
+        "Cada hallazgo marcado como verificado o heurístico, con su fuente y su evidencia",
+        "Una lista de las revisiones que se hicieron y de las que no están disponibles"
+      ],
+      "howTo": [
+        "Pega la dirección del contrato de un token (0x…). Elige la cadena si la conoces.",
+        "CRYPY simula una compra, una transferencia y una venta, y lee los poderes del dueño, la liquidez y más.",
+        "Lee los hallazgos por gravedad. Cada uno indica cómo se comprobó: verificado, simulado, heurístico o de un proveedor externo."
+      ],
+      "faq": [
+        {
+          "q": "¿CRYPY puede decirme que un token es seguro?",
+          "a": "No. CRYPY muestra los riesgos que pudo revisar y cómo comprobó cada uno. Pasar las revisiones no demuestra que un token sea honesto, y los dueños pueden cambiar comisiones o el trading más adelante."
+        },
+        {
+          "q": "¿Cómo funciona la prueba de compraventa?",
+          "a": "CRYPY ejecuta un pequeño contrato de prueba dentro de una llamada de solo lectura contra el pool real del exchange: compra, envía una parte a otra billetera y vende. No se firma ni se envía nada, y no hace falta ninguna billetera."
+        },
+        {
+          "q": "¿Qué significa \"heurístico\"?",
+          "a": "Que se dedujo del código del contrato, por ejemplo, que existe una función de emisión. Muestra lo que es posible, no lo que ha pasado."
+        },
+        {
+          "q": "¿De dónde salen los números de holders?",
+          "a": "De GoPlus Security, un proveedor externo, y se muestran con su nombre. CRYPY todavía no cuenta los holders por su cuenta."
+        },
+        {
+          "q": "¿Qué cadenas y exchanges cubre?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon. La prueba de compraventa usa los exchanges principales de cada cadena, con pools v2 y v3 (Uniswap, PancakeSwap, SushiSwap, Biswap y QuickSwap, según la cadena); la liquidez se lee de esos mismos exchanges y de algunos más en BNB Chain."
+        }
+      ],
+      "seoTitle": "Escáner de tokens: honeypot, impuestos y rug pull | CRYPY",
+      "seoDescription": "Revisa gratis si un token es estafa: CRYPY simula una compraventa para detectar honeypots e impuestos, y revisa al dueño y la liquidez en 5 cadenas."
+    },
+    "approval-checker": {
+      "name": "Verificador de aprobaciones",
+      "question": "¿Quién puede gastar mis tokens?",
+      "description": "Mira qué contratos pueden gastar tus tokens y elimina los permisos riesgosos desde tu billetera.",
+      "input": "La dirección de tu billetera",
+      "cta": "Revisar aprobaciones",
+      "features": [
+        "Aprobaciones de tokens y permisos de NFT para \"aprobar todo\"",
+        "Aprobaciones ilimitadas y gastadores riesgosos resaltados",
+        "Valor en riesgo de cada aprobación",
+        "Revoca una aprobación a la vez, siempre confirmada en tu propia billetera",
+        "Indicación clara de lo que se revisó y de lo que puede faltar"
+      ],
+      "seoTitle": "Verificador de aprobaciones: encuentra y revoca | CRYPY",
+      "seoDescription": "Mira qué contratos pueden gastar tus tokens en Ethereum, BNB Chain, Base, Arbitrum y Polygon, y revoca las aprobaciones riesgosas en tu billetera.",
+      "howTo": [
+        "Pega una dirección de billetera, o conecta tu billetera y elige \"Revisar mi billetera conectada\". Conectarla es opcional y nunca te pide firmar.",
+        "CRYPY encuentra las aprobaciones de la billetera en cada cadena compatible y lee cada una en la blockchain.",
+        "Empieza por \"Requiere atención\": cada aprobación muestra quién puede gastar, cuánto puede tomar y por qué se marcó.",
+        "Para eliminar una, haz clic en Revocar y confirma la transacción en tu propia billetera. Cuesta una pequeña comisión de red."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué es una aprobación de token?",
+          "a": "Un permiso que le diste a un contrato, como un exchange, para mover un token desde tu billetera. Sigue activo hasta que lo eliminas, incluso si dejas de usar la aplicación."
+        },
+        {
+          "q": "¿Por qué son riesgosas las aprobaciones ilimitadas?",
+          "a": "Una aprobación ilimitada permite que el gastador tome todo ese token, incluidos los que recibas más adelante. Si el contrato es hackeado o malicioso, puede moverlos sin volver a pedirte permiso."
+        },
+        {
+          "q": "¿Revocar cuesta algo?",
+          "a": "Sí, una pequeña comisión de red, porque revocar es una transacción en la blockchain. CRYPY muestra la comisión y prueba la transacción antes de que tu billetera te pida confirmarla."
+        },
+        {
+          "q": "¿CRYPY puede mover mis fondos?",
+          "a": "No. CRYPY nunca tiene claves. Revocar solo pone el permiso en cero, y tu billetera siempre te muestra la transacción para que la apruebes o la rechaces."
+        },
+        {
+          "q": "¿La lista está completa?",
+          "a": "No siempre. CRYPY combina varias fuentes gratuitas y lee cada resultado en la blockchain, pero pueden faltar algunas aprobaciones antiguas, por ejemplo, de tokens que ya no tienes. La página indica qué se revisó."
+        },
+        {
+          "q": "¿Qué cadenas cubre?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon."
+        }
+      ]
+    },
+    "balance-scanner": {
+      "name": "Escáner de saldos",
+      "question": "¿Qué hay en esta billetera?",
+      "description": "Saldos de monedas y tokens con su valor en USD en las cadenas compatibles.",
+      "input": "Cualquier dirección de billetera",
+      "cta": "Ver saldos",
+      "features": [
+        "Saldos de monedas y tokens en Ethereum, BNB Chain, Base, Arbitrum y Polygon a la vez",
+        "Valor en USD cuando existe un precio confiable, nunca inventado",
+        "Totales por cadena y combinados",
+        "Posibles tokens spam ocultos por defecto, con el motivo",
+        "Cada token enlaza a su página",
+        "Sin conectar tu billetera"
+      ],
+      "howTo": [
+        "Pega cualquier dirección de billetera (empieza con 0x).",
+        "Abre los resultados: los saldos de todas las cadenas compatibles se cargan juntos.",
+        "Haz clic en un token para ver sus detalles; despliega los tokens ocultos para ver qué se filtró y por qué."
+      ],
+      "faq": [
+        {
+          "q": "¿Necesito conectar mi billetera?",
+          "a": "No. Los saldos son públicos en la blockchain, así que cualquier dirección se puede revisar sin conectar ni firmar nada."
+        },
+        {
+          "q": "¿De dónde salen los saldos y los precios?",
+          "a": "Los saldos se leen directamente de la blockchain. Los precios en USD también se leen en la cadena, de pools de PancakeSwap y Uniswap con suficiente liquidez (al menos 5.000 $ del lado de la cotización). Los tokens sin un pool así se listan, pero no se suman al total."
+        },
+        {
+          "q": "¿Por qué algunos tokens están ocultos?",
+          "a": "Los estafadores envían tokens sin valor a muchas billeteras, a menudo con un sitio web en el nombre, para atraer a la gente a sitios falsos. CRYPY oculta los tokens con ese aspecto y muestra el motivo. Nunca visites enlaces que aparezcan en nombres de tokens."
+        },
+        {
+          "q": "¿Por qué el valor es distinto al de mi aplicación de billetera?",
+          "a": "Las aplicaciones de billetera pueden usar otras fuentes de precios, actualizarse en otro momento o incluir tokens sin un precio confiable en la cadena. CRYPY nunca inventa un precio."
+        },
+        {
+          "q": "¿Qué cadenas se revisan?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon. Una misma dirección puede tener monedas y tokens distintos en cada cadena, así que cada cadena se muestra por separado."
+        }
+      ],
+      "seoTitle": "Verificador de saldos de billetera en USD | CRYPY",
+      "seoDescription": "Revisa los saldos de monedas y tokens de cualquier billetera, con su valor en USD, en Ethereum, BNB Chain, Base, Arbitrum y Polygon. Gratis."
+    },
+    "address-analyzer": {
+      "name": "Analizador de direcciones",
+      "question": "¿Qué ha hecho esta billetera?",
+      "description": "Todas las transferencias de monedas, tokens y NFT de cualquier dirección, con su primera y última actividad y avisos de estafa.",
+      "input": "Cualquier dirección de billetera",
+      "cta": "Ver actividad",
+      "features": [
+        "Todas las monedas, tokens y NFT enviados y recibidos, de lo más nuevo a lo más antiguo",
+        "Primera y última actividad",
+        "Avisos de transferencias con direcciones parecidas (envenenamiento de direcciones)",
+        "Filtros, búsqueda y exportación a CSV",
+        "Spam probable oculto, nunca borrado"
+      ],
+      "seoTitle": "Analizador de direcciones: historial completo | CRYPY",
+      "seoDescription": "Todas las transferencias de monedas, tokens y NFT de cualquier billetera, su primera y última actividad, y avisos de spam y envenenamiento. Gratis.",
+      "howTo": [
+        "Pega cualquier dirección de billetera. No hace falta conectar tu billetera.",
+        "Por defecto, CRYPY analiza las cadenas donde se ha usado la dirección; puedes elegir otras.",
+        "Recorre las transferencias por día, filtra por enviadas o recibidas, monedas, tokens o NFT, y busca por token o por dirección.",
+        "Carga la actividad más antigua o exporta la lista a CSV."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué es el envenenamiento de direcciones?",
+          "a": "Los estafadores envían transferencias diminutas o de valor cero desde una dirección que empieza y termina como una que tú usas, con la esperanza de que la copies de tu historial la próxima vez. CRYPY marca estas transferencias parecidas. Compara siempre la dirección completa antes de enviar."
+        },
+        {
+          "q": "¿Por qué hay actividad oculta?",
+          "a": "Los tokens spam y las transferencias probablemente falsas se ocultan por defecto para que la lista se lea mejor. Se cuentan, nunca se borran, y un interruptor los muestra."
+        },
+        {
+          "q": "¿Hasta cuándo llega el historial?",
+          "a": "Es el historial completo de transferencias de monedas, tokens y NFT, cargado página por página. Si la fuente del historial completo no está disponible, la página lo dice y muestra solo las transferencias recientes de tokens."
+        },
+        {
+          "q": "¿Se incluyen las transferencias hechas por contratos?",
+          "a": "En Ethereum y Polygon se incluyen las monedas enviadas por contratos (transferencias internas). En BNB Chain, Base y Arbitrum pueden faltar, y la página lo indica."
+        },
+        {
+          "q": "¿Qué cadenas cubre?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon."
+        }
+      ]
+    },
+    "portfolio": {
+      "name": "Seguimiento de portafolio",
+      "question": "Todas mis billeteras juntas",
+      "description": "Mira todas tus billeteras juntas: un total entre billeteras y cadenas, por cadena, por billetera y por token, con revisiones rápidas de seguridad.",
+      "input": "Hasta 20 direcciones",
+      "cta": "Abrir portafolio",
+      "features": [
+        "Hasta 20 billeteras con tus propias etiquetas, sin crear una cuenta",
+        "Se guarda solo en este navegador; nada se almacena en el servidor de CRYPY",
+        "Un total entre Ethereum, BNB Chain, Base, Arbitrum y Polygon",
+        "Por cadena, por billetera y principales tenencias combinadas entre cadenas",
+        "Aprobaciones que requieren atención y tokens que GoPlus marca, por billetera",
+        "Cambio desde tu última visita y exportación a CSV"
+      ],
+      "howTo": [
+        "Pulsa Añadir billetera y pega una dirección pública (0x…). Si quieres, ponle una etiqueta como Principal o Ahorros.",
+        "Añade más billeteras, hasta 20. El portafolio se guarda en este navegador, así que estará aquí la próxima vez.",
+        "Abre cualquier billetera para ver todos sus saldos, aprobaciones y actividad, o exporta las tenencias a CSV."
+      ],
+      "faq": [
+        {
+          "q": "¿Tengo que conectar una billetera o crear una cuenta?",
+          "a": "No. El portafolio lee saldos públicos de la blockchain. Nunca pide claves, frases semilla ni firmas. Si tu billetera está conectada, puedes añadir su dirección con un clic."
+        },
+        {
+          "q": "¿Dónde se guarda mi portafolio?",
+          "a": "Solo en este navegador (almacenamiento local). Tu lista de billeteras y etiquetas nunca se envía a CRYPY como lista ni se guarda en su servidor; los saldos de cada billetera se leen dirección por dirección y no se guardan. Si borras los datos del navegador, se borra el portafolio."
+        },
+        {
+          "q": "¿Qué significa \"desde tu última visita\"?",
+          "a": "La diferencia entre el valor total de hoy y el total de la última vez que abriste el portafolio aquí. Refleja cambios de precio y transferencias, así que no es ganancia ni pérdida."
+        },
+        {
+          "q": "¿Por qué algunos tokens se combinan entre cadenas y otros no?",
+          "a": "ETH, BNB, POL y tokens conocidos como USDT y USDC se combinan porque CRYPY verifica sus direcciones en cada cadena. Los demás tokens quedan en una fila por cadena, para que un token imitador nunca se mezcle con el real."
+        },
+        {
+          "q": "¿Qué tokens se revisan en busca de riesgos?",
+          "a": "Los tokens de más valor de cada billetera (hasta 8, sin contar los conocidos) se revisan en GoPlus para detectar un honeypot o un impuesto de venta del 30 % o más. Es un hallazgo de GoPlus, no un veredicto; abre el token para ver las revisiones completas de CRYPY. La capacidad gratuita de GoPlus es compartida y las páginas de tokens y de aprobaciones tienen prioridad: cuando se omite una revisión, el portafolio lo dice. Nunca se declara nada como seguro."
+        }
+      ],
+      "seoTitle": "Portafolio cripto para varias billeteras | CRYPY",
+      "seoDescription": "Sigue hasta 20 billeteras en una vista: valor por cadena, billetera y token, con revisión de aprobaciones y tokens estafa. Sin registro."
+    },
+    "tx-checker": {
+      "name": "Verificador de transacciones",
+      "question": "¿Se completó mi transacción?",
+      "description": "Pega un hash de transacción y mira qué pasó en palabras simples: resultado, activos movidos, costo y por qué falló.",
+      "input": "Hash de transacción",
+      "cta": "Revisar una transacción",
+      "features": [
+        "Detecta la red automáticamente",
+        "Titular en palabras simples: enviado, intercambiado, aprobado, emitido, fallido…",
+        "Cambios en la billetera del remitente y un flujo sencillo",
+        "Transacciones fallidas explicadas, con el mensaje del propio contrato",
+        "Las transacciones pendientes se actualizan solas y muestran si fueron reemplazadas",
+        "Vista avanzada con comisiones, función, eventos y datos sin procesar"
+      ],
+      "howTo": [
+        "Pega un hash de transacción (0x seguido de 64 caracteres).",
+        "CRYPY encuentra la red y muestra qué pasó en palabras simples.",
+        "Cambia a la vista avanzada para ver el gas, los parámetros de la función, los eventos y los datos sin procesar."
+      ],
+      "faq": [
+        {
+          "q": "¿Necesito conectar mi billetera?",
+          "a": "No. Las transacciones son públicas, así que cualquier hash se puede revisar sin conectar ni firmar nada."
+        },
+        {
+          "q": "¿De dónde sale la información?",
+          "a": "Directamente de los nodos de la blockchain: la transacción, su recibo y sus eventos. Los precios se leen de pools en la cadena. No se compra nada a un proveedor de datos."
+        },
+        {
+          "q": "¿Qué tan segura es la explicación?",
+          "a": "Cada explicación muestra su evidencia: confirmada en la blockchain, decodificada de la transacción o probable. Cuando algo no se puede identificar, CRYPY lo dice en lugar de adivinar."
+        },
+        {
+          "q": "¿Por qué no puedo ver por qué falló mi transacción antigua?",
+          "a": "Para leer el motivo hay que repetir la transacción sobre el estado de la red justo antes de ella. Los nodos gratuitos guardan ese estado solo para bloques recientes, así que en transacciones antiguas el motivo puede no estar disponible."
+        },
+        {
+          "q": "¿Qué redes son compatibles?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon. La tabla de esta página muestra exactamente qué partes funcionan en cada red."
+        }
+      ],
+      "seoTitle": "Verificador de transacciones: estado y detalles | CRYPY",
+      "seoDescription": "Pega un hash de transacción para ver si se completó, qué se movió, cuánto costó y por qué falló, en palabras simples. Funciona en 5 cadenas EVM."
+    },
+    "gas-tracker": {
+      "name": "Rastreador de gas",
+      "question": "¿Cuánto costará ahora?",
+      "description": "Precios actuales del gas y el costo de las acciones comunes en cada cadena.",
+      "input": "Nada: solo ábrelo",
+      "cta": "Ver precios del gas",
+      "features": [
+        "Comisiones de prioridad baja, media y alta por cadena",
+        "Costo en dólares de envíos, aprobaciones, swaps y transferencias de NFT",
+        "Tendencia de la comisión base en los últimos 1.024 bloques",
+        "Se actualiza cada 12 segundos y muestra la hora de actualización"
+      ],
+      "seoTitle": "Rastreador de gas: precios en gwei en 5 cadenas | CRYPY",
+      "seoDescription": "Precios del gas en vivo en gwei para Ethereum, BNB Chain, Base, Arbitrum y Polygon, con el costo en USD de enviar, hacer un swap o aprobar.",
+      "howTo": [
+        "Abre la página: los precios se cargan para todas las cadenas compatibles y se actualizan cada 12 segundos.",
+        "Elige una velocidad: baja si puedes esperar, media para la mayoría de las transacciones, alta si debe pasar rápido.",
+        "Revisa la tabla de costos para ver cuánto cuesta ahora en dólares un envío, una aprobación, un swap o una transferencia de NFT."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué es un gwei?",
+          "a": "Una unidad pequeña de la moneda de una cadena: 1 gwei es una milmillonésima parte de un ETH, BNB o POL. Los precios del gas se expresan en gwei por unidad de gas."
+        },
+        {
+          "q": "¿Qué son la comisión base y la comisión de prioridad?",
+          "a": "En Ethereum y cadenas similares, cada transacción paga la comisión base del bloque, que se quema, más una comisión de prioridad (una propina) para el validador. Una propina más alta suele hacer que entres antes. BNB Chain no tiene comisión base, así que su precio es solo el precio del gas."
+        },
+        {
+          "q": "¿Cómo se calculan los precios bajo, medio y alto?",
+          "a": "A partir de bloques recientes leídos directamente de cada cadena: la comisión base del siguiente bloque más las propinas que pagaron realmente las transacciones, en tres niveles."
+        },
+        {
+          "q": "¿Por qué los costos de Base y Arbitrum incluyen una parte extra?",
+          "a": "En estas redes, parte de la comisión paga la publicación de los datos de la transacción en Ethereum. Los costos de CRYPY incluyen una estimación de esa parte, leída de la cadena."
+        },
+        {
+          "q": "¿Cuándo es más barato el gas?",
+          "a": "Cuando la red está menos ocupada. La línea de tendencia muestra si las comisiones suben o bajan, para que puedas esperar a un momento más tranquilo si tu transacción no es urgente."
+        }
+      ]
+    },
+    "watchlist": {
+      "name": "Seguimiento y alertas",
+      "question": "Avísame cuando una billetera se mueva",
+      "description": "Recibe un mensaje en Telegram cuando una billetera que sigues envía, recibe o da una nueva aprobación, o cuando cambia la seguridad o la liquidez de un token. Inicia sesión con tu billetera: sin contraseña ni correo.",
+      "input": "Inicio de sesión con billetera (un mensaje firmado, sin transacción) y Telegram",
+      "cta": "Configurar alertas",
+      "features": [
+        "Inicia sesión con tu billetera: un mensaje firmado gratis, nunca una transacción",
+        "Sigue hasta 10 direcciones (en todas las cadenas compatibles) o tokens, revisados más o menos cada minuto",
+        "Por elemento: monedas y tokens enviados o recibidos por encima de un monto, nuevas aprobaciones, grandes caídas de valor y cambios en la seguridad y la liquidez de un token",
+        "Alertas en Telegram con horas de silencio, más un historial en esta página",
+        "Descarga tus datos o elimina tu cuenta cuando quieras"
+      ],
+      "howTo": [
+        "Pulsa Iniciar sesión y aprueba el mensaje en tu billetera. Comprueba que mencione este sitio y diga que no es una transacción.",
+        "Añade una billetera o un token para seguir, ponle una etiqueta y elige qué debe activar una alerta.",
+        "Pulsa Conectar Telegram, abre nuestro bot y pulsa Iniciar. Desde entonces, las alertas llegan ahí."
+      ],
+      "faq": [
+        {
+          "q": "¿Por qué tengo que iniciar sesión?",
+          "a": "Las alertas funcionan en el servidor de CRYPY aunque tu navegador esté cerrado, así que el servidor necesita saber qué vigilar por ti. Tu billetera es tu inicio de sesión: firmas un mensaje corto que no cuesta nada y no puede mover fondos. No hay contraseña ni correo."
+        },
+        {
+          "q": "¿Qué firmo exactamente?",
+          "a": "Un mensaje de texto simple que empieza con la dirección de este sitio y dice que es un mensaje, no una transacción. Si algún sitio te pide firmar una transferencia, una aprobación o un permit para iniciar sesión, no lo firmes."
+        },
+        {
+          "q": "¿Qué tan rápido llegan las alertas?",
+          "a": "Las transferencias y aprobaciones se revisan más o menos cada minuto, unos bloques por detrás del más nuevo para que una reorganización corta de la cadena no cause alertas falsas. Las caídas de valor y la seguridad y liquidez de los tokens se revisan cada hora. Durante tus horas de silencio las alertas esperan y llegan juntas cuando terminan."
+        },
+        {
+          "q": "¿Puedo confiar en todas las alertas?",
+          "a": "Las alertas vienen de las propias lecturas de CRYPY en la blockchain. Se filtran los tokens falsos y las transferencias con direcciones parecidas: los tokens sin precio de mercado no se reportan como recibidos, y las aprobaciones se confirman primero en la cadena. Las alertas de tokens son señales, nunca un veredicto de seguridad. El bot nunca te pide conectar una billetera, firmar nada ni compartir una frase semilla."
+        },
+        {
+          "q": "¿Qué guarda CRYPY?",
+          "a": "La dirección de tu billetera, tu lista de seguimiento con etiquetas y opciones de alerta, el id de tu chat de Telegram, tu historial de alertas (90 días), tus sesiones (solo una forma cifrada del código de sesión) y, si lo eliges, tu lista de portafolio. Ni correo ni dirección IP. Puedes descargarlo todo, o eliminar tu cuenta y todo lo que contiene, cuando quieras."
+        }
+      ],
+      "seoTitle": "Seguimiento de billeteras y alertas en Telegram | CRYPY",
+      "seoDescription": "Recibe alertas en Telegram cuando una billetera que sigues envía, recibe o aprueba, o cuando cambia la seguridad o la liquidez de un token."
+    },
+    "unit-converter": {
+      "name": "Conversor de unidades",
+      "question": "¿Cuántos gwei son esto?",
+      "description": "Convierte entre wei, gwei y ETH o BNB con exactitud, sin redondear.",
+      "input": "Una cantidad",
+      "cta": "Convertir unidades",
+      "features": [
+        "Wei, gwei y ETH o BNB, en ambos sentidos",
+        "Exacto hasta el último wei, sin redondeo",
+        "Funciona en tu navegador"
+      ],
+      "howTo": [
+        "Escribe una cantidad en cualquier casilla: wei, gwei o ETH / BNB.",
+        "Las otras dos casillas se actualizan al instante con el valor exacto.",
+        "Usa el botón de copiar junto a un valor para copiarlo."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué es un wei?",
+          "a": "El wei es la unidad más pequeña de ETH: 1 ETH equivale a 1.000.000.000.000.000.000 wei (10^18). BNB en BNB Chain usa los mismos 18 decimales, así que las mismas unidades sirven para BNB."
+        },
+        {
+          "q": "¿Qué es un gwei?",
+          "a": "Un gwei son 1.000.000.000 wei (10^9), o 0,000000001 ETH. Los precios del gas suelen expresarse en gwei."
+        },
+        {
+          "q": "¿Cómo calculo una comisión de transacción?",
+          "a": "Multiplica el gas usado por el precio del gas. Por ejemplo, una transferencia simple que usa 21.000 de gas a 20 gwei cuesta 420.000 gwei, es decir, 0,00042 ETH."
+        },
+        {
+          "q": "¿Los tokens usan las mismas unidades?",
+          "a": "No siempre. Muchos tokens usan 18 decimales como ETH, pero otros no: USDT en Ethereum usa 6 decimales, mientras que USDT en BNB Chain usa 18. Revisa los decimales del token antes de convertir cantidades de tokens."
+        },
+        {
+          "q": "¿Se envía a un servidor algo de lo que escribo?",
+          "a": "No. La conversión se hace por completo en tu navegador."
+        }
+      ],
+      "seoTitle": "Conversor exacto de wei a gwei a ETH | CRYPY",
+      "seoDescription": "Convierte wei, gwei, ETH y BNB con exactitud, sin redondeo, incluso cantidades en notación científica. Funciona en tu navegador; no se envía nada."
+    },
+    "hex-converter": {
+      "name": "Conversor hexadecimal",
+      "question": "¿Qué número es este valor hexadecimal?",
+      "description": "Convierte valores hexadecimales y decimales usados en las blockchains, hasta 256 bits.",
+      "input": "Un valor hexadecimal o decimal",
+      "cta": "Convertir",
+      "features": [
+        "De hexadecimal a decimal y viceversa",
+        "Forma de 32 bytes, longitud en bytes y lectura con signo",
+        "Muestra el texto oculto en datos hexadecimales",
+        "Funciona en tu navegador"
+      ],
+      "howTo": [
+        "Pega un valor hexadecimal (con o sin 0x) o un número decimal.",
+        "Mira al instante las formas decimal, hexadecimal y de 32 bytes.",
+        "Si escribes solo dígitos, elige si es decimal o hexadecimal."
+      ],
+      "faq": [
+        {
+          "q": "¿Por qué las blockchains usan hexadecimal?",
+          "a": "La EVM trabaja con palabras de 32 bytes, y las APIs de los nodos devuelven números como el número de bloque, los saldos y el gas en hexadecimal (por ejemplo, 0x10 = 16)."
+        },
+        {
+          "q": "¿Qué es la forma de 32 bytes?",
+          "a": "El valor completado hasta 64 dígitos hexadecimales. Así aparecen los números en los datos de las transacciones y en el almacenamiento de los contratos."
+        },
+        {
+          "q": "¿Qué es el valor con signo?",
+          "a": "Los contratos pueden guardar números con signo (int256) usando complemento a dos. Cuando un valor de 32 bytes tiene activado el bit más alto, representa un número negativo, que se muestra aquí."
+        },
+        {
+          "q": "¿Cuál es el valor más grande admitido?",
+          "a": "2^256 − 1, el número más grande que cabe en un uint256 de la EVM."
+        }
+      ],
+      "seoTitle": "Conversor de hexadecimal a decimal para blockchain | CRYPY",
+      "seoDescription": "Convierte de hexadecimal a decimal y viceversa valores de hasta 256 bits, con int256 con signo, forma de 32 bytes y texto. En tu navegador."
+    },
+    "address-formatter": {
+      "name": "Formateador de direcciones",
+      "question": "¿Esta dirección está bien escrita?",
+      "description": "Comprueba que una dirección esté bien escrita y obtén su forma con checksum. Sirve para una dirección o para una lista.",
+      "input": "Una dirección",
+      "cta": "Revisar dirección",
+      "features": [
+        "Detecta errores de escritura con el checksum EIP-55",
+        "Revisa hasta 500 direcciones a la vez",
+        "Funciona en todas las cadenas EVM",
+        "Funciona en tu navegador"
+      ],
+      "howTo": [
+        "Pega una dirección o una lista con una dirección por línea.",
+        "Cada dirección se marca como correcta, sin protección (sin checksum) o mal escrita.",
+        "Copia la forma con checksum de las direcciones correctas."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué es una dirección con checksum?",
+          "a": "EIP-55 mezcla mayúsculas y minúsculas en una dirección para codificar una comprobación. Si escribes mal un carácter, la comprobación casi siempre falla, así que el error se detecta antes de enviar nada."
+        },
+        {
+          "q": "¿Es válida una dirección toda en minúsculas?",
+          "a": "Sí. Es la misma dirección, pero no lleva checksum, así que un error de escritura podría pasar desapercibido. La forma con checksum añade esa protección."
+        },
+        {
+          "q": "¿Qué hago si el checksum es incorrecto?",
+          "a": "No uses la dirección. Un checksum incorrecto significa que se cambió un carácter. Copia la dirección otra vez desde su fuente original; no intentes corregirla a mano."
+        },
+        {
+          "q": "¿La dirección es la misma en todas las cadenas EVM?",
+          "a": "Todas las cadenas EVM usan el mismo formato de dirección, así que la misma dirección puede existir en cada una, pero los saldos y contratos son distintos en cada cadena. Las direcciones de depósito de los exchanges a menudo aceptan solo una red, así que revisa siempre qué red admite quien recibe."
+        },
+        {
+          "q": "¿Una dirección correcta significa que es segura?",
+          "a": "No. Solo significa que la dirección está bien escrita. Usa la búsqueda de CRYPY para ver qué es la dirección antes de enviarle fondos."
+        }
+      ],
+      "seoTitle": "Checksum de direcciones Ethereum (EIP-55) | CRYPY",
+      "seoDescription": "Comprueba que una dirección de Ethereum o BNB Chain esté bien escrita y obtén su forma con checksum EIP-55, para una dirección o hasta 500 a la vez."
+    },
+    "timestamp-block": {
+      "name": "Conversor de fecha y bloque",
+      "question": "¿Qué bloque había en este momento?",
+      "description": "Encuentra el bloque de cualquier fecha en cada cadena, la fecha de cualquier bloque, y convierte marcas de tiempo Unix.",
+      "input": "Una fecha o un número de bloque",
+      "cta": "Convertir",
+      "features": [
+        "De fecha a bloque en todas las cadenas a la vez",
+        "De número de bloque a fecha y hora",
+        "De marca de tiempo Unix a fecha, en tu navegador",
+        "Leído de tiempos reales de bloque, nunca estimado (las fechas futuras se marcan como estimaciones)"
+      ],
+      "seoTitle": "Número de bloque por fecha y conversor de timestamp | CRYPY",
+      "seoDescription": "Encuentra el bloque de cualquier fecha en Ethereum, BNB Chain, Base, Arbitrum y Polygon, la fecha de cualquier bloque, y convierte timestamps Unix.",
+      "howTo": [
+        "Escribe una fecha y una hora para encontrar el bloque de ese momento en cada cadena.",
+        "O escribe un número de bloque y elige una cadena para ver cuándo se produjo ese bloque.",
+        "O pega una marca de tiempo Unix para convertirla en fecha (esta parte funciona en tu navegador)."
+      ],
+      "faq": [
+        {
+          "q": "¿Cómo se encuentra el bloque de una fecha?",
+          "a": "CRYPY lee tiempos reales de bloque de cada cadena y se acerca hasta el primer bloque producido en tu fecha o después. Suele tardar uno o dos segundos."
+        },
+        {
+          "q": "¿Qué es una marca de tiempo Unix?",
+          "a": "La cantidad de segundos desde el 1 de enero de 1970 (UTC). Las blockchains registran así la hora de cada bloque."
+        },
+        {
+          "q": "¿Por qué el número de bloque es distinto en cada cadena?",
+          "a": "Cada cadena empezó en un momento distinto y produce bloques a su propio ritmo (unos 12 segundos en Ethereum, más rápido en las demás), así que el mismo momento tiene un número de bloque distinto en cada una."
+        },
+        {
+          "q": "¿Puedo escribir una fecha futura?",
+          "a": "Sí. CRYPY estima el bloque según el ritmo reciente de la cadena y marca el resultado como una estimación."
+        },
+        {
+          "q": "¿Qué cadenas cubre?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon."
+        }
+      ]
+    },
+    "tx-decoder": {
+      "name": "Decodificador de datos de transacción",
+      "question": "¿Qué significan estos datos de transacción?",
+      "description": "Convierte los datos sin procesar de una transacción en una función y valores legibles, con avisos sobre aprobaciones riesgosas.",
+      "input": "Datos sin procesar de la transacción",
+      "cta": "Decodificar",
+      "features": [
+        "Decodifica funciones comunes de tokens, NFT, routers y propiedad",
+        "Avisa sobre aprobaciones ilimitadas y aprobaciones de operador de NFT",
+        "Decodifica las llamadas dentro de un multicall",
+        "Funciona en tu navegador"
+      ],
+      "howTo": [
+        "Copia los datos de entrada de la transacción (empiezan con 0x) desde un explorador de bloques o desde la vista de datos de tu billetera.",
+        "Pégalos aquí; se decodifican al instante.",
+        "Lee la función, sus valores y cualquier aviso antes de confirmar una transacción."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué son los datos de una transacción?",
+          "a": "Los datos de entrada le dicen a un contrato qué hacer. Los primeros 4 bytes (el selector de función) identifican la función, y el resto contiene sus valores en palabras de 32 bytes."
+        },
+        {
+          "q": "¿Dónde los encuentro?",
+          "a": "En un explorador de bloques, abre la transacción y busca Input Data (míralos como el hexadecimal original). Muchas billeteras también muestran los datos hexadecimales en una pestaña avanzada o de datos antes de que confirmes."
+        },
+        {
+          "q": "¿Qué es una aprobación ilimitada?",
+          "a": "Permite que el gastador mueva cualquier cantidad de ese token desde tu billetera, ahora y en el futuro, hasta que la revoques. Si el gastador es malicioso o lo hackean más adelante, esos tokens pueden ser robados."
+        },
+        {
+          "q": "¿Por qué dice función desconocida?",
+          "a": "CRYPY solo decodifica una lista de funciones conocidas y nunca adivina. Funciones distintas pueden compartir el mismo selector, así que adivinar podría mostrarte un significado equivocado."
+        },
+        {
+          "q": "¿Por qué las cantidades son tan grandes?",
+          "a": "Las cantidades están en la unidad más pequeña del token. Divide entre 10 elevado a los decimales del token, o usa el Conversor de unidades para tokens de 18 decimales."
+        }
+      ],
+      "seoTitle": "Decodificador de datos de entrada (calldata) | CRYPY",
+      "seoDescription": "Decodifica los datos de entrada de una transacción en una función y valores legibles, con avisos de aprobaciones ilimitadas. En tu navegador."
+    },
+    "batch-balance": {
+      "name": "Escáner de saldos en lote",
+      "question": "¿Qué tienen todas estas billeteras?",
+      "description": "Revisa los saldos de monedas y tokens de hasta 500 direcciones a la vez, en las cadenas que elijas. Leídos directamente de la blockchain.",
+      "input": "Una lista de direcciones",
+      "cta": "Analizar una lista",
+      "features": [
+        "Pega, escribe o sube una lista CSV o TXT, con etiquetas opcionales",
+        "Los errores de escritura, duplicados y checksums incorrectos se detectan antes de analizar",
+        "Ethereum, BNB Chain, Base, Arbitrum y Polygon: la moneda nativa más hasta 5 tokens",
+        "Cada lote se lee en el mismo bloque, directo de la cadena",
+        "Totales, valores en USD con precios en la cadena, orden y filtros",
+        "Exporta a CSV o copia las direcciones con o sin saldo"
+      ],
+      "howTo": [
+        "Pega tus direcciones, una por línea. Si quieres, añade una etiqueta después de una coma (0x…,Tesorería) o sube un archivo CSV/TXT.",
+        "Elige las cadenas y los tokens a revisar. La moneda nativa (ETH, BNB) siempre se incluye.",
+        "Pulsa Analizar saldos y luego ordena, filtra, copia o exporta los resultados."
+      ],
+      "faq": [
+        {
+          "q": "¿Necesito conectar una billetera?",
+          "a": "No. Los saldos son públicos, así que cualquier lista de direcciones se puede revisar sin conectar ni firmar nada. CRYPY nunca pide claves ni frases semilla."
+        },
+        {
+          "q": "¿Se guarda mi lista?",
+          "a": "No. Las direcciones se envían al servidor de CRYPY solo para leer sus saldos y no se guardan ni se registran. Las etiquetas nunca salen de tu navegador, y la lista nunca se pone en la dirección de la página."
+        },
+        {
+          "q": "¿De dónde salen los saldos?",
+          "a": "Directamente de los nodos de la blockchain, todos leídos en el mismo bloque. Los precios vienen de pools DEX en la cadena; los tokens sin un precio confiable muestran solo cantidades."
+        },
+        {
+          "q": "¿Cuántas direcciones puedo revisar?",
+          "a": "Hasta 500 direcciones en hasta 2 cadenas con hasta 6 activos por análisis. Las listas muy grandes, las listas guardadas y los análisis programados están previstos para más adelante."
+        },
+        {
+          "q": "¿Por qué una dirección aparece como contrato?",
+          "a": "Tiene código de contrato inteligente en esa cadena. Las billeteras que delegan en código (EIP-7702) se muestran como billeteras delegadas."
+        }
+      ],
+      "seoTitle": "Verificador de saldos en lote: 500 direcciones | CRYPY",
+      "seoDescription": "Revisa los saldos de monedas y tokens de hasta 500 direcciones a la vez en Ethereum, BNB Chain, Base, Arbitrum y Polygon, y exporta a CSV. Gratis."
+    }
+  },
+  "toolPage": {
+    "backToTools": "Todas las herramientas",
+    "whatYouGet": "Lo que obtendrás",
+    "notLiveTitle": "Esta herramienta aún no está disponible",
+    "notLiveText": "Solo publicamos herramientas cuando funcionan con datos reales de la blockchain y ya se probaron. Esta está prevista para la etapa {milestone}.",
+    "requiresAccount": "Requiere iniciar sesión con tu billetera.",
+    "howToUse": "Cómo usarla",
+    "faq": "Preguntas y respuestas",
+    "runsLocally": "Funciona en tu navegador. Nada de lo que escribas se envía a ningún lugar."
+  },
+  "toolsDialog": {
+    "title": "Todas las herramientas",
+    "description": "Todas las herramientas de CRYPY, agrupadas según lo que te ayudan a hacer.",
+    "searchLabel": "Buscar una herramienta",
+    "searchPlaceholder": "Busca una herramienta, p. ej. \"aprobaciones\", \"gas\", \"honeypot\"",
+    "noResults": "Ninguna herramienta coincide con \"{query}\".",
+    "noWalletNeeded": "Todas las herramientas funcionan sin conectar una billetera, salvo que se indique lo contrario.",
+    "shortcut": "Ctrl K",
+    "close": "Cerrar"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "languageTitle": "Idioma",
+    "languageText": "Estamos traduciendo más idiomas. Los marcados como Beta todavía no los ha revisado un hablante nativo.",
+    "themeTitle": "Tema",
+    "themeText": "Elige el aspecto más cómodo para tu vista.",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "Igual que mi dispositivo"
+  },
+  "footer": {
+    "disclaimer": "CRYPY no custodia fondos. Los resultados son señales, no asesoría financiera ni garantías de seguridad.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "risk": "Aviso de riesgos",
+    "languages": "Idiomas"
+  },
+  "legal": {
+    "draftNotice": "Beta: esta página describe cómo funciona CRYPY hoy. Todavía no la ha revisado un abogado y puede cambiar. Si esta traducción difiere del texto en inglés, prevalece la versión en inglés.",
+    "privacy": {
+      "title": "Política de privacidad",
+      "description": "Qué guarda CRYPY, qué nunca recopila, qué cookies usa y qué servicios intervienen.",
+      "body": [
+        "CRYPY nunca pide, recopila ni guarda frases semilla, frases de recuperación ni claves privadas. Ninguna página ni mensaje de CRYPY te las pedirá jamás.",
+        "Las direcciones, tokens y hashes de transacción que consultas son datos públicos de la blockchain. Para responder, el servidor de CRYPY consulta a proveedores de datos de blockchain (como Alchemy, Infura, Ankr, dRPC y nodos públicos) y a servicios de seguridad (GoPlus, Sourcify). Estas consultas salen del servidor de CRYPY, no de tu navegador, así que los proveedores no ven tu dirección IP. CRYPY no guarda un registro de quién consultó qué; los resultados se guardan en caché por poco tiempo para que el sitio sea rápido.",
+        "Sin una cuenta, tu idioma, tema, lista de portafolio, elementos vistos recientemente y preferencias de visualización se guardan solo en tu propio navegador. Las direcciones del portafolio se envían una por una para consultar sus saldos y no se guardan.",
+        "Cookies: CRYPY usa solo las cookies que necesita para funcionar: NEXT_LOCALE (tu idioma), crypy_chains (qué cadenas analizar) y crypy_session (solo después de iniciar sesión). No hay cookies de publicidad ni de analítica, ni scripts de seguimiento. Cloudflare, que protege el sitio, puede poner su propia cookie de seguridad (como __cf_bm) para distinguir a las personas de los bots.",
+        "Conectar una billetera es opcional. CRYPY solo lee tu dirección pública, y conectarla nunca te pide firmar nada. Si te conectas mediante WalletConnect, la conexión pasa por el servicio WalletConnect de Reown.",
+        "Iniciar sesión con tu billetera es opcional y solo hace falta para el seguimiento y las alertas. Es un mensaje firmado, nunca una transacción. Luego CRYPY guarda la dirección de tu billetera, tu lista de seguimiento con sus etiquetas y opciones de alerta, tus horas de silencio y tu zona horaria, y un código de sesión (solo su huella). Si eliges guardar tu portafolio en tu cuenta, también se guardan sus direcciones y etiquetas.",
+        "Si conectas Telegram para las alertas, CRYPY guarda el ID y el nombre de usuario de tu chat de Telegram para enviarte alertas ahí, y conserva tu historial de alertas durante 90 días. Telegram entrega los mensajes según su propia política de privacidad.",
+        "Con la sesión iniciada, puedes descargar todo lo que CRYPY tiene sobre tu cuenta o eliminar tu cuenta, lo que lo borra todo de una vez. Las copias de seguridad de la base de datos se conservan 14 días, así que los datos eliminados también desaparecen de ellas en ese plazo.",
+        "Como la mayoría de los sitios web, el servidor de CRYPY y Cloudflare guardan registros técnicos (dirección IP, página solicitada, hora y tipo de navegador) para mantener el sitio seguro y funcionando, por ejemplo, para aplicar límites de solicitudes. Los registros del servidor de CRYPY se conservan unas dos semanas.",
+        "CRYPY no vende datos personales ni los comparte con anunciantes."
+      ]
+    },
+    "terms": {
+      "title": "Términos de uso",
+      "description": "Las reglas para usar las herramientas gratuitas de blockchain de CRYPY mientras el sitio está en beta.",
+      "body": [
+        "CRYPY ofrece herramientas de información gratuitas sobre datos públicos de blockchain. Está en beta: las funciones pueden cambiar y los resultados pueden estar incompletos o ser incorrectos.",
+        "CRYPY nunca tiene, mueve ni administra tus fondos. Acciones como revocar una aprobación son transacciones que revisas y confirmas en tu propia billetera. Eres responsable de cada transacción que confirmas y de su comisión de red.",
+        "Los resultados vienen de nodos de blockchain y de proveedores de datos externos, que pueden retrasarse, estar incompletos o equivocarse. Las revisiones de seguridad muestran señales de riesgo, nunca una garantía de que un token, contrato o billetera sea seguro. Las alertas pueden llegar tarde o no llegar, así que no dependas de ellas como tu única protección.",
+        "Usa CRYPY de forma justa: no envíes solicitudes automáticas masivas para evadir sus límites, y no intentes romper, sobrecargar ni hacer mal uso del sitio.",
+        "CRYPY se ofrece tal cual, sin garantías. En la medida en que la ley lo permita, CRYPY no se hace responsable de pérdidas por usar el sitio o confiar en sus resultados."
+      ]
+    },
+    "risk": {
+      "title": "Aviso de riesgos",
+      "description": "Los riesgos de las criptomonedas, y por qué ninguna revisión de seguridad puede demostrar que un token, contrato o billetera sea seguro.",
+      "body": [
+        "Los criptoactivos son riesgosos. Los precios pueden caer a cero y las transacciones no se pueden revertir.",
+        "Las revisiones de seguridad de CRYPY muestran señales de herramientas automáticas y proveedores de datos. Ninguna revisión puede demostrar que un token, contrato o billetera sea seguro.",
+        "Los estafadores crean tokens y direcciones que imitan a los reales. Revisa siempre la dirección completa antes de enviar nada.",
+        "Nada en CRYPY es asesoría financiera, legal ni fiscal. Haz siempre tu propia investigación."
+      ]
+    }
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "text": "Esta página no existe o se movió.",
+    "home": "Ir a la página de inicio"
+  },
+  "chains": {
+    "ethereum": "Ethereum",
+    "bsc": "BNB Chain",
+    "base": "Base",
+    "arbitrum": "Arbitrum",
+    "polygon": "Polygon"
+  },
+  "entity": {
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "viewOn": "Ver en {explorer}",
+    "unavailableChain": "No se pudo revisar {chain} en este momento. Inténtalo de nuevo en un minuto.",
+    "rateLimited": "Demasiadas solicitudes en poco tiempo. Espera un minuto y actualiza.",
+    "comingSoonTitle": "Vienen más funciones",
+    "kinds": {
+      "account": "Billetera",
+      "delegated": "Billetera con código delegado (EIP-7702)",
+      "token": "Contrato de token",
+      "contract": "Contrato inteligente"
+    },
+    "address": {
+      "title": "Dirección",
+      "metaTitle": "Dirección {short}",
+      "perChain": "En cada cadena",
+      "active": "Ha enviado transacciones",
+      "inactive": "Sin transacciones salientes",
+      "openToken": "Abrir la página del token",
+      "badChecksum": "Esta dirección no coincide con su checksum, así que probablemente se cambió o se escribió mal un carácter. Cópiala otra vez desde la fuente original y nunca le envíes fondos.",
+      "comingSoon": "El historial de actividad (M7) de esta dirección llegará en una próxima actualización.",
+      "balances": {
+        "total": "Valor total",
+        "totalNote": "Estimado con los precios actuales de los DEX. No se incluyen los tokens sin un pool con suficiente liquidez para un precio confiable.",
+        "chainTotal": "Valor en {chain}",
+        "pricesBy": "Precios: leídos en la cadena de pools de PancakeSwap y Uniswap.",
+        "updated": "Actualizado {time}",
+        "asset": "Activo",
+        "balance": "Saldo",
+        "price": "Precio",
+        "value": "Valor",
+        "noPrice": "Sin precio confiable",
+        "lessThanCent": "< 0,01 $",
+        "nativeCoin": "Moneda nativa",
+        "empty": "No hay monedas ni tokens en {chain}.",
+        "unpriced": "{count, plural, one {# token no tiene} other {# tokens no tienen}} un precio confiable y no se {count, plural, one {suma} other {suman}} al total.",
+        "pricesUnavailable": "Los precios no están disponibles en este momento, así que solo se muestran los saldos. Inténtalo de nuevo en un minuto.",
+        "coverage": {
+          "truncated": "Esta dirección tiene una lista de tokens muy larga (sobre todo airdrops no solicitados), así que CRYPY revisó las primeras {count} entradas para que la página cargue rápido. Pueden faltar algunos tokens.",
+          "common-only": "En este momento solo se revisaron los tokens conocidos en {chain}, así que pueden faltar algunos tokens."
+        },
+        "hidden": "{count, plural, one {# token oculto parece spam} other {# tokens ocultos parecen spam}}",
+        "hiddenNote": "Los estafadores envían tokens sin valor a muchas billeteras para atraer a la gente a sitios web falsos. Nunca visites enlaces que aparezcan en nombres de tokens ni intentes vender o \"reclamar\" estos tokens.",
+        "spam": {
+          "link-in-name": "Sitio web en el nombre",
+          "bait-words": "Texto de cebo, sin precio",
+          "unreadable": "El contrato no responde"
+        },
+        "rawAmount": "{amount} (unidades sin procesar)",
+        "totalAll": "Valor total · todas las cadenas",
+        "totalChain": "Valor total · {chain}",
+        "unpricedGroup": "{count, plural, one {# token sin precio confiable} other {# tokens sin precio confiable}}",
+        "moreNotListed": "{count, plural, one {# más no se muestra aquí, para que la página cargue rápido.} other {# más no se muestran aquí, para que la página cargue rápido.}}",
+        "unpricedNote": "Estos tokens no tienen un pool DEX con suficiente liquidez para un precio confiable, así que no se suman al total. La mayoría de los tokens desconocidos que llegan a billeteras sin pedirlos no valen nada o son estafas: no intentes venderlos en sitios web desconocidos."
+      },
+      "lookupAnyway": "Buscarla de todos modos",
+      "identity": {
+        "title": "Encontrada en {count} de {total} cadenas",
+        "subtitle": "Qué es esta dirección en cada red",
+        "noneTitle": "No se encontró actividad en ninguna cadena compatible",
+        "inactive": "Sin actividad en: {chains}",
+        "filter": "Filtrar por cadena",
+        "all": "Todas las cadenas",
+        "tokenNote": "En {chain}, esta dirección es un contrato de token ({token}). Sus detalles y revisiones están en la página del token.",
+        "openToken": "Abrir la página del token",
+        "shownBelow": "Se muestra abajo",
+        "viewChain": "Ver en esta cadena",
+        "tokens": "{count, plural, one {# token} other {# tokens}}"
+      }
+    },
+    "token": {
+      "metaTitle": "Token {symbol} en {chain}",
+      "notToken": "Esta dirección no es un contrato de token en {chain}.",
+      "viewAsAddress": "Ver como dirección",
+      "facts": "Datos del token",
+      "decimals": "Decimales",
+      "totalSupply": "Suministro total",
+      "contract": "Dirección del contrato",
+      "unnamed": "Token sin nombre",
+      "linkWarningTitle": "El nombre de este token contiene una dirección web",
+      "linkWarning": "Los tokens estafa suelen poner un sitio web en su nombre para atraer a la gente. Nunca visites enlaces que aparezcan en nombres de tokens ni reclames tokens \"gratis\".",
+      "comingSoon": "Las revisiones de seguridad completas de este token (honeypot, impuestos, poderes del dueño y holders) llegarán en la etapa M5."
+    },
+    "tx": {
+      "title": "Transacción",
+      "metaTitle": "Transacción {short}",
+      "status": {
+        "success": "Exitosa",
+        "reverted": "Fallida",
+        "pending": "Pendiente"
+      },
+      "chain": "Red",
+      "block": "Bloque",
+      "from": "De",
+      "to": "Para",
+      "contractCreation": "Creación de contrato",
+      "notFound": "No encontramos esta transacción en {chain}.",
+      "notFoundHelp": "Puede que todavía no se haya enviado, que se haya reemplazado o descartado, o que esté en otra red.",
+      "searchAll": "Buscar en todas las redes",
+      "confirmations": "{count, plural, one {# confirmación} other {# confirmaciones}}",
+      "ago": "{time} UTC · {relative}",
+      "summary": {
+        "title": "Qué pasó",
+        "pending": "Esperando a que se añada a un bloque. Esta página se actualiza cada 15 segundos.",
+        "failed": "Esta transacción falló. No se hizo nada de lo que intentaba hacer, pero igual se pagó la comisión de red.",
+        "native": "{from} envió {amount} a {to}.",
+        "creation": "{from} creó un contrato nuevo.",
+        "call": "{from} llamó a {fn} en {to}.",
+        "callUnknown": "{from} llamó en {to} a una función que no está en nuestra lista de funciones conocidas.",
+        "withValue": "También envió {amount}.",
+        "moved": "{count, plural, one {Movió # activo (ver abajo).} other {Movió # activos (ver abajo).}}",
+        "permissions": "{count, plural, one {Cambió # permiso de gasto.} other {Cambió # permisos de gasto.}}"
+      },
+      "facts": {
+        "status": "Estado",
+        "time": "Hora",
+        "confirmations": "Confirmaciones",
+        "created": "Contrato creado",
+        "value": "Valor enviado",
+        "fee": "Comisión de red",
+        "burnt": "Quemado (comisión base)",
+        "gasUsed": "Gas usado",
+        "gasUsedValue": "{used} de {limit} ({percent})",
+        "gasPrice": "Precio del gas",
+        "gwei": "{value} gwei",
+        "nonce": "Nonce",
+        "type": "Tipo",
+        "freeFee": "0 (enviada sin comisión)",
+        "wallet": "Billetera",
+        "contract": "Contrato",
+        "pendingValue": "Todavía no se sabe",
+        "gasLimit": "Límite de gas",
+        "maxGasPrice": "Precio máximo del gas",
+        "l1Fee": "Comisión de datos de Ethereum (incluida en el total)"
+      },
+      "types": {
+        "legacy": "Legacy (tipo 0)",
+        "eip2930": "Lista de acceso (tipo 1)",
+        "eip1559": "EIP-1559 (tipo 2)",
+        "eip4844": "Blob (tipo 3)",
+        "eip7702": "Código de cuenta, EIP-7702 (tipo 4)"
+      },
+      "failure": {
+        "title": "Por qué falló",
+        "reason": "Mensaje de error del contrato:",
+        "none": "El contrato se detuvo sin mensaje de error.",
+        "unknown": "El mensaje de error no está disponible: leerlo requiere el estado de la red justo antes de este bloque, que nuestros nodos ya no guardan."
+      },
+      "transfers": {
+        "title": "Movimientos de activos",
+        "token": "Activo",
+        "from": "De",
+        "to": "Para",
+        "amount": "Cantidad",
+        "nft": "NFT #{id}",
+        "wrap": "Envuelto",
+        "unwrap": "Desenvuelto",
+        "unknownToken": "Token desconocido",
+        "truncated": "Esta transacción tiene más eventos de los que mostramos. La lista completa está en {explorer}.",
+        "valueAtTx": "Valor en ese momento",
+        "valueToday": "Valor hoy",
+        "event": "Evento"
+      },
+      "approvals": {
+        "title": "Permisos de gasto modificados",
+        "owner": "Dueño",
+        "spender": "Gastador",
+        "allowance": "Permiso",
+        "unlimited": "Ilimitado",
+        "all": "Todos los NFT de esta colección",
+        "nft": "NFT #{id}",
+        "removed": "Eliminado",
+        "alertTitle": "Esta transacción dio un permiso de gasto",
+        "alertText": "El gastador puede mover estos tokens desde la billetera del dueño sin volver a pedir permiso, hasta que el permiso se elimine. Aprueba solo contratos en los que confíes. Una herramienta para revisar y eliminar permisos llegará en la etapa M6."
+      },
+      "call": {
+        "title": "Función llamada",
+        "unknown": "Esta función no está en nuestra lista de funciones conocidas, así que se muestra como datos sin procesar. Nunca adivinamos el significado de una función.",
+        "mismatch": "La función es conocida, pero estos datos no coinciden con sus parámetros.",
+        "selector": "ID de la función",
+        "params": "Parámetros",
+        "nested": "Llamadas internas",
+        "decoder": "Abrir en el Decodificador de datos de transacción",
+        "more": "…y {count} más"
+      },
+      "input": {
+        "title": "Datos de entrada",
+        "bytes": "{count, plural, one {# byte} other {# bytes}}",
+        "truncated": "Se muestran los primeros 2 KB. Los datos completos están en {explorer}."
+      },
+      "events": "{count, plural, =0 {Sin eventos.} one {# evento en el recibo.} other {# eventos en el recibo.}}",
+      "otherEvents": "{count, plural, one {# evento no es un evento de token estándar y no se interpreta.} other {# eventos no son eventos de token estándar y no se interpretan.}}",
+      "pricesNote": "Los valores en USD usan los precios actuales en la cadena, no los del momento de la transacción.",
+      "source": "Leído directamente de los nodos de {chain}.",
+      "story": {
+        "view": {
+          "label": "Vista",
+          "simple": "Simple",
+          "advanced": "Avanzada",
+          "showTechnical": "Detalles técnicos",
+          "showTechnicalHint": "Bloque, gas, función y datos sin procesar, en la vista avanzada"
+        },
+        "actions": {
+          "title": "{count, plural, one {Acción detectada (#)} other {Acciones detectadas (#)}}",
+          "coverage": "{explained} de {total} eventos explicados",
+          "coverageTip": "Explicar un evento no es lo mismo que entender por completo una transacción, y no es una revisión de seguridad.",
+          "more": "{count, plural, one {Mostrar # acción más} other {Mostrar # acciones más}}",
+          "unexplainedTitle": "{count, plural, one {# evento sin identificar} other {# eventos sin identificar}}",
+          "unexplainedNote": "No adivinamos qué significan estos eventos. Sus datos sin procesar están en la vista avanzada.",
+          "notIdentified": "Sin identificar",
+          "okResult": "se completó",
+          "failedResult": "falló",
+          "app": "Aplicación indicada en el reporte: {app}.",
+          "native-transfer": "{from} envió {amount} a {to}.",
+          "token-transfer": "{amount} pasó de {from} a {to}.",
+          "nft-transfer": "{amount} pasó de {from} a {to}.",
+          "mint": "Se creó {amount} y se envió a {to}.",
+          "burn": "Se envió {amount} a una dirección de quema.",
+          "wrap": "{from} envolvió monedas en {amount}.",
+          "unwrap": "{from} desenvolvió {amount} en {native}.",
+          "pool-swap": "{pool} cambió {in} por {out}.",
+          "pool-swap-unknown": "{pool} registró un swap; no se pudieron leer sus tokens.",
+          "liquidity-add": "Liquidez añadida a {pool}: {in} y {out}.",
+          "liquidity-add-unknown": "Liquidez añadida a {pool}.",
+          "liquidity-remove": "Liquidez retirada de {pool}: {in} y {out}.",
+          "liquidity-remove-unknown": "Liquidez retirada de {pool}.",
+          "permission-used": "{spender} usó el permiso de {owner} para mover {amount}. Queda: {after}.",
+          "permission-granted": "{owner} permitió que {spender} gaste {after}.",
+          "permission-modified": "{owner} cambió el permiso de {spender} a {after}.",
+          "permission-set": "El permiso de {owner} para {spender} se fijó en {after}.",
+          "permission-revoked": "{owner} eliminó el permiso de {spender} sobre {token}.",
+          "router-swap": "{router} informa que gastó {in} y devolvió {out} a {to}.",
+          "contract-creation": "{from} creó el contrato {to}.",
+          "smart-wallet": "La billetera inteligente {from} ejecutó una transacción; {result}.",
+          "user-operation": "La cuenta inteligente {from} ejecutó una operación mediante {router}; {result}.",
+          "copySummary": "Copiar resumen",
+          "copied": "Copiado",
+          "export": "Exportar",
+          "json": "Detalles (JSON)",
+          "report": "Informe legible (texto)",
+          "raw": "Transacción y recibo sin procesar (JSON)",
+          "copyLink": "Copiar enlace"
+        },
+        "status": {
+          "success": "Completada",
+          "reverted": "Fallida",
+          "pending": "En espera"
+        },
+        "kinds": {
+          "native-send": "Transferencia",
+          "token-send": "Transferencia de token",
+          "nft-send": "Transferencia de NFT",
+          "receive": "Recibida",
+          "swap": "Swap",
+          "approval": "Aprobación",
+          "revoke": "Permiso eliminado",
+          "mint": "Emisión",
+          "burn": "Quema",
+          "wrap": "Envoltura",
+          "unwrap": "Desenvoltura",
+          "creation": "Creación de contrato",
+          "self": "Transacción vacía",
+          "contract-call": "Llamada a contrato",
+          "unknown-call": "Llamada a contrato"
+        },
+        "attempted": "{kind} (intento)",
+        "headline": {
+          "native-send": "Envió {amount} a {to}",
+          "token-send": "Envió {amount} a {to}",
+          "token-move": "Movió {amount} de {from} a {to}",
+          "nft-send": "Envió {amount} a {to}",
+          "receive": "Recibió {amount}",
+          "swap": "Cambió {out} por {in}",
+          "swapMany": "Cambió {outCount} activos por {inCount} activos",
+          "approvalUnlimited": "Dio permiso ilimitado para gastar {token}",
+          "approval": "Dio permiso para gastar {amount}",
+          "approvalAll": "Dio acceso total a todos los NFT de {token}",
+          "approvalNoAmount": "Dio permiso para gastar {token}",
+          "revoke": "Eliminó el permiso para gastar {token}",
+          "mint": "Emitió {amount}",
+          "burn": "Destruyó {amount}",
+          "wrap": "Envolvió {amount}",
+          "unwrap": "Desenvolvió {amount}",
+          "creation": "Creó un contrato nuevo",
+          "self": "Se envió una transacción vacía a sí misma",
+          "contract-call": "Llamó a {fn} en {to}",
+          "unknown-call": "Interactuó con un contrato",
+          "failed": "Falló: intentó {intent}",
+          "pending": "Esperando confirmación",
+          "swapPartial": "Cambió {out} en un pool",
+          "swapPartialVia": "Cambió {out} en un pool de {via}"
+        },
+        "intent": {
+          "native-send": "enviar {amount} a {to}",
+          "token-send": "mover {amount} a {to}",
+          "approval": "dar a {spender} permiso para gastar {token}",
+          "revoke": "eliminar el permiso de {spender} para gastar {token}",
+          "swap": "cambiar tokens mediante {to}",
+          "creation": "crear un contrato",
+          "contract-call": "llamar a {fn} en {to}",
+          "unknown-call": "llamar a un contrato ({to})"
+        },
+        "sub": {
+          "native-send": "La billetera {from} envió {amount} a {to}.",
+          "token-send": "La billetera {from} envió {amount} a {to}.",
+          "token-move": "{actor} movió {amount} de {from} a {to} usando un permiso.",
+          "nft-send": "{from} envió {amount} a {to}.",
+          "receive": "La billetera {to} recibió {amount} de {from}.",
+          "swap": "La billetera {from} cambió {out} por {in} mediante {to}.",
+          "swapMany": "La billetera {from} entregó {outCount} activos y recibió {inCount} mediante {to}.",
+          "approval": "La billetera {from} permitió que {spender} mueva sus {token}. En esta transacción no se movió ningún token.",
+          "revoke": "La billetera {from} eliminó el permiso de {spender} para mover sus {token}. Esto reduce el riesgo.",
+          "mint": "Se crearon tokens nuevos y se enviaron a {to}.",
+          "burn": "La billetera {from} envió {amount} a una dirección de quema, donde nadie puede usarlos.",
+          "wrap": "La billetera {from} convirtió sus monedas en el token envuelto, 1 a 1.",
+          "unwrap": "La billetera {from} convirtió el token envuelto otra vez en monedas, 1 a 1.",
+          "creation": "La billetera {from} puso un nuevo contrato inteligente en la blockchain.",
+          "self": "Las transacciones vacías como esta suelen usarse para cancelar o acelerar una anterior.",
+          "contract-call": "La billetera {from} llamó a la función {fn} en {to}.",
+          "unknown-call": "La billetera {from} llamó en {to} a una función que no está en nuestra lista de funciones conocidas, así que no adivinamos qué hizo.",
+          "movements": "{count, plural, one {Se registró # evento de token (detalles abajo).} other {Se registraron # eventos de token (detalles abajo).}}",
+          "noMovements": "No se registraron eventos de token estándar.",
+          "fee": "La comisión fue de {fee}.",
+          "failed": "No cambió nada. Igual se pagó la comisión de red de {fee}.",
+          "failedNoFee": "No cambió nada.",
+          "pending": "Enviada a la red, todavía no está en un bloque. Cuando se confirme, va a {intent}.",
+          "pendingTime": "{chain} añade un bloque cada {seconds} segundos aproximadamente; en momentos de mucha actividad puede tardar más.",
+          "via": "Pasó por un pool de {dex}, verificado con la factory del exchange.",
+          "app": "El router indica la aplicación como \"{app}\".",
+          "possibleFee": "También se enviaron {amount} a {to}, posiblemente una comisión (sin verificar).",
+          "swapPartial": "La billetera {from} pagó {out} a un swap de un pool mediante {to}. El pool entregó {poolOut}; a dónde fue después no se ve en los eventos. Las monedas (ETH, BNB) pagadas dentro de contratos no dejan eventos, y nuestros nodos ya no guardan los saldos de este bloque para medirlo.",
+          "swapPartialVia": "La billetera {from} pagó {out} a un pool de {via} (verificado con la factory del exchange) mediante {to}. El pool entregó {poolOut}; a dónde fue después no se ve en los eventos. Las monedas (ETH, BNB) pagadas dentro de contratos no dejan eventos, y nuestros nodos ya no guardan los saldos de este bloque para medirlo."
+        },
+        "evidence": {
+          "confirmed": "Confirmado en la blockchain",
+          "decoded": "Decodificado de la transacción",
+          "likely": "Probable, según los eventos de tokens",
+          "unknown": "Sin identificar",
+          "fromEvents": "Según los eventos de tokens",
+          "estimate": "Estimación",
+          "notChecked": "Aún sin revisar",
+          "seen": "Vista por la red",
+          "explained": "Explicado con el mensaje del contrato",
+          "reported": "Depende del propio reporte de un contrato"
+        },
+        "flow": {
+          "label": "Flujo de la transacción",
+          "from": "De",
+          "to": "Para",
+          "wallet": "Billetera",
+          "contract": "Contrato",
+          "known": "Contrato · nombre conocido",
+          "owner": "Dueño",
+          "spender": "Gastador",
+          "created": "creado",
+          "sender": "Remitente",
+          "through": "Intercambiado mediante",
+          "intendedTo": "Para (previsto)",
+          "triedFrom": "De (intento)",
+          "sent": "envió",
+          "receivedBack": "recibió a cambio",
+          "permission": "dio permiso para gastar",
+          "permissionOnly": "solo un permiso · no se envió nada",
+          "unlimited": "Ilimitado",
+          "calls": "llamó a un contrato",
+          "stoppedBy": "detenida por {name}",
+          "afterConfirm": "los movimientos aparecen tras la confirmación",
+          "triedToMove": "intentó mover",
+          "notMoved": "no se movió",
+          "self": "a sí misma",
+          "copy": "Copiar dirección",
+          "newContract": "Contrato nuevo",
+          "address": "Dirección"
+        },
+        "progress": {
+          "label": "Progreso",
+          "sent": "Enviada",
+          "sentBy": "Por {from}",
+          "included": "Incluida en un bloque",
+          "block": "Bloque {block}",
+          "final": "Definitiva",
+          "confirmations": "{count, plural, one {# confirmación} other {# confirmaciones}}",
+          "waiting": "Esperando…",
+          "failed": "Fallida",
+          "reverted": "Revertida por el contrato",
+          "seen": "Vista por nuestro nodo"
+        },
+        "changes": {
+          "title": "Cambios para {wallet}",
+          "fee": "Comisión de red",
+          "note": "Según los eventos de token estándar. Las monedas (ETH, BNB) movidas dentro de contratos no aparecen en los eventos, así que pueden faltar.",
+          "none": "Sin cambios de tokens para esta billetera en los eventos estándar.",
+          "noteMeasured": "Tokens: según los eventos de token estándar. Monedas: medidas con el saldo del remitente antes y después del bloque {block}; otra transacción en el mismo bloque también podría afectarlo.",
+          "noteReported": "Tokens: según los eventos de token estándar. Monedas recibidas dentro de contratos: según el propio reporte del router, sin medición independiente.",
+          "source": {
+            "chain": "Revisión de saldo",
+            "event": "Evento de token",
+            "reported": "Reporte del router",
+            "protocol": "Verificado",
+            "interpreted": "Interpretación",
+            "unknown": "Desconocido"
+          }
+        },
+        "cost": {
+          "title": "Costo",
+          "network": "Red",
+          "tip": "Las comisiones de red van a la red, no a CRYPY. Se cobran aunque una transacción falle.",
+          "failed": "Las comisiones se cobran aunque la transacción falle, porque la red igual hizo el trabajo.",
+          "free": "Esta transacción no pagó comisión.",
+          "estimateTitle": "Comisión (estimación)",
+          "upTo": "Hasta {usd}",
+          "upToCoin": "Hasta {amount}",
+          "estimateNote": "La comisión final se conoce después de la confirmación y suele ser menor.",
+          "estimateTip": "Límite de gas × precio máximo por gas. Comisión real = gas usado × precio pagado.",
+          "time": "Hora",
+          "yourTime": "{time} (tu hora)",
+          "networkFee": "Comisión de red, pagada para procesar la transacción."
+        },
+        "usd": {
+          "atTx": "en ese momento",
+          "today": "hoy"
+        },
+        "failure": {
+          "title": "¿Por qué falló?",
+          "message": {
+            "title": "El contrato se detuvo con un mensaje.",
+            "text": "No tenemos una explicación en palabras simples para este mensaje, así que se muestra tal como está escrito."
+          },
+          "help": "Lo que suele ayudar:",
+          "balance": {
+            "title": "La billetera remitente no tenía suficientes tokens.",
+            "text": "El contrato lo rechazó porque el saldo era menor que la cantidad que intentaba mover."
+          },
+          "balanceHelp": "Revisa el saldo e inténtalo de nuevo con una cantidad que la billetera tenga.",
+          "allowance": {
+            "title": "El permiso de gasto era demasiado bajo.",
+            "text": "El contrato intentó mover tokens con un permiso (allowance) menor que la cantidad."
+          },
+          "allowanceHelp": "Aprueba al menos esta cantidad para la aplicación e inténtalo de nuevo.",
+          "slippage": {
+            "title": "El precio se movió demasiado.",
+            "text": "El exchange se detuvo porque la operación habría devuelto menos del mínimo que aceptaba el remitente."
+          },
+          "slippageHelp": "Inténtalo de nuevo o permite un cambio de precio (slippage) un poco mayor en la aplicación.",
+          "deadline": {
+            "title": "Llegó demasiado tarde.",
+            "text": "La transacción se incluyó después del plazo fijado al enviarla."
+          },
+          "deadlineHelp": "Envíala de nuevo.",
+          "access": {
+            "title": "Esta billetera no tiene permitido hacer eso.",
+            "text": "El contrato solo deja que ciertas direcciones, como su dueño, usen esta función."
+          },
+          "paused": {
+            "title": "El contrato está pausado.",
+            "text": "Sus operadores detuvieron esta función por ahora."
+          },
+          "token-transfer": {
+            "title": "Falló una transferencia de token dentro de ella.",
+            "text": "El contrato intentó mover un token y el token lo rechazó. Causas comunes: saldo o permiso insuficiente, o un token con restricciones de transferencia."
+          },
+          "math": {
+            "title": "Falló un cálculo.",
+            "text": "El contrato tuvo un error matemático, como un desbordamiento o una división entre cero."
+          },
+          "out-of-gas": {
+            "title": "Probablemente se quedó sin gas.",
+            "text": "Usó el {percent} del gas permitido, así que lo más probable es que se detuviera por falta de gas. Es una causa probable, no confirmada."
+          },
+          "out-of-gasHelp": "Inténtalo de nuevo con un límite de gas más alto.",
+          "custom": {
+            "title": "El contrato se detuvo con su propio código de error.",
+            "text": "Este error no está en nuestra lista de errores conocidos, así que no podemos explicarlo de forma fiable."
+          },
+          "no-message": {
+            "title": "El contrato se detuvo sin decir por qué.",
+            "text": "No dio ningún mensaje de error, así que el motivo no se puede leer en la blockchain."
+          },
+          "unavailable": {
+            "title": "El motivo no está disponible.",
+            "text": "La transacción falló, pero ahora no se puede leer el motivo: eso requiere el estado de la red justo antes de este bloque, que nuestros nodos gratuitos ya no guardan."
+          },
+          "messageLabel": "El mensaje del contrato"
+        },
+        "approval": {
+          "meaningTitle": "Qué significa",
+          "permission": "Esto es un permiso, no un pago. Las aplicaciones, como los exchanges, lo piden antes de poder mover tus tokens.",
+          "unlimited": "\"Ilimitado\" significa que el gastador puede mover cualquier cantidad de este token desde la billetera, ahora o después, sin volver a pedir permiso.",
+          "limited": "El gastador puede mover hasta {amount} desde la billetera sin volver a pedir permiso.",
+          "all": "El operador puede mover todos los NFT de esta colección que tenga esta billetera.",
+          "stays": "El permiso sigue activo hasta que se elimina o hasta que una transacción posterior lo cambia.",
+          "revoked": "El permiso se puso en cero, así que el gastador ya no puede mover estos tokens.",
+          "activeTitle": "¿Sigue activo?",
+          "activeText": "Esta página muestra lo que hizo la transacción {when}. El permiso puede haber cambiado desde entonces.",
+          "checker": "El Verificador de aprobaciones (para revisar y eliminar permisos) llegará en la etapa M6."
+        },
+        "pending": {
+          "title": "¿Todavía puede completarse?",
+          "yes": "Sí. El remitente no ha usado el número de esta transacción (nonce {nonce}) en otra transacción.",
+          "no": "No. El remitente ya usó el número de esta transacción (nonce {nonce}) en otra transacción, así que esta se reemplazó o se canceló y no puede confirmarse.",
+          "unknown": "No pudimos comprobarlo en este momento.",
+          "note": "Si el remitente la reemplaza o la cancela, esta página lo dirá. Nunca marcamos una transacción como descartada sin esa evidencia.",
+          "checked": "Última revisión {time} · se revisa cada 15 segundos"
+        },
+        "notes": {
+          "title": "Para tener en cuenta",
+          "known": "{name} es un nombre de la lista de contratos conocidos de CRYPY. Un nombre no es una revisión de seguridad.",
+          "pricesAtTx": "Los valores en dólares usan el precio del momento de la transacción, leído de pools en la cadena.",
+          "pricesToday": "Los valores en dólares usan el precio actual en la cadena. Nuestros nodos no tienen el precio del momento de la transacción.",
+          "toContract": "El destinatario es un contrato, no una billetera personal.",
+          "burn": "Los tokens enviados a una dirección de quema no se pueden recuperar.",
+          "nativeMissing": "Las monedas (ETH, BNB) pagadas dentro de contratos no aparecen en los eventos de tokens, así que puede que no se muestre la parte en monedas de esta transacción.",
+          "self": "No se movió nada. Las billeteras envían transacciones así para reemplazar una atascada que tiene el mismo número.",
+          "unknownFn": "La función no está en nuestra lista. Un contrato puede usar cualquier nombre, así que solo describimos lo que prueban los eventos.",
+          "reported": "Parte de este resultado viene del propio reporte del router (su evento \"Swapped\"). Lo mostramos como reportado porque no pudimos comprobar el saldo de monedas de forma independiente."
+        },
+        "events": {
+          "title": "Los {count} eventos de tokens",
+          "hint": "Cada movimiento de tokens en su orden original, incluidos los saltos internos entre contratos"
+        },
+        "nft": "NFT #{id}",
+        "units": "{amount} unidades",
+        "advanced": {
+          "transaction": "Transacción",
+          "hash": "Hash",
+          "chain": "Red",
+          "chainValue": "{name} · ID de cadena {id} ({caip})",
+          "block": "Bloque",
+          "blockHash": "Hash del bloque",
+          "index": "Posición en el bloque",
+          "indexTip": "Dónde está la transacción dentro de su bloque.",
+          "nonceTip": "Un número de secuencia para las transacciones del remitente.",
+          "fees": "Comisiones",
+          "gasLimitTip": "El máximo de gas que permitió el remitente.",
+          "gasUsedTip": "El gas que realmente usó la transacción.",
+          "baseFee": "Comisión base",
+          "baseFeeTip": "La fija la red para cada bloque; esta parte se quema.",
+          "priorityFee": "Comisión de prioridad",
+          "priorityFeeTip": "Propina pagada a quien construye el bloque.",
+          "effective": "Precio efectivo del gas",
+          "maxFee": "Comisión máxima por gas",
+          "maxPriority": "Comisión de prioridad máxima por gas",
+          "total": "Comisión total",
+          "events": "Eventos",
+          "eventsCount": "{count, plural, one {# evento en el recibo, en su orden original} other {# eventos en el recibo, en su orden original}}",
+          "log": "Log",
+          "contract": "Contrato",
+          "event": "Evento",
+          "notStandard": "No es un evento estándar",
+          "topics": "Topics",
+          "data": "Datos",
+          "dataBytes": "{count, plural, one {# byte} other {# bytes}}",
+          "raw": "Datos sin procesar",
+          "moreEvents": "Solo se listan los primeros {count} eventos. La lista completa está en {explorer}."
+        },
+        "utc": "({time} UTC)",
+        "level": {
+          "chain": "Hecho en la cadena",
+          "chainTip": "Leído directamente del estado de la blockchain (estado, valor, comisión, saldo o permiso).",
+          "event": "Evento estándar",
+          "eventTip": "Decodificado de un evento estándar que registró el contrato (Transfer, Approval, Swap…).",
+          "protocol": "Verificado",
+          "protocolTip": "Confirmado con el propio protocolo, p. ej., un pool que figura en la factory de su exchange.",
+          "reported": "Reportado",
+          "reportedTip": "El propio reporte de un contrato sobre lo que hizo. Se muestra como reportado, sin comprobación independiente.",
+          "interpreted": "Interpretación",
+          "interpretedTip": "Una lectura razonable de los hechos que no está demostrada.",
+          "unknown": "Sin identificar",
+          "unknownTip": "No podemos saberlo con los datos disponibles."
+        },
+        "who": {
+          "sender": "el remitente",
+          "senderWallet": "Billetera remitente",
+          "you": "Tú",
+          "pool": "Pool de {dex}",
+          "poolUnverified": "Pool (sin verificar)",
+          "token": "Contrato de {symbol}"
+        },
+        "route": {
+          "title": "Cómo se movieron los activos",
+          "relationsTitle": "Movimientos de activos",
+          "hint": "En el orden en que ocurrieron, según los eventos de la transacción",
+          "relationsIntro": "Estos movimientos no forman una ruta conectada, así que los listamos por separado en lugar de adivinar cómo se relacionan.",
+          "verifiedPool": "Pool verificado",
+          "unverifiedPool": "Sin verificar",
+          "knownName": "Nombre conocido",
+          "wrapped": "Envuelto en {amount}",
+          "unwrapped": "Desenvuelto a {amount}",
+          "reported": "reportado por el router",
+          "reportedMatched": "reportado, coincide con el cambio de saldo",
+          "measured": "medido con el saldo",
+          "sentWithCall": "enviado con la transacción",
+          "possibleFee": "Posible comisión (sin verificar)",
+          "more": "{count, plural, one {# movimiento más} other {# movimientos más}} en la vista avanzada",
+          "called": "Contrato llamado: {name}"
+        },
+        "actionLabel": {
+          "native-transfer": "Transferencia de moneda",
+          "token-transfer": "Transferencia de token",
+          "nft-transfer": "Transferencia de NFT",
+          "mint": "Emisión",
+          "burn": "Quema",
+          "wrap": "Envoltura",
+          "unwrap": "Desenvoltura",
+          "pool-swap": "Swap en un pool",
+          "liquidity-add": "Liquidez añadida",
+          "liquidity-remove": "Liquidez retirada",
+          "permission-granted": "Permiso concedido",
+          "permission-modified": "Permiso cambiado",
+          "permission-set": "Permiso fijado",
+          "permission-used": "Permiso usado",
+          "permission-revoked": "Permiso eliminado",
+          "router-swap": "Reporte del router",
+          "contract-creation": "Contrato creado",
+          "smart-wallet": "Billetera inteligente",
+          "user-operation": "Operación de cuenta inteligente"
+        },
+        "permissions": {
+          "title": "Permisos modificados",
+          "heading": "{token} · gastador {spender}",
+          "status": {
+            "used": "Agotado por esta transacción",
+            "granted": "Permiso concedido",
+            "modified": "Permiso cambiado",
+            "set": "Permiso fijado",
+            "revoked": "Permiso eliminado"
+          },
+          "change": {
+            "used": "Usado",
+            "granted": "Concedido",
+            "modified": "Cambiado",
+            "set": "Fijado",
+            "revoked": "Eliminado"
+          },
+          "before": "Antes",
+          "after": "Después de esta transacción",
+          "today": "Hoy",
+          "unknown": "Desconocido",
+          "notRead": "No se pudo leer",
+          "readBefore": "Leído de la cadena",
+          "derived": "Calculado a partir de los eventos",
+          "readNow": "Leído ahora",
+          "usedBy": "por la transferencia #{index}",
+          "todayNote": "El valor de hoy se leyó el {time}. Muestra el permiso actual, no cuándo ni por qué cambió.",
+          "eventsNote": "Los tokens reportan los cambios de permisos en eventos Approval, y no todos lo hacen igual. Los valores de antes y después vienen de los eventos de esta transacción, salvo que se indique que se leyeron de la cadena."
+        },
+        "roles": {
+          "sender": "Remitente",
+          "called": "Contrato llamado",
+          "created": "Contrato nuevo",
+          "router": "Router",
+          "pool": "Pool",
+          "intermediary": "Pasó los activos",
+          "recipient": "Recibió",
+          "possible-fee": "Posible comisión (sin verificar)",
+          "spender": "Gastador",
+          "token": "Token",
+          "smart-account": "Cuenta inteligente",
+          "burn": "Dirección de quema"
+        },
+        "parties": {
+          "title": "Quiénes participaron ({count})",
+          "more": "{count, plural, one {Mostrar # más} other {Mostrar # más}}",
+          "note": "Los roles salen de los eventos de esta transacción. Si es un contrato o una billetera se lee de la cadena; un nombre es una etiqueta, no una revisión de seguridad."
+        }
+      }
+    },
+    "otherChains": {
+      "label": "La misma dirección en otras cadenas:",
+      "none": "No se usa en las demás cadenas compatibles.",
+      "overview": "Resumen de todas las cadenas"
+    },
+    "tokenSecurity": {
+      "tabs": {
+        "label": "Secciones del token",
+        "security": "Seguridad",
+        "market": "Mercado",
+        "soon": "Pronto"
+      },
+      "level": {
+        "serious": "Se encontraron riesgos graves",
+        "risks": "Se encontraron riesgos",
+        "warnings": "Algunas advertencias",
+        "none-found": "No se encontraron riesgos importantes en estas revisiones"
+      },
+      "levelNote": "En CRYPY no existe el veredicto \"seguro\": estas son las señales que pudimos revisar.",
+      "topRisks": "Riesgos principales: {list}.",
+      "noneFoundNote": "Pasar estas revisiones no demuestra que un token sea honesto, y un contrato puede cambiar su comportamiento más adelante.",
+      "checked": "Revisado {time} UTC · bloque {block}",
+      "counts": {
+        "critical": "Críticos",
+        "high": "Altos",
+        "medium": "Medios",
+        "low": "Bajos",
+        "passed": "Superadas",
+        "unchecked": "Sin revisar"
+      },
+      "severity": {
+        "critical": "Crítico",
+        "high": "Alto",
+        "medium": "Medio",
+        "low": "Bajo",
+        "pass": "Superada",
+        "unchecked": "Sin revisar"
+      },
+      "class": {
+        "verified": "Verificado",
+        "verifiedTip": "Leído directamente de la blockchain.",
+        "simulated": "Simulado",
+        "simulatedTip": "Medido simulando operaciones en una llamada de solo lectura. No se envió nada.",
+        "heuristic": "Heurístico",
+        "heuristicTip": "Deducido del código del contrato. Que exista una función no indica si se usa.",
+        "external": "{provider}",
+        "externalTip": "De un proveedor externo, mostrado con su nombre.",
+        "unsupported": "Sin revisar",
+        "unsupportedTip": "CRYPY no pudo revisar esto aquí."
+      },
+      "copyReport": "Copiar el informe",
+      "copied": "Copiado",
+      "unavailable": "Las revisiones de seguridad no están disponibles para este token en este momento. Inténtalo de nuevo en un minuto.",
+      "loading": "Ejecutando revisiones de seguridad…",
+      "trade": {
+        "title": "Prueba de compraventa",
+        "intro": "Una compra, una transferencia y una venta, simuladas contra el pool real de {dex} dentro de una llamada de solo lectura. No se envió nada.",
+        "buy": "Compra",
+        "sell": "Venta",
+        "transfer": "Transferencia a otra billetera",
+        "worked": "Funcionó",
+        "blocked": "Bloqueada",
+        "notRun": "Sin probar",
+        "tax": "Impuesto {tax}",
+        "said": "El contrato dijo: {reason}",
+        "noReason": "El contrato no dio ningún motivo.",
+        "footer": "Tamaño de la prueba: {amount} {symbol} · pool {pool}. Los resultados pueden cambiar en cualquier momento: un dueño puede activar o desactivar el trading o las comisiones más adelante.",
+        "why": {
+          "noPool": "No se encontró ningún pool en los exchanges que revisa CRYPY ({dexes}), así que no había contra qué operar.",
+          "unsupportedPool": "Hay pools, pero ninguno que la prueba pueda usar: están en un tipo de exchange que aún no simula, o emparejados con un token que no es la moneda nativa ni una stablecoin.",
+          "noLiquidity": "El pool todavía (casi) no tiene liquidez, así que una operación de prueba no tiene sentido.",
+          "error": "La prueba de compraventa no se pudo ejecutar ahora (el nodo no respondió a tiempo). Inténtalo de nuevo en un minuto."
+        },
+        "via": "El pool está emparejado con {symbol}, así que la prueba primero cambió la moneda nativa a {symbol} y luego compró con ella.",
+        "feeRejected": "El pool rechazó la venta: el token tomó el {tax} de la cantidad al entrar en el pool, y los pools v3 no aceptan recibir menos de lo que se les debe."
+      },
+      "owner": {
+        "title": "Lo que puede hacer el dueño",
+        "state": {
+          "none": "No se encontró función de dueño",
+          "renounced": "Propiedad renunciada",
+          "wallet": "Dueño: una billetera, sin renunciar",
+          "contract": "Dueño: un contrato (a menudo un multisig, un timelock o un contrato de staking)"
+        },
+        "power": {
+          "mint": "Emitir nuevos tokens",
+          "fees": "Cambiar las comisiones de compra y venta",
+          "blacklist": "Impedir que ciertas billeteras operen",
+          "pause": "Pausar o activar el trading",
+          "limits": "Limitar cuánto puede comprar o tener una billetera",
+          "cooldown": "Añadir tiempo de espera entre operaciones",
+          "upgrade": "Reemplazar el código del contrato",
+          "selfdestruct": "Destruir el contrato (SELFDESTRUCT)"
+        },
+        "found": "Encontrado en el código: {functions}",
+        "notUsable": "No se puede usar: la propiedad está renunciada.",
+        "byContract": "En manos de un contrato dueño.",
+        "nothing": "No se encontró en el código ninguno de los poderes de dueño habituales (emisión, comisiones, lista negra, pausa, límites).",
+        "note": "\"Encontrado en el código\" significa que la función existe. No indica si se usa ni cuándo. Cuando el código está verificado en Sourcify, CRYPY lee quién puede llamar a cada función y qué límites comprueba; es una lectura del código, no una garantía.",
+        "access": {
+          "owner": "solo el dueño",
+          "role": "cuentas con un rol (no se elimina al renunciar a la propiedad)",
+          "restricted": "una cuenta concreta distinta del dueño (no se elimina al renunciar a la propiedad)",
+          "open": "cualquiera: no se encontró control de acceso",
+          "unknown": "control de acceso no reconocido"
+        },
+        "fromSourceTitle": "Según el código verificado:",
+        "whoCalls": "quién puede llamarla: {access}",
+        "limitLabel": "Límite escrito en el código:"
+      },
+      "allChecks": "Todas las revisiones ({count})",
+      "showAll": "Mostrar las {count} revisiones",
+      "checks": {
+        "sell": {
+          "risk": {
+            "title": "Venta bloqueada en la prueba de compraventa",
+            "detail": "La compra funcionó, pero la venta falló. {reason}"
+          },
+          "pass": {
+            "title": "La venta funcionó en la prueba de compraventa",
+            "detail": "Comprado y vendido en {dex}."
+          },
+          "feeRejected": {
+            "title": "La venta falló en la prueba de compraventa",
+            "detail": "El pool de {dex} rechaza las ventas porque el token toma el {tax} de cada transferencia que entra en él."
+          }
+        },
+        "buy": {
+          "risk": {
+            "title": "La compra falló en la prueba de compraventa",
+            "detail": "Puede que el trading todavía no esté abierto o que haya un límite. {reason}"
+          }
+        },
+        "transfer": {
+          "risk": {
+            "title": "Transferencias bloqueadas en la prueba de compraventa",
+            "detail": "Falló una transferencia a otra billetera. {reason}"
+          }
+        },
+        "buyTax": {
+          "risk": {
+            "title": "Impuesto de compra del {tax}",
+            "detail": "Medido en la prueba de compraventa."
+          },
+          "pass": {
+            "title": "Sin impuesto de compra",
+            "detail": "Medido en la prueba de compraventa."
+          }
+        },
+        "sellTax": {
+          "risk": {
+            "title": "Impuesto de venta del {tax}",
+            "detail": "Medido en la prueba de compraventa."
+          },
+          "pass": {
+            "title": "Sin impuesto de venta",
+            "detail": "Medido en la prueba de compraventa."
+          }
+        },
+        "transferTax": {
+          "risk": {
+            "title": "Impuesto de transferencia del {tax}",
+            "detail": "Las transferencias entre billeteras pierden parte de la cantidad."
+          },
+          "pass": {
+            "title": "Sin impuesto de transferencia",
+            "detail": "Medido en la prueba de compraventa."
+          }
+        },
+        "tradeTest": {
+          "unchecked": {
+            "title": "Prueba de compraventa no realizada",
+            "detail": "Mira la prueba de compraventa."
+          }
+        },
+        "owner": {
+          "risk": {
+            "title": "El dueño no renunció",
+            "detail": "Una dirección dueña todavía puede usar las funciones exclusivas del dueño."
+          },
+          "pass": {
+            "title": "Sin dueño activo",
+            "detail": "La propiedad está renunciada o no hay función de dueño."
+          }
+        },
+        "powers": {
+          "pass": {
+            "title": "No se encontraron poderes de dueño habituales",
+            "detail": "No se encontraron en el código funciones de emisión, comisiones, lista negra, pausa ni límites."
+          }
+        },
+        "power": {
+          "mint": {
+            "risk": {
+              "title": "El dueño puede emitir nuevos tokens",
+              "detail": "Un nuevo suministro reduciría la parte de cada holder."
+            }
+          },
+          "fees": {
+            "risk": {
+              "title": "El dueño puede cambiar las comisiones",
+              "detail": "Las comisiones de compra o venta podrían subir más adelante."
+            }
+          },
+          "blacklist": {
+            "risk": {
+              "title": "El dueño puede bloquear billeteras",
+              "detail": "Las billeteras bloqueadas no pueden operar ni mover el token."
+            }
+          },
+          "pause": {
+            "risk": {
+              "title": "El dueño puede pausar o activar el trading",
+              "detail": "El trading se puede desactivar."
+            }
+          },
+          "limits": {
+            "risk": {
+              "title": "El dueño puede poner límites de operación o de billetera",
+              "detail": "Las compras o ventas grandes se pueden bloquear."
+            }
+          },
+          "cooldown": {
+            "risk": {
+              "title": "El dueño puede añadir un tiempo de espera entre operaciones",
+              "detail": "Las billeteras pueden tener que esperar entre operaciones."
+            }
+          },
+          "upgrade": {
+            "risk": {
+              "title": "El código se puede reemplazar",
+              "detail": "Se encontraron funciones de actualización en el código."
+            }
+          },
+          "selfdestruct": {
+            "risk": {
+              "title": "El contrato contiene SELFDESTRUCT",
+              "detail": "Su efecto es limitado en las redes actuales, pero es poco habitual en un token."
+            }
+          }
+        },
+        "proxy": {
+          "risk": {
+            "title": "Proxy actualizable",
+            "detail": "El administrador del proxy puede reemplazar su código."
+          },
+          "pass": {
+            "title": "No es un proxy actualizable",
+            "detail": "No se encontró un slot estándar de implementación de proxy."
+          }
+        },
+        "source": {
+          "pass": {
+            "title": "Código fuente publicado",
+            "detail": "Coincide en {provider}."
+          },
+          "unchecked": {
+            "title": "Código fuente sin confirmar",
+            "detail": "No se encontró en {provider}. Puede que esté publicado en un explorador de bloques; CRYPY todavía no puede comprobarlo gratis."
+          }
+        },
+        "liquidity": {
+          "risk": {
+            "title": "Liquidez baja",
+            "detail": "Unos ${usd} en el pool principal ({dex}). Las operaciones grandes mueven mucho el precio."
+          },
+          "pass": {
+            "title": "Liquidez de unos ${usd}",
+            "detail": "Pool principal: {dex}."
+          }
+        },
+        "lp": {
+          "risk": {
+            "title": "La liquidez se puede retirar",
+            "detail": "Solo el {protected} de la liquidez está quemado o bloqueado por más de 30 días ({pools, plural, one {# pool} other {# pools}}, ponderado por valor)."
+          },
+          "pass": {
+            "title": "La mayor parte de la liquidez está quemada o bloqueada",
+            "detail": "El {protected} está quemado o bloqueado por más de 30 días ({pools, plural, one {# pool} other {# pools}}, ponderado por valor)."
+          },
+          "owner": {
+            "risk": {
+              "title": "El dueño puede retirar el {share} de la liquidez",
+              "detail": "Unos ${usd}, en la billetera o las posiciones del dueño."
+            }
+          },
+          "soon": {
+            "risk": {
+              "title": "El {share} de la liquidez se desbloquea en menos de 30 días",
+              "detail": "El primer bloqueo termina el {date}. Después se puede retirar."
+            }
+          },
+          "expired": {
+            "risk": {
+              "title": "El {share} de la liquidez está en bloqueos que ya terminaron",
+              "detail": "Todavía no se retiró, pero se puede retirar en cualquier momento."
+            }
+          },
+          "unknown": {
+            "risk": {
+              "title": "El {share} está en contratos que CRYPY no puede leer",
+              "detail": "Contratos no identificados, o contratos de bloqueo cuyas condiciones no se pudieron leer. Pueden ser seguros o no."
+            }
+          },
+          "coverage": {
+            "unchecked": {
+              "title": "No se encontraron los holders del {share} de la liquidez",
+              "detail": "Encontrar a todos los holders requiere el historial completo de cada pool; el índice propio de CRYPY lo añadirá. Esta parte nunca se cuenta como segura."
+            }
+          },
+          "upgradeable": {
+            "risk": {
+              "title": "El {share} está bloqueado en contratos de bloqueo actualizables",
+              "detail": "El operador del contrato de bloqueo puede cambiar su código, así que estos bloqueos son tan seguros como ese operador."
+            }
+          }
+        },
+        "holders": {
+          "risk": {
+            "title": "Los 10 mayores holders tienen el {top10}",
+            "detail": "Según {provider}. Sin contar las direcciones de quema."
+          },
+          "pass": {
+            "title": "Los 10 mayores holders tienen el {top10}",
+            "detail": "Según {provider}. Sin contar las direcciones de quema."
+          },
+          "unchecked": {
+            "title": "Holders sin revisar",
+            "detail": "CRYPY todavía no puede contar los holders por su cuenta, y el proveedor externo no respondió."
+          }
+        },
+        "name": {
+          "risk": {
+            "title": "Nombre sospechoso",
+            "detail": "El nombre o el símbolo contiene un enlace o palabras de cebo."
+          },
+          "pass": {
+            "title": "El nombre y el símbolo parecen normales",
+            "detail": "Sin enlaces ni palabras de cebo."
+          }
+        },
+        "age": {
+          "unchecked": {
+            "title": "Antigüedad y creador del contrato",
+            "detail": "Requiere un índice de transacciones pasadas (previsto)."
+          }
+        },
+        "proxyClone": {
+          "title": "Un clon fijo, no actualizable",
+          "detail": "Un clon mínimo EIP-1167: siempre ejecuta el mismo código de contrato, que no se puede reemplazar."
+        },
+        "liquidityState": {
+          "none": {
+            "title": "No se encontró ningún pool de liquidez",
+            "detail": "No está en los exchanges que revisa CRYPY. El token puede operarse en otro lugar, o todavía no operarse."
+          },
+          "empty": {
+            "title": "Los pools están vacíos",
+            "detail": "Se encontraron {count, plural, one {# pool} other {# pools}}, pero (casi) no tienen nada. En la práctica, el token todavía no se puede operar."
+          }
+        },
+        "powerOpen": {
+          "title": "Cualquiera puede llamar a {functions}",
+          "detail": "El código verificado no tiene control de acceso en esta función, así que cualquier billetera puede usarla."
+        },
+        "powerOthers": "En manos de un rol o de otra cuenta concreta, así que renunciar a la propiedad no lo elimina."
+      },
+      "lpStates": {
+        "owner": "El {owner} de la liquidez está en manos del dueño; se puede retirar en cualquier momento.",
+        "proxyBurned": "Su administrador es una dirección de quema, así que ya no se puede actualizar."
+      },
+      "liquidity": {
+        "title": "Liquidez",
+        "none": "No se encontraron pools en {dexes}.",
+        "empty": "Se encontraron {count, plural, one {# pool} other {# pools}} en {dexes}, todos vacíos (menos de 1 $)."
+      },
+      "holders": {
+        "title": "Holders",
+        "count": "Holders",
+        "top10": "Los 10 mayores tienen",
+        "owner": "El dueño tiene",
+        "creator": "El creador tiene",
+        "source": "Según {provider}, leído {time} UTC. CRYPY todavía no puede contar los holders por su cuenta.",
+        "none": "Sin datos de holders: {provider} no respondió o todavía no analizó este token."
+      },
+      "second": {
+        "title": "Segunda opinión",
+        "agree": "{provider} coincide en {agree} de {shared} revisiones compartidas.",
+        "none": "Sin segunda opinión: {provider} no respondió o todavía no analizó este token.",
+        "different": "Diferencias:",
+        "separate": "Los resultados de {provider} se muestran con su nombre y nunca se mezclan con las revisiones propias de CRYPY.",
+        "ids": {
+          "honeypot": "venta bloqueada",
+          "buyTax": "impuesto de compra",
+          "sellTax": "impuesto de venta",
+          "mintable": "puede emitir",
+          "proxy": "proxy actualizable",
+          "blacklist": "puede bloquear billeteras",
+          "renounced": "propiedad renunciada"
+        },
+        "diff": "{what}: CRYPY {ours}, {provider} {theirs}"
+      },
+      "facts": {
+        "title": "Datos del token",
+        "supply": "Suministro total",
+        "decimals": "Decimales",
+        "contract": "Contrato"
+      },
+      "disclaimer": "CRYPY nunca muestra un token como \"seguro\". Pasar las revisiones no demuestra que un token sea honesto, y un contrato puede cambiar su comportamiento más adelante. No es asesoría financiera.",
+      "lp": {
+        "title": "Quién tiene la liquidez",
+        "intro": "La liquidez es lo que permite vender. Quien la tiene puede retirarla, y entonces el precio puede desplomarse. CRYPY buscó a los holders de cada pool y leyó en la cadena lo que puede hacer cada uno.",
+        "tiles": {
+          "protected": "Protegida: quemada o bloqueada por más de 30 días",
+          "soon": "Se desbloquea en menos de 30 días",
+          "soonNext": "Próximo: {date}",
+          "controlled": "Multisig, timelock, farm o exchange",
+          "removable": "Se puede retirar ahora",
+          "unknown": "Contratos no identificados o bloqueos sin leer",
+          "notFound": "Holders no encontrados"
+        },
+        "state": {
+          "burned": "Quemada",
+          "locked": "Bloqueada",
+          "soon": "Se desbloquea pronto",
+          "controlled": "Controlada",
+          "owner": "Dueño",
+          "expired": "Bloqueo terminado",
+          "removable": "Se puede retirar ahora",
+          "unknown": "Desconocido",
+          "notFound": "Sin revisar"
+        },
+        "total": "Todos los pools contados en conjunto: {usd} ({count, plural, one {# pool} other {# pools}}). Cada pool cuenta según su valor, así que un pool grande importa más que uno pequeño.",
+        "tooSmall": "Ningún pool vale {usd} o más, así que no hay totales.",
+        "kindLp": "Tokens LP",
+        "kindPositions": "Posiciones (NFT) · proporciones medidas por valor",
+        "foundShare": "holders encontrados para el {share}",
+        "unlisted": "exchange fuera de la lista de CRYPY; pool confirmado con su factory",
+        "weight": "el {share} de toda la liquidez",
+        "notCounted": "sin contar",
+        "fee": "comisión del {fee}%",
+        "unreadPool": "Esta vez no se pudieron leer los holders de este pool. Prueba a revisarlo de nuevo.",
+        "col": {
+          "holder": "Holder",
+          "type": "Tipo",
+          "share": "Proporción",
+          "control": "Bloqueo o control",
+          "status": "Estado"
+        },
+        "wallets": "{count} billeteras",
+        "largest": "la mayor: {address}",
+        "position": "Posición #{id} · {name}",
+        "notFound": {
+          "title": "Holders no encontrados",
+          "detail": "CRYPY no pudo encontrar quién tiene esta parte. Encontrar a todos los holders requiere el historial completo del pool, que el índice propio de CRYPY aportará más adelante. Nunca se cuenta como segura."
+        },
+        "small": {
+          "title": "{count, plural, one {# pool pequeño} other {# pools pequeños}}",
+          "detail": "de menos de {usd} cada uno: listados, sin contar en los totales"
+        },
+        "empty": "{count, plural, one {# pool vacío (menos de 1 $) no se muestra.} other {# pools vacíos (menos de 1 $) no se muestran.}}",
+        "how": {
+          "title": "Cómo lo revisamos.",
+          "body": "Los pools se encontraron en {dexes}, más los pools que lista GoPlus una vez confirmados con la factory de su exchange. Los holders se encontraron a partir de direcciones conocidas (direcciones de quema, el dueño, lockers registrados, farms y recaudadores de comisiones), la lista de mayores holders de GoPlus, transferencias recientes de LP y las listas propias de los lockers con posiciones v3 bloqueadas. Después, cada proporción y cada fecha de desbloqueo se leyó de la blockchain. Un locker solo cuenta si está en la lista verificada de CRYPY (UNCX, PinkLock, Team Finance, bóvedas de OnlyMoons); un contrato que solo dice ser un bloqueo cuenta como no identificado. Un bloqueo solo protege hasta su fecha de fin."
+        },
+        "lock": {
+          "forever": "Bloqueado sin fecha de fin.",
+          "until": "Bloqueado hasta el {date} (dentro de {days, plural, one {# día} other {# días}}).",
+          "soon": "Se desbloquea el {date}, dentro de {days, plural, one {# día} other {# días}}. Después se puede retirar.",
+          "ended": "El bloqueo terminó el {date} (hace {days, plural, one {# día} other {# días}}) y no se retiró: se puede retirar en cualquier momento.",
+          "vesting": "Después se libera por etapas."
+        },
+        "control": {
+          "unread": "Un contrato de bloqueo de la lista de CRYPY, pero esta vez no se pudieron leer sus condiciones.",
+          "noLocks": "Un contrato de bloqueo de la lista de CRYPY, pero no indica ningún bloqueo para este pool.",
+          "partly": "El {share} no está cubierto por ningún bloqueo que indique.",
+          "locks": "{count} bloqueos. El primero: {first}",
+          "multisig": "Deben estar de acuerdo {threshold} de {signers} firmantes para retirarla. Igual pueden hacerlo en cualquier momento.",
+          "multisigOne": "Un multisig en el que un solo firmante (de {signers}) puede retirarla.",
+          "timelock": "Cualquier retiro debe esperar unas {hours, plural, one {# hora} other {# horas}} (leído del contrato), así que se vería con antelación.",
+          "farm": "En staking por muchas personas, no por un solo holder.",
+          "exchange": "El recaudador de comisiones del exchange: gana una pequeña parte de cada pool.",
+          "owner": "El dueño del token puede retirarla en cualquier momento.",
+          "token": "En el propio contrato del token. Lo que puede hacer depende del código de ese contrato.",
+          "pool": "Devuelta al pool; se va con el próximo retiro.",
+          "wallet": "Se puede retirar en cualquier momento.",
+          "contract": "CRYPY no puede saber si este contrato puede liberarla. No está en la lista de lockers conocidos de CRYPY.",
+          "burn": "Eliminada para siempre: nadie puede retirarla.",
+          "upgradeable": "El operador de este contrato de bloqueo puede actualizarlo, así que el bloqueo es tan seguro como ese operador."
+        },
+        "kind": {
+          "burn": "Dirección de quema",
+          "locker": "Contrato de bloqueo",
+          "vault": "Bóveda de bloqueo",
+          "multisig": "Multisig (Safe)",
+          "timelock": "Timelock",
+          "farm": "Farm de staking",
+          "exchange": "Recaudador de comisiones del exchange",
+          "owner": "Dueño del token",
+          "token": "El propio contrato del token",
+          "pool": "El propio pool",
+          "wallet": "Billetera",
+          "contract": "Contrato no identificado",
+          "exchangeOf": "Recaudador de comisiones de {name}"
+        },
+        "type": {
+          "burn": "Quemada",
+          "locker": "Contrato de bloqueo",
+          "vault": "Bóveda de bloqueo",
+          "multisig": "Multisig",
+          "timelock": "Timelock",
+          "farm": "Farm de staking",
+          "exchange": "Exchange",
+          "owner": "Dueño",
+          "token": "Contrato del token",
+          "pool": "Pool",
+          "wallet": "Billetera",
+          "contract": "Contrato no reconocido"
+        },
+        "tiny": "{count, plural, one {# holder más} other {# holders más}} con menos del 0,05 % cada uno (el {share} en conjunto), contados en todos los totales."
+      },
+      "notOnChain": "Las revisiones de seguridad de tokens todavía no están disponibles en {chain}: CRYPY las añade cuando su prueba de compraventa y sus revisiones de liquidez están verificadas ahí. Los datos del token de arriba se leen de la cadena."
+    },
+    "tabs": {
+      "label": "Secciones de la dirección",
+      "overview": "Resumen",
+      "approvals": "Aprobaciones",
+      "activity": "Actividad"
+    },
+    "approvals": {
+      "metaTitle": "Aprobaciones de {short}",
+      "title": "Aprobaciones",
+      "intro": "Una aprobación permite que otra dirección mueva tus tokens sin volver a pedirte permiso. Revoca las que no uses y cualquiera que no reconozcas.",
+      "ui": {
+        "readOnlyTitle": "No es tu billetera conectada (solo lectura)",
+        "readOnlyBody": "Cualquiera puede revisar cualquier dirección. Revocar solo funciona cuando está conectada la billetera que dio la aprobación.",
+        "connectToRevoke": "Conecta esta billetera para revocar",
+        "attentionOne": "1 aprobación requiere atención",
+        "attentionOther": "{count} aprobaciones requieren atención",
+        "attentionBody": "Pueden mover ahora mismo hasta {usd} de tus tokens.",
+        "attentionBodyNoPrice": "Revísalas y revoca las que no reconozcas.",
+        "noneAttention": "Ninguna aprobación requiere atención",
+        "noneAttentionBody": "Todas las aprobaciones encontradas van a aplicaciones conocidas o a contratos con código publicado. Revoca las que ya no uses.",
+        "noneFoundTitle": "No se encontraron aprobaciones",
+        "noneFoundBody": "No se encontraron aprobaciones activas en {chains}. CRYPY buscó en la lista de GoPlus y en sus propias revisiones; una aprobación que no pudo encontrar no aparecería aquí.",
+        "revokeFlaggedOne": "Revocar la marcada",
+        "revokeFlaggedOther": "Revocar las {count} marcadas",
+        "revokeFlaggedNote": "Una confirmación en la billetera por cada una · gratis salvo las comisiones de red",
+        "readAt": "Leído en la cadena {time} · {blocks}",
+        "blockOn": "bloque {block} en {chain}",
+        "checkAgain": "Revisar de nuevo",
+        "statActive": "Aprobaciones activas",
+        "statActiveDetail": "{tokens} tokens · {nfts} colecciones de NFT · {permit2} mediante Permit2",
+        "statAtRisk": "Se podría mover ahora",
+        "statAtRiskDetail": "limitado por tus saldos",
+        "statUnlimited": "Ilimitadas",
+        "statAttention": "Requieren atención",
+        "statAttentionDetail": "{malicious} maliciosas · {wallets} gastadores que son billeteras",
+        "listTitle": "Aprobaciones de esta billetera",
+        "filters": "Filtrar aprobaciones",
+        "all": "Todas ({count})",
+        "fAttention": "Requieren atención ({count})",
+        "fUnlimited": "Ilimitadas ({count})",
+        "fTokens": "Tokens ({count})",
+        "fNfts": "NFT ({count})",
+        "allChains": "Todas las cadenas",
+        "groupAttention": "Requieren atención ({count})",
+        "groupAttentionNote": "revócalas, salvo que estés seguro de que las necesitas",
+        "groupNormal": "Parecen normales ({count})",
+        "groupNormalNote": "aplicaciones conocidas o contratos con código publicado: revoca las que ya no uses",
+        "groupCheck": "Revisa estas ({count})",
+        "groupCheckNote": "contratos desconocidos: asegúrate de que cada uno sea una aplicación que querías usar",
+        "colToken": "Token",
+        "colSpender": "Gastador (quién puede moverlo)",
+        "colAllowance": "Permiso",
+        "colAtRisk": "En riesgo ahora",
+        "colLast": "Último cambio",
+        "youHold": "Tienes {amount}",
+        "youHoldNfts": "Tienes {count}",
+        "holdUnknown": "Saldo ilegible",
+        "unlimited": "Ilimitado",
+        "unlimitedNote": "también cubre los tokens que recibas después",
+        "allItems": "Todos los elementos de la colección",
+        "expires": "caduca el {date}",
+        "viaPermit2": "{permit2} → {name}",
+        "nftCount": "{count} NFT",
+        "noPrice": "Sin precio",
+        "unknownDate": "Desconocido",
+        "tx": "tx {hash}",
+        "spenderWallet": "Una billetera, no un contrato",
+        "spenderDelegated": "Una billetera con código delegado",
+        "spenderContract": "Contrato desconocido",
+        "spenderUnreadable": "No se pudo leer",
+        "badgeMalicious": "Malicioso (GoPlus)",
+        "badgeHigh": "Riesgo alto",
+        "badgeCheck": "Revisar",
+        "badgeKnown": "Aplicación conocida",
+        "badgeNormal": "Contrato",
+        "badgeSourceVerified": "Código verificado",
+        "badgeSourceMissing": "Código no publicado",
+        "badgeGoplusDoubt": "GoPlus: dudoso",
+        "badgeGoplusTrusted": "GoPlus: confiable",
+        "badgeUnused": "Sin uso",
+        "badgeRevoked": "Revocada",
+        "reasonMalicious": "GoPlus marca esta dirección como maliciosa. Puede tomar tus {symbol}, ahora y después.",
+        "reasonWallet": "Es la billetera de una persona, no una aplicación. Las aplicaciones nunca necesitan esto; es una forma común en que las estafas vacían billeteras.",
+        "reasonUnknownContract": "Su código no está publicado y no está en la lista de aplicaciones conocidas de CRYPY. Comprueba que sea una aplicación que querías usar.",
+        "reasonUnreadable": "CRYPY no pudo identificar a este gastador. Revísalo antes de mantener la aprobación.",
+        "reasonUnused": "No tienes {symbol}, así que hoy no hay nada en riesgo. Puedes revocarla sin problema si ya no la usas.",
+        "revoke": "Revocar",
+        "howTitle": "Cómo lo revisamos.",
+        "how": "Las aprobaciones se encontraron con la lista de aprobaciones de GoPlus y las revisiones propias de CRYPY (aplicaciones populares y Permit2 para cada token que tienes, y tus aprobaciones de esos tokens en las últimas horas). Después, cada permiso mostrado se volvió a leer de la blockchain. \"En riesgo ahora\" es el menor entre el permiso y lo que tienes, a precios de la cadena. Una aprobación que CRYPY no pudo encontrar no aparece, así que esta lista puede estar incompleta.",
+        "howSafety": "Revocar cuesta una pequeña comisión de red y se firma en tu propia billetera. CRYPY nunca te pide tu frase semilla ni tu clave privada, y nunca envía nada sin tu clic.",
+        "goplusDown": "GoPlus no respondió en {chains}. Ahí solo se hicieron las revisiones propias de CRYPY (aplicaciones populares y Permit2 para los tokens que tienes), así que pueden faltar aprobaciones a otros gastadores. Vuelve a revisar en un minuto.",
+        "chainDown": "No se pudo leer {chain} en este momento. Vuelve a revisar en un minuto.",
+        "batchNote": "Revocar varias en una sola transacción (revocación en lote) está prevista como herramienta de pago más adelante. Las revocaciones individuales y las revisiones básicas siempre serán gratis.",
+        "dialogTitle": "Revocar esta aprobación",
+        "dialogToken": "Token",
+        "dialogCollection": "Colección",
+        "dialogSpender": "Gastador",
+        "dialogNow": "Permiso actual",
+        "dialogAfter": "Después de revocar",
+        "dialogAfterNft": "Sin aprobación",
+        "dialogFee": "Comisión de red",
+        "dialogFeeValue": "unos {fee} {symbol}",
+        "dialogFeeUnknown": "la muestra tu billetera",
+        "dialogWalletShows": "Lo que mostrará tu billetera",
+        "dialogContract": "Contrato",
+        "dialogFunction": "función",
+        "dialogValue": "valor 0 {symbol}",
+        "dialogTested": "CRYPY probó primero esta misma transacción: se completa y solo pone este permiso en 0.",
+        "dialogNotTested": "CRYPY no pudo probar esta transacción ahora, así que no abrirá tu billetera. Inténtalo de nuevo en un minuto.",
+        "dialogPreparing": "Preparando y probando la transacción…",
+        "dialogOpen": "Abrir mi billetera para revocar",
+        "dialogMatch": "Antes de confirmar, comprueba que el contrato y la función que muestra tu billetera coincidan con los de arriba.",
+        "stepChecking": "Revisando tu billetera…",
+        "stepSwitching": "Tu billetera te pedirá cambiar de red. No se firma nada.",
+        "stepTesting": "Probando la transacción…",
+        "stepConfirm": "Confirma en tu billetera",
+        "stepPending": "Esperando a que se incluya la transacción…",
+        "stepVerifying": "Volviendo a leer el permiso en la blockchain…",
+        "doneTitle": "Revocada",
+        "doneCleared": "El permiso ahora es 0",
+        "doneNotCleared": "La transacción se completó, pero el permiso todavía no se lee como 0. Vuelve a revisar en un minuto.",
+        "doneReadAgain": "Leído otra vez de la blockchain en el bloque {block}.",
+        "doneTx": "Transacción",
+        "doneFee": "Comisión pagada",
+        "done": "Listo",
+        "next": "Siguiente",
+        "stop": "Detener después de esta",
+        "queueTitle": "Revocando {done} de {total}",
+        "queueNote": "Cada una es una transacción separada: tu billetera te pide cada una y puedes detenerte cuando quieras.",
+        "wrongAccountTitle": "Cambia a la cuenta correcta",
+        "wrongAccount": "Solo la billetera que dio la aprobación puede revocarla. Tu billetera está conectada como {connected}; esta página es sobre {owner}.",
+        "wrongAccountDone": "Ya cambié de cuenta",
+        "wrongNetworkTitle": "Cambia de red",
+        "wrongNetwork": "Esta aprobación está en {chain}. Tu billetera no cambió a esa red, así que no se envió nada.",
+        "failTitle": "La revocación no se completó",
+        "rejected": "Rechazaste la solicitud en tu billetera. No se envió nada y la aprobación sigue igual.",
+        "testFailed": "La prueba de esta transacción falló, así que CRYPY no abrió tu billetera. Puede que el token no permita cambiar aprobaciones en este momento.",
+        "failed": "La transacción falló. Puede que la aprobación siga igual; vuelve a revisar antes de intentarlo otra vez.",
+        "tryAgain": "Intentar de nuevo",
+        "close": "Cerrar",
+        "groupSpam": "Tokens spam ({count})",
+        "groupSpamNote": "tokens que CRYPY oculta como probable spam: nada de valor en riesgo",
+        "badgeSpam": "Probable token spam",
+        "reasonSpamToken": "Este token parece spam (CRYPY lo oculta en los saldos), así que no hay nada de valor en riesgo. Revocar es opcional; nunca visites enlaces que aparezcan en el nombre del token.",
+        "reasonNewContract": "Este contrato se creó {days} días antes de tu aprobación y no está en la lista de aplicaciones conocidas de CRYPY. Los contratos nuevos y desconocidos son una forma común en que las estafas vacían billeteras: comprueba que sea una aplicación que querías usar.",
+        "goplusPartial": "GoPlus envió una lista parcial en {chains}, algo común en billeteras con mucha actividad. CRYPY la usó junto con sus propias revisiones; todavía pueden faltar algunas aprobaciones.",
+        "badgeNewContract": "Contrato nuevo",
+        "goplusName": "Nombre según GoPlus: {name}",
+        "reasonDisputed": "GoPlus marca esta dirección como maliciosa, pero la lista propia de CRYPY la identifica como {name}, un contrato oficial. Los sitios de phishing a veces piden aprobaciones mediante contratos oficiales, así que revócala si no recuerdas haberla aprobado tú.",
+        "badgeDisputed": "GoPlus: marcada",
+        "checkOne": "1 aprobación por revisar",
+        "checkOther": "{count} aprobaciones por revisar",
+        "checkBody": "Ninguna va a una billetera ni a una dirección marcada como maliciosa, pero estas van a contratos que CRYPY no puede identificar por completo. Revoca las que no reconozcas o ya no uses.",
+        "recentSkipped": "En este momento no se pudieron buscar tus aprobaciones de las últimas horas en {chains} (el nodo estaba lento). Se muestran las aprobaciones encontradas por las otras revisiones; vuelve a revisar en un minuto."
+      }
+    },
+    "activity": {
+      "metaTitle": "Actividad de {short}",
+      "title": "Actividad",
+      "intro": "Todas las transferencias de monedas, tokens y NFT hacia o desde esta dirección, de lo más nuevo a lo más antiguo. Nunca copies una dirección de tu historial: los estafadores envían transferencias con direcciones parecidas.",
+      "ui": {
+        "recentOnly": "El historial completo no está disponible ahora en {chains}, así que solo se muestran las últimas horas de transferencias de los tokens que tiene esta billetera (las transferencias de monedas no se pueden encontrar así). Vuelve a revisar más tarde.",
+        "chainDown": "No se pudo leer {chain} en este momento. Vuelve a revisar en un minuto.",
+        "statLast": "Última actividad",
+        "statFirst": "Primera actividad",
+        "statFirstUnknown": "aún no se sabe",
+        "statLoaded": "Transferencias cargadas",
+        "statMore": "hay más antiguas",
+        "statAll": "historial completo",
+        "statSpam": "Ocultas como probable spam",
+        "statSpamDetail": "airdrops con enlaces, tokens de valor cero",
+        "listTitle": "Transferencias",
+        "exportCsv": "Exportar CSV",
+        "checkAgain": "Revisar de nuevo",
+        "filters": "Filtrar actividad",
+        "dir_all": "Todas",
+        "dir_in": "Recibidas",
+        "dir_out": "Enviadas",
+        "kind_all": "Cualquier tipo",
+        "kind_coin": "Monedas",
+        "kind_token": "Tokens",
+        "kind_nft": "NFT",
+        "allChains": "Todas las cadenas",
+        "search": "Buscar en la actividad",
+        "searchPlaceholder": "Token, dirección o hash de tx",
+        "range": "Periodo",
+        "range_all": "Todo lo cargado",
+        "range_1": "Últimas 24 horas",
+        "range_7": "Últimos 7 días",
+        "range_30": "Últimos 30 días",
+        "hideSpam": "Ocultar probable spam ({count} ocultas)",
+        "empty": "No se encontraron transferencias de esta dirección en estas cadenas.",
+        "noMatch": "Ninguna transferencia coincide con estos filtros.",
+        "unknownTime": "Hora desconocida",
+        "titleIn": "Recibió {what}",
+        "titleOut": "Envió {what}",
+        "titleSelf": "Se envió {what} a sí misma",
+        "titleSwap": "Cambió {out} por {in}",
+        "titleMulti": "{count} transferencias en una transacción",
+        "subSwap": "en una transacción",
+        "subNft": "NFT",
+        "subInternal": "moneda enviada por un contrato",
+        "subCoin": "transferencia de moneda",
+        "subToken": "transferencia de token",
+        "from": "de",
+        "to": "a",
+        "interpretation": "Interpretación",
+        "heuristic": "Heurístico",
+        "poisoning": "Posible envenenamiento de direcciones: {sender} empieza y termina como {lookalike}. Los estafadores envían esto para que después copies la dirección equivocada. Nunca copies direcciones de tu historial.",
+        "loadMore": "Cargar actividad anterior",
+        "loading": "Cargando…",
+        "loadError": "No se pudo cargar más. Inténtalo de nuevo.",
+        "showingMore": "Mostrando {count} · de lo más nuevo a lo más antiguo · hay más",
+        "showingAll": "Mostrando las {count}",
+        "howTitle": "Cómo lo obtuvimos.",
+        "how": "Transferencias de monedas, tokens y NFT hacia o desde esta dirección, del historial de transferencias gratuito de Alchemy, de lo más nuevo a lo más antiguo. \"Valor actual\" usa el precio de hoy en la cadena, no el precio de ese momento. Los swaps son nuestra lectura de las transferencias de una misma transacción, marcadas como \"Interpretación\". El probable spam se oculta por defecto y nunca se borra.",
+        "noInternal": "En {chains}, las monedas movidas dentro de contratos (transferencias internas) no están en nuestra fuente gratuita, así que puede faltar un pago hecho por un contrato.",
+        "statRecent": "solo las últimas horas",
+        "howRecent": "Sin la fuente del historial, CRYPY lee directamente de la cadena las últimas horas de transferencias de tokens, solo de los tokens que esta billetera tiene ahora."
+      }
+    },
+    "chainScope": {
+      "picker": {
+        "button": "Cadenas:",
+        "used": "Usadas",
+        "all": "Todas",
+        "title": "¿Qué cadenas?",
+        "usedTitle": "Cadenas donde se usa",
+        "usedDesc": "Recomendado. CRYPY revisa primero todas las cadenas y analiza solo donde esta dirección tiene actividad.",
+        "allTitle": "Todas las cadenas",
+        "allDesc": "Analizar todas las cadenas compatibles, se usen o no.",
+        "pickTitle": "Elegir cadenas",
+        "pickDesc": "Elige una o más cadenas.",
+        "isUsed": "usada",
+        "notUsed": "sin uso",
+        "cancel": "Cancelar",
+        "scan": "Analizar {count} cadenas",
+        "scanOne": "Analizar 1 cadena",
+        "remembered": "Tu elección se guarda en el enlace y se recuerda en este dispositivo.",
+        "updating": "Analizando…"
+      },
+      "scanned": "Analizado en <b>{chains}</b>",
+      "scannedOnly": "Analizado solo en <b>{chains}</b>",
+      "notUsed": "Sin actividad en {chains}",
+      "noneUsed": "No se encontró actividad en ninguna cadena compatible",
+      "scanToo": "Analizar también estas",
+      "scanAll": "Analizar todas las cadenas",
+      "leftOutTitle": "{chains}: sin revisar",
+      "leftOut": "Limitaste el análisis, pero esta billetera también se usa en {chains}. Las aprobaciones de ahí todavía podrían permitir que aplicaciones muevan tus tokens.",
+      "checkToo": "Revisar también {chains}"
+    }
+  },
+  "wallet": {
+    "connect": "Conectar billetera",
+    "connecting": "Conectando…",
+    "title": "Conecta una billetera",
+    "intro": "Al conectarte solo compartes tu dirección pública. CRYPY nunca te pide tu frase semilla y nunca envía una transacción sin que la confirmes en tu billetera.",
+    "detected": "Billeteras en este navegador",
+    "noneDetected": "No se encontró ninguna billetera en el navegador. Instala MetaMask, abre CRYPY dentro del navegador de tu billetera móvil o usa WalletConnect.",
+    "walletConnect": "WalletConnect (billeteras móviles)",
+    "walletConnectUnavailable": "WalletConnect todavía no está configurado.",
+    "scanQr": "Escanea con tu billetera móvil",
+    "openIn": "Abrir en {wallet}",
+    "copyLink": "Copiar el enlace de conexión",
+    "back": "Atrás",
+    "connectedAs": "Conectada",
+    "network": "Red",
+    "unsupportedNetwork": "Esta red aún no es compatible. CRYPY funciona con Ethereum, BNB Chain, Base, Arbitrum y Polygon.",
+    "viewMyAddress": "Ver mi dirección",
+    "disconnect": "Desconectar",
+    "close": "Cerrar",
+    "rejected": "La conexión se canceló en tu billetera.",
+    "failed": "No se pudo conectar. Inténtalo de nuevo.",
+    "useMyWallet": "Usar mi billetera"
+  },
+  "utilities": {
+    "common": {
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "example": "Probar un ejemplo",
+      "clear": "Borrar"
+    },
+    "unit-converter": {
+      "units": {
+        "wei": "Wei",
+        "gwei": "Gwei",
+        "ether": "ETH / BNB"
+      },
+      "hint": "1 ETH (o BNB) = 1 000 000 000 gwei = 1 000 000 000 000 000 000 wei",
+      "errors": {
+        "format": "Escribe un número, como 1.5 o 1e9.",
+        "negative": "Las cantidades no pueden ser negativas.",
+        "comma": "Usa un punto para los decimales (1.5), no una coma.",
+        "too-precise": "Demasiados decimales: el wei es la unidad más pequeña.",
+        "too-large": "Demasiado grande: el máximo es 2^256 − 1 wei.",
+        "empty": ""
+      }
+    },
+    "hex-converter": {
+      "label": "Valor hexadecimal o decimal",
+      "placeholder": "0x1a2b o 6699",
+      "readAs": "Leer este número como",
+      "decimal": "Decimal",
+      "hex": "Hexadecimal",
+      "rows": {
+        "decimal": "Decimal",
+        "hex": "Hexadecimal",
+        "padded": "Hexadecimal de 32 bytes",
+        "bytes": "Tamaño",
+        "signed": "Con signo (int256)",
+        "text": "Como texto"
+      },
+      "bytes": {
+        "one": "# byte",
+        "other": "# bytes"
+      },
+      "detected": {
+        "hex": "Leído como hexadecimal",
+        "decimal": "Leído como decimal"
+      },
+      "errors": {
+        "format": "Usa los dígitos 0–9 para decimal, o 0–9 y a–f para hexadecimal.",
+        "negative": "Los números negativos no se admiten; pega el hexadecimal de 32 bytes para ver su valor con signo.",
+        "too-large": "Demasiado grande: el máximo es 256 bits (2^256 − 1).",
+        "empty": ""
+      }
+    },
+    "address-formatter": {
+      "label": "Direcciones (una por línea)",
+      "placeholder": "0x…",
+      "summary": "Revisadas: {total} · Correctas: {ok} · Requieren atención: {problems}",
+      "tooMany": "Solo se revisan las primeras {max} direcciones.",
+      "copyAll": "Copiar todas las direcciones correctas",
+      "open": "Buscarla",
+      "checksummed": "Con checksum",
+      "status": {
+        "valid": "Correcta",
+        "no-checksum": "Sin checksum",
+        "bad-checksum": "Error de escritura",
+        "missing-prefix": "Falta 0x",
+        "invalid": "No es una dirección"
+      },
+      "explain": {
+        "valid": "Está bien escrita y el checksum coincide.",
+        "no-checksum": "El formato es válido, pero está toda en minúsculas o mayúsculas, así que no se pueden detectar errores de escritura. Usa la forma con checksum de abajo.",
+        "bad-checksum": "El checksum no coincide, así que se cambió un carácter. No uses esta dirección: cópiala otra vez desde su fuente original.",
+        "missing-prefix": "Las direcciones empiezan con 0x. Aquí está la forma completa.",
+        "zero": "Esta es la dirección cero. Los tokens enviados a ella se pierden para siempre."
+      },
+      "invalid": {
+        "length": "Longitud incorrecta: {length} caracteres después de 0x en lugar de 40.",
+        "characters": "Contiene caracteres no permitidos (solo 0–9 y a–f).",
+        "empty": "Vacía."
+      }
+    },
+    "tx-decoder": {
+      "label": "Datos de entrada de la transacción",
+      "placeholder": "0xa9059cbb…",
+      "function": "Función",
+      "standard": "Estándar",
+      "selector": "Selector",
+      "signature": "Firma",
+      "parameters": "Valores",
+      "name": "Nombre",
+      "type": "Tipo",
+      "value": "Valor",
+      "unlimited": "Ilimitado",
+      "yes": "Sí",
+      "no": "No",
+      "nested": "Llamada {index}",
+      "rawNote": "Las cantidades se muestran en la unidad más pequeña del token. Divide según los decimales del token para obtener la cantidad habitual.",
+      "known": "Decodifica {count} funciones conocidas. Las funciones desconocidas se muestran como datos sin procesar, nunca se adivinan.",
+      "native": "Datos vacíos (0x): una transferencia simple de ETH o BNB sin llamada a un contrato.",
+      "unknownTitle": "Función desconocida",
+      "unknownText": "Esta función no está en la lista de funciones conocidas de CRYPY, así que no se decodifica. Abajo se muestran las palabras de 32 bytes sin procesar.",
+      "mismatch": "El selector coincide con una función conocida, pero los datos no encajan con sus valores. Puede ser otra función con el mismo selector. Función conocida:",
+      "moreWords": "{count} palabras más no se muestran.",
+      "extraBytes": "{count} bytes de más al final.",
+      "errors": {
+        "format": "Los datos de una transacción son hexadecimales: 0x seguido de 0–9 y a–f.",
+        "odd-length": "Los datos tienen un número impar de dígitos hexadecimales; puede faltar una parte.",
+        "too-short": "Demasiado corto: los datos empiezan con un selector de función de 4 bytes (8 dígitos hexadecimales).",
+        "too-long": "Demasiado largo para decodificarlo aquí (más de 100 KB).",
+        "tx-hash": "Esto parece un hash de transacción, no datos de transacción. Búscalo para ver la transacción."
+      },
+      "searchHash": "Buscar este hash",
+      "functions": {
+        "transfer": "Enviar tokens a una dirección.",
+        "approve": "Permitir que otra dirección (el gastador) mueva tus tokens.",
+        "transfer-from": "Mover tokens de una dirección a otra usando una aprobación.",
+        "increase-allowance": "Aumentar cuántos tokens puede mover un gastador.",
+        "decrease-allowance": "Reducir cuántos tokens puede mover un gastador.",
+        "permit": "Registrar en la cadena una aprobación de token firmada (permit).",
+        "set-approval-for-all": "Dar o quitar a un operador el control de todos tus NFT de esta colección.",
+        "nft-safe-transfer": "Enviar un NFT a una dirección.",
+        "multi-token-transfer": "Enviar tokens de un tipo ERC-1155 a una dirección.",
+        "multi-token-batch-transfer": "Enviar varios tipos de tokens ERC-1155 a una dirección.",
+        "wrap": "Envolver ETH o BNB en WETH o WBNB.",
+        "unwrap": "Desenvolver WETH o WBNB de vuelta a ETH o BNB.",
+        "permit2-approve": "Permitir que un gastador mueva un token mediante Uniswap Permit2.",
+        "multicall": "Ejecutar varias llamadas en una transacción. Cada llamada se decodifica abajo.",
+        "swap": "Intercambiar tokens mediante el router de un exchange descentralizado.",
+        "add-liquidity": "Añadir tokens a un pool de liquidez.",
+        "remove-liquidity": "Retirar tokens de un pool de liquidez.",
+        "transfer-ownership": "Ceder el control de este contrato a un nuevo dueño.",
+        "renounce-ownership": "Renunciar para siempre a la propiedad de este contrato.",
+        "router-execute": "Ejecutar una lista de pasos de swap mediante un Universal Router. Los pasos van empaquetados en \"commands\" y no se decodifican aquí."
+      },
+      "warnings": {
+        "unlimited-approval": "Aprobación ilimitada: el gastador puede mover todo este token desde tu billetera, ahora y después, hasta que la revoques.",
+        "approval": "Aprobación: el gastador podrá mover hasta esta cantidad de tus tokens.",
+        "approval-for-all": "Acceso total a NFT: el operador puede transferir todos tus NFT de esta colección.",
+        "revoke": "Esto elimina una aprobación, lo que reduce el riesgo.",
+        "ownership-transfer": "Cambio de dueño: el nuevo dueño obtiene el control de las funciones exclusivas del dueño del contrato.",
+        "ownership-renounce": "Renuncia: después, nadie podrá usar las funciones exclusivas del dueño del contrato."
+      },
+      "heuristic": "Los avisos se basan en la función y sus valores. No revisan quién es el gastador."
+    },
+    "balance-scanner": {
+      "label": "Dirección de billetera",
+      "placeholder": "0x…",
+      "submit": "Ver saldos",
+      "invalid": "Escribe una dirección de billetera: 0x seguido de 40 caracteres (0–9, a–f)."
+    },
+    "tx-checker": {
+      "label": "Hash de transacción",
+      "placeholder": "0x… 64 caracteres",
+      "submit": "Revisar transacción",
+      "invalid": "Un hash de transacción es 0x seguido de 64 letras (a–f) y números.",
+      "supportTitle": "Redes compatibles",
+      "feature": "Función",
+      "levels": {
+        "supported": "Compatible",
+        "partial": "Parcial",
+        "planned": "Prevista"
+      },
+      "features": {
+        "lookup": "Encontrar y leer transacciones",
+        "status": "Exitosa, fallida, pendiente",
+        "assets": "Movimientos de tokens y NFT",
+        "decoding": "Decodificación de funciones",
+        "failure": "Motivos de fallo",
+        "fees": "Desglose de comisiones",
+        "pricesAtTx": "Precio en ese momento",
+        "actions": "Acciones y cobertura de eventos",
+        "permissions": "Permisos: dados, usados, eliminados y valor actual",
+        "pools": "Swaps en pools de liquidez",
+        "routerReports": "Reportes de routers",
+        "smartWallets": "Billeteras inteligentes (Safe, ERC-4337)",
+        "coinsInside": "Monedas pagadas dentro de contratos"
+      },
+      "notes": {
+        "failure": "Requiere bloques recientes en nodos gratuitos",
+        "pricesAtTx": "Requiere bloques recientes en nodos gratuitos",
+        "decoding": "Solo funciones conocidas",
+        "pools": "Los pools v2 y v3 de Uniswap/PancakeSwap/SushiSwap/Biswap se verifican con su factory; los demás aparecen como no verificados",
+        "routerReports": "Solo KyberSwap; los demás routers se leen de sus eventos de tokens",
+        "smartWallets": "Se reconocen por eventos estándar; no se decodifican más",
+        "coinsInside": "Se miden en bloques recientes o con un proveedor de archivo; si no, según el reporte de un router"
+      }
+    },
+    "batch-balance": {
+      "steps": {
+        "addresses": "Direcciones",
+        "chains": "Cadenas",
+        "assets": "Activos"
+      },
+      "addressesHint": "Pega, escribe o suelta un archivo",
+      "chainsHint": "Elige una o más",
+      "assetsHint": "Hasta 6 por análisis",
+      "upload": "Subir CSV o TXT",
+      "example": "Cargar un ejemplo",
+      "clear": "Borrar",
+      "editorLabel": "Lista de direcciones, una por línea, con etiqueta opcional después de una coma",
+      "placeholder": "0x… una dirección por línea\n0x…,Tesorería",
+      "dropHere": "Suelta un archivo CSV o TXT",
+      "fileTooBig": "El archivo es demasiado grande. El límite es 1 MB.",
+      "fileUnreadable": "No se pudo leer el archivo como texto.",
+      "valid": "{count} válidas",
+      "duplicates": "Duplicadas combinadas: {count}",
+      "problems": "Problemas: {count} · el primero en la línea {line}",
+      "overLimit": "{count} por encima del límite, sin analizar",
+      "countLine": "{count} / {max} direcciones · las etiquetas después de una coma son opcionales",
+      "notes": {
+        "duplicate": "Duplicada de la línea {line} · combinada",
+        "checksum": "El checksum no coincide (posible error de escritura) · omitida",
+        "invalid": "No es una dirección válida · omitida",
+        "over-limit": "Supera el límite de {max} direcciones · omitida",
+        "several": "{count} direcciones en esta línea"
+      },
+      "chainsMore": "Aquí aparecerán más cadenas a medida que CRYPY las añada.",
+      "nativeCoin": "Moneda nativa",
+      "alwaysIncluded": "Siempre incluida",
+      "notOnChain": "no es un token en {chain} (se omite ahí)",
+      "onlyOn": "Solo {chain}",
+      "remove": "Quitar {symbol}",
+      "addPlaceholder": "Pega un contrato de token",
+      "add": "Añadir",
+      "pick": "o elige:",
+      "checking": "Revisando el contrato…",
+      "notToken": "Esta dirección no es un token en ninguna cadena compatible.",
+      "tokenLimit": "Hasta 5 tokens por análisis.",
+      "alreadyAdded": "Este token ya está en la lista.",
+      "lookupFailed": "No se pudo revisar este contrato ahora. Inténtalo de nuevo en un momento.",
+      "decimals": "{decimals} decimales",
+      "ready": "Listo: {addresses} direcciones × {chains} cadenas × {assets} activos",
+      "readyNone": "Añade al menos una dirección válida y elige una cadena.",
+      "estimate": "Unas {requests} solicitudes a la blockchain",
+      "scan": "Analizar saldos",
+      "scanning": "Analizando… {done} de {total} lotes",
+      "cancel": "Cancelar",
+      "trust": {
+        "public": "Solo direcciones públicas: nunca pide claves ni frases semilla",
+        "notStored": "Tu lista no se guarda ni se registra",
+        "noWallet": "Sin conectar tu billetera"
+      },
+      "complete": "Análisis completo",
+      "cancelled": "Análisis detenido",
+      "completeLine": "{addresses} direcciones · {checks} revisiones · leídas en {blocks} · {time} UTC",
+      "blockOn": "bloque {block} ({chain})",
+      "editList": "Editar la lista",
+      "scanAgain": "Analizar de nuevo",
+      "cards": {
+        "total": "Valor total",
+        "totalNote": "Solo activos con precio",
+        "withBalance": "Direcciones con saldo",
+        "withBalanceValue": "{count} de {total}",
+        "withBalanceNote": "En al menos una cadena",
+        "empty": "Direcciones vacías",
+        "emptyNote": "Nada en las cadenas revisadas",
+        "failed": "Revisiones fallidas",
+        "failedNone": "Ninguna",
+        "failedNote": "Se reintentaron una vez; reinténtalas abajo"
+      },
+      "noPrice": "sin precio confiable",
+      "searchPlaceholder": "Buscar dirección o etiqueta",
+      "allChains": "Todas las cadenas",
+      "hideEmpty": "Ocultar vacías",
+      "copy": "Copiar",
+      "copyResults": "Copiar resultados (tabla)",
+      "copyWithBalance": "Copiar direcciones con saldo",
+      "copyEmpty": "Copiar direcciones vacías",
+      "copied": "Copiado",
+      "export": "Exportar CSV",
+      "table": {
+        "index": "#",
+        "label": "Etiqueta",
+        "address": "Dirección",
+        "chain": "Cadena",
+        "type": "Tipo",
+        "native": "Nativa",
+        "value": "Valor",
+        "share": "Proporción",
+        "status": "Estado",
+        "total": "Total · {count} filas mostradas",
+        "sortBy": "Ordenar por {column}"
+      },
+      "types": {
+        "wallet": "Billetera",
+        "contract": "Contrato",
+        "delegated": "Billetera delegada",
+        "unknown": "Desconocido"
+      },
+      "status": {
+        "ok": "OK",
+        "failed": "Fallida",
+        "pending": "Sin leer"
+      },
+      "noLabel": "Sin etiqueta",
+      "rowFailed": "No se pudo leer esta dirección en {chain}.",
+      "retryRow": "Reintentar",
+      "unreadable": "No se pudo leer este saldo",
+      "noRows": "Ninguna fila coincide con estos filtros.",
+      "footer": "Mostrando {from}–{to} de {count} filas{hidden} · Precios leídos en la cadena de pools de PancakeSwap y Uniswap. Los tokens sin un precio confiable muestran solo cantidades.",
+      "hiddenEmpty": " ({count} filas vacías ocultas)",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "sortedBy": "Ordenado por valor",
+      "copyAddress": "Copiar dirección",
+      "error": {
+        "rateLimited": "Demasiados análisis en poco tiempo. Espera un minuto y vuelve a intentar las filas fallidas.",
+        "failed": "No se pudieron leer algunos lotes. Vuelve a intentar las filas fallidas de abajo."
+      },
+      "csv": {
+        "label": "Etiqueta",
+        "address": "Dirección",
+        "chain": "Cadena",
+        "type": "Tipo",
+        "value": "Valor (USD)",
+        "status": "Estado"
+      }
+    },
+    "token-security": {
+      "label": "Dirección del contrato del token",
+      "placeholder": "0x… contrato del token",
+      "chain": "Cadena",
+      "anyChain": "Búscala por mí",
+      "submit": "Revisar token",
+      "invalid": "Escribe la dirección del contrato de un token: 0x seguido de 40 caracteres."
+    },
+    "approval-checker": {
+      "label": "Dirección de billetera",
+      "placeholder": "0x… dirección de billetera",
+      "submit": "Revisar aprobaciones",
+      "useConnected": "Revisar mi billetera conectada",
+      "invalid": "Escribe una dirección de billetera: 0x seguido de 40 caracteres.",
+      "noConnection": "Para revisar no hace falta conectar tu billetera. Conéctala solo cuando quieras revocar."
+    },
+    "address-analyzer": {
+      "label": "Dirección de billetera",
+      "placeholder": "0x… dirección de billetera",
+      "submit": "Ver actividad",
+      "useConnected": "Ver mi billetera conectada",
+      "invalid": "Escribe una dirección de billetera: 0x seguido de 40 caracteres.",
+      "noConnection": "Sin conectar tu billetera: sirve cualquier dirección pública."
+    },
+    "gas-tracker": {
+      "chainDown": "No se pudieron leer las comisiones de {chain} en este momento. Se reintenta cada 12 segundos.",
+      "low": "Prioridad baja",
+      "average": "Media",
+      "high": "Prioridad alta",
+      "lowNote": "normalmente en pocos bloques",
+      "averageNote": "normalmente en el siguiente bloque",
+      "highNote": "para momentos de mucha actividad",
+      "updated": "bloque {block} · actualizado hace {seconds} s",
+      "toSend": "{usd} por enviar monedas",
+      "baseFee": "Comisión base ahora",
+      "noBaseFee": "Esta cadena no tiene comisión base",
+      "trendLabel": "Tendencia de comisiones en bloques recientes",
+      "trendBase": "comisión base, últimos 1.024 bloques ({span})",
+      "trendTip": "propina típica pagada, últimos 1.024 bloques ({span})",
+      "hours": "~{n} h",
+      "minutes": "~{n} min",
+      "costsTitle": "Lo que cuestan ahora las acciones comunes (media)",
+      "action": "Acción",
+      "typicalGas": "Gas típico",
+      "onChain": "{chain}",
+      "action_sendCoin": "Enviar monedas",
+      "action_sendToken": "Enviar un token",
+      "action_approve": "Aprobar o revocar un token",
+      "action_swap": "Hacer un swap en un DEX",
+      "action_sendNft": "Enviar un NFT",
+      "costsNote": "El gas típico es una estimación: la cantidad real depende del token o de la aplicación, y tu billetera muestra la comisión exacta antes de que confirmes. Los valores en dólares usan precios de la cadena:",
+      "howTitle": "Cómo medimos.",
+      "how": "A partir de los últimos 20 bloques de cada cadena (eth_feeHistory): la comisión base del siguiente bloque más la propina que pagaron el 25 %, el 50 % y el 90 % de las transacciones incluidas. \"Normalmente en el siguiente bloque\" describe los bloques recientes, no es una promesa. Se actualiza cada 12 segundos mientras esta página está abierta; no hace falta cuenta ni billetera.",
+      "l1Note": "En {chains}, los costos incluyen una estimación de la comisión de datos de Ethereum que añaden estas redes."
+    },
+    "timestamp-block": {
+      "modes": "Conversión",
+      "mode_date": "Fecha → bloque",
+      "mode_block": "Bloque → fecha",
+      "mode_unix": "Marca de tiempo Unix ↔ fecha",
+      "dateLabel": "Fecha y hora",
+      "zoneLabel": "Zona horaria",
+      "zoneUtc": "UTC",
+      "zoneLocal": "Mi zona horaria",
+      "findBlocks": "Buscar bloques",
+      "working": "Leyendo la cadena…",
+      "estimate": "Estimación: esta hora está en el futuro",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "chainDown": "No se pudo leer {chain} en este momento.",
+      "dateNote": "El primer bloque en esta hora o después en cada cadena, encontrado leyendo tiempos reales de bloque (unas pocas consultas al nodo). Las fechas futuras muestran el bloque esperado, marcado como estimación.",
+      "chainLabel": "Cadena",
+      "blockLabel": "Número de bloque",
+      "findTime": "Buscar fecha",
+      "blockResult": "Bloque {block} en {chain}:",
+      "yourTime": "tu hora {time}",
+      "unixIs": "Unix {unix}",
+      "unixLabel": "Marca de tiempo (segundos o milisegundos)",
+      "unixNote": "Se convierte en tu navegador; no se envía nada.",
+      "badDate": "Elige una fecha y una hora.",
+      "badBlock": "Escribe un número de bloque (solo dígitos).",
+      "badUnix": "Escribe solo dígitos: segundos o milisegundos.",
+      "noBlock": "Ese bloque todavía no existe en esta cadena.",
+      "failed": "No se pudo leer la cadena en este momento. Inténtalo de nuevo en un minuto."
+    },
+    "portfolio": {
+      "loadingSaved": "Cargando tu portafolio…",
+      "emptyTitle": "Sigue todas tus billeteras en un solo lugar",
+      "emptyText": "Añade las direcciones públicas de tus billeteras para ver un total, dividido por cadena, billetera y token. Sin cuenta y sin claves.",
+      "emptyPoint1": "Hasta 20 billeteras, con tus propias etiquetas",
+      "emptyPoint2": "Se guarda solo en este navegador",
+      "emptyPoint3": "Aprobaciones y tokens riesgosos marcados por billetera",
+      "addWallet": "Añadir billetera",
+      "addConnected": "Añadir mi billetera conectada ({address})",
+      "myWallet": "Mi billetera",
+      "totalOf": "Valor total · {count} billeteras",
+      "sinceLast": "{change} desde tu última visita ({when})",
+      "notProfit": "Un cambio en el valor de hoy, no una ganancia o pérdida.",
+      "loadingWallets": "Cargando billeteras: {done} de {total}",
+      "refresh": "Actualizar",
+      "exportCsv": "Exportar CSV",
+      "statTokens": "Monedas y tokens con valor",
+      "statTokensNote": "{count} más sin un precio confiable",
+      "statApprovals": "Aprobaciones por revisar",
+      "statFlagged": "Tokens marcados por GoPlus",
+      "inWallets": "en {count} billeteras",
+      "noneFound": "No se encontró ninguno en las revisiones realizadas",
+      "flaggedBy": "Una segunda opinión de GoPlus",
+      "byChain": "Por cadena",
+      "someFailed": "No se pudieron cargar {count} billeteras en este momento.",
+      "rateLimited": "No se cargaron {count} billeteras: demasiadas solicitudes en un minuto. Espera un momento y luego",
+      "retry": "Inténtalo de nuevo",
+      "chainsDown": "No se pudo leer ahora: {chains}. Los totales no las incluyen.",
+      "pricesMissing": "No se pudieron leer los precios de algunas cadenas: sus saldos se muestran sin valor.",
+      "walletsTitle": "Billeteras",
+      "walletCount": "{count} de {max}",
+      "unnamed": "Billetera sin nombre",
+      "notLoaded": "Sin cargar",
+      "badgeApprovals": "{count} aprobaciones por revisar",
+      "badgeFlagged": "{count} tokens marcados",
+      "badgeNothing": "Nada marcado",
+      "open": "Abrir",
+      "editLabel": "Cambiar el nombre de {name}",
+      "remove": "Quitar {name} del portafolio",
+      "safetyTitle": "Seguridad",
+      "approvalsIn": "{count} aprobaciones por revisar en {name}",
+      "onChains": "En {chains}: permisos ilimitados o riesgosos para mover tus tokens.",
+      "reviewApprovals": "Revisar aprobaciones →",
+      "flagHoneypot": "{symbol} en {name} ({chain}): GoPlus informa que no se puede vender (honeypot)",
+      "flagSellTax": "{symbol} en {name} ({chain}): GoPlus informa un impuesto de venta del {tax}",
+      "flagSource": "Hallazgo de GoPlus Security, no un veredicto de CRYPY.",
+      "openReport": "Abrir el informe del token →",
+      "someUnchecked": "Algunas revisiones no se hicieron para todas las billeteras: no terminaron a tiempo o la capacidad gratuita de GoPlus se reservó para las páginas de tokens y aprobaciones. Actualiza en un minuto o abre la billetera para ver su informe completo.",
+      "safetyNote": "Las revisiones se hacen sobre las aprobaciones y los tokens de más valor de las billeteras de arriba. CRYPY nunca dice que una billetera o un token sea seguro.",
+      "holdingsTitle": "Principales tenencias",
+      "holdingsNote": "En todas las billeteras. La misma moneda o el mismo token conocido en varias cadenas se combina.",
+      "colToken": "Token",
+      "colChains": "Cadenas",
+      "colAmount": "Cantidad",
+      "colValue": "Valor",
+      "colWallets": "Billeteras",
+      "noPrice": "Sin precio",
+      "spamHidden": "{count} tokens probablemente spam ocultos",
+      "showAll": "Mostrar los {count}",
+      "showFewer": "Mostrar menos",
+      "privacyNote": "Tu portafolio se guarda solo en este navegador. CRYPY lee saldos públicos billetera por billetera y no guarda tu lista ni tus etiquetas.",
+      "addTitle": "Añadir una billetera",
+      "editTitle": "Cambiar el nombre de la billetera",
+      "addText": "Solo lectura: pega una dirección pública. CRYPY la lee de la blockchain y no puede mover nada.",
+      "addressLabel": "Dirección de billetera",
+      "labelLabel": "Etiqueta (opcional)",
+      "labelPlaceholder": "p. ej. Principal, Ahorros, Trading",
+      "watchOnly": "Nunca pegues una frase semilla ni una clave privada aquí ni en ningún otro lugar. CRYPY nunca te las pedirá.",
+      "cancel": "Cancelar",
+      "add": "Añadir",
+      "save": "Guardar",
+      "errEmpty": "Pega una dirección de billetera.",
+      "errInvalid": "Eso no es una dirección de billetera. Debe empezar con 0x seguido de 40 caracteres.",
+      "errChecksum": "Las mayúsculas de esta dirección no coinciden con su checksum. Puede tener un error de escritura; vuelve a copiarla.",
+      "errSecret": "Esto parece una frase semilla o una clave privada. Se borró y no se guardó ni se envió. Nunca la compartas con ningún sitio web.",
+      "errDuplicate": "Esta billetera ya está en tu portafolio.",
+      "errFull": "El portafolio admite hasta {max} billeteras. Quita una para añadir otra.",
+      "syncLocalOnly": "Guardado solo en este dispositivo (sin cuenta).",
+      "syncSignIn": "Inicia sesión con tu billetera",
+      "syncOptional": "para tenerlo en todos tus dispositivos (opcional).",
+      "syncOn": "Guardado en tu cuenta: la misma lista en cada dispositivo donde inicies sesión. Desactívalo para guardarlo solo en este dispositivo.",
+      "syncOff": "Guarda también esta lista en tu cuenta, para tenerla en cada dispositivo donde inicies sesión.",
+      "syncConnectFirst": "Primero conecta una billetera y luego pulsa Iniciar sesión otra vez. Iniciar sesión es un mensaje gratuito, no una transacción.",
+      "syncRejected": "Rechazaste el mensaje en tu billetera. No se firmó nada.",
+      "syncError": "No se pudo conectar con tu cuenta ahora. Tu lista está a salvo en este navegador; inténtalo de nuevo en un momento.",
+      "watchTitle": "Vigilar cambios",
+      "watchText": "Recibe un mensaje en Telegram cuando una de estas billeteras envíe o reciba fondos, o dé una nueva aprobación.",
+      "watchButton": "Configurar alertas",
+      "watchNote": "Requiere iniciar sesión gratis con tu billetera (un mensaje para firmar, sin transacción). Hasta 10 elementos vigilados; tú eliges cuáles de tus {count} billeteras."
+    },
+    "watchlist": {
+      "loading": "Cargando…",
+      "signInTitle": "Inicia sesión para usar el seguimiento",
+      "signInIntro": "Las alertas necesitan una cuenta para que el servidor sepa qué vigilar por ti. Tu billetera es tu inicio de sesión: sin contraseña ni correo.",
+      "step1Title": "Inicia sesión con tu billetera",
+      "step1Text": "Conecta una billetera si aún no lo hiciste y pulsa Iniciar sesión. El portafolio y todas las demás herramientas siguen funcionando sin iniciar sesión.",
+      "step2Title": "Firma el mensaje en tu billetera",
+      "step2Text": "Tu billetera muestra un texto corto. Comprueba que empiece con {site} y diga que es un mensaje, no una transacción: no cuesta nada y no puede mover tus fondos.",
+      "step2Warning": "Si algún sitio te pide firmar algo que mencione una transferencia, una aprobación o un permit para iniciar sesión, no lo firmes.",
+      "signIn": "Iniciar sesión",
+      "connectAndSignIn": "Conectar billetera e iniciar sesión",
+      "signingIn": "Esperando a tu billetera…",
+      "noAccountNeeded": "Solo hace falta iniciar sesión para el seguimiento y las alertas.",
+      "errNoWallet": "Primero conecta una billetera y luego pulsa Iniciar sesión.",
+      "errChain": "Cambia tu billetera a Ethereum, BNB Chain, Base, Arbitrum o Polygon e inténtalo de nuevo.",
+      "errRejected": "Rechazaste el mensaje en tu billetera. No se firmó nada.",
+      "errRateLimited": "Demasiados intentos en un minuto. Espera un momento e inténtalo de nuevo.",
+      "errSignInFailed": "No se pudo iniciar sesión. Inténtalo de nuevo; si sigue fallando, recarga la página.",
+      "errUnavailable": "El servicio de cuentas no está disponible en este momento. Inténtalo de nuevo en un minuto.",
+      "watchTitle": "Seguimiento",
+      "watching": "Siguiendo {count} de {max}",
+      "watchAnother": "Seguir una dirección o un token",
+      "emptyTitle": "Todavía no sigues nada",
+      "emptyText": "Añade una billetera o un token para elegir qué debe activar una alerta.",
+      "watchMine": "Seguir mi billetera ({address})",
+      "myWallet": "Mi billetera",
+      "unnamedWallet": "Billetera sin nombre",
+      "unnamedToken": "Token sin nombre",
+      "badgeOwn": "Tu billetera (firmada)",
+      "badgeWatchOnly": "Solo lectura",
+      "badgeToken": "Token",
+      "rename": "Cambiar el nombre de {name}",
+      "remove": "Dejar de seguir {name}",
+      "ruleSent": "Enviado",
+      "ruleSentOwnHint": "Monedas o tokens enviados desde esta billetera",
+      "ruleSentHint": "Monedas o tokens enviados desde esta dirección",
+      "ruleReceived": "Recibido",
+      "ruleReceivedHint": "Un mínimo oculta cantidades ínfimas y spam; los tokens sin precio de mercado nunca se reportan",
+      "ruleApprovals": "Nueva aprobación dada",
+      "ruleApprovalsHint": "Quién puede mover ahora tokens desde esta billetera, con un enlace para revocar",
+      "ruleDrop": "Gran caída de valor",
+      "ruleDropHint": "Más del {percent}% en un día",
+      "ruleSecurity": "Cambió el resultado de seguridad",
+      "ruleSecurityHint": "Por ejemplo: la venta empieza a fallar o aparece un nuevo poder del dueño",
+      "ruleLiquidity": "Termina un bloqueo de liquidez o se retira liquidez",
+      "ruleLiquidityHint": "Se revisa cada hora",
+      "anyAmount": "Cualquier cantidad",
+      "above": "Solo por encima de {amount}",
+      "amountFor": "{rule}: cantidad mínima para {name}",
+      "whereTitle": "A dónde llegan las alertas",
+      "accountTitle": "Tu cuenta",
+      "signedInAs": "Sesión iniciada como",
+      "accountText": "con un mensaje firmado: sin contraseña ni correo. CRYPY guarda la dirección de tu billetera, tu lista de seguimiento, el id de tu chat de Telegram, tu historial de alertas y, si lo eliges, tu lista de portafolio.",
+      "signOut": "Cerrar sesión",
+      "download": "Descargar mis datos",
+      "deleteAccount": "Eliminar cuenta",
+      "deleteConfirmTitle": "¿Eliminar tu cuenta?",
+      "deleteConfirmText": "Esto elimina tu lista de seguimiento y cierra tu sesión en todos los dispositivos. No se puede deshacer. Tu billetera y sus fondos no se ven afectados.",
+      "deleteConfirm": "Eliminar todo",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "add": "Seguir",
+      "addTitle": "Seguir una dirección o un token",
+      "addText": "Solo direcciones públicas. CRYPY las lee de la blockchain y no puede mover nada.",
+      "kindLabel": "Qué seguir",
+      "kindAddress": "Billetera o dirección",
+      "kindToken": "Token",
+      "chainLabel": "Red",
+      "addressLabel": "Dirección",
+      "tokenLabel": "Dirección del contrato del token",
+      "labelLabel": "Etiqueta (opcional)",
+      "labelPlaceholder": "p. ej. Principal, Ahorros, Exchange",
+      "neverSecret": "Nunca pegues una frase semilla ni una clave privada aquí ni en ningún otro lugar. CRYPY nunca te las pedirá.",
+      "renameTitle": "Cambiar el nombre",
+      "errEmpty": "Pega una dirección.",
+      "errInvalid": "Eso no es una dirección. Debe empezar con 0x seguido de 40 caracteres.",
+      "errChecksum": "Las mayúsculas de esta dirección no coinciden con su checksum. Puede tener un error de escritura; vuelve a copiarla.",
+      "errSecret": "Esto parece una frase semilla o una clave privada. Se borró y no se guardó ni se envió. Nunca la compartas con ningún sitio web.",
+      "errDuplicateOrFull": "Ya lo sigues, o la lista está llena (10 elementos). Quita uno para añadir otro.",
+      "errSignedOut": "Se cerró tu sesión. Vuelve a iniciar sesión para continuar.",
+      "errSave": "No se pudo guardar ese cambio. Inténtalo de nuevo.",
+      "checkedEveryMinute": "Se revisa más o menos cada minuto",
+      "checkerOff": "Las alertas no se están revisando en este servidor en este momento.",
+      "chainsNotChecked": "No se están revisando ahora: {chains}. El servidor de CRYPY no puede buscar en estas redes por el momento.",
+      "mutedBadge": "Silenciado",
+      "mute": "Silenciar las alertas de {name}",
+      "unmute": "Volver a activar las alertas de {name}",
+      "tgUnavailable": "Las alertas de Telegram todavía no están configuradas en este servidor. Tu lista de seguimiento está guardada y las alertas quedan en el historial de abajo.",
+      "tgConnectText": "Conecta Telegram una vez para recibir ahí las alertas. Nuestro bot solo envía alertas.",
+      "tgConnect": "Conectar Telegram",
+      "tgNeverAsks": "Las alertas nunca te piden conectar una billetera ni firmar nada, así que un bot falso de \"CRYPY\" es fácil de detectar.",
+      "tgStepText": "Abre nuestro bot y pulsa Iniciar. El código vincula tu Telegram con esta cuenta y caduca en 10 minutos.",
+      "tgQrAlt": "Código QR que abre el bot de alertas de CRYPY en Telegram",
+      "tgOpen": "Abrir Telegram",
+      "tgOrSend": "o envía",
+      "tgToBot": "a {bot}",
+      "tgCode": "Código:",
+      "tgWaiting": "Esperando a Telegram… esta página se actualiza sola.",
+      "tgExpired": "Ese código caducó antes de usarse. Pide uno nuevo.",
+      "tgNewCode": "Pedir un código nuevo",
+      "tgConnectedAs": "conectado como {name}",
+      "tgConnected": "conectado",
+      "tgFromBot": "Los mensajes vienen de {bot}. Solo alertas; nunca pide nada.",
+      "tgSendTest": "Enviar prueba",
+      "tgTestSent": "Prueba enviada. Revisa Telegram.",
+      "tgError": "No funcionó. Inténtalo de nuevo en un momento.",
+      "tgDisconnect": "Desconectar Telegram",
+      "tgDisconnectTitle": "¿Desconectar Telegram?",
+      "tgDisconnectText": "Las alertas dejan de llegar a Telegram. Siguen guardándose en el historial de aquí, y puedes volver a conectarlo cuando quieras.",
+      "tgDisconnectConfirm": "Desconectar",
+      "emailLater": "Las alertas por correo llegarán más adelante.",
+      "quietOnText": "Horas de silencio {start}–{end} (las alertas esperan hasta que terminan)",
+      "quietOffText": "Sin horas de silencio (las alertas llegan en cualquier momento)",
+      "quietChange": "Cambiar",
+      "quietTitle": "Horas de silencio",
+      "quietText": "Las alertas detectadas durante las horas de silencio esperan y llegan juntas cuando terminan.",
+      "quietUse": "Usar horas de silencio",
+      "quietFrom": "Desde",
+      "quietTo": "Hasta",
+      "quietZone": "En tu zona horaria: {zone}",
+      "quietInvalid": "Escribe las dos horas, por ejemplo 23:00 y 07:00.",
+      "recentTitle": "Alertas recientes",
+      "recentAll": "Todas",
+      "recentFewer": "Menos",
+      "recentEmpty": "Todavía no hay alertas. Aparecerán aquí y en Telegram.",
+      "recentOlder": "Cargar alertas anteriores",
+      "statusWaiting": "Esperando para enviarse (horas de silencio)",
+      "statusNoChannel": "No enviada: Telegram no estaba conectado",
+      "statusFailed": "No se pudo enviar a Telegram",
+      "statusMuted": "No enviada: silenciada",
+      "importTitle": "Sigue las billeteras de tu portafolio",
+      "importText": "¿Seguir {count} billetera(s) del portafolio de este navegador, con sus etiquetas? Después puedes cambiar qué alerta activa cada una.",
+      "importNone": "Ya sigues todas las billeteras del portafolio de este navegador.",
+      "importButton": "Seguir {count} billetera(s)",
+      "importNotNow": "Ahora no"
+    }
+  },
+  "seo": {
+    "homeTitle": "CRYPY: verificador de billeteras, tokens y transacciones",
+    "toolsTitle": "Herramientas cripto gratis para billeteras y tokens | CRYPY",
+    "toolsDescription": "14 herramientas gratis para billeteras, tokens y transacciones en Ethereum, BNB Chain, Base, Arbitrum y Polygon: tokens, aprobaciones, gas y más."
+  },
+  "learn": {
+    "seoTitle": "Guías de seguridad cripto: estafas, aprobaciones | CRYPY",
+    "seoDescription": "Guías claras sobre tokens estafa, honeypots, aprobaciones, transacciones fallidas, gas y frases semilla, cada una con una herramienta gratis.",
+    "title": "Aprende a detectar riesgos cripto antes de que te cuesten caro",
+    "intro": "Guías breves y claras sobre tokens estafa, aprobaciones, transacciones fallidas y gas. Cada una termina con la herramienta gratis de CRYPY que lo revisa por ti.",
+    "topicsLabel": "Temas",
+    "allTopics": "Todas las guías",
+    "topics": {
+      "token-scams": "Estafas con tokens",
+      "approvals": "Aprobaciones",
+      "transactions": "Transacciones",
+      "gas-units": "Gas y unidades",
+      "wallet-safety": "Seguridad de la billetera"
+    },
+    "startHere": "Empieza aquí",
+    "checkNowTitle": "Revisa algo ahora",
+    "checkNowText": "Pega una dirección, un contrato de token o un hash de transacción. No hace falta conectar tu billetera.",
+    "guideCount": "{count, plural, one {# guía} other {# guías}}",
+    "allGuidesHeading": "Todas las guías",
+    "readTime": "{minutes} min de lectura",
+    "toolLabel": "Herramienta:",
+    "noTool": "Todas las herramientas",
+    "byline": "Por CRYPY",
+    "updated": "Actualizada el {date}",
+    "inShort": "En resumen",
+    "onThisPage": "En esta página",
+    "questions": "Preguntas",
+    "relatedGuides": "Guías relacionadas",
+    "ctaTitle": "Compruébalo tú mismo con {tool}",
+    "ctaButton": "Abrir {tool}",
+    "ctaAllTitle": "Herramientas gratis que nunca piden tu frase semilla",
+    "ctaAllText": "Revisa billeteras, tokens, aprobaciones y transacciones usando solo datos públicos.",
+    "ctaAllButton": "Ver todas las herramientas",
+    "notTranslated": "Esta guía todavía no está traducida, así que se muestra en inglés.",
+    "learnMore": "Más información",
+    "relatedTools": "Herramientas relacionadas"
+  },
+  "gasChain": {
+    "seoTitle": "Precio del gas en {chain} ahora: gwei y comisiones | CRYPY",
+    "title": "Precio del gas en {chain} ahora",
+    "intro": "Precios del gas en vivo en gwei y lo que cuestan en dólares las acciones más comunes, leídos directamente de la cadena y actualizados cada 12 segundos.",
+    "howTitle": "Cómo funciona el gas en {chain}",
+    "questions": "Preguntas",
+    "otherChains": "Gas en otras cadenas",
+    "compareAll": "Comparar todas las cadenas en el Rastreador de gas",
+    "guideLink": "Lee: las comisiones de gas explicadas",
+    "byChain": "Gas por cadena:",
+    "chains": {
+      "ethereum": {
+        "description": "Precio del gas de Ethereum en vivo en gwei: bajo, medio y alto, y cuánto cuesta ahora en dólares enviar ETH o tokens, aprobar y hacer swaps.",
+        "how": [
+          "Cada transacción en Ethereum paga la comisión base del bloque, que se quema, más una comisión de prioridad (una propina) para el validador. Llega un bloque nuevo cada 12 segundos aproximadamente, y la comisión base sube o baja según lo lleno que estuvo el bloque anterior.",
+          "Tu billetera fija una comisión máxima: pagas la comisión base más tu propina, nunca más que ese máximo. Una transacción fallida igual paga el gas que usó."
+        ],
+        "faq": [
+          {
+            "q": "¿Por qué el precio del gas cambia tan seguido?",
+            "a": "La comisión base se recalcula en cada bloque según lo lleno que estuvo el anterior, así que puede moverse cada 12 segundos. Los momentos de mucha actividad, como el lanzamiento de un token popular, la suben rápido."
+          },
+          {
+            "q": "¿Qué velocidad debo elegir?",
+            "a": "La media sirve para la mayoría de las transacciones. Elige la baja si puedes esperar y la alta si debe pasar rápido, como un swap en el que el tiempo importa."
+          },
+          {
+            "q": "¿Por qué pagué una cantidad distinta a la que se muestra aquí?",
+            "a": "El costo depende del gas que realmente use tu transacción: un swap complejo usa más que las cantidades típicas que se muestran aquí. Además, la comisión base puede cambiar entre el momento en que miras y el momento en que se incluye tu transacción."
+          }
+        ]
+      },
+      "bsc": {
+        "description": "Precio del gas de BNB Chain en vivo en gwei: bajo, medio y alto, y cuánto cuesta ahora en dólares enviar BNB o tokens, aprobar y hacer swaps.",
+        "how": [
+          "BNB Chain no tiene comisión base: el precio del gas que fijas es el precio completo y va a los validadores. Los bloques llegan mucho más rápido que en Ethereum y el precio suele mantenerse bajo y estable.",
+          "Las comisiones se pagan en BNB, así que mantén un poco de BNB en tu billetera aunque solo tengas tokens."
+        ],
+        "faq": [
+          {
+            "q": "¿Por qué las comisiones de BNB Chain son tan bajas?",
+            "a": "Sus bloques tienen espacio para muchas transacciones y llegan rápido, así que el precio del gas suele quedarse cerca del mínimo que aceptan los validadores. En momentos de mucha actividad todavía puede subir."
+          },
+          {
+            "q": "¿Necesito BNB para enviar tokens en BNB Chain?",
+            "a": "Sí. Cada transacción se paga en BNB, incluso cuando envías USDT u otro token."
+          },
+          {
+            "q": "¿Qué velocidad debo elegir?",
+            "a": "La media sirve para la mayoría de las transacciones. Elige la baja si puedes esperar y la alta si debe pasar rápido, como un swap en el que el tiempo importa."
+          }
+        ]
+      },
+      "base": {
+        "description": "Precio del gas de Base en vivo en gwei y cuánto cuesta en dólares enviar ETH o tokens, aprobar y hacer swaps, incluida la comisión de datos de Ethereum.",
+        "how": [
+          "Base es un rollup construido sobre Ethereum. Cada transacción paga una pequeña comisión de red en Base (una comisión base más una propina, como en Ethereum) y una comisión por publicar sus datos en Ethereum.",
+          "Las dos partes suelen ser pequeñas. Los costos de CRYPY incluyen una estimación de la comisión de datos, leída de la cadena. Las comisiones en Base se pagan en ETH."
+        ],
+        "faq": [
+          {
+            "q": "¿Por qué Base es más barato que Ethereum?",
+            "a": "Base agrupa muchas transacciones y las publica en Ethereum de una sola vez, así que cada transacción paga solo una pequeña parte."
+          },
+          {
+            "q": "¿Qué es la comisión de datos de Ethereum?",
+            "a": "La parte de tu comisión que paga la publicación de los datos de tu transacción en Ethereum. Sigue las comisiones de Ethereum, así que es más baja cuando Ethereum está tranquilo."
+          },
+          {
+            "q": "¿Necesito ETH en Base?",
+            "a": "Sí. Las comisiones en Base se pagan con ETH que esté en Base, no en Ethereum."
+          }
+        ]
+      },
+      "arbitrum": {
+        "description": "Precio del gas de Arbitrum en vivo en gwei y cuánto cuesta ahora en dólares enviar ETH o tokens, aprobar y hacer swaps, leído de la cadena.",
+        "how": [
+          "Arbitrum One es un rollup construido sobre Ethereum. El costo de publicar los datos de la transacción en Ethereum se cobra como gas adicional, así que ya forma parte del gas usado y de los costos que se muestran aquí.",
+          "Las transacciones se ordenan según van llegando, así que una propina más alta normalmente no las acelera. Las comisiones se pagan en ETH en Arbitrum."
+        ],
+        "faq": [
+          {
+            "q": "¿Una propina más alta acelera mi transacción en Arbitrum?",
+            "a": "Normalmente no. Arbitrum ordena las transacciones según van llegando, así que la propina de prioridad tiene poco efecto."
+          },
+          {
+            "q": "¿Por qué Arbitrum es más barato que Ethereum?",
+            "a": "Agrupa muchas transacciones y las publica juntas en Ethereum, así que cada una paga solo una pequeña parte."
+          },
+          {
+            "q": "¿Necesito ETH en Arbitrum?",
+            "a": "Sí. Las comisiones se pagan con ETH que esté en Arbitrum, no en Ethereum."
+          }
+        ]
+      },
+      "polygon": {
+        "description": "Precio del gas de Polygon en vivo en gwei y cuánto cuesta ahora en dólares enviar POL o tokens, aprobar y hacer swaps, leído de la cadena.",
+        "how": [
+          "Polygon funciona como Ethereum: cada transacción paga una comisión base, que se quema, más una propina para el validador. Las comisiones se pagan en POL.",
+          "Los precios del gas en gwei parecen altos en Polygon porque POL vale mucho menos que ETH. Lo que importa es el costo en dólares que se muestra aquí."
+        ],
+        "faq": [
+          {
+            "q": "¿Por qué el precio del gas de Polygon en gwei es tan alto?",
+            "a": "Un gwei es una fracción de un POL, y POL vale mucho menos que ETH. Unos cientos de gwei en Polygon suelen costar mucho menos que unos pocos gwei en Ethereum."
+          },
+          {
+            "q": "¿Necesito POL para enviar tokens en Polygon?",
+            "a": "Sí. Cada transacción se paga en POL, incluso cuando envías USDC u otro token."
+          },
+          {
+            "q": "¿Qué velocidad debo elegir?",
+            "a": "La media sirve para la mayoría de las transacciones. Elige la baja si puedes esperar y la alta si debe pasar rápido, como un swap en el que el tiempo importa."
+          }
+        ]
+      }
+    }
+  },
+  "tokenChecks": {
+    "seoTitle": "Revisiones de seguridad de tokens cada día | CRYPY",
+    "seoDescription": "Revisiones automáticas diarias de 50 tokens conocidos en 5 cadenas: si se pueden vender, impuestos de compra y venta, poderes del dueño y liquidez.",
+    "nav": "Revisiones de tokens",
+    "title": "Revisiones de seguridad de tokens",
+    "intro": "Revisiones automáticas de CRYPY a tokens muy conocidos, repetidas cada día: si se puede vender, cuánto cobra de impuesto, qué puede cambiar el dueño y quién tiene la liquidez. Los resultados son señales, nunca la promesa de que un token es seguro.",
+    "checkAny": "Revisa cualquier token",
+    "chainsLabel": "Ir a una cadena",
+    "colToken": "Token",
+    "colResult": "Resultado",
+    "colSell": "Se puede vender (prueba)",
+    "colTax": "Impuesto compra / venta",
+    "colChecked": "Revisado",
+    "sellYes": "Sí",
+    "sellNo": "No",
+    "sellNoPool": "Sin pool encontrado",
+    "sellUnchecked": "Sin revisar",
+    "tax": "{buy} / {sell}",
+    "notMeasured": "Sin medir",
+    "pending": "En revisión",
+    "selection": "Qué tokens aparecen: tokens conocidos con mucha liquidez en cada cadena, elegidos por CRYPY. Nadie puede pagar para aparecer ni para cambiar un resultado.",
+    "fromToolPage": "Ver las revisiones diarias de tokens conocidos",
+    "page": {
+      "seoTitle": "{symbol} en {chain}: revisión de seguridad | CRYPY",
+      "seoDescription": "{symbol} en {chain}: prueba de venta, impuestos de compra y venta, poderes del dueño y liquidez según la revisión diaria de CRYPY. Son señales, no promesas.",
+      "title": "Revisión de seguridad del token {name} ({symbol})",
+      "pendingTitle": "{symbol} en {chain}: revisión de seguridad del token",
+      "checked": "Revisado el {time} UTC · se vuelve a revisar cada día",
+      "fresh": "Hacer una revisión nueva",
+      "aboutTitle": "Sobre esta revisión",
+      "about": "Esta página muestra la revisión automática de CRYPY al contrato de {symbol} en {chain}, guardada más o menos una vez al día. Cubre la venta, los impuestos, los poderes del dueño y la liquidez, e indica cómo se comprobó cada hallazgo. No es una auditoría ni una recomendación, y los dueños pueden cambiar la configuración después de una revisión. Para ver los datos más recientes, haz una revisión nueva.",
+      "preparingTitle": "Esta revisión se está preparando",
+      "preparingText": "CRYPY todavía no ha guardado una revisión de {symbol} en {chain}; normalmente aparece en menos de dos horas. Puedes hacer una revisión en vivo ahora.",
+      "questions": "Preguntas",
+      "sellQ": "¿Puedo vender {symbol}?",
+      "sellOk": "En la última operación de prueba de CRYPY, {symbol} se pudo comprar, enviar y vender. Las reglas de un token pueden cambiar, así que vuelve a revisarlo antes de una operación grande.",
+      "sellNo": "En la última operación de prueba de CRYPY, la operación no se completó. La prueba de compraventa de arriba muestra qué paso falló; no compres hasta saber por qué.",
+      "sellUnchecked": "La última revisión de CRYPY no pudo hacer una operación de prueba con {symbol} (no hay un pool compatible o la simulación no se ejecutó). La prueba de compraventa de arriba explica el motivo.",
+      "taxQ": "¿{symbol} tiene impuesto de compra o de venta?",
+      "taxA": "En la última operación de prueba de CRYPY se cobró {buy} al comprar, {sell} al vender y {transfer} en una transferencia.",
+      "taxNone": "Los impuestos no se midieron en la última revisión porque la operación de prueba no se completó.",
+      "safeQ": "¿{symbol} es seguro?",
+      "safeA": "Ninguna revisión puede demostrar que un token es seguro. La última revisión de CRYPY dice \"{level}\", con {high} hallazgos altos y {medium} medios. Lee los hallazgos de arriba y decide por tu cuenta.",
+      "related": "Otros tokens revisados en {chain}",
+      "allChecks": "Todas las revisiones de tokens",
+      "learn": "Más información"
+    }
+  },
+  "status": {
+    "seoTitle": "Estado de CRYPY: ¿funcionan todas las herramientas?",
+    "seoDescription": "Estado en vivo de cada herramienta y cada cadena de CRYPY. Nuestro servidor las prueba con datos reales cada pocos minutos y guarda 90 días.",
+    "title": "Estado de CRYPY",
+    "intro": "¿Funciona todo? Nuestro servidor prueba de verdad cada herramienta y cada cadena cada pocos minutos y muestra los resultados aquí.",
+    "headline": {
+      "operational": "Todo funciona",
+      "degraded": "Algunas partes tienen problemas",
+      "down": "El sitio tiene un problema grave",
+      "unknown": "Aún sin revisar"
+    },
+    "headlineText": {
+      "operational": "Todas las herramientas y cadenas pasaron su última revisión.",
+      "degraded": "{names} {count, plural, one {tiene} other {tienen}} problemas. Todo lo demás funciona.",
+      "down": "El propio sitio web no pasó sus últimas revisiones. Estamos trabajando en ello.",
+      "unknown": "El servidor todavía no ha guardado resultados. Aparecen unos minutos después de que arranca.",
+      "partial": "Todo lo revisado hasta ahora pasó. {count, plural, one {Falta revisar # parte} other {Faltan revisar # partes}}."
+    },
+    "lastChecked": "Última revisión: {minutes, plural, =0 {hace menos de un minuto} one {hace # minuto} other {hace # minutos}}",
+    "checksEvery": "Las revisiones se hacen cada 5 minutos",
+    "state": {
+      "operational": "Funciona",
+      "degraded": "Con problemas",
+      "down": "Caído",
+      "unknown": "Aún sin revisar"
+    },
+    "legendLabel": "Qué significan las barras",
+    "legend": {
+      "operational": "Funcionó todo el día",
+      "degraded": "Algunos problemas",
+      "down": "Caído un tiempo",
+      "none": "Aún sin revisiones"
+    },
+    "daysAgo": "Hace 90 días",
+    "today": "Hoy",
+    "uptime": "{percent} funcionando",
+    "noUptime": "Aún sin revisiones",
+    "dayTitle": "{day}: pasó el {percent} de las revisiones",
+    "dayNone": "{day}: sin revisiones",
+    "groups": {
+      "core": {
+        "title": "Sitio web",
+        "sub": ""
+      },
+      "tools": {
+        "title": "Herramientas",
+        "sub": "Cada herramienta se prueba con datos públicos reales cada 30 minutos aproximadamente"
+      },
+      "chains": {
+        "title": "Cadenas",
+        "sub": "La conexión con cada cadena, cada 5 minutos"
+      },
+      "alerts": {
+        "title": "Alertas y revisiones diarias",
+        "sub": ""
+      }
+    },
+    "components": {
+      "website": "Sitio web",
+      "search": "Búsqueda",
+      "alerts": "Alertas de billetera en Telegram",
+      "token-checks": "Revisiones diarias de seguridad de tokens"
+    },
+    "updates": {
+      "title": "Novedades",
+      "none": "No hay novedades en los últimos 90 días.",
+      "earlier": "Novedades anteriores (últimos 90 días)",
+      "state": {
+        "ongoing": "En curso",
+        "fixed": "Resuelto",
+        "planned": "Mantenimiento previsto"
+      },
+      "affects": "Afecta a: {name}",
+      "wholeSite": "Todo el sitio"
+    },
+    "features": {
+      "title": "Funciones: disponibles y próximas",
+      "live": "Disponible",
+      "beta": "Beta",
+      "soon": "Próximamente",
+      "liveTools": "{count} herramientas, listadas arriba",
+      "liveChains": "Ethereum, BNB Chain, Base, Arbitrum y Polygon",
+      "liveAlerts": "Alertas de billetera por Telegram",
+      "betaSite": "Todo el sitio es una beta pública: los resultados son reales, el diseño todavía puede cambiar",
+      "soonItems": [
+        "Traducciones revisadas: español, portugués (Brasil), chino, ruso, turco y vietnamita",
+        "Más idiomas"
+      ]
+    },
+    "howItWorks": "Cómo funciona: las revisiones usan datos públicos de prueba (una billetera, una transacción y un token muy conocidos), nunca las búsquedas de nadie. \"Funciona\" significa que la última revisión pasó; no garantiza que cada resultado esté completo. Si esta página no carga en absoluto, todo el sitio está caído y recibimos un aviso por separado."
+  }
+}

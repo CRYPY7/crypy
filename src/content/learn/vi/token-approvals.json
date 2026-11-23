@@ -1,0 +1,116 @@
+{
+  "title": "Giải thích phê duyệt token và cách thu hồi",
+  "seoTitle": "Giải thích phê duyệt token và cách thu hồi | CRYPY",
+  "description": "Các ứng dụng bạn từng dùng có thể vẫn được phép tiêu token của bạn. Tìm hiểu phê duyệt token là gì, khi nào nó nguy hiểm, và cách kiểm tra, thu hồi.",
+  "summary": "Mọi ứng dụng bạn từng dùng có thể vẫn được phép tiêu token của bạn. Cách tìm và gỡ bỏ.",
+  "inShort": [
+    "Phê duyệt cho phép một hợp đồng chuyển một loại token của bạn mà không cần hỏi lại.",
+    "Nó vẫn hiệu lực cho đến khi bạn gỡ, kể cả khi bạn đã ngừng dùng ứng dụng.",
+    "Gỡ phê duyệt là một giao dịch nhỏ bạn xác nhận trong chính ví của mình."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Phê duyệt token là gì?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Trước khi một sàn hay ứng dụng khác có thể chuyển token khỏi ví của bạn, bạn cấp quyền cho nó một lần. Quyền đó chính là phê duyệt: nó chỉ rõ hợp đồng (**bên chi tiêu**) và lượng token nó được chuyển."
+        },
+        {
+          "type": "figure",
+          "kind": "approval",
+          "labels": [
+            "Ví của bạn",
+            "đang giữ 1.200 USDT",
+            "Quyền: tiêu USDT",
+            "tối đa: không giới hạn",
+            "Hợp đồng sàn",
+            "có thể chuyển mà không hỏi"
+          ],
+          "caption": "Phê duyệt là một quyền thường trực. Token vẫn nằm trong ví cho đến khi hợp đồng dùng quyền này.",
+          "alt": "Ví của bạn cấp cho hợp đồng sàn quyền tiêu USDT không giới hạn."
+        },
+        {
+          "type": "p",
+          "text": "Với NFT có phiên bản rộng hơn: **phê duyệt tất cả**, cho phép bên chi tiêu chuyển mọi NFT bạn giữ trong bộ sưu tập đó."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Vì sao phê duyệt có thể trở nên nguy hiểm",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Nhiều ứng dụng xin lượng không giới hạn để lần sau bạn khỏi phải phê duyệt lại. Nếu hợp đồng đó về sau bị hack, hoặc vốn đã độc hại, nó có thể chuyển toàn bộ token đó khỏi ví của bạn, kể cả token bạn nhận sau này."
+        },
+        {
+          "type": "p",
+          "text": "Phê duyệt cũng là mục tiêu của nhiều trang lừa đảo: một trang giả bảo bạn \"nhận\" hoặc \"xác minh\" thứ gì đó, và giao dịch bạn xác nhận thực ra là phê duyệt cho hợp đồng của kẻ lừa đảo."
+        },
+        {
+          "type": "warning",
+          "text": "Thu hồi không bao giờ cần thiết để \"mở khóa\" hay \"xác minh\" ví. Trang hay tin nhắn nào nói vậy, hoặc đòi cụm từ khôi phục, đều là lừa đảo."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Cách kiểm tra phê duyệt của bạn",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Dán địa chỉ ví vào [Kiểm tra phê duyệt](tool:approval-checker). Công cụ tìm phê duyệt trên Ethereum, BNB Chain, Base, Arbitrum và Polygon, đọc từng cái trên blockchain và đưa những cái cần chú ý lên đầu: hợp đồng chưa rõ, lượng không giới hạn và bên chi tiêu bị dữ liệu bảo mật đánh dấu."
+        },
+        {
+          "type": "p",
+          "text": "Kiểm tra không cần ví của bạn: ai cũng tra được mọi địa chỉ, vì phê duyệt là công khai."
+        }
+      ]
+    },
+    {
+      "id": "revoke",
+      "heading": "Cách thu hồi phê duyệt",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Mở [Kiểm tra phê duyệt](tool:approval-checker) và kiểm tra địa chỉ của bạn, hoặc kết nối ví rồi kiểm tra. Kết nối không bao giờ yêu cầu ký.",
+            "Xem phần **Cần chú ý** trước, và quyết định phê duyệt nào bạn không còn cần.",
+            "Bấm **Thu hồi** cạnh một phê duyệt. CRYPY thử giao dịch trước và cho bạn biết nó làm gì và tốn bao nhiêu phí.",
+            "Kiểm tra chi tiết trong ví và xác nhận. Khi giao dịch vào khối, hạn mức sẽ về 0."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Thu hồi đặt hạn mức về 0. Token của bạn không di chuyển."
+        }
+      ]
+    },
+    {
+      "id": "keep",
+      "heading": "Khi nào nên giữ phê duyệt",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Phê duyệt cho ứng dụng bạn dùng thường xuyên, lý tưởng là giới hạn ở lượng bạn giao dịch, là bình thường. Thu hồi chúng chỉ có nghĩa lần sau bạn phải phê duyệt lại và trả phí. Hãy tập trung vào phê duyệt cho ứng dụng bạn không còn dùng, hợp đồng bạn không nhận ra, và phê duyệt không giới hạn trên token giá trị lớn."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Thu hồi có tốn tiền không?",
+      "a": "Có, một khoản phí mạng nhỏ, vì thu hồi là một giao dịch blockchain."
+    },
+    {
+      "q": "Thu hồi có làm token của tôi di chuyển không?",
+      "a": "Không. Nó chỉ gỡ quyền. Token vẫn nằm trong ví của bạn."
+    },
+    {
+      "q": "Tôi có kiểm tra được mà không cần kết nối ví không?",
+      "a": "Có. Phê duyệt là công khai, nên bạn có thể kiểm tra mọi địa chỉ. Thu hồi cần ví của bạn, vì chỉ bạn mới đổi được quyền của chính mình."
+    }
+  ]
+}

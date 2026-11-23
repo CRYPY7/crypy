@@ -1,0 +1,116 @@
+{
+  "title": "Token onayları açıklandı ve nasıl iptal edilir",
+  "seoTitle": "Token Onayları Açıklandı: Nasıl İptal Edilir | CRYPY",
+  "description": "Kullandığınız uygulamalar hâlâ tokenlarınızı harcayabilir. Token onayı nedir, ne zaman tehlikeli olur ve onaylarınızı nasıl kontrol edip iptal edersiniz?",
+  "summary": "Kullandığınız her uygulamanın tokenlarınızı harcama izni hâlâ olabilir. Bunları nasıl bulup kaldırırsınız.",
+  "inShort": [
+    "Bir onay, bir kontratın tokenlarınızdan birini tekrar sormadan taşımasına izin verir.",
+    "Uygulamayı kullanmayı bıraksanız bile siz kaldırana kadar etkin kalır.",
+    "Birini kaldırmak, kendi cüzdanınızda onayladığınız küçük bir işlemdir."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Token onayı nedir?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir borsa veya başka bir uygulama cüzdanınızdan bir tokenı taşıyabilmeden önce ona bir kez izin verirsiniz. Bu izin onaydır: kontratı (**harcayıcı**) ve tokenın ne kadarını taşıyabileceğini belirtir."
+        },
+        {
+          "type": "figure",
+          "kind": "approval",
+          "labels": [
+            "Cüzdanınız",
+            "1.200 USDT tutuyor",
+            "İzin: USDT harcamak",
+            "sınır: sınırsız",
+            "Borsa kontratı",
+            "sormadan taşıyabilir"
+          ],
+          "caption": "Onay kalıcı bir izindir. Tokenlar, kontrat onu kullanana kadar cüzdanınızda kalır.",
+          "alt": "Cüzdanınız bir borsa kontratına sınırsız miktarda USDT harcama izni veriyor."
+        },
+        {
+          "type": "p",
+          "text": "NFT'ler için daha geniş bir sürümü vardır: **tümünü onayla**; harcayıcının o koleksiyonda tuttuğunuz her NFT'yi taşımasına izin verir."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Onaylar neden tehlikeli hâle gelebilir",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Birçok uygulama, bir dahaki sefere tekrar onaylamanız gerekmesin diye sınırsız tutar ister. O kontrat daha sonra hacklenirse veya baştan kötü niyetliyse o tokenın tamamını, sonradan alacaklarınız dahil cüzdanınızdan taşıyabilir."
+        },
+        {
+          "type": "p",
+          "text": "Onaylar birçok kimlik avı sitesinin de hedefidir: sahte bir sayfa bir şeyi \"talep etmenizi\" veya \"doğrulamanızı\" ister ve onayladığınız işlem aslında dolandırıcının kontratı için bir onaydır."
+        },
+        {
+          "type": "warning",
+          "text": "Bir cüzdanın \"kilidini açmak\" veya onu \"doğrulamak\" için iptal etmek asla gerekmez. Bunu söyleyen ya da kurtarma ifadenizi isteyen bir site veya mesaj dolandırıcılıktır."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Onaylarınızı nasıl kontrol edersiniz",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cüzdan adresinizi [Onay Kontrolü](tool:approval-checker) içine yapıştırın. Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da onayları arar, her birini zincirden okur ve dikkat gerektirenleri en üste koyar: bilinmeyen kontratlar, sınırsız tutarlar ve güvenlik verilerinin işaretlediği harcayıcılar."
+        },
+        {
+          "type": "p",
+          "text": "Kontrol etmek için cüzdanınız gerekmez: onaylar herkese açık olduğu için herkes herhangi bir adrese bakabilir."
+        }
+      ]
+    },
+    {
+      "id": "revoke",
+      "heading": "Bir onay nasıl iptal edilir",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "[Onay Kontrolü](tool:approval-checker) aracını açıp adresinizi kontrol edin veya cüzdanınızı bağlayıp kontrol edin. Bağlanmak asla imza istemez.",
+            "Önce **Dikkat gerektirenler** bölümüne bakın ve artık hangi onaylara ihtiyacınız olmadığına karar verin.",
+            "Birinin yanındaki **İptal et** düğmesine tıklayın. CRYPY önce işlemi test eder ve ne yaptığını ve ücreti gösterir.",
+            "Ayrıntıları cüzdanınızda kontrol edin ve onaylayın. İşlem bir bloğa girdiğinde izin sıfır olur."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "İptal etmek izni sıfıra ayarlar. Tokenlarınız hareket etmez."
+        }
+      ]
+    },
+    {
+      "id": "keep",
+      "heading": "Bir onay ne zaman tutulmalı",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Sık kullandığınız uygulamalar için, tercihen işlem yaptığınız tutarla sınırlı onaylar normaldir. Onları iptal etmek yalnızca bir dahaki sefere tekrar onaylamanız ve ücret ödemeniz demektir. Artık kullanmadığınız uygulamaların onaylarına, tanımadığınız kontratlara ve değerli tokenlardaki sınırsız onaylara odaklanın."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "İptal etmek para tutar mı?",
+      "a": "Evet, küçük bir ağ ücreti; çünkü iptal etmek bir blokzincir işlemidir."
+    },
+    {
+      "q": "İptal etmek tokenlarımı taşır mı?",
+      "a": "Hayır. Yalnızca izni kaldırır. Tokenlarınız cüzdanınızda kalır."
+    },
+    {
+      "q": "Cüzdanımı bağlamadan kontrol edebilir miyim?",
+      "a": "Evet. Onaylar herkese açıktır, bu yüzden herhangi bir adresi kontrol edebilirsiniz. İptal etmek cüzdanınızı gerektirir, çünkü kendi izinlerinizi yalnızca siz değiştirebilirsiniz."
+    }
+  ]
+}

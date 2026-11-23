@@ -1,0 +1,84 @@
+{
+  "title": "Adres zehirleme: benzer adres dolandırıcılığı",
+  "seoTitle": "Adres Zehirleme: Benzer Adres Dolandırıcılığı | CRYPY",
+  "description": "Dolandırıcılar, yanlış adresi kopyalamanız için sizinkine benzeyen adreslerden küçük transferler gönderir. Adres zehirleme nasıl işler, nasıl korunursunuz?",
+  "summary": "Yanlış adresi kopyalamanız için sizinkine benzeyen adreslerden gelen çok küçük transferler.",
+  "inShort": [
+    "Dolandırıcılar, kullandığınız adreslerle aynı şekilde başlayıp biten adresler oluşturur.",
+    "Sahte adresin geçmişinizde görünmesi için çok küçük veya sıfır değerli transferler gönderirler.",
+    "İşlem geçmişinizden asla adres kopyalamayın: her karakteri karşılaştırın."
+  ],
+  "sections": [
+    {
+      "id": "how",
+      "heading": "Dolandırıcılık nasıl işler",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Adresler uzundur, bu yüzden çoğu kişi yalnızca ilk ve son birkaç karaktere bakar. Dolandırıcılar, kullandığınız bir adresin (örneğin bir borsa yatırma adresi veya bir arkadaşınızın cüzdanı) bu karakterleriyle eşleşen adresler üretir."
+        },
+        {
+          "type": "p",
+          "text": "Ardından bu benzer adresi sıfır veya çok küçük tutarlı bir transferle ya da sahte bir tokenla geçmişinizde görünür hâle getirirler. Bir dahaki sefere geçmişinizden adres kopyaladığınızda onların adresini kopyalayıp dolandırıcıya gerçek para gönderebilirsiniz."
+        }
+      ]
+    },
+    {
+      "id": "example",
+      "heading": "Neye benzer",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "0x7a3F…9c21 adresine USDT gönderirsiniz. Dakikalar sonra geçmişinizde 0x7a3F…9c21 ile ilgili 0 USDT'lik bir transfer görünür, ama ortadaki karakterler farklıdır. Tutar sıfır olduğu için hiçbir şey olmamış gibi görünür. O kayıt yemdir."
+        }
+      ]
+    },
+    {
+      "id": "avoid",
+      "heading": "Nasıl korunursunuz",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Adresleri asıl kaynaktan (borsanın yatırma sayfası, kişinin kendi mesajı) kopyalayın, asla geçmişinizden değil.",
+            "Yalnızca başını ve sonunu değil, adresin tamamını karşılaştırın.",
+            "Güvendiğiniz adresleri cüzdanınızın adres defterine kaydedin.",
+            "Yeni bir adrese büyük bir tutar göndermeden önce küçük bir tutar gönderin ve alıcıdan ulaştığını teyit etmesini isteyin."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Beklemediğiniz sıfır değerli ve çok küçük transferler bir hata değil, bir uyarı işaretidir. Onlarla etkileşime girmeyin."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "CRYPY bunu nasıl işaretler",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Adres Analizi](tool:address-analyzer) bir cüzdanın transferlerini listeler ve olası zehirlemeyi işaretler: cüzdanın kendisiyle veya cüzdanın ödeme yaptığı bir adresle aynı şekilde başlayıp biten bir adresten gelen sıfır veya çok küçük transferler. Bu sezgisel bir uyarıdır, bu yüzden bazı durumları kaçırabilir veya zararsız bir transferi işaretleyebilir."
+        },
+        {
+          "type": "tip",
+          "text": "Spam ve zehirleme transferleri, geçmişiniz okunabilir kalsın diye varsayılan olarak gizlenir. Tek bir anahtar onları gösterir."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Sıfır değerli bir transfer paramı alabilir mi?",
+      "a": "Hayır. Tek başına fonlarınızı taşıyamaz. Tehlike, benzer adresi sonradan kopyalamaktır."
+    },
+    {
+      "q": "Neden biri cüzdanımdan geliyormuş gibi görünen bir transfer gönderebiliyor?",
+      "a": "Bazı token kontratları, herkesin herhangi bir adresi gösteren sıfır tutarlı bir transfer kaydı oluşturmasına izin verir. Hiçbir şey taşımaz ama geçmişlerde görünür."
+    },
+    {
+      "q": "Sağlama toplamı beni korur mu?",
+      "a": "Hayır. Benzer adres geçerli bir adrestir, bu yüzden sağlama toplamından geçer. Yalnızca adresin tamamını karşılaştırmak işe yarar."
+    }
+  ]
+}

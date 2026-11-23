@@ -1,0 +1,107 @@
+{
+  "title": "Kurtarma ifadeniz: hiçbir site neden onu istememeli",
+  "seoTitle": "Kurtarma İfadesi Güvenliği: Asla Paylaşmayın | CRYPY",
+  "description": "Kurtarma ifadeniz cüzdanınızdaki her şeyi kontrol eder. Hiçbir site, uygulama veya destek temsilcisi onu neden istememeli ve dolandırıcılar ne yapar?",
+  "summary": "Cüzdanınızdaki her şeyi koruyan tek kural ve onu çiğnetmek için kullanılan hileler.",
+  "inShort": [
+    "Kurtarma ifadeniz (12 veya 24 kelime), ona sahip olan herkese cüzdanınızın tam kontrolünü verir.",
+    "Hiçbir gerçek site, uygulama, borsa veya destek temsilcisi onu asla istemez.",
+    "Onu internette herhangi bir yere yazdıysanız fonlarınızı hemen yeni bir cüzdana taşıyın."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Kurtarma ifadesi nedir",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "MetaMask veya Trust Wallet gibi bir cüzdan oluşturduğunuzda size 12 veya 24 kelimelik bir kurtarma ifadesi gösterir. Bu kelimeler cüzdanın kendisidir: onlara sahip olan herkes cüzdanı kendi cihazında yeniden oluşturup içindeki her şeyi taşıyabilir. Bu transferi kimse geri alamaz."
+        },
+        {
+          "type": "p",
+          "text": "Şifreniz yalnızca kendi cihazınızdaki uygulamanın kilidini açar. Kurtarma ifadesi ana anahtardır."
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "heading": "Kural",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Kurtarma ifadenizi, kendi cüzdanınızı geri yüklemek için yüklediğiniz uygulama dışında hiçbir siteye, forma, sohbete veya uygulamaya asla yazmayın.** Hiçbir borsanın, cüzdan şirketinin, airdrop'un, destek ekibinin veya güvenlik aracının ona ihtiyacı yoktur."
+        },
+        {
+          "type": "p",
+          "text": "CRYPY onu asla istemez. Tüm CRYPY araçları yalnızca genel adreslerle çalışır ve adres kaydettiğiniz formlar yapıştırılan bir kurtarma ifadesini reddeder."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Dolandırıcıların kullandığı hileler",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Sahte destek:** biri sosyal medyada veya Discord'da sorunuza yanıt verip yardım teklif eder, sonra sizi ifadenizi isteyen bir forma yönlendirir.",
+            "**Cüzdanınızı \"doğrulayın\", \"senkronize edin\" veya \"kilidini açın\":** bir airdrop almak veya bir hatayı düzeltmek için cüzdanınızın doğrulanması gerektiğini iddia eden siteler.",
+            "**Sahte cüzdan uygulamaları ve tarayıcı eklentileri:** geri yükleme yaptığınızda ifadenizi dolandırıcıya gönderen gerçek cüzdan kopyaları.",
+            "**Cüzdan \"kurtarma\" veya bakiye kontrol araçları:** ifadeyi \"taramak\" için isteyen araçlar.",
+            "**Ekran görüntüleri ve bulut notları:** fotoğraflarda, e-postada veya bulut depolamada saklanan bir ifade, o hesapla birlikte çalınabilir."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "heading": "Nasıl saklanır",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Kâğıda (veya metale) yazın ve güvenli, gizli bir yerde, tercihen iki farklı yerde saklayın.",
+            "Fotoğrafını çekmeyin, not uygulamasına yazmayın ve bulutta saklamayın.",
+            "Büyük tutarlar için bir donanım cüzdanı düşünün: ifade çevrimdışı kalır ve işlemler cihazda onaylanır."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Bir cüzdanı bir siteye bağlamak farklıdır: site yalnızca genel adresinizi görür ve cüzdanınız bir şey imzalamadan önce size sorar."
+        }
+      ]
+    },
+    {
+      "id": "exposed",
+      "heading": "Açığa çıktığını düşünüyorsanız",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Güvendiğiniz bir cihazda yeni bir kurtarma ifadesiyle yeni bir cüzdan oluşturun.",
+            "Fonlarınızı eski cüzdandan yenisine hemen, en değerlilerden başlayarak taşıyın.",
+            "Eski cüzdanı kullanmayı bırakın ve içinde bir şey bırakıyorsanız onaylarını iptal edin."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Dolandırıcılar fonları çoğu zaman dakikalar içinde taşır. Önce harekete geçin; sonra araştırın."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Özel anahtarım kurtarma ifademle aynı şey mi?",
+      "a": "Tam olarak değil: kurtarma ifadesi cüzdanın tüm özel anahtarlarını oluşturur. İkisi de gizli kalmalıdır ve hiçbir site ikisini de istememelidir."
+    },
+    {
+      "q": "Cüzdanımı bağladığımda CRYPY kurtarma ifademi görebilir mi?",
+      "a": "Hayır. Bağlanmak yalnızca genel adresinizi paylaşır. İfade cüzdanınızdan asla çıkmaz."
+    },
+    {
+      "q": "Bir destek temsilcisi hesabımı düzeltmek için ona ihtiyacı olduğunu söylüyor. Doğru mu?",
+      "a": "Hayır. Gerçek destek asla kurtarma ifadenize ihtiyaç duymaz. Bu bir dolandırıcılıktır."
+    }
+  ]
+}

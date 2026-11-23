@@ -1,0 +1,82 @@
+{
+  "title": "Endereços com checksum (EIP-55): por que as maiúsculas importam",
+  "seoTitle": "Checksum de endereços (EIP-55): maiúsculas importam | CRYPY",
+  "description": "Por que endereços Ethereum misturam maiúsculas e minúsculas, como o checksum EIP-55 pega erros de digitação e do que ele não consegue proteger você.",
+  "summary": "Como a mistura de maiúsculas e minúsculas pega erros de digitação em endereços.",
+  "inShort": [
+    "A mistura de maiúsculas e minúsculas em um endereço é uma verificação de erros embutida (EIP-55).",
+    "Um endereço com checksum digitado errado quase sempre falha na verificação.",
+    "Ela não pega um endereço parecido criado por um golpista: esse é válido."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "O que é um endereço com checksum",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Um endereço no estilo Ethereum tem 40 caracteres hexadecimais depois de 0x. As letras de a até f podem ser escritas em maiúscula ou minúscula, e a blockchain trata as duas igual. O EIP-55 aproveita essa liberdade: o padrão de maiúsculas é calculado a partir de um hash do próprio endereço."
+        },
+        {
+          "type": "p",
+          "text": "Se um caractere for trocado por engano, o padrão esperado deixa de conferir, e as carteiras podem avisar você antes do envio."
+        }
+      ]
+    },
+    {
+      "id": "cases",
+      "heading": "Tudo minúsculo, tudo maiúsculo, misturado",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Misturado:** um endereço com checksum. As carteiras conseguem verificá-lo.",
+            "**Tudo minúsculo ou tudo maiúsculo:** válido, mas sem verificação. Um erro de digitação não pode ser detectado."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "O mesmo endereço é usado em todas as redes EVM: Ethereum, BNB Chain, Base, Arbitrum e Polygon têm o mesmo formato."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Do que ele não protege",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Um checksum só pega erros de digitação acidentais. Um endereço parecido gerado por um golpista é um endereço real e válido, com o próprio checksum correto. Veja [Envenenamento de endereço](guide:address-poisoning)."
+        },
+        {
+          "type": "warning",
+          "text": "Nunca \"conserte\" um endereço que falha no checksum trocando as letras até passar. Pegue o endereço correto de novo na fonte."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Verifique um endereço",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O [Formatador de endereços](tool:address-formatter) confere se um endereço está escrito certo e mostra a forma com checksum, para um endereço ou uma lista de até 500. Funciona no seu navegador; nada é enviado."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Um endereço em minúsculas está errado?",
+      "a": "Não. Ele é válido, só não tem verificação de erros embutida."
+    },
+    {
+      "q": "Minha carteira diz que o checksum é inválido. O que faço?",
+      "a": "Não envie. Copie o endereço de novo da fonte original; o mais provável é que ele tenha um erro de digitação."
+    },
+    {
+      "q": "O Bitcoin usa o mesmo checksum?",
+      "a": "Não. O EIP-55 é para endereços no estilo Ethereum. Outras blockchains têm os próprios formatos e verificações de endereço."
+    }
+  ]
+}

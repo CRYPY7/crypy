@@ -5,6 +5,7 @@ import { featuredGuide, getGuide, getGuides, guideMetas, learnTopics, readingMin
 import { guideSlugs } from "@/content/learn/slugs";
 import { plainText } from "@/components/learn/inline-text";
 import type { LearnGuide } from "@/content/learn/types";
+import type { Locale } from "@/i18n/locales";
 
 const LINK = /\[([^\]]+)\]\((tool|guide):([a-z0-9-]+)\)/g;
 
@@ -27,7 +28,9 @@ describe("Learn guides", () => {
   const guides = getGuides("en");
 
   it("has one English file per guide, and the slug list matches", () => {
-    const files = readdirSync("src/content/learn/en").map((name) => name.replace(/\.json$/, ""));
+    const files = readdirSync("src/content/learn/en")
+      .filter((name) => name.endsWith(".json"))
+      .map((name) => name.replace(/\.json$/, ""));
     expect(files.sort()).toEqual([...guideSlugs].sort());
     expect(guideMetas.map((meta) => meta.slug)).toEqual([...guideSlugs]);
     expect(guides).toHaveLength(guideSlugs.length);
@@ -97,5 +100,46 @@ describe("Learn guides", () => {
     expect(plainText("Use the **Approval Checker**: [open it](tool:approval-checker).")).toBe(
       "Use the Approval Checker: open it.",
     );
+  });
+});
+
+describe("translated guides", () => {
+  const translated = readdirSync("src/content/learn").filter(
+    (dir) =>
+      dir !== "en" && !dir.includes(".") && readdirSync(`src/content/learn/${dir}`).some((f) => f.endsWith(".json")),
+  ) as Locale[];
+
+  it("has at least one translated language", () => {
+    expect(translated.length).toBeGreaterThan(0);
+  });
+
+  describe.each(translated)("%s", (locale) => {
+    it.each(guideSlugs)("%s: same structure, links and marks as English; search texts fit", (slug) => {
+      const en = getGuide(slug, "en")!;
+      const local = getGuide(slug, locale)!;
+      expect(local.translated, `${locale}/${slug} is missing`).toBe(true);
+      expect(local.sections.map((s) => s.id)).toEqual(en.sections.map((s) => s.id));
+      expect(local.sections.map((s) => s.blocks.map((b) => b.type))).toEqual(
+        en.sections.map((s) => s.blocks.map((b) => b.type)),
+      );
+      expect(local.inShort.length).toBe(en.inShort.length);
+      expect(local.faq.length).toBe(en.faq.length);
+      for (const [i, section] of local.sections.entries())
+        for (const [j, block] of section.blocks.entries()) {
+          const source = en.sections[i]!.blocks[j]!;
+          if ((block.type === "list" || block.type === "steps") && (source.type === "list" || source.type === "steps"))
+            expect(block.items.length, `${slug} ${section.id}`).toBe(source.items.length);
+        }
+      const links = (g: LearnGuide) => allText(g).flatMap((t) => [...t.matchAll(LINK)].map((m) => `${m[2]}:${m[3]}`));
+      expect(links(local).sort()).toEqual(links(en).sort());
+      for (const text of allText(local)) {
+        expect(text).not.toMatch(/<[a-z/]/i);
+        expect((text.match(/\*\*/g) ?? []).length % 2).toBe(0);
+      }
+      expect(local.seoTitle.endsWith("| CRYPY")).toBe(true);
+      expect(local.seoTitle.length).toBeLessThanOrEqual(60);
+      expect(local.description.length).toBeLessThanOrEqual(160);
+      expect(local.minutes).toBeGreaterThanOrEqual(2);
+    });
   });
 });

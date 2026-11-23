@@ -1,0 +1,82 @@
+{
+  "title": "Sağlama toplamlı adresler (EIP-55): harf büyüklüğü neden önemli",
+  "seoTitle": "Sağlama Toplamlı Adres (EIP-55) ve Harf Boyutu | CRYPY",
+  "description": "Ethereum adreslerinin neden büyük ve küçük harfleri karıştırdığı, EIP-55 sağlama toplamının yazım hatalarını nasıl yakaladığı ve sizi neye karşı koruyamadığı.",
+  "summary": "Karışık büyük ve küçük harflerin adreslerdeki yazım hatalarını nasıl yakaladığı.",
+  "inShort": [
+    "Bir adreste karışık büyük ve küçük harf, yerleşik bir yazım hatası kontrolüdür (EIP-55).",
+    "Yanlış yazılmış sağlama toplamlı bir adres neredeyse her zaman kontrolden geçemez.",
+    "Bir dolandırıcının oluşturduğu benzer adresi yakalayamaz: o adres geçerlidir."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Sağlama toplamlı adres nedir",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Ethereum tarzı bir adres, 0x'ten sonra 40 hex karakterdir. a'dan f'ye kadar harfler büyük veya küçük yazılabilir ve blokzincir ikisini aynı kabul eder. EIP-55 bu serbestliği kullanır: büyük harflerin dizilişi adresin kendi hash'inden hesaplanır."
+        },
+        {
+          "type": "p",
+          "text": "Bir karakter yanlışlıkla değişirse beklenen diziliş artık eşleşmez ve cüzdanlar göndermeden önce sizi uyarabilir."
+        }
+      ]
+    },
+    {
+      "id": "cases",
+      "heading": "Tamamı küçük, tamamı büyük, karışık",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Karışık harf:** sağlama toplamlı bir adres. Cüzdanlar onu kontrol edebilir.",
+            "**Tamamı küçük veya tamamı büyük harf:** geçerli, ama kontrol taşımaz. Bir yazım hatası yakalanamaz."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Aynı adres tüm EVM ağlarında kullanılır: Ethereum, BNB Chain, Base, Arbitrum ve Polygon aynı biçimi paylaşır."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Sizi neye karşı koruyamaz",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Sağlama toplamı yalnızca kazara yapılan yazım hatalarını yakalar. Bir dolandırıcının ürettiği benzer adres, kendi doğru sağlama toplamına sahip gerçek ve geçerli bir adrestir. Bkz. [Adres zehirleme](guide:address-poisoning)."
+        },
+        {
+          "type": "warning",
+          "text": "Sağlama toplamından geçemeyen bir adresi, geçene kadar harflerini değiştirerek asla \"düzeltmeyin\". Doğru adresi kaynağından yeniden alın."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Bir adresi kontrol edin",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Adres Biçimlendirici](tool:address-formatter), bir adresin doğru yazılıp yazılmadığını kontrol eder ve sağlama toplamlı biçimini verir; tek adres veya 500 adrese kadar bir liste için. Tarayıcınızda çalışır; hiçbir şey gönderilmez."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Küçük harfli bir adres yanlış mı?",
+      "a": "Hayır. Geçerlidir, yalnızca yerleşik bir yazım hatası kontrolü yoktur."
+    },
+    {
+      "q": "Cüzdanım sağlama toplamının geçersiz olduğunu söylüyor. Ne yapmalıyım?",
+      "a": "Göndermeyin. Adresi asıl kaynaktan yeniden kopyalayın; büyük ihtimalle bir yazım hatası içeriyor."
+    },
+    {
+      "q": "Bitcoin aynı sağlama toplamını kullanır mı?",
+      "a": "Hayır. EIP-55 Ethereum tarzı adresler içindir. Diğer blokzincirlerin kendi adres biçimleri ve kontrolleri vardır."
+    }
+  ]
+}

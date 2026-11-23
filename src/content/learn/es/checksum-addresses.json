@@ -1,0 +1,82 @@
+{
+  "title": "Direcciones con checksum (EIP-55): por qué importan las mayúsculas",
+  "seoTitle": "Direcciones con checksum (EIP-55): mayúsculas | CRYPY",
+  "description": "Por qué las direcciones de Ethereum mezclan mayúsculas y minúsculas, cómo el checksum EIP-55 detecta errores de escritura y de qué no puede protegerte.",
+  "summary": "Cómo la mezcla de mayúsculas y minúsculas detecta errores de escritura en las direcciones.",
+  "inShort": [
+    "La mezcla de mayúsculas y minúsculas en una dirección es una comprobación de errores incorporada (EIP-55).",
+    "Una dirección con checksum mal escrita casi siempre falla la comprobación.",
+    "No puede detectar una dirección parecida creada por un estafador: esa es válida."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Qué es una dirección con checksum",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Una dirección tipo Ethereum tiene 40 caracteres hexadecimales después de 0x. Las letras de la a a la f pueden escribirse en mayúscula o minúscula, y la blockchain trata ambas igual. EIP-55 aprovecha esa libertad: el patrón de mayúsculas se calcula a partir de un hash de la propia dirección."
+        },
+        {
+          "type": "p",
+          "text": "Si un carácter se cambia por error, el patrón esperado deja de coincidir, y las billeteras pueden avisarte antes de enviar."
+        }
+      ]
+    },
+    {
+      "id": "cases",
+      "heading": "Todo en minúsculas, todo en mayúsculas o mezclado",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Mezclado:** una dirección con checksum. Las billeteras pueden comprobarla.",
+            "**Todo en minúsculas o todo en mayúsculas:** válida, pero sin comprobación. Un error de escritura no se puede detectar."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "La misma dirección se usa en todas las cadenas EVM: Ethereum, BNB Chain, Base, Arbitrum y Polygon comparten el mismo formato."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "De qué no puede protegerte",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Un checksum solo detecta errores de escritura accidentales. Una dirección parecida que generó un estafador es una dirección real y válida con su propio checksum correcto. Mira [Envenenamiento de direcciones](guide:address-poisoning)."
+        },
+        {
+          "type": "warning",
+          "text": "Nunca \"arregles\" una dirección que falla el checksum cambiando sus letras hasta que pase. Vuelve a obtener la dirección correcta desde su fuente."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Revisa una dirección",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El [Formateador de direcciones](tool:address-formatter) comprueba si una dirección está bien escrita y da su forma con checksum, para una dirección o una lista de hasta 500. Funciona en tu navegador; no se envía nada."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Una dirección en minúsculas está mal?",
+      "a": "No. Es válida; simplemente no tiene una comprobación de errores incorporada."
+    },
+    {
+      "q": "Mi billetera dice que el checksum no es válido. ¿Qué hago?",
+      "a": "No envíes nada. Vuelve a copiar la dirección desde la fuente original; lo más probable es que tenga un error de escritura."
+    },
+    {
+      "q": "¿Bitcoin usa el mismo checksum?",
+      "a": "No. EIP-55 es para direcciones tipo Ethereum. Otras blockchains tienen sus propios formatos de dirección y comprobaciones."
+    }
+  ]
+}

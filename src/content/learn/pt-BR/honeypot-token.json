@@ -1,0 +1,99 @@
+{
+  "title": "O que é um token honeypot e como identificá-lo",
+  "seoTitle": "O que é um token honeypot e como identificar | CRYPY",
+  "description": "Um token honeypot deixa você comprar, mas nunca vender. Conheça os truques dos honeypots e como uma negociação de teste mostra se dá para vender antes.",
+  "summary": "Um token que você compra, mas nunca vende. Como funciona e como uma negociação de teste o revela.",
+  "inShort": [
+    "Um honeypot é um token que você consegue comprar, mas não vender, ou só vender com uma perda enorme.",
+    "A armadilha está escrita no contrato do token, então o gráfico pode parecer normal.",
+    "Uma negociação de teste antes da compra é a forma mais confiável de encontrá-lo."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "O que é um honeypot",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Um token honeypot é feito para que a compra funcione e a venda não. O gráfico de preço só mostra compras, então muitas vezes sobe sem parar, o que atrai mais compradores. Quando alguém tenta vender, a transação falha, ou quase tudo é levado como taxa."
+        },
+        {
+          "type": "p",
+          "text": "As pessoas por trás dele normalmente ainda conseguem vender os próprios tokens, então ficam com o dinheiro que os compradores colocaram."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Truques comuns",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Vendas bloqueadas para todos, menos carteiras escolhidas:** o contrato só deixa uma lista permitida transferir tokens para o pool.",
+            "**Lista negra depois que você compra:** sua carteira entra em uma lista de bloqueio, e as transferências seguintes falham.",
+            "**Uma taxa de venda perto de 100%:** a venda tecnicamente dá certo, mas você não recebe quase nada.",
+            "**Limites que só afetam vendas:** um valor máximo de venda minúsculo, ou uma espera que nunca acaba.",
+            "**Configurações mudadas depois:** o token é negociado normalmente no lançamento, e depois o dono liga a armadilha."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spot",
+      "heading": "Como identificar",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Ler o código do contrato pode revelar alguns truques, mas o código pode estar escondido atrás de um proxy ou escrito para confundir. A verificação mais confiável é ver o que acontece em uma negociação real: comprar, transferir e vender."
+        },
+        {
+          "type": "p",
+          "text": "Fazer isso com o seu próprio dinheiro é arriscado. Uma simulação faz as mesmas etapas contra o pool real sem enviar nada."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "Como funciona a negociação de teste do CRYPY",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O [Scanner de segurança de tokens](tool:token-security) roda um pequeno contrato de teste dentro de uma chamada somente leitura contra o pool real do token na exchange. Ele compra cerca de US$ 10, envia uma parte para um segundo endereço e depois vende o resto. Informa qual etapa falhou, se alguma falhou, com o erro do próprio contrato, e a taxa medida em cada etapa."
+        },
+        {
+          "type": "p",
+          "text": "Nada é assinado, enviado nem pago, e não é preciso carteira. O teste usa o pool mais profundo que ele aceita para aquele token."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "O que uma negociação de teste não mostra",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Uma simulação mostra como o token se comporta agora, para uma carteira nova. Ela não garante que o dono não vai ligar um bloqueio ou aumentar a taxa amanhã. Por isso o scanner também lista os poderes do dono, como mudar taxas ou colocar carteiras na lista negra."
+        },
+        {
+          "type": "warning",
+          "text": "Se um token não pode ser vendido no teste, não compre, por melhor que o gráfico pareça."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Um token pode virar honeypot depois que eu compro?",
+      "a": "Sim, se o dono manteve poderes como lista negra, pausa ou mudança de taxas. Confira os poderes do dono além da negociação de teste."
+    },
+    {
+      "q": "A negociação de teste custa alguma coisa?",
+      "a": "Não. É uma simulação somente leitura: nada é enviado para a blockchain."
+    },
+    {
+      "q": "Por que o gráfico de um honeypot parece tão bom?",
+      "a": "Porque só as compras passam. Compras constantes quase sem vendas empurram o preço para cima."
+    }
+  ]
+}

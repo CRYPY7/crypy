@@ -1,0 +1,83 @@
+{
+  "title": "Wei, gwei và ether: giải thích đơn vị crypto",
+  "seoTitle": "Wei, gwei và ether: giải thích đơn vị crypto | CRYPY",
+  "description": "Wei, gwei và ether liên hệ thế nào, vì sao gas tính bằng gwei, và vì sao số lượng token phụ thuộc số chữ số thập phân. Quy đổi nhanh cho ETH, BNB và POL.",
+  "summary": "Các đơn vị đằng sau mọi số lượng và giá gas, kèm quy đổi nhanh.",
+  "inShort": [
+    "1 ETH = 1.000.000.000 gwei = 1.000.000.000.000.000.000 wei.",
+    "Giá gas dùng gwei vì như vậy con số dễ đọc.",
+    "Token có số chữ số thập phân riêng: 6 với USDC trên Ethereum, 18 với hầu hết token khác."
+  ],
+  "sections": [
+    {
+      "id": "units",
+      "heading": "Các đơn vị",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**wei:** đơn vị nhỏ nhất. Blockchain lưu mọi số lượng dưới dạng số nguyên wei.",
+            "**gwei:** 1.000.000.000 wei (10⁹). Giá gas tính bằng gwei.",
+            "**ether (ETH):** 1.000.000.000.000.000.000 wei (10¹⁸)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Các đơn vị này cũng áp dụng cho BNB trên BNB Chain và POL trên Polygon: 1 BNB bằng 10¹⁸ wei, và gas ở đó cũng tính bằng gwei."
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "heading": "Quy đổi nhanh",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "0,001 ETH = 1.000.000 gwei",
+            "1 gwei = 0,000000001 ETH",
+            "Giá gas 20 gwei × 21.000 gas = 420.000 gwei = 0,00042 ETH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "heading": "Số chữ số thập phân của token",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Token lưu số lượng bằng đơn vị nhỏ nhất của riêng nó, và mỗi token cho biết dùng bao nhiêu **chữ số thập phân**. Hầu hết dùng 18, giống ETH. USDC và USDT trên Ethereum dùng 6, nên 1 USDT được lưu là 1.000.000. Cùng một token trên mạng khác có thể dùng số chữ số khác: USDT trên BNB Chain dùng 18."
+        },
+        {
+          "type": "warning",
+          "text": "Số lượng thô trong dữ liệu giao dịch tính bằng đơn vị nhỏ nhất. Đọc chúng với số chữ số thập phân sai sẽ khiến số lượng trông lớn hơn hoặc nhỏ hơn thực tế một nghìn tỷ lần."
+        }
+      ]
+    },
+    {
+      "id": "convert",
+      "heading": "Quy đổi chính xác",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Chuyển đổi đơn vị](tool:unit-converter) quy đổi chính xác giữa wei, gwei, ETH và BNB, không làm tròn, kể cả số dạng khoa học. Chạy trong trình duyệt; không gửi gì đi."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Sao không dùng luôn ETH cho giá gas?",
+      "a": "Giá gas tính bằng ETH sẽ là những con số như 0,000000015. Gwei giữ cho chúng dễ đọc: 15 gwei."
+    },
+    {
+      "q": "Cái tên wei từ đâu ra?",
+      "a": "Nó được đặt để vinh danh Wei Dai, một người tiên phong về mật mã học. Gwei nghĩa là giga-wei: một tỷ wei."
+    },
+    {
+      "q": "Mọi token đều dùng 18 chữ số thập phân?",
+      "a": "Không. Hầu hết là vậy, nhưng stablecoin trên Ethereum thường dùng 6. Luôn kiểm tra số chữ số thập phân của token trước khi đọc số lượng thô."
+    }
+  ]
+}

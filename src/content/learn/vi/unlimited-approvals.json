@@ -1,0 +1,98 @@
+{
+  "title": "Phê duyệt không giới hạn có nguy hiểm không?",
+  "seoTitle": "Phê duyệt token không giới hạn có nguy hiểm? | CRYPY",
+  "description": "Phê duyệt không giới hạn tiết kiệm phí nhưng bao phủ mọi token loại đó bạn từng có. Tìm hiểu khi nào nó rủi ro, Permit2 khác gì và khi nào nên giới hạn.",
+  "summary": "Vì sao \"không giới hạn\" bao phủ cả token bạn nhận sau này, và khi nào đáng giới hạn lại.",
+  "inShort": [
+    "Phê duyệt không giới hạn bao phủ mọi token loại đó trong ví, bây giờ và sau này.",
+    "Nó chỉ an toàn bằng hợp đồng mà bạn đã cấp quyền.",
+    "Hãy giới hạn hoặc thu hồi phê duyệt cho ứng dụng bạn ít dùng."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "\"Không giới hạn\" nghĩa là gì",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Khi bạn phê duyệt một token, ứng dụng chọn lượng. Nhiều ứng dụng chọn con số lớn nhất có thể, để bạn không bao giờ phải phê duyệt lại. Ví có thể hiển thị là \"không giới hạn\" hoặc một con số rất dài."
+        },
+        {
+          "type": "p",
+          "text": "Bản thân phê duyệt không chuyển gì. Nó có nghĩa hợp đồng chi tiêu có thể chuyển bất kỳ lượng token đó khỏi ví của bạn, bất cứ lúc nào, mà không hỏi lại."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Khi nào nó thành vấn đề",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Hợp đồng bị hack.** Kẻ tấn công có thể dùng các phê duyệt sẵn có để rút sạch những ví đã phê duyệt nó.",
+            "**Hợp đồng vốn độc hại.** Nút \"nhận\" trên trang lừa đảo có thể là phê duyệt cho hợp đồng của kẻ gian.",
+            "**Bạn đã quên nó.** Phê duyệt từ nhiều năm trước vẫn còn hiệu lực hôm nay, với cả token bạn nhận từ đó đến giờ."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Phê duyệt có giới hạn chặn thiệt hại ở mức bạn đã duyệt. Phê duyệt không giới hạn thì không."
+        }
+      ]
+    },
+    {
+      "id": "permit2",
+      "heading": "Phê duyệt Permit2",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Một số ứng dụng, gồm Uniswap và PancakeSwap, dùng **Permit2**: bạn phê duyệt hợp đồng Permit2 một lần cho mỗi token, rồi ký quyền riêng cho từng ứng dụng, có lượng và ngày hết hạn."
+        },
+        {
+          "type": "p",
+          "text": "Hãy kiểm tra cả hai tầng: phê duyệt dành cho chính Permit2, và quyền của các ứng dụng bên trong nó. [Kiểm tra phê duyệt](tool:approval-checker) đọc cả hai và cho biết khi nào mỗi quyền Permit2 hết hạn."
+        }
+      ]
+    },
+    {
+      "id": "nft",
+      "heading": "NFT \"phê duyệt tất cả\"",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bộ sưu tập NFT có một quyền rộng hơn, bao phủ mọi NFT bạn giữ trong bộ sưu tập. Nó phổ biến trên các chợ NFT và thường là mục tiêu lừa đảo. Hãy đối xử với nó như một phê duyệt token không giới hạn."
+        }
+      ]
+    },
+    {
+      "id": "habits",
+      "heading": "Thói quen tốt",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Khi ví cho phép, hãy sửa lượng thành mức bạn định dùng.",
+            "Thu hồi phê duyệt cho ứng dụng bạn không còn dùng, nhất là với token giá trị lớn.",
+            "Giữ tài sản lớn trong một ví bạn không dùng để thử ứng dụng mới.",
+            "Thỉnh thoảng kiểm tra phê duyệt bằng [Kiểm tra phê duyệt](tool:approval-checker)."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Tôi có nên thu hồi mọi phê duyệt không giới hạn?",
+      "a": "Không nhất thiết. Với ứng dụng nổi tiếng bạn dùng thường xuyên, thu hồi nghĩa là lần sau phải phê duyệt lại (và trả phí). Hãy tập trung vào ứng dụng bạn không còn dùng và hợp đồng bạn không nhận ra."
+    },
+    {
+      "q": "Phê duyệt có giới hạn có an toàn không?",
+      "a": "An toàn hơn, vì bên chi tiêu chỉ chuyển được tối đa lượng đó. Nhưng nó vẫn là một quyền: hãy thu hồi nếu không cần."
+    },
+    {
+      "q": "Vì sao ví hiện một con số khổng lồ thay vì \"không giới hạn\"?",
+      "a": "\"Không giới hạn\" chỉ là con số lớn nhất mà hợp đồng token lưu được. Mỗi ví hiển thị theo cách khác nhau."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "title": "Envenenamento de endereço: o golpe do endereço parecido",
+  "seoTitle": "Envenenamento de endereço: o golpe do endereço | CRYPY",
+  "description": "Golpistas enviam transferências minúsculas de endereços parecidos com os seus, esperando que você copie o errado. Veja como funciona e como evitar.",
+  "summary": "Transferências minúsculas de endereços parecidos com os seus, para você copiar o errado.",
+  "inShort": [
+    "Golpistas criam endereços que começam e terminam como os que você usa.",
+    "Eles enviam transferências minúsculas ou de valor zero para o endereço falso aparecer no seu histórico.",
+    "Nunca copie um endereço do seu histórico de transações: compare cada caractere."
+  ],
+  "sections": [
+    {
+      "id": "how",
+      "heading": "Como o golpe funciona",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Os endereços são longos, então a maioria das pessoas só olha os primeiros e os últimos caracteres. Golpistas geram endereços que repetem esses caracteres de um endereço que você usa, como um endereço de depósito de exchange ou a carteira de um amigo."
+        },
+        {
+          "type": "p",
+          "text": "Depois fazem esse endereço parecido aparecer no seu histórico, com uma transferência de valor zero ou minúscula, ou com um token falso. Da próxima vez que você copiar um endereço do histórico, pode copiar o deles e enviar dinheiro de verdade para o golpista."
+        }
+      ]
+    },
+    {
+      "id": "example",
+      "heading": "Como isso aparece",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Você envia USDT para 0x7a3F…9c21. Minutos depois, seu histórico mostra uma transferência de 0 USDT envolvendo 0x7a3F…9c21, mas os caracteres do meio são diferentes. O valor é zero, então parece que nada aconteceu. Essa entrada é a isca."
+        }
+      ]
+    },
+    {
+      "id": "avoid",
+      "heading": "Como evitar",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Copie endereços da fonte original (a página de depósito da exchange, a mensagem da própria pessoa), nunca do seu histórico.",
+            "Compare o endereço inteiro, não só o começo e o fim.",
+            "Salve os endereços de confiança na agenda de endereços da sua carteira.",
+            "Para um valor alto para um endereço novo, envie primeiro um valor pequeno e peça para quem recebe confirmar que chegou."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Transferências de valor zero ou minúsculas que você não esperava são um sinal de alerta, não um engano. Não interaja com elas."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "Como o CRYPY marca isso",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O [Analisador de endereços](tool:address-analyzer) lista as transferências de uma carteira e marca o provável envenenamento: transferências zeradas ou minúsculas de um endereço que começa e termina como a própria carteira, ou como um endereço para o qual a carteira já pagou. É um alerta heurístico, então pode deixar passar alguns casos ou marcar um inofensivo."
+        },
+        {
+          "type": "tip",
+          "text": "Transferências de spam e de envenenamento ficam ocultas por padrão para manter seu histórico legível. Um botão as mostra."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Uma transferência de valor zero pode levar meu dinheiro?",
+      "a": "Não. Ela não move seus fundos sozinha. O perigo é copiar o endereço parecido depois."
+    },
+    {
+      "q": "Por que alguém consegue enviar uma transferência que parece vir da minha carteira?",
+      "a": "Alguns contratos de token deixam qualquer pessoa emitir um registro de transferência de valor zero citando qualquer endereço. Isso não move nada, mas aparece nos históricos."
+    },
+    {
+      "q": "O checksum me protege?",
+      "a": "Não. Um endereço parecido é um endereço válido, então passa no checksum. Só comparar o endereço inteiro ajuda."
+    }
+  ]
+}

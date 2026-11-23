@@ -1,0 +1,111 @@
+{
+  "title": "Gas ücretleri açıklandı: gwei, taban ücret ve öncelik ücreti",
+  "seoTitle": "Gas Ücretleri: Gwei, Taban Ücret ve Öncelik Ücreti | CRYPY",
+  "description": "Bir işlemde ne ödersiniz: gas birimleri, gwei, taban ücret ve öncelik ücreti, ücretlerin neden değiştiği, rollup maliyetleri ve nasıl daha az ödersiniz.",
+  "summary": "Ücretinizin nereye gittiği, neden değiştiği ve nasıl daha az ödeyeceğiniz.",
+  "inShort": [
+    "Ücret = kullanılan gas × gas fiyatı. Gas işi ölçer; fiyatı talep belirler.",
+    "Ethereum ve benzeri ağlarda fiyatın iki kısmı vardır: taban ücret (yakılır) ve bahşiş.",
+    "Ağ sakinken veya daha ucuz bir ağda daha az ödersiniz."
+  ],
+  "sections": [
+    {
+      "id": "gas",
+      "heading": "Gas ve gas fiyatı",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Blokzincirdeki her eylem **gas** harcar; gas, ne kadar iş gerektiğinin ölçüsüdür. Basit bir coin transferi 21.000 gas kullanır; bir token takası 100.000 veya daha fazlasını kullanabilir."
+        },
+        {
+          "type": "p",
+          "text": "Her birim için **gwei** (bir coin'in milyarda biri) cinsinden bir **gas fiyatı** ödersiniz. Ücret, kullanılan gas × gas fiyatıdır ve ağın kendi coin'iyle ödenir: ETH, BNB veya POL."
+        },
+        {
+          "type": "tip",
+          "text": "Wei, gwei ve ether arasında dönüştürme: [Wei, gwei ve ether açıklandı](guide:wei-gwei-ether)."
+        }
+      ]
+    },
+    {
+      "id": "1559",
+      "heading": "Taban ücret ve öncelik ücreti",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Ethereum'da ve onun gibi çalışan ağlarda gas fiyatının iki kısmı vardır:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Taban ücret:** ağ tarafından her blok için belirlenir; bloklar doluyken artar, değilken azalır. Yakılır.",
+            "**Öncelik ücreti (bahşiş):** doğrulayıcıya giden ek bir tutar. Ağ yoğunken daha yüksek bahşiş genellikle daha erken girmenizi sağlar."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Cüzdanınız ayrıca bir **azami ücret** belirler: birim başına ödemeye razı olduğunuz en yüksek tutar. Taban ücret artı bahşişinizi ödersiniz, asla azamiden fazlasını değil. BNB Chain'de taban ücret yoktur, bu yüzden gas fiyatı doğrudan fiyattır."
+        }
+      ]
+    },
+    {
+      "id": "limit",
+      "heading": "Gas limiti",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Gas limiti, bir işlemin kullanabileceği en fazla gas'tır. Biterse işlem başarısız olur ve kullanılan gas için yine de ödeme yaparsınız. Cüzdanlar limiti sizin için tahmin eder; elle düşürmek nadiren bir şey kazandırır."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "heading": "Base ve Arbitrum: ek bir kısım",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Base ve Arbitrum rollup'tır: işlemlerinin verilerini Ethereum'da yayınlarlar. Ücretinizin bir kısmı bunun için ödenir, bu yüzden ağ ücretinin kendisi çok küçük olsa da maliyet Ethereum'un ücretlerine de bağlıdır."
+        }
+      ]
+    },
+    {
+      "id": "less",
+      "heading": "Nasıl daha az ödersiniz",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Ağ daha sakinken gönderin: [Gas Takipçisi](tool:gas-tracker) içindeki eğilim ücretlerin artıp artmadığını gösterir.",
+            "Acele etmiyorsanız daha düşük bir hız kullanın.",
+            "Küçük tutarlar için daha ucuz bir ağ kullanın.",
+            "İhtiyacınız olmayan onaylardan ve işlemlerden kaçının."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Güncel ücretleri görün",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Gas Takipçisi](tool:gas-tracker), Ethereum, BNB Chain, Base, Arbitrum ve Polygon için canlı düşük, ortalama ve yüksek fiyatları ve bir gönderme, onay, takas veya NFT transferinin şu anda kaç dolar tuttuğunu gösterir."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Başarısız bir işlem için neden ücret ödedim?",
+      "a": "Ağ, işlem başarısız olana kadar işi yaptı ve o işin ücreti ödenir. Bkz. İşlemim neden başarısız oldu."
+    },
+    {
+      "q": "Gönderdikten sonra ücreti değiştirebilir miyim?",
+      "a": "Yalnızca işlemi değiştirerek: çoğu cüzdanda aynı işlemi daha yüksek ücretle gönderen bir hızlandırma seçeneği vardır."
+    },
+    {
+      "q": "Taban ücret nereye gidiyor?",
+      "a": "Yakılır, yani dolaşımdan çıkarılır. Bahşiş doğrulayıcıya gider."
+    }
+  ]
+}

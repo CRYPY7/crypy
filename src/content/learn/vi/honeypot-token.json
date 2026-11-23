@@ -1,0 +1,99 @@
+{
+  "title": "Token honeypot là gì và cách nhận biết",
+  "seoTitle": "Token honeypot là gì và cách nhận biết | CRYPY",
+  "description": "Token honeypot cho bạn mua nhưng không bao giờ bán được. Tìm hiểu các chiêu của honeypot và cách giao dịch thử cho biết token có bán được không trước khi mua.",
+  "summary": "Token mua được nhưng không bao giờ bán được. Cách nó hoạt động và cách giao dịch thử vạch trần nó.",
+  "inShort": [
+    "Honeypot là token bạn mua được nhưng không bán được, hoặc chỉ bán được với khoản lỗ rất lớn.",
+    "Cái bẫy nằm sẵn trong hợp đồng token, nên biểu đồ có thể trông bình thường.",
+    "Giao dịch thử trước khi mua là cách đáng tin nhất để phát hiện nó."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Honeypot là gì",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Token honeypot được tạo ra để mua thì được, bán thì không. Biểu đồ giá chỉ có lệnh mua, nên thường tăng đều, thu hút thêm người mua. Khi ai đó cố bán, giao dịch thất bại, hoặc gần như toàn bộ bị lấy làm phí."
+        },
+        {
+          "type": "p",
+          "text": "Những người đứng sau thường vẫn bán được token của mình, nên họ lấy đi số tiền người mua bỏ vào."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Các chiêu thường gặp",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Chặn bán với tất cả, trừ ví được chọn:** hợp đồng chỉ cho một danh sách được phép chuyển token vào pool.",
+            "**Đưa vào danh sách đen sau khi bạn mua:** ví của bạn bị thêm vào danh sách chặn, các lần chuyển sau đều thất bại.",
+            "**Thuế bán gần 100%:** về kỹ thuật lệnh bán thành công, nhưng bạn gần như không nhận được gì.",
+            "**Giới hạn chỉ áp lên lệnh bán:** số lượng bán tối đa cực nhỏ, hoặc thời gian chờ không bao giờ kết thúc.",
+            "**Đổi cài đặt về sau:** token giao dịch bình thường khi ra mắt, rồi chủ sở hữu bật bẫy."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spot",
+      "heading": "Cách nhận biết",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Đọc mã hợp đồng có thể lộ ra vài chiêu, nhưng mã có thể bị giấu sau proxy hoặc viết rối rắm. Cách kiểm tra đáng tin nhất là xem chuyện gì xảy ra trong một giao dịch thật: mua, chuyển và bán."
+        },
+        {
+          "type": "p",
+          "text": "Làm vậy bằng tiền của mình thì rủi ro. Mô phỏng thực hiện đúng các bước đó với pool thật mà không gửi gì đi."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "Giao dịch thử của CRYPY hoạt động thế nào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Quét bảo mật token](tool:token-security) chạy một hợp đồng thử nhỏ bên trong lệnh gọi chỉ đọc với pool thật của token trên sàn. Nó mua khoảng 10 $, gửi một phần sang địa chỉ thứ hai, rồi bán phần còn lại. Nó báo bước nào thất bại (nếu có), kèm lỗi của chính hợp đồng, và mức thuế đo được ở từng bước."
+        },
+        {
+          "type": "p",
+          "text": "Không có gì được ký, gửi hay trả, và không cần ví. Phép thử dùng pool sâu nhất mà nó hỗ trợ cho token đó."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Điều giao dịch thử không cho thấy",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Mô phỏng cho thấy token đang hoạt động thế nào với một ví mới ngay lúc này. Nó không thể hứa chủ sở hữu sẽ không bật chặn hay tăng thuế vào ngày mai. Vì vậy công cụ quét cũng liệt kê quyền của chủ sở hữu, như đổi phí hay đưa vào danh sách đen."
+        },
+        {
+          "type": "warning",
+          "text": "Nếu token không bán được trong phép thử, đừng mua, dù biểu đồ trông đẹp đến đâu."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Token có thể thành honeypot sau khi tôi mua không?",
+      "a": "Có, nếu chủ sở hữu giữ các quyền như danh sách đen, tạm dừng hoặc đổi phí. Hãy kiểm tra quyền chủ sở hữu cùng với giao dịch thử."
+    },
+    {
+      "q": "Giao dịch thử có tốn gì không?",
+      "a": "Không. Đó là mô phỏng chỉ đọc: không có gì được gửi lên blockchain."
+    },
+    {
+      "q": "Vì sao biểu đồ của honeypot trông đẹp vậy?",
+      "a": "Vì chỉ có lệnh mua được khớp. Mua đều đặn mà gần như không có lệnh bán sẽ đẩy giá lên."
+    }
+  ]
+}

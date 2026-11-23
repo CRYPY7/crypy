@@ -1,0 +1,111 @@
+{
+  "title": "Taxas de gás explicadas: gwei, taxa base e taxa de prioridade",
+  "seoTitle": "Taxas de gás: gwei, taxa base e de prioridade | CRYPY",
+  "description": "O que você paga ao enviar uma transação: unidades de gás, gwei, taxa base e taxa de prioridade, por que as taxas mudam, custos de rollups e como pagar menos.",
+  "summary": "Para onde vai a sua taxa, por que ela muda e como pagar menos.",
+  "inShort": [
+    "Taxa = gás usado × preço do gás. O gás mede o trabalho; o preço é definido pela demanda.",
+    "Na Ethereum e em redes parecidas o preço tem duas partes: uma taxa base (queimada) e uma gorjeta.",
+    "Você paga menos quando a rede está tranquila, ou em uma rede mais barata."
+  ],
+  "sections": [
+    {
+      "id": "gas",
+      "heading": "Gás e preço do gás",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Toda ação na blockchain custa **gás**, uma medida de quanto trabalho ela exige. Uma transferência simples de moeda usa 21.000 de gás; um swap de tokens pode usar 100.000 ou mais."
+        },
+        {
+          "type": "p",
+          "text": "Você paga um **preço do gás** por unidade, cotado em **gwei** (um bilionésimo de uma moeda). A taxa é gás usado × preço do gás, paga na moeda da própria rede: ETH, BNB ou POL."
+        },
+        {
+          "type": "tip",
+          "text": "Para converter entre wei, gwei e ether: [Wei, gwei e ether explicados](guide:wei-gwei-ether)."
+        }
+      ]
+    },
+    {
+      "id": "1559",
+      "heading": "Taxa base e taxa de prioridade",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Na Ethereum e nas redes que funcionam como ela, o preço do gás tem duas partes:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Taxa base:** definida pela rede a cada bloco, sobe quando os blocos estão cheios e cai quando não estão. Ela é queimada.",
+            "**Taxa de prioridade (gorjeta):** um valor extra para o validador. Uma gorjeta maior costuma fazer você entrar antes quando a rede está movimentada."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Sua carteira também define uma **taxa máxima**: o máximo que você aceita pagar por unidade. Você paga a taxa base mais a sua gorjeta, nunca mais que o máximo. A BNB Chain não tem taxa base, então o preço do gás dela é só o preço."
+        }
+      ]
+    },
+    {
+      "id": "limit",
+      "heading": "Limite de gás",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O limite de gás é o máximo de gás que uma transação pode usar. Se acabar, a transação falha e você paga mesmo assim pelo gás usado. As carteiras estimam o limite para você; diminuí-lo à mão raramente economiza algo."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "heading": "Base e Arbitrum: uma parte extra",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Base e Arbitrum são rollups: elas publicam os dados das suas transações na Ethereum. Parte da sua taxa paga por isso, então o custo também depende das taxas da Ethereum, mesmo que a taxa da rede em si seja minúscula."
+        }
+      ]
+    },
+    {
+      "id": "less",
+      "heading": "Como pagar menos",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Envie quando a rede estiver mais tranquila: a tendência no [Rastreador de gás](tool:gas-tracker) mostra se as taxas estão subindo ou caindo.",
+            "Use uma velocidade menor quando não estiver com pressa.",
+            "Use uma rede mais barata para valores pequenos.",
+            "Evite aprovações e transações de que você não precisa."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Veja as taxas atuais",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O [Rastreador de gás](tool:gas-tracker) mostra ao vivo os preços baixo, médio e alto da Ethereum, BNB Chain, Base, Arbitrum e Polygon, e quanto custa agora em dólares um envio, uma aprovação, um swap ou uma transferência de NFT."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Por que paguei taxa por uma transação que falhou?",
+      "a": "A rede fez o trabalho até o ponto em que falhou, e esse trabalho é pago. Veja Por que minha transação falhou."
+    },
+    {
+      "q": "Posso mudar a taxa depois de enviar?",
+      "a": "Só substituindo a transação: a maioria das carteiras tem uma opção de acelerar que envia a mesma transação com uma taxa maior."
+    },
+    {
+      "q": "Para onde vai a taxa base?",
+      "a": "Ela é queimada, retirada de circulação. A gorjeta vai para o validador."
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "title": "Cómo saber si un token es una estafa antes de comprarlo",
+  "seoTitle": "Cómo saber si un token cripto es una estafa | CRYPY",
+  "description": "Cinco revisiones que detectan casi todos los tokens estafa antes de comprar: venta, impuestos, poderes del dueño, liquidez y holders.",
+  "summary": "Cinco revisiones que detectan la mayoría de las estafas: venta, impuestos, poderes del dueño, liquidez y holders.",
+  "inShort": [
+    "La mayoría de los tokens estafa fallan al menos una de cinco revisiones: venta, impuestos, poderes del dueño, liquidez y holders.",
+    "Una operación de prueba muestra si de verdad puedes vender y cuánto te quitan por el camino.",
+    "Pasar todas las revisiones no es una garantía: los dueños pueden cambiar la configuración después de que compres."
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "heading": "Por qué hay tantos tokens estafa",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cualquiera puede crear un token en minutos y añadirlo a un exchange descentralizado. No hay revisión para listarlo, así que las mismas herramientas que permiten lanzar proyectos honestos también permiten a los estafadores copiar un nombre popular, añadir un poco de liquidez y esperar a los compradores."
+        },
+        {
+          "type": "p",
+          "text": "La mayoría de las estafas siguen unos pocos patrones. Puedes revisarlos todos antes de comprar usando solo datos públicos de la blockchain."
+        }
+      ]
+    },
+    {
+      "id": "sell",
+      "heading": "1. ¿Puedes venderlo?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Un **honeypot** te deja comprar, pero bloquea o vacía cada venta. La revisión más fiable es una operación de prueba: comprar una pequeña cantidad, enviar una parte a otra billetera y luego vender, y ver qué pasa en cada paso."
+        },
+        {
+          "type": "p",
+          "text": "El [Escáner de seguridad de tokens](tool:token-security) hace esa prueba contra el pool real del token dentro de una simulación de solo lectura. No se firma ni se envía nada, y no hace falta ninguna billetera."
+        },
+        {
+          "type": "tip",
+          "text": "Lee más en [Qué es un token honeypot y cómo detectarlo](guide:honeypot-token)."
+        }
+      ]
+    },
+    {
+      "id": "taxes",
+      "heading": "2. ¿Cuánto cobra en cada operación?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Algunos tokens cobran una comisión en cada compra, venta o transferencia. Una comisión pequeña puede ser legítima, pero un impuesto de venta del 30, el 50 o el 99 % convierte un token en una trampa aunque la venta técnicamente funcione."
+        },
+        {
+          "type": "p",
+          "text": "Fíjate en el impuesto medido, no en el número que anuncia el proyecto. La operación de prueba mide lo que realmente llega en cada paso."
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "heading": "3. ¿Qué puede cambiar todavía el dueño?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Muchos contratos de tokens guardan poderes especiales para su dueño. Los que debes buscar:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Emisión:** crear tokens nuevos y venderlos en el pool.",
+            "**Comisiones:** subir el impuesto de compra o de venta en cualquier momento.",
+            "**Lista negra o pausa:** impedir que ciertas billeteras, o todo el mundo, muevan tokens.",
+            "**Actualización:** reemplazar por completo el código del contrato (un contrato proxy)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Un dueño que **renunció a la propiedad** ya no puede usar los poderes exclusivos del dueño, pero pueden seguir existiendo poderes en manos de otros roles o cuentas. Un contrato con el código fuente publicado (verificado) es más fácil de revisar que uno que solo muestra código compilado."
+        }
+      ]
+    },
+    {
+      "id": "liquidity",
+      "heading": "4. ¿Quién controla la liquidez?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El pool de liquidez es donde compradores y vendedores operan. Si quienes están detrás del token pueden retirar esa liquidez, pueden llevarse el dinero de todos en una sola transacción: un \"rug pull\"."
+        },
+        {
+          "type": "p",
+          "text": "Revisa cuánta liquidez hay y si los tokens de participación del pool están **quemados** o **bloqueados** en un contrato de bloqueo conocido, y hasta cuándo. Mira [Qué es un bloqueo de liquidez y por qué importa](guide:liquidity-lock)."
+        }
+      ]
+    },
+    {
+      "id": "holders",
+      "heading": "5. ¿Quién tiene el suministro?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Si una o dos billeteras tienen la mayor parte del suministro, pueden hundir el precio vendiendo. Las grandes tenencias de exchanges, direcciones de quema o contratos de bloqueo suelen estar bien; las de billeteras desconocidas merecen una mirada más atenta."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Lo que una revisión no puede decirte",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cada revisión describe el token tal como está ahora. Los dueños pueden cambiar impuestos, pausar el trading o emitir más adelante, y algunos tokens se comportan distinto según la billetera. Toma los buenos resultados como \"no se encontraron riesgos importantes\", nunca como \"seguro\"."
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "heading": "Revisa un token con CRYPY",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Copia la dirección del contrato del token desde una fuente de confianza, como el sitio oficial del proyecto o un explorador de bloques.",
+            "Pégala en el [Escáner de seguridad de tokens](tool:token-security) y elige la cadena si la conoces.",
+            "Lee los hallazgos de mayor a menor gravedad. Cada uno indica cómo se comprobó: verificado en la cadena, simulado, heurístico o de un proveedor externo.",
+            "Si aparece algo crítico, como que la venta esté bloqueada, no compres."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Un token es seguro si pasa todas las revisiones?",
+      "a": "No. Significa que no se encontró ningún riesgo importante en lo que se pudo revisar. Los dueños pueden cambiar la configuración más adelante, así que usa cantidades que puedas permitirte perder."
+    },
+    {
+      "q": "¿Necesito conectar mi billetera?",
+      "a": "No. El Escáner de seguridad de tokens solo necesita la dirección del contrato del token."
+    },
+    {
+      "q": "¿Qué cadenas puedo revisar?",
+      "a": "Ethereum, BNB Chain, Base, Arbitrum y Polygon."
+    }
+  ]
+}

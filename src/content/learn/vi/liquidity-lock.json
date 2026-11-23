@@ -1,0 +1,90 @@
+{
+  "title": "Khóa thanh khoản là gì và vì sao quan trọng",
+  "seoTitle": "Khóa thanh khoản là gì và vì sao quan trọng | CRYPY",
+  "description": "Ai có thể rút tiền khỏi pool của token? Tìm hiểu thanh khoản được nắm giữ thế nào, thanh khoản bị đốt và bị khóa nghĩa là gì, và khóa không bảo vệ điều gì.",
+  "summary": "Ai có thể rút tiền khỏi pool của token, và khóa thực sự bảo vệ được gì.",
+  "inShort": [
+    "Pool của token chứa số coin người mua đã bỏ vào. Ai nắm token phần chia của pool đều có thể rút chúng ra.",
+    "Phần chia đã đốt hoặc đã khóa không thể rút, hoặc chưa thể rút cho đến khi hết hạn khóa.",
+    "Khóa không ngăn chủ sở hữu đúc thêm, tăng thuế hay bán token của chính họ."
+  ],
+  "sections": [
+    {
+      "id": "pool",
+      "heading": "Pool thanh khoản hoạt động thế nào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Trên các sàn như Uniswap và PancakeSwap, token được giao dịch với một pool chứa hai tài sản, ví dụ token đó và ETH hoặc BNB. Ai thêm thanh khoản sẽ nhận **phần chia của pool** (token LP, hoặc NFT vị thế ở các kiểu pool mới hơn), sau này có thể đổi lại lấy phần của mình trong pool."
+        },
+        {
+          "type": "p",
+          "text": "Khi mọi người mua token, họ bỏ ETH hoặc BNB vào pool. Ai nắm phần lớn phần chia của pool thì có thể rút phần lớn số đó."
+        }
+      ]
+    },
+    {
+      "id": "rug",
+      "heading": "Rug pull xảy ra thế nào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Trong một vụ rug pull, những người đứng sau token rút thanh khoản của pool chỉ trong một giao dịch. Giá sụp đổ và người nắm giữ không bán được với giá đáng kể nào. Đây là một trong những cách phổ biến nhất khiến người mua token mất tiền."
+        }
+      ]
+    },
+    {
+      "id": "protected",
+      "heading": "Đã đốt, đã khóa hay đang bị nắm giữ",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Đã đốt:** phần chia của pool được gửi tới địa chỉ không ai kiểm soát. Phần thanh khoản đó không bao giờ rút được.",
+            "**Đã khóa:** phần chia nằm trong hợp đồng khóa đến một ngày định sẵn. Hãy xem ngày kết thúc: khóa hết hạn vào tuần sau thì bảo vệ được rất ít.",
+            "**Do multisig hoặc timelock nắm:** giữa phần chia và việc rút có nhiều người ký hoặc một khoảng chờ. Tốt hơn một người nắm, nhưng không bằng bị khóa.",
+            "**Do ví hoặc chủ sở hữu nắm:** có thể rút bất cứ lúc nào."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Một hợp đồng chỉ tự gọi mình là khóa thì chưa phải bằng chứng. CRYPY chỉ tính là khóa khi đó là hợp đồng khóa trong danh sách đã kiểm tra, và đọc ngày kết thúc từ chính hợp đồng đó."
+        }
+      ]
+    },
+    {
+      "id": "notcover",
+      "heading": "Khóa không bảo vệ điều gì",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Khóa thanh khoản chỉ ngăn phần chia bị khóa bị rút ra. Nó không ngăn chủ sở hữu đúc token mới rồi bán, tăng thuế bán, chặn bán hoặc xả lượng lớn token họ đang giữ. Hãy kiểm tra cả những rủi ro đó: xem [Cách kiểm tra token có phải lừa đảo](guide:check-token-scam)."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Xem ai nắm thanh khoản của token",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Quét bảo mật token](tool:token-security) liệt kê các pool của token và, với mỗi pool, những người nắm phần chia mà nó tìm được: địa chỉ đốt, hợp đồng khóa kèm ngày kết thúc, multisig, farm, chủ sở hữu và ví thường. Phần chia không xác định được chủ sẽ hiện là chưa tìm thấy, không bao giờ được tính là an toàn."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Thanh khoản bị đốt có tốt hơn bị khóa không?",
+      "a": "Thanh khoản bị đốt không bao giờ rút được, nên là vĩnh viễn. Khóa chỉ bảo vệ đến ngày kết thúc."
+    },
+    {
+      "q": "Khóa thanh khoản có nghĩa là token an toàn không?",
+      "a": "Không. Nó chỉ bao phủ một rủi ro. Chủ sở hữu vẫn có thể đúc thêm, đổi thuế hoặc bán token của chính họ."
+    },
+    {
+      "q": "Vì sao kết quả kiểm tra nói một số người nắm giữ chưa được tìm thấy?",
+      "a": "Muốn tìm mọi người nắm giữ của một pool cần toàn bộ lịch sử của nó, điều mà nguồn dữ liệu miễn phí không phải lúc nào cũng có. CRYPY hiển thị phần đó là chưa kiểm tra thay vì đoán."
+    }
+  ]
+}

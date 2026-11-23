@@ -1,0 +1,95 @@
+{
+  "title": "İşlemim neden başarısız oldu? Yaygın hatalar sade dille",
+  "seoTitle": "İşlemim Neden Başarısız Oldu? Yaygın Hatalar | CRYPY",
+  "description": "Gas bitmesi, slippage, yetersiz izin, süresi dolmuş son tarih: yaygın blokzincir işlem hatalarının anlamı, neden yine de ücret ödediğiniz ve neyin işe yaradığı.",
+  "summary": "Gas bitmesi, slippage, yetersiz izin ve daha fazlası: her hatanın anlamı ve neyin işe yaradığı.",
+  "inShort": [
+    "Başarısız bir işlem geri alınır, ama kullandığı gas için yine de ödeme yaparsınız.",
+    "Başarısızlıkların çoğu birkaç nedenden kaynaklanır: gas, slippage, izin, bakiye veya son tarihler.",
+    "Kontratın hata mesajı genellikle hangisi olduğunu söyler."
+  ],
+  "sections": [
+    {
+      "id": "fee",
+      "heading": "Neden boşuna ücret ödediniz",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir işlem bir blok içinde başarısız olduğunda, yapmaya çalıştığı her değişiklik geri alınır: hiçbir token hareket etmez. Ama doğrulayıcılar onu başarısız olana kadar çalıştırma işini yaptığı için, kullanılan gas'ın ağ ücreti alınır."
+        },
+        {
+          "type": "p",
+          "text": "Hiç bloğa girmeyen bir işlem (örneğin cüzdanınızın reddettiği veya değiştirilen bir işlem) hiçbir şeye mal olmaz."
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "heading": "Yaygın hatalar ve anlamları",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Gas bitti (out of gas):** gas limiti, işlemin yapması gereken iş için çok düşüktü. Genellikle gas limitinin neredeyse tamamını kullanmıştır. Cüzdanın önerdiği limitle tekrar deneyin.",
+            "**Gas için yetersiz bakiye:** token tutsanız bile ücreti ödeyecek kadar ETH, BNB veya POL'ünüz yok. Ücretler için ağın coin'inden biraz bulundurun.",
+            "**Slippage (\"too little received\", \"INSUFFICIENT_OUTPUT_AMOUNT\"):** fiyat, gönderme ile gerçekleşme arasında toleransınızdan fazla değişti. Tekrar deneyin veya oynak tokenlar için slippage'ı biraz artırın.",
+            "**Son tarih geçti (\"EXPIRED\", \"Transaction too old\"):** bir takas bloğa girmeden önce çok uzun bekledi. Belki daha yüksek bir öncelik ücretiyle tekrar deneyin.",
+            "**Yetersiz izin (\"transfer amount exceeds allowance\"):** uygulamanın tokenınızdan o kadar harcamasına onay verilmemişti. Önce onaylayın, sonra tekrar deneyin.",
+            "**Yetersiz bakiye (\"transfer amount exceeds balance\"):** sahip olduğunuzdan fazlasını göndermeye veya takas etmeye çalıştınız.",
+            "**Transfer başarısız (\"TRANSFER_FAILED\"):** çoğu zaman transferleri engelleyen veya vergilendiren bir token. Satarken oluyorsa tokenı kontrol edin: bkz. [Honeypot token nedir](guide:honeypot-token).",
+            "**Duraklatıldı veya izin verilmedi:** kontrat duraklatılmış veya adresinizin bunu yapma izni yok."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonce",
+      "heading": "Takılan veya değiştirilen işlemler",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir cüzdandan gelen işlemler bir **nonce** ile numaralanarak sırayla ilerler. Önceki bir işlem düşük ücretle bekliyorsa sonrakiler onun arkasında bekler. Çoğu cüzdan, aynı nonce ve daha yüksek ücretle bir yedek göndererek onu hızlandırmanıza veya iptal etmenize izin verir."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Sizinkinin neden başarısız olduğunu öğrenin",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "İşlem hash'ini [İşlem Kontrolü](tool:tx-checker) içine yapıştırın. Sonucu, düğüm okumak için gereken verileri hâlâ tutuyorsa kontratın kendi hata mesajını, bilinen hataların sade bir açıklamasını ve ne kadar gas kullanıldığını gösterir."
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "heading": "Başarısız işlemlerden kaçınmak",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Ücretler için ağın coin'inden biraz bulundurun.",
+            "Cüzdanınızın önerdiği gas limitini kullanın.",
+            "Oynak tokenlar için biraz daha yüksek bir slippage toleransı başarısızlıkları önler; çok yüksek slippage kötü fiyatlara davetiye çıkarır.",
+            "Cüzdanınız bir işlemin büyük ihtimalle başarısız olacağı konusunda uyarırsa göndermeyin."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Başarısız bir işlemin ücretini geri alabilir miyim?",
+      "a": "Hayır. Ücret, sonuç geri alınsa bile ağın yaptığı işin karşılığıdır."
+    },
+    {
+      "q": "Tokenlarım cüzdanımdan çıktı ama işlem başarısız oldu. Neredeler?",
+      "a": "İşlem başarısız olduysa hiçbir şey hareket etmedi. Bakiyenizi tekrar kontrol edin ve hangisine baktığınızdan emin olmak için işlemi İşlem Kontrolü'nde inceleyin."
+    },
+    {
+      "q": "Hata mesajı neden işe yarar bir şey söylemiyor?",
+      "a": "Bazı kontratlar mesaj vermeden başarısız olur ve bazı düğümler eski işlemleri yeniden oynatamaz. İşlem Kontrolü, neden mevcut olmadığında tahmin etmek yerine bunu söyler."
+    }
+  ]
+}

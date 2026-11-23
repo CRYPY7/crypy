@@ -1,0 +1,82 @@
+{
+  "title": "Địa chỉ có checksum (EIP-55): vì sao chữ hoa chữ thường quan trọng",
+  "seoTitle": "Checksum địa chỉ (EIP-55): vì sao chữ hoa quan trọng | CRYPY",
+  "description": "Vì sao địa chỉ Ethereum trộn chữ hoa và chữ thường, checksum EIP-55 phát hiện lỗi gõ thế nào, và nó không bảo vệ bạn khỏi điều gì.",
+  "summary": "Cách chữ hoa và chữ thường xen kẽ giúp phát hiện lỗi gõ trong địa chỉ.",
+  "inShort": [
+    "Chữ hoa và chữ thường xen kẽ trong địa chỉ là cơ chế kiểm tra lỗi gõ có sẵn (EIP-55).",
+    "Một địa chỉ có checksum bị gõ sai gần như luôn không qua được kiểm tra.",
+    "Nó không phát hiện được địa chỉ giống hệt do kẻ lừa đảo tạo: địa chỉ đó hợp lệ."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Địa chỉ có checksum là gì",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Địa chỉ kiểu Ethereum gồm 40 ký tự hex sau 0x. Các chữ cái từ a đến f có thể viết hoa hoặc thường, và blockchain coi hai cách như nhau. EIP-55 tận dụng điều đó: vị trí chữ hoa được tính từ hash của chính địa chỉ."
+        },
+        {
+          "type": "p",
+          "text": "Nếu một ký tự bị đổi do nhầm lẫn, mẫu chữ hoa mong đợi sẽ không còn khớp, và ví có thể cảnh báo bạn trước khi gửi."
+        }
+      ]
+    },
+    {
+      "id": "cases",
+      "heading": "Toàn chữ thường, toàn chữ hoa, xen kẽ",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Xen kẽ:** địa chỉ có checksum. Ví có thể kiểm tra nó.",
+            "**Toàn chữ thường hoặc toàn chữ hoa:** hợp lệ, nhưng không có kiểm tra. Không phát hiện được lỗi gõ."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Cùng một địa chỉ được dùng trên mọi mạng EVM: Ethereum, BNB Chain, Base, Arbitrum và Polygon có chung định dạng."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Điều nó không bảo vệ được",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Checksum chỉ phát hiện lỗi gõ vô tình. Địa chỉ giống hệt do kẻ lừa đảo tạo ra là địa chỉ thật, hợp lệ, với checksum đúng của riêng nó. Xem [Đầu độc địa chỉ](guide:address-poisoning)."
+        },
+        {
+          "type": "warning",
+          "text": "Đừng bao giờ \"sửa\" một địa chỉ không qua checksum bằng cách đổi chữ cho đến khi qua. Hãy lấy lại địa chỉ đúng từ nguồn gốc."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Kiểm tra một địa chỉ",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Kiểm tra định dạng địa chỉ](tool:address-formatter) kiểm tra địa chỉ có được viết đúng không và đưa ra dạng có checksum, cho một địa chỉ hoặc danh sách tối đa 500. Chạy trong trình duyệt; không gửi gì đi."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Địa chỉ toàn chữ thường có sai không?",
+      "a": "Không. Nó hợp lệ, chỉ là không có sẵn cơ chế kiểm tra lỗi gõ."
+    },
+    {
+      "q": "Ví báo checksum không hợp lệ. Tôi nên làm gì?",
+      "a": "Đừng gửi. Hãy sao chép lại địa chỉ từ nguồn gốc; rất có thể nó có lỗi gõ."
+    },
+    {
+      "q": "Bitcoin có dùng cùng loại checksum không?",
+      "a": "Không. EIP-55 dành cho địa chỉ kiểu Ethereum. Các blockchain khác có định dạng và cách kiểm tra địa chỉ riêng."
+    }
+  ]
+}

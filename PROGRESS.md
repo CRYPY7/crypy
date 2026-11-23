@@ -37,7 +37,50 @@ Last updated: 2026-11-23
 | SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                           |
 | SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
 | M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
+| Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Languages wave 1 — six Beta languages (owner decision 2026-11-23)
+
+Owner decision: instead of Urdu and Arabic first, start with the biggest crypto markets. Wave 1 = **Spanish,
+Portuguese (Brazil), Chinese (Simplified), Russian, Turkish and Vietnamese**, released as **Beta** (selectable, marked
+"Beta translation", hidden from search engines) until a native speaker reviews each one. Urdu and Arabic stay hidden for
+later; their right-to-left support stays in place.
+
+**Built:**
+
+- Every website text translated in all six languages (about 2,700 strings each: tools, entity pages, transaction
+  story, token security, approvals, portfolio, watchlist, status page, legal pages, errors). The admin dashboard stays
+  English only (owner-facing).
+- All 12 Learn guides translated in each language (`src/content/learn/<locale>/`). Section ids, link targets, list
+  lengths and bold marks match English; every search title is 60 characters or less and every description 160 or less.
+- Russian uses its full plural forms (one / few / many / other). Number formats follow each language in prose (for
+  example 1.024 in Portuguese and Turkish, 1 024 in Russian); input fields still use a dot for decimals, and the hint
+  says so.
+- Legal pages: the Beta notice adds "if this translation differs from the English text, the English version applies".
+- Locale status: `beta` = in the language menu and footer, `noindex`, notice under the header, not in the sitemap or
+  hreflang, not auto-detected. `planned` = hidden. Missing keys fall back to English.
+- Fonts: Inter's Cyrillic and Vietnamese files are self-hosted with the rest; headings switch to Inter for Russian
+  (Space Grotesk has no Cyrillic). Chinese uses the system's Chinese fonts.
+- Checks: `scripts/check-translations.ts` now fails if a Beta language misses any key (except `admin`), or if a
+  translation changes a placeholder, plural/select shape, rich-text tag or list length.
+- New browser test `tests/e2e/languages.spec.ts`: for each Beta language, the home page and a guide are translated,
+  the Beta notice shows, the page is `noindex`, the language is not in the sitemap, and the footer links to it.
+
+### Languages wave 1 checks (2026-11-23, in the cloud workspace)
+
+| Check                                                             | Result                        |
+| ----------------------------------------------------------------- | ----------------------------- |
+| Translation check (`pnpm i18n:check`)                             | ✅ Passed                     |
+| Type check, lint, Prettier                                        | ✅ Passed                     |
+| Unit tests (`pnpm test`)                                          | ✅ 460 passed, 72 skipped     |
+| Production build                                                  | ✅ Passed                     |
+| Browser tests (`pnpm test:e2e`, desktop and mobile)               | ✅ 260 passed, 12 skipped     |
+| Language tests (6 languages × 2 tests × 2 screen sizes)           | ✅ 26 passed (included above) |
+| Visual check: home desktop and phone, a guide, for every language | ✅ Looked correct             |
+
+**Still to do (owner):** a native speaker reviews each language; when one is approved, its status changes from `beta`
+to `complete` (it then appears in search engines with hreflang and is offered automatically to matching browsers).
 
 ## M9 Part 5 — Monitoring: health checks, status page, admin dashboard (owner request 2026-11-23)
 

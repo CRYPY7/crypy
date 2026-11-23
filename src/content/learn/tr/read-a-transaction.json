@@ -1,0 +1,105 @@
+{
+  "title": "Bir işlem nasıl okunur: gönderen, alıcı, değer, gas ve loglar",
+  "seoTitle": "Blokzincir İşlemi Alan Alan Nasıl Okunur | CRYPY",
+  "description": "Bir blokzincir işleminin her alanının anlamı: durum, gönderen, alıcı, değer, ücret, gas, nonce, giriş verisi ve loglar. Bir gezginde her işlemi okumayı öğrenin.",
+  "summary": "Bir gezgindeki her alanın anlamı ve token transferlerinin gerçekte nerede göründüğü.",
+  "inShort": [
+    "Değer yalnızca ağın kendi coin'ini gösterir. Token transferleri loglarda görünür.",
+    "\"Alıcı\" çoğu zaman parayı alan kişi değil, bir kontrattır.",
+    "Ücret, kullanılan gas ile gas fiyatının çarpımıdır."
+  ],
+  "sections": [
+    {
+      "id": "basics",
+      "heading": "Temeller",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**İşlem hash'i:** işlemin benzersiz kimliği (0x ve ardından 64 karakter).",
+            "**Durum:** başarılı, başarısız veya bekliyor (henüz bir blokta değil).",
+            "**Blok ve zaman:** onu hangi bloğun içerdiği ve ne zaman.",
+            "**Onaylar:** ondan sonra kaç blok geldiği. Ne kadar çoksa o kadar kesindir."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fromto",
+      "heading": "Gönderen ve alıcı",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Gönderen**, işlemi imzalayan ve ücretini ödeyen cüzdandır. **Alıcı**, işlemin çağırdığı adrestir. Basit bir coin transferinde \"alıcı\" parayı alan kişidir. Token, takas veya uygulama içeren her şeyde \"alıcı\" genellikle bir kontrattır ve gerçek alıcılar loglarda görünür."
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "heading": "Değer: yalnızca ağın kendi coin'i",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Değer** alanı doğrudan ne kadar ETH, BNB veya POL gönderildiğini gösterir. USDT gönderdiğinizde veya token takas ettiğinizde değer çoğu zaman 0'dır, çünkü tokenlar tokenın kontratı içinde hareket eder ve olaylar (loglar) olarak kaydedilir. Bu birçok kişiyi şaşırtır."
+        }
+      ]
+    },
+    {
+      "id": "fee",
+      "heading": "Ücret ve gas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Kullanılan gas:** işlemin ne kadar iş gerektirdiği.",
+            "**Gas limiti:** kullanmasına izin verilen en fazla miktar.",
+            "**Gas fiyatı:** gas birimi başına fiyat, genellikle gwei cinsinden.",
+            "**Ücret:** kullanılan gas × gas fiyatı, ağın coin'iyle ödenir. Ethereum'da bir kısmı (taban ücret) yakılır."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Ücretlerin ayrıntılı açıklaması: [Gas ücretleri açıklandı](guide:gas-fees)."
+        }
+      ]
+    },
+    {
+      "id": "input",
+      "heading": "Nonce ve giriş verisi",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Nonce**, işlemin gönderenin sıralamasındaki numarasıdır. **Giriş verisi** kodlanmış fonksiyon çağrısıdır: kontratın hangi fonksiyonunun hangi değerlerle çağrıldığı. Gezginler ve [İşlem Verisi Çözücü](tool:tx-decoder), fonksiyon biliniyorsa onu okunabilir bir biçime çevirir."
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "heading": "Loglar: gerçekte ne oldu",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Kontratlar çalışırken **olaylar** kaydeder: token transferleri, onaylar, takaslar. Hangi tokenların kimden kime ve ne kadar taşındığını bu loglarda görürsünüz."
+        },
+        {
+          "type": "p",
+          "text": "[İşlem Kontrolü](tool:tx-checker) bunların hepsini okur ve tek bir cümleyle açıklar; örneğin \"0xD37A…06B4 adresine 84,74 USDC gönderildi\", taşınan varlıklar, maliyet ve değişen izinlerle birlikte."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Token transferim neden 0 değer gösteriyor?",
+      "a": "Değer yalnızca ağın kendi coin'ini sayar. Token miktarları loglarda Transfer olayları olarak kaydedilir."
+    },
+    {
+      "q": "\"Alıcı\" adresi ödeme yaptığım kişi değil. Bir şey mi ters gitti?",
+      "a": "Muhtemelen hayır. Token transferlerinde \"alıcı\" token kontratıdır. Transfer olayı gerçek alıcıyı gösterir."
+    },
+    {
+      "q": "Bekliyor ne demek?",
+      "a": "İşlem gönderildi ama henüz bir blokta değil. Hâlâ onaylanabilir, değiştirilebilir veya düşürülebilir."
+    }
+  ]
+}

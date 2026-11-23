@@ -1,0 +1,83 @@
+{
+  "title": "Wei, gwei ve ether: kripto birimleri açıklandı",
+  "seoTitle": "Wei, Gwei ve Ether: Kripto Birimleri Açıklandı | CRYPY",
+  "description": "Wei, gwei ve ether'in ilişkisi, gas'ın neden gwei ile verildiği ve token tutarlarının neden ondalıklara bağlı olduğu. ETH, BNB ve POL için hızlı dönüşümler.",
+  "summary": "Her tutarın ve gas fiyatının arkasındaki birimler, hızlı dönüşümlerle.",
+  "inShort": [
+    "1 ETH = 1.000.000.000 gwei = 1.000.000.000.000.000.000 wei.",
+    "Gas fiyatları gwei kullanır, çünkü sayılar okunabilir kalır.",
+    "Tokenların kendi ondalık basamakları vardır: Ethereum'daki USDC için 6, diğerlerinin çoğu için 18."
+  ],
+  "sections": [
+    {
+      "id": "units",
+      "heading": "Birimler",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**wei:** en küçük birim. Blokzincirler her tutarı tam sayı wei olarak saklar.",
+            "**gwei:** 1.000.000.000 wei (10⁹). Gas fiyatları gwei ile verilir.",
+            "**ether (ETH):** 1.000.000.000.000.000.000 wei (10¹⁸)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Aynı birimler BNB Chain'deki BNB ve Polygon'daki POL için de geçerlidir: 1 BNB, 10¹⁸ wei'dir ve oradaki gas da gwei ile verilir."
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "heading": "Hızlı dönüşümler",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "0,001 ETH = 1.000.000 gwei",
+            "1 gwei = 0,000000001 ETH",
+            "20 gwei gas fiyatı × 21.000 gas = 420.000 gwei = 0,00042 ETH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "heading": "Token ondalık basamakları",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Tokenlar tutarları kendi en küçük birimlerinde saklar ve her token kaç **ondalık basamak** kullandığını belirtir. Çoğu ETH gibi 18 kullanır. Ethereum'daki USDC ve USDT 6 kullanır, bu yüzden 1 USDT 1.000.000 olarak saklanır. Aynı token başka bir ağda farklı ondalık basamak kullanabilir: BNB Chain'deki USDT 18 kullanır."
+        },
+        {
+          "type": "warning",
+          "text": "İşlem verisindeki ham tutarlar en küçük birimdedir. Onları yanlış ondalık basamakla okumak, bir tutarı gerçekte olduğundan bir trilyon kat büyük veya küçük gösterir."
+        }
+      ]
+    },
+    {
+      "id": "convert",
+      "heading": "Tam dönüştürün",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Birim Dönüştürücü](tool:unit-converter), wei, gwei, ETH ve BNB arasında yuvarlamadan, bilimsel gösterimdeki tutarlar dahil tam dönüştürme yapar. Tarayıcınızda çalışır; hiçbir şey gönderilmez."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Gas fiyatları için neden doğrudan ETH kullanılmıyor?",
+      "a": "ETH cinsinden gas fiyatları 0,000000015 gibi sayılar olurdu. Gwei onları okunabilir tutar: 15 gwei."
+    },
+    {
+      "q": "Wei adı nereden geliyor?",
+      "a": "Bir kriptografi öncüsü olan Wei Dai'nin onuruna verilmiştir. Gwei, giga-wei yani bir milyar wei demektir."
+    },
+    {
+      "q": "Tüm tokenlar 18 ondalık basamak mı kullanır?",
+      "a": "Hayır. Çoğu kullanır, ama stablecoinler Ethereum'da çoğu zaman 6 kullanır. Ham tutarları okumadan önce tokenın ondalık basamaklarını her zaman kontrol edin."
+    }
+  ]
+}

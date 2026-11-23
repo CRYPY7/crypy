@@ -1,0 +1,116 @@
+{
+  "title": "Las aprobaciones de tokens explicadas, y cómo revocarlas",
+  "seoTitle": "Aprobaciones de tokens: qué son y cómo revocarlas | CRYPY",
+  "description": "Las aplicaciones que usaste quizá aún pueden gastar tus tokens. Qué es una aprobación, cuándo es peligrosa y cómo revisar y revocar las tuyas.",
+  "summary": "Cada aplicación que usaste quizá todavía pueda gastar tus tokens. Cómo encontrarlas y eliminarlas.",
+  "inShort": [
+    "Una aprobación permite que un contrato mueva uno de tus tokens sin volver a pedirte permiso.",
+    "Sigue activa hasta que la eliminas, incluso si dejas de usar la aplicación.",
+    "Eliminarla es una pequeña transacción que confirmas en tu propia billetera."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "¿Qué es una aprobación de token?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Antes de que un exchange u otra aplicación pueda mover un token desde tu billetera, le das permiso una vez. Ese permiso es la aprobación: indica el contrato (el **gastador**) y cuánto de ese token puede mover."
+        },
+        {
+          "type": "figure",
+          "kind": "approval",
+          "labels": [
+            "Tu billetera",
+            "tiene 1.200 USDT",
+            "Permiso: gastar USDT",
+            "hasta: ilimitado",
+            "Contrato del exchange",
+            "puede moverlos sin preguntar"
+          ],
+          "caption": "Una aprobación es un permiso permanente. Los tokens siguen en tu billetera hasta que el contrato lo usa.",
+          "alt": "Tu billetera da a un contrato de exchange permiso para gastar una cantidad ilimitada de USDT."
+        },
+        {
+          "type": "p",
+          "text": "Para los NFT hay una versión más amplia: **aprobar todo**, que permite al gastador mover todos los NFT que tengas de esa colección."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Por qué las aprobaciones pueden volverse peligrosas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Muchas aplicaciones piden una cantidad ilimitada para que no tengas que aprobar otra vez la próxima vez. Si ese contrato es hackeado más adelante, o era malicioso desde el principio, puede mover todo ese token desde tu billetera, incluidos los tokens que recibas después."
+        },
+        {
+          "type": "p",
+          "text": "Las aprobaciones también son el objetivo de muchos sitios de phishing: una página falsa te pide \"reclamar\" o \"verificar\" algo, y la transacción que confirmas es en realidad una aprobación para el contrato del estafador."
+        },
+        {
+          "type": "warning",
+          "text": "Revocar nunca es necesario para \"desbloquear\" o \"verificar\" una billetera. Un sitio o mensaje que diga eso, o que te pida tu frase semilla, es una estafa."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Cómo revisar tus aprobaciones",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Pega la dirección de tu billetera en el [Verificador de aprobaciones](tool:approval-checker). Busca aprobaciones en Ethereum, BNB Chain, Base, Arbitrum y Polygon, lee cada una en la cadena y pone primero las que requieren atención: contratos desconocidos, cantidades ilimitadas y gastadores marcados por datos de seguridad."
+        },
+        {
+          "type": "p",
+          "text": "Para revisar no hace falta tu billetera: cualquiera puede consultar cualquier dirección, porque las aprobaciones son públicas."
+        }
+      ]
+    },
+    {
+      "id": "revoke",
+      "heading": "Cómo revocar una aprobación",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Abre el [Verificador de aprobaciones](tool:approval-checker) y revisa tu dirección, o conecta tu billetera y revísala. Conectarla nunca te pide firmar.",
+            "Mira primero **Requieren atención** y decide qué aprobaciones ya no necesitas.",
+            "Haz clic en **Revocar** junto a una. CRYPY prueba primero la transacción y muestra qué hace y la comisión.",
+            "Revisa los detalles en tu billetera y confirma. Cuando la transacción entra en un bloque, el permiso queda en cero."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Revocar pone el permiso en cero. Tus tokens no se mueven."
+        }
+      ]
+    },
+    {
+      "id": "keep",
+      "heading": "Cuándo mantener una aprobación",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Las aprobaciones de aplicaciones que usas a menudo, idealmente limitadas a la cantidad que operas, son normales. Revocarlas solo significa que tendrás que aprobar otra vez, y pagar una comisión, la próxima vez. Concéntrate en las aprobaciones de aplicaciones que ya no usas, de contratos que no reconoces y en las aprobaciones ilimitadas de tokens que valen mucho."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Revocar cuesta dinero?",
+      "a": "Sí, una pequeña comisión de red, porque revocar es una transacción en la blockchain."
+    },
+    {
+      "q": "¿Revocar moverá mis tokens?",
+      "a": "No. Solo elimina el permiso. Tus tokens se quedan en tu billetera."
+    },
+    {
+      "q": "¿Puedo revisar sin conectar mi billetera?",
+      "a": "Sí. Las aprobaciones son públicas, así que puedes revisar cualquier dirección. Para revocar necesitas tu billetera, porque solo tú puedes cambiar tus propios permisos."
+    }
+  ]
+}

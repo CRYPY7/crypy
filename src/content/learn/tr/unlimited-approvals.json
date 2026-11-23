@@ -1,0 +1,98 @@
+{
+  "title": "Sınırsız onaylar tehlikeli mi?",
+  "seoTitle": "Sınırsız Token Onayları Tehlikeli mi? | CRYPY",
+  "description": "Sınırsız onaylar ücretten tasarruf sağlar ama o türden her tokenı kapsar. Ne zaman riskli oldukları, Permit2'nin farkı ve ne zaman sınırlamanız gerektiği.",
+  "summary": "\"Sınırsız\"ın neden sonradan aldığınız tokenları da kapsadığı ve ne zaman sınırlamaya değdiği.",
+  "inShort": [
+    "Sınırsız bir onay, cüzdanınızdaki o türden her tokenı şimdi ve sonra kapsar.",
+    "Ancak verdiğiniz kontrat kadar güvenlidir.",
+    "Sık kullanmadığınız uygulamaların onaylarını sınırlayın veya iptal edin."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "\"Sınırsız\" ne demek",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir tokenı onayladığınızda tutarı uygulama seçer. Birçoğu, bir daha onaylamanız gerekmesin diye mümkün olan en büyük sayıyı seçer. Cüzdanınız bunu \"sınırsız\" ya da çok uzun bir sayı olarak gösterebilir."
+        },
+        {
+          "type": "p",
+          "text": "Onay tek başına hiçbir şey taşımaz. Harcayıcı kontratın o tokenın herhangi bir miktarını, istediği zaman, size tekrar sormadan cüzdanınızdan taşıyabileceği anlamına gelir."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Ne zaman sorun olur",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Kontrat hacklenir.** Saldırganlar mevcut onayları kullanarak onu onaylamış cüzdanları boşaltabilir.",
+            "**Kontrat kötü niyetliydi.** Bir dolandırıcılık sitesindeki \"talep et\" düğmesi, dolandırıcının kontratına bir onay olabilir.",
+            "**Onu unuttunuz.** Yıllar önce verilmiş bir onay, o zamandan beri aldığınız tokenlar için bugün de çalışır."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Sınırlı bir onay zararı onayladığınız tutarla sınırlar. Sınırsız bir onay sınırlamaz."
+        }
+      ]
+    },
+    {
+      "id": "permit2",
+      "heading": "Permit2 onayları",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Uniswap ve PancakeSwap dahil bazı uygulamalar **Permit2** kullanır: Permit2 kontratını token başına bir kez onaylarsınız, sonra her uygulama için bir tutar ve son kullanma tarihi olan ayrı izinler imzalarsınız."
+        },
+        {
+          "type": "p",
+          "text": "Her iki seviyeyi de kontrol edin: Permit2'nin kendisine verilen onay ve içindeki uygulama izinleri. [Onay Kontrolü](tool:approval-checker) ikisini de okur ve her Permit2 izninin ne zaman sona erdiğini gösterir."
+        }
+      ]
+    },
+    {
+      "id": "nft",
+      "heading": "NFT'lerde \"tümünü onayla\"",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "NFT koleksiyonlarında, koleksiyonda tuttuğunuz her NFT'yi kapsayan daha geniş bir izin vardır. Pazar yerlerinde yaygındır ve kimlik avının sık hedefidir. Ona sınırsız bir token onayı gibi davranın."
+        }
+      ]
+    },
+    {
+      "id": "habits",
+      "heading": "İyi alışkanlıklar",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Cüzdanınız izin verdiğinde tutarı kullanmayı planladığınız miktara göre düzenleyin.",
+            "Artık kullanmadığınız uygulamaların onaylarını, özellikle değerli tokenlarda iptal edin.",
+            "Büyük varlıkları yeni uygulamaları denemek için kullanmadığınız bir cüzdanda tutun.",
+            "Onaylarınızı ara sıra [Onay Kontrolü](tool:approval-checker) ile kontrol edin."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Her sınırsız onayı iptal etmeli miyim?",
+      "a": "Şart değil. Sık kullandığınız bilinen bir uygulama için iptal etmek, bir dahaki sefere tekrar onaylamak (ve ücret ödemek) demektir. Artık kullanmadığınız uygulamalara ve tanımadığınız kontratlara odaklanın."
+    },
+    {
+      "q": "Sınırlı bir onay güvenli mi?",
+      "a": "Daha güvenlidir, çünkü harcayıcı en fazla o tutarı taşıyabilir. Yine de bir izindir: ihtiyacınız yoksa iptal edin."
+    },
+    {
+      "q": "Cüzdanım neden \"sınırsız\" yerine devasa bir sayı gösteriyor?",
+      "a": "\"Sınırsız\", token kontratının saklayabileceği en büyük sayıdır. Cüzdanlar bunu farklı şekillerde gösterir."
+    }
+  ]
+}

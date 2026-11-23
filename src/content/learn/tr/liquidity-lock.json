@@ -1,0 +1,90 @@
+{
+  "title": "Likidite kilidi nedir ve neden önemlidir",
+  "seoTitle": "Likidite Kilidi Nedir ve Neden Önemlidir | CRYPY",
+  "description": "Bir tokenın havuzundaki parayı kim çekebilir? Likidite nasıl tutulur, yakılmış ve kilitli likidite ne demektir ve bir kilit neyi korumaz?",
+  "summary": "Bir tokenın havuzundaki parayı kim çekebilir ve bir kilit gerçekte neyi korur.",
+  "inShort": [
+    "Bir tokenın havuzu alıcıların ödediği coinleri tutar. Havuzun pay tokenları kimdeyse onları çekebilir.",
+    "Yakılmış veya kilitli paylar çekilemez ya da kilit bitene kadar çekilemez.",
+    "Bir kilit, sahibin basım yapmasını, vergileri artırmasını veya kendi tokenlarını satmasını engellemez."
+  ],
+  "sections": [
+    {
+      "id": "pool",
+      "heading": "Likidite havuzu nasıl çalışır",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Uniswap ve PancakeSwap gibi borsalarda bir token, iki varlık tutan bir havuza karşı işlem görür; örneğin token ve ETH veya BNB. Likidite ekleyen kişi **havuz payları** (LP tokenları veya yeni havuz tasarımlarında bir pozisyon NFT'si) alır ve bunları daha sonra havuzdaki kendi payıyla geri değiştirebilir."
+        },
+        {
+          "type": "p",
+          "text": "İnsanlar tokenı satın aldığında havuza ETH veya BNB koyarlar. Havuz paylarının çoğu kimdeyse bunun çoğunu çekebilir."
+        }
+      ]
+    },
+    {
+      "id": "rug",
+      "heading": "Rug pull nasıl olur",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir rug pull'da tokenın arkasındaki kişiler havuzun likiditesini tek bir işlemle çeker. Fiyat çöker ve sahipler anlamlı bir fiyata satamaz. Token alıcılarının para kaybetmesinin en yaygın yollarından biridir."
+        }
+      ]
+    },
+    {
+      "id": "protected",
+      "heading": "Yakılmış, kilitli veya birinin elinde",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Yakılmış:** havuz payları kimsenin kontrol etmediği bir adrese gönderilmiş. Bu likidite asla çekilemez.",
+            "**Kilitli:** paylar belirli bir tarihe kadar bir kilit kontratında durur. Bitiş tarihini kontrol edin: gelecek hafta biten bir kilit pek koruma sağlamaz.",
+            "**Multisig veya timelock elinde:** paylar ile çekim arasında birkaç imzacı veya bir gecikme vardır. Tek bir kişiden iyidir ama kilitli olmakla aynı değildir.",
+            "**Bir cüzdanın veya sahibin elinde:** her an çekilebilir."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Yalnızca kendine kilit diyen bir kontrat kanıt değildir. CRYPY bir kilidi yalnızca kontrol edilmiş listesindeki bir kilit kontratıysa sayar ve bitiş tarihini o kontrattan okur."
+        }
+      ]
+    },
+    {
+      "id": "notcover",
+      "heading": "Bir kilit neyi korumaz",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Likidite kilidi yalnızca kilitli payların çekilmesini engeller. Sahibin yeni tokenlar basıp satmasını, satış vergisini artırmasını, satışları engellemesini veya elindeki büyük arzı boşaltmasını engellemez. Bu riskleri de kontrol edin: bkz. [Bir tokenın dolandırıcılık olup olmadığını nasıl anlarsınız](guide:check-token-scam)."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Bir tokenın likiditesinin kimde olduğunu görün",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Token Güvenlik Tarayıcı](tool:token-security), bir tokenın havuzlarını ve her havuz için bulabildiği pay sahiplerini listeler: yakım adresleri, bitiş tarihleriyle kilit kontratları, multisig'ler, farm'lar, sahip ve sıradan cüzdanlar. Kime ait olduğu belirlenemeyen paylar bulunamadı olarak gösterilir, asla güvenli sayılmaz."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Yakılmış likidite kilitliden daha mı iyi?",
+      "a": "Yakılmış likidite asla çekilemez, yani kalıcıdır. Bir kilit yalnızca bitiş tarihine kadar korur."
+    },
+    {
+      "q": "Likidite kilidi tokenın güvenli olduğu anlamına mı gelir?",
+      "a": "Hayır. Tek bir riski kapsar. Sahipler hâlâ basım yapabilir, vergileri değiştirebilir veya kendi tokenlarını satabilir."
+    },
+    {
+      "q": "Kontrol neden bazı sahiplerin bulunamadığını söylüyor?",
+      "a": "Bir havuzun tüm sahiplerini bulmak tam geçmişini gerektirir ve ücretsiz veri kaynakları bunu her zaman sağlamaz. CRYPY tahmin etmek yerine o kısmı kontrol edilmedi olarak gösterir."
+    }
+  ]
+}

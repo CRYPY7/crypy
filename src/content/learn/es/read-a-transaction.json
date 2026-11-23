@@ -1,0 +1,105 @@
+{
+  "title": "Cómo leer una transacción: de, para, valor, gas y logs",
+  "seoTitle": "Cómo leer una transacción, campo por campo | CRYPY",
+  "description": "Qué significa cada campo de una transacción: estado, de, para, valor, comisión, gas, nonce, datos de entrada y logs. Lee cualquier transacción.",
+  "summary": "Qué significa cada campo de un explorador y dónde aparecen de verdad las transferencias de tokens.",
+  "inShort": [
+    "El valor solo muestra la moneda propia de la cadena. Las transferencias de tokens aparecen en los logs.",
+    "\"Para\" suele ser un contrato, no la persona que recibió el dinero.",
+    "La comisión es el gas usado por el precio del gas."
+  ],
+  "sections": [
+    {
+      "id": "basics",
+      "heading": "Lo básico",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Hash de transacción:** el ID único de la transacción (0x seguido de 64 caracteres).",
+            "**Estado:** exitosa, fallida o pendiente (todavía no está en un bloque).",
+            "**Bloque y hora:** qué bloque la incluyó y cuándo.",
+            "**Confirmaciones:** cuántos bloques vinieron después. Cuantas más, más definitiva."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fromto",
+      "heading": "De y para",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**De** es la billetera que firmó y pagó la transacción. **Para** es la dirección a la que llamó. En una transferencia simple de moneda, \"para\" es el destinatario. En cualquier cosa con tokens, swaps o aplicaciones, \"para\" suele ser un contrato, y los destinatarios reales aparecen en los logs."
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "heading": "Valor: solo la moneda propia de la cadena",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El campo **valor** muestra cuánto ETH, BNB o POL se envió directamente. Cuando envías USDT o cambias tokens, el valor suele ser 0, porque los tokens se mueven dentro del contrato del token y se registran como eventos (logs). Eso sorprende a mucha gente."
+        }
+      ]
+    },
+    {
+      "id": "fee",
+      "heading": "Comisión y gas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Gas usado:** cuánto trabajo necesitó la transacción.",
+            "**Límite de gas:** lo máximo que se le permitió usar.",
+            "**Precio del gas:** el precio por unidad de gas, normalmente en gwei.",
+            "**Comisión:** gas usado × precio del gas, pagada en la moneda de la cadena. En Ethereum, una parte (la comisión base) se quema."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Las comisiones explicadas en detalle: [Las comisiones de gas explicadas](guide:gas-fees)."
+        }
+      ]
+    },
+    {
+      "id": "input",
+      "heading": "Nonce y datos de entrada",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El **nonce** es el número de la transacción en la secuencia del remitente. Los **datos de entrada** son la llamada a la función codificada: qué función del contrato se llamó y con qué valores. Los exploradores y el [Decodificador de datos de transacción](tool:tx-decoder) los convierten en una forma legible cuando la función es conocida."
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "heading": "Logs: lo que pasó de verdad",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Los contratos registran **eventos** mientras se ejecutan: transferencias de tokens, aprobaciones, swaps. En estos logs ves qué tokens se movieron, de quién, a quién y cuánto."
+        },
+        {
+          "type": "p",
+          "text": "El [Verificador de transacciones](tool:tx-checker) lee todo esto y lo explica en una frase, como \"Envió 84.74 USDC a 0xD37A…06B4\", con los activos movidos, el costo y cualquier permiso cambiado."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Por qué mi transferencia de token muestra un valor de 0?",
+      "a": "El valor solo cuenta la moneda propia de la cadena. Las cantidades de tokens se registran en los logs como eventos Transfer."
+    },
+    {
+      "q": "La dirección \"para\" no es la persona a la que pagué. ¿Salió algo mal?",
+      "a": "Probablemente no. En las transferencias de tokens, \"para\" es el contrato del token. El evento Transfer muestra el destinatario real."
+    },
+    {
+      "q": "¿Qué significa pendiente?",
+      "a": "La transacción se envió, pero todavía no está en un bloque. Aún puede confirmarse, reemplazarse o descartarse."
+    }
+  ]
+}

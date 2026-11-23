@@ -1,0 +1,145 @@
+{
+  "title": "Como saber se um token é golpe antes de comprar",
+  "seoTitle": "Como saber se um token cripto é golpe | CRYPY",
+  "description": "Cinco verificações que pegam a maioria dos tokens golpe antes da compra: dá para vender, quais taxas cobra, o que o dono pode mudar e quem controla a liquidez.",
+  "summary": "Cinco verificações que pegam a maioria dos tokens golpe: venda, taxas, poderes do dono, liquidez e holders.",
+  "inShort": [
+    "A maioria dos tokens golpe falha em pelo menos uma de cinco verificações: venda, taxas, poderes do dono, liquidez e holders.",
+    "Uma negociação de teste mostra se você consegue mesmo vender, e quanto é tirado no caminho.",
+    "Passar em todas as verificações não é garantia: os donos podem mudar as configurações depois que você compra."
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "heading": "Por que tokens golpe são tão comuns",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Qualquer pessoa cria um token em minutos e o coloca em uma exchange descentralizada. Não existe revisão de listagem, então as mesmas ferramentas que permitem lançar projetos honestos também deixam golpistas copiar um nome popular, adicionar um pouco de liquidez e esperar os compradores."
+        },
+        {
+          "type": "p",
+          "text": "A maioria dos golpes segue poucos padrões. Você pode verificar todos eles antes de comprar, usando só dados públicos da blockchain."
+        }
+      ]
+    },
+    {
+      "id": "sell",
+      "heading": "1. Dá para vender?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Um **honeypot** deixa você comprar, mas bloqueia ou esvazia toda venda. A verificação mais confiável é uma negociação de teste: comprar um valor pequeno, enviar uma parte para outra carteira e depois vender, vendo o que acontece em cada etapa."
+        },
+        {
+          "type": "p",
+          "text": "O [Scanner de segurança de tokens](tool:token-security) faz esse teste contra o pool real do token na exchange, dentro de uma simulação somente leitura. Nada é assinado nem enviado, e não é preciso carteira."
+        },
+        {
+          "type": "tip",
+          "text": "Saiba mais em [O que é um token honeypot e como identificá-lo](guide:honeypot-token)."
+        }
+      ]
+    },
+    {
+      "id": "taxes",
+      "heading": "2. Quanto ele tira em cada negociação?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Alguns tokens cobram uma taxa em cada compra, venda ou transferência. Uma taxa pequena pode ser legítima, mas uma taxa de venda de 30, 50 ou 99% transforma o token em uma armadilha, mesmo que vender funcione tecnicamente."
+        },
+        {
+          "type": "p",
+          "text": "Olhe a taxa medida, não o número que o projeto anuncia. A negociação de teste mede o que realmente chega em cada etapa."
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "heading": "3. O que o dono ainda pode mudar?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Muitos contratos de token guardam poderes especiais para o dono. Os que você deve procurar:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Emissão:** criar novos tokens e vendê-los no pool.",
+            "**Taxas:** aumentar a taxa de compra ou venda a qualquer momento.",
+            "**Lista negra ou pausa:** impedir que certas carteiras, ou todo mundo, movam os tokens.",
+            "**Atualização:** substituir todo o código do contrato (um contrato proxy)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Um dono que **renunciou à propriedade** não pode mais usar os poderes exclusivos do dono, mas poderes de outros papéis ou contas podem continuar. Um contrato com código-fonte publicado (verificado) é mais fácil de conferir do que um que só expõe o código compilado."
+        }
+      ]
+    },
+    {
+      "id": "liquidity",
+      "heading": "4. Quem controla a liquidez?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "O pool de liquidez é onde compradores e vendedores negociam. Se as pessoas por trás do token puderem retirar essa liquidez, podem levar o dinheiro de todo mundo em uma transação: um \"rug pull\"."
+        },
+        {
+          "type": "p",
+          "text": "Veja quanta liquidez existe e se os tokens de participação do pool estão **queimados** ou **bloqueados** em um contrato de bloqueio conhecido, e até quando. Veja [O que é um bloqueio de liquidez e por que importa](guide:liquidity-lock)."
+        }
+      ]
+    },
+    {
+      "id": "holders",
+      "heading": "5. Quem tem a oferta?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Se uma ou duas carteiras têm a maior parte da oferta, elas podem derrubar o preço vendendo. Grandes posições de exchanges, endereços de queima ou contratos de bloqueio costumam ser normais; grandes posições de carteiras desconhecidas merecem um olhar mais atento."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "O que uma verificação não consegue dizer",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Toda verificação descreve o token como ele está agora. Os donos podem mudar taxas, pausar a negociação ou emitir depois, e alguns tokens se comportam de forma diferente para carteiras diferentes. Trate bons resultados como \"nenhum risco grave encontrado\", nunca como \"seguro\"."
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "heading": "Verifique um token com o CRYPY",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Copie o endereço do contrato do token de uma fonte confiável, como o site oficial do projeto ou um explorador de blocos.",
+            "Cole no [Scanner de segurança de tokens](tool:token-security) e escolha a rede, se souber.",
+            "Leia os achados do mais grave ao menos grave. Cada um diz como foi verificado: verificado na rede, simulado, heurístico ou de um provedor externo.",
+            "Se aparecer algo crítico, como venda bloqueada, não compre."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Um token é seguro se passar em todas as verificações?",
+      "a": "Não. Significa que nenhum risco grave foi encontrado no que pôde ser verificado. Os donos podem mudar as configurações depois, então use só valores que você pode perder."
+    },
+    {
+      "q": "Preciso conectar minha carteira?",
+      "a": "Não. O Scanner de segurança de tokens só precisa do endereço do contrato do token."
+    },
+    {
+      "q": "Quais redes posso verificar?",
+      "a": "Ethereum, BNB Chain, Base, Arbitrum e Polygon."
+    }
+  ]
+}

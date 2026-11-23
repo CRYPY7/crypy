@@ -1,0 +1,84 @@
+{
+  "title": "Đầu độc địa chỉ: chiêu lừa địa chỉ giống hệt",
+  "seoTitle": "Đầu độc địa chỉ: chiêu lừa địa chỉ giống hệt | CRYPY",
+  "description": "Kẻ lừa đảo gửi những khoản cực nhỏ từ địa chỉ giống địa chỉ của bạn, mong bạn sao chép nhầm. Tìm hiểu cách đầu độc địa chỉ hoạt động và cách phòng tránh.",
+  "summary": "Những khoản chuyển cực nhỏ từ địa chỉ giống của bạn, để bạn sao chép nhầm.",
+  "inShort": [
+    "Kẻ lừa đảo tạo địa chỉ có đầu và cuối giống địa chỉ bạn hay dùng.",
+    "Họ gửi khoản chuyển cực nhỏ hoặc bằng 0 để địa chỉ giả xuất hiện trong lịch sử của bạn.",
+    "Đừng bao giờ sao chép địa chỉ từ lịch sử giao dịch: hãy so từng ký tự."
+  ],
+  "sections": [
+    {
+      "id": "how",
+      "heading": "Chiêu lừa hoạt động thế nào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Địa chỉ rất dài, nên hầu hết mọi người chỉ liếc vài ký tự đầu và cuối. Kẻ lừa đảo tạo ra địa chỉ khớp những ký tự đó với một địa chỉ bạn hay dùng, như địa chỉ nạp tiền của sàn hoặc ví của bạn bè."
+        },
+        {
+          "type": "p",
+          "text": "Sau đó họ khiến địa chỉ giống hệt này xuất hiện trong lịch sử của bạn bằng một khoản chuyển 0 đồng, cực nhỏ, hoặc bằng token giả. Lần tới khi bạn sao chép địa chỉ từ lịch sử, bạn có thể sao chép nhầm địa chỉ của họ và gửi tiền thật cho kẻ lừa đảo."
+        }
+      ]
+    },
+    {
+      "id": "example",
+      "heading": "Nó trông như thế nào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bạn gửi USDT đến 0x7a3F…9c21. Vài phút sau, lịch sử của bạn hiện một khoản chuyển 0 USDT liên quan đến 0x7a3F…9c21, nhưng các ký tự ở giữa lại khác. Số tiền bằng 0 nên có vẻ như chẳng có gì xảy ra. Dòng đó chính là mồi nhử."
+        }
+      ]
+    },
+    {
+      "id": "avoid",
+      "heading": "Cách phòng tránh",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Sao chép địa chỉ từ nguồn gốc (trang nạp tiền của sàn, tin nhắn của chính người đó), không bao giờ từ lịch sử.",
+            "So sánh toàn bộ địa chỉ, không chỉ phần đầu và phần cuối.",
+            "Lưu các địa chỉ tin cậy trong sổ địa chỉ của ví.",
+            "Khi gửi số tiền lớn tới địa chỉ mới, hãy gửi thử một khoản nhỏ trước và nhờ người nhận xác nhận đã nhận được."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Những khoản chuyển 0 đồng hoặc cực nhỏ mà bạn không chờ đợi là dấu hiệu cảnh báo, không phải nhầm lẫn. Đừng tương tác với chúng."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "CRYPY đánh dấu thế nào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Phân tích địa chỉ](tool:address-analyzer) liệt kê các lần chuyển của một ví và đánh dấu khả năng bị đầu độc: các khoản chuyển 0 đồng hoặc cực nhỏ từ một địa chỉ có đầu và cuối giống chính ví đó, hoặc giống một địa chỉ mà ví đã từng trả tiền. Đây là cảnh báo suy đoán, nên có thể bỏ sót một số trường hợp hoặc đánh dấu nhầm một khoản vô hại."
+        },
+        {
+          "type": "tip",
+          "text": "Các khoản chuyển rác và đầu độc được ẩn mặc định để lịch sử dễ đọc. Một nút bật sẽ hiện chúng."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Khoản chuyển 0 đồng có lấy được tiền của tôi không?",
+      "a": "Không. Tự nó không thể chuyển tiền của bạn. Nguy hiểm nằm ở việc bạn sao chép địa chỉ giống hệt về sau."
+    },
+    {
+      "q": "Vì sao ai đó gửi được khoản chuyển trông như đi từ ví của tôi?",
+      "a": "Một số hợp đồng token cho phép bất kỳ ai tạo bản ghi chuyển 0 đồng ghi bất kỳ địa chỉ nào. Nó không chuyển gì cả, nhưng vẫn hiện trong lịch sử."
+    },
+    {
+      "q": "Checksum có bảo vệ tôi không?",
+      "a": "Không. Địa chỉ giống hệt vẫn là địa chỉ hợp lệ, nên vượt qua checksum. Chỉ có so sánh toàn bộ địa chỉ mới giúp được."
+    }
+  ]
+}

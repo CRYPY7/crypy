@@ -305,14 +305,28 @@ crypy/
 
 ## 8. Internationalization
 
-- 10 locales registered (en default; ur, ar RTL; hi, es, fr, de, zh-CN, ru, tr); status drives the selector.
+- 12 locales registered: en (default), wave 1 `es`, `pt-BR`, `zh-CN`, `ru`, `tr`, `vi` (owner decision 2026-11-23), and
+  later `ur`, `ar` (RTL), `hi`, `fr`, `de`. Each has a status in `src/i18n/locales.ts`:
+  - `complete`: indexed (sitemap, hreflang) and offered by language detection;
+  - `beta`: fully translated, in the language menu and footer, shows the "Beta translation" notice, `noindex`, not
+    in the sitemap or hreflang, never auto-detected; becomes `complete` after a native speaker's review;
+  - `planned`: hidden (reachable by URL for testing only).
 - Localized routes, `hreflang`, cookie → Accept-Language → en.
-- One dictionary per locale (`messages/<locale>.json`), deep-merged over English so missing keys fall back; `pnpm i18n:check` validates keys and types; ESLint `i18next/no-literal-string` blocks hard-coded UI text.
+- One dictionary per locale (`messages/<locale>.json`), deep-merged over English so missing keys fall back; ESLint `i18next/no-literal-string` blocks hard-coded UI text.
+- `pnpm i18n:check` (`scripts/check-translations.ts`, `messageShape()`): no unknown or wrongly typed keys anywhere; a
+  `beta` or `complete` locale must have every key except `admin.*` (the admin dashboard stays English); each
+  translation must keep English's placeholders, plural/select arguments, rich-text tags and list lengths (a locale may
+  add plural categories its grammar needs, such as Russian few/many, inside plural arguments).
+- Learn guides: one JSON file per guide and locale in `src/content/learn/<locale>/`, bundled by that folder's
+  `index.ts` and registered in `src/content/learn/index.ts` (`texts`). A translation must keep English's section ids,
+  block types, list lengths, link targets and bold marks; search title ≤ 60 characters ending "| CRYPY", description
+  ≤ 160 (unit-tested). A missing translation shows the English guide with a notice. Reading time counts each Chinese
+  character as half a word.
 - Translations are resolved on the server (`next-intl/server` with `next/root-params`); client components receive ready-made strings as props, so no i18n code ships to the browser.
 - `src/proxy.ts` redirects un-prefixed URLs using the saved `NEXT_LOCALE` cookie, then `Accept-Language`, choosing only `complete` locales. Unreviewed locales are reachable by URL for testing, show a notice and are `noindex`.
 - RTL via logical utilities; `TechnicalText` for addresses/hashes of every family.
 - bigint-safe amounts with per-asset decimals; `Intl` formatting.
-- Fonts per script; Urdu Nastaliq for text, Naskh for tables.
+- Fonts: Inter (all subsets self-hosted, incl. Cyrillic and Vietnamese) for text; Space Grotesk headings, switched to Inter for Russian (`:root:lang(ru)`, no Cyrillic in Space Grotesk); Chinese uses system fonts. Later: Urdu Nastaliq for text, Naskh for tables.
 - Finding explanations and per-family terms (gas, energy/bandwidth on Tron, rent on Solana, sat/vB on Bitcoin) in dictionaries + glossary.
 - Locale switch preserves URL and wallet session.
 

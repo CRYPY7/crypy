@@ -1,0 +1,99 @@
+{
+  "title": "Qué es un token honeypot y cómo detectarlo",
+  "seoTitle": "Qué es un token honeypot y cómo detectarlo | CRYPY",
+  "description": "Un token honeypot te deja comprar, pero nunca vender. Conoce sus trucos y cómo una operación de prueba muestra si un token se puede vender.",
+  "summary": "Un token que puedes comprar pero nunca vender. Cómo funciona y cómo lo revela una operación de prueba.",
+  "inShort": [
+    "Un honeypot es un token que puedes comprar pero no vender, o solo vender con una pérdida enorme.",
+    "La trampa está escrita en el contrato del token, así que el gráfico puede verse normal.",
+    "Una operación de prueba antes de comprar es la forma más fiable de detectarlo."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Qué es un honeypot",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Un token honeypot está hecho para que comprar funcione y vender no. El gráfico de precio solo muestra compras, así que suele subir de forma constante, lo que atrae a más compradores. Cuando alguien intenta vender, la transacción falla o casi todo se lo lleva una comisión."
+        },
+        {
+          "type": "p",
+          "text": "Quienes están detrás normalmente sí pueden vender sus propios tokens, así que se quedan con el dinero que pusieron los compradores."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Trucos comunes",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Ventas bloqueadas para todos salvo billeteras elegidas:** el contrato solo deja que una lista permitida transfiera tokens al pool.",
+            "**Lista negra después de comprar:** tu billetera se añade a una lista de bloqueo, así que las transferencias posteriores fallan.",
+            "**Un impuesto de venta cercano al 100 %:** la venta técnicamente se completa, pero no recibes casi nada.",
+            "**Límites que solo afectan a las ventas:** una cantidad máxima de venta diminuta o un tiempo de espera que nunca termina.",
+            "**Configuración cambiada después:** el token opera con normalidad en el lanzamiento y luego el dueño activa la trampa."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spot",
+      "heading": "Cómo detectarlo",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Leer el código del contrato puede revelar algunos trucos, pero el código puede esconderse detrás de un proxy o estar escrito para confundir. La revisión más fiable es observar qué pasa en una operación real: comprar, transferir y vender."
+        },
+        {
+          "type": "p",
+          "text": "Hacerlo con tu propio dinero es riesgoso. Una simulación hace los mismos pasos contra el pool real sin enviar nada."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "Cómo funciona la operación de prueba de CRYPY",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El [Escáner de seguridad de tokens](tool:token-security) ejecuta un pequeño contrato de prueba dentro de una llamada de solo lectura contra el pool real del token. Compra unos 10 $, envía una parte a una segunda dirección y luego vende el resto. Indica qué paso falló, si alguno, con el propio error del contrato, y el impuesto medido en cada paso."
+        },
+        {
+          "type": "p",
+          "text": "No se firma, envía ni paga nada, y no hace falta ninguna billetera. La prueba usa el pool con más liquidez que admite para ese token."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Lo que una operación de prueba no puede mostrar",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Una simulación muestra cómo se comporta el token ahora mismo, para una billetera nueva. No puede prometer que el dueño no activará un bloqueo o subirá el impuesto mañana. Por eso el escáner también lista los poderes del dueño, como cambiar comisiones o usar una lista negra."
+        },
+        {
+          "type": "warning",
+          "text": "Si un token no se puede vender en la prueba, no lo compres, por muy bien que se vea el gráfico."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Un token puede volverse honeypot después de que lo compre?",
+      "a": "Sí, si el dueño conservó poderes como la lista negra, la pausa o el cambio de comisiones. Revisa los poderes del dueño además de la operación de prueba."
+    },
+    {
+      "q": "¿La operación de prueba cuesta algo?",
+      "a": "No. Es una simulación de solo lectura: no se envía nada a la blockchain."
+    },
+    {
+      "q": "¿Por qué el gráfico de un honeypot se ve tan bien?",
+      "a": "Porque solo pasan las compras. Las compras constantes casi sin ventas empujan el precio hacia arriba."
+    }
+  ]
+}

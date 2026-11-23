@@ -1,18 +1,13 @@
 import "server-only";
 import type { Locale } from "@/i18n/locales";
 import type { LearnBlock, LearnGuide, LearnGuideMeta, LearnGuideText, LearnTopic } from "./types";
-import checkTokenScam from "./en/check-token-scam.json";
-import honeypotToken from "./en/honeypot-token.json";
-import liquidityLock from "./en/liquidity-lock.json";
-import tokenApprovals from "./en/token-approvals.json";
-import unlimitedApprovals from "./en/unlimited-approvals.json";
-import addressPoisoning from "./en/address-poisoning.json";
-import seedPhraseSafety from "./en/seed-phrase-safety.json";
-import whyTransactionFailed from "./en/why-transaction-failed.json";
-import readATransaction from "./en/read-a-transaction.json";
-import gasFees from "./en/gas-fees.json";
-import weiGweiEther from "./en/wei-gwei-ether.json";
-import checksumAddresses from "./en/checksum-addresses.json";
+import { guides as en } from "./en";
+import { guides as es } from "./es";
+import { guides as ptBR } from "./pt-BR";
+import { guides as ru } from "./ru";
+import { guides as tr } from "./tr";
+import { guides as vi } from "./vi";
+import { guides as zhCN } from "./zh-CN";
 
 /** Topics in the order the Learn hub shows them. */
 export const learnTopics: readonly LearnTopic[] = [
@@ -128,20 +123,13 @@ export const featuredGuide = "seed-phrase-safety";
 
 /** Translated guide texts by language. English is the source; a missing translation falls back to it. */
 const texts: Partial<Record<Locale, Record<string, LearnGuideText>>> = {
-  en: {
-    "check-token-scam": checkTokenScam as LearnGuideText,
-    "honeypot-token": honeypotToken as LearnGuideText,
-    "liquidity-lock": liquidityLock as LearnGuideText,
-    "token-approvals": tokenApprovals as LearnGuideText,
-    "unlimited-approvals": unlimitedApprovals as LearnGuideText,
-    "address-poisoning": addressPoisoning as LearnGuideText,
-    "seed-phrase-safety": seedPhraseSafety as LearnGuideText,
-    "why-transaction-failed": whyTransactionFailed as LearnGuideText,
-    "read-a-transaction": readATransaction as LearnGuideText,
-    "gas-fees": gasFees as LearnGuideText,
-    "wei-gwei-ether": weiGweiEther as LearnGuideText,
-    "checksum-addresses": checksumAddresses as LearnGuideText,
-  },
+  en,
+  es,
+  "pt-BR": ptBR,
+  "zh-CN": zhCN,
+  ru,
+  tr,
+  vi,
 };
 
 const WORDS_PER_MINUTE = 200;
@@ -166,7 +154,14 @@ export function readingMinutes(text: LearnGuideText): number {
     ...text.sections.flatMap((section) => [section.heading, ...section.blocks.map(blockText)]),
     ...text.faq.flatMap((item) => [item.q, item.a]),
   ].join(" ");
-  const words = all.split(/\s+/).filter(Boolean).length;
+  // Chinese has no spaces between words: about two characters count as one word for reading speed.
+  const han = all.match(/\p{Script=Han}/gu)?.length ?? 0;
+  const words =
+    all
+      .replace(/\p{Script=Han}/gu, " ")
+      .split(/\s+/)
+      .filter(Boolean).length +
+    han / 2;
   return Math.max(2, Math.round(words / WORDS_PER_MINUTE));
 }
 

@@ -14,7 +14,7 @@
     "arrivesIn": "Planned for milestone {milestone}",
     "open": "Open",
     "youNeed": "You need:",
-    "betaTranslation": "Beta translation",
+    "betaTranslation": "Beta translation: not yet checked by a native speaker",
     "languageNotReady": "This language is still being translated, so you're seeing English for now.",
     "beta": "Beta",
     "betaSiteLabel": "CRYPY is in beta: features may change and results can be incomplete."
@@ -71,7 +71,7 @@
       "invalid": "This doesn't look like an address or transaction hash. Addresses start with 0x and have 40 characters after it; transaction hashes have 64.",
       "empty": "Paste an address or transaction hash first.",
       "bad-checksum": "This address doesn't match its checksum, so a character was probably changed or mistyped. Copy it again from the original source, and never send funds to it.",
-      "not-found-tx": "We couldn't find this transaction on Ethereum or BNB Chain. It may be on another network, or not broadcast yet.",
+      "not-found-tx": "We couldn't find this transaction on any supported network. It may be on another network, or not broadcast yet.",
       "unavailable": "We couldn't reach the blockchain right now. Please try again in a minute.",
       "rate-limited": "Too many searches in a short time. Please wait a minute and try again.",
       "error": "Something went wrong. Please try again.",
@@ -757,7 +757,7 @@
   "settings": {
     "title": "Settings",
     "languageTitle": "Language",
-    "languageText": "More languages are being translated and reviewed. Urdu and Arabic come first.",
+    "languageText": "More languages are being translated. Languages marked Beta haven't been checked by a native speaker yet.",
     "themeTitle": "Theme",
     "themeText": "Choose the look that's easiest on your eyes.",
     "dark": "Dark",
@@ -3211,8 +3211,8 @@
       "liveAlerts": "Telegram wallet alerts",
       "betaSite": "The whole site is a public beta: results are real, the design may still change",
       "soonItems": [
-        "Urdu language",
-        "Arabic language"
+        "Reviewed translations: Spanish, Portuguese (Brazil), Chinese, Russian, Turkish and Vietnamese",
+        "More languages"
       ]
     },
     "howItWorks": "How this works: the checks use public test data (a well-known wallet, transaction and token), never anyone's searches. \"Working\" means the last check passed; it doesn't promise every result is complete. If this page doesn't load at all, the whole site is down, and we're alerted separately."

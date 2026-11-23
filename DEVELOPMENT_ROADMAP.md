@@ -25,7 +25,7 @@ Next.js + TS strict + Tailwind v4 + shadcn/ui; tooling; design system from appro
 - **M2.5 (free utilities):** first organic-traffic magnets (unit converter etc.), each with a how-to and FAQ section + FAQPage schema.
 - **M5.5:** Market tab content shares the token page rules below (curated tokens indexable only).
 - **M5:** token security pages indexable only for tokens in a curated/top-searched list (sitemap), cached; all others `noindex`.
-- **M7–M9: Learn hub** — short, original guides that answer real searches ("how to revoke token approvals", "what is a honeypot token", "check if a BEP-20 token is a scam"), linked to the matching tool; published in English, then Urdu and Arabic (low-competition languages).
+- **M7–M9: Learn hub** — short, original guides that answer real searches ("how to revoke token approvals", "what is a honeypot token", "check if a BEP-20 token is a scam"), linked to the matching tool; published in English, then (2026-11-23) translated into the six wave-1 languages as Beta; Urdu and Arabic later.
 - **M9 launch:** Google Search Console + Bing Webmaster Tools (free), IndexNow, sitemap submission, Lighthouse ≥ 90 on mobile.
 - **Ongoing:** monthly check of search queries, broken links and Core Web Vitals; never thin or auto-generated spam pages.
 
@@ -193,7 +193,7 @@ mistyped lines are caught; CSV opens correctly in Excel and Google Sheets; page 
 | M7 New chains                 | Internal transfers on Base and Arbitrum in Activity (not in Alchemy's free data)                                                                                                                                                                                 | M5.5 Stage 2 indexer / own node         |
 | M4.2 Transaction Intelligence | Part 2: more routers and pool types, NFT marketplaces, lending, bridges, smart-wallet inner calls                                                                                                                                                                | Alongside M5.5 / M6                     |
 | M8 Alerts                     | Email alerts (board 39: "Email alerts later")                                                                                                                                                                                                                    | After V1                                |
-| M8 Alerts                     | Telegram messages and bot replies in other languages (English only now)                                                                                                                                                                                          | M9 translations                         |
+| M8 Alerts                     | Telegram messages and bot replies in other languages (English only now)                                                                                                                                                                                          | After the native reviews (M9 Part 6)    |
 | M8 Alerts                     | ERC-1155 transfers and single-NFT approvals (`approve(tokenId)`)                                                                                                                                                                                                 | With M6's single-NFT approvals          |
 | M8 Alerts                     | Coin transfers with transaction details where Alchemy has none (internal transfers on BNB Chain, Base, Arbitrum; any chain without Alchemy): reported as balance changes                                                                                         | M5.5 Stage 2 indexer / own node         |
 | M8 Alerts                     | Running the checker and bot on several servers at once (needs a shared lock; one server per database and bot token for now)                                                                                                                                      | When scaling past one VPS               |
@@ -272,7 +272,7 @@ items per account.
 
 ## M9 — Launch readiness — in progress (owner decisions 2026-11-22)
 
-Urdu + Arabic translations & RTL QA; security review; accessibility & performance; legal pages; production deploy to crypy.org.
+Translations (wave 1, owner decision 2026-11-23: Spanish, Portuguese (Brazil), Chinese, Russian, Turkish, Vietnamese); security review; accessibility & performance; legal pages; production deploy to crypy.org. Urdu and Arabic moved to later.
 
 - **Part 1 — Security review ✅ (2026-11-22):** 6 findings fixed; accepted items and nginx launch requirements in
   ARCHITECTURE.md §10d.
@@ -307,9 +307,15 @@ Urdu + Arabic translations & RTL QA; security review; accessibility & performanc
     about itself.
   - **Done when:** a provider or the bot stopped on purpose on staging shows as Down on both pages within 10
     minutes, the owner gets the Telegram message, and recovery shows too; the status page has no private detail.
-- **Next parts (proposed order):** Urdu translations (reviewed by the owner) and RTL QA, Arabic as preview until a
-  native review; lawyer review of the legal pages; a staging copy, then the alerts "Done when" on staging and
-  production.
+- **Part 6 — Languages wave 1 🟡 (owner decision 2026-11-23: the biggest crypto markets first):** Spanish,
+  Portuguese (Brazil), Chinese (Simplified), Russian, Turkish and Vietnamese, every website text and all 12 guides,
+  built 2026-11-23 and released as **Beta**: in the language menu and footer with a "Beta translation" notice,
+  `noindex`, not in the sitemap or hreflang, not auto-detected. The admin dashboard stays English.
+  **Done when (per language):** a native speaker has reviewed it and the owner approves; then its status becomes
+  `complete`, which adds it to search engines (hreflang, sitemap) and to automatic language detection.
+  **Later:** Urdu and Arabic (hidden; right-to-left support kept), then Hindi, French, German.
+- **Next parts (proposed order):** native reviews of the six Beta languages; lawyer review of the legal pages; a
+  staging copy, then the alerts "Done when" on staging and production.
 
 ## After V1 — revenue phases (approved 2026-11-19)
 

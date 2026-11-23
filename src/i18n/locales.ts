@@ -7,7 +7,7 @@
  * - `planned`:  route exists for development and RTL testing only; hidden and not indexed.
  *               Missing strings fall back to English.
  */
-export const locales = ["en", "ur", "ar", "hi", "es", "fr", "de", "zh-CN", "ru", "tr"] as const;
+export const locales = ["en", "es", "pt-BR", "zh-CN", "ru", "tr", "vi", "ur", "ar", "hi", "fr", "de"] as const;
 
 export type Locale = (typeof locales)[number];
 
@@ -25,15 +25,19 @@ export interface LocaleConfig {
 
 export const localeConfigs: Record<Locale, LocaleConfig> = {
   en: { code: "en", nativeName: "English", dir: "ltr", status: "complete" },
+  // Wave 1 (owner decision 2026-11-23: the biggest crypto markets first). Beta until a native speaker reviews each.
+  es: { code: "es", nativeName: "Español", dir: "ltr", status: "beta" },
+  "pt-BR": { code: "pt-BR", nativeName: "Português (Brasil)", dir: "ltr", status: "beta" },
+  "zh-CN": { code: "zh-CN", nativeName: "简体中文", dir: "ltr", status: "beta" },
+  ru: { code: "ru", nativeName: "Русский", dir: "ltr", status: "beta" },
+  tr: { code: "tr", nativeName: "Türkçe", dir: "ltr", status: "beta" },
+  vi: { code: "vi", nativeName: "Tiếng Việt", dir: "ltr", status: "beta" },
+  // Later (kept hidden; right-to-left support stays in place for Urdu and Arabic).
   ur: { code: "ur", nativeName: "اردو", dir: "rtl", status: "planned" },
   ar: { code: "ar", nativeName: "العربية", dir: "rtl", status: "planned" },
   hi: { code: "hi", nativeName: "हिन्दी", dir: "ltr", status: "planned" },
-  es: { code: "es", nativeName: "Español", dir: "ltr", status: "planned" },
   fr: { code: "fr", nativeName: "Français", dir: "ltr", status: "planned" },
   de: { code: "de", nativeName: "Deutsch", dir: "ltr", status: "planned" },
-  "zh-CN": { code: "zh-CN", nativeName: "简体中文", dir: "ltr", status: "planned" },
-  ru: { code: "ru", nativeName: "Русский", dir: "ltr", status: "planned" },
-  tr: { code: "tr", nativeName: "Türkçe", dir: "ltr", status: "planned" },
 };
 
 export function isLocale(value: unknown): value is Locale {

@@ -1,0 +1,83 @@
+{
+  "title": "Wei, gwei y ether: las unidades cripto explicadas",
+  "seoTitle": "Wei, gwei y ether: las unidades cripto explicadas | CRYPY",
+  "description": "Cómo se relacionan wei, gwei y ether, por qué el gas se expresa en gwei y por qué los tokens dependen de sus decimales. Conversiones rápidas.",
+  "summary": "Las unidades detrás de cada cantidad y cada precio del gas, con conversiones rápidas.",
+  "inShort": [
+    "1 ETH = 1 000 000 000 gwei = 1 000 000 000 000 000 000 wei.",
+    "Los precios del gas usan gwei porque así los números se leen bien.",
+    "Los tokens tienen sus propios decimales: 6 para USDC en Ethereum, 18 para la mayoría de los demás."
+  ],
+  "sections": [
+    {
+      "id": "units",
+      "heading": "Las unidades",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**wei:** la unidad más pequeña. Las blockchains guardan cada cantidad como un número entero de wei.",
+            "**gwei:** 1 000 000 000 wei (10⁹). Los precios del gas se expresan en gwei.",
+            "**ether (ETH):** 1 000 000 000 000 000 000 wei (10¹⁸)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Las mismas unidades sirven para BNB en BNB Chain y POL en Polygon: 1 BNB son 10¹⁸ wei, y allí el gas también se expresa en gwei."
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "heading": "Conversiones rápidas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "0,001 ETH = 1 000 000 gwei",
+            "1 gwei = 0,000000001 ETH",
+            "Un precio del gas de 20 gwei × 21 000 de gas = 420 000 gwei = 0,00042 ETH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "heading": "Decimales de los tokens",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Los tokens guardan las cantidades en su propia unidad más pequeña, y cada token indica cuántos **decimales** usa. La mayoría usa 18, como ETH. USDC y USDT en Ethereum usan 6, así que 1 USDT se guarda como 1 000 000. El mismo token en otra cadena puede usar decimales distintos: USDT en BNB Chain usa 18."
+        },
+        {
+          "type": "warning",
+          "text": "Las cantidades sin procesar en los datos de una transacción están en la unidad más pequeña. Leerlas con los decimales equivocados hace que una cantidad parezca un billón de veces mayor o menor de lo que es."
+        }
+      ]
+    },
+    {
+      "id": "convert",
+      "heading": "Convierte con exactitud",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El [Conversor de unidades](tool:unit-converter) convierte entre wei, gwei, ETH y BNB con exactitud, sin redondear, incluso cantidades en notación científica. Funciona en tu navegador; no se envía nada."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Por qué no usar simplemente ETH para los precios del gas?",
+      "a": "Los precios del gas en ETH serían números como 0,000000015. Con gwei se leen bien: 15 gwei."
+    },
+    {
+      "q": "¿De dónde viene el nombre wei?",
+      "a": "Es un homenaje a Wei Dai, un pionero de la criptografía. Gwei significa giga-wei: mil millones de wei."
+    },
+    {
+      "q": "¿Todos los tokens usan 18 decimales?",
+      "a": "No. La mayoría sí, pero las stablecoins suelen usar 6 en Ethereum. Revisa siempre los decimales del token antes de leer cantidades sin procesar."
+    }
+  ]
+}

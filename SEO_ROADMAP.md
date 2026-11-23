@@ -89,11 +89,17 @@ First guides (by search demand and fit with the tools):
 
 **Done when:** pages live, cached so crawlers cost no extra provider calls, structured data valid.
 
-## Phase 4 — Languages (with the M9 translations)
+## Phase 4 — Languages (owner decision 2026-11-23: biggest crypto markets first)
 
-Urdu first (owner review), then Arabic (native review), then the others. Each language becomes indexable only after
-review: localized titles and descriptions written for local searches (not word-for-word), hreflang between all
-reviewed languages, a localized Open Graph image font. Guides translated after the tool pages.
+Wave 1: Spanish, Portuguese (Brazil), Chinese (Simplified), Russian, Turkish, Vietnamese. **Translated 2026-11-23**
+(every website text and all 12 guides) and live as **Beta**: `noindex`, not in the sitemap, no hreflang yet, so search
+engines see nothing half-reviewed. Titles and descriptions were written within the 60 / 160 limits and phrased for
+local searches (for example "Como saber se um token cripto é golpe", "Как проверить, не скам ли криптотокен").
+
+Each language becomes indexable only after a native speaker's review (status `beta` → `complete`), which adds it to
+the sitemap, hreflang between all reviewed languages and language detection. Still to do per language at review: check
+the local search phrasing of the top pages, and a localized Open Graph image (Open Graph images stay English until
+then). Urdu and Arabic later.
 
 ## Phase 5 — Measure and improve (ongoing, monthly)
 

@@ -1,0 +1,83 @@
+{
+  "title": "wei、gwei 和 ether：加密货币单位详解",
+  "seoTitle": "wei、gwei 和 ether：加密单位详解 | CRYPY",
+  "description": "wei、gwei 和 ether 之间的关系，为什么 Gas 以 gwei 报价，以及为什么代币数量取决于小数位。ETH、BNB 和 POL 数量的快速换算。",
+  "summary": "每个金额和 Gas 价格背后的单位，附快速换算。",
+  "inShort": [
+    "1 ETH = 1,000,000,000 gwei = 1,000,000,000,000,000,000 wei。",
+    "Gas 价格使用 gwei，因为数字更易读。",
+    "代币有自己的小数位：Ethereum 上的 USDC 是 6 位，大多数其他代币是 18 位。"
+  ],
+  "sections": [
+    {
+      "id": "units",
+      "heading": "单位",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**wei：**最小单位。区块链把每个金额都存储为整数个 wei。",
+            "**gwei：**1,000,000,000 wei（10⁹）。Gas 价格以 gwei 报价。",
+            "**ether（ETH）：**1,000,000,000,000,000,000 wei（10¹⁸）。"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "同样的单位也适用于 BNB Chain 上的 BNB 和 Polygon 上的 POL：1 BNB 是 10¹⁸ wei，那里的 Gas 也以 gwei 报价。"
+        }
+      ]
+    },
+    {
+      "id": "examples",
+      "heading": "快速换算",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "0.001 ETH = 1,000,000 gwei",
+            "1 gwei = 0.000000001 ETH",
+            "Gas 价格 20 gwei × 21,000 Gas = 420,000 gwei = 0.00042 ETH"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decimals",
+      "heading": "代币小数位",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "代币以自己的最小单位存储金额，每个代币都会说明它使用多少位**小数**。大多数和 ETH 一样使用 18 位。Ethereum 上的 USDC 和 USDT 使用 6 位，所以 1 USDT 存储为 1,000,000。同一代币在另一条链上可能使用不同的小数位：BNB Chain 上的 USDT 使用 18 位。"
+        },
+        {
+          "type": "warning",
+          "text": "交易数据中的原始金额以最小单位表示。用错误的小数位读取，会让金额看起来比实际大或小一万亿倍。"
+        }
+      ]
+    },
+    {
+      "id": "convert",
+      "heading": "精确换算",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[单位换算](tool:unit-converter)可以在 wei、gwei、ETH 和 BNB 之间精确换算，不四舍五入，包括科学计数法表示的数值。它在您的浏览器中运行，不发送任何内容。"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "为什么不直接用 ETH 表示 Gas 价格？",
+      "a": "以 ETH 表示的 Gas 价格会是 0.000000015 这样的数字。用 gwei 就很好读：15 gwei。"
+    },
+    {
+      "q": "wei 这个名字从哪里来？",
+      "a": "它是为了纪念密码学先驱戴伟（Wei Dai）。gwei 的意思是 giga-wei：十亿 wei。"
+    },
+    {
+      "q": "所有代币都使用 18 位小数吗？",
+      "a": "不是。大多数是，但稳定币在 Ethereum 上常用 6 位。读取原始金额前，务必确认代币的小数位。"
+    }
+  ]
+}

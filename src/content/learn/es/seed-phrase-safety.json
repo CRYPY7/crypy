@@ -1,0 +1,107 @@
+{
+  "title": "Tu frase semilla: por qué ningún sitio web debería pedírtela nunca",
+  "seoTitle": "Frase semilla: nunca compartas tu frase | CRYPY",
+  "description": "Tu frase semilla controla todo en tu billetera. Por qué ningún sitio, aplicación ni soporte debería pedírtela, y los trucos de los estafadores.",
+  "summary": "La única regla que protege todo lo que hay en tu billetera, y los trucos que se usan para romperla.",
+  "inShort": [
+    "Tu frase semilla (12 o 24 palabras) da el control total de tu billetera a quien la tenga.",
+    "Ningún sitio web, aplicación, exchange ni agente de soporte real te la pedirá nunca.",
+    "Si la escribiste en algún lugar en línea, mueve tus fondos a una billetera nueva de inmediato."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Qué es la frase semilla",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cuando creas una billetera como MetaMask o Trust Wallet, te muestra una frase de recuperación de 12 o 24 palabras. Esas palabras son la billetera: cualquiera que las tenga puede recrearla en su propio dispositivo y mover todo lo que contiene. Nadie puede revertir esa transferencia."
+        },
+        {
+          "type": "p",
+          "text": "Tu contraseña solo desbloquea la aplicación en tu propio dispositivo. La frase semilla es la llave maestra."
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "heading": "La regla",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Nunca escribas tu frase semilla en un sitio web, un formulario, un chat ni una aplicación que no hayas instalado para restaurar tu propia billetera.** Ningún exchange, empresa de billeteras, airdrop, equipo de soporte ni herramienta de seguridad la necesita."
+        },
+        {
+          "type": "p",
+          "text": "CRYPY nunca te la pide. Todas las herramientas de CRYPY funcionan solo con direcciones públicas, y los formularios donde guardas direcciones rechazan una frase semilla pegada."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Trucos que usan los estafadores",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Soporte falso:** alguien responde a tu pregunta en redes sociales o Discord y te ofrece ayuda, y luego te envía a un formulario que pide tu frase.",
+            "**\"Validar\", \"sincronizar\" o \"desbloquear\" tu billetera:** sitios que dicen que tu billetera debe verificarse para recibir un airdrop o corregir un error.",
+            "**Aplicaciones y extensiones de billetera falsas:** copias de billeteras reales que envían tu frase al estafador cuando restauras.",
+            "**Herramientas de \"recuperación\" de billeteras o de consulta de saldo** que piden la frase para \"escanearla\".",
+            "**Capturas de pantalla y notas en la nube:** una frase guardada en fotos, en el correo o en una nube puede robarse junto con esa cuenta."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "heading": "Cómo guardarla",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Escríbela en papel (o en metal) y guárdala en un lugar seguro y privado, idealmente en dos sitios.",
+            "No le saques fotos, no la escribas en una aplicación de notas ni la guardes en la nube.",
+            "Para cantidades mayores, considera una billetera de hardware: la frase se queda sin conexión y las transacciones se confirman en el dispositivo."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Conectar una billetera a un sitio web es distinto: el sitio solo ve tu dirección pública, y tu billetera te pregunta antes de firmar cualquier cosa."
+        }
+      ]
+    },
+    {
+      "id": "exposed",
+      "heading": "Si crees que quedó expuesta",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Crea una billetera nueva con una frase semilla nueva, en un dispositivo de confianza.",
+            "Mueve tus fondos de la billetera vieja a la nueva de inmediato, empezando por lo de más valor.",
+            "Deja de usar la billetera vieja y revoca sus aprobaciones si mantienes algo en ella."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Los estafadores suelen mover los fondos en minutos. Actúa primero; investiga después."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Mi clave privada es lo mismo que mi frase semilla?",
+      "a": "No exactamente: la frase semilla genera todas las claves privadas de la billetera. Ambas deben seguir en secreto, y ningún sitio web debería pedir ninguna de las dos."
+    },
+    {
+      "q": "¿CRYPY puede ver mi frase semilla cuando conecto mi billetera?",
+      "a": "No. Al conectarla solo compartes tu dirección pública. La frase nunca sale de tu billetera."
+    },
+    {
+      "q": "Un agente de soporte dice que la necesita para arreglar mi cuenta. ¿Es cierto?",
+      "a": "No. El soporte real nunca necesita tu frase semilla. Es una estafa."
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "title": "Giải thích phí gas: gwei, phí cơ bản và phí ưu tiên",
+  "seoTitle": "Giải thích phí gas: gwei, phí cơ bản và ưu tiên | CRYPY",
+  "description": "Bạn trả gì khi gửi giao dịch: đơn vị gas, gwei, phí cơ bản và phí ưu tiên, vì sao phí thay đổi, chi phí của rollup và cách trả ít hơn.",
+  "summary": "Phí của bạn đi đâu, vì sao nó thay đổi và cách trả ít hơn.",
+  "inShort": [
+    "Phí = gas đã dùng × giá gas. Gas đo khối lượng công việc; giá do nhu cầu quyết định.",
+    "Trên Ethereum và các mạng tương tự, giá gồm hai phần: phí cơ bản (bị đốt) và tiền boa.",
+    "Bạn trả ít hơn khi mạng vắng, hoặc trên mạng rẻ hơn."
+  ],
+  "sections": [
+    {
+      "id": "gas",
+      "heading": "Gas và giá gas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Mọi thao tác trên blockchain đều tốn **gas**, thước đo lượng công việc cần làm. Một lần chuyển coin đơn giản dùng 21.000 gas; một lần hoán đổi token có thể dùng 100.000 hoặc hơn."
+        },
+        {
+          "type": "p",
+          "text": "Bạn trả một **giá gas** cho mỗi đơn vị, tính bằng **gwei** (một phần tỷ của một coin). Phí bằng gas đã dùng × giá gas, trả bằng coin của chính mạng đó: ETH, BNB hoặc POL."
+        },
+        {
+          "type": "tip",
+          "text": "Chuyển đổi giữa wei, gwei và ether: [Giải thích wei, gwei và ether](guide:wei-gwei-ether)."
+        }
+      ]
+    },
+    {
+      "id": "1559",
+      "heading": "Phí cơ bản và phí ưu tiên",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Trên Ethereum và các mạng hoạt động giống nó, giá gas gồm hai phần:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Phí cơ bản:** do mạng đặt cho mỗi khối, tăng khi khối đầy và giảm khi khối vắng. Phần này bị đốt.",
+            "**Phí ưu tiên (tiền boa):** khoản thêm trả cho validator. Tiền boa cao hơn thường giúp được đưa vào sớm hơn khi mạng đông."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Ví của bạn cũng đặt một **phí tối đa**: mức cao nhất bạn sẵn sàng trả cho mỗi đơn vị. Bạn trả phí cơ bản cộng tiền boa, không bao giờ vượt mức tối đa. BNB Chain không có phí cơ bản, nên giá gas ở đó chính là giá."
+        }
+      ]
+    },
+    {
+      "id": "limit",
+      "heading": "Giới hạn gas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Giới hạn gas là lượng gas tối đa một giao dịch được dùng. Nếu hết gas, giao dịch thất bại và bạn vẫn trả cho phần gas đã dùng. Ví ước tính giới hạn giúp bạn; tự hạ thấp hiếm khi tiết kiệm được gì."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "heading": "Base và Arbitrum: thêm một phần",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Base và Arbitrum là rollup: chúng công bố dữ liệu giao dịch lên Ethereum. Một phần phí của bạn trả cho việc đó, nên chi phí cũng phụ thuộc phí Ethereum, dù phí mạng của chúng rất nhỏ."
+        }
+      ]
+    },
+    {
+      "id": "less",
+      "heading": "Cách trả ít hơn",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Gửi khi mạng vắng hơn: xu hướng trong [Theo dõi gas](tool:gas-tracker) cho biết phí đang tăng hay giảm.",
+            "Chọn tốc độ thấp hơn khi bạn không vội.",
+            "Dùng mạng rẻ hơn cho số tiền nhỏ.",
+            "Tránh các phê duyệt và giao dịch không cần thiết."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Xem phí hiện tại",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Theo dõi gas](tool:gas-tracker) hiển thị trực tiếp giá thấp, trung bình và cao cho Ethereum, BNB Chain, Base, Arbitrum và Polygon, cùng chi phí bằng đô la hiện tại của một lần gửi, phê duyệt, hoán đổi hoặc chuyển NFT."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Vì sao tôi phải trả phí cho giao dịch thất bại?",
+      "a": "Mạng đã làm việc cho đến lúc giao dịch thất bại, và phần việc đó được tính phí. Xem bài Vì sao giao dịch của tôi thất bại."
+    },
+    {
+      "q": "Tôi có đổi phí sau khi gửi được không?",
+      "a": "Chỉ bằng cách thay thế giao dịch: hầu hết ví có tùy chọn tăng tốc, gửi lại cùng giao dịch với phí cao hơn."
+    },
+    {
+      "q": "Phí cơ bản đi đâu?",
+      "a": "Nó bị đốt, tức bị loại khỏi lưu thông. Tiền boa thuộc về validator."
+    }
+  ]
+}

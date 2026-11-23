@@ -1,0 +1,145 @@
+{
+  "title": "Cách kiểm tra token có phải lừa đảo trước khi mua",
+  "seoTitle": "Cách kiểm tra token crypto có phải lừa đảo | CRYPY",
+  "description": "Năm bước kiểm tra phát hiện hầu hết token lừa đảo trước khi mua: có bán được không, thu thuế bao nhiêu, chủ sở hữu đổi được gì và ai kiểm soát thanh khoản.",
+  "summary": "Năm bước kiểm tra phát hiện hầu hết token lừa đảo: bán, thuế, quyền chủ sở hữu, thanh khoản và người nắm giữ.",
+  "inShort": [
+    "Hầu hết token lừa đảo trượt ít nhất một trong năm bước kiểm tra: bán, thuế, quyền chủ sở hữu, thanh khoản và người nắm giữ.",
+    "Một giao dịch thử cho thấy bạn có thực sự bán được không, và bị trừ bao nhiêu trên đường đi.",
+    "Vượt qua mọi kiểm tra không phải là bảo đảm: chủ sở hữu có thể đổi cài đặt sau khi bạn mua."
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "heading": "Vì sao token lừa đảo phổ biến đến vậy",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Ai cũng có thể tạo một token trong vài phút và đưa lên sàn phi tập trung. Không có khâu duyệt niêm yết, nên chính công cụ giúp dự án trung thực ra mắt cũng cho phép kẻ lừa đảo nhái tên nổi tiếng, thêm chút thanh khoản và chờ người mua."
+        },
+        {
+          "type": "p",
+          "text": "Hầu hết chiêu lừa đều theo vài kiểu quen thuộc. Bạn có thể kiểm tra tất cả trước khi mua, chỉ bằng dữ liệu blockchain công khai."
+        }
+      ]
+    },
+    {
+      "id": "sell",
+      "heading": "1. Có bán được không?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Honeypot** cho bạn mua nhưng chặn hoặc rút sạch mọi lệnh bán. Cách kiểm tra đáng tin nhất là giao dịch thử: mua một ít, gửi một phần sang ví khác rồi bán, và xem điều gì xảy ra ở từng bước."
+        },
+        {
+          "type": "p",
+          "text": "[Quét bảo mật token](tool:token-security) chạy phép thử này với pool thật của token trên sàn, trong một mô phỏng chỉ đọc. Không có gì được ký hay gửi đi, và không cần ví."
+        },
+        {
+          "type": "tip",
+          "text": "Đọc thêm tại [Token honeypot là gì và cách nhận biết](guide:honeypot-token)."
+        }
+      ]
+    },
+    {
+      "id": "taxes",
+      "heading": "2. Mỗi giao dịch bị trừ bao nhiêu?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Một số token thu phí ở mỗi lần mua, bán hoặc chuyển. Phí nhỏ có thể hợp lệ, nhưng thuế bán 30, 50 hay 99% biến token thành cái bẫy, kể cả khi về kỹ thuật vẫn bán được."
+        },
+        {
+          "type": "p",
+          "text": "Hãy nhìn vào mức thuế đo được, không phải con số dự án công bố. Giao dịch thử đo chính xác số thực nhận ở từng bước."
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "heading": "3. Chủ sở hữu còn đổi được gì?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Nhiều hợp đồng token giữ lại quyền đặc biệt cho chủ sở hữu. Những quyền cần để ý:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Đúc thêm:** tạo token mới rồi bán vào pool.",
+            "**Phí:** tăng thuế mua hoặc bán bất cứ lúc nào.",
+            "**Danh sách đen hoặc tạm dừng:** chặn một số ví, hoặc tất cả, chuyển token.",
+            "**Nâng cấp:** thay toàn bộ mã hợp đồng (hợp đồng proxy)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Chủ sở hữu đã **từ bỏ quyền sở hữu** không còn dùng được quyền chỉ dành cho chủ, nhưng quyền do vai trò hoặc tài khoản khác nắm có thể vẫn còn. Hợp đồng đã công bố (xác minh) mã nguồn dễ kiểm tra hơn hợp đồng chỉ có mã đã biên dịch."
+        }
+      ]
+    },
+    {
+      "id": "liquidity",
+      "heading": "4. Ai kiểm soát thanh khoản?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Pool thanh khoản là nơi người mua và người bán giao dịch. Nếu những người đứng sau token có thể rút thanh khoản đó, họ có thể lấy tiền của mọi người chỉ trong một giao dịch: đó là \"rug pull\"."
+        },
+        {
+          "type": "p",
+          "text": "Hãy kiểm tra có bao nhiêu thanh khoản, và token phần chia của pool đã bị **đốt** hay **khóa** trong một hợp đồng khóa đã biết, khóa đến khi nào. Xem [Khóa thanh khoản là gì và vì sao quan trọng](guide:liquidity-lock)."
+        }
+      ]
+    },
+    {
+      "id": "holders",
+      "heading": "5. Ai nắm giữ nguồn cung?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Nếu một hai ví nắm phần lớn nguồn cung, họ có thể bán ra làm sập giá. Lượng nắm giữ lớn của sàn, địa chỉ đốt hoặc hợp đồng khóa thường không sao; lượng nắm giữ lớn của ví lạ đáng để xem kỹ hơn."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Điều kiểm tra không thể cho bạn biết",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Mỗi kiểm tra mô tả token ở thời điểm hiện tại. Chủ sở hữu có thể đổi thuế, tạm dừng giao dịch hoặc đúc thêm về sau, và một số token xử lý khác nhau với từng ví. Hãy coi kết quả tốt là \"không phát hiện rủi ro lớn\", không bao giờ là \"an toàn\"."
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "heading": "Kiểm tra token với CRYPY",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Sao chép địa chỉ hợp đồng token từ nguồn tin cậy, như trang chính thức của dự án hoặc trình khám phá khối.",
+            "Dán vào [Quét bảo mật token](tool:token-security) và chọn mạng nếu bạn biết.",
+            "Đọc các phát hiện từ nghiêm trọng nhất đến nhẹ nhất. Mỗi phát hiện ghi rõ cách kiểm tra: xác minh on-chain, mô phỏng, suy đoán hoặc từ nhà cung cấp bên ngoài.",
+            "Nếu xuất hiện điều gì nghiêm trọng, như bán bị chặn, đừng mua."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Token có an toàn nếu vượt qua mọi kiểm tra?",
+      "a": "Không. Điều đó chỉ có nghĩa không phát hiện rủi ro lớn trong những gì kiểm tra được. Chủ sở hữu có thể đổi cài đặt về sau, nên chỉ dùng số tiền bạn chấp nhận mất."
+    },
+    {
+      "q": "Tôi có cần kết nối ví không?",
+      "a": "Không. Quét bảo mật token chỉ cần địa chỉ hợp đồng của token."
+    },
+    {
+      "q": "Tôi kiểm tra được những mạng nào?",
+      "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon."
+    }
+  ]
+}

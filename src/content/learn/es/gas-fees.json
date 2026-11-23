@@ -1,0 +1,111 @@
+{
+  "title": "Las comisiones de gas explicadas: gwei, comisión base y comisión de prioridad",
+  "seoTitle": "Comisiones de gas: gwei, comisión base y prioridad | CRYPY",
+  "description": "Lo que pagas al enviar una transacción: gas, gwei, comisión base y de prioridad, por qué cambian, el costo de los rollups y cómo pagar menos.",
+  "summary": "A dónde va tu comisión, por qué cambia y cómo pagar menos.",
+  "inShort": [
+    "Comisión = gas usado × precio del gas. El gas mide el trabajo; el precio lo fija la demanda.",
+    "En Ethereum y cadenas similares, el precio tiene dos partes: una comisión base (que se quema) y una propina.",
+    "Pagas menos cuando la red está tranquila o en una cadena más barata."
+  ],
+  "sections": [
+    {
+      "id": "gas",
+      "heading": "Gas y precio del gas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cada acción en la blockchain cuesta **gas**, una medida de cuánto trabajo necesita. Una transferencia simple de moneda usa 21.000 de gas; un swap de tokens puede usar 100.000 o más."
+        },
+        {
+          "type": "p",
+          "text": "Pagas un **precio del gas** por cada unidad, expresado en **gwei** (una milmillonésima parte de una moneda). La comisión es gas usado × precio del gas, pagada en la moneda propia de la cadena: ETH, BNB o POL."
+        },
+        {
+          "type": "tip",
+          "text": "Cómo convertir entre wei, gwei y ether: [Wei, gwei y ether explicados](guide:wei-gwei-ether)."
+        }
+      ]
+    },
+    {
+      "id": "1559",
+      "heading": "Comisión base y comisión de prioridad",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "En Ethereum y en las cadenas que funcionan como ella, el precio del gas tiene dos partes:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Comisión base:** la fija la red para cada bloque; sube cuando los bloques están llenos y baja cuando no lo están. Se quema.",
+            "**Comisión de prioridad (propina):** una cantidad extra para el validador. Una propina más alta suele hacer que te incluyan antes cuando la red está ocupada."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Tu billetera también fija una **comisión máxima**: lo máximo que estás dispuesto a pagar por unidad. Pagas la comisión base más tu propina, nunca más que el máximo. BNB Chain no tiene comisión base, así que su precio del gas es simplemente el precio."
+        }
+      ]
+    },
+    {
+      "id": "limit",
+      "heading": "Límite de gas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El límite de gas es lo máximo que puede usar una transacción. Si se agota, la transacción falla e igual pagas el gas usado. Las billeteras calculan el límite por ti; bajarlo a mano casi nunca ahorra nada."
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "heading": "Base y Arbitrum: una parte extra",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Base y Arbitrum son rollups: publican los datos de sus transacciones en Ethereum. Parte de tu comisión paga eso, así que el costo también depende de las comisiones de Ethereum, aunque la comisión de red en sí sea diminuta."
+        }
+      ]
+    },
+    {
+      "id": "less",
+      "heading": "Cómo pagar menos",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Envía cuando la red esté más tranquila: la tendencia del [Rastreador de gas](tool:gas-tracker) muestra si las comisiones suben o bajan.",
+            "Usa una velocidad más baja cuando no tengas prisa.",
+            "Usa una cadena más barata para cantidades pequeñas.",
+            "Evita las aprobaciones y transacciones que no necesitas."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Mira las comisiones actuales",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El [Rastreador de gas](tool:gas-tracker) muestra en vivo los precios bajo, medio y alto de Ethereum, BNB Chain, Base, Arbitrum y Polygon, y cuánto cuesta ahora en dólares un envío, una aprobación, un swap o una transferencia de NFT."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Por qué pagué una comisión por una transacción fallida?",
+      "a": "La red hizo el trabajo hasta el punto en que falló, y ese trabajo se paga. Mira ¿Por qué falló mi transacción?"
+    },
+    {
+      "q": "¿Puedo cambiar la comisión después de enviar?",
+      "a": "Solo reemplazando la transacción: la mayoría de las billeteras tienen una opción de acelerar que envía la misma transacción con una comisión más alta."
+    },
+    {
+      "q": "¿A dónde va la comisión base?",
+      "a": "Se quema, es decir, se retira de la circulación. La propina va al validador."
+    }
+  ]
+}

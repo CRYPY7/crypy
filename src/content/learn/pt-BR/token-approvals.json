@@ -1,0 +1,116 @@
+{
+  "title": "Aprovações de tokens explicadas, e como revogá-las",
+  "seoTitle": "Aprovações de tokens: como revogar | CRYPY",
+  "description": "Apps que você usou ainda podem gastar seus tokens. Veja o que é uma aprovação de token, quando fica perigosa e como verificar e revogar as suas.",
+  "summary": "Todo app que você usou ainda pode ter permissão para gastar seus tokens. Como encontrar e remover essas permissões.",
+  "inShort": [
+    "Uma aprovação permite que um contrato mova um dos seus tokens sem pedir de novo.",
+    "Ela continua ativa até você removê-la, mesmo depois que você para de usar o app.",
+    "Remover uma é uma pequena transação que você confirma na sua própria carteira."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "O que é uma aprovação de token?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Antes que uma exchange ou outro app possa mover um token da sua carteira, você dá permissão uma vez. Essa permissão é a aprovação: ela indica o contrato (o **gastador**) e quanto daquele token ele pode mover."
+        },
+        {
+          "type": "figure",
+          "kind": "approval",
+          "labels": [
+            "Sua carteira",
+            "tem 1.200 USDT",
+            "Permissão: gastar USDT",
+            "até: ilimitado",
+            "Contrato da exchange",
+            "pode mover sem pedir"
+          ],
+          "caption": "Uma aprovação é uma permissão permanente. Os tokens ficam na sua carteira até o contrato usá-la.",
+          "alt": "Sua carteira dá a um contrato de exchange permissão para gastar uma quantidade ilimitada de USDT."
+        },
+        {
+          "type": "p",
+          "text": "Para NFTs existe uma versão mais ampla: **aprovar tudo**, que permite ao gastador mover todos os NFTs daquela coleção que você tem."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Por que as aprovações podem ficar perigosas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Muitos apps pedem uma quantidade ilimitada para você não precisar aprovar de novo da próxima vez. Se esse contrato for hackeado depois, ou for malicioso desde o início, ele pode mover todo aquele token da sua carteira, inclusive os que você receber depois."
+        },
+        {
+          "type": "p",
+          "text": "As aprovações também são o alvo de muitos sites de phishing: uma página falsa pede para você \"resgatar\" ou \"verificar\" algo, e a transação que você confirma é na verdade uma aprovação para o contrato do golpista."
+        },
+        {
+          "type": "warning",
+          "text": "Revogar nunca é necessário para \"desbloquear\" ou \"verificar\" uma carteira. Um site ou mensagem que diga isso, ou que peça sua frase-semente, é golpe."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Como verificar suas aprovações",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cole o endereço da sua carteira no [Verificador de aprovações](tool:approval-checker). Ele procura aprovações na Ethereum, BNB Chain, Base, Arbitrum e Polygon, lê cada uma na rede e coloca primeiro as que precisam de atenção: contratos desconhecidos, quantidades ilimitadas e gastadores marcados por dados de segurança."
+        },
+        {
+          "type": "p",
+          "text": "Verificar não precisa da sua carteira: qualquer pessoa pode consultar qualquer endereço, porque as aprovações são públicas."
+        }
+      ]
+    },
+    {
+      "id": "revoke",
+      "heading": "Como revogar uma aprovação",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Abra o [Verificador de aprovações](tool:approval-checker) e verifique seu endereço, ou conecte sua carteira e verifique. Conectar nunca pede assinatura.",
+            "Olhe primeiro **Precisam de atenção** e decida quais aprovações você não precisa mais.",
+            "Clique em **Revogar** ao lado de uma. O CRYPY testa a transação antes e mostra o que ela faz e a taxa.",
+            "Confira os detalhes na sua carteira e confirme. Quando a transação entrar em um bloco, a permissão será zero."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Revogar zera a permissão. Seus tokens não se movem."
+        }
+      ]
+    },
+    {
+      "id": "keep",
+      "heading": "Quando manter uma aprovação",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Aprovações para apps que você usa com frequência, de preferência limitadas ao valor que você negocia, são normais. Revogá-las só significa aprovar de novo, e pagar uma taxa, da próxima vez. Concentre-se nas aprovações de apps que você não usa mais, contratos que você não reconhece e aprovações ilimitadas em tokens que valem muito."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Revogar custa dinheiro?",
+      "a": "Sim, uma pequena taxa de rede, porque revogar é uma transação na blockchain."
+    },
+    {
+      "q": "Revogar vai mover meus tokens?",
+      "a": "Não. Só remove a permissão. Seus tokens continuam na sua carteira."
+    },
+    {
+      "q": "Posso verificar sem conectar minha carteira?",
+      "a": "Sim. As aprovações são públicas, então você pode verificar qualquer endereço. Revogar precisa da sua carteira, porque só você pode mudar suas próprias permissões."
+    }
+  ]
+}

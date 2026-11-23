@@ -1,0 +1,95 @@
+{
+  "title": "¿Por qué falló mi transacción? Errores comunes en palabras simples",
+  "seoTitle": "¿Por qué falló mi transacción? Errores explicados | CRYPY",
+  "description": "Sin gas, slippage, permiso insuficiente, plazo vencido: qué significan los errores comunes, por qué igual pagaste la comisión y qué ayuda.",
+  "summary": "Sin gas, slippage, permiso insuficiente y más: qué significa cada error y qué ayuda.",
+  "inShort": [
+    "Una transacción fallida se deshace, pero igual pagas el gas que usó.",
+    "La mayoría de los fallos vienen de unas pocas causas: gas, slippage, permiso, saldo o plazos.",
+    "El mensaje de error del contrato suele decir cuál fue."
+  ],
+  "sections": [
+    {
+      "id": "fee",
+      "heading": "Por qué pagaste una comisión a cambio de nada",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cuando una transacción falla dentro de un bloque, se deshacen todos los cambios que intentaba hacer: no se mueve ningún token. Pero los validadores igual hicieron el trabajo de ejecutarla hasta el punto en que falló, así que se cobra la comisión de red por el gas que usó."
+        },
+        {
+          "type": "p",
+          "text": "Una transacción que nunca llegó a un bloque (por ejemplo, una rechazada en tu billetera o reemplazada) no cuesta nada."
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "heading": "Errores comunes y qué significan",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Sin gas (out of gas):** el límite de gas era demasiado bajo para lo que tenía que hacer la transacción. Normalmente usó casi todo su límite de gas. Inténtalo de nuevo con el límite que sugiere la billetera.",
+            "**Fondos insuficientes para el gas:** no tienes suficiente ETH, BNB o POL para pagar la comisión, aunque tengas tokens. Guarda un poco de la moneda de la cadena para las comisiones.",
+            "**Slippage (\"too little received\", \"INSUFFICIENT_OUTPUT_AMOUNT\"):** el precio se movió más que tu tolerancia entre el envío y la ejecución. Inténtalo de nuevo o sube un poco el slippage en los tokens volátiles.",
+            "**Plazo vencido (\"EXPIRED\", \"Transaction too old\"):** un swap esperó demasiado antes de incluirse. Inténtalo de nuevo, quizá con una comisión de prioridad más alta.",
+            "**Permiso insuficiente (\"transfer amount exceeds allowance\"):** la aplicación no tenía aprobación para gastar tanto de tu token. Aprueba primero y luego vuelve a intentarlo.",
+            "**Saldo insuficiente (\"transfer amount exceeds balance\"):** intentaste enviar o cambiar más de lo que tienes.",
+            "**Transferencia fallida (\"TRANSFER_FAILED\"):** a menudo es un token que bloquea o cobra impuestos en las transferencias. Si pasa al vender, revisa el token: mira [Qué es un token honeypot](guide:honeypot-token).",
+            "**Pausado o no permitido:** el contrato está pausado, o tu dirección no tiene permitido hacer eso."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonce",
+      "heading": "Transacciones atascadas o reemplazadas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Las transacciones de una billetera van en orden, numeradas con un **nonce**. Si una transacción anterior está esperando con una comisión baja, las siguientes esperan detrás de ella. La mayoría de las billeteras te permiten acelerarla o cancelarla enviando un reemplazo con el mismo nonce y una comisión más alta."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Descubre por qué falló la tuya",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Pega el hash de la transacción en el [Verificador de transacciones](tool:tx-checker). Muestra el resultado, el propio mensaje de error del contrato cuando el nodo todavía tiene los datos para leerlo, una explicación en palabras simples de los errores conocidos y cuánto gas se usó."
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "heading": "Cómo evitar transacciones fallidas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Guarda algo de la moneda de la cadena para las comisiones.",
+            "Usa el límite de gas que sugiere tu billetera.",
+            "Con tokens volátiles, una tolerancia de slippage un poco más alta evita fallos; un slippage muy alto invita a malos precios.",
+            "Si una billetera avisa que una transacción probablemente fallará, no la envíes."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Puedo recuperar la comisión de una transacción fallida?",
+      "a": "No. La comisión paga el trabajo que hizo la red, aunque el resultado se haya deshecho."
+    },
+    {
+      "q": "Mis tokens salieron de mi billetera, pero la transacción falló. ¿Dónde están?",
+      "a": "Si la transacción falló, no se movió nada. Vuelve a revisar tu saldo y revisa la transacción en el Verificador de transacciones para asegurarte de cuál estás mirando."
+    },
+    {
+      "q": "¿Por qué el mensaje de error no dice nada útil?",
+      "a": "Algunos contratos fallan sin mensaje, y algunos nodos no pueden repetir transacciones antiguas. El Verificador de transacciones indica cuándo el motivo no está disponible en lugar de adivinar."
+    }
+  ]
+}

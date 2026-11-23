@@ -1,0 +1,98 @@
+{
+  "title": "Aprovações ilimitadas são perigosas?",
+  "seoTitle": "Aprovações ilimitadas de tokens são perigosas? | CRYPY",
+  "description": "Aprovações ilimitadas economizam taxas, mas cobrem todo token daquele tipo que você tiver. Veja quando são arriscadas, o que muda no Permit2 e quando limitar.",
+  "summary": "Por que \"ilimitada\" também cobre tokens que você recebe depois, e quando vale a pena limitar.",
+  "inShort": [
+    "Uma aprovação ilimitada cobre todo token daquele tipo na sua carteira, agora e depois.",
+    "Ela é tão segura quanto o contrato para o qual você a deu.",
+    "Limite ou revogue as aprovações de apps que você não usa com frequência."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "O que \"ilimitada\" significa",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Quando você aprova um token, o app escolhe a quantidade. Muitos escolhem o maior número possível, para você nunca precisar aprovar de novo. Sua carteira pode mostrar isso como \"ilimitada\" ou como um número muito longo."
+        },
+        {
+          "type": "p",
+          "text": "A aprovação não move nada sozinha. Ela significa que o contrato gastador pode mover qualquer quantidade daquele token da sua carteira, a qualquer momento, sem pedir de novo."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Quando isso é um problema",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**O contrato é hackeado.** Os invasores podem usar as aprovações existentes para esvaziar as carteiras que o aprovaram.",
+            "**O contrato era malicioso.** O botão \"resgatar\" de um site golpe pode ser uma aprovação para o contrato do golpista.",
+            "**Você se esqueceu dela.** Uma aprovação de anos atrás ainda funciona hoje, para os tokens que você recebeu desde então."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Uma aprovação limitada restringe o prejuízo ao valor que você aprovou. Uma ilimitada, não."
+        }
+      ]
+    },
+    {
+      "id": "permit2",
+      "heading": "Aprovações Permit2",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Alguns apps, como Uniswap e PancakeSwap, usam o **Permit2**: você aprova o contrato Permit2 uma vez por token e depois assina permissões separadas para cada app, com um valor e uma data de expiração."
+        },
+        {
+          "type": "p",
+          "text": "Confira os dois níveis: a aprovação para o próprio Permit2 e as permissões de apps dentro dele. O [Verificador de aprovações](tool:approval-checker) lê os dois e mostra quando cada permissão Permit2 expira."
+        }
+      ]
+    },
+    {
+      "id": "nft",
+      "heading": "\"Aprovar tudo\" em NFTs",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "As coleções de NFT têm uma permissão mais ampla que cobre todos os NFTs da coleção que você tem. É comum em marketplaces e um alvo frequente de phishing. Trate como uma aprovação de token ilimitada."
+        }
+      ]
+    },
+    {
+      "id": "habits",
+      "heading": "Bons hábitos",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Quando a sua carteira deixar, ajuste o valor para o que você pretende usar.",
+            "Revogue as aprovações de apps que você não usa mais, principalmente em tokens que valem muito.",
+            "Guarde grandes valores em uma carteira que você não usa para testar apps novos.",
+            "Confira suas aprovações de vez em quando com o [Verificador de aprovações](tool:approval-checker)."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Devo revogar toda aprovação ilimitada?",
+      "a": "Não necessariamente. Para um app conhecido que você usa com frequência, revogar significa aprovar de novo (e pagar uma taxa) da próxima vez. Concentre-se nos apps que você não usa mais e nos contratos que não reconhece."
+    },
+    {
+      "q": "Uma aprovação limitada é segura?",
+      "a": "Mais segura, porque o gastador pode mover no máximo aquele valor. Mesmo assim é uma permissão: revogue se não precisar dela."
+    },
+    {
+      "q": "Por que minha carteira mostra um número enorme em vez de \"ilimitada\"?",
+      "a": "\"Ilimitada\" é só o maior número que o contrato do token consegue guardar. Cada carteira mostra isso de um jeito."
+    }
+  ]
+}

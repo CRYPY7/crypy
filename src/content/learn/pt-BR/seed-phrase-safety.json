@@ -1,0 +1,107 @@
+{
+  "title": "Sua frase-semente: por que nenhum site deve pedi-la",
+  "seoTitle": "Frase-semente: nunca compartilhe sua frase | CRYPY",
+  "description": "Sua frase-semente controla tudo na sua carteira. Veja por que nenhum site, app ou atendente deve pedi-la, e os truques que os golpistas usam.",
+  "summary": "A regra que protege tudo na sua carteira, e os truques usados para quebrá-la.",
+  "inShort": [
+    "Sua frase-semente (12 ou 24 palavras) dá controle total da sua carteira a quem a tiver.",
+    "Nenhum site, app, exchange ou atendente de verdade vai pedi-la.",
+    "Se você a digitou em algum lugar online, mova seus fundos para uma carteira nova imediatamente."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "O que é a frase-semente",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Quando você cria uma carteira como MetaMask ou Trust Wallet, ela mostra uma frase de recuperação de 12 ou 24 palavras. Essas palavras são a carteira: quem as tiver pode recriá-la no próprio dispositivo e mover tudo o que está nela. Ninguém pode desfazer essa transferência."
+        },
+        {
+          "type": "p",
+          "text": "Sua senha só desbloqueia o app no seu próprio dispositivo. A frase-semente é a chave mestra."
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "heading": "A regra",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Nunca digite sua frase-semente em um site, formulário, chat ou app que você não instalou para restaurar a sua própria carteira.** Nenhuma exchange, empresa de carteira, airdrop, equipe de suporte ou ferramenta de segurança precisa dela."
+        },
+        {
+          "type": "p",
+          "text": "O CRYPY nunca a pede. Todas as ferramentas do CRYPY funcionam só com endereços públicos, e os formulários onde você salva endereços recusam uma frase-semente colada."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Truques que os golpistas usam",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Suporte falso:** alguém responde à sua pergunta nas redes sociais ou no Discord e oferece ajuda, depois manda você para um formulário que pede a sua frase.",
+            "**\"Validar\", \"sincronizar\" ou \"desbloquear\" a carteira:** sites que dizem que sua carteira precisa ser verificada para receber um airdrop ou corrigir um erro.",
+            "**Apps de carteira e extensões de navegador falsos:** cópias de carteiras reais que enviam a sua frase ao golpista quando você restaura.",
+            "**Ferramentas de \"recuperação\" de carteira ou de consulta de saldo** que pedem a frase para \"analisá-la\".",
+            "**Capturas de tela e notas na nuvem:** uma frase salva em fotos, e-mail ou drive na nuvem pode ser roubada junto com essa conta."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "heading": "Como guardá-la",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Escreva no papel (ou em metal) e guarde em um lugar seguro e privado, de preferência em dois lugares.",
+            "Não fotografe, não digite em um app de notas nem guarde na nuvem.",
+            "Para valores maiores, considere uma carteira de hardware: a frase fica offline e as transações são confirmadas no dispositivo."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Conectar uma carteira a um site é diferente: o site só vê seu endereço público, e sua carteira pergunta antes de assinar qualquer coisa."
+        }
+      ]
+    },
+    {
+      "id": "exposed",
+      "heading": "Se você acha que ela foi exposta",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Crie uma carteira nova com uma frase-semente nova, em um dispositivo de confiança.",
+            "Mova seus fundos da carteira antiga para a nova imediatamente, começando pelos mais valiosos.",
+            "Pare de usar a carteira antiga e revogue as aprovações dela se ainda guardar algo nela."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Golpistas muitas vezes movem os fundos em minutos. Aja primeiro; investigue depois."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Minha chave privada é a mesma coisa que a frase-semente?",
+      "a": "Não exatamente: a frase-semente gera todas as chaves privadas da carteira. As duas precisam ficar em segredo, e nenhum site deve pedir nenhuma delas."
+    },
+    {
+      "q": "O CRYPY pode ver minha frase-semente quando conecto minha carteira?",
+      "a": "Não. Conectar só compartilha seu endereço público. A frase nunca sai da sua carteira."
+    },
+    {
+      "q": "Um atendente diz que precisa dela para consertar minha conta. É verdade?",
+      "a": "Não. O suporte de verdade nunca precisa da sua frase-semente. É golpe."
+    }
+  ]
+}

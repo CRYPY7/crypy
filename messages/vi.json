@@ -1,0 +1,3220 @@
+{
+  "meta": {
+    "siteName": "CRYPY",
+    "title": "CRYPY — Bộ công cụ an toàn và nghiên cứu ví",
+    "description": "Kiểm tra mọi ví, token hoặc giao dịch trước khi tin tưởng: Ethereum, BNB Chain, Base, Arbitrum và Polygon. Miễn phí, phi lưu ký, không cần kết nối ví."
+  },
+  "common": {
+    "skipToContent": "Chuyển đến nội dung",
+    "status": {
+      "live": "Đang hoạt động",
+      "beta": "Beta",
+      "soon": "Sắp ra mắt"
+    },
+    "arrivesIn": "Dự kiến ở giai đoạn {milestone}",
+    "open": "Mở",
+    "youNeed": "Bạn cần:",
+    "betaTranslation": "Bản dịch beta: chưa được người bản ngữ kiểm tra",
+    "languageNotReady": "Ngôn ngữ này vẫn đang được dịch, nên tạm thời bạn đang xem tiếng Anh.",
+    "beta": "Beta",
+    "betaSiteLabel": "CRYPY đang ở giai đoạn beta: tính năng có thể thay đổi và kết quả có thể chưa đầy đủ."
+  },
+  "nav": {
+    "main": "Chính",
+    "primary": "Điều hướng chính",
+    "footer": "Chân trang",
+    "home": "Trang chủ",
+    "allTools": "Tất cả công cụ",
+    "tools": "Công cụ",
+    "portfolio": "Danh mục",
+    "watchlist": "Theo dõi",
+    "alerts": "Cảnh báo",
+    "gas": "Gas",
+    "settings": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "switchTheme": "Chuyển giữa giao diện tối và sáng",
+    "homeLink": "Trang chủ CRYPY",
+    "openWallet": "Ví",
+    "toolsSidebar": "Công cụ",
+    "collapseSidebar": "Thu gọn thanh bên",
+    "expandSidebar": "Mở rộng thanh bên",
+    "collapse": "Thu gọn",
+    "soon": "Sắp ra mắt",
+    "breadcrumb": "Đường dẫn",
+    "recent": "Đã xem gần đây trên thiết bị này",
+    "clearRecent": "Xóa",
+    "new": "Mới",
+    "beta": "Beta",
+    "learn": "Học",
+    "status": "Trạng thái"
+  },
+  "categories": {
+    "all": "Tất cả",
+    "security": "Bảo mật",
+    "wallet": "Ví",
+    "network": "Mạng",
+    "monitoring": "Giám sát",
+    "utilities": "Tiện ích"
+  },
+  "search": {
+    "label": "Tìm địa chỉ ví, hợp đồng token hoặc mã hash giao dịch",
+    "placeholder": "0x… địa chỉ, hợp đồng token hoặc hash giao dịch",
+    "compactPlaceholder": "Địa chỉ, token hoặc hash giao dịch",
+    "submit": "Quét",
+    "detects": "Tự động nhận diện:",
+    "types": {
+      "address": "Địa chỉ ví",
+      "token": "Hợp đồng token",
+      "tx": "Hash giao dịch"
+    },
+    "result": {
+      "invalid": "Đây không giống địa chỉ hay hash giao dịch. Địa chỉ bắt đầu bằng 0x, theo sau là 40 ký tự; hash giao dịch có 64 ký tự.",
+      "empty": "Hãy dán một địa chỉ hoặc hash giao dịch trước.",
+      "bad-checksum": "Địa chỉ này không khớp với mã kiểm tra (checksum), nên rất có thể một ký tự đã bị đổi hoặc gõ sai. Hãy sao chép lại từ nguồn gốc và tuyệt đối không gửi tiền vào địa chỉ này.",
+      "not-found-tx": "Chúng tôi không tìm thấy giao dịch này trên mạng nào được hỗ trợ. Có thể nó nằm trên mạng khác hoặc chưa được phát đi.",
+      "unavailable": "Hiện không kết nối được với blockchain. Vui lòng thử lại sau một phút.",
+      "rate-limited": "Tìm kiếm quá nhiều trong thời gian ngắn. Vui lòng đợi một phút rồi thử lại.",
+      "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "choose": "Tìm thấy trên nhiều mạng. Bạn muốn mở mạng nào?"
+    },
+    "checking": "Đang kiểm tra mọi mạng được hỗ trợ…",
+    "partial": "Hiện chưa kiểm tra được {chains}, nên kết quả có thể chưa đầy đủ.",
+    "lookupAnyway": "Vẫn tra cứu",
+    "close": "Đóng",
+    "found": {
+      "title": "Tìm thấy trên {count}/{total} mạng",
+      "overview": "Mở tổng quan trên mọi mạng",
+      "inactive": "Không có hoạt động trên: {chains}",
+      "sentTx": "Đã gửi giao dịch",
+      "holds": "Đang giữ {amount} {symbol}",
+      "noBalance": "Không có số dư coin",
+      "open": {
+        "token": "Trang token",
+        "account": "Số dư",
+        "contract": "Hợp đồng"
+      },
+      "kinds": {
+        "account": "Ví",
+        "delegated": "Ví (EIP-7702)",
+        "token": "Hợp đồng token",
+        "contract": "Hợp đồng thông minh",
+        "tx": "Giao dịch"
+      }
+    }
+  },
+  "home": {
+    "eyebrow": "An toàn và nghiên cứu ví · Miễn phí · Phi lưu ký",
+    "title": "Kiểm tra mọi ví, token hoặc giao dịch trước khi tin tưởng.",
+    "subtitle": "Dán một địa chỉ, hợp đồng token hoặc hash giao dịch. CRYPY tự xác định đó là gì và hiển thị số dư, rủi ro và hoạt động từ dữ liệu on-chain thật — không cần kết nối ví.",
+    "trust": {
+      "seedTitle": "Không bao giờ hỏi cụm từ khôi phục",
+      "seedText": "Không bao giờ dùng khóa riêng. Mặc định chỉ đọc.",
+      "connectTitle": "Không cần kết nối",
+      "connectText": "Quét mọi địa chỉ công khai mà không cần kết nối ví.",
+      "sourceTitle": "Mọi kết quả đều ghi nguồn",
+      "sourceText": "Dữ liệu on-chain thật, có thời gian và nguồn rõ ràng."
+    },
+    "goals": {
+      "title": "Bạn muốn kiểm tra gì?",
+      "subtitle": "Chọn một câu hỏi, chúng tôi sẽ mở đúng công cụ."
+    },
+    "allTools": {
+      "title": "Tất cả công cụ",
+      "filterLabel": "Lọc công cụ theo danh mục"
+    },
+    "worksOn": "Hoạt động trên",
+    "gas": {
+      "title": "Gas hiện tại",
+      "send": "Gửi tốn {usd}",
+      "open": "Theo dõi Gas →",
+      "gwei": "{value} gwei"
+    }
+  },
+  "tools": {
+    "token-security": {
+      "name": "Quét bảo mật token",
+      "question": "Token này có an toàn để mua không?",
+      "description": "Tín hiệu rủi ro honeypot, thuế, đúc thêm và quyền chủ sở hữu cho mọi hợp đồng token.",
+      "input": "Địa chỉ hợp đồng token",
+      "cta": "Kiểm tra token",
+      "features": [
+        "Tín hiệu rủi ro theo mức độ: nghiêm trọng, cao, trung bình và thấp",
+        "Thử honeypot: token có thực sự bán được không?",
+        "Thuế mua và bán, quyền đúc thêm, đặc quyền chủ sở hữu, danh sách đen và chức năng tạm dừng",
+        "Kiểm tra hợp đồng có thể nâng cấp và mức tập trung của người nắm giữ",
+        "Mỗi phát hiện được gắn nhãn đã xác minh hoặc suy đoán, kèm nguồn và bằng chứng",
+        "Danh sách những gì đã kiểm tra và những gì không kiểm tra được"
+      ],
+      "howTo": [
+        "Dán địa chỉ hợp đồng token (0x…). Chọn mạng nếu bạn biết.",
+        "CRYPY mô phỏng một lần mua, một lần chuyển và một lần bán, đồng thời đọc quyền chủ sở hữu, thanh khoản và nhiều thứ khác.",
+        "Đọc các phát hiện theo mức độ. Mỗi phát hiện cho biết cách kiểm tra: đã xác minh, mô phỏng, suy đoán hoặc từ nhà cung cấp bên ngoài."
+      ],
+      "faq": [
+        {
+          "q": "CRYPY có thể nói một token an toàn không?",
+          "a": "Không. CRYPY hiển thị các rủi ro kiểm tra được và cách kiểm tra từng rủi ro. Vượt qua kiểm tra không chứng minh token trung thực, và chủ sở hữu có thể đổi thuế hoặc việc giao dịch về sau."
+        },
+        {
+          "q": "Phép thử mua và bán hoạt động thế nào?",
+          "a": "CRYPY chạy một hợp đồng thử nhỏ bên trong một lệnh gọi chỉ đọc với pool thật của sàn: mua, gửi một phần sang ví khác rồi bán. Không có gì được ký hay gửi đi, và không cần ví."
+        },
+        {
+          "q": "\"Suy đoán\" nghĩa là gì?",
+          "a": "Nghĩa là được suy ra từ mã hợp đồng, ví dụ có tồn tại hàm đúc thêm. Nó cho thấy điều gì có thể xảy ra, không phải điều gì đã xảy ra."
+        },
+        {
+          "q": "Số người nắm giữ lấy từ đâu?",
+          "a": "Từ nhà cung cấp bên ngoài GoPlus Security, có ghi tên. CRYPY hiện chưa tự đếm được người nắm giữ."
+        },
+        {
+          "q": "Những mạng và sàn nào được hỗ trợ?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon. Phép thử giao dịch dùng các sàn chính trên mỗi mạng với pool v2 và v3 (Uniswap, PancakeSwap, SushiSwap, Biswap và QuickSwap tùy mạng); thanh khoản được đọc từ chính các sàn này và thêm vài sàn trên BNB Chain."
+        }
+      ],
+      "seoTitle": "Quét token: honeypot, thuế và rug pull | CRYPY",
+      "seoDescription": "Kiểm tra miễn phí token có phải lừa đảo: CRYPY mô phỏng mua và bán để tìm honeypot và thuế, đồng thời kiểm tra chủ sở hữu và thanh khoản trên 5 mạng."
+    },
+    "approval-checker": {
+      "name": "Kiểm tra phê duyệt",
+      "question": "Ai có thể tiêu token của tôi?",
+      "description": "Xem hợp đồng nào có thể tiêu token của bạn và gỡ bỏ quyền rủi ro qua ví của bạn.",
+      "input": "Địa chỉ ví của bạn",
+      "cta": "Kiểm tra phê duyệt",
+      "features": [
+        "Phê duyệt token và quyền NFT \"phê duyệt tất cả\"",
+        "Làm nổi bật phê duyệt không giới hạn và bên chi tiêu rủi ro",
+        "Giá trị chịu rủi ro của mỗi phê duyệt",
+        "Thu hồi từng phê duyệt, luôn được xác nhận trong ví của bạn",
+        "Nói rõ những gì đã kiểm tra và những gì có thể còn thiếu"
+      ],
+      "seoTitle": "Kiểm tra phê duyệt token: tìm và thu hồi | CRYPY",
+      "seoDescription": "Xem hợp đồng nào có thể tiêu token của bạn trên Ethereum, BNB Chain, Base, Arbitrum và Polygon, và thu hồi phê duyệt rủi ro ngay trong ví.",
+      "howTo": [
+        "Dán một địa chỉ ví, hoặc kết nối ví rồi chọn \"Kiểm tra ví đã kết nối\". Kết nối là tùy chọn và không bao giờ yêu cầu ký.",
+        "CRYPY tìm các phê duyệt của ví trên mọi mạng được hỗ trợ và đọc từng phê duyệt trên blockchain.",
+        "Bắt đầu với \"Cần chú ý\": mỗi phê duyệt cho biết ai có thể tiêu, lấy được bao nhiêu và vì sao bị đánh dấu.",
+        "Để gỡ một phê duyệt, bấm Thu hồi và xác nhận giao dịch trong ví của bạn. Tốn một khoản phí mạng nhỏ."
+      ],
+      "faq": [
+        {
+          "q": "Phê duyệt token là gì?",
+          "a": "Là quyền bạn cấp cho một hợp đồng, như một sàn giao dịch, để chuyển một token khỏi ví của bạn. Quyền này vẫn hiệu lực cho đến khi bạn gỡ, kể cả khi bạn đã ngừng dùng ứng dụng."
+        },
+        {
+          "q": "Vì sao phê duyệt không giới hạn lại rủi ro?",
+          "a": "Phê duyệt không giới hạn cho phép bên chi tiêu lấy toàn bộ token đó, kể cả số bạn nhận sau này. Nếu hợp đồng bị hack hoặc vốn độc hại, nó có thể chuyển chúng đi mà không hỏi lại."
+        },
+        {
+          "q": "Thu hồi có tốn tiền không?",
+          "a": "Có, một khoản phí mạng nhỏ, vì thu hồi là một giao dịch blockchain. CRYPY hiển thị phí và thử giao dịch trước khi ví yêu cầu bạn xác nhận."
+        },
+        {
+          "q": "CRYPY có thể chuyển tiền của tôi không?",
+          "a": "Không. CRYPY không bao giờ giữ khóa. Thu hồi chỉ đặt quyền về 0, và ví của bạn luôn hiển thị giao dịch để bạn chấp thuận hoặc từ chối."
+        },
+        {
+          "q": "Danh sách có đầy đủ không?",
+          "a": "Không phải lúc nào cũng vậy. CRYPY kết hợp nhiều nguồn miễn phí và đọc từng kết quả trên blockchain, nhưng một số phê duyệt cũ, ví dụ cho token bạn không còn giữ, có thể bị thiếu. Trang sẽ nói rõ những gì đã kiểm tra."
+        },
+        {
+          "q": "Những mạng nào được hỗ trợ?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon."
+        }
+      ]
+    },
+    "balance-scanner": {
+      "name": "Quét số dư",
+      "question": "Ví này có gì?",
+      "description": "Số dư coin và token kèm giá trị USD trên các mạng được hỗ trợ.",
+      "input": "Bất kỳ địa chỉ ví nào",
+      "cta": "Xem số dư",
+      "features": [
+        "Số dư coin và token trên Ethereum, BNB Chain, Base, Arbitrum và Polygon cùng lúc",
+        "Giá trị USD khi có giá đáng tin cậy, không bao giờ bịa ra",
+        "Tổng theo từng mạng và tổng chung",
+        "Token nghi là rác được ẩn mặc định, kèm lý do",
+        "Mỗi token dẫn tới trang riêng",
+        "Không cần kết nối ví"
+      ],
+      "howTo": [
+        "Dán bất kỳ địa chỉ ví nào (bắt đầu bằng 0x).",
+        "Mở kết quả: số dư trên mọi mạng được hỗ trợ tải cùng lúc.",
+        "Bấm vào một token để xem chi tiết; mở phần token bị ẩn để xem những gì bị lọc và vì sao."
+      ],
+      "faq": [
+        {
+          "q": "Tôi có cần kết nối ví không?",
+          "a": "Không. Số dư là công khai trên blockchain, nên mọi địa chỉ đều kiểm tra được mà không cần kết nối hay ký gì."
+        },
+        {
+          "q": "Số dư và giá lấy từ đâu?",
+          "a": "Số dư được đọc trực tiếp từ blockchain. Giá USD cũng được đọc on-chain, từ các pool PancakeSwap và Uniswap có đủ thanh khoản (ít nhất 5.000 $ ở phía tiền định giá). Token không có pool như vậy vẫn được liệt kê nhưng không tính vào tổng."
+        },
+        {
+          "q": "Vì sao một số token bị ẩn?",
+          "a": "Kẻ lừa đảo gửi token vô giá trị tới nhiều ví, thường có tên trang web trong tên token, để dụ người ta vào trang giả. CRYPY ẩn những token trông như vậy và cho biết lý do. Đừng bao giờ truy cập liên kết trong tên token."
+        },
+        {
+          "q": "Vì sao tổng khác với ứng dụng ví của tôi?",
+          "a": "Ứng dụng ví có thể dùng nguồn giá khác, cập nhật vào thời điểm khác hoặc tính cả token không có giá on-chain đáng tin cậy. CRYPY không bao giờ bịa giá."
+        },
+        {
+          "q": "Những mạng nào được kiểm tra?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon. Cùng một địa chỉ có thể giữ coin và token khác nhau trên mỗi mạng, nên mỗi mạng được hiển thị riêng."
+        }
+      ],
+      "seoTitle": "Kiểm tra số dư ví kèm giá trị USD | CRYPY",
+      "seoDescription": "Xem số dư coin và token của bất kỳ ví nào kèm giá trị USD trên Ethereum, BNB Chain, Base, Arbitrum và Polygon. Miễn phí."
+    },
+    "address-analyzer": {
+      "name": "Phân tích địa chỉ",
+      "question": "Ví này đã làm gì?",
+      "description": "Mọi giao dịch chuyển coin, token và NFT của bất kỳ địa chỉ nào, kèm hoạt động đầu tiên, gần nhất và cảnh báo lừa đảo.",
+      "input": "Bất kỳ địa chỉ ví nào",
+      "cta": "Xem hoạt động",
+      "features": [
+        "Mọi coin, token và NFT đã gửi và nhận, từ mới đến cũ",
+        "Hoạt động đầu tiên và gần nhất",
+        "Cảnh báo chuyển khoản từ địa chỉ giống hệt (đầu độc địa chỉ)",
+        "Bộ lọc, tìm kiếm và xuất CSV",
+        "Nghi là rác thì ẩn, không bao giờ xóa"
+      ],
+      "seoTitle": "Phân tích địa chỉ: toàn bộ lịch sử ví | CRYPY",
+      "seoDescription": "Mọi giao dịch chuyển coin, token và NFT của bất kỳ ví nào, hoạt động đầu tiên và gần nhất, cảnh báo rác và đầu độc địa chỉ. Miễn phí.",
+      "howTo": [
+        "Dán bất kỳ địa chỉ ví nào. Không cần kết nối ví.",
+        "Mặc định CRYPY quét các mạng mà địa chỉ đã dùng; bạn có thể chọn mạng khác.",
+        "Xem các lần chuyển theo ngày, lọc theo đã gửi hay đã nhận, coin, token hay NFT, và tìm theo token hoặc địa chỉ.",
+        "Tải thêm hoạt động cũ hơn hoặc xuất danh sách ra CSV."
+      ],
+      "faq": [
+        {
+          "q": "Đầu độc địa chỉ là gì?",
+          "a": "Kẻ lừa đảo gửi các khoản chuyển cực nhỏ hoặc bằng 0 từ một địa chỉ có đầu và cuối giống địa chỉ bạn hay dùng, mong lần sau bạn sao chép nó từ lịch sử. CRYPY đánh dấu các khoản chuyển giống hệt này. Luôn so sánh toàn bộ địa chỉ trước khi gửi."
+        },
+        {
+          "q": "Vì sao một phần hoạt động bị ẩn?",
+          "a": "Token rác và các khoản chuyển nghi là giả được ẩn mặc định để danh sách dễ đọc. Chúng vẫn được đếm, không bao giờ bị xóa, và một nút bật sẽ hiện chúng."
+        },
+        {
+          "q": "Lịch sử xem được bao xa?",
+          "a": "Toàn bộ lịch sử chuyển coin, token và NFT, tải theo từng trang. Nếu nguồn lịch sử đầy đủ không khả dụng, trang sẽ báo và chỉ hiển thị các lần chuyển token gần đây."
+        },
+        {
+          "q": "Có tính các khoản chuyển do hợp đồng thực hiện không?",
+          "a": "Trên Ethereum và Polygon, coin do hợp đồng gửi (chuyển nội bộ) được tính. Trên BNB Chain, Base và Arbitrum chúng có thể bị thiếu, và trang sẽ báo."
+        },
+        {
+          "q": "Những mạng nào được hỗ trợ?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon."
+        }
+      ]
+    },
+    "portfolio": {
+      "name": "Theo dõi danh mục",
+      "question": "Tất cả ví của tôi ở một nơi",
+      "description": "Xem mọi ví cùng lúc: một tổng chung qua các ví và mạng, theo mạng, theo ví và theo token, kèm kiểm tra an toàn nhanh.",
+      "input": "Tối đa 20 địa chỉ",
+      "cta": "Mở danh mục",
+      "features": [
+        "Tối đa 20 ví với nhãn riêng của bạn, không cần tài khoản",
+        "Chỉ lưu trong trình duyệt này; máy chủ CRYPY không lưu gì",
+        "Một tổng chung trên Ethereum, BNB Chain, Base, Arbitrum và Polygon",
+        "Theo mạng, theo ví và tài sản lớn nhất được gộp qua các mạng",
+        "Phê duyệt cần chú ý và token bị GoPlus đánh dấu, theo từng ví",
+        "Thay đổi kể từ lần xem trước và xuất CSV"
+      ],
+      "howTo": [
+        "Chạm Thêm ví và dán một địa chỉ công khai (0x…). Có thể đặt nhãn như Chính hoặc Tiết kiệm.",
+        "Thêm ví khác, tối đa 20. Danh mục được lưu trong trình duyệt này, lần sau vẫn còn.",
+        "Mở bất kỳ ví nào để xem toàn bộ số dư, phê duyệt và hoạt động, hoặc xuất tài sản ra CSV."
+      ],
+      "faq": [
+        {
+          "q": "Tôi có cần kết nối ví hay tạo tài khoản không?",
+          "a": "Không. Danh mục đọc số dư công khai từ blockchain. Nó không bao giờ hỏi khóa, cụm từ khôi phục hay chữ ký. Nếu ví đã kết nối, bạn có thể thêm địa chỉ chỉ với một chạm."
+        },
+        {
+          "q": "Danh mục của tôi được lưu ở đâu?",
+          "a": "Chỉ trong trình duyệt này (bộ nhớ cục bộ). Danh sách ví và nhãn của bạn không bao giờ được gửi tới CRYPY dưới dạng danh sách hay lưu trên máy chủ; số dư của từng ví được đọc theo từng địa chỉ và không được lưu. Xóa dữ liệu trình duyệt sẽ xóa danh mục."
+        },
+        {
+          "q": "\"Kể từ lần xem trước\" nghĩa là gì?",
+          "a": "Chênh lệch giữa tổng giá trị hôm nay và tổng lần trước bạn mở danh mục ở đây. Nó phản ánh thay đổi giá và các lần chuyển, nên không phải lãi hay lỗ."
+        },
+        {
+          "q": "Vì sao có token được gộp qua các mạng, có token thì không?",
+          "a": "ETH, BNB, POL và các token nổi tiếng như USDT, USDC được gộp vì CRYPY đã đối chiếu địa chỉ của chúng trên từng mạng. Các token khác giữ một dòng cho mỗi mạng, để token nhái không bao giờ bị cộng chung với token thật."
+        },
+        {
+          "q": "Những token nào được kiểm tra rủi ro?",
+          "a": "Các token giá trị nhất của mỗi ví (tối đa 8, không tính token nổi tiếng) được kiểm tra qua GoPlus xem có phải honeypot hoặc có thuế bán từ 30% trở lên. Đây là phát hiện của GoPlus, không phải kết luận; mở token để xem toàn bộ kiểm tra của CRYPY. Hạn mức miễn phí của GoPlus được dùng chung và ưu tiên cho trang token và trang phê duyệt: khi một lần kiểm tra bị bỏ qua, danh mục sẽ báo. Không có gì được gọi là an toàn."
+        }
+      ],
+      "seoTitle": "Theo dõi danh mục crypto nhiều ví | CRYPY",
+      "seoDescription": "Theo dõi tối đa 20 ví trên một màn hình: giá trị theo mạng, ví và token, kèm kiểm tra phê duyệt và token lừa đảo. Không cần đăng ký."
+    },
+    "tx-checker": {
+      "name": "Kiểm tra giao dịch",
+      "question": "Giao dịch của tôi đã thành công chưa?",
+      "description": "Dán hash giao dịch và xem chuyện gì đã xảy ra bằng lời dễ hiểu: kết quả, tài sản đã chuyển, chi phí và lý do thất bại.",
+      "input": "Hash giao dịch",
+      "cta": "Kiểm tra giao dịch",
+      "features": [
+        "Tự nhận diện mạng",
+        "Tiêu đề dễ hiểu: đã gửi, đã hoán đổi, đã phê duyệt, đã đúc, thất bại…",
+        "Thay đổi trong ví người gửi và luồng đơn giản",
+        "Giải thích giao dịch thất bại, kèm thông báo của chính hợp đồng",
+        "Giao dịch đang chờ tự làm mới và cho biết có bị thay thế không",
+        "Chế độ nâng cao với phí, hàm, sự kiện và dữ liệu thô"
+      ],
+      "howTo": [
+        "Dán hash giao dịch (0x và 64 ký tự).",
+        "CRYPY tìm mạng và hiển thị chuyện gì đã xảy ra bằng lời dễ hiểu.",
+        "Chuyển sang chế độ nâng cao để xem gas, tham số hàm, sự kiện và dữ liệu thô."
+      ],
+      "faq": [
+        {
+          "q": "Tôi có cần kết nối ví không?",
+          "a": "Không. Giao dịch là công khai, nên mọi hash đều kiểm tra được mà không cần kết nối hay ký gì."
+        },
+        {
+          "q": "Thông tin lấy từ đâu?",
+          "a": "Trực tiếp từ các node blockchain: giao dịch, biên nhận và sự kiện. Giá được đọc từ pool on-chain. Không mua dữ liệu từ nhà cung cấp nào."
+        },
+        {
+          "q": "Lời giải thích đáng tin đến mức nào?",
+          "a": "Mỗi lời giải thích đều kèm bằng chứng: xác nhận trên blockchain, giải mã từ giao dịch hoặc có khả năng. Khi không xác định được, CRYPY nói rõ thay vì đoán."
+        },
+        {
+          "q": "Vì sao tôi không xem được lý do giao dịch cũ thất bại?",
+          "a": "Muốn đọc lý do phải chạy lại giao dịch trên trạng thái mạng ngay trước nó. Node miễn phí chỉ lưu trạng thái này cho các khối gần đây, nên với giao dịch cũ có thể không có lý do."
+        },
+        {
+          "q": "Những mạng nào được hỗ trợ?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon. Bảng trên trang này cho biết chính xác phần nào hoạt động trên mỗi mạng."
+        }
+      ],
+      "seoTitle": "Kiểm tra giao dịch: trạng thái và chi tiết | CRYPY",
+      "seoDescription": "Dán hash giao dịch để xem nó có thành công không, đã chuyển gì, tốn bao nhiêu và vì sao thất bại, bằng lời dễ hiểu. Hoạt động trên 5 mạng."
+    },
+    "gas-tracker": {
+      "name": "Theo dõi gas",
+      "question": "Bây giờ tốn bao nhiêu?",
+      "description": "Giá gas hiện tại và chi phí của các thao tác phổ biến trên mỗi mạng.",
+      "input": "Không cần gì: chỉ cần mở",
+      "cta": "Xem giá gas",
+      "features": [
+        "Phí ưu tiên thấp, trung bình và cao trên mỗi mạng",
+        "Chi phí bằng đô la để gửi, phê duyệt, hoán đổi và chuyển NFT",
+        "Xu hướng phí cơ bản trong 1.024 khối gần nhất",
+        "Làm mới mỗi 12 giây và hiển thị thời điểm cập nhật"
+      ],
+      "seoTitle": "Theo dõi gas: giá gwei trên 5 mạng | CRYPY",
+      "seoDescription": "Giá gas trực tiếp bằng gwei cho Ethereum, BNB Chain, Base, Arbitrum và Polygon, kèm chi phí USD để gửi, hoán đổi hoặc phê duyệt.",
+      "howTo": [
+        "Mở trang: giá được tải cho mọi mạng được hỗ trợ và làm mới mỗi 12 giây.",
+        "Chọn tốc độ: thấp khi có thể chờ, trung bình cho hầu hết giao dịch, cao khi cần qua nhanh.",
+        "Xem bảng chi phí để biết một lần gửi, phê duyệt, hoán đổi hoặc chuyển NFT hiện tốn bao nhiêu đô la."
+      ],
+      "faq": [
+        {
+          "q": "Gwei là gì?",
+          "a": "Một đơn vị nhỏ của coin trên mạng: 1 gwei là một phần tỷ của một ETH, BNB hoặc POL. Giá gas được tính bằng gwei cho mỗi đơn vị gas."
+        },
+        {
+          "q": "Phí cơ bản và phí ưu tiên là gì?",
+          "a": "Trên Ethereum và các mạng tương tự, mỗi giao dịch trả phí cơ bản của khối (bị đốt) cộng phí ưu tiên (tiền boa) cho validator. Tiền boa cao hơn thường giúp bạn được đưa vào sớm hơn. BNB Chain không có phí cơ bản, nên giá chỉ là giá gas."
+        },
+        {
+          "q": "Giá thấp, trung bình và cao được tính thế nào?",
+          "a": "Từ các khối gần đây đọc trực tiếp từ mỗi mạng: phí cơ bản của khối tiếp theo cộng tiền boa mà các giao dịch thực sự đã trả, ở ba mức."
+        },
+        {
+          "q": "Vì sao chi phí trên Base và Arbitrum có thêm một phần?",
+          "a": "Trên các mạng này, một phần phí trả cho việc công bố dữ liệu giao dịch lên Ethereum. Chi phí của CRYPY gồm ước tính phần đó, đọc từ mạng."
+        },
+        {
+          "q": "Khi nào gas rẻ nhất?",
+          "a": "Khi mạng ít đông đúc hơn. Đường xu hướng cho biết phí đang tăng hay giảm, để bạn có thể chờ lúc vắng hơn nếu giao dịch không gấp."
+        }
+      ]
+    },
+    "watchlist": {
+      "name": "Theo dõi và cảnh báo",
+      "question": "Báo tôi khi một ví có biến động",
+      "description": "Nhận tin nhắn Telegram khi ví bạn theo dõi gửi, nhận hoặc cấp phê duyệt mới, hoặc khi bảo mật hay thanh khoản của một token thay đổi. Đăng nhập bằng ví: không mật khẩu, không email.",
+      "input": "Đăng nhập bằng ví (một tin nhắn được ký, không phải giao dịch) và Telegram",
+      "cta": "Thiết lập cảnh báo",
+      "features": [
+        "Đăng nhập bằng ví: một tin nhắn ký miễn phí, không bao giờ là giao dịch",
+        "Theo dõi tối đa 10 địa chỉ (trên mọi mạng được hỗ trợ) hoặc token, kiểm tra khoảng mỗi phút",
+        "Cho từng mục: gửi hoặc nhận coin và token trên một mức, phê duyệt mới, giá trị giảm mạnh và thay đổi về bảo mật, thanh khoản của token",
+        "Cảnh báo Telegram có giờ yên lặng, kèm lịch sử trên trang này",
+        "Tải dữ liệu của bạn hoặc xóa tài khoản bất cứ lúc nào"
+      ],
+      "howTo": [
+        "Chạm Đăng nhập và chấp thuận tin nhắn trong ví. Kiểm tra rằng nó nhắc đến trang này và nói đây không phải giao dịch.",
+        "Thêm ví hoặc token để theo dõi, đặt nhãn và chọn điều gì sẽ kích hoạt cảnh báo.",
+        "Chạm Kết nối Telegram, mở bot của chúng tôi và chạm Bắt đầu. Từ đó cảnh báo sẽ đến đó."
+      ],
+      "faq": [
+        {
+          "q": "Vì sao tôi cần đăng nhập?",
+          "a": "Cảnh báo chạy trên máy chủ CRYPY kể cả khi trình duyệt đã đóng, nên máy chủ cần biết theo dõi gì cho bạn. Ví chính là thông tin đăng nhập: bạn ký một tin nhắn ngắn, không tốn phí và không thể chuyển tiền. Không có mật khẩu hay email."
+        },
+        {
+          "q": "Chính xác thì tôi ký cái gì?",
+          "a": "Một tin nhắn văn bản thường bắt đầu bằng địa chỉ trang này và nói rằng đây là tin nhắn, không phải giao dịch. Nếu trang nào yêu cầu bạn ký chuyển khoản, phê duyệt hoặc permit để đăng nhập, đừng ký."
+        },
+        {
+          "q": "Cảnh báo đến nhanh thế nào?",
+          "a": "Chuyển khoản và phê duyệt được kiểm tra khoảng mỗi phút, chậm vài khối so với khối mới nhất để một lần tái tổ chức mạng ngắn không gây cảnh báo sai. Giá trị giảm, bảo mật và thanh khoản token được kiểm tra mỗi giờ. Trong giờ yên lặng, cảnh báo sẽ chờ và đến cùng lúc khi hết giờ."
+        },
+        {
+          "q": "Tôi có thể tin mọi cảnh báo không?",
+          "a": "Cảnh báo dựa trên dữ liệu blockchain do chính CRYPY đọc. Token giả và chuyển khoản từ địa chỉ giống hệt bị lọc: token không có giá thị trường không bị báo là đã nhận, và phê duyệt được xác nhận on-chain trước. Cảnh báo về token là tín hiệu, không bao giờ là kết luận an toàn. Bot không bao giờ yêu cầu bạn kết nối ví, ký bất cứ thứ gì hay chia sẻ cụm từ khôi phục."
+        },
+        {
+          "q": "CRYPY lưu những gì?",
+          "a": "Địa chỉ ví, danh sách theo dõi kèm nhãn và tùy chọn cảnh báo, ID cuộc trò chuyện Telegram, lịch sử cảnh báo (90 ngày), phiên đăng nhập (chỉ dạng đã xáo trộn của mã phiên) và, nếu bạn muốn, danh sách danh mục. Không có email hay địa chỉ IP. Bạn có thể tải mọi thứ hoặc xóa tài khoản cùng toàn bộ dữ liệu bất cứ lúc nào."
+        }
+      ],
+      "seoTitle": "Theo dõi ví và cảnh báo qua Telegram | CRYPY",
+      "seoDescription": "Nhận cảnh báo Telegram khi ví bạn theo dõi gửi, nhận hoặc phê duyệt, hoặc khi bảo mật hay thanh khoản của token thay đổi."
+    },
+    "unit-converter": {
+      "name": "Chuyển đổi đơn vị",
+      "question": "Đây là bao nhiêu gwei?",
+      "description": "Chuyển đổi chính xác giữa wei, gwei và ETH hoặc BNB, không làm tròn.",
+      "input": "Một số lượng",
+      "cta": "Chuyển đổi",
+      "features": [
+        "Wei, gwei và ETH hoặc BNB, hai chiều",
+        "Chính xác đến từng wei, không làm tròn",
+        "Chạy trong trình duyệt của bạn"
+      ],
+      "howTo": [
+        "Nhập số lượng vào bất kỳ ô nào: wei, gwei hoặc ETH / BNB.",
+        "Hai ô còn lại cập nhật ngay với giá trị chính xác.",
+        "Dùng nút sao chép bên cạnh một giá trị để sao chép."
+      ],
+      "faq": [
+        {
+          "q": "Wei là gì?",
+          "a": "Wei là đơn vị nhỏ nhất của ETH: 1 ETH bằng 1.000.000.000.000.000.000 wei (10^18). BNB trên BNB Chain cũng dùng 18 chữ số thập phân, nên các đơn vị này áp dụng cho BNB."
+        },
+        {
+          "q": "Gwei là gì?",
+          "a": "Một gwei là 1.000.000.000 wei (10^9), tức 0,000000001 ETH. Giá gas thường được tính bằng gwei."
+        },
+        {
+          "q": "Tôi tính phí giao dịch thế nào?",
+          "a": "Nhân lượng gas đã dùng với giá gas. Ví dụ, một lần chuyển đơn giản dùng 21.000 gas ở mức 20 gwei tốn 420.000 gwei, tức 0,00042 ETH."
+        },
+        {
+          "q": "Token có dùng cùng đơn vị không?",
+          "a": "Không phải lúc nào cũng vậy. Nhiều token dùng 18 chữ số thập phân như ETH, nhưng không phải tất cả: USDT trên Ethereum dùng 6, còn USDT trên BNB Chain dùng 18. Hãy kiểm tra số chữ số thập phân của token trước khi chuyển đổi số lượng token."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Việc chuyển đổi diễn ra hoàn toàn trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Chuyển đổi chính xác wei sang gwei và ETH | CRYPY",
+      "seoDescription": "Chuyển đổi chính xác wei, gwei, ETH và BNB, không làm tròn, kể cả số dạng khoa học. Chạy trong trình duyệt của bạn; không gửi gì đi."
+    },
+    "hex-converter": {
+      "name": "Chuyển đổi hex",
+      "question": "Giá trị hex này là số nào?",
+      "description": "Chuyển đổi giá trị hex và thập phân dùng trong blockchain, tối đa 256 bit.",
+      "input": "Giá trị hex hoặc thập phân",
+      "cta": "Chuyển đổi",
+      "features": [
+        "Hex sang thập phân và ngược lại",
+        "Dạng 32 byte, độ dài byte và cách đọc có dấu",
+        "Hiển thị văn bản ẩn trong dữ liệu hex",
+        "Chạy trong trình duyệt của bạn"
+      ],
+      "howTo": [
+        "Dán giá trị hex (có hoặc không có 0x) hoặc số thập phân.",
+        "Xem ngay dạng thập phân, hex và 32 byte.",
+        "Nếu bạn chỉ nhập chữ số, hãy chọn đó là thập phân hay hex."
+      ],
+      "faq": [
+        {
+          "q": "Vì sao blockchain dùng hex?",
+          "a": "EVM làm việc với các từ 32 byte, và API của node trả về các số như số khối, số dư và gas dưới dạng hex (ví dụ 0x10 = 16)."
+        },
+        {
+          "q": "Dạng 32 byte là gì?",
+          "a": "Giá trị được đệm đủ 64 chữ số hex. Đây là cách các số xuất hiện trong dữ liệu giao dịch và bộ nhớ hợp đồng."
+        },
+        {
+          "q": "Giá trị có dấu là gì?",
+          "a": "Hợp đồng có thể lưu số có dấu (int256) bằng phép bù hai. Khi một giá trị 32 byte có bit cao nhất được bật, nó biểu thị một số âm, được hiển thị ở đây."
+        },
+        {
+          "q": "Giá trị lớn nhất được hỗ trợ là bao nhiêu?",
+          "a": "2^256 − 1, số lớn nhất vừa với một uint256 trong EVM."
+        }
+      ],
+      "seoTitle": "Chuyển đổi hex sang thập phân | CRYPY",
+      "seoDescription": "Chuyển đổi hex sang thập phân và ngược lại tới 256 bit, gồm int256 có dấu, dạng 32 byte và văn bản. Chạy trong trình duyệt của bạn."
+    },
+    "address-formatter": {
+      "name": "Kiểm tra định dạng địa chỉ",
+      "question": "Địa chỉ này viết đúng chưa?",
+      "description": "Kiểm tra địa chỉ có viết đúng không và lấy dạng có checksum. Cho một địa chỉ hoặc cả danh sách.",
+      "input": "Một địa chỉ",
+      "cta": "Kiểm tra địa chỉ",
+      "features": [
+        "Phát hiện lỗi gõ nhờ checksum EIP-55",
+        "Kiểm tra tối đa 500 địa chỉ cùng lúc",
+        "Hoạt động trên mọi mạng EVM",
+        "Chạy trong trình duyệt của bạn"
+      ],
+      "howTo": [
+        "Dán một địa chỉ hoặc danh sách, mỗi dòng một địa chỉ.",
+        "Mỗi địa chỉ được đánh dấu đúng, không có bảo vệ (không checksum) hoặc gõ sai.",
+        "Sao chép dạng có checksum của các địa chỉ đúng."
+      ],
+      "faq": [
+        {
+          "q": "Địa chỉ có checksum là gì?",
+          "a": "EIP-55 trộn chữ hoa và chữ thường trong địa chỉ để mã hóa một phép kiểm tra. Nếu bạn gõ sai một ký tự, phép kiểm tra gần như luôn thất bại, nên lỗi được phát hiện trước khi bạn gửi gì."
+        },
+        {
+          "q": "Địa chỉ toàn chữ thường có hợp lệ không?",
+          "a": "Có. Đó vẫn là cùng một địa chỉ nhưng không có checksum, nên lỗi gõ có thể không bị phát hiện. Dạng có checksum bổ sung lớp bảo vệ này."
+        },
+        {
+          "q": "Nếu checksum sai thì tôi làm gì?",
+          "a": "Đừng dùng địa chỉ đó. Checksum sai nghĩa là có ký tự đã bị đổi. Hãy sao chép lại địa chỉ từ nguồn gốc; đừng tự sửa bằng tay."
+        },
+        {
+          "q": "Địa chỉ có giống nhau trên mọi mạng EVM không?",
+          "a": "Mọi mạng EVM dùng cùng định dạng địa chỉ, nên cùng một địa chỉ có thể tồn tại trên mỗi mạng, nhưng số dư và hợp đồng trên mỗi mạng là khác nhau. Địa chỉ nạp của sàn thường chỉ nhận một mạng, vì vậy luôn kiểm tra người nhận chấp nhận mạng nào."
+        },
+        {
+          "q": "Địa chỉ đúng có nghĩa là an toàn không?",
+          "a": "Không. Nó chỉ có nghĩa địa chỉ được viết đúng. Hãy dùng tìm kiếm của CRYPY để xem địa chỉ đó là gì trước khi gửi."
+        }
+      ],
+      "seoTitle": "Checksum địa chỉ Ethereum (EIP-55) | CRYPY",
+      "seoDescription": "Kiểm tra địa chỉ Ethereum hoặc BNB Chain có viết đúng không và lấy dạng checksum EIP-55, cho một hoặc tối đa 500 địa chỉ."
+    },
+    "timestamp-block": {
+      "name": "Chuyển đổi thời gian và khối",
+      "question": "Lúc này là khối nào?",
+      "description": "Tìm khối của bất kỳ ngày nào trên mỗi mạng, thời gian của bất kỳ khối nào, và chuyển đổi dấu thời gian Unix.",
+      "input": "Ngày hoặc số khối",
+      "cta": "Chuyển đổi",
+      "features": [
+        "Từ ngày ra khối trên mọi mạng cùng lúc",
+        "Từ số khối ra ngày giờ",
+        "Dấu thời gian Unix ra ngày, trong trình duyệt của bạn",
+        "Đọc từ thời gian khối thật, không ước lượng (ngày tương lai được đánh dấu là ước tính)"
+      ],
+      "seoTitle": "Số khối theo ngày và chuyển đổi Unix | CRYPY",
+      "seoDescription": "Tìm khối của bất kỳ ngày nào trên Ethereum, BNB Chain, Base, Arbitrum và Polygon, thời gian của bất kỳ khối nào, và chuyển đổi dấu thời gian Unix.",
+      "howTo": [
+        "Nhập ngày và giờ để tìm khối tại thời điểm đó trên mỗi mạng.",
+        "Hoặc nhập số khối và chọn mạng để xem khối đó được tạo khi nào.",
+        "Hoặc dán dấu thời gian Unix để đổi ra ngày (phần này chạy trong trình duyệt)."
+      ],
+      "faq": [
+        {
+          "q": "Khối của một ngày được tìm thế nào?",
+          "a": "CRYPY đọc thời gian khối thật của mỗi mạng và thu hẹp dần đến khối đầu tiên được tạo vào hoặc sau ngày của bạn. Thường mất một hai giây."
+        },
+        {
+          "q": "Dấu thời gian Unix là gì?",
+          "a": "Số giây kể từ ngày 1 tháng 1 năm 1970 (UTC). Blockchain ghi thời gian của mỗi khối theo cách này."
+        },
+        {
+          "q": "Vì sao số khối trên mỗi mạng khác nhau?",
+          "a": "Mỗi mạng bắt đầu vào thời điểm khác nhau và tạo khối theo nhịp riêng (khoảng 12 giây trên Ethereum, nhanh hơn ở các mạng khác), nên cùng một thời điểm có số khối khác nhau trên mỗi mạng."
+        },
+        {
+          "q": "Tôi có nhập được ngày trong tương lai không?",
+          "a": "Có. CRYPY ước tính khối dựa trên nhịp gần đây của mạng và đánh dấu kết quả là ước tính."
+        },
+        {
+          "q": "Những mạng nào được hỗ trợ?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum và Polygon."
+        }
+      ]
+    },
+    "tx-decoder": {
+      "name": "Giải mã dữ liệu giao dịch",
+      "question": "Dữ liệu giao dịch này nghĩa là gì?",
+      "description": "Biến dữ liệu giao dịch thô thành hàm và giá trị dễ đọc, kèm cảnh báo về phê duyệt rủi ro.",
+      "input": "Dữ liệu giao dịch thô",
+      "cta": "Giải mã",
+      "features": [
+        "Giải mã các hàm phổ biến của token, NFT, router và quyền sở hữu",
+        "Cảnh báo phê duyệt không giới hạn và phê duyệt toán tử NFT",
+        "Giải mã các lệnh gọi bên trong multicall",
+        "Chạy trong trình duyệt của bạn"
+      ],
+      "howTo": [
+        "Sao chép dữ liệu đầu vào của giao dịch (bắt đầu bằng 0x) từ trình khám phá khối hoặc phần dữ liệu trong ví.",
+        "Dán vào đây; nó được giải mã ngay.",
+        "Đọc hàm, giá trị và mọi cảnh báo trước khi xác nhận giao dịch."
+      ],
+      "faq": [
+        {
+          "q": "Dữ liệu giao dịch là gì?",
+          "a": "Dữ liệu đầu vào cho hợp đồng biết phải làm gì. 4 byte đầu (bộ chọn hàm) xác định hàm, phần còn lại chứa các giá trị theo từng từ 32 byte."
+        },
+        {
+          "q": "Tôi tìm nó ở đâu?",
+          "a": "Trên trình khám phá khối, mở giao dịch và tìm Input Data (xem ở dạng hex gốc). Nhiều ví cũng hiển thị dữ liệu hex ở tab nâng cao hoặc tab dữ liệu trước khi bạn xác nhận."
+        },
+        {
+          "q": "Phê duyệt không giới hạn là gì?",
+          "a": "Nó cho phép bên chi tiêu chuyển bất kỳ lượng token đó khỏi ví của bạn, bây giờ và sau này, cho đến khi bạn thu hồi. Nếu bên chi tiêu độc hại hoặc bị hack sau này, số token đó có thể bị lấy."
+        },
+        {
+          "q": "Vì sao hiển thị hàm không xác định?",
+          "a": "CRYPY chỉ giải mã một danh sách hàm đã biết và không bao giờ đoán. Các hàm khác nhau có thể có cùng bộ chọn, nên đoán có thể hiển thị sai ý nghĩa."
+        },
+        {
+          "q": "Vì sao giá trị lớn vậy?",
+          "a": "Giá trị tính bằng đơn vị nhỏ nhất của token. Chia cho 10 mũ số chữ số thập phân của token, hoặc dùng công cụ Chuyển đổi đơn vị cho token 18 chữ số."
+        }
+      ],
+      "seoTitle": "Giải mã dữ liệu đầu vào giao dịch (calldata) | CRYPY",
+      "seoDescription": "Giải mã dữ liệu đầu vào giao dịch thành hàm và giá trị dễ đọc, kèm cảnh báo phê duyệt không giới hạn. Chạy trong trình duyệt của bạn."
+    },
+    "batch-balance": {
+      "name": "Quét số dư hàng loạt",
+      "question": "Tất cả các ví này có gì?",
+      "description": "Kiểm tra số dư coin và token của tối đa 500 địa chỉ cùng lúc trên các mạng bạn chọn. Đọc trực tiếp từ blockchain.",
+      "input": "Một danh sách địa chỉ",
+      "cta": "Quét danh sách",
+      "features": [
+        "Dán, gõ hoặc tải lên danh sách CSV hoặc TXT, kèm nhãn tùy chọn",
+        "Phát hiện lỗi gõ, trùng lặp và checksum sai trước khi quét",
+        "Ethereum, BNB Chain, Base, Arbitrum và Polygon: coin gốc cộng tối đa 5 token",
+        "Mỗi lô được đọc tại cùng một khối, trực tiếp từ mạng",
+        "Tổng, giá trị USD theo giá on-chain, sắp xếp và bộ lọc",
+        "Xuất CSV hoặc sao chép các địa chỉ có hoặc không có số dư"
+      ],
+      "howTo": [
+        "Dán các địa chỉ, mỗi dòng một địa chỉ. Có thể thêm nhãn sau dấu phẩy (0x…,Quỹ) hoặc tải lên tệp CSV/TXT.",
+        "Chọn mạng và token cần kiểm tra. Coin gốc (ETH, BNB) luôn được bao gồm.",
+        "Chạm Quét số dư, rồi sắp xếp, lọc, sao chép hoặc xuất kết quả."
+      ],
+      "faq": [
+        {
+          "q": "Tôi có cần kết nối ví không?",
+          "a": "Không. Số dư là công khai, nên mọi danh sách địa chỉ đều kiểm tra được mà không cần kết nối hay ký gì. CRYPY không bao giờ hỏi khóa hay cụm từ khôi phục."
+        },
+        {
+          "q": "Danh sách của tôi có được lưu không?",
+          "a": "Không. Địa chỉ chỉ được gửi tới máy chủ CRYPY để đọc số dư và không được lưu hay ghi lại. Nhãn không bao giờ rời khỏi trình duyệt, và danh sách không bao giờ xuất hiện trong địa chỉ trang."
+        },
+        {
+          "q": "Số dư lấy từ đâu?",
+          "a": "Trực tiếp từ các node blockchain, tất cả đọc tại cùng một khối. Giá lấy từ các pool DEX on-chain; token không có giá đáng tin cậy chỉ hiển thị số lượng."
+        },
+        {
+          "q": "Tôi kiểm tra được bao nhiêu địa chỉ?",
+          "a": "Tối đa 500 địa chỉ trên tối đa 2 mạng với tối đa 6 tài sản mỗi lần quét. Danh sách rất lớn, danh sách đã lưu và quét theo lịch được lên kế hoạch cho sau này."
+        },
+        {
+          "q": "Vì sao một địa chỉ hiện là hợp đồng?",
+          "a": "Nó có mã hợp đồng thông minh trên mạng đó. Ví ủy quyền cho mã (EIP-7702) được hiển thị là ví ủy quyền."
+        }
+      ],
+      "seoTitle": "Kiểm tra số dư ví hàng loạt: 500 địa chỉ | CRYPY",
+      "seoDescription": "Kiểm tra số dư coin và token của tối đa 500 địa chỉ cùng lúc trên Ethereum, BNB Chain, Base, Arbitrum và Polygon và xuất ra CSV."
+    }
+  },
+  "toolPage": {
+    "backToTools": "Tất cả công cụ",
+    "whatYouGet": "Bạn sẽ nhận được",
+    "notLiveTitle": "Công cụ này chưa ra mắt",
+    "notLiveText": "Chúng tôi chỉ phát hành công cụ khi nó hoạt động với dữ liệu blockchain thật và đã được kiểm thử. Công cụ này dự kiến ở giai đoạn {milestone}.",
+    "requiresAccount": "Cần đăng nhập bằng ví của bạn.",
+    "howToUse": "Cách sử dụng",
+    "faq": "Hỏi và đáp",
+    "runsLocally": "Chạy trong trình duyệt của bạn. Không có gì bạn nhập được gửi đi."
+  },
+  "toolsDialog": {
+    "title": "Tất cả công cụ",
+    "description": "Mọi công cụ của CRYPY, nhóm theo việc chúng giúp bạn làm.",
+    "searchLabel": "Tìm công cụ",
+    "searchPlaceholder": "Tìm công cụ — ví dụ \"phê duyệt\", \"gas\", \"honeypot\"",
+    "noResults": "Không có công cụ nào khớp với \"{query}\".",
+    "noWalletNeeded": "Mọi công cụ đều hoạt động mà không cần kết nối ví, trừ khi có ghi chú khác.",
+    "shortcut": "Ctrl K",
+    "close": "Đóng"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "languageTitle": "Ngôn ngữ",
+    "languageText": "Thêm ngôn ngữ đang được dịch. Các ngôn ngữ đánh dấu Beta chưa được người bản ngữ kiểm tra.",
+    "themeTitle": "Giao diện",
+    "themeText": "Chọn giao diện dễ nhìn nhất với bạn.",
+    "dark": "Tối",
+    "light": "Sáng",
+    "system": "Theo thiết bị"
+  },
+  "footer": {
+    "disclaimer": "CRYPY là phi lưu ký. Kết quả chỉ là tín hiệu, không phải lời khuyên tài chính hay cam kết an toàn.",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản",
+    "risk": "Công bố rủi ro",
+    "languages": "Ngôn ngữ"
+  },
+  "legal": {
+    "draftNotice": "Beta: trang này mô tả cách CRYPY hoạt động hiện nay. Trang chưa được luật sư xem xét và có thể thay đổi. Nếu bản dịch này khác với văn bản tiếng Anh, bản tiếng Anh được ưu tiên áp dụng.",
+    "privacy": {
+      "title": "Chính sách quyền riêng tư",
+      "description": "CRYPY lưu gì, không bao giờ thu thập gì, dùng cookie nào và những dịch vụ nào tham gia.",
+      "body": [
+        "CRYPY không bao giờ yêu cầu, thu thập hay lưu cụm từ khôi phục, cụm từ bí mật hoặc khóa riêng. Không trang hay tin nhắn nào của CRYPY sẽ hỏi bạn những thứ này.",
+        "Địa chỉ, token và hash giao dịch bạn tìm là dữ liệu blockchain công khai. Để trả lời, máy chủ CRYPY truy vấn các nhà cung cấp dữ liệu blockchain (như Alchemy, Infura, Ankr, dRPC và node công khai) và dịch vụ bảo mật (GoPlus, Sourcify). Các truy vấn này đi từ máy chủ CRYPY, không phải từ trình duyệt của bạn, nên nhà cung cấp không thấy địa chỉ IP của bạn. CRYPY không ghi lại ai đã tìm gì; kết quả được lưu đệm ngắn hạn để trang chạy nhanh.",
+        "Khi không có tài khoản, ngôn ngữ, giao diện, danh sách danh mục, mục đã xem gần đây và tùy chọn hiển thị chỉ được lưu trong trình duyệt của bạn. Địa chỉ trong danh mục được gửi từng cái để tra số dư và không được lưu.",
+        "Cookie: CRYPY chỉ dùng các cookie cần thiết để hoạt động: NEXT_LOCALE (ngôn ngữ), crypy_chains (mạng cần quét) và crypy_session (chỉ sau khi bạn đăng nhập). Không có cookie quảng cáo, phân tích hay tập lệnh theo dõi. Cloudflare, dịch vụ bảo vệ trang, có thể đặt cookie bảo mật riêng (như __cf_bm) để phân biệt người với bot.",
+        "Kết nối ví là tùy chọn. CRYPY chỉ đọc địa chỉ công khai của bạn, và kết nối không bao giờ yêu cầu bạn ký gì. Nếu bạn kết nối qua WalletConnect, kết nối đi qua dịch vụ WalletConnect của Reown.",
+        "Đăng nhập bằng ví là tùy chọn và chỉ cần cho danh sách theo dõi và cảnh báo. Đó là một tin nhắn được ký, không bao giờ là giao dịch. Sau đó CRYPY lưu địa chỉ ví, danh sách theo dõi kèm nhãn và tùy chọn cảnh báo, giờ yên lặng và múi giờ, cùng một mã phiên (chỉ lưu dấu vân tay của mã). Nếu bạn chọn giữ danh mục trong tài khoản, địa chỉ và nhãn của danh mục cũng được lưu.",
+        "Nếu bạn kết nối Telegram để nhận cảnh báo, CRYPY lưu ID cuộc trò chuyện và tên người dùng Telegram để gửi cảnh báo, và giữ lịch sử cảnh báo 90 ngày. Telegram chuyển tin nhắn theo chính sách quyền riêng tư của họ.",
+        "Khi đã đăng nhập, bạn có thể tải mọi thứ CRYPY có về tài khoản của bạn, hoặc xóa tài khoản để xóa tất cả cùng lúc. Bản sao lưu cơ sở dữ liệu được giữ 14 ngày, nên dữ liệu đã xóa cũng biến mất khỏi bản sao lưu trong thời gian đó.",
+        "Như hầu hết các trang web, máy chủ CRYPY và Cloudflare giữ nhật ký kỹ thuật (địa chỉ IP, trang được yêu cầu, thời gian và loại trình duyệt) để giữ trang an toàn và hoạt động, ví dụ để áp giới hạn yêu cầu. Nhật ký của máy chủ CRYPY được giữ khoảng hai tuần.",
+        "CRYPY không bán dữ liệu cá nhân và không chia sẻ với nhà quảng cáo."
+      ]
+    },
+    "terms": {
+      "title": "Điều khoản sử dụng",
+      "description": "Quy tắc sử dụng các công cụ blockchain miễn phí của CRYPY khi trang đang ở giai đoạn beta.",
+      "body": [
+        "CRYPY cung cấp công cụ thông tin miễn phí về dữ liệu blockchain công khai. Trang đang ở giai đoạn beta: tính năng có thể thay đổi, và kết quả có thể chưa đầy đủ hoặc sai.",
+        "CRYPY không bao giờ giữ, chuyển hay quản lý tiền của bạn. Các thao tác như thu hồi phê duyệt là giao dịch bạn xem xét và xác nhận trong ví của mình. Bạn chịu trách nhiệm cho mọi giao dịch mình xác nhận và phí mạng của nó.",
+        "Kết quả đến từ node blockchain và nhà cung cấp dữ liệu bên ngoài, có thể chậm, thiếu hoặc sai. Kiểm tra bảo mật hiển thị tín hiệu rủi ro, không bao giờ đảm bảo token, hợp đồng hay ví là an toàn. Cảnh báo có thể đến muộn hoặc không đến, vì vậy đừng dựa vào chúng như lớp bảo vệ duy nhất.",
+        "Hãy dùng CRYPY công bằng: đừng gửi lượng lớn yêu cầu tự động để vượt giới hạn, và đừng cố phá hỏng, làm quá tải hay lạm dụng trang.",
+        "CRYPY được cung cấp nguyên trạng, không có bảo đảm. Trong phạm vi pháp luật cho phép, CRYPY không chịu trách nhiệm cho tổn thất do sử dụng trang hoặc dựa vào kết quả của trang."
+      ]
+    },
+    "risk": {
+      "title": "Công bố rủi ro",
+      "description": "Rủi ro của tiền mã hóa, và vì sao không lần kiểm tra bảo mật nào chứng minh được token, hợp đồng hay ví là an toàn.",
+      "body": [
+        "Tài sản mã hóa có rủi ro. Giá có thể về 0 và giao dịch không thể đảo ngược.",
+        "Kiểm tra bảo mật của CRYPY hiển thị tín hiệu từ công cụ tự động và nhà cung cấp dữ liệu. Không lần kiểm tra nào chứng minh được token, hợp đồng hay ví là an toàn.",
+        "Kẻ lừa đảo tạo token và địa chỉ bắt chước hàng thật. Luôn kiểm tra toàn bộ địa chỉ trước khi gửi bất cứ thứ gì.",
+        "Không nội dung nào trên CRYPY là lời khuyên tài chính, pháp lý hay thuế. Hãy luôn tự tìm hiểu."
+      ]
+    }
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "text": "Trang này không tồn tại hoặc đã được chuyển đi.",
+    "home": "Về trang chủ"
+  },
+  "chains": {
+    "ethereum": "Ethereum",
+    "bsc": "BNB Chain",
+    "base": "Base",
+    "arbitrum": "Arbitrum",
+    "polygon": "Polygon"
+  },
+  "entity": {
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "viewOn": "Xem trên {explorer}",
+    "unavailableChain": "Hiện không kiểm tra được {chain}. Hãy thử lại sau một phút.",
+    "rateLimited": "Quá nhiều yêu cầu trong thời gian ngắn. Vui lòng đợi một phút rồi làm mới.",
+    "comingSoonTitle": "Sắp có thêm",
+    "kinds": {
+      "account": "Ví",
+      "delegated": "Ví có mã ủy quyền (EIP-7702)",
+      "token": "Hợp đồng token",
+      "contract": "Hợp đồng thông minh"
+    },
+    "address": {
+      "title": "Địa chỉ",
+      "metaTitle": "Địa chỉ {short}",
+      "perChain": "Trên từng mạng",
+      "active": "Đã gửi giao dịch",
+      "inactive": "Không có giao dịch gửi đi",
+      "openToken": "Mở trang token",
+      "badChecksum": "Địa chỉ này không khớp với checksum, nên rất có thể một ký tự đã bị đổi hoặc gõ sai. Hãy sao chép lại từ nguồn gốc và tuyệt đối không gửi tiền vào địa chỉ này.",
+      "comingSoon": "Lịch sử hoạt động (M7) của địa chỉ này sẽ có trong một bản cập nhật sắp tới.",
+      "balances": {
+        "total": "Tổng giá trị",
+        "totalNote": "Ước tính theo giá DEX hiện tại. Token không có pool đủ sâu để có giá đáng tin cậy không được tính.",
+        "chainTotal": "Giá trị trên {chain}",
+        "pricesBy": "Giá: đọc on-chain từ pool PancakeSwap và Uniswap.",
+        "updated": "Cập nhật {time}",
+        "asset": "Tài sản",
+        "balance": "Số dư",
+        "price": "Giá",
+        "value": "Giá trị",
+        "noPrice": "Không có giá đáng tin cậy",
+        "lessThanCent": "< $0.01",
+        "nativeCoin": "Coin gốc",
+        "empty": "Không có coin hay token nào trên {chain}.",
+        "unpriced": "{count, plural, one {# token} other {# token}} không có giá đáng tin cậy và {count, plural, one {không được tính} other {không được tính}} vào tổng.",
+        "pricesUnavailable": "Hiện chưa có giá, nên chỉ hiển thị số dư. Hãy thử lại sau một phút.",
+        "coverage": {
+          "truncated": "Địa chỉ này có danh sách token rất dài (phần lớn là airdrop không mong muốn), nên CRYPY chỉ kiểm tra {count} mục đầu để trang chạy nhanh. Có thể thiếu một số token.",
+          "common-only": "Hiện trên {chain} chỉ kiểm tra các token nổi tiếng, nên có thể thiếu một số token."
+        },
+        "hidden": "{count, plural, one {# token bị ẩn trông như rác} other {# token bị ẩn trông như rác}}",
+        "hiddenNote": "Kẻ lừa đảo gửi token vô giá trị tới nhiều ví để dụ người ta vào trang giả. Đừng bao giờ truy cập liên kết trong tên token hay cố bán hoặc \"nhận\" các token này.",
+        "spam": {
+          "link-in-name": "Có trang web trong tên",
+          "bait-words": "Từ ngữ mồi nhử, không có giá",
+          "unreadable": "Hợp đồng không phản hồi"
+        },
+        "rawAmount": "{amount} (đơn vị thô)",
+        "totalAll": "Tổng giá trị · mọi mạng",
+        "totalChain": "Tổng giá trị · {chain}",
+        "unpricedGroup": "{count, plural, one {# token không có giá đáng tin cậy} other {# token không có giá đáng tin cậy}}",
+        "moreNotListed": "{count, plural, one {Còn # mục không được liệt kê ở đây để trang chạy nhanh.} other {Còn # mục không được liệt kê ở đây để trang chạy nhanh.}}",
+        "unpricedNote": "Các token này không có pool DEX đủ sâu để có giá đáng tin cậy, nên không được tính vào tổng. Phần lớn token lạ được gửi tới ví mà không ai yêu cầu đều vô giá trị hoặc là lừa đảo: đừng cố bán chúng trên các trang lạ."
+      },
+      "lookupAnyway": "Vẫn tra cứu",
+      "identity": {
+        "title": "Tìm thấy trên {count}/{total} mạng",
+        "subtitle": "Địa chỉ này là gì trên mỗi mạng",
+        "noneTitle": "Không thấy hoạt động trên mạng nào được hỗ trợ",
+        "inactive": "Không có hoạt động trên: {chains}",
+        "filter": "Lọc theo mạng",
+        "all": "Mọi mạng",
+        "tokenNote": "Trên {chain}, địa chỉ này là một hợp đồng token ({token}). Chi tiết và kiểm tra nằm ở trang token.",
+        "openToken": "Mở trang token",
+        "shownBelow": "Hiển thị bên dưới",
+        "viewChain": "Xem trên mạng này",
+        "tokens": "{count, plural, one {# token} other {# token}}"
+      }
+    },
+    "token": {
+      "metaTitle": "Token {symbol} trên {chain}",
+      "notToken": "Địa chỉ này không phải hợp đồng token trên {chain}.",
+      "viewAsAddress": "Xem dưới dạng địa chỉ",
+      "facts": "Thông tin token",
+      "decimals": "Chữ số thập phân",
+      "totalSupply": "Tổng cung",
+      "contract": "Địa chỉ hợp đồng",
+      "unnamed": "Token chưa đặt tên",
+      "linkWarningTitle": "Tên token này chứa địa chỉ web",
+      "linkWarning": "Token lừa đảo thường đặt trang web trong tên để dụ người dùng. Đừng bao giờ truy cập liên kết trong tên token hay nhận token \"miễn phí\".",
+      "comingSoon": "Kiểm tra bảo mật đầy đủ cho token này — honeypot, thuế, quyền chủ sở hữu và người nắm giữ — sẽ có ở giai đoạn M5."
+    },
+    "tx": {
+      "title": "Giao dịch",
+      "metaTitle": "Giao dịch {short}",
+      "status": {
+        "success": "Thành công",
+        "reverted": "Thất bại",
+        "pending": "Đang chờ"
+      },
+      "chain": "Mạng",
+      "block": "Khối",
+      "from": "Từ",
+      "to": "Đến",
+      "contractCreation": "Tạo hợp đồng",
+      "notFound": "Chúng tôi không tìm thấy giao dịch này trên {chain}.",
+      "notFoundHelp": "Có thể nó chưa được gửi, đã bị thay thế hoặc loại bỏ, hoặc nằm trên mạng khác.",
+      "searchAll": "Tìm trên mọi mạng",
+      "confirmations": "{count, plural, one {# xác nhận} other {# xác nhận}}",
+      "ago": "{time} UTC · {relative}",
+      "summary": {
+        "title": "Chuyện gì đã xảy ra",
+        "pending": "Đang chờ được đưa vào khối. Trang này làm mới mỗi 15 giây.",
+        "failed": "Giao dịch này thất bại. Không điều gì nó định làm đã xảy ra, nhưng phí mạng vẫn bị trừ.",
+        "native": "{from} đã gửi {amount} đến {to}.",
+        "creation": "{from} đã tạo một hợp đồng mới.",
+        "call": "{from} đã gọi {fn} trên {to}.",
+        "callUnknown": "{from} đã gọi một hàm trên {to} không có trong danh sách hàm đã biết của chúng tôi.",
+        "withValue": "Đồng thời gửi {amount}.",
+        "moved": "{count, plural, one {Đã chuyển # tài sản (xem bên dưới).} other {Đã chuyển # tài sản (xem bên dưới).}}",
+        "permissions": "{count, plural, one {Đã thay đổi # quyền chi tiêu.} other {Đã thay đổi # quyền chi tiêu.}}"
+      },
+      "facts": {
+        "status": "Trạng thái",
+        "time": "Thời gian",
+        "confirmations": "Số xác nhận",
+        "created": "Hợp đồng được tạo",
+        "value": "Giá trị đã gửi",
+        "fee": "Phí mạng",
+        "burnt": "Đã đốt (phí cơ bản)",
+        "gasUsed": "Gas đã dùng",
+        "gasUsedValue": "{used}/{limit} ({percent})",
+        "gasPrice": "Giá gas",
+        "gwei": "{value} gwei",
+        "nonce": "Nonce",
+        "type": "Loại",
+        "freeFee": "0 (gửi không mất phí)",
+        "wallet": "Ví",
+        "contract": "Hợp đồng",
+        "pendingValue": "Chưa biết",
+        "gasLimit": "Giới hạn gas",
+        "maxGasPrice": "Giá gas tối đa",
+        "l1Fee": "Phí dữ liệu Ethereum (đã gồm trong tổng)"
+      },
+      "types": {
+        "legacy": "Cũ (loại 0)",
+        "eip2930": "Danh sách truy cập (loại 1)",
+        "eip1559": "EIP-1559 (loại 2)",
+        "eip4844": "Blob (loại 3)",
+        "eip7702": "Mã tài khoản, EIP-7702 (loại 4)"
+      },
+      "failure": {
+        "title": "Lý do thất bại",
+        "reason": "Thông báo lỗi từ hợp đồng:",
+        "none": "Hợp đồng dừng mà không có thông báo lỗi.",
+        "unknown": "Không có thông báo lỗi: muốn đọc cần trạng thái mạng ngay trước khối này, mà node của chúng tôi không còn lưu."
+      },
+      "transfers": {
+        "title": "Biến động tài sản",
+        "token": "Tài sản",
+        "from": "Từ",
+        "to": "Đến",
+        "amount": "Số lượng",
+        "nft": "NFT #{id}",
+        "wrap": "Đã bọc",
+        "unwrap": "Đã gỡ bọc",
+        "unknownToken": "Token chưa rõ",
+        "truncated": "Giao dịch này có nhiều sự kiện hơn số chúng tôi hiển thị. Danh sách đầy đủ có trên {explorer}.",
+        "valueAtTx": "Giá trị lúc đó",
+        "valueToday": "Giá trị hôm nay",
+        "event": "Sự kiện"
+      },
+      "approvals": {
+        "title": "Quyền chi tiêu đã thay đổi",
+        "owner": "Chủ sở hữu",
+        "spender": "Bên chi tiêu",
+        "allowance": "Quyền",
+        "unlimited": "Không giới hạn",
+        "all": "Mọi NFT trong bộ sưu tập này",
+        "nft": "NFT #{id}",
+        "removed": "Đã gỡ",
+        "alertTitle": "Giao dịch này đã cấp quyền chi tiêu",
+        "alertText": "Bên chi tiêu có thể chuyển các token này khỏi ví của chủ sở hữu mà không cần hỏi lại, cho đến khi quyền bị gỡ. Chỉ phê duyệt hợp đồng bạn tin tưởng. Công cụ xem và gỡ quyền sẽ có ở giai đoạn M6."
+      },
+      "call": {
+        "title": "Hàm được gọi",
+        "unknown": "Hàm này không có trong danh sách hàm đã biết của chúng tôi, nên được hiển thị dưới dạng dữ liệu thô. Chúng tôi không bao giờ đoán ý nghĩa của một hàm.",
+        "mismatch": "Hàm đã biết, nhưng dữ liệu này không khớp với tham số của nó.",
+        "selector": "ID hàm",
+        "params": "Tham số",
+        "nested": "Lệnh gọi bên trong",
+        "decoder": "Mở trong công cụ Giải mã dữ liệu giao dịch",
+        "more": "…và thêm {count}"
+      },
+      "input": {
+        "title": "Dữ liệu đầu vào",
+        "bytes": "{count, plural, one {# byte} other {# byte}}",
+        "truncated": "Hiển thị 2 KB đầu. Dữ liệu đầy đủ có trên {explorer}."
+      },
+      "events": "{count, plural, =0 {Không có sự kiện.} one {# sự kiện trong biên nhận.} other {# sự kiện trong biên nhận.}}",
+      "otherEvents": "{count, plural, one {# sự kiện không phải sự kiện token chuẩn và không được diễn giải.} other {# sự kiện không phải sự kiện token chuẩn và không được diễn giải.}}",
+      "pricesNote": "Giá trị USD dùng giá on-chain hôm nay, không phải giá lúc giao dịch.",
+      "source": "Đọc trực tiếp từ node {chain}.",
+      "story": {
+        "view": {
+          "label": "Chế độ xem",
+          "simple": "Đơn giản",
+          "advanced": "Nâng cao",
+          "showTechnical": "Chi tiết kỹ thuật",
+          "showTechnicalHint": "Khối, gas, hàm và dữ liệu thô, trong chế độ nâng cao"
+        },
+        "actions": {
+          "title": "{count, plural, one {Hành động phát hiện được (#)} other {Hành động phát hiện được (#)}}",
+          "coverage": "Đã giải thích {explained}/{total} sự kiện",
+          "coverageTip": "Giải thích một sự kiện không có nghĩa là hiểu hoàn toàn giao dịch, và đó không phải kiểm tra an toàn.",
+          "more": "{count, plural, one {Hiện thêm # hành động} other {Hiện thêm # hành động}}",
+          "unexplainedTitle": "{count, plural, one {# sự kiện chưa xác định} other {# sự kiện chưa xác định}}",
+          "unexplainedNote": "Chúng tôi không đoán ý nghĩa của các sự kiện này. Dữ liệu thô có trong chế độ nâng cao.",
+          "notIdentified": "Chưa xác định",
+          "okResult": "thành công",
+          "failedResult": "thất bại",
+          "app": "Ứng dụng nêu trong báo cáo: {app}.",
+          "native-transfer": "{from} đã gửi {amount} đến {to}.",
+          "token-transfer": "{amount} đã chuyển từ {from} đến {to}.",
+          "nft-transfer": "{amount} đã chuyển từ {from} đến {to}.",
+          "mint": "{amount} đã được tạo và gửi đến {to}.",
+          "burn": "{amount} đã được gửi tới địa chỉ đốt.",
+          "wrap": "{from} đã bọc coin thành {amount}.",
+          "unwrap": "{from} đã gỡ bọc {amount} thành {native}.",
+          "pool-swap": "{pool} đã đổi {in} lấy {out}.",
+          "pool-swap-unknown": "{pool} đã ghi nhận một lần hoán đổi; không đọc được token của nó.",
+          "liquidity-add": "Đã thêm thanh khoản vào {pool}: {in} và {out}.",
+          "liquidity-add-unknown": "Đã thêm thanh khoản vào {pool}.",
+          "liquidity-remove": "Đã rút thanh khoản khỏi {pool}: {in} và {out}.",
+          "liquidity-remove-unknown": "Đã rút thanh khoản khỏi {pool}.",
+          "permission-used": "{spender} đã dùng quyền của {owner} để chuyển {amount}. Còn lại: {after}.",
+          "permission-granted": "{owner} đã cho phép {spender} chi tiêu {after}.",
+          "permission-modified": "{owner} đã đổi quyền của {spender} thành {after}.",
+          "permission-set": "Quyền của {owner} dành cho {spender} được đặt thành {after}.",
+          "permission-revoked": "{owner} đã gỡ quyền của {spender} với {token}.",
+          "router-swap": "{router} báo đã chi {in} và trả {out} cho {to}.",
+          "contract-creation": "{from} đã tạo hợp đồng {to}.",
+          "smart-wallet": "Ví thông minh {from} đã chạy một giao dịch; giao dịch {result}.",
+          "user-operation": "Tài khoản thông minh {from} đã chạy một thao tác qua {router}; thao tác {result}.",
+          "copySummary": "Sao chép tóm tắt",
+          "copied": "Đã sao chép",
+          "export": "Xuất",
+          "json": "Chi tiết (JSON)",
+          "report": "Báo cáo dễ đọc (văn bản)",
+          "raw": "Giao dịch và biên nhận thô (JSON)",
+          "copyLink": "Sao chép liên kết"
+        },
+        "status": {
+          "success": "Hoàn tất",
+          "reverted": "Thất bại",
+          "pending": "Đang chờ"
+        },
+        "kinds": {
+          "native-send": "Chuyển khoản",
+          "token-send": "Chuyển token",
+          "nft-send": "Chuyển NFT",
+          "receive": "Đã nhận",
+          "swap": "Hoán đổi",
+          "approval": "Phê duyệt",
+          "revoke": "Đã gỡ quyền",
+          "mint": "Đúc",
+          "burn": "Đốt",
+          "wrap": "Bọc",
+          "unwrap": "Gỡ bọc",
+          "creation": "Tạo hợp đồng",
+          "self": "Giao dịch rỗng",
+          "contract-call": "Gọi hợp đồng",
+          "unknown-call": "Gọi hợp đồng"
+        },
+        "attempted": "{kind} (đã thử)",
+        "headline": {
+          "native-send": "Đã gửi {amount} đến {to}",
+          "token-send": "Đã gửi {amount} đến {to}",
+          "token-move": "Đã chuyển {amount} từ {from} đến {to}",
+          "nft-send": "Đã gửi {amount} đến {to}",
+          "receive": "Đã nhận {amount}",
+          "swap": "Đã đổi {out} lấy {in}",
+          "swapMany": "Đã đổi {outCount} tài sản lấy {inCount} tài sản",
+          "approvalUnlimited": "Đã cấp quyền không giới hạn để chi tiêu {token}",
+          "approval": "Đã cấp quyền chi tiêu {amount}",
+          "approvalAll": "Đã cấp toàn quyền với mọi NFT {token}",
+          "approvalNoAmount": "Đã cấp quyền chi tiêu {token}",
+          "revoke": "Đã gỡ quyền chi tiêu {token}",
+          "mint": "Đã đúc {amount}",
+          "burn": "Đã hủy {amount}",
+          "wrap": "Đã bọc {amount}",
+          "unwrap": "Đã gỡ bọc {amount}",
+          "creation": "Đã tạo một hợp đồng mới",
+          "self": "Đã gửi một giao dịch rỗng cho chính mình",
+          "contract-call": "Đã gọi {fn} trên {to}",
+          "unknown-call": "Đã tương tác với một hợp đồng",
+          "failed": "Thất bại: định {intent}",
+          "pending": "Đang chờ xác nhận",
+          "swapPartial": "Đã đổi {out} trong một pool",
+          "swapPartialVia": "Đã đổi {out} trong một pool {via}"
+        },
+        "intent": {
+          "native-send": "gửi {amount} đến {to}",
+          "token-send": "chuyển {amount} đến {to}",
+          "approval": "cấp cho {spender} quyền chi tiêu {token}",
+          "revoke": "gỡ quyền chi tiêu {token} của {spender}",
+          "swap": "hoán đổi token qua {to}",
+          "creation": "tạo một hợp đồng",
+          "contract-call": "gọi {fn} trên {to}",
+          "unknown-call": "gọi một hợp đồng ({to})"
+        },
+        "sub": {
+          "native-send": "Ví {from} đã gửi {amount} đến {to}.",
+          "token-send": "Ví {from} đã gửi {amount} đến {to}.",
+          "token-move": "{actor} đã chuyển {amount} từ {from} đến {to}, bằng một quyền chi tiêu.",
+          "nft-send": "{from} đã gửi {amount} đến {to}.",
+          "receive": "Ví {to} đã nhận {amount} từ {from}.",
+          "swap": "Ví {from} đã đổi {out} lấy {in} qua {to}.",
+          "swapMany": "Ví {from} đã đưa {outCount} tài sản và nhận {inCount} tài sản qua {to}.",
+          "approval": "Ví {from} đã cho phép {spender} chuyển {token} của mình. Không có token nào được chuyển trong giao dịch này.",
+          "revoke": "Ví {from} đã gỡ quyền chuyển {token} của {spender}. Điều này giúp giảm rủi ro.",
+          "mint": "Token mới đã được tạo và gửi đến {to}.",
+          "burn": "Ví {from} đã gửi {amount} tới địa chỉ đốt, nơi không ai dùng được.",
+          "wrap": "Ví {from} đã đổi coin thành token bọc, tỷ lệ 1:1.",
+          "unwrap": "Ví {from} đã đổi token bọc về lại coin, tỷ lệ 1:1.",
+          "creation": "Ví {from} đã đưa một hợp đồng thông minh mới lên blockchain.",
+          "self": "Giao dịch rỗng như thế này thường được dùng để hủy hoặc tăng tốc một giao dịch trước đó.",
+          "contract-call": "Ví {from} đã gọi hàm {fn} trên {to}.",
+          "unknown-call": "Ví {from} đã gọi một hàm trên {to} không có trong danh sách hàm đã biết của chúng tôi, nên chúng tôi không đoán nó đã làm gì.",
+          "movements": "{count, plural, one {Đã ghi nhận # sự kiện token (chi tiết bên dưới).} other {Đã ghi nhận # sự kiện token (chi tiết bên dưới).}}",
+          "noMovements": "Không ghi nhận sự kiện token chuẩn nào.",
+          "fee": "Phí là {fee}.",
+          "failed": "Không có gì thay đổi. Phí mạng {fee} vẫn bị trừ.",
+          "failedNoFee": "Không có gì thay đổi.",
+          "pending": "Đã gửi lên mạng, chưa nằm trong khối. Khi được xác nhận, nó sẽ {intent}.",
+          "pendingTime": "{chain} thêm một khối khoảng mỗi {seconds} giây; lúc đông đúc có thể lâu hơn.",
+          "via": "Đi qua một pool {dex}, đã xác minh qua factory của sàn.",
+          "app": "Router báo tên ứng dụng là \"{app}\".",
+          "possibleFee": "{amount} cũng đã đến {to}, có thể là phí (chưa xác minh).",
+          "swapPartial": "Ví {from} đã trả {out} vào một lần hoán đổi trong pool qua {to}. Pool đã trả ra {poolOut}; sau đó số này đi đâu không thấy trong sự kiện. Coin (ETH, BNB) trả bên trong hợp đồng không để lại sự kiện, và node của chúng tôi không còn lưu số dư của khối này để đo.",
+          "swapPartialVia": "Ví {from} đã trả {out} vào một pool {via} (đã xác minh qua factory của sàn) qua {to}. Pool đã trả ra {poolOut}; sau đó số này đi đâu không thấy trong sự kiện. Coin (ETH, BNB) trả bên trong hợp đồng không để lại sự kiện, và node của chúng tôi không còn lưu số dư của khối này để đo."
+        },
+        "evidence": {
+          "confirmed": "Đã xác nhận trên blockchain",
+          "decoded": "Giải mã từ giao dịch",
+          "likely": "Có khả năng, dựa trên sự kiện token",
+          "unknown": "Chưa xác định",
+          "fromEvents": "Từ sự kiện token",
+          "estimate": "Ước tính",
+          "notChecked": "Chưa kiểm tra",
+          "seen": "Mạng đã nhận",
+          "explained": "Giải thích từ thông báo của hợp đồng",
+          "reported": "Dựa vào báo cáo của chính hợp đồng"
+        },
+        "flow": {
+          "label": "Luồng giao dịch",
+          "from": "Từ",
+          "to": "Đến",
+          "wallet": "Ví",
+          "contract": "Hợp đồng",
+          "known": "Hợp đồng · tên đã biết",
+          "owner": "Chủ sở hữu",
+          "spender": "Bên chi tiêu",
+          "created": "đã tạo",
+          "sender": "Người gửi",
+          "through": "Đổi qua",
+          "intendedTo": "Đến (dự định)",
+          "triedFrom": "Từ (đã thử)",
+          "sent": "đã gửi",
+          "receivedBack": "nhận lại",
+          "permission": "cấp quyền chi tiêu",
+          "permissionOnly": "chỉ cấp quyền · không gửi gì",
+          "unlimited": "Không giới hạn",
+          "calls": "đã gọi một hợp đồng",
+          "stoppedBy": "bị {name} chặn",
+          "afterConfirm": "biến động hiện sau khi xác nhận",
+          "triedToMove": "đã thử chuyển",
+          "notMoved": "không được chuyển",
+          "self": "cho chính mình",
+          "copy": "Sao chép địa chỉ",
+          "newContract": "Hợp đồng mới",
+          "address": "Địa chỉ"
+        },
+        "progress": {
+          "label": "Tiến trình",
+          "sent": "Đã gửi",
+          "sentBy": "Bởi {from}",
+          "included": "Đã vào khối",
+          "block": "Khối {block}",
+          "final": "Hoàn tất",
+          "confirmations": "{count, plural, one {# xác nhận} other {# xác nhận}}",
+          "waiting": "Đang chờ…",
+          "failed": "Thất bại",
+          "reverted": "Bị hợp đồng hoàn tác",
+          "seen": "Node của chúng tôi đã nhận"
+        },
+        "changes": {
+          "title": "Thay đổi của {wallet}",
+          "fee": "Phí mạng",
+          "note": "Từ sự kiện token chuẩn. Coin (ETH, BNB) chuyển bên trong hợp đồng không xuất hiện trong sự kiện, nên có thể bị thiếu.",
+          "none": "Không có thay đổi token nào của ví này trong sự kiện chuẩn.",
+          "noteMeasured": "Token: từ sự kiện token chuẩn. Coin: đo từ số dư của người gửi trước và sau khối {block}; giao dịch khác trong cùng khối cũng có thể ảnh hưởng.",
+          "noteReported": "Token: từ sự kiện token chuẩn. Coin nhận bên trong hợp đồng: theo báo cáo của chính router, không đo độc lập.",
+          "source": {
+            "chain": "Kiểm tra số dư",
+            "event": "Sự kiện token",
+            "reported": "Báo cáo của router",
+            "protocol": "Đã xác minh",
+            "interpreted": "Diễn giải",
+            "unknown": "Không rõ"
+          }
+        },
+        "cost": {
+          "title": "Chi phí",
+          "network": "Mạng",
+          "tip": "Phí mạng trả cho mạng, không phải cho CRYPY. Phí vẫn bị thu kể cả khi giao dịch thất bại.",
+          "failed": "Phí vẫn bị thu khi giao dịch thất bại, vì mạng vẫn đã thực hiện công việc.",
+          "free": "Giao dịch này không trả phí.",
+          "estimateTitle": "Phí (ước tính)",
+          "upTo": "Tối đa {usd}",
+          "upToCoin": "Tối đa {amount}",
+          "estimateNote": "Phí cuối cùng chỉ biết sau khi xác nhận và thường thấp hơn.",
+          "estimateTip": "Giới hạn gas × giá tối đa mỗi gas. Phí thực tế = gas đã dùng × giá đã trả.",
+          "time": "Thời gian",
+          "yourTime": "{time} (giờ của bạn)",
+          "networkFee": "Phí mạng, trả để xử lý giao dịch."
+        },
+        "usd": {
+          "atTx": "lúc đó",
+          "today": "hôm nay"
+        },
+        "failure": {
+          "title": "Vì sao thất bại?",
+          "message": {
+            "title": "Hợp đồng dừng lại kèm một thông báo.",
+            "text": "Chúng tôi chưa có lời giải thích dễ hiểu cho thông báo này, nên hiển thị nguyên văn."
+          },
+          "help": "Điều thường giúp được:",
+          "balance": {
+            "title": "Ví gửi không đủ token.",
+            "text": "Hợp đồng từ chối vì số dư thấp hơn số lượng nó định chuyển."
+          },
+          "balanceHelp": "Kiểm tra số dư, rồi thử lại với số lượng mà ví đang có.",
+          "allowance": {
+            "title": "Quyền chi tiêu quá thấp.",
+            "text": "Hợp đồng định chuyển token bằng một quyền (hạn mức) nhỏ hơn số lượng cần."
+          },
+          "allowanceHelp": "Phê duyệt cho ứng dụng ít nhất số lượng này, rồi thử lại.",
+          "slippage": {
+            "title": "Giá biến động quá nhiều.",
+            "text": "Sàn đã dừng vì giao dịch sẽ trả về ít hơn mức tối thiểu người gửi chấp nhận."
+          },
+          "slippageHelp": "Thử lại, hoặc cho phép biến động giá (trượt giá) lớn hơn một chút trong ứng dụng.",
+          "deadline": {
+            "title": "Đến quá muộn.",
+            "text": "Giao dịch được đưa vào khối sau hạn chót đặt lúc gửi."
+          },
+          "deadlineHelp": "Gửi lại.",
+          "access": {
+            "title": "Ví này không được phép làm việc đó.",
+            "text": "Hợp đồng chỉ cho một số địa chỉ nhất định, như chủ sở hữu, dùng hàm này."
+          },
+          "paused": {
+            "title": "Hợp đồng đang tạm dừng.",
+            "text": "Đơn vị vận hành đã tạm ngừng hàm này."
+          },
+          "token-transfer": {
+            "title": "Một lần chuyển token bên trong đã thất bại.",
+            "text": "Hợp đồng định chuyển một token và token từ chối. Nguyên nhân thường gặp: không đủ số dư hoặc quyền, hoặc token có giới hạn chuyển."
+          },
+          "math": {
+            "title": "Một phép tính bị lỗi.",
+            "text": "Hợp đồng gặp lỗi toán học, như tràn số hoặc chia cho 0."
+          },
+          "out-of-gas": {
+            "title": "Có thể đã hết gas.",
+            "text": "Nó đã dùng {percent} lượng gas được phép, nên nhiều khả năng dừng vì thiếu gas. Đây là nguyên nhân có khả năng, chưa được xác nhận."
+          },
+          "out-of-gasHelp": "Thử lại với giới hạn gas cao hơn.",
+          "custom": {
+            "title": "Hợp đồng dừng với mã lỗi riêng.",
+            "text": "Lỗi này không có trong danh sách lỗi đã biết của chúng tôi, nên không thể giải thích chắc chắn."
+          },
+          "no-message": {
+            "title": "Hợp đồng dừng mà không nói lý do.",
+            "text": "Nó không đưa ra thông báo lỗi, nên không đọc được lý do từ blockchain."
+          },
+          "unavailable": {
+            "title": "Không có lý do.",
+            "text": "Giao dịch thất bại, nhưng hiện không đọc được lý do: việc đó cần trạng thái mạng ngay trước khối này, mà node miễn phí của chúng tôi không còn lưu."
+          },
+          "messageLabel": "Thông báo của hợp đồng"
+        },
+        "approval": {
+          "meaningTitle": "Điều này có nghĩa là gì",
+          "permission": "Đây là một quyền, không phải khoản thanh toán. Các ứng dụng như sàn giao dịch xin quyền này trước khi có thể chuyển token của bạn.",
+          "unlimited": "\"Không giới hạn\" nghĩa là bên chi tiêu có thể chuyển bất kỳ lượng token này khỏi ví, bây giờ hay sau này, mà không cần hỏi lại.",
+          "limited": "Bên chi tiêu có thể chuyển tối đa {amount} khỏi ví mà không cần hỏi lại.",
+          "all": "Toán tử có thể chuyển mọi NFT trong bộ sưu tập này mà ví đang giữ.",
+          "stays": "Quyền này còn hiệu lực cho đến khi bị gỡ, hoặc cho đến khi một giao dịch sau thay đổi nó.",
+          "revoked": "Quyền đã được đặt về 0, nên bên chi tiêu không còn chuyển được các token này.",
+          "activeTitle": "Quyền này còn hiệu lực không?",
+          "activeText": "Trang này cho thấy giao dịch đã làm gì {when}. Quyền có thể đã thay đổi kể từ đó.",
+          "checker": "Kiểm tra phê duyệt (xem và gỡ quyền) sẽ có ở giai đoạn M6."
+        },
+        "pending": {
+          "title": "Nó còn có thể thành công không?",
+          "yes": "Có. Người gửi chưa dùng số thứ tự của giao dịch này (nonce {nonce}) cho giao dịch khác.",
+          "no": "Không. Người gửi đã dùng số thứ tự của giao dịch này (nonce {nonce}) cho giao dịch khác, nên giao dịch này đã bị thay thế hoặc hủy và không thể xác nhận.",
+          "unknown": "Hiện chúng tôi không kiểm tra được điều này.",
+          "note": "Nếu người gửi thay thế hoặc hủy nó, trang này sẽ cho biết. Chúng tôi không bao giờ đánh dấu giao dịch là bị loại nếu không có bằng chứng đó.",
+          "checked": "Kiểm tra lần cuối {time} · kiểm tra mỗi 15 giây"
+        },
+        "notes": {
+          "title": "Điều nên biết",
+          "known": "{name} là tên trong danh sách hợp đồng nổi tiếng của CRYPY. Tên không phải là kiểm tra an toàn.",
+          "pricesAtTx": "Giá trị đô la dùng giá tại thời điểm giao dịch, đọc từ pool on-chain.",
+          "pricesToday": "Giá trị đô la dùng giá on-chain hôm nay. Node của chúng tôi không có giá tại thời điểm giao dịch.",
+          "toContract": "Bên nhận là một hợp đồng, không phải ví cá nhân.",
+          "burn": "Token gửi tới địa chỉ đốt không thể lấy lại.",
+          "nativeMissing": "Coin (ETH, BNB) trả ra bên trong hợp đồng không xuất hiện trong sự kiện token, nên phần coin của giao dịch này có thể không được hiển thị.",
+          "self": "Không có gì được chuyển. Ví gửi những giao dịch như vậy để thay thế một giao dịch bị kẹt có cùng số thứ tự.",
+          "unknownFn": "Hàm này không có trong danh sách của chúng tôi. Hợp đồng có thể đặt bất kỳ tên nào, nên chúng tôi chỉ mô tả những gì sự kiện chứng minh.",
+          "reported": "Một phần kết quả này đến từ báo cáo của chính router (sự kiện \"Swapped\" của nó). Chúng tôi hiển thị theo báo cáo vì không thể tự kiểm tra số dư coin."
+        },
+        "events": {
+          "title": "Tất cả {count} sự kiện token",
+          "hint": "Mọi biến động token theo thứ tự gốc, kể cả các bước trung chuyển nội bộ giữa các hợp đồng"
+        },
+        "nft": "NFT #{id}",
+        "units": "{amount} đơn vị",
+        "advanced": {
+          "transaction": "Giao dịch",
+          "hash": "Hash",
+          "chain": "Mạng",
+          "chainValue": "{name} · chain ID {id} ({caip})",
+          "block": "Khối",
+          "blockHash": "Hash khối",
+          "index": "Vị trí trong khối",
+          "indexTip": "Vị trí của giao dịch bên trong khối.",
+          "nonceTip": "Số thứ tự các giao dịch của người gửi.",
+          "fees": "Phí",
+          "gasLimitTip": "Lượng gas tối đa người gửi cho phép.",
+          "gasUsedTip": "Lượng gas giao dịch thực sự đã dùng.",
+          "baseFee": "Phí cơ bản",
+          "baseFeeTip": "Do mạng đặt cho mỗi khối; phần này bị đốt.",
+          "priorityFee": "Phí ưu tiên",
+          "priorityFeeTip": "Tiền boa trả cho bên tạo khối.",
+          "effective": "Giá gas thực tế",
+          "maxFee": "Phí tối đa mỗi gas",
+          "maxPriority": "Phí ưu tiên tối đa mỗi gas",
+          "total": "Tổng phí",
+          "events": "Sự kiện",
+          "eventsCount": "{count, plural, one {# sự kiện trong biên nhận, theo thứ tự gốc} other {# sự kiện trong biên nhận, theo thứ tự gốc}}",
+          "log": "Log",
+          "contract": "Hợp đồng",
+          "event": "Sự kiện",
+          "notStandard": "Không phải sự kiện chuẩn",
+          "topics": "Topics",
+          "data": "Dữ liệu",
+          "dataBytes": "{count, plural, one {# byte} other {# byte}}",
+          "raw": "Dữ liệu thô",
+          "moreEvents": "Chỉ liệt kê {count} sự kiện đầu. Danh sách đầy đủ có trên {explorer}."
+        },
+        "utc": "({time} UTC)",
+        "level": {
+          "chain": "Dữ kiện on-chain",
+          "chainTip": "Đọc trực tiếp từ trạng thái blockchain (trạng thái, giá trị, phí, số dư hoặc hạn mức).",
+          "event": "Sự kiện chuẩn",
+          "eventTip": "Giải mã từ một sự kiện chuẩn mà hợp đồng ghi lại (Transfer, Approval, Swap…).",
+          "protocol": "Đã xác minh",
+          "protocolTip": "Xác nhận với chính giao thức, ví dụ một pool mà factory của sàn liệt kê.",
+          "reported": "Được báo cáo",
+          "reportedTip": "Báo cáo của chính hợp đồng về việc nó đã làm. Hiển thị theo báo cáo, không kiểm tra độc lập.",
+          "interpreted": "Diễn giải",
+          "interpretedTip": "Một cách đọc hợp lý các dữ kiện nhưng chưa được chứng minh.",
+          "unknown": "Chưa xác định",
+          "unknownTip": "Không thể kết luận từ dữ liệu hiện có."
+        },
+        "who": {
+          "sender": "người gửi",
+          "senderWallet": "Ví người gửi",
+          "you": "Bạn",
+          "pool": "Pool {dex}",
+          "poolUnverified": "Pool (chưa xác minh)",
+          "token": "Hợp đồng {symbol}"
+        },
+        "route": {
+          "title": "Tài sản đã di chuyển thế nào",
+          "relationsTitle": "Biến động tài sản",
+          "hint": "Theo thứ tự xảy ra, từ các sự kiện của giao dịch",
+          "relationsIntro": "Các biến động này không tạo thành một tuyến liền mạch, nên chúng tôi liệt kê riêng thay vì đoán mối liên hệ giữa chúng.",
+          "verifiedPool": "Pool đã xác minh",
+          "unverifiedPool": "Chưa xác minh",
+          "knownName": "Tên đã biết",
+          "wrapped": "Đã bọc thành {amount}",
+          "unwrapped": "Đã gỡ bọc thành {amount}",
+          "reported": "do router báo cáo",
+          "reportedMatched": "được báo cáo, khớp với thay đổi số dư",
+          "measured": "đo từ số dư",
+          "sentWithCall": "gửi kèm giao dịch",
+          "possibleFee": "Có thể là phí (chưa xác minh)",
+          "more": "Thêm {count, plural, one {# biến động} other {# biến động}} trong chế độ nâng cao",
+          "called": "Hợp đồng được gọi: {name}"
+        },
+        "actionLabel": {
+          "native-transfer": "Chuyển coin",
+          "token-transfer": "Chuyển token",
+          "nft-transfer": "Chuyển NFT",
+          "mint": "Đúc",
+          "burn": "Đốt",
+          "wrap": "Bọc",
+          "unwrap": "Gỡ bọc",
+          "pool-swap": "Hoán đổi trong pool",
+          "liquidity-add": "Thêm thanh khoản",
+          "liquidity-remove": "Rút thanh khoản",
+          "permission-granted": "Cấp quyền",
+          "permission-modified": "Đổi quyền",
+          "permission-set": "Đặt quyền",
+          "permission-used": "Dùng quyền",
+          "permission-revoked": "Gỡ quyền",
+          "router-swap": "Báo cáo của router",
+          "contract-creation": "Tạo hợp đồng",
+          "smart-wallet": "Ví thông minh",
+          "user-operation": "Thao tác tài khoản thông minh"
+        },
+        "permissions": {
+          "title": "Quyền đã thay đổi",
+          "heading": "{token} · bên chi tiêu {spender}",
+          "status": {
+            "used": "Đã dùng hết bởi giao dịch này",
+            "granted": "Đã cấp quyền",
+            "modified": "Đã đổi quyền",
+            "set": "Đã đặt quyền",
+            "revoked": "Đã gỡ quyền"
+          },
+          "change": {
+            "used": "Đã dùng",
+            "granted": "Đã cấp",
+            "modified": "Đã đổi",
+            "set": "Đã đặt",
+            "revoked": "Đã gỡ"
+          },
+          "before": "Trước",
+          "after": "Sau giao dịch này",
+          "today": "Hôm nay",
+          "unknown": "Không rõ",
+          "notRead": "Không đọc được",
+          "readBefore": "Đọc từ mạng",
+          "derived": "Tính từ sự kiện",
+          "readNow": "Vừa đọc",
+          "usedBy": "bởi lần chuyển #{index}",
+          "todayNote": "Giá trị hôm nay được đọc lúc {time}. Nó cho thấy quyền hiện tại, không phải khi nào hay vì sao nó thay đổi.",
+          "eventsNote": "Token báo thay đổi quyền qua sự kiện Approval, và không phải token nào cũng làm giống nhau. Giá trị trước và sau lấy từ sự kiện của giao dịch này, trừ khi được ghi là đọc từ mạng."
+        },
+        "roles": {
+          "sender": "Người gửi",
+          "called": "Hợp đồng được gọi",
+          "created": "Hợp đồng mới",
+          "router": "Router",
+          "pool": "Pool",
+          "intermediary": "Chuyển tiếp tài sản",
+          "recipient": "Đã nhận",
+          "possible-fee": "Có thể là phí (chưa xác minh)",
+          "spender": "Bên chi tiêu",
+          "token": "Token",
+          "smart-account": "Tài khoản thông minh",
+          "burn": "Địa chỉ đốt"
+        },
+        "parties": {
+          "title": "Các bên liên quan ({count})",
+          "more": "{count, plural, one {Hiện thêm #} other {Hiện thêm #}}",
+          "note": "Vai trò lấy từ sự kiện của giao dịch này. Hợp đồng hay ví được đọc từ mạng; tên chỉ là nhãn, không phải kiểm tra an toàn."
+        }
+      }
+    },
+    "otherChains": {
+      "label": "Cùng địa chỉ trên mạng khác:",
+      "none": "Không được dùng trên các mạng được hỗ trợ khác.",
+      "overview": "Tổng quan mọi mạng"
+    },
+    "tokenSecurity": {
+      "tabs": {
+        "label": "Các phần của token",
+        "security": "Bảo mật",
+        "market": "Thị trường",
+        "soon": "Sắp có"
+      },
+      "level": {
+        "serious": "Phát hiện rủi ro nghiêm trọng",
+        "risks": "Phát hiện rủi ro",
+        "warnings": "Có một số cảnh báo",
+        "none-found": "Không phát hiện rủi ro lớn trong các kiểm tra này"
+      },
+      "levelNote": "CRYPY không có kết luận \"an toàn\": đây là những tín hiệu chúng tôi kiểm tra được.",
+      "topRisks": "Rủi ro chính: {list}.",
+      "noneFoundNote": "Vượt qua các kiểm tra này không chứng minh token trung thực, và hợp đồng có thể thay đổi hành vi về sau.",
+      "checked": "Kiểm tra lúc {time} UTC · khối {block}",
+      "counts": {
+        "critical": "Nghiêm trọng",
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp",
+        "passed": "Đạt",
+        "unchecked": "Chưa kiểm tra"
+      },
+      "severity": {
+        "critical": "Nghiêm trọng",
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp",
+        "pass": "Đạt",
+        "unchecked": "Chưa kiểm tra"
+      },
+      "class": {
+        "verified": "Đã xác minh",
+        "verifiedTip": "Đọc trực tiếp từ blockchain.",
+        "simulated": "Mô phỏng",
+        "simulatedTip": "Đo bằng cách mô phỏng giao dịch trong lệnh gọi chỉ đọc. Không có gì được gửi.",
+        "heuristic": "Suy đoán",
+        "heuristicTip": "Suy ra từ mã hợp đồng. Hàm tồn tại không cho biết nó có được dùng hay không.",
+        "external": "{provider}",
+        "externalTip": "Từ nhà cung cấp bên ngoài, có ghi tên.",
+        "unsupported": "Chưa kiểm tra",
+        "unsupportedTip": "CRYPY không kiểm tra được mục này ở đây."
+      },
+      "copyReport": "Sao chép báo cáo",
+      "copied": "Đã sao chép",
+      "unavailable": "Hiện chưa có kiểm tra bảo mật cho token này. Hãy thử lại sau một phút.",
+      "loading": "Đang chạy kiểm tra bảo mật…",
+      "trade": {
+        "title": "Thử giao dịch",
+        "intro": "Một lần mua, một lần chuyển và một lần bán, mô phỏng với pool {dex} thật trong lệnh gọi chỉ đọc. Không có gì được gửi.",
+        "buy": "Mua",
+        "sell": "Bán",
+        "transfer": "Chuyển sang ví khác",
+        "worked": "Thành công",
+        "blocked": "Bị chặn",
+        "notRun": "Chưa thử",
+        "tax": "Thuế {tax}",
+        "said": "Hợp đồng báo: {reason}",
+        "noReason": "Hợp đồng không đưa ra lý do.",
+        "footer": "Quy mô thử {amount} {symbol} · pool {pool}. Kết quả có thể thay đổi bất cứ lúc nào: chủ sở hữu có thể bật hoặc tắt giao dịch hay phí về sau.",
+        "why": {
+          "noPool": "Không tìm thấy pool trên các sàn CRYPY kiểm tra ({dexes}), nên không có gì để giao dịch.",
+          "unsupportedPool": "Có pool, nhưng phép thử không dùng được pool nào: chúng nằm trên kiểu sàn mà phép thử chưa mô phỏng được, hoặc ghép cặp với token khác ngoài coin gốc hay stablecoin.",
+          "noLiquidity": "Pool gần như chưa có thanh khoản, nên giao dịch thử không có ý nghĩa.",
+          "error": "Hiện không chạy được phép thử giao dịch (node không phản hồi kịp). Hãy thử lại sau một phút."
+        },
+        "via": "Pool ghép cặp với {symbol}, nên phép thử đổi coin gốc sang {symbol} trước, rồi dùng nó để mua.",
+        "feeRejected": "Pool từ chối lệnh bán: token đã lấy {tax} số lượng trên đường vào pool, và pool v3 từ chối nhận ít hơn số được nợ."
+      },
+      "owner": {
+        "title": "Chủ sở hữu có thể làm gì",
+        "state": {
+          "none": "Không tìm thấy hàm chủ sở hữu",
+          "renounced": "Đã từ bỏ quyền sở hữu",
+          "wallet": "Chủ sở hữu: một ví, chưa từ bỏ",
+          "contract": "Chủ sở hữu: một hợp đồng (thường là multisig, timelock hoặc hợp đồng staking)"
+        },
+        "power": {
+          "mint": "Đúc thêm token mới",
+          "fees": "Thay đổi phí mua và bán",
+          "blacklist": "Chặn ví giao dịch",
+          "pause": "Tạm dừng hoặc mở giao dịch",
+          "limits": "Giới hạn lượng một ví có thể mua hoặc giữ",
+          "cooldown": "Thêm thời gian chờ giữa các giao dịch",
+          "upgrade": "Thay mã hợp đồng",
+          "selfdestruct": "Hủy hợp đồng (SELFDESTRUCT)"
+        },
+        "found": "Tìm thấy trong mã: {functions}",
+        "notUsable": "Không dùng được: đã từ bỏ quyền sở hữu.",
+        "byContract": "Do một hợp đồng chủ sở hữu nắm giữ.",
+        "nothing": "Không tìm thấy quyền chủ sở hữu phổ biến nào (đúc thêm, phí, danh sách đen, tạm dừng, giới hạn) trong mã.",
+        "note": "\"Tìm thấy trong mã\" nghĩa là hàm tồn tại. Nó không cho biết hàm có được dùng hay dùng khi nào. Khi mã nguồn được xác minh trên Sourcify, CRYPY đọc ai có thể gọi từng hàm và các giới hạn hàm kiểm tra; đây là cách đọc mã nguồn, không phải sự bảo đảm.",
+        "access": {
+          "owner": "chỉ chủ sở hữu",
+          "role": "tài khoản có vai trò (không mất khi từ bỏ quyền sở hữu)",
+          "restricted": "một tài khoản chỉ định không phải chủ sở hữu (không mất khi từ bỏ quyền sở hữu)",
+          "open": "bất kỳ ai: không thấy kiểm tra quyền truy cập",
+          "unknown": "không nhận diện được kiểm tra quyền truy cập"
+        },
+        "fromSourceTitle": "Từ mã nguồn đã xác minh:",
+        "whoCalls": "ai có thể gọi: {access}",
+        "limitLabel": "Giới hạn ghi trong mã:"
+      },
+      "allChecks": "Tất cả kiểm tra ({count})",
+      "showAll": "Hiện cả {count} kiểm tra",
+      "checks": {
+        "sell": {
+          "risk": {
+            "title": "Bán bị chặn trong phép thử",
+            "detail": "Mua thành công nhưng bán thất bại. {reason}"
+          },
+          "pass": {
+            "title": "Bán thành công trong phép thử",
+            "detail": "Đã mua và bán trên {dex}."
+          },
+          "feeRejected": {
+            "title": "Bán thất bại trong phép thử",
+            "detail": "Pool {dex} từ chối lệnh bán vì token lấy {tax} mỗi lần chuyển vào pool."
+          }
+        },
+        "buy": {
+          "risk": {
+            "title": "Mua thất bại trong phép thử",
+            "detail": "Có thể giao dịch chưa mở, hoặc đang có giới hạn. {reason}"
+          }
+        },
+        "transfer": {
+          "risk": {
+            "title": "Chuyển bị chặn trong phép thử",
+            "detail": "Chuyển sang ví khác thất bại. {reason}"
+          }
+        },
+        "buyTax": {
+          "risk": {
+            "title": "Thuế mua {tax}",
+            "detail": "Đo trong phép thử giao dịch."
+          },
+          "pass": {
+            "title": "Không có thuế mua",
+            "detail": "Đo trong phép thử giao dịch."
+          }
+        },
+        "sellTax": {
+          "risk": {
+            "title": "Thuế bán {tax}",
+            "detail": "Đo trong phép thử giao dịch."
+          },
+          "pass": {
+            "title": "Không có thuế bán",
+            "detail": "Đo trong phép thử giao dịch."
+          }
+        },
+        "transferTax": {
+          "risk": {
+            "title": "Thuế chuyển {tax}",
+            "detail": "Chuyển giữa các ví bị mất một phần số lượng."
+          },
+          "pass": {
+            "title": "Không có thuế chuyển",
+            "detail": "Đo trong phép thử giao dịch."
+          }
+        },
+        "tradeTest": {
+          "unchecked": {
+            "title": "Phép thử giao dịch chưa chạy",
+            "detail": "Xem phần Thử giao dịch."
+          }
+        },
+        "owner": {
+          "risk": {
+            "title": "Chưa từ bỏ quyền sở hữu",
+            "detail": "Một địa chỉ chủ sở hữu vẫn có thể dùng các hàm chỉ dành cho chủ."
+          },
+          "pass": {
+            "title": "Không có chủ sở hữu hoạt động",
+            "detail": "Đã từ bỏ quyền sở hữu hoặc không có hàm chủ sở hữu."
+          }
+        },
+        "powers": {
+          "pass": {
+            "title": "Không thấy quyền chủ sở hữu phổ biến",
+            "detail": "Không tìm thấy hàm đúc thêm, phí, danh sách đen, tạm dừng và giới hạn trong mã."
+          }
+        },
+        "power": {
+          "mint": {
+            "risk": {
+              "title": "Chủ sở hữu có thể đúc thêm token",
+              "detail": "Nguồn cung mới sẽ làm giảm tỷ lệ của mọi người nắm giữ."
+            }
+          },
+          "fees": {
+            "risk": {
+              "title": "Chủ sở hữu có thể đổi phí",
+              "detail": "Phí mua hoặc bán có thể bị tăng sau này."
+            }
+          },
+          "blacklist": {
+            "risk": {
+              "title": "Chủ sở hữu có thể chặn ví",
+              "detail": "Ví bị chặn không thể giao dịch hay chuyển token."
+            }
+          },
+          "pause": {
+            "risk": {
+              "title": "Chủ sở hữu có thể tạm dừng hoặc mở giao dịch",
+              "detail": "Giao dịch có thể bị tắt."
+            }
+          },
+          "limits": {
+            "risk": {
+              "title": "Chủ sở hữu có thể đặt giới hạn giao dịch hoặc ví",
+              "detail": "Các lệnh mua hoặc bán lớn có thể bị chặn."
+            }
+          },
+          "cooldown": {
+            "risk": {
+              "title": "Chủ sở hữu có thể thêm thời gian chờ giao dịch",
+              "detail": "Ví có thể phải chờ giữa các giao dịch."
+            }
+          },
+          "upgrade": {
+            "risk": {
+              "title": "Mã có thể bị thay",
+              "detail": "Tìm thấy hàm nâng cấp trong mã."
+            }
+          },
+          "selfdestruct": {
+            "risk": {
+              "title": "Hợp đồng chứa SELFDESTRUCT",
+              "detail": "Tác dụng của nó bị giới hạn trên các mạng hiện nay, nhưng hiếm gặp ở token."
+            }
+          }
+        },
+        "proxy": {
+          "risk": {
+            "title": "Proxy có thể nâng cấp",
+            "detail": "Mã của nó có thể bị quản trị viên proxy thay thế."
+          },
+          "pass": {
+            "title": "Không phải proxy có thể nâng cấp",
+            "detail": "Không tìm thấy ô triển khai proxy chuẩn."
+          }
+        },
+        "source": {
+          "pass": {
+            "title": "Đã công bố mã nguồn",
+            "detail": "Khớp trên {provider}."
+          },
+          "unchecked": {
+            "title": "Chưa xác nhận mã nguồn",
+            "detail": "Không tìm thấy trên {provider}. Mã có thể đã công bố trên trình khám phá khối; CRYPY chưa kiểm tra miễn phí được điều đó."
+          }
+        },
+        "liquidity": {
+          "risk": {
+            "title": "Thanh khoản thấp",
+            "detail": "Khoảng ${usd} trong pool chính ({dex}). Giao dịch lớn làm giá biến động mạnh."
+          },
+          "pass": {
+            "title": "Thanh khoản khoảng ${usd}",
+            "detail": "Pool chính: {dex}."
+          }
+        },
+        "lp": {
+          "risk": {
+            "title": "Thanh khoản có thể bị rút",
+            "detail": "Chỉ {protected} thanh khoản bị đốt hoặc khóa hơn 30 ngày ({pools, plural, one {# pool} other {# pool}}, tính theo giá trị)."
+          },
+          "pass": {
+            "title": "Phần lớn thanh khoản đã đốt hoặc khóa",
+            "detail": "{protected} đã đốt hoặc khóa hơn 30 ngày ({pools, plural, one {# pool} other {# pool}}, tính theo giá trị)."
+          },
+          "owner": {
+            "risk": {
+              "title": "Chủ sở hữu có thể rút {share} thanh khoản",
+              "detail": "Khoảng ${usd}, nằm trong ví hoặc vị thế của chủ sở hữu."
+            }
+          },
+          "soon": {
+            "risk": {
+              "title": "{share} thanh khoản mở khóa trong 30 ngày",
+              "detail": "Khóa đầu tiên kết thúc {date}. Sau đó có thể rút."
+            }
+          },
+          "expired": {
+            "risk": {
+              "title": "{share} thanh khoản nằm trong các khóa đã hết hạn",
+              "detail": "Chưa bị rút, nhưng có thể bị rút bất cứ lúc nào."
+            }
+          },
+          "unknown": {
+            "risk": {
+              "title": "{share} nằm trong hợp đồng CRYPY không đọc được",
+              "detail": "Hợp đồng chưa xác định, hoặc hợp đồng khóa không đọc được điều khoản. Chúng có thể an toàn hoặc không."
+            }
+          },
+          "coverage": {
+            "unchecked": {
+              "title": "Chưa tìm thấy người nắm giữ {share} thanh khoản",
+              "detail": "Muốn tìm mọi người nắm giữ cần toàn bộ lịch sử của từng pool; chỉ mục riêng của CRYPY sẽ bổ sung. Phần này không bao giờ được tính là an toàn."
+            }
+          },
+          "upgradeable": {
+            "risk": {
+              "title": "{share} bị khóa trong hợp đồng khóa có thể nâng cấp",
+              "detail": "Đơn vị vận hành hợp đồng khóa có thể thay mã, nên các khóa này chỉ an toàn bằng đơn vị vận hành đó."
+            }
+          }
+        },
+        "holders": {
+          "risk": {
+            "title": "10 người nắm giữ lớn nhất giữ {top10}",
+            "detail": "Từ {provider}. Không tính địa chỉ đốt."
+          },
+          "pass": {
+            "title": "10 người nắm giữ lớn nhất giữ {top10}",
+            "detail": "Từ {provider}. Không tính địa chỉ đốt."
+          },
+          "unchecked": {
+            "title": "Chưa kiểm tra người nắm giữ",
+            "detail": "CRYPY chưa tự đếm được người nắm giữ, và nhà cung cấp bên ngoài không phản hồi."
+          }
+        },
+        "name": {
+          "risk": {
+            "title": "Tên đáng ngờ",
+            "detail": "Tên hoặc ký hiệu chứa liên kết hoặc từ ngữ mồi nhử."
+          },
+          "pass": {
+            "title": "Tên và ký hiệu trông bình thường",
+            "detail": "Không có liên kết hay từ ngữ mồi nhử."
+          }
+        },
+        "age": {
+          "unchecked": {
+            "title": "Tuổi hợp đồng và người tạo",
+            "detail": "Cần chỉ mục giao dịch trong quá khứ (dự kiến)."
+          }
+        },
+        "proxyClone": {
+          "title": "Một bản sao cố định, không nâng cấp được",
+          "detail": "Một bản sao tối giản EIP-1167: luôn chạy cùng một mã hợp đồng, không thể thay thế."
+        },
+        "liquidityState": {
+          "none": {
+            "title": "Không tìm thấy pool thanh khoản",
+            "detail": "Không có trên các sàn CRYPY kiểm tra. Token có thể được giao dịch ở nơi khác hoặc chưa được giao dịch."
+          },
+          "empty": {
+            "title": "Các pool đều trống",
+            "detail": "Tìm thấy {count, plural, one {# pool} other {# pool}} nhưng gần như không có gì. Token chưa thể giao dịch thực sự."
+          }
+        },
+        "powerOpen": {
+          "title": "Ai cũng có thể gọi {functions}",
+          "detail": "Mã nguồn đã xác minh không có kiểm tra quyền truy cập cho hàm này, nên ví nào cũng dùng được."
+        },
+        "powerOthers": "Do một vai trò hoặc tài khoản chỉ định khác nắm giữ, nên từ bỏ quyền sở hữu không loại bỏ được."
+      },
+      "lpStates": {
+        "owner": "{owner} thanh khoản nằm trong tay chủ sở hữu; có thể bị rút bất cứ lúc nào.",
+        "proxyBurned": "Quản trị viên của nó là địa chỉ đốt, nên không thể nâng cấp nữa."
+      },
+      "liquidity": {
+        "title": "Thanh khoản",
+        "none": "Không tìm thấy pool trên {dexes}.",
+        "empty": "Tìm thấy {count, plural, one {# pool} other {# pool}} trên {dexes}, đều trống (dưới 1 $)."
+      },
+      "holders": {
+        "title": "Người nắm giữ",
+        "count": "Người nắm giữ",
+        "top10": "Top 10 nắm giữ",
+        "owner": "Chủ sở hữu giữ",
+        "creator": "Người tạo giữ",
+        "source": "Từ {provider}, đọc lúc {time} UTC. CRYPY chưa tự đếm được người nắm giữ.",
+        "none": "Không có dữ liệu người nắm giữ: {provider} không phản hồi hoặc chưa phân tích token này."
+      },
+      "second": {
+        "title": "Ý kiến thứ hai",
+        "agree": "{provider} đồng ý ở {agree}/{shared} kiểm tra chung.",
+        "none": "Không có ý kiến thứ hai: {provider} không phản hồi hoặc chưa phân tích token này.",
+        "different": "Khác nhau:",
+        "separate": "Kết quả của {provider} hiển thị kèm tên và không bao giờ trộn vào kiểm tra riêng của CRYPY.",
+        "ids": {
+          "honeypot": "bán bị chặn",
+          "buyTax": "thuế mua",
+          "sellTax": "thuế bán",
+          "mintable": "có thể đúc thêm",
+          "proxy": "proxy có thể nâng cấp",
+          "blacklist": "có thể chặn ví",
+          "renounced": "đã từ bỏ quyền sở hữu"
+        },
+        "diff": "{what}: CRYPY {ours}, {provider} {theirs}"
+      },
+      "facts": {
+        "title": "Thông tin token",
+        "supply": "Tổng cung",
+        "decimals": "Chữ số thập phân",
+        "contract": "Hợp đồng"
+      },
+      "disclaimer": "CRYPY không bao giờ hiển thị token là \"an toàn\". Vượt qua kiểm tra không chứng minh token trung thực, và hợp đồng có thể thay đổi hành vi về sau. Không phải lời khuyên tài chính.",
+      "lp": {
+        "title": "Ai nắm giữ thanh khoản",
+        "intro": "Thanh khoản là thứ giúp mọi người bán được. Ai nắm giữ có thể rút nó, và khi đó giá có thể sụp đổ. CRYPY đã tìm người nắm giữ của từng pool và đọc on-chain xem mỗi bên có thể làm gì.",
+        "tiles": {
+          "protected": "Được bảo vệ: đã đốt, hoặc khóa hơn 30 ngày",
+          "soon": "Mở khóa trong 30 ngày",
+          "soonNext": "Tiếp theo: {date}",
+          "controlled": "Multisig, timelock, farm hoặc sàn",
+          "removable": "Có thể rút ngay",
+          "unknown": "Hợp đồng chưa xác định hoặc khóa chưa đọc được",
+          "notFound": "Chưa tìm thấy người nắm giữ"
+        },
+        "state": {
+          "burned": "Đã đốt",
+          "locked": "Đã khóa",
+          "soon": "Sắp mở khóa",
+          "controlled": "Có kiểm soát",
+          "owner": "Chủ sở hữu",
+          "expired": "Khóa đã hết hạn",
+          "removable": "Có thể rút ngay",
+          "unknown": "Không rõ",
+          "notFound": "Chưa kiểm tra"
+        },
+        "total": "Tổng các pool được tính: {usd} ({count, plural, one {# pool} other {# pool}}). Mỗi pool được tính theo giá trị, nên pool lớn quan trọng hơn pool nhỏ.",
+        "tooSmall": "Không pool nào có giá trị từ {usd} trở lên, nên không có tổng.",
+        "kindLp": "Token LP",
+        "kindPositions": "Vị thế (NFT) · tỷ lệ tính theo giá trị",
+        "foundShare": "đã tìm được người nắm giữ cho {share}",
+        "unlisted": "sàn không có trong danh sách CRYPY; pool đã xác nhận qua factory",
+        "weight": "{share} tổng thanh khoản",
+        "notCounted": "không tính",
+        "fee": "phí {fee}%",
+        "unreadPool": "Lần này không đọc được người nắm giữ của pool này. Hãy thử kiểm tra lại.",
+        "col": {
+          "holder": "Người nắm giữ",
+          "type": "Loại",
+          "share": "Tỷ lệ",
+          "control": "Khóa hoặc kiểm soát",
+          "status": "Trạng thái"
+        },
+        "wallets": "{count} ví",
+        "largest": "lớn nhất {address}",
+        "position": "Vị thế #{id} · {name}",
+        "notFound": {
+          "title": "Chưa tìm thấy người nắm giữ",
+          "detail": "CRYPY không tìm được ai đang giữ phần này. Muốn tìm mọi người nắm giữ cần toàn bộ lịch sử pool, thứ mà chỉ mục riêng của CRYPY sẽ cung cấp sau. Phần này không bao giờ được tính là an toàn."
+        },
+        "small": {
+          "title": "{count, plural, one {# pool nhỏ} other {# pool nhỏ}}",
+          "detail": "mỗi pool dưới {usd}: có liệt kê, không tính vào tổng"
+        },
+        "empty": "{count, plural, one {# pool trống (dưới 1 $) không được liệt kê.} other {# pool trống (dưới 1 $) không được liệt kê.}}",
+        "how": {
+          "title": "Cách chúng tôi kiểm tra.",
+          "body": "Pool được tìm trên {dexes}, cùng các pool GoPlus liệt kê sau khi đã xác nhận qua factory của sàn. Người nắm giữ được tìm từ các địa chỉ đã biết (địa chỉ đốt, chủ sở hữu, hợp đồng khóa đã đăng ký, farm và bên thu phí), danh sách người nắm giữ lớn nhất của GoPlus, các lần chuyển LP gần đây và danh sách vị thế v3 bị khóa của chính các hợp đồng khóa. Sau đó mọi tỷ lệ và mọi ngày mở khóa được đọc từ blockchain. Một hợp đồng khóa chỉ được tính nếu nằm trong danh sách đã kiểm tra của CRYPY (UNCX, PinkLock, Team Finance, kho OnlyMoons); hợp đồng chỉ tự gọi mình là khóa được tính là chưa xác định. Khóa chỉ bảo vệ đến ngày kết thúc."
+        },
+        "lock": {
+          "forever": "Khóa không có ngày kết thúc.",
+          "until": "Khóa đến {date} (còn {days, plural, one {# ngày} other {# ngày}}).",
+          "soon": "Mở khóa {date}, sau {days, plural, one {# ngày} other {# ngày}}. Sau đó có thể rút.",
+          "ended": "Khóa đã kết thúc {date} ({days, plural, one {# ngày} other {# ngày}} trước) và chưa bị rút: có thể bị rút bất cứ lúc nào.",
+          "vesting": "Sau đó được mở dần theo từng đợt."
+        },
+        "control": {
+          "unread": "Một hợp đồng khóa trong danh sách CRYPY, nhưng lần này không đọc được điều khoản khóa.",
+          "noLocks": "Một hợp đồng khóa trong danh sách CRYPY, nhưng nó không liệt kê khóa nào cho pool này.",
+          "partly": "{share} trong số đó không được các khóa nó liệt kê bao phủ.",
+          "locks": "{count} khóa. Đầu tiên: {first}",
+          "multisig": "Cần {threshold}/{signers} người ký đồng ý để rút. Họ vẫn có thể làm vậy bất cứ lúc nào.",
+          "multisigOne": "Một multisig mà chỉ một người ký (trong {signers}) có thể tự rút.",
+          "timelock": "Mọi lần rút phải chờ khoảng {hours, plural, one {# giờ} other {# giờ}} (đọc từ hợp đồng), nên sẽ được thấy trước.",
+          "farm": "Được nhiều người stake, không phải một người nắm giữ.",
+          "exchange": "Bên thu phí của sàn: nhận một phần nhỏ từ mỗi pool.",
+          "owner": "Chủ sở hữu token có thể rút bất cứ lúc nào.",
+          "token": "Do chính hợp đồng token nắm giữ. Nó làm được gì phụ thuộc vào mã của hợp đồng đó.",
+          "pool": "Đã gửi trả về pool; sẽ đi theo lần rút tiếp theo.",
+          "wallet": "Có thể rút bất cứ lúc nào.",
+          "contract": "CRYPY không xác định được hợp đồng này có thể giải phóng nó hay không. Nó không có trong danh sách hợp đồng khóa đã biết của CRYPY.",
+          "burn": "Mất vĩnh viễn: không ai rút được.",
+          "upgradeable": "Hợp đồng khóa này có thể được đơn vị vận hành nâng cấp, nên khóa chỉ an toàn bằng đơn vị vận hành đó."
+        },
+        "kind": {
+          "burn": "Địa chỉ đốt",
+          "locker": "Hợp đồng khóa",
+          "vault": "Kho khóa",
+          "multisig": "Multisig (Safe)",
+          "timelock": "Timelock",
+          "farm": "Farm staking",
+          "exchange": "Bên thu phí của sàn",
+          "owner": "Chủ sở hữu token",
+          "token": "Hợp đồng của chính token",
+          "pool": "Chính pool",
+          "wallet": "Ví",
+          "contract": "Hợp đồng chưa xác định",
+          "exchangeOf": "Bên thu phí {name}"
+        },
+        "type": {
+          "burn": "Đã đốt",
+          "locker": "Hợp đồng khóa",
+          "vault": "Kho khóa",
+          "multisig": "Multisig",
+          "timelock": "Timelock",
+          "farm": "Farm staking",
+          "exchange": "Sàn",
+          "owner": "Chủ sở hữu",
+          "token": "Hợp đồng token",
+          "pool": "Pool",
+          "wallet": "Ví",
+          "contract": "Hợp đồng, chưa nhận diện"
+        },
+        "tiny": "Thêm {count, plural, one {# người nắm giữ} other {# người nắm giữ}}, mỗi người dưới 0,05% (cộng lại {share}), được tính trong mọi tổng."
+      },
+      "notOnChain": "Kiểm tra bảo mật token chưa có trên {chain}: CRYPY sẽ bổ sung khi phép thử giao dịch và kiểm tra thanh khoản được xác minh ở đó. Thông tin token ở trên được đọc từ mạng."
+    },
+    "tabs": {
+      "label": "Các phần của địa chỉ",
+      "overview": "Tổng quan",
+      "approvals": "Phê duyệt",
+      "activity": "Hoạt động"
+    },
+    "approvals": {
+      "metaTitle": "Phê duyệt của {short}",
+      "title": "Phê duyệt",
+      "intro": "Phê duyệt cho phép một địa chỉ khác chuyển token của bạn mà không cần hỏi lại. Hãy thu hồi những phê duyệt bạn không dùng và mọi phê duyệt bạn không nhận ra.",
+      "ui": {
+        "readOnlyTitle": "Không phải ví bạn đang kết nối (chỉ đọc)",
+        "readOnlyBody": "Ai cũng có thể kiểm tra mọi địa chỉ. Chỉ thu hồi được khi ví đã cấp phê duyệt đang được kết nối.",
+        "connectToRevoke": "Kết nối ví này để thu hồi",
+        "attentionOne": "1 phê duyệt cần chú ý",
+        "attentionOther": "{count} phê duyệt cần chú ý",
+        "attentionBody": "Chúng có thể chuyển tới {usd} token của bạn ngay lúc này.",
+        "attentionBodyNoPrice": "Hãy kiểm tra và thu hồi những phê duyệt bạn không nhận ra.",
+        "noneAttention": "Không có phê duyệt nào cần chú ý",
+        "noneAttentionBody": "Mọi phê duyệt tìm thấy đều dành cho ứng dụng nổi tiếng hoặc hợp đồng đã công bố mã nguồn. Hãy thu hồi những phê duyệt bạn không còn dùng.",
+        "noneFoundTitle": "Không tìm thấy phê duyệt",
+        "noneFoundBody": "Không tìm thấy phê duyệt nào còn hiệu lực trên {chains}. CRYPY đã tìm trong danh sách của GoPlus và kiểm tra riêng; phê duyệt mà nó không tìm thấy sẽ không hiện ở đây.",
+        "revokeFlaggedOne": "Thu hồi phê duyệt bị đánh dấu",
+        "revokeFlaggedOther": "Thu hồi {count} phê duyệt bị đánh dấu",
+        "revokeFlaggedNote": "Mỗi phê duyệt một lần xác nhận trong ví · miễn phí ngoài phí mạng",
+        "readAt": "Đọc on-chain {time} · {blocks}",
+        "blockOn": "khối {block} trên {chain}",
+        "checkAgain": "Kiểm tra lại",
+        "statActive": "Phê duyệt còn hiệu lực",
+        "statActiveDetail": "{tokens} token · {nfts} bộ sưu tập NFT · {permit2} qua Permit2",
+        "statAtRisk": "Có thể bị chuyển ngay",
+        "statAtRiskDetail": "giới hạn bởi số dư của bạn",
+        "statUnlimited": "Không giới hạn",
+        "statAttention": "Cần chú ý",
+        "statAttentionDetail": "{malicious} độc hại · {wallets} bên chi tiêu là ví",
+        "listTitle": "Phê duyệt của ví này",
+        "filters": "Lọc phê duyệt",
+        "all": "Tất cả ({count})",
+        "fAttention": "Cần chú ý ({count})",
+        "fUnlimited": "Không giới hạn ({count})",
+        "fTokens": "Token ({count})",
+        "fNfts": "NFT ({count})",
+        "allChains": "Mọi mạng",
+        "groupAttention": "Cần chú ý ({count})",
+        "groupAttentionNote": "thu hồi trừ khi bạn chắc chắn cần chúng",
+        "groupNormal": "Trông bình thường ({count})",
+        "groupNormalNote": "ứng dụng nổi tiếng hoặc hợp đồng đã công bố mã nguồn: thu hồi những cái bạn không còn dùng",
+        "groupCheck": "Hãy kiểm tra ({count})",
+        "groupCheckNote": "hợp đồng chưa rõ: đảm bảo mỗi cái là ứng dụng bạn định dùng",
+        "colToken": "Token",
+        "colSpender": "Bên chi tiêu (ai có thể chuyển)",
+        "colAllowance": "Hạn mức",
+        "colAtRisk": "Đang chịu rủi ro",
+        "colLast": "Thay đổi gần nhất",
+        "youHold": "Bạn đang giữ {amount}",
+        "youHoldNfts": "Bạn đang giữ {count}",
+        "holdUnknown": "Không đọc được số dư",
+        "unlimited": "Không giới hạn",
+        "unlimitedNote": "cũng bao gồm token bạn nhận sau này",
+        "allItems": "Mọi vật phẩm trong bộ sưu tập",
+        "expires": "hết hạn {date}",
+        "viaPermit2": "{permit2} → {name}",
+        "nftCount": "{count} NFT",
+        "noPrice": "Không có giá",
+        "unknownDate": "Không rõ",
+        "tx": "giao dịch {hash}",
+        "spenderWallet": "Một ví, không phải hợp đồng",
+        "spenderDelegated": "Ví có mã ủy quyền",
+        "spenderContract": "Hợp đồng chưa rõ",
+        "spenderUnreadable": "Không đọc được",
+        "badgeMalicious": "Độc hại (GoPlus)",
+        "badgeHigh": "Rủi ro cao",
+        "badgeCheck": "Kiểm tra",
+        "badgeKnown": "Ứng dụng nổi tiếng",
+        "badgeNormal": "Hợp đồng",
+        "badgeSourceVerified": "Mã nguồn đã xác minh",
+        "badgeSourceMissing": "Chưa công bố mã nguồn",
+        "badgeGoplusDoubt": "GoPlus: đáng ngờ",
+        "badgeGoplusTrusted": "GoPlus: đáng tin",
+        "badgeUnused": "Không dùng",
+        "badgeRevoked": "Đã thu hồi",
+        "reasonMalicious": "GoPlus liệt kê địa chỉ này là độc hại. Nó có thể lấy {symbol} của bạn, bây giờ và sau này.",
+        "reasonWallet": "Đây là ví của một người, không phải ứng dụng. Ứng dụng không bao giờ cần điều này; đây là cách lừa đảo phổ biến để rút sạch ví.",
+        "reasonUnknownContract": "Mã nguồn chưa được công bố và không nằm trong danh sách ứng dụng nổi tiếng của CRYPY. Hãy đảm bảo đây là ứng dụng bạn định dùng.",
+        "reasonUnreadable": "CRYPY không đọc được bên chi tiêu này là gì. Hãy kiểm tra trước khi giữ phê duyệt.",
+        "reasonUnused": "Bạn không giữ {symbol}, nên hôm nay không có gì chịu rủi ro. Có thể thu hồi yên tâm nếu bạn không còn dùng.",
+        "revoke": "Thu hồi",
+        "howTitle": "Cách chúng tôi kiểm tra.",
+        "how": "Phê duyệt được tìm qua danh sách phê duyệt của GoPlus và các kiểm tra riêng của CRYPY (ứng dụng phổ biến và Permit2 cho mọi token bạn giữ, cùng các phê duyệt của bạn trong vài giờ qua với các token đó). Sau đó mỗi hạn mức hiển thị đều được đọc lại từ blockchain. \"Đang chịu rủi ro\" là giá trị nhỏ hơn giữa hạn mức và số bạn đang giữ, theo giá on-chain. Phê duyệt mà CRYPY không tìm thấy sẽ không hiện, nên danh sách này có thể chưa đầy đủ.",
+        "howSafety": "Thu hồi tốn một khoản phí mạng nhỏ và được ký trong chính ví của bạn. CRYPY không bao giờ hỏi cụm từ khôi phục hay khóa riêng, và không bao giờ gửi gì nếu bạn chưa bấm.",
+        "goplusDown": "GoPlus không phản hồi trên {chains}. Ở đó chỉ có kiểm tra riêng của CRYPY (ứng dụng phổ biến và Permit2 cho token bạn giữ), nên phê duyệt cho bên chi tiêu khác có thể bị thiếu. Hãy kiểm tra lại sau một phút.",
+        "chainDown": "Hiện không đọc được {chain}. Hãy kiểm tra lại sau một phút.",
+        "batchNote": "Thu hồi nhiều phê duyệt trong một giao dịch (thu hồi hàng loạt) dự kiến sẽ là công cụ trả phí sau này. Thu hồi từng cái và kiểm tra cơ bản luôn miễn phí.",
+        "dialogTitle": "Thu hồi phê duyệt này",
+        "dialogToken": "Token",
+        "dialogCollection": "Bộ sưu tập",
+        "dialogSpender": "Bên chi tiêu",
+        "dialogNow": "Hạn mức hiện tại",
+        "dialogAfter": "Sau khi thu hồi",
+        "dialogAfterNft": "Không được phê duyệt",
+        "dialogFee": "Phí mạng",
+        "dialogFeeValue": "khoảng {fee} {symbol}",
+        "dialogFeeUnknown": "ví của bạn sẽ hiển thị",
+        "dialogWalletShows": "Ví của bạn sẽ hiển thị",
+        "dialogContract": "Hợp đồng",
+        "dialogFunction": "hàm",
+        "dialogValue": "giá trị 0 {symbol}",
+        "dialogTested": "CRYPY đã thử chính giao dịch này trước: nó thành công và chỉ đặt hạn mức này về 0.",
+        "dialogNotTested": "CRYPY hiện không thử được giao dịch này, nên sẽ không mở ví của bạn. Hãy thử lại sau một phút.",
+        "dialogPreparing": "Đang chuẩn bị và thử giao dịch…",
+        "dialogOpen": "Mở ví để thu hồi",
+        "dialogMatch": "Trước khi xác nhận, hãy kiểm tra hợp đồng và hàm trong ví khớp với thông tin ở trên.",
+        "stepChecking": "Đang kiểm tra ví của bạn…",
+        "stepSwitching": "Ví sẽ yêu cầu bạn chuyển mạng. Không có gì được ký.",
+        "stepTesting": "Đang thử giao dịch…",
+        "stepConfirm": "Xác nhận trong ví của bạn",
+        "stepPending": "Đang chờ giao dịch được đưa vào khối…",
+        "stepVerifying": "Đang đọc lại hạn mức từ blockchain…",
+        "doneTitle": "Đã thu hồi",
+        "doneCleared": "Hạn mức giờ là 0",
+        "doneNotCleared": "Giao dịch đã thành công nhưng hạn mức chưa đọc được là 0. Hãy kiểm tra lại sau một phút.",
+        "doneReadAgain": "Đã đọc lại từ blockchain tại khối {block}.",
+        "doneTx": "Giao dịch",
+        "doneFee": "Phí đã trả",
+        "done": "Xong",
+        "next": "Tiếp",
+        "stop": "Dừng sau cái này",
+        "queueTitle": "Đang thu hồi {done}/{total}",
+        "queueNote": "Mỗi phê duyệt là một giao dịch riêng: ví sẽ hỏi từng cái, và bạn có thể dừng bất cứ lúc nào.",
+        "wrongAccountTitle": "Chuyển sang đúng tài khoản",
+        "wrongAccount": "Chỉ ví đã cấp phê duyệt mới thu hồi được. Ví của bạn đang kết nối là {connected}; trang này nói về {owner}.",
+        "wrongAccountDone": "Tôi đã chuyển tài khoản",
+        "wrongNetworkTitle": "Chuyển mạng",
+        "wrongNetwork": "Phê duyệt này nằm trên {chain}. Ví của bạn chưa chuyển sang mạng đó, nên không có gì được gửi.",
+        "failTitle": "Thu hồi không thành công",
+        "rejected": "Bạn đã từ chối yêu cầu trong ví. Không có gì được gửi và phê duyệt không thay đổi.",
+        "testFailed": "Phép thử giao dịch này thất bại, nên CRYPY không mở ví của bạn. Có thể token hiện không cho phép thay đổi phê duyệt.",
+        "failed": "Giao dịch thất bại. Phê duyệt có thể chưa thay đổi; hãy kiểm tra lại trước khi thử lần nữa.",
+        "tryAgain": "Thử lại",
+        "close": "Đóng",
+        "groupSpam": "Token rác ({count})",
+        "groupSpamNote": "token CRYPY ẩn vì nghi là rác: không có gì giá trị chịu rủi ro",
+        "badgeSpam": "Nghi là token rác",
+        "reasonSpamToken": "Token này trông như rác (CRYPY ẩn nó trong số dư), nên không có gì giá trị chịu rủi ro. Thu hồi là tùy chọn; đừng bao giờ truy cập liên kết trong tên token.",
+        "reasonNewContract": "Hợp đồng này được tạo {days} ngày trước khi bạn phê duyệt và không nằm trong danh sách ứng dụng nổi tiếng của CRYPY. Hợp đồng mới chưa rõ là cách lừa đảo phổ biến để rút sạch ví: hãy đảm bảo đây là ứng dụng bạn định dùng.",
+        "goplusPartial": "GoPlus chỉ gửi một phần danh sách trên {chains}, điều thường gặp với ví hoạt động nhiều. CRYPY dùng nó cùng với kiểm tra riêng; một số phê duyệt vẫn có thể bị thiếu.",
+        "badgeNewContract": "Hợp đồng mới",
+        "goplusName": "Tên theo GoPlus: {name}",
+        "reasonDisputed": "GoPlus liệt kê địa chỉ này là độc hại, nhưng danh sách riêng của CRYPY xác định đây là {name}, một hợp đồng chính thức. Trang lừa đảo đôi khi gửi phê duyệt qua hợp đồng chính thức, nên hãy thu hồi nếu bạn không nhớ mình đã tự phê duyệt.",
+        "badgeDisputed": "GoPlus: bị đánh dấu",
+        "checkOne": "1 phê duyệt cần kiểm tra",
+        "checkOther": "{count} phê duyệt cần kiểm tra",
+        "checkBody": "Không phê duyệt nào dành cho một ví hay địa chỉ bị đánh dấu độc hại, nhưng những phê duyệt này dành cho hợp đồng CRYPY chưa xác định đầy đủ. Hãy thu hồi những cái bạn không nhận ra hoặc không còn dùng.",
+        "recentSkipped": "Hiện không tìm được phê duyệt của bạn trong vài giờ qua trên {chains} (node phản hồi chậm). Các phê duyệt tìm được bằng kiểm tra khác vẫn hiển thị; hãy kiểm tra lại sau một phút."
+      }
+    },
+    "activity": {
+      "metaTitle": "Hoạt động của {short}",
+      "title": "Hoạt động",
+      "intro": "Mọi lần chuyển coin, token và NFT đến hoặc đi từ địa chỉ này, từ mới đến cũ. Đừng bao giờ sao chép địa chỉ từ lịch sử: kẻ lừa đảo gửi các khoản chuyển từ địa chỉ giống hệt.",
+      "ui": {
+        "recentOnly": "Hiện chưa có toàn bộ lịch sử trên {chains}, nên chỉ hiển thị các lần chuyển token trong vài giờ qua với những token ví này đang giữ (không tìm được chuyển coin theo cách này). Hãy kiểm tra lại sau.",
+        "chainDown": "Hiện không đọc được {chain}. Hãy kiểm tra lại sau một phút.",
+        "statLast": "Hoạt động gần nhất",
+        "statFirst": "Hoạt động đầu tiên",
+        "statFirstUnknown": "chưa rõ",
+        "statLoaded": "Số lần chuyển đã tải",
+        "statMore": "còn cũ hơn",
+        "statAll": "toàn bộ lịch sử",
+        "statSpam": "Ẩn vì nghi là rác",
+        "statSpamDetail": "airdrop có liên kết, token giá trị 0",
+        "listTitle": "Các lần chuyển",
+        "exportCsv": "Xuất CSV",
+        "checkAgain": "Kiểm tra lại",
+        "filters": "Lọc hoạt động",
+        "dir_all": "Tất cả",
+        "dir_in": "Đã nhận",
+        "dir_out": "Đã gửi",
+        "kind_all": "Mọi loại",
+        "kind_coin": "Coin",
+        "kind_token": "Token",
+        "kind_nft": "NFT",
+        "allChains": "Mọi mạng",
+        "search": "Tìm trong hoạt động",
+        "searchPlaceholder": "Token, địa chỉ hoặc hash giao dịch",
+        "range": "Khoảng thời gian",
+        "range_all": "Tất cả đã tải",
+        "range_1": "24 giờ qua",
+        "range_7": "7 ngày qua",
+        "range_30": "30 ngày qua",
+        "hideSpam": "Ẩn nghi là rác ({count} đã ẩn)",
+        "empty": "Không tìm thấy lần chuyển nào của địa chỉ này trên các mạng này.",
+        "noMatch": "Không có lần chuyển nào khớp bộ lọc.",
+        "unknownTime": "Không rõ thời gian",
+        "titleIn": "Đã nhận {what}",
+        "titleOut": "Đã gửi {what}",
+        "titleSelf": "Đã chuyển {what} cho chính mình",
+        "titleSwap": "Đã đổi {out} lấy {in}",
+        "titleMulti": "{count} lần chuyển trong một giao dịch",
+        "subSwap": "trong một giao dịch",
+        "subNft": "NFT",
+        "subInternal": "coin do hợp đồng gửi",
+        "subCoin": "chuyển coin",
+        "subToken": "chuyển token",
+        "from": "từ",
+        "to": "đến",
+        "interpretation": "Diễn giải",
+        "heuristic": "Suy đoán",
+        "poisoning": "Có thể là đầu độc địa chỉ: {sender} có đầu và cuối giống {lookalike}. Kẻ lừa đảo gửi những khoản này để sau này bạn sao chép nhầm địa chỉ. Đừng bao giờ sao chép địa chỉ từ lịch sử.",
+        "loadMore": "Tải hoạt động cũ hơn",
+        "loading": "Đang tải…",
+        "loadError": "Không tải thêm được. Hãy thử lại.",
+        "showingMore": "Hiển thị {count} · mới nhất trước · còn nữa",
+        "showingAll": "Hiển thị cả {count}",
+        "howTitle": "Chúng tôi lấy dữ liệu thế nào.",
+        "how": "Các lần chuyển coin, token và NFT đến hoặc đi từ địa chỉ này lấy từ lịch sử chuyển khoản miễn phí của Alchemy, từ mới đến cũ. \"Giá trị hiện tại\" dùng giá on-chain hôm nay, không phải giá lúc đó. Hoán đổi là cách chúng tôi đọc các lần chuyển trong một giao dịch, gắn nhãn \"Diễn giải\". Nghi là rác được ẩn mặc định và không bao giờ bị xóa.",
+        "noInternal": "Trên {chains}, coin được chuyển bên trong hợp đồng (chuyển nội bộ) không có trong nguồn miễn phí của chúng tôi, nên khoản thanh toán từ hợp đồng có thể bị thiếu.",
+        "statRecent": "chỉ vài giờ qua",
+        "howRecent": "Khi không có nguồn lịch sử, CRYPY đọc trực tiếp từ mạng các lần chuyển token trong vài giờ qua, chỉ với những token ví này đang giữ."
+      }
+    },
+    "chainScope": {
+      "picker": {
+        "button": "Mạng:",
+        "used": "Đã dùng",
+        "all": "Tất cả",
+        "title": "Mạng nào?",
+        "usedTitle": "Mạng đã dùng",
+        "usedDesc": "Khuyên dùng. CRYPY kiểm tra mọi mạng trước và chỉ quét nơi địa chỉ này có hoạt động.",
+        "allTitle": "Mọi mạng",
+        "allDesc": "Quét mọi mạng được hỗ trợ, dù đã dùng hay chưa.",
+        "pickTitle": "Chọn mạng",
+        "pickDesc": "Chọn một hoặc nhiều mạng.",
+        "isUsed": "đã dùng",
+        "notUsed": "chưa dùng",
+        "cancel": "Hủy",
+        "scan": "Quét {count} mạng",
+        "scanOne": "Quét 1 mạng",
+        "remembered": "Lựa chọn được giữ trong liên kết và ghi nhớ trên thiết bị này.",
+        "updating": "Đang quét…"
+      },
+      "scanned": "Đã quét trên <b>{chains}</b>",
+      "scannedOnly": "Chỉ quét trên <b>{chains}</b>",
+      "notUsed": "Không thấy hoạt động trên {chains}",
+      "noneUsed": "Không thấy hoạt động trên mạng nào được hỗ trợ",
+      "scanToo": "Quét cả các mạng này",
+      "scanAll": "Quét mọi mạng",
+      "leftOutTitle": "{chains}: chưa kiểm tra",
+      "leftOut": "Bạn đã thu hẹp phạm vi quét, nhưng ví này cũng được dùng trên {chains}. Phê duyệt ở đó vẫn có thể cho ứng dụng chuyển token của bạn.",
+      "checkToo": "Kiểm tra cả {chains}"
+    }
+  },
+  "wallet": {
+    "connect": "Kết nối ví",
+    "connecting": "Đang kết nối…",
+    "title": "Kết nối ví",
+    "intro": "Kết nối chỉ chia sẻ địa chỉ công khai của bạn. CRYPY không bao giờ hỏi cụm từ khôi phục và không bao giờ gửi giao dịch nếu bạn chưa xác nhận trong ví.",
+    "detected": "Ví trong trình duyệt này",
+    "noneDetected": "Không tìm thấy ví trình duyệt. Hãy cài MetaMask, mở CRYPY trong trình duyệt của ví di động, hoặc dùng WalletConnect.",
+    "walletConnect": "WalletConnect (ví di động)",
+    "walletConnectUnavailable": "WalletConnect chưa được thiết lập.",
+    "scanQr": "Quét bằng ví di động",
+    "openIn": "Mở trong {wallet}",
+    "copyLink": "Sao chép liên kết kết nối",
+    "back": "Quay lại",
+    "connectedAs": "Đã kết nối",
+    "network": "Mạng",
+    "unsupportedNetwork": "Mạng này chưa được hỗ trợ. CRYPY hỗ trợ Ethereum, BNB Chain, Base, Arbitrum và Polygon.",
+    "viewMyAddress": "Xem địa chỉ của tôi",
+    "disconnect": "Ngắt kết nối",
+    "close": "Đóng",
+    "rejected": "Kết nối đã bị hủy trong ví.",
+    "failed": "Không kết nối được. Vui lòng thử lại.",
+    "useMyWallet": "Dùng ví của tôi"
+  },
+  "utilities": {
+    "common": {
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "example": "Thử một ví dụ",
+      "clear": "Xóa"
+    },
+    "unit-converter": {
+      "units": {
+        "wei": "Wei",
+        "gwei": "Gwei",
+        "ether": "ETH / BNB"
+      },
+      "hint": "1 ETH (hoặc BNB) = 1 000 000 000 gwei = 1 000 000 000 000 000 000 wei",
+      "errors": {
+        "format": "Nhập một số, ví dụ 1.5 hoặc 1e9.",
+        "negative": "Số lượng không được âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (1.5), không dùng dấu phẩy.",
+        "too-precise": "Quá nhiều chữ số thập phân: wei là đơn vị nhỏ nhất.",
+        "too-large": "Quá lớn: tối đa là 2^256 − 1 wei.",
+        "empty": ""
+      }
+    },
+    "hex-converter": {
+      "label": "Giá trị hex hoặc thập phân",
+      "placeholder": "0x1a2b hoặc 6699",
+      "readAs": "Đọc số này dưới dạng",
+      "decimal": "Thập phân",
+      "hex": "Hex",
+      "rows": {
+        "decimal": "Thập phân",
+        "hex": "Hex",
+        "padded": "Hex 32 byte",
+        "bytes": "Độ dài",
+        "signed": "Có dấu (int256)",
+        "text": "Dạng văn bản"
+      },
+      "bytes": {
+        "one": "# byte",
+        "other": "# byte"
+      },
+      "detected": {
+        "hex": "Đọc dưới dạng hex",
+        "decimal": "Đọc dưới dạng thập phân"
+      },
+      "errors": {
+        "format": "Dùng chữ số 0–9 cho thập phân, hoặc 0–9 và a–f cho hex.",
+        "negative": "Không hỗ trợ số âm; dán hex 32 byte để xem giá trị có dấu.",
+        "too-large": "Quá lớn: tối đa 256 bit (2^256 − 1).",
+        "empty": ""
+      }
+    },
+    "address-formatter": {
+      "label": "Địa chỉ (mỗi dòng một địa chỉ)",
+      "placeholder": "0x…",
+      "summary": "Đã kiểm tra: {total} · Đúng: {ok} · Cần chú ý: {problems}",
+      "tooMany": "Chỉ kiểm tra {max} địa chỉ đầu tiên.",
+      "copyAll": "Sao chép mọi địa chỉ đúng",
+      "open": "Tìm",
+      "checksummed": "Có checksum",
+      "status": {
+        "valid": "Đúng",
+        "no-checksum": "Không có checksum",
+        "bad-checksum": "Gõ sai",
+        "missing-prefix": "Thiếu 0x",
+        "invalid": "Không phải địa chỉ"
+      },
+      "explain": {
+        "valid": "Viết đúng và checksum khớp.",
+        "no-checksum": "Định dạng hợp lệ nhưng toàn chữ thường hoặc toàn chữ hoa, nên không phát hiện được lỗi gõ. Hãy dùng dạng có checksum bên dưới.",
+        "bad-checksum": "Checksum không khớp, nghĩa là có ký tự đã bị đổi. Đừng dùng địa chỉ này: hãy sao chép lại từ nguồn gốc.",
+        "missing-prefix": "Địa chỉ bắt đầu bằng 0x. Đây là dạng đầy đủ.",
+        "zero": "Đây là địa chỉ 0. Token gửi tới đây sẽ mất vĩnh viễn."
+      },
+      "invalid": {
+        "length": "Sai độ dài: {length} ký tự sau 0x thay vì 40.",
+        "characters": "Chứa ký tự không hợp lệ (chỉ 0–9 và a–f).",
+        "empty": "Trống."
+      }
+    },
+    "tx-decoder": {
+      "label": "Dữ liệu đầu vào giao dịch",
+      "placeholder": "0xa9059cbb…",
+      "function": "Hàm",
+      "standard": "Chuẩn",
+      "selector": "Bộ chọn",
+      "signature": "Chữ ký hàm",
+      "parameters": "Giá trị",
+      "name": "Tên",
+      "type": "Kiểu",
+      "value": "Giá trị",
+      "unlimited": "Không giới hạn",
+      "yes": "Có",
+      "no": "Không",
+      "nested": "Lệnh gọi {index}",
+      "rawNote": "Giá trị hiển thị theo đơn vị nhỏ nhất của token. Chia theo số chữ số thập phân của token để ra số lượng thông thường.",
+      "known": "Giải mã {count} hàm đã biết. Hàm chưa biết hiển thị dưới dạng dữ liệu thô, không bao giờ đoán.",
+      "native": "Dữ liệu rỗng (0x): một lần chuyển ETH hoặc BNB đơn thuần, không gọi hợp đồng.",
+      "unknownTitle": "Hàm chưa biết",
+      "unknownText": "Hàm này không có trong danh sách hàm đã biết của CRYPY, nên không được giải mã. Các từ 32 byte thô được hiển thị bên dưới.",
+      "mismatch": "Bộ chọn khớp với một hàm đã biết nhưng dữ liệu không khớp với các giá trị của hàm đó. Có thể là một hàm khác có cùng bộ chọn. Hàm đã biết:",
+      "moreWords": "Còn {count} từ chưa hiển thị.",
+      "extraBytes": "Thừa {count} byte ở cuối.",
+      "errors": {
+        "format": "Dữ liệu giao dịch là hex: 0x, rồi 0–9 và a–f.",
+        "odd-length": "Dữ liệu có số chữ số hex lẻ; có thể thiếu một phần.",
+        "too-short": "Quá ngắn: dữ liệu bắt đầu bằng bộ chọn hàm 4 byte (8 chữ số hex).",
+        "too-long": "Quá dài để giải mã ở đây (hơn 100 KB).",
+        "tx-hash": "Đây có vẻ là hash giao dịch, không phải dữ liệu giao dịch. Hãy tìm nó để xem giao dịch."
+      },
+      "searchHash": "Tìm hash này",
+      "functions": {
+        "transfer": "Gửi token tới một địa chỉ.",
+        "approve": "Cho phép một địa chỉ khác (bên chi tiêu) chuyển token của bạn.",
+        "transfer-from": "Chuyển token từ địa chỉ này sang địa chỉ khác bằng một phê duyệt.",
+        "increase-allowance": "Tăng số token mà bên chi tiêu có thể chuyển.",
+        "decrease-allowance": "Giảm số token mà bên chi tiêu có thể chuyển.",
+        "permit": "Ghi nhận on-chain một phê duyệt token đã ký (permit).",
+        "set-approval-for-all": "Cấp hoặc thu hồi quyền kiểm soát của một toán tử với mọi NFT của bạn trong bộ sưu tập này.",
+        "nft-safe-transfer": "Gửi một NFT tới một địa chỉ.",
+        "multi-token-transfer": "Gửi một loại token ERC-1155 tới một địa chỉ.",
+        "multi-token-batch-transfer": "Gửi nhiều loại token ERC-1155 tới một địa chỉ.",
+        "wrap": "Bọc ETH hoặc BNB thành WETH hoặc WBNB.",
+        "unwrap": "Gỡ bọc WETH hoặc WBNB về lại ETH hoặc BNB.",
+        "permit2-approve": "Cho phép bên chi tiêu chuyển một token qua Uniswap Permit2.",
+        "multicall": "Chạy nhiều lệnh gọi trong một giao dịch. Mỗi lệnh gọi được giải mã bên dưới.",
+        "swap": "Hoán đổi token qua router của một sàn phi tập trung.",
+        "add-liquidity": "Thêm token vào một pool thanh khoản.",
+        "remove-liquidity": "Rút token khỏi một pool thanh khoản.",
+        "transfer-ownership": "Chuyển quyền kiểm soát hợp đồng này cho chủ sở hữu mới.",
+        "renounce-ownership": "Từ bỏ vĩnh viễn quyền sở hữu hợp đồng này.",
+        "router-execute": "Chạy một danh sách bước hoán đổi qua Universal Router. Các bước được đóng gói trong \"commands\" và không được giải mã ở đây."
+      },
+      "warnings": {
+        "unlimited-approval": "Phê duyệt không giới hạn: bên chi tiêu có thể chuyển toàn bộ token này khỏi ví của bạn, bây giờ và sau này, cho đến khi bạn thu hồi.",
+        "approval": "Phê duyệt: bên chi tiêu sẽ có thể chuyển tối đa số lượng này từ token của bạn.",
+        "approval-for-all": "Toàn quyền NFT: toán tử có thể chuyển mọi NFT của bạn trong bộ sưu tập này.",
+        "revoke": "Thao tác này gỡ một phê duyệt, giúp giảm rủi ro.",
+        "ownership-transfer": "Đổi chủ sở hữu: chủ sở hữu mới sẽ kiểm soát các hàm chỉ dành cho chủ của hợp đồng.",
+        "ownership-renounce": "Từ bỏ: sau đó không ai có thể dùng các hàm chỉ dành cho chủ của hợp đồng."
+      },
+      "heuristic": "Cảnh báo dựa trên hàm và giá trị. Chúng không kiểm tra bên chi tiêu là ai."
+    },
+    "balance-scanner": {
+      "label": "Địa chỉ ví",
+      "placeholder": "0x…",
+      "submit": "Xem số dư",
+      "invalid": "Nhập địa chỉ ví: 0x rồi 40 ký tự (0–9, a–f)."
+    },
+    "tx-checker": {
+      "label": "Hash giao dịch",
+      "placeholder": "0x… 64 ký tự",
+      "submit": "Kiểm tra giao dịch",
+      "invalid": "Hash giao dịch là 0x rồi 64 chữ cái (a–f) và chữ số.",
+      "supportTitle": "Mạng được hỗ trợ",
+      "feature": "Tính năng",
+      "levels": {
+        "supported": "Hỗ trợ",
+        "partial": "Một phần",
+        "planned": "Dự kiến"
+      },
+      "features": {
+        "lookup": "Tìm và đọc giao dịch",
+        "status": "Thành công, thất bại, đang chờ",
+        "assets": "Biến động token và NFT",
+        "decoding": "Giải mã hàm",
+        "failure": "Lý do thất bại",
+        "fees": "Chi tiết phí",
+        "pricesAtTx": "Giá tại thời điểm giao dịch",
+        "actions": "Hành động và độ bao phủ sự kiện",
+        "permissions": "Quyền: cấp, dùng, gỡ và giá trị hiện tại",
+        "pools": "Hoán đổi trong pool thanh khoản",
+        "routerReports": "Báo cáo của router",
+        "smartWallets": "Ví thông minh (Safe, ERC-4337)",
+        "coinsInside": "Coin trả bên trong hợp đồng"
+      },
+      "notes": {
+        "failure": "Cần khối gần đây trên node miễn phí",
+        "pricesAtTx": "Cần khối gần đây trên node miễn phí",
+        "decoding": "Chỉ các hàm đã biết",
+        "pools": "Pool v2 và v3 của Uniswap/PancakeSwap/SushiSwap/Biswap được xác minh qua factory; pool khác hiển thị là chưa xác minh",
+        "routerReports": "Chỉ KyberSwap; router khác được đọc qua sự kiện token",
+        "smartWallets": "Nhận diện qua sự kiện chuẩn; không giải mã thêm",
+        "coinsInside": "Đo ở khối gần đây hoặc qua nhà cung cấp lưu trữ; nếu không thì theo báo cáo của router"
+      }
+    },
+    "batch-balance": {
+      "steps": {
+        "addresses": "Địa chỉ",
+        "chains": "Mạng",
+        "assets": "Tài sản"
+      },
+      "addressesHint": "Dán, gõ hoặc thả tệp vào",
+      "chainsHint": "Chọn một hoặc nhiều",
+      "assetsHint": "Tối đa 6 mỗi lần quét",
+      "upload": "Tải lên CSV hoặc TXT",
+      "example": "Tải ví dụ",
+      "clear": "Xóa",
+      "editorLabel": "Danh sách địa chỉ, mỗi dòng một địa chỉ, nhãn tùy chọn sau dấu phẩy",
+      "placeholder": "0x… mỗi dòng một địa chỉ\n0x…,Quỹ",
+      "dropHere": "Thả tệp CSV hoặc TXT vào đây",
+      "fileTooBig": "Tệp quá lớn. Giới hạn là 1 MB.",
+      "fileUnreadable": "Không đọc được tệp này dưới dạng văn bản.",
+      "valid": "{count} hợp lệ",
+      "duplicates": "Đã gộp trùng lặp: {count}",
+      "problems": "Vấn đề: {count} · đầu tiên ở dòng {line}",
+      "overLimit": "{count} vượt giới hạn, không quét",
+      "countLine": "{count} / {max} địa chỉ · nhãn sau dấu phẩy là tùy chọn",
+      "notes": {
+        "duplicate": "Trùng với dòng {line} · đã gộp",
+        "checksum": "Checksum không khớp (có thể gõ sai) · đã bỏ qua",
+        "invalid": "Không phải địa chỉ hợp lệ · đã bỏ qua",
+        "over-limit": "Vượt giới hạn {max} địa chỉ · đã bỏ qua",
+        "several": "Dòng này có {count} địa chỉ"
+      },
+      "chainsMore": "Mạng mới sẽ xuất hiện ở đây khi CRYPY bổ sung.",
+      "nativeCoin": "Coin gốc",
+      "alwaysIncluded": "Luôn bao gồm",
+      "notOnChain": "không phải token trên {chain} (bỏ qua ở đó)",
+      "onlyOn": "Chỉ trên {chain}",
+      "remove": "Bỏ {symbol}",
+      "addPlaceholder": "Dán hợp đồng token",
+      "add": "Thêm",
+      "pick": "hoặc chọn:",
+      "checking": "Đang kiểm tra hợp đồng…",
+      "notToken": "Địa chỉ này không phải token trên mạng nào được hỗ trợ.",
+      "tokenLimit": "Tối đa 5 token mỗi lần quét.",
+      "alreadyAdded": "Token này đã có trong danh sách.",
+      "lookupFailed": "Hiện không kiểm tra được hợp đồng này. Hãy thử lại sau ít phút.",
+      "decimals": "{decimals} chữ số thập phân",
+      "ready": "Sẵn sàng: {addresses} địa chỉ × {chains} mạng × {assets} tài sản",
+      "readyNone": "Thêm ít nhất một địa chỉ hợp lệ và chọn một mạng.",
+      "estimate": "Khoảng {requests} yêu cầu blockchain",
+      "scan": "Quét số dư",
+      "scanning": "Đang quét… lô {done}/{total}",
+      "cancel": "Hủy",
+      "trust": {
+        "public": "Chỉ địa chỉ công khai: không bao giờ hỏi khóa hay cụm từ khôi phục",
+        "notStored": "Danh sách của bạn không được lưu hay ghi lại",
+        "noWallet": "Không cần kết nối ví"
+      },
+      "complete": "Đã quét xong",
+      "cancelled": "Đã dừng quét",
+      "completeLine": "{addresses} địa chỉ · {checks} lần kiểm tra · đọc tại {blocks} · {time} UTC",
+      "blockOn": "khối {block} ({chain})",
+      "editList": "Sửa danh sách",
+      "scanAgain": "Quét lại",
+      "cards": {
+        "total": "Tổng giá trị",
+        "totalNote": "Chỉ tài sản có giá",
+        "withBalance": "Địa chỉ có số dư",
+        "withBalanceValue": "{count}/{total}",
+        "withBalanceNote": "Trên ít nhất một mạng",
+        "empty": "Địa chỉ trống",
+        "emptyNote": "Không có gì trên các mạng đã kiểm tra",
+        "failed": "Lần kiểm tra lỗi",
+        "failedNone": "Không có",
+        "failedNote": "Đã thử lại một lần; thử lại bên dưới"
+      },
+      "noPrice": "không có giá đáng tin cậy",
+      "searchPlaceholder": "Tìm địa chỉ hoặc nhãn",
+      "allChains": "Mọi mạng",
+      "hideEmpty": "Ẩn địa chỉ trống",
+      "copy": "Sao chép",
+      "copyResults": "Sao chép kết quả (bảng)",
+      "copyWithBalance": "Sao chép địa chỉ có số dư",
+      "copyEmpty": "Sao chép địa chỉ trống",
+      "copied": "Đã sao chép",
+      "export": "Xuất CSV",
+      "table": {
+        "index": "#",
+        "label": "Nhãn",
+        "address": "Địa chỉ",
+        "chain": "Mạng",
+        "type": "Loại",
+        "native": "Coin gốc",
+        "value": "Giá trị",
+        "share": "Tỷ trọng",
+        "status": "Trạng thái",
+        "total": "Tổng · đang hiển thị {count} dòng",
+        "sortBy": "Sắp xếp theo {column}"
+      },
+      "types": {
+        "wallet": "Ví",
+        "contract": "Hợp đồng",
+        "delegated": "Ví ủy quyền",
+        "unknown": "Không rõ"
+      },
+      "status": {
+        "ok": "OK",
+        "failed": "Lỗi",
+        "pending": "Chưa đọc"
+      },
+      "noLabel": "Không có nhãn",
+      "rowFailed": "Không đọc được địa chỉ này trên {chain}.",
+      "retryRow": "Thử lại",
+      "unreadable": "Không đọc được số dư này",
+      "noRows": "Không có dòng nào khớp bộ lọc.",
+      "footer": "Hiển thị {from}–{to} trong {count} dòng{hidden} · Giá được đọc on-chain từ pool PancakeSwap và Uniswap. Token không có giá đáng tin cậy chỉ hiển thị số lượng.",
+      "hiddenEmpty": " (đã ẩn {count} dòng trống)",
+      "previous": "Trước",
+      "next": "Sau",
+      "sortedBy": "Sắp xếp theo giá trị",
+      "copyAddress": "Sao chép địa chỉ",
+      "error": {
+        "rateLimited": "Quét quá nhiều trong thời gian ngắn. Hãy đợi một phút rồi thử lại các dòng lỗi.",
+        "failed": "Một số lô không đọc được. Hãy thử lại các dòng lỗi bên dưới."
+      },
+      "csv": {
+        "label": "Nhãn",
+        "address": "Địa chỉ",
+        "chain": "Mạng",
+        "type": "Loại",
+        "value": "Giá trị (USD)",
+        "status": "Trạng thái"
+      }
+    },
+    "token-security": {
+      "label": "Địa chỉ hợp đồng token",
+      "placeholder": "0x… hợp đồng token",
+      "chain": "Mạng",
+      "anyChain": "Tìm giúp tôi",
+      "submit": "Kiểm tra token",
+      "invalid": "Nhập địa chỉ hợp đồng token: 0x rồi 40 ký tự."
+    },
+    "approval-checker": {
+      "label": "Địa chỉ ví",
+      "placeholder": "0x… địa chỉ ví",
+      "submit": "Kiểm tra phê duyệt",
+      "useConnected": "Kiểm tra ví đã kết nối",
+      "invalid": "Nhập địa chỉ ví: 0x rồi 40 ký tự.",
+      "noConnection": "Không cần kết nối ví để kiểm tra. Chỉ kết nối khi bạn muốn thu hồi."
+    },
+    "address-analyzer": {
+      "label": "Địa chỉ ví",
+      "placeholder": "0x… địa chỉ ví",
+      "submit": "Xem hoạt động",
+      "useConnected": "Xem ví đã kết nối",
+      "invalid": "Nhập địa chỉ ví: 0x rồi 40 ký tự.",
+      "noConnection": "Không cần kết nối ví: địa chỉ công khai nào cũng được."
+    },
+    "gas-tracker": {
+      "chainDown": "Hiện không đọc được phí của {chain}. Đang thử lại mỗi 12 giây.",
+      "low": "Ưu tiên thấp",
+      "average": "Trung bình",
+      "high": "Ưu tiên cao",
+      "lowNote": "thường trong vài khối",
+      "averageNote": "thường ở khối kế tiếp",
+      "highNote": "cho lúc đông đúc",
+      "updated": "khối {block} · cập nhật {seconds} giây trước",
+      "toSend": "Gửi coin tốn {usd}",
+      "baseFee": "Phí cơ bản hiện tại",
+      "noBaseFee": "Mạng này không có phí cơ bản",
+      "trendLabel": "Xu hướng phí qua các khối gần đây",
+      "trendBase": "phí cơ bản, 1.024 khối gần nhất ({span})",
+      "trendTip": "tiền boa điển hình, 1.024 khối gần nhất ({span})",
+      "hours": "~{n} giờ",
+      "minutes": "~{n} phút",
+      "costsTitle": "Chi phí các thao tác phổ biến hiện tại (trung bình)",
+      "action": "Thao tác",
+      "typicalGas": "Gas điển hình",
+      "onChain": "{chain}",
+      "action_sendCoin": "Gửi coin",
+      "action_sendToken": "Gửi token",
+      "action_approve": "Phê duyệt hoặc thu hồi token",
+      "action_swap": "Hoán đổi trên DEX",
+      "action_sendNft": "Gửi NFT",
+      "costsNote": "Gas điển hình là ước tính: lượng thực tế tùy token hoặc ứng dụng, và ví sẽ hiển thị phí chính xác trước khi bạn xác nhận. Số tiền đô la dùng giá on-chain:",
+      "howTitle": "Cách chúng tôi đo.",
+      "how": "Từ 20 khối gần nhất của mỗi mạng (eth_feeHistory): phí cơ bản của khối kế tiếp cộng tiền boa mà 25%, 50% và 90% giao dịch được đưa vào đã trả. \"Thường ở khối kế tiếp\" mô tả các khối gần đây, không phải lời hứa. Cập nhật mỗi 12 giây khi trang mở; không cần tài khoản hay ví.",
+      "l1Note": "Trên {chains}, chi phí gồm ước tính phí dữ liệu Ethereum mà các mạng này cộng thêm."
+    },
+    "timestamp-block": {
+      "modes": "Chuyển đổi",
+      "mode_date": "Ngày → khối",
+      "mode_block": "Khối → ngày",
+      "mode_unix": "Dấu thời gian Unix ↔ ngày",
+      "dateLabel": "Ngày và giờ",
+      "zoneLabel": "Múi giờ",
+      "zoneUtc": "UTC",
+      "zoneLocal": "Múi giờ của tôi",
+      "findBlocks": "Tìm khối",
+      "working": "Đang đọc mạng…",
+      "estimate": "Ước tính: thời điểm này ở tương lai",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "chainDown": "Hiện không đọc được {chain}.",
+      "dateNote": "Khối đầu tiên vào hoặc sau thời điểm này trên mỗi mạng, tìm bằng cách đọc thời gian khối thật (vài truy vấn node). Ngày tương lai hiển thị khối dự kiến, đánh dấu là ước tính.",
+      "chainLabel": "Mạng",
+      "blockLabel": "Số khối",
+      "findTime": "Tìm ngày",
+      "blockResult": "Khối {block} trên {chain}:",
+      "yourTime": "giờ của bạn {time}",
+      "unixIs": "Unix {unix}",
+      "unixLabel": "Dấu thời gian (giây hoặc mili giây)",
+      "unixNote": "Chuyển đổi trong trình duyệt; không gửi gì đi.",
+      "badDate": "Chọn ngày và giờ.",
+      "badBlock": "Nhập số khối (chỉ chữ số).",
+      "badUnix": "Chỉ nhập chữ số: giây hoặc mili giây.",
+      "noBlock": "Khối này chưa tồn tại trên mạng này.",
+      "failed": "Hiện không đọc được mạng. Hãy thử lại sau một phút."
+    },
+    "portfolio": {
+      "loadingSaved": "Đang tải danh mục của bạn…",
+      "emptyTitle": "Theo dõi mọi ví ở một nơi",
+      "emptyText": "Thêm địa chỉ công khai của các ví để xem một tổng chung, chia theo mạng, ví và token. Không cần tài khoản, không cần khóa.",
+      "emptyPoint1": "Tối đa 20 ví, với nhãn riêng của bạn",
+      "emptyPoint2": "Chỉ lưu trong trình duyệt này",
+      "emptyPoint3": "Đánh dấu phê duyệt và token rủi ro theo từng ví",
+      "addWallet": "Thêm ví",
+      "addConnected": "Thêm ví đã kết nối ({address})",
+      "myWallet": "Ví của tôi",
+      "totalOf": "Tổng giá trị · {count} ví",
+      "sinceLast": "{change} kể từ lần xem trước ({when})",
+      "notProfit": "Đây là thay đổi giá trị hôm nay, không phải lãi hay lỗ.",
+      "loadingWallets": "Đang tải ví: {done}/{total}",
+      "refresh": "Làm mới",
+      "exportCsv": "Xuất CSV",
+      "statTokens": "Coin và token có giá trị",
+      "statTokensNote": "thêm {count} không có giá đáng tin cậy",
+      "statApprovals": "Phê duyệt cần kiểm tra",
+      "statFlagged": "Token bị GoPlus đánh dấu",
+      "inWallets": "trong {count} ví",
+      "noneFound": "Không tìm thấy trong các lần kiểm tra đã chạy",
+      "flaggedBy": "Ý kiến thứ hai từ GoPlus",
+      "byChain": "Theo mạng",
+      "someFailed": "Hiện không tải được {count} ví.",
+      "rateLimited": "{count} ví chưa được tải: quá nhiều yêu cầu trong một phút. Hãy đợi một chút, rồi",
+      "retry": "Thử lại",
+      "chainsDown": "Hiện chưa đọc được: {chains}. Tổng không bao gồm các mạng này.",
+      "pricesMissing": "Không đọc được giá cho một số mạng: số dư ở đó hiển thị không kèm giá trị.",
+      "walletsTitle": "Ví",
+      "walletCount": "{count}/{max}",
+      "unnamed": "Ví chưa đặt tên",
+      "notLoaded": "Chưa tải",
+      "badgeApprovals": "{count} phê duyệt cần kiểm tra",
+      "badgeFlagged": "{count} token bị đánh dấu",
+      "badgeNothing": "Không có gì bị đánh dấu",
+      "open": "Mở",
+      "editLabel": "Đổi tên {name}",
+      "remove": "Xóa {name} khỏi danh mục",
+      "safetyTitle": "An toàn",
+      "approvalsIn": "{count} phê duyệt cần kiểm tra trong {name}",
+      "onChains": "Trên {chains}: quyền không giới hạn hoặc rủi ro để chuyển token của bạn.",
+      "reviewApprovals": "Xem phê duyệt →",
+      "flagHoneypot": "{symbol} trong {name} ({chain}): GoPlus báo không bán được (honeypot)",
+      "flagSellTax": "{symbol} trong {name} ({chain}): GoPlus báo thuế bán {tax}",
+      "flagSource": "Phát hiện từ GoPlus Security, không phải kết luận của CRYPY.",
+      "openReport": "Mở báo cáo token →",
+      "someUnchecked": "Một số kiểm tra chưa chạy cho mọi ví: chưa xong kịp, hoặc hạn mức miễn phí của GoPlus được dành cho trang token và trang phê duyệt. Hãy làm mới sau một phút, hoặc mở ví để xem báo cáo đầy đủ.",
+      "safetyNote": "Kiểm tra chạy trên các phê duyệt và token giá trị nhất của các ví trên. CRYPY không bao giờ nói ví hay token là an toàn.",
+      "holdingsTitle": "Tài sản lớn nhất",
+      "holdingsNote": "Trên mọi ví. Cùng một coin hoặc token nổi tiếng trên nhiều mạng được gộp lại.",
+      "colToken": "Token",
+      "colChains": "Mạng",
+      "colAmount": "Số lượng",
+      "colValue": "Giá trị",
+      "colWallets": "Ví",
+      "noPrice": "Không có giá",
+      "spamHidden": "Đã ẩn {count} token nghi là rác",
+      "showAll": "Hiện cả {count}",
+      "showFewer": "Thu gọn",
+      "privacyNote": "Danh mục của bạn chỉ được lưu trong trình duyệt này. CRYPY đọc số dư công khai từng ví một và không lưu danh sách hay nhãn của bạn.",
+      "addTitle": "Thêm ví",
+      "editTitle": "Đổi tên ví",
+      "addText": "Chỉ xem: dán một địa chỉ công khai. CRYPY đọc nó từ blockchain và không thể chuyển gì đi.",
+      "addressLabel": "Địa chỉ ví",
+      "labelLabel": "Nhãn (tùy chọn)",
+      "labelPlaceholder": "ví dụ: Chính, Tiết kiệm, Giao dịch",
+      "watchOnly": "Đừng bao giờ dán cụm từ khôi phục hay khóa riêng vào đây hoặc bất cứ đâu. CRYPY sẽ không bao giờ hỏi chúng.",
+      "cancel": "Hủy",
+      "add": "Thêm",
+      "save": "Lưu",
+      "errEmpty": "Hãy dán địa chỉ ví.",
+      "errInvalid": "Đây không phải địa chỉ ví. Địa chỉ phải bắt đầu bằng 0x, theo sau là 40 ký tự.",
+      "errChecksum": "Chữ hoa trong địa chỉ này không khớp với checksum. Có thể bị gõ sai; hãy sao chép lại.",
+      "errSecret": "Đây có vẻ là cụm từ khôi phục hoặc khóa riêng. Đã xóa, không lưu và không gửi đi. Đừng bao giờ chia sẻ nó với bất kỳ trang web nào.",
+      "errDuplicate": "Ví này đã có trong danh mục.",
+      "errFull": "Danh mục chứa tối đa {max} ví. Hãy xóa một ví để thêm ví khác.",
+      "syncLocalOnly": "Chỉ lưu trên thiết bị này (không có tài khoản).",
+      "syncSignIn": "Đăng nhập bằng ví",
+      "syncOptional": "để dùng trên mọi thiết bị — tùy chọn.",
+      "syncOn": "Đã lưu trong tài khoản: cùng một danh sách trên mọi thiết bị bạn đăng nhập. Tắt để chỉ lưu trên thiết bị này.",
+      "syncOff": "Lưu danh sách này cả trong tài khoản, để có trên mọi thiết bị bạn đăng nhập.",
+      "syncConnectFirst": "Hãy kết nối ví trước, rồi bấm Đăng nhập lại. Đăng nhập là một tin nhắn miễn phí, không phải giao dịch.",
+      "syncRejected": "Bạn đã từ chối tin nhắn trong ví. Không có gì được ký.",
+      "syncError": "Hiện không kết nối được tài khoản. Danh sách vẫn an toàn trong trình duyệt này; hãy thử lại sau ít phút.",
+      "watchTitle": "Theo dõi thay đổi",
+      "watchText": "Nhận tin nhắn Telegram khi một trong các ví này gửi, nhận hoặc cấp phê duyệt mới.",
+      "watchButton": "Thiết lập cảnh báo",
+      "watchNote": "Cần đăng nhập miễn phí bằng ví (ký một tin nhắn, không phải giao dịch). Tối đa 10 mục theo dõi; bạn chọn ví nào trong {count} ví của mình."
+    },
+    "watchlist": {
+      "loading": "Đang tải…",
+      "signInTitle": "Đăng nhập để dùng danh sách theo dõi",
+      "signInIntro": "Cảnh báo cần tài khoản để máy chủ biết phải theo dõi gì cho bạn. Ví chính là thông tin đăng nhập: không mật khẩu, không email.",
+      "step1Title": "Đăng nhập bằng ví",
+      "step1Text": "Kết nối ví nếu bạn chưa kết nối, rồi bấm Đăng nhập. Danh mục và mọi công cụ khác vẫn hoạt động mà không cần đăng nhập.",
+      "step2Title": "Ký tin nhắn trong ví",
+      "step2Text": "Ví sẽ hiển thị một đoạn văn bản ngắn. Kiểm tra rằng nó bắt đầu bằng {site} và nói đây là tin nhắn, không phải giao dịch: nó không tốn phí và không thể chuyển tiền của bạn.",
+      "step2Warning": "Nếu trang nào yêu cầu bạn ký nội dung có nhắc tới chuyển khoản, phê duyệt hoặc permit để đăng nhập, đừng ký.",
+      "signIn": "Đăng nhập",
+      "connectAndSignIn": "Kết nối ví và đăng nhập",
+      "signingIn": "Đang chờ ví của bạn…",
+      "noAccountNeeded": "Chỉ cần đăng nhập cho danh sách theo dõi và cảnh báo.",
+      "errNoWallet": "Hãy kết nối ví trước, rồi bấm Đăng nhập.",
+      "errChain": "Chuyển ví sang Ethereum, BNB Chain, Base, Arbitrum hoặc Polygon rồi thử lại.",
+      "errRejected": "Bạn đã từ chối tin nhắn trong ví. Không có gì được ký.",
+      "errRateLimited": "Thử quá nhiều lần trong một phút. Hãy đợi một chút rồi thử lại.",
+      "errSignInFailed": "Đăng nhập không thành công. Hãy thử lại; nếu vẫn lỗi, hãy tải lại trang.",
+      "errUnavailable": "Dịch vụ tài khoản hiện không khả dụng. Hãy thử lại sau một phút.",
+      "watchTitle": "Danh sách theo dõi",
+      "watching": "Đang theo dõi {count}/{max}",
+      "watchAnother": "Theo dõi địa chỉ hoặc token",
+      "emptyTitle": "Chưa theo dõi gì",
+      "emptyText": "Thêm ví hoặc token để chọn điều gì sẽ kích hoạt cảnh báo.",
+      "watchMine": "Theo dõi ví của tôi ({address})",
+      "myWallet": "Ví của tôi",
+      "unnamedWallet": "Ví chưa đặt tên",
+      "unnamedToken": "Token chưa đặt tên",
+      "badgeOwn": "Ví của bạn (đã ký)",
+      "badgeWatchOnly": "Chỉ xem",
+      "badgeToken": "Token",
+      "rename": "Đổi tên {name}",
+      "remove": "Ngừng theo dõi {name}",
+      "ruleSent": "Đã gửi",
+      "ruleSentOwnHint": "Coin hoặc token gửi từ ví này",
+      "ruleSentHint": "Coin hoặc token gửi từ địa chỉ này",
+      "ruleReceived": "Đã nhận",
+      "ruleReceivedHint": "Mức tối thiểu giúp ẩn bụi và rác; token không có giá thị trường không bao giờ được báo",
+      "ruleApprovals": "Cấp phê duyệt mới",
+      "ruleApprovalsHint": "Ai giờ có thể chuyển token khỏi ví này, kèm liên kết để thu hồi",
+      "ruleDrop": "Giá trị giảm mạnh",
+      "ruleDropHint": "Hơn {percent}% trong một ngày",
+      "ruleSecurity": "Kết quả bảo mật thay đổi",
+      "ruleSecurityHint": "Ví dụ: bán bắt đầu thất bại, hoặc xuất hiện quyền chủ sở hữu mới",
+      "ruleLiquidity": "Khóa thanh khoản hết hạn hoặc thanh khoản bị rút",
+      "ruleLiquidityHint": "Kiểm tra mỗi giờ",
+      "anyAmount": "Bất kỳ số lượng",
+      "above": "Chỉ trên {amount}",
+      "amountFor": "{rule}: số lượng tối thiểu cho {name}",
+      "whereTitle": "Cảnh báo gửi đến đâu",
+      "accountTitle": "Tài khoản của bạn",
+      "signedInAs": "Đã đăng nhập là",
+      "accountText": "bằng một tin nhắn đã ký: không mật khẩu, không email. CRYPY lưu địa chỉ ví, danh sách theo dõi, ID cuộc trò chuyện Telegram, lịch sử cảnh báo và, nếu bạn chọn, danh sách danh mục.",
+      "signOut": "Đăng xuất",
+      "download": "Tải dữ liệu của tôi",
+      "deleteAccount": "Xóa tài khoản",
+      "deleteConfirmTitle": "Xóa tài khoản của bạn?",
+      "deleteConfirmText": "Thao tác này xóa danh sách theo dõi và đăng xuất bạn trên mọi thiết bị. Không thể hoàn tác. Ví và tiền của bạn không bị ảnh hưởng.",
+      "deleteConfirm": "Xóa tất cả",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "add": "Theo dõi",
+      "addTitle": "Theo dõi địa chỉ hoặc token",
+      "addText": "Chỉ địa chỉ công khai. CRYPY đọc chúng từ blockchain và không thể chuyển gì đi.",
+      "kindLabel": "Theo dõi gì",
+      "kindAddress": "Ví hoặc địa chỉ",
+      "kindToken": "Token",
+      "chainLabel": "Mạng",
+      "addressLabel": "Địa chỉ",
+      "tokenLabel": "Địa chỉ hợp đồng token",
+      "labelLabel": "Nhãn (tùy chọn)",
+      "labelPlaceholder": "ví dụ: Chính, Tiết kiệm, Sàn",
+      "neverSecret": "Đừng bao giờ dán cụm từ khôi phục hay khóa riêng vào đây hoặc bất cứ đâu. CRYPY sẽ không bao giờ hỏi chúng.",
+      "renameTitle": "Đổi tên",
+      "errEmpty": "Hãy dán một địa chỉ.",
+      "errInvalid": "Đây không phải địa chỉ. Địa chỉ phải bắt đầu bằng 0x, theo sau là 40 ký tự.",
+      "errChecksum": "Chữ hoa trong địa chỉ này không khớp với checksum. Có thể bị gõ sai; hãy sao chép lại.",
+      "errSecret": "Đây có vẻ là cụm từ khôi phục hoặc khóa riêng. Đã xóa, không lưu và không gửi đi. Đừng bao giờ chia sẻ nó với bất kỳ trang web nào.",
+      "errDuplicateOrFull": "Đã được theo dõi, hoặc danh sách đã đầy (10 mục). Hãy xóa một mục để thêm mục khác.",
+      "errSignedOut": "Bạn đã bị đăng xuất. Hãy đăng nhập lại để tiếp tục.",
+      "errSave": "Không lưu được thay đổi này. Hãy thử lại.",
+      "checkedEveryMinute": "Kiểm tra khoảng mỗi phút",
+      "checkerOff": "Hiện máy chủ này không kiểm tra cảnh báo.",
+      "chainsNotChecked": "Hiện không kiểm tra: {chains}. Máy chủ CRYPY tạm thời không tìm kiếm được trên các mạng này.",
+      "mutedBadge": "Đã tắt tiếng",
+      "mute": "Tắt cảnh báo cho {name}",
+      "unmute": "Bật lại cảnh báo cho {name}",
+      "tgUnavailable": "Cảnh báo Telegram chưa được thiết lập trên máy chủ này. Danh sách theo dõi đã được lưu và cảnh báo được giữ trong lịch sử bên dưới.",
+      "tgConnectText": "Kết nối Telegram một lần để nhận cảnh báo ở đó. Bot của chúng tôi chỉ gửi cảnh báo.",
+      "tgConnect": "Kết nối Telegram",
+      "tgNeverAsks": "Cảnh báo không bao giờ yêu cầu bạn kết nối ví hay ký gì, nên rất dễ nhận ra bot \"CRYPY\" giả.",
+      "tgStepText": "Mở bot của chúng tôi và bấm Bắt đầu. Mã này liên kết Telegram với tài khoản này và hết hạn sau 10 phút.",
+      "tgQrAlt": "Mã QR mở bot cảnh báo CRYPY trong Telegram",
+      "tgOpen": "Mở Telegram",
+      "tgOrSend": "hoặc gửi",
+      "tgToBot": "tới {bot}",
+      "tgCode": "Mã:",
+      "tgWaiting": "Đang chờ Telegram… trang này sẽ tự cập nhật.",
+      "tgExpired": "Mã đã hết hạn trước khi được dùng. Hãy lấy mã mới.",
+      "tgNewCode": "Lấy mã mới",
+      "tgConnectedAs": "đã kết nối là {name}",
+      "tgConnected": "đã kết nối",
+      "tgFromBot": "Tin nhắn đến từ {bot}. Chỉ có cảnh báo; bot không bao giờ hỏi gì.",
+      "tgSendTest": "Gửi thử",
+      "tgTestSent": "Đã gửi thử. Hãy kiểm tra Telegram.",
+      "tgError": "Không thành công. Hãy thử lại sau ít phút.",
+      "tgDisconnect": "Ngắt kết nối Telegram",
+      "tgDisconnectTitle": "Ngắt kết nối Telegram?",
+      "tgDisconnectText": "Cảnh báo sẽ không còn gửi tới Telegram. Chúng vẫn được giữ trong lịch sử ở đây, và bạn có thể kết nối lại bất cứ lúc nào.",
+      "tgDisconnectConfirm": "Ngắt kết nối",
+      "emailLater": "Cảnh báo qua email sẽ có sau.",
+      "quietOnText": "Giờ yên lặng {start}–{end} (cảnh báo chờ đến khi hết giờ)",
+      "quietOffText": "Không có giờ yên lặng (cảnh báo đến bất cứ lúc nào)",
+      "quietChange": "Thay đổi",
+      "quietTitle": "Giờ yên lặng",
+      "quietText": "Cảnh báo phát hiện trong giờ yên lặng sẽ chờ và đến cùng lúc khi hết giờ.",
+      "quietUse": "Dùng giờ yên lặng",
+      "quietFrom": "Từ",
+      "quietTo": "Đến",
+      "quietZone": "Theo múi giờ của bạn: {zone}",
+      "quietInvalid": "Nhập cả hai giờ, ví dụ 23:00 và 07:00.",
+      "recentTitle": "Cảnh báo gần đây",
+      "recentAll": "Tất cả",
+      "recentFewer": "Ít hơn",
+      "recentEmpty": "Chưa có cảnh báo. Chúng sẽ hiện ở đây và trong Telegram.",
+      "recentOlder": "Tải cảnh báo cũ hơn",
+      "statusWaiting": "Đang chờ gửi (giờ yên lặng)",
+      "statusNoChannel": "Chưa gửi: Telegram chưa được kết nối",
+      "statusFailed": "Không gửi được tới Telegram",
+      "statusMuted": "Chưa gửi: đã tắt tiếng",
+      "importTitle": "Theo dõi các ví trong danh mục",
+      "importText": "Theo dõi {count} ví từ danh mục của trình duyệt này, kèm nhãn? Sau đó bạn có thể đổi điều kiện cảnh báo cho từng ví.",
+      "importNone": "Mọi ví trong danh mục của trình duyệt này đều đã được theo dõi.",
+      "importButton": "Theo dõi {count} ví",
+      "importNotNow": "Để sau"
+    }
+  },
+  "seo": {
+    "homeTitle": "CRYPY: Kiểm tra ví, token và giao dịch crypto miễn phí",
+    "toolsTitle": "Tất cả công cụ kiểm tra ví và token miễn phí | CRYPY",
+    "toolsDescription": "14 công cụ miễn phí kiểm tra ví, token và giao dịch trên Ethereum, BNB Chain, Base, Arbitrum và Polygon: quét token, phê duyệt, gas và nhiều hơn."
+  },
+  "learn": {
+    "seoTitle": "Hướng dẫn an toàn crypto: lừa đảo, phê duyệt | CRYPY",
+    "seoDescription": "Hướng dẫn dễ hiểu về token lừa đảo, honeypot, phê duyệt token, giao dịch thất bại, phí gas và bảo vệ cụm từ khôi phục, kèm công cụ CRYPY miễn phí.",
+    "title": "Học cách nhận ra rủi ro crypto trước khi mất tiền",
+    "intro": "Các hướng dẫn ngắn, dễ hiểu về token lừa đảo, phê duyệt, giao dịch thất bại và gas. Mỗi bài kết thúc bằng công cụ CRYPY miễn phí kiểm tra giúp bạn.",
+    "topicsLabel": "Chủ đề",
+    "allTopics": "Tất cả hướng dẫn",
+    "topics": {
+      "token-scams": "Token lừa đảo",
+      "approvals": "Phê duyệt",
+      "transactions": "Giao dịch",
+      "gas-units": "Gas và đơn vị",
+      "wallet-safety": "An toàn ví"
+    },
+    "startHere": "Bắt đầu từ đây",
+    "checkNowTitle": "Kiểm tra ngay",
+    "checkNowText": "Dán một địa chỉ, hợp đồng token hoặc hash giao dịch. Không cần kết nối ví.",
+    "guideCount": "{count, plural, one {# hướng dẫn} other {# hướng dẫn}}",
+    "allGuidesHeading": "Tất cả hướng dẫn",
+    "readTime": "{minutes} phút đọc",
+    "toolLabel": "Công cụ:",
+    "noTool": "Tất cả công cụ",
+    "byline": "Bởi CRYPY",
+    "updated": "Cập nhật {date}",
+    "inShort": "Tóm tắt",
+    "onThisPage": "Trên trang này",
+    "questions": "Câu hỏi",
+    "relatedGuides": "Hướng dẫn liên quan",
+    "ctaTitle": "Tự kiểm tra bằng {tool}",
+    "ctaButton": "Mở {tool}",
+    "ctaAllTitle": "Công cụ miễn phí không bao giờ hỏi cụm từ khôi phục",
+    "ctaAllText": "Kiểm tra ví, token, phê duyệt và giao dịch chỉ bằng dữ liệu công khai.",
+    "ctaAllButton": "Xem tất cả công cụ",
+    "notTranslated": "Hướng dẫn này chưa được dịch, nên được hiển thị bằng tiếng Anh.",
+    "learnMore": "Tìm hiểu thêm",
+    "relatedTools": "Công cụ liên quan"
+  },
+  "gasChain": {
+    "seoTitle": "Giá gas {chain} hiện tại: gwei và phí trực tiếp | CRYPY",
+    "title": "Giá gas {chain} hiện tại",
+    "intro": "Giá gas trực tiếp tính bằng gwei và chi phí bằng đô la của các thao tác phổ biến, đọc trực tiếp từ mạng và làm mới mỗi 12 giây.",
+    "howTitle": "Gas hoạt động thế nào trên {chain}",
+    "questions": "Câu hỏi",
+    "otherChains": "Gas trên các mạng khác",
+    "compareAll": "So sánh mọi mạng trong Theo dõi Gas",
+    "guideLink": "Đọc: Giải thích phí gas",
+    "byChain": "Gas theo mạng:",
+    "chains": {
+      "ethereum": {
+        "description": "Giá gas Ethereum trực tiếp bằng gwei: thấp, trung bình và cao, kèm chi phí bằng đô la để gửi ETH, token, phê duyệt và hoán đổi ngay lúc này.",
+        "how": [
+          "Mỗi giao dịch Ethereum trả phí cơ bản của khối (bị đốt) cộng phí ưu tiên (tiền boa) cho validator. Khoảng 12 giây có một khối mới, và phí cơ bản tăng hoặc giảm tùy khối trước đầy đến đâu.",
+          "Ví của bạn đặt một mức phí tối đa: bạn trả phí cơ bản cộng tiền boa, không bao giờ vượt quá mức tối đa đó. Giao dịch thất bại vẫn phải trả cho lượng gas đã dùng."
+        ],
+        "faq": [
+          {
+            "q": "Vì sao giá gas thay đổi thường xuyên vậy?",
+            "a": "Phí cơ bản được tính lại cho mỗi khối dựa trên độ đầy của khối trước, nên có thể thay đổi mỗi 12 giây. Những lúc đông đúc, như khi một token nổi tiếng ra mắt, đẩy giá lên rất nhanh."
+          },
+          {
+            "q": "Tôi nên chọn tốc độ nào?",
+            "a": "Trung bình phù hợp với hầu hết giao dịch. Chọn thấp khi bạn có thể chờ, và cao khi cần qua nhanh, như một lần hoán đổi gấp."
+          },
+          {
+            "q": "Vì sao tôi trả số tiền khác với số hiển thị ở đây?",
+            "a": "Chi phí phụ thuộc vào lượng gas giao dịch thực sự dùng: một lần hoán đổi phức tạp dùng nhiều hơn mức điển hình hiển thị ở đây. Phí cơ bản cũng có thể thay đổi giữa lúc bạn xem và lúc giao dịch được đưa vào khối."
+          }
+        ]
+      },
+      "bsc": {
+        "description": "Giá gas BNB Chain trực tiếp bằng gwei: thấp, trung bình và cao, kèm chi phí bằng đô la để gửi BNB, token, phê duyệt và hoán đổi ngay lúc này.",
+        "how": [
+          "BNB Chain không có phí cơ bản: giá gas bạn đặt là toàn bộ giá và thuộc về validator. Khối ra nhanh hơn Ethereum nhiều, và giá thường thấp, ổn định.",
+          "Phí được trả bằng BNB, vì vậy hãy giữ một ít BNB trong ví dù bạn chỉ nắm token."
+        ],
+        "faq": [
+          {
+            "q": "Vì sao phí BNB Chain thấp vậy?",
+            "a": "Khối của nó chứa được nhiều giao dịch và ra nhanh, nên giá gas thường gần mức tối thiểu validator chấp nhận. Những lúc đông đúc vẫn có thể làm giá tăng."
+          },
+          {
+            "q": "Tôi có cần BNB để gửi token trên BNB Chain không?",
+            "a": "Có. Mọi giao dịch đều trả bằng BNB, kể cả khi bạn gửi USDT hay token khác."
+          },
+          {
+            "q": "Tôi nên chọn tốc độ nào?",
+            "a": "Trung bình phù hợp với hầu hết giao dịch. Chọn thấp khi bạn có thể chờ, và cao khi cần qua nhanh, như một lần hoán đổi gấp."
+          }
+        ]
+      },
+      "base": {
+        "description": "Giá gas Base trực tiếp bằng gwei, kèm chi phí bằng đô la để gửi ETH, token, phê duyệt và hoán đổi, đã gồm phí dữ liệu Ethereum.",
+        "how": [
+          "Base là một rollup xây trên Ethereum. Mỗi giao dịch trả một khoản phí mạng nhỏ trên Base (phí cơ bản cộng tiền boa, giống Ethereum) và một khoản phí dữ liệu để công bố dữ liệu lên Ethereum.",
+          "Cả hai phần thường nhỏ. Chi phí của CRYPY gồm ước tính phí dữ liệu, đọc từ mạng. Phí trên Base được trả bằng ETH."
+        ],
+        "faq": [
+          {
+            "q": "Vì sao Base rẻ hơn Ethereum?",
+            "a": "Base gom nhiều giao dịch lại và công bố lên Ethereum cùng lúc, nên mỗi giao dịch chỉ trả một phần nhỏ."
+          },
+          {
+            "q": "Phí dữ liệu Ethereum là gì?",
+            "a": "Phần phí trả cho việc công bố dữ liệu giao dịch của bạn lên Ethereum. Nó đi theo phí của chính Ethereum, nên thấp hơn khi Ethereum vắng."
+          },
+          {
+            "q": "Tôi có cần ETH trên Base không?",
+            "a": "Có. Phí trên Base được trả bằng ETH nằm trên Base, không phải trên Ethereum."
+          }
+        ]
+      },
+      "arbitrum": {
+        "description": "Giá gas Arbitrum trực tiếp bằng gwei, kèm chi phí bằng đô la để gửi ETH, token, phê duyệt và hoán đổi ngay lúc này, đọc từ mạng.",
+        "how": [
+          "Arbitrum One là một rollup xây trên Ethereum. Chi phí công bố dữ liệu giao dịch lên Ethereum được tính thành gas bổ sung, nên đã nằm trong lượng gas đã dùng và chi phí hiển thị ở đây.",
+          "Giao dịch được sắp theo thứ tự đến, nên tiền boa cao hơn thường không làm chúng nhanh hơn. Phí trên Arbitrum được trả bằng ETH."
+        ],
+        "faq": [
+          {
+            "q": "Tiền boa cao hơn có làm giao dịch nhanh hơn trên Arbitrum không?",
+            "a": "Thường là không. Arbitrum sắp giao dịch theo thứ tự đến, nên tiền boa ưu tiên ít tác dụng."
+          },
+          {
+            "q": "Vì sao Arbitrum rẻ hơn Ethereum?",
+            "a": "Nó gom nhiều giao dịch và công bố lên Ethereum cùng nhau, nên mỗi giao dịch chỉ trả một phần nhỏ."
+          },
+          {
+            "q": "Tôi có cần ETH trên Arbitrum không?",
+            "a": "Có. Phí được trả bằng ETH nằm trên Arbitrum, không phải trên Ethereum."
+          }
+        ]
+      },
+      "polygon": {
+        "description": "Giá gas Polygon trực tiếp bằng gwei, kèm chi phí bằng đô la để gửi POL, token, phê duyệt và hoán đổi ngay lúc này, đọc từ mạng.",
+        "how": [
+          "Polygon hoạt động giống Ethereum: mỗi giao dịch trả phí cơ bản (bị đốt) cộng tiền boa cho validator. Phí được trả bằng POL.",
+          "Giá gas tính bằng gwei trên Polygon trông cao vì POL có giá trị thấp hơn ETH rất nhiều. Điều quan trọng là chi phí bằng đô la hiển thị ở đây."
+        ],
+        "faq": [
+          {
+            "q": "Vì sao giá gas Polygon tính bằng gwei cao vậy?",
+            "a": "Một gwei là một phần nhỏ của một POL, và POL có giá trị thấp hơn ETH rất nhiều. Vài trăm gwei trên Polygon thường rẻ hơn nhiều so với vài gwei trên Ethereum."
+          },
+          {
+            "q": "Tôi có cần POL để gửi token trên Polygon không?",
+            "a": "Có. Mọi giao dịch đều trả bằng POL, kể cả khi bạn gửi USDC hay token khác."
+          },
+          {
+            "q": "Tôi nên chọn tốc độ nào?",
+            "a": "Trung bình phù hợp với hầu hết giao dịch. Chọn thấp khi bạn có thể chờ, và cao khi cần qua nhanh, như một lần hoán đổi gấp."
+          }
+        ]
+      }
+    }
+  },
+  "tokenChecks": {
+    "seoTitle": "Kiểm tra bảo mật token: thử lừa đảo hằng ngày | CRYPY",
+    "seoDescription": "Kiểm tra bảo mật tự động hằng ngày cho 50 token nổi tiếng trên 5 mạng: có bán được không, thuế mua và bán, quyền của chủ sở hữu và thanh khoản.",
+    "nav": "Kiểm tra token",
+    "title": "Kiểm tra bảo mật token",
+    "intro": "Các lần kiểm tra tự động của CRYPY cho token nổi tiếng, chạy lại mỗi ngày: có bán được không, thu thuế bao nhiêu, chủ sở hữu thay đổi được gì và ai nắm thanh khoản. Kết quả là tín hiệu, không bao giờ là cam kết token an toàn.",
+    "checkAny": "Kiểm tra token bất kỳ",
+    "chainsLabel": "Chuyển đến mạng",
+    "colToken": "Token",
+    "colResult": "Kết quả",
+    "colSell": "Bán được (thử)",
+    "colTax": "Thuế mua / bán",
+    "colChecked": "Kiểm tra",
+    "sellYes": "Có",
+    "sellNo": "Không",
+    "sellNoPool": "Không tìm thấy pool",
+    "sellUnchecked": "Chưa kiểm tra",
+    "tax": "{buy} / {sell}",
+    "notMeasured": "Chưa đo",
+    "pending": "Đang kiểm tra",
+    "selection": "Token nào được liệt kê: các token nổi tiếng có thanh khoản sâu trên mỗi mạng, do CRYPY chọn. Không ai có thể trả tiền để được liệt kê hoặc thay đổi kết quả.",
+    "fromToolPage": "Xem kiểm tra hằng ngày các token nổi tiếng",
+    "page": {
+      "seoTitle": "{symbol} trên {chain}: kiểm tra bảo mật token | CRYPY",
+      "seoDescription": "{symbol} trên {chain}: thử bán, thuế mua và bán, quyền chủ sở hữu và thanh khoản từ kiểm tra tự động hằng ngày của CRYPY. Kết quả chỉ là tín hiệu.",
+      "title": "Kiểm tra bảo mật token {name} ({symbol})",
+      "pendingTitle": "{symbol} trên {chain}: kiểm tra bảo mật token",
+      "checked": "Kiểm tra lúc {time} UTC · kiểm tra lại mỗi ngày",
+      "fresh": "Chạy kiểm tra mới",
+      "aboutTitle": "Về lần kiểm tra này",
+      "about": "Trang này hiển thị lần kiểm tra tự động của CRYPY đối với hợp đồng {symbol} trên {chain}, được lưu khoảng một lần mỗi ngày. Nó bao gồm việc bán, thuế, quyền chủ sở hữu và thanh khoản, đồng thời ghi rõ mỗi phát hiện được kiểm tra thế nào. Đây không phải kiểm toán hay sự bảo chứng, và chủ sở hữu có thể đổi cài đặt sau khi kiểm tra. Để có dữ liệu mới nhất, hãy chạy kiểm tra mới.",
+      "preparingTitle": "Lần kiểm tra này đang được chuẩn bị",
+      "preparingText": "CRYPY chưa lưu lần kiểm tra nào cho {symbol} trên {chain}; thường sẽ có trong vòng hai giờ. Bạn có thể chạy kiểm tra trực tiếp ngay bây giờ.",
+      "questions": "Câu hỏi",
+      "sellQ": "Tôi có bán được {symbol} không?",
+      "sellOk": "Trong giao dịch thử gần nhất của CRYPY, {symbol} có thể mua, gửi và bán được. Quy tắc token có thể thay đổi sau này, vì vậy hãy kiểm tra lại trước giao dịch lớn.",
+      "sellNo": "Trong giao dịch thử gần nhất của CRYPY, giao dịch không hoàn tất. Phần thử giao dịch ở trên cho thấy bước nào thất bại; đừng mua cho đến khi bạn biết lý do.",
+      "sellUnchecked": "Lần kiểm tra gần nhất của CRYPY không chạy được giao dịch thử cho {symbol} (không có pool được hỗ trợ, hoặc mô phỏng không chạy). Phần thử giao dịch ở trên cho biết lý do.",
+      "taxQ": "{symbol} có thuế mua hoặc bán không?",
+      "taxA": "Trong giao dịch thử gần nhất của CRYPY, token thu {buy} khi mua, {sell} khi bán và {transfer} khi chuyển.",
+      "taxNone": "Lần kiểm tra gần nhất chưa đo được thuế vì giao dịch thử không hoàn tất.",
+      "safeQ": "{symbol} có an toàn không?",
+      "safeA": "Không lần kiểm tra nào chứng minh được token an toàn. Lần kiểm tra gần nhất của CRYPY ghi \"{level}\", với {high} phát hiện mức cao và {medium} mức trung bình. Hãy đọc các phát hiện ở trên và tự quyết định.",
+      "related": "Các token đã kiểm tra khác trên {chain}",
+      "allChecks": "Tất cả kiểm tra token",
+      "learn": "Tìm hiểu thêm"
+    }
+  },
+  "status": {
+    "seoTitle": "Trạng thái CRYPY: mọi công cụ và mạng có hoạt động?",
+    "seoDescription": "Trạng thái trực tiếp của mọi công cụ CRYPY và kết nối blockchain. Máy chủ thử từng mục bằng dữ liệu thật vài phút một lần và lưu 90 ngày dữ liệu.",
+    "title": "Trạng thái CRYPY",
+    "intro": "Mọi thứ có hoạt động không? Máy chủ của chúng tôi thử thật từng công cụ và từng mạng vài phút một lần và hiển thị kết quả ở đây.",
+    "headline": {
+      "operational": "Mọi thứ đều hoạt động",
+      "degraded": "Một số phần đang gặp sự cố",
+      "down": "Trang web đang gặp sự cố lớn",
+      "unknown": "Chưa được kiểm tra"
+    },
+    "headlineText": {
+      "operational": "Mọi công cụ và mạng đều đạt lần kiểm tra gần nhất.",
+      "degraded": "{names} đang gặp sự cố{count, plural, one {} other {}}. Mọi thứ khác vẫn hoạt động.",
+      "down": "Chính trang web không đạt các lần kiểm tra gần nhất. Chúng tôi đang xử lý.",
+      "unknown": "Máy chủ chưa lưu kết quả kiểm tra nào. Kết quả sẽ xuất hiện vài phút sau khi khởi động.",
+      "partial": "Mọi thứ đã kiểm tra đều đạt. Còn {count, plural, one {# phần} other {# phần}} chưa được kiểm tra."
+    },
+    "lastChecked": "Kiểm tra lần cuối {minutes, plural, =0 {chưa đầy một phút trước} one {# phút trước} other {# phút trước}}",
+    "checksEvery": "Kiểm tra mỗi 5 phút",
+    "state": {
+      "operational": "Hoạt động",
+      "degraded": "Có sự cố",
+      "down": "Ngừng hoạt động",
+      "unknown": "Chưa được kiểm tra"
+    },
+    "legendLabel": "Ý nghĩa các thanh",
+    "legend": {
+      "operational": "Hoạt động cả ngày",
+      "degraded": "Có vài sự cố",
+      "down": "Ngừng một thời gian",
+      "none": "Chưa có kiểm tra"
+    },
+    "daysAgo": "90 ngày trước",
+    "today": "Hôm nay",
+    "uptime": "{percent} hoạt động",
+    "noUptime": "Chưa có kiểm tra",
+    "dayTitle": "{day}: {percent} lần kiểm tra đạt",
+    "dayNone": "{day}: không có kiểm tra",
+    "groups": {
+      "core": {
+        "title": "Trang web",
+        "sub": ""
+      },
+      "tools": {
+        "title": "Công cụ",
+        "sub": "Mỗi công cụ được thử bằng dữ liệu công khai thật khoảng 30 phút một lần"
+      },
+      "chains": {
+        "title": "Mạng",
+        "sub": "Kết nối của từng mạng, mỗi 5 phút"
+      },
+      "alerts": {
+        "title": "Cảnh báo và kiểm tra hằng ngày",
+        "sub": ""
+      }
+    },
+    "components": {
+      "website": "Trang web",
+      "search": "Tìm kiếm",
+      "alerts": "Cảnh báo ví qua Telegram",
+      "token-checks": "Kiểm tra bảo mật token hằng ngày"
+    },
+    "updates": {
+      "title": "Cập nhật",
+      "none": "Không có cập nhật trong 90 ngày qua.",
+      "earlier": "Cập nhật trước đó (90 ngày qua)",
+      "state": {
+        "ongoing": "Đang diễn ra",
+        "fixed": "Đã khắc phục",
+        "planned": "Bảo trì theo kế hoạch"
+      },
+      "affects": "Ảnh hưởng: {name}",
+      "wholeSite": "Toàn bộ trang web"
+    },
+    "features": {
+      "title": "Tính năng: đang có và sắp ra mắt",
+      "live": "Đang hoạt động",
+      "beta": "Beta",
+      "soon": "Sắp ra mắt",
+      "liveTools": "{count} công cụ, liệt kê ở trên",
+      "liveChains": "Ethereum, BNB Chain, Base, Arbitrum và Polygon",
+      "liveAlerts": "Cảnh báo ví qua Telegram",
+      "betaSite": "Toàn bộ trang web đang là bản beta công khai: kết quả là thật, thiết kế vẫn có thể thay đổi",
+      "soonItems": [
+        "Bản dịch đã được duyệt: tiếng Tây Ban Nha, Bồ Đào Nha (Brazil), Trung, Nga, Thổ Nhĩ Kỳ và Việt",
+        "Thêm ngôn ngữ"
+      ]
+    },
+    "howItWorks": "Cách hoạt động: các lần kiểm tra dùng dữ liệu thử công khai (một ví, giao dịch và token nổi tiếng), không bao giờ dùng nội dung tìm kiếm của ai. \"Hoạt động\" nghĩa là lần kiểm tra gần nhất đã đạt; không cam kết mọi kết quả đều đầy đủ. Nếu trang này hoàn toàn không tải được, toàn bộ trang web đang ngừng và chúng tôi sẽ nhận cảnh báo riêng."
+  }
+}

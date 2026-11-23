@@ -1,0 +1,107 @@
+{
+  "title": "Cụm từ khôi phục: vì sao không trang web nào được hỏi nó",
+  "seoTitle": "An toàn cụm từ khôi phục: đừng bao giờ chia sẻ | CRYPY",
+  "description": "Cụm từ khôi phục kiểm soát mọi thứ trong ví. Tìm hiểu vì sao không trang web, ứng dụng hay nhân viên hỗ trợ nào được hỏi nó, và các chiêu kẻ lừa đảo dùng.",
+  "summary": "Một quy tắc bảo vệ mọi thứ trong ví, và các chiêu dùng để phá nó.",
+  "inShort": [
+    "Cụm từ khôi phục (12 hoặc 24 từ) trao toàn quyền kiểm soát ví cho bất kỳ ai có nó.",
+    "Không trang web, ứng dụng, sàn hay nhân viên hỗ trợ thật nào sẽ hỏi nó.",
+    "Nếu bạn đã nhập nó ở bất cứ đâu trên mạng, hãy chuyển tiền sang ví mới ngay."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Cụm từ khôi phục là gì",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Khi bạn tạo ví như MetaMask hay Trust Wallet, ví sẽ hiện một cụm từ khôi phục gồm 12 hoặc 24 từ. Những từ đó chính là ví: ai có chúng đều có thể dựng lại ví trên thiết bị của mình và chuyển đi mọi thứ bên trong. Không ai có thể đảo ngược lần chuyển đó."
+        },
+        {
+          "type": "p",
+          "text": "Mật khẩu chỉ mở khóa ứng dụng trên thiết bị của bạn. Cụm từ khôi phục mới là chìa khóa chính."
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "heading": "Quy tắc",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Đừng bao giờ nhập cụm từ khôi phục vào trang web, biểu mẫu, cuộc trò chuyện hay ứng dụng nào, ngoài ứng dụng bạn tự cài để khôi phục ví của mình.** Không sàn, công ty ví, airdrop, đội hỗ trợ hay công cụ bảo mật nào cần đến nó."
+        },
+        {
+          "type": "p",
+          "text": "CRYPY không bao giờ hỏi nó. Mọi công cụ của CRYPY chỉ làm việc với địa chỉ công khai, và các biểu mẫu lưu địa chỉ sẽ từ chối cụm từ khôi phục được dán vào."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Các chiêu kẻ lừa đảo dùng",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Hỗ trợ giả:** ai đó trả lời câu hỏi của bạn trên mạng xã hội hoặc Discord, đề nghị giúp đỡ, rồi dẫn bạn tới biểu mẫu đòi cụm từ.",
+            "**\"Xác thực\", \"đồng bộ\" hoặc \"mở khóa\" ví:** các trang nói ví của bạn phải được xác minh để nhận airdrop hoặc sửa lỗi.",
+            "**Ứng dụng ví và tiện ích trình duyệt giả:** bản nhái của ví thật, gửi cụm từ của bạn cho kẻ lừa đảo khi bạn khôi phục.",
+            "**Công cụ \"khôi phục\" ví hoặc kiểm tra số dư** đòi cụm từ để \"quét\".",
+            "**Ảnh chụp màn hình và ghi chú đám mây:** cụm từ lưu trong ảnh, email hoặc ổ đám mây có thể bị đánh cắp cùng tài khoản đó."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "heading": "Cách cất giữ",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Viết ra giấy (hoặc khắc lên kim loại) và cất ở nơi an toàn, kín đáo, tốt nhất là hai nơi.",
+            "Đừng chụp ảnh, đừng gõ vào ứng dụng ghi chú và đừng lưu lên đám mây.",
+            "Với số tiền lớn, hãy cân nhắc ví cứng: cụm từ luôn ngoại tuyến, và giao dịch được xác nhận trên thiết bị."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Kết nối ví với trang web là chuyện khác: trang chỉ thấy địa chỉ công khai của bạn, và ví sẽ hỏi bạn trước khi ký bất cứ thứ gì."
+        }
+      ]
+    },
+    {
+      "id": "exposed",
+      "heading": "Nếu bạn nghĩ nó đã bị lộ",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Tạo ví mới với cụm từ khôi phục mới, trên thiết bị bạn tin tưởng.",
+            "Chuyển ngay tiền từ ví cũ sang ví mới, ưu tiên tài sản giá trị nhất trước.",
+            "Ngừng dùng ví cũ, và thu hồi các phê duyệt của nó nếu bạn còn để gì trong đó."
+          ]
+        },
+        {
+          "type": "warning",
+          "text": "Kẻ lừa đảo thường chuyển tiền đi chỉ trong vài phút. Hãy hành động trước; tìm hiểu sau."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Khóa riêng có giống cụm từ khôi phục không?",
+      "a": "Không hẳn: cụm từ khôi phục tạo ra mọi khóa riêng của ví. Cả hai đều phải giữ bí mật, và không trang web nào được hỏi một trong hai."
+    },
+    {
+      "q": "CRYPY có thấy cụm từ khôi phục khi tôi kết nối ví không?",
+      "a": "Không. Kết nối chỉ chia sẻ địa chỉ công khai. Cụm từ không bao giờ rời khỏi ví của bạn."
+    },
+    {
+      "q": "Nhân viên hỗ trợ nói cần nó để sửa tài khoản của tôi. Có đúng không?",
+      "a": "Không. Hỗ trợ thật không bao giờ cần cụm từ khôi phục của bạn. Đó là lừa đảo."
+    }
+  ]
+}

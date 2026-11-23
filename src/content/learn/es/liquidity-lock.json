@@ -1,0 +1,90 @@
+{
+  "title": "Qué es un bloqueo de liquidez y por qué importa",
+  "seoTitle": "Qué es un bloqueo de liquidez y por qué importa | CRYPY",
+  "description": "¿Quién puede sacar el dinero del pool de un token? Cómo se guarda la liquidez, qué es la liquidez quemada o bloqueada y qué no protege un bloqueo.",
+  "summary": "Quién puede sacar el dinero del pool de un token y qué protege de verdad un bloqueo.",
+  "inShort": [
+    "El pool de un token guarda las monedas que pagaron los compradores. Quien tiene los tokens de participación del pool puede retirarlas.",
+    "Las participaciones quemadas o bloqueadas no se pueden retirar, o no hasta que termine el bloqueo.",
+    "Un bloqueo no impide que el dueño emita, suba impuestos o venda sus propios tokens."
+  ],
+  "sections": [
+    {
+      "id": "pool",
+      "heading": "Cómo funciona un pool de liquidez",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "En exchanges como Uniswap y PancakeSwap, un token se opera contra un pool que guarda dos activos, por ejemplo el token y ETH o BNB. Quien añade liquidez recibe **participaciones del pool** (tokens LP, o un NFT de posición en los diseños de pool más nuevos) que después puede cambiar por su parte del pool."
+        },
+        {
+          "type": "p",
+          "text": "Cuando la gente compra el token, pone ETH o BNB en el pool. Quien tiene la mayoría de las participaciones del pool puede sacar la mayor parte de eso."
+        }
+      ]
+    },
+    {
+      "id": "rug",
+      "heading": "Cómo ocurre un rug pull",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "En un rug pull, quienes están detrás de un token retiran la liquidez del pool en una sola transacción. El precio se desploma y los holders no pueden vender por nada significativo. Es una de las formas más comunes en que los compradores de tokens pierden dinero."
+        }
+      ]
+    },
+    {
+      "id": "protected",
+      "heading": "Quemada, bloqueada o en manos de alguien",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Quemada:** las participaciones del pool se enviaron a una dirección que nadie controla. Esa liquidez nunca se puede retirar.",
+            "**Bloqueada:** las participaciones están en un contrato de bloqueo hasta una fecha fija. Revisa la fecha de fin: un bloqueo que termina la semana que viene protege poco.",
+            "**En manos de un multisig o un timelock:** varios firmantes, o un tiempo de espera, se interponen entre las participaciones y un retiro. Mejor que una sola persona, pero no es lo mismo que bloqueada.",
+            "**En manos de una billetera o del dueño:** se puede retirar en cualquier momento."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Un contrato que solo dice ser un bloqueo no es una prueba. CRYPY cuenta un bloqueo solo cuando es un contrato de bloqueo de su lista verificada, y lee la fecha de fin de ese contrato."
+        }
+      ]
+    },
+    {
+      "id": "notcover",
+      "heading": "Lo que no protege un bloqueo",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Un bloqueo de liquidez solo impide retirar las participaciones bloqueadas. No impide que el dueño emita tokens nuevos y los venda, suba el impuesto de venta, bloquee las ventas o venda de golpe una gran cantidad que tenga. Revisa también esos riesgos: mira [Cómo saber si un token es una estafa](guide:check-token-scam)."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Revisa quién tiene la liquidez de un token",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "El [Escáner de seguridad de tokens](tool:token-security) lista los pools de un token y, para cada pool, quién tiene las participaciones que pudo encontrar: direcciones de quema, contratos de bloqueo con su fecha de fin, multisigs, farms, el dueño y billeteras comunes. Las participaciones que no puede atribuir se muestran como no encontradas, nunca se cuentan como seguras."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿La liquidez quemada es mejor que la bloqueada?",
+      "a": "La liquidez quemada nunca se puede retirar, así que es permanente. Un bloqueo protege solo hasta su fecha de fin."
+    },
+    {
+      "q": "¿Un bloqueo de liquidez significa que un token es seguro?",
+      "a": "No. Cubre un solo riesgo. Los dueños todavía pueden emitir, cambiar impuestos o vender sus propios tokens."
+    },
+    {
+      "q": "¿Por qué la revisión dice que no se encontraron algunos holders?",
+      "a": "Encontrar a todos los holders de un pool requiere su historial completo, que las fuentes de datos gratuitas no siempre ofrecen. CRYPY muestra esa parte como sin revisar en lugar de adivinar."
+    }
+  ]
+}

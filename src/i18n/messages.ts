@@ -19,6 +19,8 @@ const loaders: Record<Locale, () => Promise<Partial<Messages>>> = {
   "zh-CN": () => import("../../messages/zh-CN.json").then((m) => m.default),
   ru: () => import("../../messages/ru.json").then((m) => m.default),
   tr: () => import("../../messages/tr.json").then((m) => m.default),
+  "pt-BR": () => import("../../messages/pt-BR.json").then((m) => m.default),
+  vi: () => import("../../messages/vi.json").then((m) => m.default),
 };
 
 export async function loadMessages(locale: Locale): Promise<Messages> {

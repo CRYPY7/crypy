@@ -1,0 +1,145 @@
+{
+  "title": "Bir tokenın dolandırıcılık olup olmadığını almadan önce nasıl anlarsınız",
+  "seoTitle": "Kripto Token Dolandırıcılık mı, Nasıl Anlaşılır | CRYPY",
+  "description": "Almadan önce dolandırıcı tokenların çoğunu yakalayan beş kontrol: satılabilir mi, vergileri ne, sahip neyi değiştirebilir, likiditeyi kim kontrol ediyor.",
+  "summary": "Dolandırıcı tokenların çoğunu yakalayan beş kontrol: satış, vergiler, sahip yetkileri, likidite ve sahipler.",
+  "inShort": [
+    "Dolandırıcı tokenların çoğu beş kontrolden en az birinde başarısız olur: satış, vergiler, sahip yetkileri, likidite ve sahipler.",
+    "Bir test işlemi gerçekten satıp satamayacağınızı ve yolda ne kadar kesildiğini gösterir.",
+    "Tüm kontrollerden geçmek garanti değildir: sahipler siz aldıktan sonra ayarları değiştirebilir."
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "heading": "Dolandırıcı tokenlar neden bu kadar yaygın",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Herkes dakikalar içinde bir token oluşturup merkeziyetsiz bir borsaya ekleyebilir. Listeleme incelemesi yoktur, bu yüzden dürüst projelerin başlamasını sağlayan araçlar dolandırıcıların da popüler bir adı kopyalayıp biraz likidite eklemesine ve alıcı beklemesine olanak tanır."
+        },
+        {
+          "type": "p",
+          "text": "Dolandırıcılıkların çoğu birkaç kalıbı izler. Hepsini yalnızca herkese açık blokzincir verileriyle, almadan önce kontrol edebilirsiniz."
+        }
+      ]
+    },
+    {
+      "id": "sell",
+      "heading": "1. Satabilir misiniz?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir **honeypot** almanıza izin verir ama her satışı engeller veya boşaltır. En güvenilir kontrol bir test işlemidir: küçük bir miktar alın, bir kısmını başka bir cüzdana gönderin, sonra satın ve her adımda ne olduğunu görün."
+        },
+        {
+          "type": "p",
+          "text": "[Token Güvenlik Tarayıcı](tool:token-security) bu testi tokenın gerçek borsa havuzuna karşı salt okunur bir simülasyonda çalıştırır. Hiçbir şey imzalanmaz veya gönderilmez, cüzdan gerekmez."
+        },
+        {
+          "type": "tip",
+          "text": "Daha fazlası için: [Honeypot token nedir ve nasıl anlaşılır](guide:honeypot-token)."
+        }
+      ]
+    },
+    {
+      "id": "taxes",
+      "heading": "2. Her işlemde ne kadar alıyor?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bazı tokenlar her alım, satım veya transferde ücret alır. Küçük bir ücret meşru olabilir, ama %30, %50 veya %99'luk bir satış vergisi, satış teknik olarak çalışsa bile tokenı bir tuzağa dönüştürür."
+        },
+        {
+          "type": "p",
+          "text": "Projenin duyurduğu rakama değil, ölçülen vergiye bakın. Test işlemi her adımda gerçekte ne ulaştığını ölçer."
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "heading": "3. Sahip hâlâ neyi değiştirebilir?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Birçok token kontratı sahibine özel yetkiler bırakır. Bakılması gerekenler:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "**Basım:** yeni tokenlar oluşturup havuza satmak.",
+            "**Ücretler:** alım veya satım vergisini istediği zaman artırmak.",
+            "**Kara liste veya duraklatma:** seçilen cüzdanların veya herkesin token taşımasını durdurmak.",
+            "**Yükseltme:** kontratın kodunu tamamen değiştirmek (proxy kontrat)."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "**Sahiplikten vazgeçmiş** bir sahip artık yalnızca sahibe açık yetkileri kullanamaz, ancak başka rollerin veya hesapların elindeki yetkiler kalabilir. Kaynak kodu yayınlanmış (doğrulanmış) bir kontratı kontrol etmek, yalnızca derlenmiş kodu açık olan bir kontrattan daha kolaydır."
+        }
+      ]
+    },
+    {
+      "id": "liquidity",
+      "heading": "4. Likiditeyi kim kontrol ediyor?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Likidite havuzu alıcıların ve satıcıların işlem yaptığı yerdir. Tokenın arkasındaki kişiler bu likiditeyi çekebiliyorsa herkesin parasını tek bir işlemle alabilirler: bir \"rug pull\"."
+        },
+        {
+          "type": "p",
+          "text": "Ne kadar likidite olduğunu ve havuzun pay tokenlarının **yakılıp yakılmadığını** veya bilinen bir kilit kontratında **kilitli** olup olmadığını ve ne zamana kadar kilitli olduğunu kontrol edin. Bkz. [Likidite kilidi nedir ve neden önemlidir](guide:liquidity-lock)."
+        }
+      ]
+    },
+    {
+      "id": "holders",
+      "heading": "5. Arz kimin elinde?",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir veya iki cüzdan arzın çoğunu tutuyorsa satarak fiyatı çökertebilirler. Borsaların, yakım adreslerinin veya kilit kontratlarının büyük payları genellikle sorun değildir; bilinmeyen cüzdanların büyük payları daha yakından incelenmeyi hak eder."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Bir kontrolün söyleyemeyeceği",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Her kontrol tokenı şu anki hâliyle anlatır. Sahipler daha sonra vergileri değiştirebilir, alım satımı durdurabilir veya basım yapabilir; bazı tokenlar farklı cüzdanlar için farklı davranır. İyi sonuçları asla \"güvenli\" olarak değil, \"büyük risk bulunamadı\" olarak değerlendirin."
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "heading": "CRYPY ile bir tokenı kontrol edin",
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            "Tokenın kontrat adresini projenin resmî sitesi veya bir blok gezgini gibi güvendiğiniz bir kaynaktan kopyalayın.",
+            "[Token Güvenlik Tarayıcı](tool:token-security) içine yapıştırın ve biliyorsanız ağı seçin.",
+            "Bulguları en ciddiden en hafife doğru okuyun. Her biri nasıl kontrol edildiğini söyler: zincirde doğrulandı, simüle edildi, sezgisel veya dış sağlayıcıdan.",
+            "Satışın engellenmesi gibi kritik bir şey çıkarsa almayın."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Tüm kontrollerden geçen bir token güvenli midir?",
+      "a": "Hayır. Kontrol edilebilenlerde büyük bir risk bulunmadığı anlamına gelir. Sahipler ayarları sonradan değiştirebilir, bu yüzden kaybetmeyi göze alabileceğiniz tutarları kullanın."
+    },
+    {
+      "q": "Cüzdanımı bağlamam gerekir mi?",
+      "a": "Hayır. Token Güvenlik Tarayıcı yalnızca tokenın kontrat adresine ihtiyaç duyar."
+    },
+    {
+      "q": "Hangi ağları kontrol edebilirim?",
+      "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon."
+    }
+  ]
+}

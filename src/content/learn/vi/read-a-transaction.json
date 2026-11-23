@@ -1,0 +1,105 @@
+{
+  "title": "Cách đọc giao dịch: từ, đến, giá trị, gas và log",
+  "seoTitle": "Cách đọc giao dịch blockchain theo từng trường | CRYPY",
+  "description": "Ý nghĩa từng trường của giao dịch blockchain: trạng thái, từ, đến, giá trị, phí, gas, nonce, dữ liệu đầu vào và log. Cách đọc mọi giao dịch trên trình khám phá.",
+  "summary": "Ý nghĩa từng trường trên trình khám phá, và chuyển token thực sự hiện ở đâu.",
+  "inShort": [
+    "Giá trị chỉ thể hiện coin của chính mạng. Chuyển token hiện trong log.",
+    "\"Đến\" thường là một hợp đồng, không phải người nhận tiền.",
+    "Phí bằng gas đã dùng nhân với giá gas."
+  ],
+  "sections": [
+    {
+      "id": "basics",
+      "heading": "Cơ bản",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Hash giao dịch:** ID duy nhất của giao dịch (0x và 64 ký tự).",
+            "**Trạng thái:** thành công, thất bại hoặc đang chờ (chưa vào khối).",
+            "**Khối và thời gian:** khối nào đưa nó vào, và lúc nào.",
+            "**Số xác nhận:** có bao nhiêu khối ra đời sau nó. Càng nhiều thì càng chắc chắn."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fromto",
+      "heading": "Từ và đến",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Từ** là ví đã ký và trả phí cho giao dịch. **Đến** là địa chỉ mà giao dịch gọi tới. Với một lần chuyển coin đơn giản, \"đến\" là người nhận. Với mọi thứ liên quan đến token, hoán đổi hay ứng dụng, \"đến\" thường là hợp đồng, còn người nhận thực sự hiện trong log."
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "heading": "Giá trị: chỉ coin của chính mạng",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Trường **giá trị** cho biết bao nhiêu ETH, BNB hoặc POL được gửi trực tiếp. Khi bạn gửi USDT hoặc hoán đổi token, giá trị thường bằng 0, vì token di chuyển bên trong hợp đồng token và được ghi lại dưới dạng sự kiện (log). Điều này làm nhiều người bất ngờ."
+        }
+      ]
+    },
+    {
+      "id": "fee",
+      "heading": "Phí và gas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Gas đã dùng:** lượng công việc giao dịch cần.",
+            "**Giới hạn gas:** mức tối đa nó được phép dùng.",
+            "**Giá gas:** giá cho mỗi đơn vị gas, thường tính bằng gwei.",
+            "**Phí:** gas đã dùng × giá gas, trả bằng coin của mạng. Trên Ethereum, một phần (phí cơ bản) bị đốt."
+          ]
+        },
+        {
+          "type": "tip",
+          "text": "Giải thích chi tiết về phí: [Giải thích phí gas](guide:gas-fees)."
+        }
+      ]
+    },
+    {
+      "id": "input",
+      "heading": "Nonce và dữ liệu đầu vào",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "**Nonce** là số thứ tự của giao dịch trong chuỗi giao dịch của người gửi. **Dữ liệu đầu vào** là lệnh gọi hàm đã mã hóa: hàm nào của hợp đồng được gọi, với giá trị nào. Trình khám phá và [Giải mã dữ liệu giao dịch](tool:tx-decoder) chuyển nó thành dạng dễ đọc khi hàm đã được biết."
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "heading": "Log: điều thực sự đã xảy ra",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Hợp đồng ghi lại **sự kiện** khi chạy: chuyển token, phê duyệt, hoán đổi. Trong các log này, bạn thấy token nào đã di chuyển, từ ai, đến ai và bao nhiêu."
+        },
+        {
+          "type": "p",
+          "text": "[Kiểm tra giao dịch](tool:tx-checker) đọc tất cả những thông tin này và giải thích bằng một câu, như \"Đã gửi 84,74 USDC đến 0xD37A…06B4\", kèm tài sản đã chuyển, chi phí và mọi quyền đã thay đổi."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Vì sao lần chuyển token của tôi hiện giá trị 0?",
+      "a": "Giá trị chỉ tính coin của chính mạng. Số lượng token được ghi trong log dưới dạng sự kiện Transfer."
+    },
+    {
+      "q": "Địa chỉ \"đến\" không phải người tôi trả tiền. Có gì sai không?",
+      "a": "Có lẽ là không. Với chuyển token, \"đến\" là hợp đồng token. Sự kiện Transfer cho thấy người nhận thực sự."
+    },
+    {
+      "q": "Đang chờ nghĩa là gì?",
+      "a": "Giao dịch đã được gửi nhưng chưa nằm trong khối. Nó vẫn có thể được xác nhận, bị thay thế hoặc bị loại bỏ."
+    }
+  ]
+}

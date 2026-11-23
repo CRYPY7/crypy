@@ -1,0 +1,95 @@
+{
+  "title": "Vì sao giao dịch của tôi thất bại? Các lỗi thường gặp, giải thích dễ hiểu",
+  "seoTitle": "Vì sao giao dịch thất bại? Giải thích lỗi thường gặp | CRYPY",
+  "description": "Hết gas, trượt giá, hạn mức không đủ, quá hạn: ý nghĩa các lỗi giao dịch blockchain thường gặp, vì sao bạn vẫn mất phí và điều gì giúp khắc phục.",
+  "summary": "Hết gas, trượt giá, hạn mức không đủ và hơn thế: mỗi lỗi nghĩa là gì và điều gì giúp được.",
+  "inShort": [
+    "Giao dịch thất bại sẽ bị hoàn tác, nhưng bạn vẫn trả cho lượng gas đã dùng.",
+    "Hầu hết thất bại đến từ vài nguyên nhân: gas, trượt giá, hạn mức, số dư hoặc hạn chót.",
+    "Thông báo lỗi của hợp đồng thường cho biết đó là nguyên nhân nào."
+  ],
+  "sections": [
+    {
+      "id": "fee",
+      "heading": "Vì sao bạn mất phí mà không được gì",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Khi một giao dịch thất bại bên trong khối, mọi thay đổi nó định làm đều bị hoàn tác: không token nào di chuyển. Nhưng validator đã chạy nó đến lúc thất bại, nên phí mạng cho lượng gas đã dùng vẫn bị giữ."
+        },
+        {
+          "type": "p",
+          "text": "Giao dịch chưa từng vào khối (ví dụ bị ví từ chối hoặc bị thay thế) thì không tốn gì."
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "heading": "Các lỗi thường gặp và ý nghĩa",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Hết gas (out of gas):** giới hạn gas quá thấp so với việc giao dịch cần làm. Thường nó đã dùng gần hết giới hạn. Hãy thử lại với giới hạn ví đề xuất.",
+            "**Không đủ tiền trả gas:** bạn không có đủ ETH, BNB hoặc POL để trả phí, dù có token. Hãy giữ một ít coin của mạng để trả phí.",
+            "**Trượt giá (\"too little received\", \"INSUFFICIENT_OUTPUT_AMOUNT\"):** giá thay đổi giữa lúc gửi và lúc thực thi nhiều hơn mức bạn chấp nhận. Hãy thử lại, hoặc tăng nhẹ trượt giá với token biến động mạnh.",
+            "**Quá hạn (\"EXPIRED\", \"Transaction too old\"):** lệnh hoán đổi chờ quá lâu trước khi vào khối. Hãy thử lại, có thể với phí ưu tiên cao hơn.",
+            "**Hạn mức không đủ (\"transfer amount exceeds allowance\"):** ứng dụng chưa được phê duyệt để tiêu nhiều token đến vậy. Hãy phê duyệt trước rồi thử lại.",
+            "**Số dư không đủ (\"transfer amount exceeds balance\"):** bạn định gửi hoặc đổi nhiều hơn số mình có.",
+            "**Chuyển thất bại (\"TRANSFER_FAILED\"):** thường là token chặn hoặc đánh thuế khi chuyển. Nếu xảy ra lúc bán, hãy kiểm tra token: xem [Token honeypot là gì](guide:honeypot-token).",
+            "**Đang tạm dừng hoặc không được phép:** hợp đồng đang tạm dừng, hoặc địa chỉ của bạn không được phép làm việc đó."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonce",
+      "heading": "Giao dịch bị kẹt hoặc bị thay thế",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Giao dịch từ một ví đi theo thứ tự, đánh số bằng **nonce**. Nếu một giao dịch trước đang chờ với phí thấp, các giao dịch sau phải chờ phía sau nó. Hầu hết ví cho bạn tăng tốc hoặc hủy nó bằng cách gửi một giao dịch thay thế có cùng nonce và phí cao hơn."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Tìm hiểu vì sao giao dịch của bạn thất bại",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Dán hash giao dịch vào [Kiểm tra giao dịch](tool:tx-checker). Công cụ cho thấy kết quả, thông báo lỗi của chính hợp đồng khi node vẫn còn dữ liệu để đọc, lời giải thích dễ hiểu cho các lỗi đã biết, và lượng gas đã dùng."
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "heading": "Tránh giao dịch thất bại",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Giữ một ít coin của mạng để trả phí.",
+            "Dùng giới hạn gas mà ví đề xuất.",
+            "Với token biến động mạnh, mức trượt giá cao hơn một chút giúp tránh thất bại; trượt giá quá cao dễ khớp giá xấu.",
+            "Nếu ví cảnh báo giao dịch có khả năng thất bại, đừng gửi."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Tôi có lấy lại phí của giao dịch thất bại được không?",
+      "a": "Không. Phí trả cho phần việc mạng đã làm, dù kết quả bị hoàn tác."
+    },
+    {
+      "q": "Token đã rời khỏi ví nhưng giao dịch thất bại. Chúng ở đâu?",
+      "a": "Nếu giao dịch thất bại thì không có gì di chuyển. Hãy kiểm tra lại số dư, và xem giao dịch trong Kiểm tra giao dịch để chắc chắn bạn đang xem đúng giao dịch."
+    },
+    {
+      "q": "Vì sao thông báo lỗi chẳng nói gì hữu ích?",
+      "a": "Một số hợp đồng thất bại mà không có thông báo, và một số node không chạy lại được giao dịch cũ. Kiểm tra giao dịch sẽ nói rõ khi không có lý do thay vì đoán."
+    }
+  ]
+}

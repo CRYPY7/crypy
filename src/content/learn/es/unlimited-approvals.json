@@ -1,0 +1,98 @@
+{
+  "title": "¿Son peligrosas las aprobaciones ilimitadas?",
+  "seoTitle": "¿Son peligrosas las aprobaciones ilimitadas? | CRYPY",
+  "description": "Las aprobaciones ilimitadas ahorran comisiones, pero cubren todos tus tokens de ese tipo. Cuándo son riesgosas, Permit2 y cuándo limitarlas.",
+  "summary": "Por qué \"ilimitado\" también cubre los tokens que recibas después, y cuándo vale la pena limitarlo.",
+  "inShort": [
+    "Una aprobación ilimitada cubre todos los tokens de ese tipo que haya en tu billetera, ahora y después.",
+    "Es tan segura como el contrato al que se la diste.",
+    "Limita o revoca las aprobaciones de aplicaciones que no usas a menudo."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Qué significa \"ilimitado\"",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cuando apruebas un token, la aplicación elige la cantidad. Muchas eligen el número más grande posible, para que nunca tengas que volver a aprobar. Tu billetera puede mostrarlo como \"ilimitado\" o como un número muy largo."
+        },
+        {
+          "type": "p",
+          "text": "La aprobación no mueve nada por sí misma. Significa que el contrato gastador puede mover cualquier cantidad de ese token desde tu billetera, en cualquier momento, sin volver a pedirte permiso."
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "heading": "Cuándo es un problema",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**El contrato es hackeado.** Los atacantes pueden usar las aprobaciones existentes para vaciar las billeteras que lo aprobaron.",
+            "**El contrato era malicioso.** El botón \"reclamar\" de un sitio estafa puede ser una aprobación para el contrato del estafador.",
+            "**Te olvidaste de ella.** Una aprobación de hace años todavía funciona hoy, también para los tokens que recibiste desde entonces."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Una aprobación limitada pone un tope al daño: la cantidad que aprobaste. Una ilimitada no."
+        }
+      ]
+    },
+    {
+      "id": "permit2",
+      "heading": "Aprobaciones de Permit2",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Algunas aplicaciones, como Uniswap y PancakeSwap, usan **Permit2**: apruebas el contrato Permit2 una vez por token y luego firmas permisos separados para cada aplicación, con una cantidad y una fecha de caducidad."
+        },
+        {
+          "type": "p",
+          "text": "Revisa los dos niveles: la aprobación al propio Permit2 y los permisos de las aplicaciones dentro de él. El [Verificador de aprobaciones](tool:approval-checker) lee ambos y muestra cuándo caduca cada permiso de Permit2."
+        }
+      ]
+    },
+    {
+      "id": "nft",
+      "heading": "\"Aprobar todo\" en NFT",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Las colecciones de NFT tienen un permiso más amplio que cubre todos los NFT que tienes de la colección. Es común en los marketplaces y un objetivo frecuente del phishing. Trátalo como una aprobación ilimitada de tokens."
+        }
+      ]
+    },
+    {
+      "id": "habits",
+      "heading": "Buenos hábitos",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Cuando tu billetera lo permita, cambia la cantidad a lo que piensas usar.",
+            "Revoca las aprobaciones de aplicaciones que ya no usas, sobre todo en tokens que valen mucho.",
+            "Guarda las cantidades grandes en una billetera que no uses para probar aplicaciones nuevas.",
+            "Revisa tus aprobaciones de vez en cuando con el [Verificador de aprobaciones](tool:approval-checker)."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Debo revocar todas las aprobaciones ilimitadas?",
+      "a": "No necesariamente. Para una aplicación conocida que usas a menudo, revocar significa volver a aprobar (y pagar una comisión) la próxima vez. Concéntrate en las aplicaciones que ya no usas y en los contratos que no reconoces."
+    },
+    {
+      "q": "¿Una aprobación limitada es segura?",
+      "a": "Más segura, porque el gastador puede mover como máximo esa cantidad. Igual es un permiso: revócala si no la necesitas."
+    },
+    {
+      "q": "¿Por qué mi billetera muestra un número enorme en lugar de \"ilimitado\"?",
+      "a": "\"Ilimitado\" es simplemente el número más grande que puede guardar el contrato del token. Cada billetera lo muestra a su manera."
+    }
+  ]
+}

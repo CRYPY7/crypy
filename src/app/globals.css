@@ -201,3 +201,8 @@ html[data-txview="advanced"] .tx-simple,
 html:not([data-txview="advanced"]) .tx-advanced {
   display: none;
 }
+
+/* The heading font has no Cyrillic letters: Russian headings use the body font, so letters never mix. */
+:root:lang(ru) {
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}

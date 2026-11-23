@@ -1,0 +1,95 @@
+{
+  "title": "Por que minha transação falhou? Erros comuns em palavras simples",
+  "seoTitle": "Por que minha transação falhou? Erros comuns | CRYPY",
+  "description": "Falta de gás, slippage, permissão insuficiente, prazo vencido: o que significam os erros comuns de transação, por que a taxa foi cobrada e o que ajuda.",
+  "summary": "Falta de gás, slippage, permissão insuficiente e mais: o que cada erro significa e o que ajuda.",
+  "inShort": [
+    "Uma transação que falha é desfeita, mas você paga mesmo assim pelo gás que ela usou.",
+    "A maioria das falhas vem de poucas causas: gás, slippage, permissão, saldo ou prazos.",
+    "A mensagem de erro do contrato normalmente diz qual delas."
+  ],
+  "sections": [
+    {
+      "id": "fee",
+      "heading": "Por que você pagou uma taxa por nada",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Quando uma transação falha dentro de um bloco, toda mudança que ela tentou fazer é desfeita: nenhum token se move. Mas os validadores fizeram o trabalho de executá-la até o ponto em que falhou, então a taxa de rede pelo gás usado é mantida."
+        },
+        {
+          "type": "p",
+          "text": "Uma transação que nunca entrou em um bloco (por exemplo, uma recusada pela sua carteira ou substituída) não custa nada."
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "heading": "Erros comuns e o que significam",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Falta de gás (out of gas):** o limite de gás era baixo demais para o que a transação precisava fazer. Normalmente ela usou quase todo o limite. Tente de novo com o limite sugerido pela carteira.",
+            "**Fundos insuficientes para o gás:** você não tem ETH, BNB ou POL suficiente para pagar a taxa, mesmo tendo tokens. Guarde um pouco da moeda da rede para as taxas.",
+            "**Slippage (\"too little received\", \"INSUFFICIENT_OUTPUT_AMOUNT\"):** o preço mudou entre o envio e a execução mais do que a sua tolerância. Tente de novo, ou aumente um pouco o slippage para tokens voláteis.",
+            "**Prazo vencido (\"EXPIRED\", \"Transaction too old\"):** um swap esperou demais antes de ser incluído. Tente de novo, talvez com uma taxa de prioridade maior.",
+            "**Permissão insuficiente (\"transfer amount exceeds allowance\"):** o app não estava aprovado para gastar tanto do seu token. Aprove primeiro e tente de novo.",
+            "**Saldo insuficiente (\"transfer amount exceeds balance\"):** você tentou enviar ou trocar mais do que tem.",
+            "**Transferência falhou (\"TRANSFER_FAILED\"):** muitas vezes um token que bloqueia ou cobra taxa nas transferências. Se acontecer ao vender, verifique o token: veja [O que é um token honeypot](guide:honeypot-token).",
+            "**Pausado ou não permitido:** o contrato está pausado, ou o seu endereço não tem permissão para fazer isso."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonce",
+      "heading": "Transações travadas ou substituídas",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "As transações de uma carteira seguem uma ordem, numeradas por um **nonce**. Se uma transação anterior está esperando com uma taxa baixa, as seguintes esperam atrás dela. A maioria das carteiras deixa você acelerá-la ou cancelá-la enviando uma substituta com o mesmo nonce e uma taxa maior."
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "heading": "Descubra por que a sua falhou",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Cole o hash da transação no [Verificador de transações](tool:tx-checker). Ele mostra o resultado, a mensagem de erro do próprio contrato quando o nó ainda tem os dados para lê-la, uma explicação em palavras simples dos erros conhecidos e quanto gás foi usado."
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "heading": "Como evitar transações que falham",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Guarde um pouco da moeda da rede para as taxas.",
+            "Use o limite de gás que a sua carteira sugere.",
+            "Para tokens voláteis, uma tolerância de slippage um pouco maior evita falhas; um slippage muito alto atrai preços ruins.",
+            "Se a carteira avisar que uma transação provavelmente vai falhar, não envie."
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Posso receber de volta a taxa de uma transação que falhou?",
+      "a": "Não. A taxa paga o trabalho que a rede fez, mesmo que o resultado tenha sido desfeito."
+    },
+    {
+      "q": "Meus tokens saíram da carteira, mas a transação falhou. Onde estão?",
+      "a": "Se a transação falhou, nada se moveu. Confira seu saldo de novo e veja a transação no Verificador de transações para ter certeza de qual delas você está olhando."
+    },
+    {
+      "q": "Por que a mensagem de erro não diz nada útil?",
+      "a": "Alguns contratos falham sem mensagem, e alguns nós não conseguem repetir transações antigas. O Verificador de transações avisa quando o motivo não está disponível em vez de adivinhar."
+    }
+  ]
+}

@@ -1,1 +1,3220 @@
-{}
+{
+  "meta": {
+    "siteName": "CRYPY",
+    "title": "CRYPY — Cüzdan güvenliği ve araştırma araç seti",
+    "description": "Güvenmeden önce her cüzdanı, tokenı veya işlemi kontrol edin: Ethereum, BNB Chain, Base, Arbitrum ve Polygon. Ücretsiz, emanetsiz, cüzdan gerekmez."
+  },
+  "common": {
+    "skipToContent": "İçeriğe geç",
+    "status": {
+      "live": "Yayında",
+      "beta": "Beta",
+      "soon": "Yakında"
+    },
+    "arrivesIn": "{milestone} aşamasında planlanıyor",
+    "open": "Aç",
+    "youNeed": "Gerekenler:",
+    "betaTranslation": "Beta çeviri: henüz anadili konuşan biri tarafından kontrol edilmedi",
+    "languageNotReady": "Bu dil hâlâ çevriliyor, bu yüzden şimdilik İngilizce görüyorsunuz.",
+    "beta": "Beta",
+    "betaSiteLabel": "CRYPY beta aşamasında: özellikler değişebilir ve sonuçlar eksik olabilir."
+  },
+  "nav": {
+    "main": "Ana",
+    "primary": "Birincil",
+    "footer": "Alt bilgi",
+    "home": "Ana sayfa",
+    "allTools": "Tüm araçlar",
+    "tools": "Araçlar",
+    "portfolio": "Portföy",
+    "watchlist": "İzleme listesi",
+    "alerts": "Uyarılar",
+    "gas": "Gas",
+    "settings": "Ayarlar",
+    "language": "Dil",
+    "switchTheme": "Koyu ve açık tema arasında geçiş yap",
+    "homeLink": "CRYPY ana sayfa",
+    "openWallet": "Cüzdan",
+    "toolsSidebar": "Araçlar",
+    "collapseSidebar": "Kenar çubuğunu daralt",
+    "expandSidebar": "Kenar çubuğunu genişlet",
+    "collapse": "Daralt",
+    "soon": "Yakında",
+    "breadcrumb": "Gezinti yolu",
+    "recent": "Bu cihazda son görüntülenenler",
+    "clearRecent": "Temizle",
+    "new": "Yeni",
+    "beta": "Beta",
+    "learn": "Öğren",
+    "status": "Durum"
+  },
+  "categories": {
+    "all": "Tümü",
+    "security": "Güvenlik",
+    "wallet": "Cüzdan",
+    "network": "Ağ",
+    "monitoring": "İzleme",
+    "utilities": "Yardımcı araçlar"
+  },
+  "search": {
+    "label": "Bir cüzdan adresi, token kontratı veya işlem hash'i arayın",
+    "placeholder": "0x… adres, token kontratı veya işlem hash'i",
+    "compactPlaceholder": "Adres, token veya işlem hash'i",
+    "submit": "Tara",
+    "detects": "Otomatik algılar:",
+    "types": {
+      "address": "Cüzdan adresi",
+      "token": "Token kontratı",
+      "tx": "İşlem hash'i"
+    },
+    "result": {
+      "invalid": "Bu bir adres veya işlem hash'i gibi görünmüyor. Adresler 0x ile başlar ve ardından 40 karakter gelir; işlem hash'lerinde 64 karakter vardır.",
+      "empty": "Önce bir adres veya işlem hash'i yapıştırın.",
+      "bad-checksum": "Bu adres sağlama toplamıyla eşleşmiyor, yani büyük ihtimalle bir karakter değiştirilmiş veya yanlış yazılmış. Adresi asıl kaynaktan yeniden kopyalayın ve kesinlikle bu adrese fon göndermeyin.",
+      "not-found-tx": "Bu işlemi desteklenen hiçbir ağda bulamadık. Başka bir ağda olabilir veya henüz yayınlanmamış olabilir.",
+      "unavailable": "Şu anda blokzincire ulaşamadık. Lütfen bir dakika sonra tekrar deneyin.",
+      "rate-limited": "Kısa sürede çok fazla arama yapıldı. Lütfen bir dakika bekleyip tekrar deneyin.",
+      "error": "Bir sorun oluştu. Lütfen tekrar deneyin.",
+      "choose": "Birden fazla ağda bulundu. Hangisini açmak istersiniz?"
+    },
+    "checking": "Desteklenen tüm ağlar kontrol ediliyor…",
+    "partial": "{chains} şu anda kontrol edilemedi, bu yüzden sonuçlar eksik olabilir.",
+    "lookupAnyway": "Yine de ara",
+    "close": "Kapat",
+    "found": {
+      "title": "{total} ağdan {count} tanesinde bulundu",
+      "overview": "Tüm ağların genel görünümünü aç",
+      "inactive": "Şu ağlarda etkinlik yok: {chains}",
+      "sentTx": "İşlem göndermiş",
+      "holds": "{amount} {symbol} tutuyor",
+      "noBalance": "Coin bakiyesi yok",
+      "open": {
+        "token": "Token sayfası",
+        "account": "Bakiyeler",
+        "contract": "Kontrat"
+      },
+      "kinds": {
+        "account": "Cüzdan",
+        "delegated": "Cüzdan (EIP-7702)",
+        "token": "Token kontratı",
+        "contract": "Akıllı kontrat",
+        "tx": "İşlem"
+      }
+    }
+  },
+  "home": {
+    "eyebrow": "Cüzdan güvenliği ve araştırma · Ücretsiz · Emanetsiz",
+    "title": "Güvenmeden önce her cüzdanı, tokenı veya işlemi kontrol edin.",
+    "subtitle": "Bir adres, token kontratı veya işlem hash'i yapıştırın. CRYPY ne olduğunu anlar ve gerçek zincir üstü verilerle bakiyeleri, riskleri ve etkinliği gösterir — cüzdan bağlamanız gerekmez.",
+    "trust": {
+      "seedTitle": "Kurtarma ifadenizi asla istemez",
+      "seedText": "Asla özel anahtar yok. Varsayılan olarak salt okunur.",
+      "connectTitle": "Bağlantı gerekmez",
+      "connectText": "Cüzdan bağlamadan herhangi bir genel adresi tarayın.",
+      "sourceTitle": "Her sonuç kaynağını gösterir",
+      "sourceText": "Zaman damgalı ve kaynağı belirtilmiş gerçek zincir üstü veriler."
+    },
+    "goals": {
+      "title": "Neyi kontrol etmek istiyorsunuz?",
+      "subtitle": "Bir soru seçin, doğru aracı açalım."
+    },
+    "allTools": {
+      "title": "Tüm araçlar",
+      "filterLabel": "Araçları kategoriye göre filtrele"
+    },
+    "worksOn": "Desteklenen ağlar",
+    "gas": {
+      "title": "Şu anki gas",
+      "send": "Göndermek {usd}",
+      "open": "Gas Takipçisi →",
+      "gwei": "{value} gwei"
+    }
+  },
+  "tools": {
+    "token-security": {
+      "name": "Token Güvenlik Tarayıcı",
+      "question": "Bu tokenı almak güvenli mi?",
+      "description": "Herhangi bir token kontratı için honeypot, vergi, basım ve sahip risk sinyalleri.",
+      "input": "Token kontrat adresi",
+      "cta": "Token kontrol et",
+      "features": [
+        "Önem derecesine göre gruplanmış risk sinyalleri: kritik, yüksek, orta ve düşük",
+        "Honeypot testi: token gerçekten satılabiliyor mu?",
+        "Alım ve satım vergisi, basım yetkisi, sahip ayrıcalıkları, kara liste ve duraklatma fonksiyonları",
+        "Yükseltilebilir kontrat ve sahip yoğunlaşması kontrolleri",
+        "Her bulgu kaynağı ve kanıtıyla doğrulanmış veya sezgisel olarak etiketlenir",
+        "Yapılan ve yapılamayan kontrollerin listesi"
+      ],
+      "howTo": [
+        "Bir token kontrat adresi yapıştırın (0x…). Biliyorsanız ağı seçin.",
+        "CRYPY bir alım, bir transfer ve bir satış simüle eder; sahip yetkilerini, likiditeyi ve daha fazlasını okur.",
+        "Bulguları önem derecesine göre okuyun. Her biri nasıl kontrol edildiğini söyler: doğrulanmış, simüle edilmiş, sezgisel veya dış sağlayıcıdan."
+      ],
+      "faq": [
+        {
+          "q": "CRYPY bir tokenın güvenli olduğunu söyleyebilir mi?",
+          "a": "Hayır. CRYPY kontrol edebildiği riskleri ve her birinin nasıl kontrol edildiğini gösterir. Kontrollerden geçmek bir tokenın dürüst olduğunu kanıtlamaz ve sahipler vergileri veya alım satımı sonradan değiştirebilir."
+        },
+        {
+          "q": "Alım-satım testi nasıl çalışır?",
+          "a": "CRYPY, gerçek borsa havuzuna karşı salt okunur bir çağrı içinde küçük bir test kontratı çalıştırır: satın alır, bir kısmını başka bir cüzdana gönderir ve satar. Hiçbir şey imzalanmaz veya gönderilmez, cüzdan gerekmez."
+        },
+        {
+          "q": "\"Sezgisel\" ne demek?",
+          "a": "Kontrat kodundan çıkarıldığı anlamına gelir; örneğin bir basım fonksiyonunun varlığı. Neyin mümkün olduğunu gösterir, neyin olduğunu değil."
+        },
+        {
+          "q": "Sahip sayıları nereden geliyor?",
+          "a": "Dış sağlayıcı GoPlus Security'den, adıyla birlikte gösterilir. CRYPY henüz sahipleri kendisi sayamıyor."
+        },
+        {
+          "q": "Hangi ağlar ve borsalar kapsanıyor?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon. Alım-satım testi her ağdaki ana borsaları v2 ve v3 havuzlarıyla kullanır (ağa göre Uniswap, PancakeSwap, SushiSwap, Biswap ve QuickSwap); likidite bu borsalardan ve BNB Chain'de birkaç borsadan daha okunur."
+        }
+      ],
+      "seoTitle": "Token Tarayıcı: Honeypot, Vergi ve Rug Pull | CRYPY",
+      "seoDescription": "Token dolandırıcılık mı? Ücretsiz kontrol edin: CRYPY alım ve satış simüle ederek honeypot ve vergileri bulur, 5 ağda sahip ve likiditeyi inceler."
+    },
+    "approval-checker": {
+      "name": "Onay Kontrolü",
+      "question": "Tokenlarımı kim harcayabilir?",
+      "description": "Hangi kontratların tokenlarınızı harcayabileceğini görün ve riskli izinleri cüzdanınız üzerinden kaldırın.",
+      "input": "Cüzdan adresiniz",
+      "cta": "Onayları kontrol et",
+      "features": [
+        "Token onayları ve NFT \"tümünü onayla\" izinleri",
+        "Sınırsız onaylar ve riskli harcayıcılar öne çıkarılır",
+        "Her onay için risk altındaki değer",
+        "Onayları tek tek iptal edin, her zaman kendi cüzdanınızda onaylayarak",
+        "Neyin kontrol edildiği ve neyin eksik olabileceği açıkça belirtilir"
+      ],
+      "seoTitle": "Token Onay Kontrolü: Bulun ve İptal Edin | CRYPY",
+      "seoDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da hangi kontratların tokenlarınızı harcayabileceğini görün ve riskli onayları cüzdanınızda iptal edin.",
+      "howTo": [
+        "Bir cüzdan adresi yapıştırın veya cüzdanınızı bağlayıp \"Bağlı cüzdanımı kontrol et\"i seçin. Bağlanmak isteğe bağlıdır ve asla imza istemez.",
+        "CRYPY cüzdanın onaylarını desteklenen tüm ağlarda bulur ve her birini zincirden okur.",
+        "\"Dikkat gerektirenler\" ile başlayın: her onay kimin harcayabileceğini, ne kadar alabileceğini ve neden işaretlendiğini gösterir.",
+        "Birini kaldırmak için İptal Et'e tıklayın ve işlemi kendi cüzdanınızda onaylayın. Küçük bir ağ ücreti tutar."
+      ],
+      "faq": [
+        {
+          "q": "Token onayı nedir?",
+          "a": "Bir kontrata, örneğin bir borsaya, cüzdanınızdan bir tokenı taşıma izni vermenizdir. Uygulamayı kullanmayı bıraksanız bile siz kaldırana kadar etkin kalır."
+        },
+        {
+          "q": "Sınırsız onaylar neden riskli?",
+          "a": "Sınırsız bir onay, harcayıcının o tokenın tamamını almasına izin verir; sonradan aldıklarınız dahil. Kontrat hacklenirse veya baştan kötü niyetliyse tokenları tekrar sormadan taşıyabilir."
+        },
+        {
+          "q": "İptal etmek ücretli mi?",
+          "a": "Evet, küçük bir ağ ücreti; çünkü iptal etmek bir blokzincir işlemidir. CRYPY ücreti gösterir ve cüzdanınız onay istemeden önce işlemi test eder."
+        },
+        {
+          "q": "CRYPY fonlarımı taşıyabilir mi?",
+          "a": "Hayır. CRYPY asla anahtar tutmaz. İptal etmek yalnızca izni sıfırlar ve cüzdanınız işlemi onaylamanız veya reddetmeniz için her zaman gösterir."
+        },
+        {
+          "q": "Liste eksiksiz mi?",
+          "a": "Her zaman değil. CRYPY birkaç ücretsiz kaynağı birleştirir ve her sonucu zincirden okur, ancak bazı eski onaylar, örneğin artık tutmadığınız tokenlar için olanlar, eksik olabilir. Sayfa neyin kontrol edildiğini söyler."
+        },
+        {
+          "q": "Hangi ağlar kapsanıyor?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon."
+        }
+      ]
+    },
+    "balance-scanner": {
+      "name": "Bakiye Tarayıcı",
+      "question": "Bu cüzdanda ne var?",
+      "description": "Desteklenen ağlarda USD değeriyle coin ve token bakiyeleri.",
+      "input": "Herhangi bir cüzdan adresi",
+      "cta": "Bakiyeleri görüntüle",
+      "features": [
+        "Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da coin ve token bakiyeleri tek seferde",
+        "Güvenilir fiyat varsa USD değeri, asla uydurma değil",
+        "Ağ başına ve toplam tutarlar",
+        "Olası spam tokenlar varsayılan olarak gizli, nedeniyle birlikte",
+        "Her token kendi sayfasına bağlanır",
+        "Cüzdan bağlamanız gerekmez"
+      ],
+      "howTo": [
+        "Herhangi bir cüzdan adresi yapıştırın (0x ile başlar).",
+        "Sonuçları açın: desteklenen tüm ağların bakiyeleri birlikte yüklenir.",
+        "Ayrıntılar için bir tokena tıklayın; neyin neden filtrelendiğini görmek için gizli tokenları genişletin."
+      ],
+      "faq": [
+        {
+          "q": "Cüzdanımı bağlamam gerekir mi?",
+          "a": "Hayır. Bakiyeler blokzincirde herkese açıktır, bu yüzden herhangi bir adres bağlanmadan veya imzalamadan kontrol edilebilir."
+        },
+        {
+          "q": "Bakiyeler ve fiyatlar nereden geliyor?",
+          "a": "Bakiyeler doğrudan blokzincirden okunur. USD fiyatları da zincir üstünde, yeterli likiditeye sahip (kote tarafında en az 5.000 $) PancakeSwap ve Uniswap havuzlarından okunur. Böyle bir havuzu olmayan tokenlar listelenir ama toplama dahil edilmez."
+        },
+        {
+          "q": "Bazı tokenlar neden gizli?",
+          "a": "Dolandırıcılar, insanları sahte sitelere çekmek için çoğu zaman adında bir site olan değersiz tokenları birçok cüzdana gönderir. CRYPY böyle görünen tokenları gizler ve nedenini gösterir. Token adlarındaki linkleri asla ziyaret etmeyin."
+        },
+        {
+          "q": "Toplam neden cüzdan uygulamamdan farklı?",
+          "a": "Cüzdan uygulamaları başka fiyat kaynakları kullanabilir, farklı zamanda güncellenebilir veya güvenilir zincir üstü fiyatı olmayan tokenları dahil edebilir. CRYPY asla fiyat uydurmaz."
+        },
+        {
+          "q": "Hangi ağlar kontrol ediliyor?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon. Aynı adres her ağda farklı coin ve tokenlar tutabilir, bu yüzden her ağ ayrı gösterilir."
+        }
+      ],
+      "seoTitle": "USD Değeriyle Cüzdan Bakiyesi Kontrolü | CRYPY",
+      "seoDescription": "Herhangi bir cüzdanın Ethereum, BNB Chain, Base, Arbitrum ve Polygon'daki coin ve token bakiyelerini USD değeriyle görün. Ücretsiz."
+    },
+    "address-analyzer": {
+      "name": "Adres Analizi",
+      "question": "Bu cüzdan ne yapmış?",
+      "description": "Herhangi bir adresin tüm coin, token ve NFT transferleri, ilk ve son etkinlik ve dolandırıcılık uyarıları.",
+      "input": "Herhangi bir cüzdan adresi",
+      "cta": "Etkinliği görüntüle",
+      "features": [
+        "Gönderilen ve alınan tüm coin, token ve NFT'ler, en yeniden en eskiye",
+        "İlk ve son etkinlik",
+        "Benzer adresli transfer (adres zehirleme) uyarıları",
+        "Filtreler, arama ve CSV dışa aktarma",
+        "Olası spam gizlenir, asla silinmez"
+      ],
+      "seoTitle": "Adres Analizi: Tam Cüzdan Geçmişi | CRYPY",
+      "seoDescription": "Herhangi bir cüzdanın tüm coin, token ve NFT transferleri, ilk ve son etkinlik, spam ve adres zehirleme uyarıları. Ücretsiz.",
+      "howTo": [
+        "Herhangi bir cüzdan adresi yapıştırın. Cüzdan bağlamanız gerekmez.",
+        "CRYPY varsayılan olarak adresin kullanıldığı ağları tarar; başkalarını seçebilirsiniz.",
+        "Transferlere gün gün göz atın; gönderilen veya alınan, coin, token veya NFT'ye göre filtreleyin ve token veya adrese göre arayın.",
+        "Daha eski etkinliği yükleyin veya listeyi CSV olarak dışa aktarın."
+      ],
+      "faq": [
+        {
+          "q": "Adres zehirleme nedir?",
+          "a": "Dolandırıcılar, kullandığınız bir adresle aynı şekilde başlayıp biten bir adresten çok küçük veya sıfır değerli transferler gönderir; bir dahaki sefere onu geçmişinizden kopyalamanızı umarlar. CRYPY bu benzer transferleri işaretler. Göndermeden önce adresin tamamını her zaman karşılaştırın."
+        },
+        {
+          "q": "Etkinliğin bir kısmı neden gizli?",
+          "a": "Spam tokenlar ve muhtemelen sahte transferler, listenin okunabilir olması için varsayılan olarak gizlenir. Sayılırlar, asla silinmezler ve bir anahtar onları gösterir."
+        },
+        {
+          "q": "Geçmiş ne kadar geriye gidiyor?",
+          "a": "Coin, token ve NFT transferlerinin tam geçmişi, sayfa sayfa yüklenir. Tam geçmiş kaynağı kullanılamıyorsa sayfa bunu söyler ve yalnızca son token transferlerini gösterir."
+        },
+        {
+          "q": "Kontratların yaptığı transferler dahil mi?",
+          "a": "Ethereum ve Polygon'da kontratların gönderdiği coinler (dahili transferler) dahildir. BNB Chain, Base ve Arbitrum'da eksik olabilirler ve sayfa bunu söyler."
+        },
+        {
+          "q": "Hangi ağlar kapsanıyor?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon."
+        }
+      ]
+    },
+    "portfolio": {
+      "name": "Portföy Takipçisi",
+      "question": "Tüm cüzdanlarım bir arada",
+      "description": "Tüm cüzdanlarınızı bir arada görün: cüzdanlar ve ağlar genelinde tek toplam; ağa, cüzdana ve tokena göre, hızlı güvenlik kontrolleriyle.",
+      "input": "En fazla 20 adres",
+      "cta": "Portföyü aç",
+      "features": [
+        "Kendi etiketlerinizle en fazla 20 cüzdan, hesap gerekmez",
+        "Yalnızca bu tarayıcıda kaydedilir; CRYPY sunucusunda hiçbir şey tutulmaz",
+        "Ethereum, BNB Chain, Base, Arbitrum ve Polygon genelinde tek toplam",
+        "Ağa göre, cüzdana göre ve ağlar arasında birleştirilmiş en büyük varlıklar",
+        "Cüzdan başına dikkat gerektiren onaylar ve GoPlus'ın işaretlediği tokenlar",
+        "Son bakışınızdan bu yana değişim ve CSV dışa aktarma"
+      ],
+      "howTo": [
+        "Cüzdan ekle'ye dokunun ve genel bir adres yapıştırın (0x…). İsterseniz Ana veya Birikim gibi bir etiket verin.",
+        "En fazla 20 olmak üzere daha fazla cüzdan ekleyin. Portföy bu tarayıcıda kaydedilir, bir dahaki sefere burada olur.",
+        "Tüm bakiyeleri, onayları ve etkinliği görmek için herhangi bir cüzdanı açın veya varlıkları CSV olarak dışa aktarın."
+      ],
+      "faq": [
+        {
+          "q": "Cüzdan bağlamam veya hesap oluşturmam gerekir mi?",
+          "a": "Hayır. Portföy blokzincirden genel bakiyeleri okur. Asla anahtar, kurtarma ifadesi veya imza istemez. Cüzdanınız bağlıysa adresini tek dokunuşla ekleyebilirsiniz."
+        },
+        {
+          "q": "Portföyüm nerede saklanıyor?",
+          "a": "Yalnızca bu tarayıcıda (yerel depolama). Cüzdan listeniz ve etiketleriniz CRYPY'ye asla liste olarak gönderilmez veya sunucuda saklanmaz; her cüzdanın bakiyeleri adres adres okunur ve saklanmaz. Tarayıcı verilerini temizlemek portföyü siler."
+        },
+        {
+          "q": "\"Son bakışınızdan bu yana\" ne demek?",
+          "a": "Bugünkü toplam değer ile portföyü burada son açtığınızdaki toplam arasındaki fark. Fiyat değişikliklerini ve transferleri yansıtır, bu yüzden kâr veya zarar değildir."
+        },
+        {
+          "q": "Neden bazı tokenlar ağlar arasında birleştiriliyor da bazıları değil?",
+          "a": "ETH, BNB, POL ve USDT, USDC gibi bilinen tokenlar birleştirilir, çünkü CRYPY her ağdaki adreslerini doğrular. Diğer tokenlar ağ başına bir satırda kalır, böylece taklit bir token asla gerçeğiyle toplanmaz."
+        },
+        {
+          "q": "Hangi tokenlar risk açısından kontrol ediliyor?",
+          "a": "Her cüzdanın en değerli tokenları (bilinenler hariç en fazla 8) GoPlus ile honeypot veya %30 ya da daha yüksek satış vergisi açısından kontrol edilir. Bu bir GoPlus bulgusudur, bir hüküm değil; CRYPY'nin tam kontrolleri için tokenı açın. GoPlus'ın ücretsiz kapasitesi paylaşımlıdır ve token ile onay sayfalarına öncelik verilir: bir kontrol atlandığında portföy bunu söyler. Hiçbir şeye güvenli denmez."
+        }
+      ],
+      "seoTitle": "Çoklu Cüzdan Kripto Portföy Takipçisi | CRYPY",
+      "seoDescription": "Tek ekranda en fazla 20 cüzdanı takip edin: ağa, cüzdana ve tokena göre değer, onay ve dolandırıcı token kontrolleriyle. Kayıt gerekmez."
+    },
+    "tx-checker": {
+      "name": "İşlem Kontrolü",
+      "question": "İşlemim gerçekleşti mi?",
+      "description": "Bir işlem hash'i yapıştırın ve ne olduğunu sade bir dille görün: sonuç, taşınan varlıklar, maliyet ve neden başarısız olduğu.",
+      "input": "İşlem hash'i",
+      "cta": "İşlem kontrol et",
+      "features": [
+        "Ağı otomatik algılar",
+        "Sade başlık: gönderdi, takas etti, onayladı, bastı, başarısız…",
+        "Gönderen cüzdandaki değişiklikler ve basit bir akış",
+        "Başarısız işlemler, kontratın kendi mesajıyla açıklanır",
+        "Bekleyen işlemler kendiliğinden yenilenir ve değiştirilip değiştirilmediğini gösterir",
+        "Ücretler, fonksiyon, olaylar ve ham verilerle gelişmiş görünüm"
+      ],
+      "howTo": [
+        "Bir işlem hash'i yapıştırın (0x ve ardından 64 karakter).",
+        "CRYPY ağı bulur ve ne olduğunu sade bir dille gösterir.",
+        "Gas, fonksiyon parametreleri, olaylar ve ham veriler için gelişmiş görünüme geçin."
+      ],
+      "faq": [
+        {
+          "q": "Cüzdanımı bağlamam gerekir mi?",
+          "a": "Hayır. İşlemler herkese açıktır, bu yüzden herhangi bir hash bağlanmadan veya imzalamadan kontrol edilebilir."
+        },
+        {
+          "q": "Bilgiler nereden geliyor?",
+          "a": "Doğrudan blokzincir düğümlerinden: işlem, makbuz ve olaylar. Fiyatlar zincir üstü havuzlardan okunur. Hiçbir veri sağlayıcıdan satın alınmaz."
+        },
+        {
+          "q": "Açıklama ne kadar güvenilir?",
+          "a": "Her açıklama kanıtını gösterir: blokzincirde doğrulandı, işlemden çözüldü veya olası. Bir şey belirlenemiyorsa CRYPY tahmin etmek yerine bunu söyler."
+        },
+        {
+          "q": "Eski işlemimin neden başarısız olduğunu neden göremiyorum?",
+          "a": "Nedeni okumak, işlemi kendisinden hemen önceki zincir durumu üzerinde yeniden oynatmayı gerektirir. Ücretsiz düğümler bu durumu yalnızca yakın tarihli bloklar için tutar, bu yüzden eski işlemlerde neden mevcut olmayabilir."
+        },
+        {
+          "q": "Hangi ağlar destekleniyor?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon. Bu sayfadaki tablo her ağda hangi bölümlerin çalıştığını tam olarak gösterir."
+        }
+      ],
+      "seoTitle": "İşlem Kontrolü: İşlem Durumu ve Ayrıntılar | CRYPY",
+      "seoDescription": "Bir işlem hash'i yapıştırın; geçip geçmediğini, neyin taşındığını, maliyetini ve neden başarısız olduğunu sade bir dille görün. 5 ağda çalışır."
+    },
+    "gas-tracker": {
+      "name": "Gas Takipçisi",
+      "question": "Şu an ne kadar tutar?",
+      "description": "Her ağda güncel gas fiyatları ve yaygın işlemlerin maliyeti.",
+      "input": "Hiçbir şey: açmanız yeterli",
+      "cta": "Gas fiyatlarını gör",
+      "features": [
+        "Ağ başına düşük, ortalama ve yüksek öncelik ücretleri",
+        "Gönderme, onay, takas ve NFT transferlerinin dolar maliyeti",
+        "Son 1.024 bloktaki taban ücret eğilimi",
+        "12 saniyede bir yenilenir ve ne zaman güncellendiğini gösterir"
+      ],
+      "seoTitle": "Gas Takipçisi: 5 Ağda Canlı Gwei Fiyatları | CRYPY",
+      "seoDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon için gwei cinsinden canlı gas fiyatları ve gönderme, takas veya onayın USD maliyeti.",
+      "howTo": [
+        "Sayfayı açın: fiyatlar desteklenen tüm ağlar için yüklenir ve 12 saniyede bir yenilenir.",
+        "Bir hız seçin: bekleyebiliyorsanız düşük, çoğu işlem için ortalama, hızlı geçmesi gerekiyorsa yüksek.",
+        "Bir gönderme, onay, takas veya NFT transferinin şu anda kaç dolar tuttuğunu görmek için maliyet tablosuna bakın."
+      ],
+      "faq": [
+        {
+          "q": "Gwei nedir?",
+          "a": "Bir ağın coin'inin küçük bir birimi: 1 gwei, bir ETH, BNB veya POL'ün milyarda biridir. Gas fiyatları gas birimi başına gwei olarak verilir."
+        },
+        {
+          "q": "Taban ücret ve öncelik ücreti nedir?",
+          "a": "Ethereum ve benzeri ağlarda her işlem, yakılan blok taban ücretini ve doğrulayıcıya bir öncelik ücreti (bahşiş) öder. Daha yüksek bahşiş genellikle daha erken girmenizi sağlar. BNB Chain'de taban ücret yoktur, bu yüzden fiyatı yalnızca gas fiyatıdır."
+        },
+        {
+          "q": "Düşük, ortalama ve yüksek fiyatlar nasıl hesaplanıyor?",
+          "a": "Doğrudan her ağdan okunan yakın tarihli bloklardan: bir sonraki bloğun taban ücreti artı işlemlerin gerçekte ödediği bahşişler, üç seviyede."
+        },
+        {
+          "q": "Base ve Arbitrum maliyetleri neden ek bir kısım içeriyor?",
+          "a": "Bu ağlarda ücretin bir kısmı işlem verilerini Ethereum'da yayınlamak için ödenir. CRYPY'nin maliyetleri, zincirden okunan bu kısmın tahminini içerir."
+        },
+        {
+          "q": "Gas ne zaman en ucuz?",
+          "a": "Ağ daha az yoğunken. Eğilim çizgisi ücretlerin artıp artmadığını gösterir, böylece işlem acil değilse daha sakin bir anı bekleyebilirsiniz."
+        }
+      ]
+    },
+    "watchlist": {
+      "name": "İzleme Listesi ve Uyarılar",
+      "question": "Bir cüzdan hareket edince bana haber ver",
+      "description": "İzlediğiniz bir cüzdan gönderdiğinde, aldığında veya yeni bir onay verdiğinde ya da bir tokenın güvenliği veya likiditesi değiştiğinde Telegram mesajı alın. Cüzdanınızla giriş yapın: şifre veya e-posta yok.",
+      "input": "Cüzdanla giriş (imzalı bir mesaj, işlem değil) ve Telegram",
+      "cta": "Uyarıları kur",
+      "features": [
+        "Cüzdanınızla giriş yapın: ücretsiz imzalı bir mesaj, asla bir işlem değil",
+        "En fazla 10 adres (desteklenen tüm ağlarda) veya token izleyin, yaklaşık dakikada bir kontrol edilir",
+        "Her öğe için: belirli tutarın üzerinde coin ve token gönderme veya alma, yeni onaylar, büyük değer düşüşleri ve token güvenliği ile likiditesindeki değişiklikler",
+        "Sessiz saatlerle Telegram uyarıları ve bu sayfada geçmiş",
+        "Verilerinizi indirin veya hesabınızı istediğiniz zaman silin"
+      ],
+      "howTo": [
+        "Giriş yap'a dokunun ve mesajı cüzdanınızda onaylayın. Bu siteyi andığını ve bir işlem olmadığını söylediğini kontrol edin.",
+        "İzlemek için bir cüzdan veya token ekleyin, bir etiket verin ve neyin uyarı tetikleyeceğini seçin.",
+        "Telegram'ı bağla'ya dokunun, botumuzu açın ve Başlat'a dokunun. Bundan sonra uyarılar oraya gelir."
+      ],
+      "faq": [
+        {
+          "q": "Neden giriş yapmam gerekiyor?",
+          "a": "Uyarılar tarayıcınız kapalıyken bile CRYPY sunucusunda çalışır, bu yüzden sunucunun sizin için neyi izleyeceğini bilmesi gerekir. Cüzdanınız girişinizdir: hiçbir ücreti olmayan ve fon taşıyamayan kısa bir mesaj imzalarsınız. Şifre veya e-posta yoktur."
+        },
+        {
+          "q": "Tam olarak neyi imzalıyorum?",
+          "a": "Bu sitenin adresiyle başlayan ve bunun bir işlem değil mesaj olduğunu söyleyen düz bir metin. Bir site giriş için transfer, onay veya permit imzalamanızı isterse imzalamayın."
+        },
+        {
+          "q": "Uyarılar ne kadar hızlı geliyor?",
+          "a": "Transferler ve onaylar yaklaşık dakikada bir, en yeni bloğun birkaç blok gerisinden kontrol edilir; böylece kısa bir zincir yeniden düzenlemesi yanlış uyarılara yol açmaz. Değer düşüşleri ile token güvenliği ve likiditesi saatte bir kontrol edilir. Sessiz saatlerde uyarılar bekler ve saatler bitince birlikte gelir."
+        },
+        {
+          "q": "Her uyarıya güvenebilir miyim?",
+          "a": "Uyarılar CRYPY'nin kendi blokzincir okumalarından gelir. Sahte tokenlar ve benzer adresli transferler filtrelenir: piyasa fiyatı olmayan tokenlar alındı olarak bildirilmez ve onaylar önce zincirde doğrulanır. Token uyarıları sinyaldir, asla güvenlik hükmü değildir. Bot asla cüzdan bağlamanızı, bir şey imzalamanızı veya kurtarma ifadenizi paylaşmanızı istemez."
+        },
+        {
+          "q": "CRYPY neleri saklıyor?",
+          "a": "Cüzdan adresiniz, etiketleri ve uyarı seçenekleriyle izleme listeniz, Telegram sohbet kimliğiniz, uyarı geçmişiniz (90 gün), oturumlarınız (yalnızca oturum kodunun karıştırılmış hâli) ve isterseniz portföy listeniz. E-posta veya IP adresi yok. İstediğiniz zaman her şeyi indirebilir veya hesabınızı ve içindeki her şeyi silebilirsiniz."
+        }
+      ],
+      "seoTitle": "Cüzdan İzleme Listesi ve Telegram Uyarıları | CRYPY",
+      "seoDescription": "İzlediğiniz bir cüzdan gönderdiğinde, aldığında veya onay verdiğinde ya da bir tokenın güvenliği veya likiditesi değiştiğinde Telegram uyarısı alın."
+    },
+    "unit-converter": {
+      "name": "Birim Dönüştürücü",
+      "question": "Bu kaç gwei eder?",
+      "description": "Wei, gwei ve ETH veya BNB arasında yuvarlamadan, tam dönüştürme.",
+      "input": "Bir tutar",
+      "cta": "Birimleri dönüştür",
+      "features": [
+        "Wei, gwei ve ETH veya BNB, iki yönde",
+        "Son wei'ye kadar tam, yuvarlama yok",
+        "Tarayıcınızda çalışır"
+      ],
+      "howTo": [
+        "Herhangi bir alana bir tutar yazın: wei, gwei veya ETH / BNB.",
+        "Diğer iki alan anında tam değerle güncellenir.",
+        "Bir değeri kopyalamak için yanındaki kopyala düğmesini kullanın."
+      ],
+      "faq": [
+        {
+          "q": "Wei nedir?",
+          "a": "Wei, ETH'nin en küçük birimidir: 1 ETH, 1.000.000.000.000.000.000 wei'ye (10^18) eşittir. BNB Chain'deki BNB de aynı 18 ondalık basamağı kullanır, bu yüzden aynı birimler BNB için de geçerlidir."
+        },
+        {
+          "q": "Gwei nedir?",
+          "a": "Bir gwei 1.000.000.000 wei'dir (10^9), yani 0,000000001 ETH. Gas fiyatları genellikle gwei olarak verilir."
+        },
+        {
+          "q": "İşlem ücretini nasıl hesaplarım?",
+          "a": "Kullanılan gas'ı gas fiyatıyla çarpın. Örneğin 20 gwei'den 21.000 gas kullanan basit bir transfer 420.000 gwei, yani 0,00042 ETH tutar."
+        },
+        {
+          "q": "Tokenlar aynı birimleri mi kullanır?",
+          "a": "Her zaman değil. Birçok token ETH gibi 18 ondalık basamak kullanır, ama hepsi değil: Ethereum'daki USDT 6, BNB Chain'deki USDT ise 18 basamak kullanır. Token tutarlarını dönüştürmeden önce tokenın ondalık basamak sayısını kontrol edin."
+        },
+        {
+          "q": "Yazdığım bir şey sunucuya gönderiliyor mu?",
+          "a": "Hayır. Dönüştürme tamamen tarayıcınızda gerçekleşir."
+        }
+      ],
+      "seoTitle": "Tam Wei, Gwei ve ETH Dönüştürücü | CRYPY",
+      "seoDescription": "Wei, gwei, ETH ve BNB'yi yuvarlamadan, bilimsel gösterimdeki tutarlar dahil tam olarak dönüştürün. Tarayıcınızda çalışır; hiçbir şey gönderilmez."
+    },
+    "hex-converter": {
+      "name": "Hex Dönüştürücü",
+      "question": "Bu hex değer hangi sayı?",
+      "description": "Blokzincirlerde kullanılan hex ve ondalık değerleri 256 bite kadar dönüştürün.",
+      "input": "Hex veya ondalık değer",
+      "cta": "Dönüştür",
+      "features": [
+        "Hex'ten ondalığa ve ondalıktan hex'e",
+        "32 baytlık biçim, bayt uzunluğu ve işaretli okuma",
+        "Hex verilerde gizli metni gösterir",
+        "Tarayıcınızda çalışır"
+      ],
+      "howTo": [
+        "Bir hex değer (0x ile veya 0x olmadan) ya da ondalık sayı yapıştırın.",
+        "Ondalık, hex ve 32 baytlık biçimleri anında görün.",
+        "Yalnızca rakam yazarsanız ondalık mı hex mi olduğunu seçin."
+      ],
+      "faq": [
+        {
+          "q": "Blokzincirler neden hex kullanır?",
+          "a": "EVM 32 baytlık kelimelerle çalışır ve düğüm API'leri blok numarası, bakiyeler ve gas gibi sayıları hex olarak döndürür (örneğin 0x10 = 16)."
+        },
+        {
+          "q": "32 baytlık biçim nedir?",
+          "a": "64 hex basamağa tamamlanmış değer. Sayılar işlem verilerinde ve kontrat depolamasında bu şekilde görünür."
+        },
+        {
+          "q": "İşaretli değer nedir?",
+          "a": "Kontratlar işaretli sayıları (int256) ikiye tümleyen biçimde saklayabilir. 32 baytlık bir değerin en üst biti 1 olduğunda negatif bir sayıyı temsil eder ve burada gösterilir."
+        },
+        {
+          "q": "Desteklenen en büyük değer nedir?",
+          "a": "2^256 − 1, yani EVM'deki bir uint256'ya sığan en büyük sayı."
+        }
+      ],
+      "seoTitle": "Hex'ten Ondalığa Dönüştürücü | CRYPY",
+      "seoDescription": "256 bite kadar değerleri hex'ten ondalığa ve geri dönüştürün; işaretli int256, 32 baytlık biçim ve metin dahil. Tarayıcınızda çalışır."
+    },
+    "address-formatter": {
+      "name": "Adres Biçimlendirici",
+      "question": "Bu adres doğru yazılmış mı?",
+      "description": "Bir adresin doğru yazılıp yazılmadığını kontrol edin ve sağlama toplamlı biçimini alın. Tek adres veya liste için.",
+      "input": "Bir adres",
+      "cta": "Adresi kontrol et",
+      "features": [
+        "EIP-55 sağlama toplamıyla yazım hatalarını yakalar",
+        "Tek seferde 500 adrese kadar kontrol",
+        "Tüm EVM ağlarında çalışır",
+        "Tarayıcınızda çalışır"
+      ],
+      "howTo": [
+        "Bir adres veya her satırda bir adres olan bir liste yapıştırın.",
+        "Her adres doğru, korumasız (sağlama toplamı yok) veya yanlış yazılmış olarak işaretlenir.",
+        "Doğru adreslerin sağlama toplamlı biçimini kopyalayın."
+      ],
+      "faq": [
+        {
+          "q": "Sağlama toplamlı adres nedir?",
+          "a": "EIP-55, bir doğrulamayı kodlamak için adreste büyük ve küçük harfleri karıştırır. Bir karakteri yanlış yazarsanız doğrulama neredeyse her zaman başarısız olur, böylece hata bir şey göndermeden önce yakalanır."
+        },
+        {
+          "q": "Tamamen küçük harfli bir adres geçerli mi?",
+          "a": "Evet. Aynı adrestir ama sağlama toplamı yoktur, bu yüzden bir yazım hatası fark edilmeyebilir. Sağlama toplamlı biçim bu korumayı ekler."
+        },
+        {
+          "q": "Sağlama toplamı yanlışsa ne yapmalıyım?",
+          "a": "Adresi kullanmayın. Yanlış sağlama toplamı bir karakterin değiştiği anlamına gelir. Adresi asıl kaynaktan yeniden kopyalayın; elle düzeltmeye çalışmayın."
+        },
+        {
+          "q": "Adres tüm EVM ağlarında aynı mı?",
+          "a": "Tüm EVM ağları aynı adres biçimini kullanır, bu yüzden aynı adres her birinde var olabilir, ama bakiyeler ve kontratlar her ağda farklıdır. Borsa yatırma adresleri genellikle yalnızca bir ağı kabul eder, bu yüzden alıcının hangi ağı kabul ettiğini her zaman kontrol edin."
+        },
+        {
+          "q": "Doğru bir adres güvenli olduğu anlamına mı gelir?",
+          "a": "Hayır. Yalnızca adresin doğru yazıldığı anlamına gelir. Göndermeden önce adresin ne olduğunu görmek için CRYPY aramasını kullanın."
+        }
+      ],
+      "seoTitle": "Ethereum Adres Sağlama Toplamı (EIP-55) | CRYPY",
+      "seoDescription": "Bir Ethereum veya BNB Chain adresinin doğru yazılıp yazılmadığını kontrol edin ve EIP-55 sağlama toplamlı biçimini alın; tek veya 500 adrese kadar."
+    },
+    "timestamp-block": {
+      "name": "Tarih ve Blok Dönüştürücü",
+      "question": "Bu anda hangi blok vardı?",
+      "description": "Her ağda herhangi bir tarihin bloğunu, herhangi bir bloğun tarihini bulun ve Unix zaman damgalarını dönüştürün.",
+      "input": "Bir tarih veya blok numarası",
+      "cta": "Dönüştür",
+      "features": [
+        "Tüm ağlarda tek seferde tarihten bloğa",
+        "Blok numarasından tarih ve saate",
+        "Unix zaman damgasından tarihe, tarayıcınızda",
+        "Gerçek blok zamanlarından okunur, asla tahmin edilmez (gelecek tarihler tahmin olarak işaretlenir)"
+      ],
+      "seoTitle": "Tarihe Göre Blok Numarası ve Zaman Damgası | CRYPY",
+      "seoDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da herhangi bir tarihin bloğunu, herhangi bir bloğun tarihini bulun ve Unix zaman damgalarını dönüştürün.",
+      "howTo": [
+        "O andaki bloğu her ağda bulmak için bir tarih ve saat girin.",
+        "Veya bir blok numarası girip bir ağ seçerek o bloğun ne zaman üretildiğini görün.",
+        "Veya bir Unix zaman damgası yapıştırarak tarihe çevirin (bu kısım tarayıcınızda çalışır)."
+      ],
+      "faq": [
+        {
+          "q": "Bir tarihin bloğu nasıl bulunuyor?",
+          "a": "CRYPY her ağın gerçek blok zamanlarını okur ve tarihinizde veya sonrasında üretilen ilk bloğa kadar daraltır. Genellikle bir iki saniye sürer."
+        },
+        {
+          "q": "Unix zaman damgası nedir?",
+          "a": "1 Ocak 1970'ten (UTC) bu yana geçen saniye sayısı. Blokzincirler her bloğun zamanını bu şekilde kaydeder."
+        },
+        {
+          "q": "Blok numarası neden her ağda farklı?",
+          "a": "Her ağ farklı bir zamanda başladı ve kendi hızında blok üretir (Ethereum'da yaklaşık 12 saniye, diğerlerinde daha hızlı), bu yüzden aynı anın her ağda farklı bir blok numarası vardır."
+        },
+        {
+          "q": "Gelecekteki bir tarih girebilir miyim?",
+          "a": "Evet. CRYPY bloğu ağın son hızından tahmin eder ve sonucu tahmin olarak işaretler."
+        },
+        {
+          "q": "Hangi ağlar kapsanıyor?",
+          "a": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon."
+        }
+      ]
+    },
+    "tx-decoder": {
+      "name": "İşlem Verisi Çözücü",
+      "question": "Bu işlem verisi ne anlama geliyor?",
+      "description": "Ham işlem verisini okunabilir bir fonksiyona ve değerlere dönüştürün; riskli onaylar için uyarılarla.",
+      "input": "Ham işlem verisi",
+      "cta": "Çöz",
+      "features": [
+        "Yaygın token, NFT, router ve sahiplik fonksiyonlarını çözer",
+        "Sınırsız onaylar ve NFT operatör onayları için uyarır",
+        "Bir multicall içindeki çağrıları çözer",
+        "Tarayıcınızda çalışır"
+      ],
+      "howTo": [
+        "İşlemin giriş verisini (0x ile başlar) bir blok gezgininden veya cüzdanınızın veri görünümünden kopyalayın.",
+        "Buraya yapıştırın; anında çözülür.",
+        "Bir işlemi onaylamadan önce fonksiyonu, değerleri ve uyarıları okuyun."
+      ],
+      "faq": [
+        {
+          "q": "İşlem verisi nedir?",
+          "a": "Giriş verisi kontrata ne yapacağını söyler. İlk 4 bayt (fonksiyon seçici) fonksiyonu belirler, gerisi değerleri 32 baytlık kelimeler hâlinde içerir."
+        },
+        {
+          "q": "Nerede bulurum?",
+          "a": "Bir blok gezgininde işlemi açın ve Input Data'yı bulun (orijinal hex olarak görüntüleyin). Birçok cüzdan da onaylamadan önce gelişmiş veya veri sekmesinde hex verisini gösterir."
+        },
+        {
+          "q": "Sınırsız onay nedir?",
+          "a": "Harcayıcının siz iptal edene kadar, şimdi ve gelecekte cüzdanınızdan o tokenın herhangi bir miktarını taşımasına izin verir. Harcayıcı kötü niyetliyse veya sonradan hacklenirse bu tokenlar alınabilir."
+        },
+        {
+          "q": "Neden bilinmeyen fonksiyon gösteriyor?",
+          "a": "CRYPY yalnızca bilinen fonksiyonların listesini çözer ve asla tahmin etmez. Farklı fonksiyonlar aynı seçiciye sahip olabilir, bu yüzden tahmin yanlış bir anlam gösterebilir."
+        },
+        {
+          "q": "Değerler neden bu kadar büyük?",
+          "a": "Değerler tokenın en küçük biriminde. Tokenın ondalık basamak sayısı kadar 10'un kuvvetine bölün veya 18 basamaklı tokenlar için Birim Dönüştürücü'yü kullanın."
+        }
+      ],
+      "seoTitle": "İşlem Giriş Verisi (Calldata) Çözücü | CRYPY",
+      "seoDescription": "İşlem giriş verisini okunabilir bir fonksiyona ve değerlere çözün; sınırsız onay uyarılarıyla. Tarayıcınızda çalışır."
+    },
+    "batch-balance": {
+      "name": "Toplu Bakiye Tarayıcı",
+      "question": "Tüm bu cüzdanlarda ne var?",
+      "description": "Seçtiğiniz ağlarda 500 adrese kadar coin ve token bakiyesini tek seferde kontrol edin. Doğrudan blokzincirden okunur.",
+      "input": "Bir adres listesi",
+      "cta": "Liste tara",
+      "features": [
+        "İsteğe bağlı etiketlerle CSV veya TXT listesi yapıştırın, yazın ya da yükleyin",
+        "Yazım hataları, kopyalar ve yanlış sağlama toplamları taramadan önce yakalanır",
+        "Ethereum, BNB Chain, Base, Arbitrum ve Polygon: yerel coin artı en fazla 5 token",
+        "Her parti aynı blokta, doğrudan zincirden okunur",
+        "Toplamlar, zincir üstü fiyatlarla USD değerleri, sıralama ve filtreler",
+        "CSV olarak dışa aktarın veya bakiyeli ya da bakiyesiz adresleri kopyalayın"
+      ],
+      "howTo": [
+        "Adreslerinizi her satıra bir tane olacak şekilde yapıştırın. İsterseniz virgülden sonra etiket ekleyin (0x…,Hazine) veya bir CSV/TXT dosyası yükleyin.",
+        "Kontrol edilecek ağları ve tokenları seçin. Yerel coin (ETH, BNB) her zaman dahildir.",
+        "Bakiyeleri tara'ya dokunun, ardından sonuçları sıralayın, filtreleyin, kopyalayın veya dışa aktarın."
+      ],
+      "faq": [
+        {
+          "q": "Cüzdan bağlamam gerekir mi?",
+          "a": "Hayır. Bakiyeler herkese açıktır, bu yüzden herhangi bir adres listesi bağlanmadan veya imzalamadan kontrol edilebilir. CRYPY asla anahtar veya kurtarma ifadesi istemez."
+        },
+        {
+          "q": "Listem saklanıyor mu?",
+          "a": "Hayır. Adresler yalnızca bakiyeleri okumak için CRYPY sunucusuna gönderilir ve saklanmaz veya kaydedilmez. Etiketler tarayıcınızdan asla çıkmaz ve liste asla sayfa adresine girmez."
+        },
+        {
+          "q": "Bakiyeler nereden geliyor?",
+          "a": "Doğrudan blokzincir düğümlerinden, hepsi aynı blokta okunur. Fiyatlar zincir üstü DEX havuzlarından gelir; güvenilir fiyatı olmayan tokenlar yalnızca miktarları gösterir."
+        },
+        {
+          "q": "Kaç adres kontrol edebilirim?",
+          "a": "Tarama başına en fazla 2 ağda 500 adres ve en fazla 6 varlık. Çok büyük listeler, kayıtlı listeler ve zamanlanmış taramalar daha sonra için planlanıyor."
+        },
+        {
+          "q": "Bir adres neden kontrat olarak gösteriliyor?",
+          "a": "O ağda akıllı kontrat kodu var. Koda yetki devreden cüzdanlar (EIP-7702) yetki devretmiş cüzdan olarak gösterilir."
+        }
+      ],
+      "seoTitle": "Toplu Cüzdan Bakiye Kontrolü: 500 Adres | CRYPY",
+      "seoDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da 500 adrese kadar coin ve token bakiyesini tek seferde kontrol edin ve CSV olarak dışa aktarın."
+    }
+  },
+  "toolPage": {
+    "backToTools": "Tüm araçlar",
+    "whatYouGet": "Neler elde edeceksiniz",
+    "notLiveTitle": "Bu araç henüz yayında değil",
+    "notLiveText": "Araçları yalnızca gerçek blokzincir verileriyle çalıştıklarında ve test edildiklerinde yayınlarız. Bu araç {milestone} aşamasında planlanıyor.",
+    "requiresAccount": "Cüzdanınızla giriş yapmanız gerekir.",
+    "howToUse": "Nasıl kullanılır",
+    "faq": "Sorular ve cevaplar",
+    "runsLocally": "Tarayıcınızda çalışır. Girdiğiniz hiçbir şey bir yere gönderilmez."
+  },
+  "toolsDialog": {
+    "title": "Tüm araçlar",
+    "description": "Tüm CRYPY araçları, ne işe yaradıklarına göre gruplandı.",
+    "searchLabel": "Araç bul",
+    "searchPlaceholder": "Araç bul — ör. \"onaylar\", \"gas\", \"honeypot\"",
+    "noResults": "\"{query}\" ile eşleşen araç yok.",
+    "noWalletNeeded": "Aksi belirtilmedikçe tüm araçlar cüzdan bağlamadan çalışır.",
+    "shortcut": "Ctrl K",
+    "close": "Kapat"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "languageTitle": "Dil",
+    "languageText": "Daha fazla dil çevriliyor. Beta olarak işaretlenen diller henüz anadili konuşan biri tarafından kontrol edilmedi.",
+    "themeTitle": "Tema",
+    "themeText": "Gözünüzü en az yoran görünümü seçin.",
+    "dark": "Koyu",
+    "light": "Açık",
+    "system": "Cihazıma uy"
+  },
+  "footer": {
+    "disclaimer": "CRYPY emanetsizdir. Sonuçlar sinyaldir; yatırım tavsiyesi veya güvenlik garantisi değildir.",
+    "privacy": "Gizlilik",
+    "terms": "Koşullar",
+    "risk": "Risk bildirimi",
+    "languages": "Diller"
+  },
+  "legal": {
+    "draftNotice": "Beta: bu sayfa CRYPY'nin bugün nasıl çalıştığını anlatır. Henüz bir avukat tarafından incelenmedi ve değişebilir. Bu çeviri İngilizce metinden farklıysa İngilizce sürüm geçerlidir.",
+    "privacy": {
+      "title": "Gizlilik politikası",
+      "description": "CRYPY'nin neleri sakladığı, asla neleri toplamadığı, hangi çerezleri kullandığı ve hangi hizmetlerin devrede olduğu.",
+      "body": [
+        "CRYPY asla kurtarma ifadesi, gizli ifade veya özel anahtar istemez, toplamaz veya saklamaz. Hiçbir CRYPY sayfası veya mesajı bunları sizden istemez.",
+        "Aradığınız adresler, tokenlar ve işlem hash'leri herkese açık blokzincir verileridir. Yanıt vermek için CRYPY sunucusu blokzincir veri sağlayıcılarına (Alchemy, Infura, Ankr, dRPC ve genel düğümler gibi) ve güvenlik hizmetlerine (GoPlus, Sourcify) sorgu gönderir. Bu sorgular tarayıcınızdan değil CRYPY sunucusundan çıkar, bu yüzden sağlayıcılar IP adresinizi görmez. CRYPY kimin neyi aradığının kaydını tutmaz; sitenin hızlı olması için sonuçlar kısa süre önbelleğe alınır.",
+        "Hesap olmadan diliniz, temanız, portföy listeniz, son görüntülenen öğeler ve görüntüleme tercihleriniz yalnızca kendi tarayıcınızda saklanır. Portföy adresleri bakiyeleri sorgulamak için tek tek gönderilir ve saklanmaz.",
+        "Çerezler: CRYPY yalnızca çalışmak için gereken çerezleri kullanır: NEXT_LOCALE (diliniz), crypy_chains (hangi ağların taranacağı) ve crypy_session (yalnızca giriş yaptıktan sonra). Reklam veya analiz çerezi ya da izleme betiği yoktur. Siteyi koruyan Cloudflare, insanları botlardan ayırmak için kendi güvenlik çerezini (__cf_bm gibi) ayarlayabilir.",
+        "Cüzdan bağlamak isteğe bağlıdır. CRYPY yalnızca genel adresinizi okur ve bağlanmak asla bir şey imzalamanızı istemez. WalletConnect ile bağlanırsanız bağlantı Reown'un WalletConnect hizmeti üzerinden geçer.",
+        "Cüzdanınızla giriş yapmak isteğe bağlıdır ve yalnızca izleme listesi ve uyarılar için gerekir. Bu imzalı bir mesajdır, asla bir işlem değil. Ardından CRYPY cüzdan adresinizi, etiketleri ve uyarı seçenekleriyle izleme listenizi, sessiz saatlerinizi ve saat diliminizi ve bir oturum kodunu (yalnızca parmak izi) saklar. Portföyünüzü hesabınızda tutmayı seçerseniz adresleri ve etiketleri de saklanır.",
+        "Uyarılar için Telegram'ı bağlarsanız CRYPY, uyarıları göndermek için Telegram sohbet kimliğinizi ve kullanıcı adınızı saklar ve uyarı geçmişinizi 90 gün tutar. Telegram mesajları kendi gizlilik politikasına göre iletir.",
+        "Giriş yapmışken CRYPY'nin hesabınız hakkında tuttuğu her şeyi indirebilir veya hesabınızı silerek her şeyi bir kerede kaldırabilirsiniz. Veritabanı yedekleri 14 gün tutulur, bu yüzden silinen veriler bu süre içinde yedeklerden de kaybolur.",
+        "Çoğu sitede olduğu gibi CRYPY sunucusu ve Cloudflare, siteyi güvende ve çalışır tutmak için, örneğin istek sınırlarını uygulamak amacıyla teknik kayıtlar (IP adresi, istenen sayfa, zaman ve tarayıcı türü) tutar. CRYPY sunucusunun kayıtları yaklaşık iki hafta saklanır.",
+        "CRYPY kişisel verileri satmaz ve reklamverenlerle paylaşmaz."
+      ]
+    },
+    "terms": {
+      "title": "Kullanım koşulları",
+      "description": "Site beta aşamasındayken CRYPY'nin ücretsiz blokzincir araçlarını kullanma kuralları.",
+      "body": [
+        "CRYPY, herkese açık blokzincir verileri hakkında ücretsiz bilgi araçları sunar. Beta aşamasındadır: özellikler değişebilir ve sonuçlar eksik veya yanlış olabilir.",
+        "CRYPY fonlarınızı asla tutmaz, taşımaz veya yönetmez. Bir onayı iptal etmek gibi eylemler, kendi cüzdanınızda incelediğiniz ve onayladığınız işlemlerdir. Onayladığınız her işlemden ve ağ ücretinden siz sorumlusunuz.",
+        "Sonuçlar blokzincir düğümlerinden ve gecikebilen, eksik olabilen veya hata yapabilen dış veri sağlayıcılarından gelir. Güvenlik kontrolleri risk sinyalleri gösterir; bir tokenın, kontratın veya cüzdanın güvenli olduğunu asla garanti etmez. Uyarılar gecikebilir veya hiç gelmeyebilir, bu yüzden tek korumanız olarak onlara güvenmeyin.",
+        "CRYPY'yi adil kullanın: sınırları aşmak için toplu otomatik istek göndermeyin ve siteyi bozmaya, aşırı yüklemeye veya kötüye kullanmaya çalışmayın.",
+        "CRYPY olduğu gibi, hiçbir garanti olmaksızın sunulur. Yasanın izin verdiği ölçüde CRYPY, siteyi kullanmaktan veya sonuçlarına güvenmekten doğan kayıplardan sorumlu değildir."
+      ]
+    },
+    "risk": {
+      "title": "Risk bildirimi",
+      "description": "Kripto paraların riskleri ve hiçbir güvenlik kontrolünün bir tokenın, kontratın veya cüzdanın güvenli olduğunu neden kanıtlayamayacağı.",
+      "body": [
+        "Kripto varlıklar risklidir. Fiyatlar sıfıra düşebilir ve işlemler geri alınamaz.",
+        "CRYPY'nin güvenlik kontrolleri otomatik araçlardan ve veri sağlayıcılarından gelen sinyalleri gösterir. Hiçbir kontrol bir tokenın, kontratın veya cüzdanın güvenli olduğunu kanıtlayamaz.",
+        "Dolandırıcılar gerçeklerini taklit eden tokenlar ve adresler oluşturur. Bir şey göndermeden önce adresin tamamını her zaman kontrol edin.",
+        "CRYPY'deki hiçbir şey finansal, hukuki veya vergi tavsiyesi değildir. Her zaman kendi araştırmanızı yapın."
+      ]
+    }
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "text": "Bu sayfa yok veya taşınmış.",
+    "home": "Ana sayfaya git"
+  },
+  "chains": {
+    "ethereum": "Ethereum",
+    "bsc": "BNB Chain",
+    "base": "Base",
+    "arbitrum": "Arbitrum",
+    "polygon": "Polygon"
+  },
+  "entity": {
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "viewOn": "{explorer} üzerinde görüntüle",
+    "unavailableChain": "{chain} şu anda kontrol edilemedi. Bir dakika sonra tekrar deneyin.",
+    "rateLimited": "Kısa sürede çok fazla istek. Lütfen bir dakika bekleyip sayfayı yenileyin.",
+    "comingSoonTitle": "Daha fazlası yolda",
+    "kinds": {
+      "account": "Cüzdan",
+      "delegated": "Yetki devredilmiş kodlu cüzdan (EIP-7702)",
+      "token": "Token kontratı",
+      "contract": "Akıllı kontrat"
+    },
+    "address": {
+      "title": "Adres",
+      "metaTitle": "Adres {short}",
+      "perChain": "Her ağda",
+      "active": "İşlem göndermiş",
+      "inactive": "Giden işlem yok",
+      "openToken": "Token sayfasını aç",
+      "badChecksum": "Bu adres sağlama toplamıyla eşleşmiyor, yani büyük ihtimalle bir karakter değiştirilmiş veya yanlış yazılmış. Adresi asıl kaynaktan yeniden kopyalayın ve kesinlikle bu adrese fon göndermeyin.",
+      "comingSoon": "Bu adresin etkinlik geçmişi (M7) yakında bir güncellemeyle gelecek.",
+      "balances": {
+        "total": "Toplam değer",
+        "totalNote": "Güncel DEX fiyatlarından tahmin edilir. Güvenilir fiyat için yeterince derin havuzu olmayan tokenlar dahil edilmez.",
+        "chainTotal": "{chain} üzerindeki değer",
+        "pricesBy": "Fiyatlar: PancakeSwap ve Uniswap havuzlarından zincir üstünde okundu.",
+        "updated": "Güncellendi: {time}",
+        "asset": "Varlık",
+        "balance": "Bakiye",
+        "price": "Fiyat",
+        "value": "Değer",
+        "noPrice": "Güvenilir fiyat yok",
+        "lessThanCent": "< $0.01",
+        "nativeCoin": "Yerel coin",
+        "empty": "{chain} üzerinde coin veya token yok.",
+        "unpriced": "{count, plural, one {# tokenın} other {# tokenın}} güvenilir fiyatı yok ve toplama {count, plural, one {dahil edilmedi} other {dahil edilmedi}}.",
+        "pricesUnavailable": "Fiyatlar şu anda kullanılamıyor, bu yüzden yalnızca bakiyeler gösteriliyor. Bir dakika sonra tekrar deneyin.",
+        "coverage": {
+          "truncated": "Bu adresin çok uzun bir token listesi var (çoğu istenmeyen airdrop), bu yüzden CRYPY sayfanın hızlı olması için ilk {count} girdiyi kontrol etti. Bazı tokenlar eksik olabilir.",
+          "common-only": "Şu anda {chain} üzerinde yalnızca bilinen tokenlar kontrol edildi, bu yüzden bazı tokenlar eksik olabilir."
+        },
+        "hidden": "{count, plural, one {# gizli token spam gibi görünüyor} other {# gizli token spam gibi görünüyor}}",
+        "hiddenNote": "Dolandırıcılar insanları sahte sitelere çekmek için birçok cüzdana değersiz tokenlar gönderir. Token adlarındaki linkleri asla ziyaret etmeyin ve bu tokenları satmaya veya \"talep etmeye\" çalışmayın.",
+        "spam": {
+          "link-in-name": "Adında site var",
+          "bait-words": "Yem ifadeler, fiyat yok",
+          "unreadable": "Kontrat yanıt vermiyor"
+        },
+        "rawAmount": "{amount} (ham birim)",
+        "totalAll": "Toplam değer · tüm ağlar",
+        "totalChain": "Toplam değer · {chain}",
+        "unpricedGroup": "{count, plural, one {Güvenilir fiyatı olmayan # token} other {Güvenilir fiyatı olmayan # token}}",
+        "moreNotListed": "{count, plural, one {Sayfanın hızlı olması için # tane daha burada listelenmedi.} other {Sayfanın hızlı olması için # tane daha burada listelenmedi.}}",
+        "unpricedNote": "Bu tokenların güvenilir fiyat için yeterince derin bir DEX havuzu yok, bu yüzden toplama dahil edilmez. İstenmeden cüzdanlara gönderilen bilinmeyen tokenların çoğu değersizdir veya dolandırıcılıktır: bunları bilinmeyen sitelerde satmaya çalışmayın."
+      },
+      "lookupAnyway": "Yine de ara",
+      "identity": {
+        "title": "{total} ağdan {count} tanesinde bulundu",
+        "subtitle": "Bu adres her ağda nedir",
+        "noneTitle": "Desteklenen hiçbir ağda etkinlik bulunamadı",
+        "inactive": "Şu ağlarda etkinlik yok: {chains}",
+        "filter": "Ağa göre filtrele",
+        "all": "Tüm ağlar",
+        "tokenNote": "{chain} üzerinde bu adres bir token kontratıdır ({token}). Ayrıntıları ve kontrolleri token sayfasındadır.",
+        "openToken": "Token sayfasını aç",
+        "shownBelow": "Aşağıda gösteriliyor",
+        "viewChain": "Bu ağda görüntüle",
+        "tokens": "{count, plural, one {# token} other {# token}}"
+      }
+    },
+    "token": {
+      "metaTitle": "{chain} üzerinde {symbol} tokenı",
+      "notToken": "Bu adres {chain} üzerinde bir token kontratı değil.",
+      "viewAsAddress": "Adres olarak görüntüle",
+      "facts": "Token bilgileri",
+      "decimals": "Ondalık basamak",
+      "totalSupply": "Toplam arz",
+      "contract": "Kontrat adresi",
+      "unnamed": "Adsız token",
+      "linkWarningTitle": "Bu tokenın adında bir web adresi var",
+      "linkWarning": "Dolandırıcı tokenlar insanları çekmek için çoğu zaman adlarına bir site koyar. Token adlarında bulunan linkleri asla ziyaret etmeyin ve \"ücretsiz\" token talep etmeyin.",
+      "comingSoon": "Bu tokenın tam güvenlik kontrolleri — honeypot, vergiler, sahip yetkileri ve sahipler — M5 aşamasında geliyor."
+    },
+    "tx": {
+      "title": "İşlem",
+      "metaTitle": "İşlem {short}",
+      "status": {
+        "success": "Başarılı",
+        "reverted": "Başarısız",
+        "pending": "Bekliyor"
+      },
+      "chain": "Ağ",
+      "block": "Blok",
+      "from": "Gönderen",
+      "to": "Alıcı",
+      "contractCreation": "Kontrat oluşturma",
+      "notFound": "Bu işlemi {chain} üzerinde bulamadık.",
+      "notFoundHelp": "Henüz gönderilmemiş, değiştirilmiş veya düşürülmüş olabilir ya da başka bir ağda olabilir.",
+      "searchAll": "Tüm ağlarda ara",
+      "confirmations": "{count, plural, one {# onay} other {# onay}}",
+      "ago": "{time} UTC · {relative}",
+      "summary": {
+        "title": "Ne oldu",
+        "pending": "Bir bloğa eklenmeyi bekliyor. Bu sayfa 15 saniyede bir yenilenir.",
+        "failed": "Bu işlem başarısız oldu. Yapmaya çalıştığı hiçbir şey gerçekleşmedi, ama ağ ücreti yine de ödendi.",
+        "native": "{from}, {to} adresine {amount} gönderdi.",
+        "creation": "{from} yeni bir kontrat oluşturdu.",
+        "call": "{from}, {to} üzerinde {fn} çağırdı.",
+        "callUnknown": "{from}, {to} üzerinde bilinen fonksiyonlar listemizde olmayan bir fonksiyon çağırdı.",
+        "withValue": "Ayrıca {amount} gönderdi.",
+        "moved": "{count, plural, one {# varlık taşıdı (aşağıya bakın).} other {# varlık taşıdı (aşağıya bakın).}}",
+        "permissions": "{count, plural, one {# harcama iznini değiştirdi.} other {# harcama iznini değiştirdi.}}"
+      },
+      "facts": {
+        "status": "Durum",
+        "time": "Zaman",
+        "confirmations": "Onaylar",
+        "created": "Oluşturulan kontrat",
+        "value": "Gönderilen değer",
+        "fee": "Ağ ücreti",
+        "burnt": "Yakılan (taban ücret)",
+        "gasUsed": "Kullanılan gas",
+        "gasUsedValue": "{limit} içinden {used} ({percent})",
+        "gasPrice": "Gas fiyatı",
+        "gwei": "{value} gwei",
+        "nonce": "Nonce",
+        "type": "Tür",
+        "freeFee": "0 (ücretsiz gönderildi)",
+        "wallet": "Cüzdan",
+        "contract": "Kontrat",
+        "pendingValue": "Henüz bilinmiyor",
+        "gasLimit": "Gas limiti",
+        "maxGasPrice": "Azami gas fiyatı",
+        "l1Fee": "Ethereum veri ücreti (toplama dahil)"
+      },
+      "types": {
+        "legacy": "Eski tip (tür 0)",
+        "eip2930": "Erişim listesi (tür 1)",
+        "eip1559": "EIP-1559 (tür 2)",
+        "eip4844": "Blob (tür 3)",
+        "eip7702": "Hesap kodu, EIP-7702 (tür 4)"
+      },
+      "failure": {
+        "title": "Neden başarısız oldu",
+        "reason": "Kontratın hata mesajı:",
+        "none": "Kontrat hata mesajı vermeden durdu.",
+        "unknown": "Hata mesajı mevcut değil: okumak için bu bloktan hemen önceki ağ durumu gerekiyor ve düğümlerimiz bunu artık tutmuyor."
+      },
+      "transfers": {
+        "title": "Varlık hareketleri",
+        "token": "Varlık",
+        "from": "Gönderen",
+        "to": "Alıcı",
+        "amount": "Miktar",
+        "nft": "NFT #{id}",
+        "wrap": "Sarıldı",
+        "unwrap": "Çözüldü",
+        "unknownToken": "Bilinmeyen token",
+        "truncated": "Bu işlemde gösterdiğimizden daha fazla olay var. Tam liste {explorer} üzerinde.",
+        "valueAtTx": "O anki değer",
+        "valueToday": "Bugünkü değer",
+        "event": "Olay"
+      },
+      "approvals": {
+        "title": "Değişen harcama izinleri",
+        "owner": "Sahip",
+        "spender": "Harcayıcı",
+        "allowance": "İzin",
+        "unlimited": "Sınırsız",
+        "all": "Bu koleksiyondaki tüm NFT'ler",
+        "nft": "NFT #{id}",
+        "removed": "Kaldırıldı",
+        "alertTitle": "Bu işlem harcama izni verdi",
+        "alertText": "Harcayıcı, izin kaldırılana kadar bu tokenları sahibin cüzdanından tekrar sormadan taşıyabilir. Yalnızca güvendiğiniz kontratları onaylayın. İzinleri inceleme ve kaldırma aracı M6 aşamasında geliyor."
+      },
+      "call": {
+        "title": "Çağrılan fonksiyon",
+        "unknown": "Bu fonksiyon bilinen fonksiyonlar listemizde değil, bu yüzden ham veri olarak gösteriliyor. Bir fonksiyonun anlamını asla tahmin etmeyiz.",
+        "mismatch": "Fonksiyon biliniyor ama bu veri parametreleriyle eşleşmiyor.",
+        "selector": "Fonksiyon kimliği",
+        "params": "Parametreler",
+        "nested": "İç çağrılar",
+        "decoder": "İşlem Verisi Çözücü'de aç",
+        "more": "…ve {count} tane daha"
+      },
+      "input": {
+        "title": "Giriş verisi",
+        "bytes": "{count, plural, one {# bayt} other {# bayt}}",
+        "truncated": "İlk 2 KB gösteriliyor. Tam veri {explorer} üzerinde."
+      },
+      "events": "{count, plural, =0 {Olay yok.} one {Makbuzda # olay.} other {Makbuzda # olay.}}",
+      "otherEvents": "{count, plural, one {# olay standart bir token olayı değil ve yorumlanmadı.} other {# olay standart token olayı değil ve yorumlanmadı.}}",
+      "pricesNote": "USD değerleri işlem anındaki değil, bugünün zincir üstü fiyatlarını kullanır.",
+      "source": "Doğrudan {chain} düğümlerinden okundu.",
+      "story": {
+        "view": {
+          "label": "Görünüm",
+          "simple": "Basit",
+          "advanced": "Gelişmiş",
+          "showTechnical": "Teknik ayrıntılar",
+          "showTechnicalHint": "Blok, gas, fonksiyon ve ham veri, gelişmiş görünümde"
+        },
+        "actions": {
+          "title": "{count, plural, one {Algılanan eylem (#)} other {Algılanan eylemler (#)}}",
+          "coverage": "{total} olaydan {explained} tanesi açıklandı",
+          "coverageTip": "Bir olayı açıklamak bir işlemi tamamen anlamakla aynı şey değildir ve bir güvenlik kontrolü değildir.",
+          "more": "{count, plural, one {# eylem daha göster} other {# eylem daha göster}}",
+          "unexplainedTitle": "{count, plural, one {# olay tanımlanamadı} other {# olay tanımlanamadı}}",
+          "unexplainedNote": "Bu olayların ne anlama geldiğini tahmin etmeyiz. Ham verileri gelişmiş görünümde.",
+          "notIdentified": "Tanımlanamadı",
+          "okResult": "başarılı oldu",
+          "failedResult": "başarısız oldu",
+          "app": "Raporda adı geçen uygulama: {app}.",
+          "native-transfer": "{from}, {to} adresine {amount} gönderdi.",
+          "token-transfer": "{amount}, {from} adresinden {to} adresine taşındı.",
+          "nft-transfer": "{amount}, {from} adresinden {to} adresine taşındı.",
+          "mint": "{amount} oluşturuldu ve {to} adresine gönderildi.",
+          "burn": "{amount} bir yakım adresine gönderildi.",
+          "wrap": "{from}, coinleri {amount} olarak sardı.",
+          "unwrap": "{from}, {amount} tutarını {native} olarak çözdü.",
+          "pool-swap": "{pool}, {in} karşılığında {out} takas etti.",
+          "pool-swap-unknown": "{pool} bir takas kaydetti; tokenları okunamadı.",
+          "liquidity-add": "{pool} havuzuna likidite eklendi: {in} ve {out}.",
+          "liquidity-add-unknown": "{pool} havuzuna likidite eklendi.",
+          "liquidity-remove": "{pool} havuzundan likidite çekildi: {in} ve {out}.",
+          "liquidity-remove-unknown": "{pool} havuzundan likidite çekildi.",
+          "permission-used": "{spender}, {owner} iznini kullanarak {amount} taşıdı. Kalan: {after}.",
+          "permission-granted": "{owner}, {spender} için {after} harcama izni verdi.",
+          "permission-modified": "{owner}, {spender} iznini {after} olarak değiştirdi.",
+          "permission-set": "{owner} tarafından {spender} için izin {after} olarak ayarlandı.",
+          "permission-revoked": "{owner}, {spender} için {token} iznini kaldırdı.",
+          "router-swap": "{router}, {in} harcadığını ve {to} adresine {out} iade ettiğini bildiriyor.",
+          "contract-creation": "{from}, {to} kontratını oluşturdu.",
+          "smart-wallet": "Akıllı cüzdan {from} bir işlem çalıştırdı; işlem {result}.",
+          "user-operation": "Akıllı hesap {from}, {router} üzerinden bir operasyon çalıştırdı; operasyon {result}.",
+          "copySummary": "Özeti kopyala",
+          "copied": "Kopyalandı",
+          "export": "Dışa aktar",
+          "json": "Ayrıntılar (JSON)",
+          "report": "Okunabilir rapor (metin)",
+          "raw": "Ham işlem ve makbuz (JSON)",
+          "copyLink": "Linki kopyala"
+        },
+        "status": {
+          "success": "Tamamlandı",
+          "reverted": "Başarısız",
+          "pending": "Bekliyor"
+        },
+        "kinds": {
+          "native-send": "Transfer",
+          "token-send": "Token transferi",
+          "nft-send": "NFT transferi",
+          "receive": "Alındı",
+          "swap": "Takas",
+          "approval": "Onay",
+          "revoke": "İzin kaldırıldı",
+          "mint": "Basım",
+          "burn": "Yakım",
+          "wrap": "Sarma",
+          "unwrap": "Çözme",
+          "creation": "Kontrat oluşturma",
+          "self": "Boş işlem",
+          "contract-call": "Kontrat çağrısı",
+          "unknown-call": "Kontrat çağrısı"
+        },
+        "attempted": "{kind} (denendi)",
+        "headline": {
+          "native-send": "{to} adresine {amount} gönderildi",
+          "token-send": "{to} adresine {amount} gönderildi",
+          "token-move": "{amount}, {from} adresinden {to} adresine taşındı",
+          "nft-send": "{to} adresine {amount} gönderildi",
+          "receive": "{amount} alındı",
+          "swap": "{out} ile {in} takas edildi",
+          "swapMany": "{outCount} varlık, {inCount} varlıkla takas edildi",
+          "approvalUnlimited": "{token} için sınırsız harcama izni verildi",
+          "approval": "{amount} harcama izni verildi",
+          "approvalAll": "Tüm {token} NFT'lerine tam erişim verildi",
+          "approvalNoAmount": "{token} harcama izni verildi",
+          "revoke": "{token} harcama izni kaldırıldı",
+          "mint": "{amount} basıldı",
+          "burn": "{amount} yok edildi",
+          "wrap": "{amount} sarıldı",
+          "unwrap": "{amount} çözüldü",
+          "creation": "Yeni bir kontrat oluşturuldu",
+          "self": "Kendisine boş bir işlem gönderdi",
+          "contract-call": "{to} üzerinde {fn} çağrıldı",
+          "unknown-call": "Bir kontratla etkileşime girdi",
+          "failed": "Başarısız: şunu yapmaya çalıştı: {intent}",
+          "pending": "Onay bekliyor",
+          "swapPartial": "Bir havuzda {out} takas edildi",
+          "swapPartialVia": "Bir {via} havuzunda {out} takas edildi"
+        },
+        "intent": {
+          "native-send": "{to} adresine {amount} göndermek",
+          "token-send": "{amount} tutarını {to} adresine taşımak",
+          "approval": "{spender} için {token} harcama izni vermek",
+          "revoke": "{spender} için {token} harcama iznini kaldırmak",
+          "swap": "{to} üzerinden token takas etmek",
+          "creation": "bir kontrat oluşturmak",
+          "contract-call": "{to} üzerinde {fn} çağırmak",
+          "unknown-call": "bir kontrat çağırmak ({to})"
+        },
+        "sub": {
+          "native-send": "{from} cüzdanı {to} adresine {amount} gönderdi.",
+          "token-send": "{from} cüzdanı {to} adresine {amount} gönderdi.",
+          "token-move": "{actor}, bir izin kullanarak {amount} tutarını {from} adresinden {to} adresine taşıdı.",
+          "nft-send": "{from}, {to} adresine {amount} gönderdi.",
+          "receive": "{to} cüzdanı {from} adresinden {amount} aldı.",
+          "swap": "{from} cüzdanı {to} üzerinden {out} karşılığında {in} aldı.",
+          "swapMany": "{from} cüzdanı {to} üzerinden {outCount} varlık verdi ve {inCount} varlık aldı.",
+          "approval": "{from} cüzdanı {spender} için {token} taşıma izni verdi. Bu işlemde hiçbir token taşınmadı.",
+          "revoke": "{from} cüzdanı {spender} için {token} taşıma iznini kaldırdı. Bu riski azaltır.",
+          "mint": "Yeni tokenlar oluşturuldu ve {to} adresine gönderildi.",
+          "burn": "{from} cüzdanı {amount} tutarını kimsenin kullanamayacağı bir yakım adresine gönderdi.",
+          "wrap": "{from} cüzdanı coinlerini 1'e 1 sarılmış tokena çevirdi.",
+          "unwrap": "{from} cüzdanı sarılmış tokenı 1'e 1 tekrar coine çevirdi.",
+          "creation": "{from} cüzdanı blokzincire yeni bir akıllı kontrat koydu.",
+          "self": "Bunun gibi boş işlemler genellikle önceki bir işlemi iptal etmek veya hızlandırmak için kullanılır.",
+          "contract-call": "{from} cüzdanı {to} üzerinde {fn} fonksiyonunu çağırdı.",
+          "unknown-call": "{from} cüzdanı {to} üzerinde bilinen fonksiyonlar listemizde olmayan bir fonksiyon çağırdı, bu yüzden ne yaptığını tahmin etmiyoruz.",
+          "movements": "{count, plural, one {# token olayı kaydedildi (ayrıntılar aşağıda).} other {# token olayı kaydedildi (ayrıntılar aşağıda).}}",
+          "noMovements": "Standart token olayı kaydedilmedi.",
+          "fee": "Ücret {fee} oldu.",
+          "failed": "Hiçbir şey değişmedi. {fee} ağ ücreti yine de ödendi.",
+          "failedNoFee": "Hiçbir şey değişmedi.",
+          "pending": "Ağa gönderildi, henüz bir blokta değil. Onaylandığında şunu yapacak: {intent}.",
+          "pendingTime": "{chain} yaklaşık her {seconds} saniyede bir blok ekler; yoğun zamanlarda daha uzun sürebilir.",
+          "via": "Borsanın factory'si ile doğrulanmış bir {dex} havuzundan geçti.",
+          "app": "Router uygulamayı \"{app}\" olarak bildiriyor.",
+          "possibleFee": "{amount} ayrıca {to} adresine gitti, muhtemelen bir ücret (doğrulanmadı).",
+          "swapPartial": "{from} cüzdanı {to} üzerinden bir havuz takasına {out} ödedi. Havuz {poolOut} ödedi; bunun sonra nereye gittiği olaylarda görünmüyor. Kontratların içinde ödenen coinler (ETH, BNB) olay bırakmaz ve düğümlerimiz bunu ölçmek için bu bloğun bakiyelerini artık tutmuyor.",
+          "swapPartialVia": "{from} cüzdanı {to} üzerinden bir {via} havuzuna (borsanın factory'si ile doğrulandı) {out} ödedi. Havuz {poolOut} ödedi; bunun sonra nereye gittiği olaylarda görünmüyor. Kontratların içinde ödenen coinler (ETH, BNB) olay bırakmaz ve düğümlerimiz bunu ölçmek için bu bloğun bakiyelerini artık tutmuyor."
+        },
+        "evidence": {
+          "confirmed": "Blokzincirde doğrulandı",
+          "decoded": "İşlemden çözüldü",
+          "likely": "Olası, token olaylarına göre",
+          "unknown": "Tanımlanamadı",
+          "fromEvents": "Token olaylarından",
+          "estimate": "Tahmin",
+          "notChecked": "Henüz kontrol edilmedi",
+          "seen": "Ağ tarafından görüldü",
+          "explained": "Kontratın mesajından açıklandı",
+          "reported": "Bir kontratın kendi raporuna dayanır"
+        },
+        "flow": {
+          "label": "İşlem akışı",
+          "from": "Gönderen",
+          "to": "Alıcı",
+          "wallet": "Cüzdan",
+          "contract": "Kontrat",
+          "known": "Kontrat · bilinen ad",
+          "owner": "Sahip",
+          "spender": "Harcayıcı",
+          "created": "oluşturdu",
+          "sender": "Gönderen",
+          "through": "Takas aracısı",
+          "intendedTo": "Alıcı (amaçlanan)",
+          "triedFrom": "Gönderen (denendi)",
+          "sent": "gönderdi",
+          "receivedBack": "geri aldı",
+          "permission": "harcama izni verdi",
+          "permissionOnly": "yalnızca izin · hiçbir şey gönderilmedi",
+          "unlimited": "Sınırsız",
+          "calls": "bir kontrat çağırdı",
+          "stoppedBy": "{name} tarafından durduruldu",
+          "afterConfirm": "hareketler onaydan sonra görünür",
+          "triedToMove": "taşımaya çalıştı",
+          "notMoved": "taşınmadı",
+          "self": "kendisine",
+          "copy": "Adresi kopyala",
+          "newContract": "Yeni kontrat",
+          "address": "Adres"
+        },
+        "progress": {
+          "label": "İlerleme",
+          "sent": "Gönderildi",
+          "sentBy": "{from} tarafından",
+          "included": "Bloğa eklendi",
+          "block": "Blok {block}",
+          "final": "Kesinleşti",
+          "confirmations": "{count, plural, one {# onay} other {# onay}}",
+          "waiting": "Bekleniyor…",
+          "failed": "Başarısız",
+          "reverted": "Kontrat tarafından geri alındı",
+          "seen": "Düğümümüz tarafından görüldü"
+        },
+        "changes": {
+          "title": "{wallet} için değişiklikler",
+          "fee": "Ağ ücreti",
+          "note": "Standart token olaylarından. Kontratların içinde taşınan coinler (ETH, BNB) olaylarda görünmez, bu yüzden eksik olabilir.",
+          "none": "Standart olaylarda bu cüzdan için token değişikliği yok.",
+          "noteMeasured": "Tokenlar: standart token olaylarından. Coinler: gönderenin {block} bloğundan önceki ve sonraki bakiyesinden ölçüldü; aynı bloktaki başka bir işlem de bunu etkilemiş olabilir.",
+          "noteReported": "Tokenlar: standart token olaylarından. Kontratların içinde alınan coinler: router'ın kendi raporundan, bağımsız olarak ölçülmedi.",
+          "source": {
+            "chain": "Bakiye kontrolü",
+            "event": "Token olayı",
+            "reported": "Router raporu",
+            "protocol": "Doğrulandı",
+            "interpreted": "Yorum",
+            "unknown": "Bilinmiyor"
+          }
+        },
+        "cost": {
+          "title": "Maliyet",
+          "network": "Ağ",
+          "tip": "Ağ ücretleri CRYPY'ye değil ağa gider. İşlem başarısız olsa bile alınır.",
+          "failed": "Ağ işi yine de yaptığı için ücretler işlem başarısız olsa bile alınır.",
+          "free": "Bu işlem ücret ödemedi.",
+          "estimateTitle": "Ücret (tahmin)",
+          "upTo": "En fazla {usd}",
+          "upToCoin": "En fazla {amount}",
+          "estimateNote": "Kesin ücret onaydan sonra bilinir ve genellikle daha düşüktür.",
+          "estimateTip": "Gas limiti × gas başına azami fiyat. Gerçek ücret = kullanılan gas × ödenen fiyat.",
+          "time": "Zaman",
+          "yourTime": "{time} (sizin saatiniz)",
+          "networkFee": "İşlemin işlenmesi için ödenen ağ ücreti."
+        },
+        "usd": {
+          "atTx": "o anki",
+          "today": "bugünkü"
+        },
+        "failure": {
+          "title": "Neden başarısız oldu?",
+          "message": {
+            "title": "Kontrat bir mesajla durdu.",
+            "text": "Bu mesaj için sade bir açıklamamız yok, bu yüzden yazıldığı gibi gösteriliyor."
+          },
+          "help": "Genellikle işe yarayanlar:",
+          "balance": {
+            "title": "Gönderen cüzdanda yeterli token yoktu.",
+            "text": "Kontrat reddetti, çünkü bakiye taşımaya çalıştığı tutardan düşüktü."
+          },
+          "balanceHelp": "Bakiyeyi kontrol edin, sonra cüzdanda olan bir tutarla tekrar deneyin.",
+          "allowance": {
+            "title": "Harcama izni çok düşüktü.",
+            "text": "Kontrat, tutardan küçük bir izinle (allowance) token taşımaya çalıştı."
+          },
+          "allowanceHelp": "Uygulama için en az bu tutarı onaylayın, sonra tekrar deneyin.",
+          "slippage": {
+            "title": "Fiyat çok fazla değişti.",
+            "text": "Borsa durdu, çünkü işlem gönderenin kabul ettiği asgari tutardan az getirecekti."
+          },
+          "slippageHelp": "Tekrar deneyin veya uygulamada biraz daha büyük bir fiyat değişimine (slippage) izin verin.",
+          "deadline": {
+            "title": "Çok geç ulaştı.",
+            "text": "İşlem, gönderilirken belirlenen son tarihten sonra bloğa eklendi."
+          },
+          "deadlineHelp": "Tekrar gönderin.",
+          "access": {
+            "title": "Bu cüzdanın buna izni yok.",
+            "text": "Kontrat bu fonksiyonu yalnızca sahibi gibi belirli adreslerin kullanmasına izin veriyor."
+          },
+          "paused": {
+            "title": "Kontrat duraklatılmış.",
+            "text": "Operatörleri bu fonksiyonu şimdilik durdurmuş."
+          },
+          "token-transfer": {
+            "title": "İçindeki bir token transferi başarısız oldu.",
+            "text": "Kontrat bir token taşımaya çalıştı ve token reddetti. Yaygın nedenler: yeterli bakiye veya izin yok ya da transfer kısıtlamaları olan bir token."
+          },
+          "math": {
+            "title": "Bir hesaplama başarısız oldu.",
+            "text": "Kontrat taşma veya sıfıra bölme gibi bir matematik hatasıyla karşılaştı."
+          },
+          "out-of-gas": {
+            "title": "Muhtemelen gas'ı bitti.",
+            "text": "İzin verilen gas'ın {percent} kadarını kullandı, bu yüzden büyük ihtimalle gas yetmediği için durdu. Bu olası bir neden, doğrulanmış değil."
+          },
+          "out-of-gasHelp": "Daha yüksek bir gas limitiyle tekrar deneyin.",
+          "custom": {
+            "title": "Kontrat kendi hata koduyla durdu.",
+            "text": "Bu hata bilinen hatalar listemizde değil, bu yüzden güvenilir şekilde açıklayamıyoruz."
+          },
+          "no-message": {
+            "title": "Kontrat nedenini söylemeden durdu.",
+            "text": "Hata mesajı vermedi, bu yüzden neden blokzincirden okunamaz."
+          },
+          "unavailable": {
+            "title": "Neden mevcut değil.",
+            "text": "İşlem başarısız oldu ama neden şu anda okunamıyor: bunun için bu bloktan hemen önceki ağ durumu gerekiyor ve ücretsiz düğümlerimiz bunu artık tutmuyor."
+          },
+          "messageLabel": "Kontratın mesajı"
+        },
+        "approval": {
+          "meaningTitle": "Bunun anlamı",
+          "permission": "Bu bir ödeme değil, bir izindir. Borsalar gibi uygulamalar tokenlarınızı taşıyabilmek için bunu ister.",
+          "unlimited": "\"Sınırsız\", harcayıcının bu tokenın herhangi bir miktarını şimdi veya sonra, tekrar sormadan cüzdandan taşıyabileceği anlamına gelir.",
+          "limited": "Harcayıcı tekrar sormadan cüzdandan en fazla {amount} taşıyabilir.",
+          "all": "Operatör bu cüzdanın bu koleksiyonda tuttuğu her NFT'yi taşıyabilir.",
+          "stays": "İzin kaldırılana veya sonraki bir işlem onu değiştirene kadar geçerli kalır.",
+          "revoked": "İzin sıfıra ayarlandı, bu yüzden harcayıcı artık bu tokenları taşıyamaz.",
+          "activeTitle": "Hâlâ etkin mi?",
+          "activeText": "Bu sayfa işlemin {when} ne yaptığını gösterir. İzin o zamandan beri değişmiş olabilir.",
+          "checker": "Onay Kontrolü (izinleri inceleme ve kaldırma) M6 aşamasında geliyor."
+        },
+        "pending": {
+          "title": "Hâlâ gerçekleşebilir mi?",
+          "yes": "Evet. Gönderen bu işlemin numarasını (nonce {nonce}) başka bir işlem için kullanmadı.",
+          "no": "Hayır. Gönderen bu işlemin numarasını (nonce {nonce}) zaten başka bir işlem için kullandı, bu yüzden bu işlem değiştirildi veya iptal edildi ve onaylanamaz.",
+          "unknown": "Bunu şu anda kontrol edemedik.",
+          "note": "Gönderen onu değiştirir veya iptal ederse bu sayfa bunu söyler. Bu kanıt olmadan bir işlemi asla düşürülmüş olarak işaretlemeyiz.",
+          "checked": "Son kontrol {time} · 15 saniyede bir kontrol eder"
+        },
+        "notes": {
+          "title": "Bilmekte fayda var",
+          "known": "{name}, CRYPY'nin bilinen kontratlar listesinden bir ad. Bir ad güvenlik kontrolü değildir.",
+          "pricesAtTx": "Dolar değerleri, zincir üstü havuzlardan okunan işlem anındaki fiyatı kullanır.",
+          "pricesToday": "Dolar değerleri bugünün zincir üstü fiyatını kullanır. İşlem anındaki fiyat düğümlerimizde mevcut değil.",
+          "toContract": "Alıcı kişisel bir cüzdan değil, bir kontrat.",
+          "burn": "Yakım adresine gönderilen tokenlar geri alınamaz.",
+          "nativeMissing": "Kontratların içinde ödenen coinler (ETH, BNB) token olaylarında görünmez, bu yüzden bu işlemin coin tarafı gösterilmeyebilir.",
+          "self": "Hiçbir şey taşınmadı. Cüzdanlar takılmış bir işlemi aynı numarayla değiştirmek için bu tür işlemler gönderir.",
+          "unknownFn": "Fonksiyon listemizde yok. Bir kontrat herhangi bir ad kullanabilir, bu yüzden yalnızca olayların kanıtladığını anlatıyoruz.",
+          "reported": "Bu sonucun bir kısmı router'ın kendi raporundan (\"Swapped\" olayından) geliyor. Coin bakiyesini bağımsız olarak kontrol edemediğimiz için bildirildiği gibi gösteriyoruz."
+        },
+        "events": {
+          "title": "{count} token olayının tümü",
+          "hint": "Kontratlar arasındaki iç geçişler dahil, her token hareketi orijinal sırasıyla"
+        },
+        "nft": "NFT #{id}",
+        "units": "{amount} birim",
+        "advanced": {
+          "transaction": "İşlem",
+          "hash": "Hash",
+          "chain": "Ağ",
+          "chainValue": "{name} · zincir kimliği {id} ({caip})",
+          "block": "Blok",
+          "blockHash": "Blok hash'i",
+          "index": "Bloktaki konumu",
+          "indexTip": "İşlemin bloğunun içinde nerede durduğu.",
+          "nonceTip": "Gönderenin işlemleri için sıra numarası.",
+          "fees": "Ücretler",
+          "gasLimitTip": "Gönderenin izin verdiği en fazla gas.",
+          "gasUsedTip": "İşlemin gerçekte kullandığı gas.",
+          "baseFee": "Taban ücret",
+          "baseFeeTip": "Ağ tarafından her blok için belirlenir; bu kısım yakılır.",
+          "priorityFee": "Öncelik ücreti",
+          "priorityFeeTip": "Blok oluşturucuya ödenen bahşiş.",
+          "effective": "Gerçekleşen gas fiyatı",
+          "maxFee": "Gas başına azami ücret",
+          "maxPriority": "Gas başına azami öncelik ücreti",
+          "total": "Toplam ücret",
+          "events": "Olaylar",
+          "eventsCount": "{count, plural, one {Makbuzda # olay, orijinal sırayla} other {Makbuzda # olay, orijinal sırayla}}",
+          "log": "Log",
+          "contract": "Kontrat",
+          "event": "Olay",
+          "notStandard": "Standart bir olay değil",
+          "topics": "Topics",
+          "data": "Veri",
+          "dataBytes": "{count, plural, one {# bayt} other {# bayt}}",
+          "raw": "Ham veri",
+          "moreEvents": "Yalnızca ilk {count} olay listeleniyor. Tam liste {explorer} üzerinde."
+        },
+        "utc": "({time} UTC)",
+        "level": {
+          "chain": "Zincir üstü gerçek",
+          "chainTip": "Doğrudan blokzincirin durumundan okundu (durum, değer, ücret, bakiye veya izin).",
+          "event": "Standart olay",
+          "eventTip": "Kontratın kaydettiği standart bir olaydan çözüldü (Transfer, Approval, Swap…).",
+          "protocol": "Doğrulandı",
+          "protocolTip": "Protokolün kendisiyle doğrulandı, örneğin borsasının factory'sinin listelediği bir havuz.",
+          "reported": "Bildirildi",
+          "reportedTip": "Bir kontratın ne yaptığına dair kendi raporu. Bildirildiği gibi gösterilir, bağımsız olarak kontrol edilmez.",
+          "interpreted": "Yorum",
+          "interpretedTip": "Gerçeklerin kanıtlanmamış makul bir okuması.",
+          "unknown": "Tanımlanamadı",
+          "unknownTip": "Mevcut verilerden anlaşılamıyor."
+        },
+        "who": {
+          "sender": "gönderen",
+          "senderWallet": "Gönderen cüzdan",
+          "you": "Siz",
+          "pool": "{dex} havuzu",
+          "poolUnverified": "Havuz (doğrulanmadı)",
+          "token": "{symbol} kontratı"
+        },
+        "route": {
+          "title": "Varlıklar nasıl hareket etti",
+          "relationsTitle": "Varlık hareketleri",
+          "hint": "Gerçekleştikleri sırayla, işlemin olaylarından",
+          "relationsIntro": "Bu hareketler bağlantılı tek bir rota oluşturmuyor, bu yüzden nasıl ilişkili olduklarını tahmin etmek yerine ayrı ayrı listeliyoruz.",
+          "verifiedPool": "Havuz doğrulandı",
+          "unverifiedPool": "Doğrulanmadı",
+          "knownName": "Bilinen ad",
+          "wrapped": "{amount} olarak sarıldı",
+          "unwrapped": "{amount} olarak çözüldü",
+          "reported": "router tarafından bildirildi",
+          "reportedMatched": "bildirildi, bakiye değişimiyle eşleşiyor",
+          "measured": "bakiyeden ölçüldü",
+          "sentWithCall": "işlemle birlikte gönderildi",
+          "possibleFee": "Olası ücret (doğrulanmadı)",
+          "more": "Gelişmiş görünümde {count, plural, one {# hareket daha} other {# hareket daha}}",
+          "called": "Çağrılan kontrat: {name}"
+        },
+        "actionLabel": {
+          "native-transfer": "Coin transferi",
+          "token-transfer": "Token transferi",
+          "nft-transfer": "NFT transferi",
+          "mint": "Basım",
+          "burn": "Yakım",
+          "wrap": "Sarma",
+          "unwrap": "Çözme",
+          "pool-swap": "Havuz takası",
+          "liquidity-add": "Likidite eklendi",
+          "liquidity-remove": "Likidite çekildi",
+          "permission-granted": "İzin verildi",
+          "permission-modified": "İzin değiştirildi",
+          "permission-set": "İzin ayarlandı",
+          "permission-used": "İzin kullanıldı",
+          "permission-revoked": "İzin kaldırıldı",
+          "router-swap": "Router raporu",
+          "contract-creation": "Kontrat oluşturuldu",
+          "smart-wallet": "Akıllı cüzdan",
+          "user-operation": "Akıllı hesap operasyonu"
+        },
+        "permissions": {
+          "title": "Değişen izinler",
+          "heading": "{token} · harcayıcı {spender}",
+          "status": {
+            "used": "Bu işlemle tükendi",
+            "granted": "İzin verildi",
+            "modified": "İzin değiştirildi",
+            "set": "İzin ayarlandı",
+            "revoked": "İzin kaldırıldı"
+          },
+          "change": {
+            "used": "Kullanıldı",
+            "granted": "Verildi",
+            "modified": "Değiştirildi",
+            "set": "Ayarlandı",
+            "revoked": "Kaldırıldı"
+          },
+          "before": "Önce",
+          "after": "Bu işlemden sonra",
+          "today": "Bugün",
+          "unknown": "Bilinmiyor",
+          "notRead": "Okunamadı",
+          "readBefore": "Zincirden okundu",
+          "derived": "Olaylardan hesaplandı",
+          "readNow": "Şimdi okundu",
+          "usedBy": "#{index} numaralı transfer tarafından",
+          "todayNote": "Bugünkü değer {time} tarihinde okundu. Ne zaman veya neden değiştiğini değil, iznin şu anki hâlini gösterir.",
+          "eventsNote": "Tokenlar izin değişikliklerini Approval olaylarında bildirir ve hepsi bunu aynı şekilde yapmaz. Önceki ve sonraki değerler, zincirden okundu olarak işaretlenmedikçe bu işlemin olaylarından gelir."
+        },
+        "roles": {
+          "sender": "Gönderen",
+          "called": "Çağrılan kontrat",
+          "created": "Yeni kontrat",
+          "router": "Router",
+          "pool": "Havuz",
+          "intermediary": "Varlıkları aktardı",
+          "recipient": "Aldı",
+          "possible-fee": "Olası ücret (doğrulanmadı)",
+          "spender": "Harcayıcı",
+          "token": "Token",
+          "smart-account": "Akıllı hesap",
+          "burn": "Yakım adresi"
+        },
+        "parties": {
+          "title": "Taraflar ({count})",
+          "more": "{count, plural, one {# tane daha göster} other {# tane daha göster}}",
+          "note": "Roller bu işlemin olaylarından gelir. Kontrat veya cüzdan olduğu zincirden okunur; bir ad bir etikettir, güvenlik kontrolü değil."
+        }
+      }
+    },
+    "otherChains": {
+      "label": "Diğer ağlarda aynı adres:",
+      "none": "Desteklenen diğer ağlarda kullanılmıyor.",
+      "overview": "Tüm ağların genel görünümü"
+    },
+    "tokenSecurity": {
+      "tabs": {
+        "label": "Token bölümleri",
+        "security": "Güvenlik",
+        "market": "Piyasa",
+        "soon": "Yakında"
+      },
+      "level": {
+        "serious": "Ciddi riskler bulundu",
+        "risks": "Riskler bulundu",
+        "warnings": "Bazı uyarılar",
+        "none-found": "Bu kontrollerde büyük risk bulunamadı"
+      },
+      "levelNote": "CRYPY'de \"güvenli\" hükmü yoktur: bunlar kontrol edebildiğimiz sinyallerdir.",
+      "topRisks": "Başlıca riskler: {list}.",
+      "noneFoundNote": "Bu kontrollerden geçmek bir tokenın dürüst olduğunu kanıtlamaz ve bir kontrat davranışını sonradan değiştirebilir.",
+      "checked": "Kontrol: {time} UTC · blok {block}",
+      "counts": {
+        "critical": "Kritik",
+        "high": "Yüksek",
+        "medium": "Orta",
+        "low": "Düşük",
+        "passed": "Geçti",
+        "unchecked": "Kontrol edilmedi"
+      },
+      "severity": {
+        "critical": "Kritik",
+        "high": "Yüksek",
+        "medium": "Orta",
+        "low": "Düşük",
+        "pass": "Geçti",
+        "unchecked": "Kontrol edilmedi"
+      },
+      "class": {
+        "verified": "Doğrulandı",
+        "verifiedTip": "Doğrudan blokzincirden okundu.",
+        "simulated": "Simüle edildi",
+        "simulatedTip": "Salt okunur bir çağrıda işlemler simüle edilerek ölçüldü. Hiçbir şey gönderilmedi.",
+        "heuristic": "Sezgisel",
+        "heuristicTip": "Kontrat kodundan çıkarıldı. Bir fonksiyonun var olması kullanılıp kullanılmadığını göstermez.",
+        "external": "{provider}",
+        "externalTip": "Dış bir sağlayıcıdan, adıyla birlikte gösterilir.",
+        "unsupported": "Kontrol edilmedi",
+        "unsupportedTip": "CRYPY bunu burada kontrol edemedi."
+      },
+      "copyReport": "Raporu kopyala",
+      "copied": "Kopyalandı",
+      "unavailable": "Bu token için güvenlik kontrolleri şu anda kullanılamıyor. Bir dakika sonra tekrar deneyin.",
+      "loading": "Güvenlik kontrolleri çalıştırılıyor…",
+      "trade": {
+        "title": "İşlem testi",
+        "intro": "Gerçek {dex} havuzuna karşı salt okunur bir çağrı içinde simüle edilen bir alım, bir transfer ve bir satış. Hiçbir şey gönderilmedi.",
+        "buy": "Alım",
+        "sell": "Satış",
+        "transfer": "Başka bir cüzdana transfer",
+        "worked": "Çalıştı",
+        "blocked": "Engellendi",
+        "notRun": "Test edilmedi",
+        "tax": "Vergi {tax}",
+        "said": "Kontratın yanıtı: {reason}",
+        "noReason": "Kontrat bir neden vermedi.",
+        "footer": "Test büyüklüğü {amount} {symbol} · havuz {pool}. Sonuçlar her an değişebilir: bir sahip alım satımı veya ücretleri sonradan açıp kapatabilir.",
+        "why": {
+          "noPool": "CRYPY'nin kontrol ettiği borsalarda ({dexes}) havuz bulunamadı, bu yüzden karşısında işlem yapılacak bir şey yoktu.",
+          "unsupportedPool": "Havuzlar var ama işlem testi hiçbirini kullanamıyor: henüz simüle edemediği bir borsa tasarımındalar veya yerel coin ya da stablecoin dışında bir tokenla eşleşmişler.",
+          "noLiquidity": "Havuzda henüz (neredeyse) hiç likidite yok, bu yüzden bir test işlemi anlamlı değil.",
+          "error": "İşlem testi şu anda çalıştırılamadı (düğüm zamanında yanıt vermedi). Bir dakika sonra tekrar deneyin."
+        },
+        "via": "Havuz {symbol} ile eşleşmiş, bu yüzden test önce yerel coini {symbol} ile takas etti, sonra onunla satın aldı.",
+        "feeRejected": "Havuz satışı reddetti: token, havuza giderken tutarın {tax} kadarını aldı ve v3 havuzları borçlu olunandan az ödemeyi kabul etmez."
+      },
+      "owner": {
+        "title": "Sahip neler yapabilir",
+        "state": {
+          "none": "Sahip fonksiyonu bulunamadı",
+          "renounced": "Sahiplikten vazgeçildi",
+          "wallet": "Sahip: bir cüzdan, vazgeçilmemiş",
+          "contract": "Sahip: bir kontrat (çoğu zaman multisig, timelock veya staking kontratı)"
+        },
+        "power": {
+          "mint": "Yeni token basmak",
+          "fees": "Alım ve satım ücretlerini değiştirmek",
+          "blacklist": "Cüzdanların işlem yapmasını engellemek",
+          "pause": "Alım satımı duraklatmak veya açmak",
+          "limits": "Bir cüzdanın alabileceği veya tutabileceği miktarı sınırlamak",
+          "cooldown": "İşlemler arasına bekleme süresi eklemek",
+          "upgrade": "Kontratın kodunu değiştirmek",
+          "selfdestruct": "Kontratı yok etmek (SELFDESTRUCT)"
+        },
+        "found": "Kodda bulundu: {functions}",
+        "notUsable": "Kullanılamaz: sahiplikten vazgeçilmiş.",
+        "byContract": "Bir kontrat sahibinin elinde.",
+        "nothing": "Yaygın sahip yetkilerinin hiçbiri (basım, ücretler, kara liste, duraklatma, sınırlar) kodda bulunamadı.",
+        "note": "\"Kodda bulundu\", fonksiyonun var olduğu anlamına gelir. Kullanılıp kullanılmadığını veya ne zaman kullanıldığını göstermez. Kaynak kod Sourcify'da doğrulandığında CRYPY her fonksiyonu kimin çağırabileceğini ve hangi sınırları kontrol ettiğini okur; bu kaynağın okunmasıdır, bir garanti değildir.",
+        "access": {
+          "owner": "yalnızca sahip",
+          "role": "bir role sahip hesaplar (sahiplikten vazgeçmekle kalkmaz)",
+          "restricted": "sahip dışında adı belirli bir hesap (sahiplikten vazgeçmekle kalkmaz)",
+          "open": "herkes: erişim kontrolü bulunamadı",
+          "unknown": "erişim kontrolü tanınmadı"
+        },
+        "fromSourceTitle": "Doğrulanmış kaynaktan:",
+        "whoCalls": "kim çağırabilir: {access}",
+        "limitLabel": "Kodda yazılı sınır:"
+      },
+      "allChecks": "Tüm kontroller ({count})",
+      "showAll": "{count} kontrolün hepsini göster",
+      "checks": {
+        "sell": {
+          "risk": {
+            "title": "İşlem testinde satış engellendi",
+            "detail": "Alım çalıştı ama satış başarısız oldu. {reason}"
+          },
+          "pass": {
+            "title": "İşlem testinde satış çalıştı",
+            "detail": "{dex} üzerinde alındı ve satıldı."
+          },
+          "feeRejected": {
+            "title": "İşlem testinde satış başarısız oldu",
+            "detail": "{dex} havuzu satışları reddediyor, çünkü token havuza giden her transferden {tax} alıyor."
+          }
+        },
+        "buy": {
+          "risk": {
+            "title": "İşlem testinde alım başarısız oldu",
+            "detail": "Alım satım henüz açılmamış olabilir veya bir sınır uygulanıyor olabilir. {reason}"
+          }
+        },
+        "transfer": {
+          "risk": {
+            "title": "İşlem testinde transferler engellendi",
+            "detail": "Başka bir cüzdana transfer başarısız oldu. {reason}"
+          }
+        },
+        "buyTax": {
+          "risk": {
+            "title": "Alım vergisi {tax}",
+            "detail": "İşlem testinde ölçüldü."
+          },
+          "pass": {
+            "title": "Alım vergisi yok",
+            "detail": "İşlem testinde ölçüldü."
+          }
+        },
+        "sellTax": {
+          "risk": {
+            "title": "Satış vergisi {tax}",
+            "detail": "İşlem testinde ölçüldü."
+          },
+          "pass": {
+            "title": "Satış vergisi yok",
+            "detail": "İşlem testinde ölçüldü."
+          }
+        },
+        "transferTax": {
+          "risk": {
+            "title": "Transfer vergisi {tax}",
+            "detail": "Cüzdandan cüzdana transferler tutarın bir kısmını kaybeder."
+          },
+          "pass": {
+            "title": "Transfer vergisi yok",
+            "detail": "İşlem testinde ölçüldü."
+          }
+        },
+        "tradeTest": {
+          "unchecked": {
+            "title": "İşlem testi çalışmadı",
+            "detail": "İşlem testine bakın."
+          }
+        },
+        "owner": {
+          "risk": {
+            "title": "Sahiplikten vazgeçilmemiş",
+            "detail": "Bir sahip adresi hâlâ yalnızca sahibe açık fonksiyonları kullanabilir."
+          },
+          "pass": {
+            "title": "Etkin sahip yok",
+            "detail": "Sahiplikten vazgeçilmiş veya sahip fonksiyonu yok."
+          }
+        },
+        "powers": {
+          "pass": {
+            "title": "Yaygın sahip yetkisi bulunamadı",
+            "detail": "Basım, ücret, kara liste, duraklatma ve sınır fonksiyonları kodda bulunamadı."
+          }
+        },
+        "power": {
+          "mint": {
+            "risk": {
+              "title": "Sahip yeni token basabilir",
+              "detail": "Yeni arz her sahibin payını düşürür."
+            }
+          },
+          "fees": {
+            "risk": {
+              "title": "Sahip ücretleri değiştirebilir",
+              "detail": "Alım veya satım ücretleri sonradan artırılabilir."
+            }
+          },
+          "blacklist": {
+            "risk": {
+              "title": "Sahip cüzdanları engelleyebilir",
+              "detail": "Engellenen cüzdanlar tokenla işlem yapamaz veya onu taşıyamaz."
+            }
+          },
+          "pause": {
+            "risk": {
+              "title": "Sahip alım satımı duraklatabilir veya açabilir",
+              "detail": "Alım satım kapatılabilir."
+            }
+          },
+          "limits": {
+            "risk": {
+              "title": "Sahip işlem veya cüzdan sınırları koyabilir",
+              "detail": "Büyük alımlar veya satışlar engellenebilir."
+            }
+          },
+          "cooldown": {
+            "risk": {
+              "title": "Sahip işlem bekleme süresi ekleyebilir",
+              "detail": "Cüzdanlar işlemler arasında beklemek zorunda kalabilir."
+            }
+          },
+          "upgrade": {
+            "risk": {
+              "title": "Kod değiştirilebilir",
+              "detail": "Kodda yükseltme fonksiyonları bulundu."
+            }
+          },
+          "selfdestruct": {
+            "risk": {
+              "title": "Kontrat SELFDESTRUCT içeriyor",
+              "detail": "Bugünün ağlarında etkisi sınırlıdır ama bir token için olağan dışıdır."
+            }
+          }
+        },
+        "proxy": {
+          "risk": {
+            "title": "Yükseltilebilir proxy",
+            "detail": "Kodu, proxy'nin yöneticisi tarafından değiştirilebilir."
+          },
+          "pass": {
+            "title": "Yükseltilebilir proxy değil",
+            "detail": "Standart proxy uygulama yuvası bulunamadı."
+          }
+        },
+        "source": {
+          "pass": {
+            "title": "Kaynak kod yayınlanmış",
+            "detail": "{provider} üzerinde eşleşti."
+          },
+          "unchecked": {
+            "title": "Kaynak kod doğrulanamadı",
+            "detail": "{provider} üzerinde bulunamadı. Bir blok gezgininde yayınlanmış olabilir; CRYPY bunu henüz ücretsiz kontrol edemiyor."
+          }
+        },
+        "liquidity": {
+          "risk": {
+            "title": "Düşük likidite",
+            "detail": "Ana havuzda ({dex}) yaklaşık ${usd}. Büyük işlemler fiyatı çok oynatır."
+          },
+          "pass": {
+            "title": "Likidite yaklaşık ${usd}",
+            "detail": "Ana havuz: {dex}."
+          }
+        },
+        "lp": {
+          "risk": {
+            "title": "Likidite çekilebilir",
+            "detail": "Likiditenin yalnızca {protected} kadarı yakılmış veya 30 günden uzun kilitli ({pools, plural, one {# havuz} other {# havuz}}, değere göre ağırlıklı)."
+          },
+          "pass": {
+            "title": "Likiditenin çoğu yakılmış veya kilitli",
+            "detail": "{protected} yakılmış veya 30 günden uzun kilitli ({pools, plural, one {# havuz} other {# havuz}}, değere göre ağırlıklı)."
+          },
+          "owner": {
+            "risk": {
+              "title": "Sahip likiditenin {share} kadarını çekebilir",
+              "detail": "Yaklaşık ${usd}, sahibin cüzdanında veya pozisyonlarında."
+            }
+          },
+          "soon": {
+            "risk": {
+              "title": "Likiditenin {share} kadarının kilidi 30 gün içinde açılıyor",
+              "detail": "İlk kilit {date} tarihinde bitiyor. Ondan sonra çekilebilir."
+            }
+          },
+          "expired": {
+            "risk": {
+              "title": "Likiditenin {share} kadarı süresi dolmuş kilitlerde",
+              "detail": "Henüz çekilmedi ama her an çekilebilir."
+            }
+          },
+          "unknown": {
+            "risk": {
+              "title": "{share} kadarı CRYPY'nin okuyamadığı kontratlarda",
+              "detail": "Tanımlanamayan kontratlar veya koşulları okunamayan kilit kontratları. Güvenli olabilirler de olmayabilirler de."
+            }
+          },
+          "coverage": {
+            "unchecked": {
+              "title": "Likiditenin {share} kadarının sahipleri bulunamadı",
+              "detail": "Tüm sahipleri bulmak her havuzun tam geçmişini gerektirir; CRYPY'nin kendi dizini bunu ekleyecek. Bu kısım asla güvenli sayılmaz."
+            }
+          },
+          "upgradeable": {
+            "risk": {
+              "title": "{share} kadarı yükseltilebilir kilit kontratlarında kilitli",
+              "detail": "Kilit kontratının operatörü kodunu değiştirebilir, bu yüzden bu kilitler ancak o operatör kadar güvenlidir."
+            }
+          }
+        },
+        "holders": {
+          "risk": {
+            "title": "İlk 10 sahip {top10} tutuyor",
+            "detail": "{provider} verisi. Yakım adresleri hariç."
+          },
+          "pass": {
+            "title": "İlk 10 sahip {top10} tutuyor",
+            "detail": "{provider} verisi. Yakım adresleri hariç."
+          },
+          "unchecked": {
+            "title": "Sahipler kontrol edilmedi",
+            "detail": "CRYPY henüz sahipleri kendisi sayamıyor ve dış sağlayıcı yanıt vermedi."
+          }
+        },
+        "name": {
+          "risk": {
+            "title": "Şüpheli ad",
+            "detail": "Ad veya sembol bir link ya da yem kelimeler içeriyor."
+          },
+          "pass": {
+            "title": "Ad ve sembol normal görünüyor",
+            "detail": "Link veya yem kelime yok."
+          }
+        },
+        "age": {
+          "unchecked": {
+            "title": "Kontrat yaşı ve oluşturan",
+            "detail": "Geçmiş işlemlerin dizinini gerektirir (planlanıyor)."
+          }
+        },
+        "proxyClone": {
+          "title": "Sabit bir klon, yükseltilemez",
+          "detail": "Bir EIP-1167 minimal klon: her zaman aynı kontrat kodunu çalıştırır ve bu kod değiştirilemez."
+        },
+        "liquidityState": {
+          "none": {
+            "title": "Likidite havuzu bulunamadı",
+            "detail": "CRYPY'nin kontrol ettiği borsalarda yok. Token başka bir yerde işlem görüyor olabilir veya henüz hiç işlem görmüyor olabilir."
+          },
+          "empty": {
+            "title": "Havuzlar boş",
+            "detail": "{count, plural, one {# havuz} other {# havuz}} bulundu ama (neredeyse) hiçbir şey içermiyor. Token henüz gerçekten alınıp satılamıyor."
+          }
+        },
+        "powerOpen": {
+          "title": "{functions} fonksiyonunu herkes çağırabilir",
+          "detail": "Doğrulanmış kaynakta bu fonksiyonda erişim kontrolü yok, bu yüzden her cüzdan onu kullanabilir."
+        },
+        "powerOthers": "Bir rolün veya adı belirli başka bir hesabın elinde, bu yüzden sahiplikten vazgeçmek onu kaldırmaz."
+      },
+      "lpStates": {
+        "owner": "Likiditenin {owner} kadarı sahibin elinde; her an çekilebilir.",
+        "proxyBurned": "Yöneticisi bir yakım adresi, bu yüzden artık yükseltilemez."
+      },
+      "liquidity": {
+        "title": "Likidite",
+        "none": "{dexes} üzerinde havuz bulunamadı.",
+        "empty": "{dexes} üzerinde {count, plural, one {# havuz} other {# havuz}} bulundu, hepsi boş (1 $ altında)."
+      },
+      "holders": {
+        "title": "Sahipler",
+        "count": "Sahipler",
+        "top10": "İlk 10'un payı",
+        "owner": "Sahibin payı",
+        "creator": "Oluşturanın payı",
+        "source": "{provider} verisi, okunma zamanı {time} UTC. CRYPY henüz sahipleri kendisi sayamıyor.",
+        "none": "Sahip verisi yok: {provider} yanıt vermedi veya bu tokenı henüz analiz etmedi."
+      },
+      "second": {
+        "title": "İkinci görüş",
+        "agree": "{provider}, {shared} ortak kontrolün {agree} tanesinde aynı fikirde.",
+        "none": "İkinci görüş yok: {provider} yanıt vermedi veya bu tokenı henüz analiz etmedi.",
+        "different": "Farklı olanlar:",
+        "separate": "{provider} sonuçları adıyla gösterilir ve CRYPY'nin kendi kontrolleriyle asla karıştırılmaz.",
+        "ids": {
+          "honeypot": "satış engelli",
+          "buyTax": "alım vergisi",
+          "sellTax": "satış vergisi",
+          "mintable": "basılabilir",
+          "proxy": "yükseltilebilir proxy",
+          "blacklist": "cüzdan engelleyebilir",
+          "renounced": "sahiplikten vazgeçilmiş"
+        },
+        "diff": "{what}: CRYPY {ours}, {provider} {theirs}"
+      },
+      "facts": {
+        "title": "Token bilgileri",
+        "supply": "Toplam arz",
+        "decimals": "Ondalık basamak",
+        "contract": "Kontrat"
+      },
+      "disclaimer": "CRYPY bir tokenı asla \"güvenli\" olarak göstermez. Kontrollerden geçmek bir tokenın dürüst olduğunu kanıtlamaz ve bir kontrat davranışını sonradan değiştirebilir. Yatırım tavsiyesi değildir.",
+      "lp": {
+        "title": "Likidite kimde",
+        "intro": "Likidite, insanların satabilmesini sağlayan şeydir. Kimde varsa onu çekebilir ve o zaman fiyat çökebilir. CRYPY her havuzun sahiplerini aradı ve her birinin neler yapabileceğini zincirden okudu.",
+        "tiles": {
+          "protected": "Korunan: yakılmış veya 30 günden uzun kilitli",
+          "soon": "30 gün içinde kilidi açılıyor",
+          "soonNext": "Sıradaki: {date}",
+          "controlled": "Multisig, timelock, farm veya borsa",
+          "removable": "Şu an çekilebilir",
+          "unknown": "Tanımlanamayan kontratlar veya okunamayan kilitler",
+          "notFound": "Sahipler bulunamadı"
+        },
+        "state": {
+          "burned": "Yakılmış",
+          "locked": "Kilitli",
+          "soon": "Kilidi yakında açılıyor",
+          "controlled": "Kontrollü",
+          "owner": "Sahip",
+          "expired": "Kilit bitti",
+          "removable": "Şu an çekilebilir",
+          "unknown": "Bilinmiyor",
+          "notFound": "Kontrol edilmedi"
+        },
+        "total": "Sayılan tüm havuzlar birlikte: {usd} ({count, plural, one {# havuz} other {# havuz}}). Her havuz değerine göre sayılır, bu yüzden büyük bir havuz küçük olandan daha önemlidir.",
+        "tooSmall": "Hiçbir havuz {usd} veya daha fazla değerde değil, bu yüzden toplam yok.",
+        "kindLp": "LP tokenları",
+        "kindPositions": "Pozisyonlar (NFT'ler) · paylar değere göre ölçülür",
+        "foundShare": "{share} için sahipler bulundu",
+        "unlisted": "borsa CRYPY'nin listesinde değil; havuz factory'si ile doğrulandı",
+        "weight": "tüm likiditenin {share} kadarı",
+        "notCounted": "sayılmadı",
+        "fee": "%{fee} ücret",
+        "unreadPool": "Bu havuzun sahipleri bu sefer okunamadı. Tekrar kontrol etmeyi deneyin.",
+        "col": {
+          "holder": "Sahip",
+          "type": "Tür",
+          "share": "Pay",
+          "control": "Kilit veya kontrol",
+          "status": "Durum"
+        },
+        "wallets": "{count} cüzdan",
+        "largest": "en büyüğü {address}",
+        "position": "Pozisyon #{id} · {name}",
+        "notFound": {
+          "title": "Sahipler bulunamadı",
+          "detail": "CRYPY bu kısmın kimde olduğunu bulamadı. Tüm sahipleri bulmak havuzun tam geçmişini gerektirir; bunu CRYPY'nin kendi dizini daha sonra sağlayacak. Asla güvenli sayılmaz."
+        },
+        "small": {
+          "title": "{count, plural, one {# küçük havuz} other {# küçük havuz}}",
+          "detail": "her biri {usd} altında: listelendi, toplamlara sayılmadı"
+        },
+        "empty": "{count, plural, one {# boş havuz (1 $ altında) listelenmedi.} other {# boş havuz (1 $ altında) listelenmedi.}}",
+        "how": {
+          "title": "Nasıl kontrol ettik.",
+          "body": "Havuzlar {dexes} üzerinde ve ayrıca borsalarının factory'si ile doğrulandıktan sonra GoPlus'ın listelediği havuzlarda bulundu. Sahipler bilinen adreslerden (yakım adresleri, sahip, kayıtlı kilitleyiciler, farm'lar ve ücret toplayıcılar), GoPlus'ın en büyük sahipler listesinden, son LP transferlerinden ve kilitleyicilerin kendi kilitli v3 pozisyon listelerinden bulundu. Ardından her pay ve her kilit açılış tarihi blokzincirden okundu. Bir kilitleyici yalnızca CRYPY'nin kontrol edilmiş listesindeyse sayılır (UNCX, PinkLock, Team Finance, OnlyMoons kasaları); yalnızca kendine kilit diyen bir kontrat tanımlanamamış sayılır. Bir kilit yalnızca bitiş tarihine kadar korur."
+        },
+        "lock": {
+          "forever": "Bitiş tarihi olmadan kilitli.",
+          "until": "{date} tarihine kadar kilitli ({days, plural, one {# gün} other {# gün}} sonra).",
+          "soon": "{date} tarihinde, {days, plural, one {# gün} other {# gün}} sonra kilidi açılıyor. Sonra çekilebilir.",
+          "ended": "Kilit {date} tarihinde bitti ({days, plural, one {# gün} other {# gün}} önce) ve çekilmedi: her an çekilebilir.",
+          "vesting": "Ondan sonra adım adım serbest bırakılır."
+        },
+        "control": {
+          "unread": "CRYPY'nin listesinden bir kilit kontratı, ama kilit koşulları bu sefer okunamadı.",
+          "noLocks": "CRYPY'nin listesinden bir kilit kontratı, ama bu havuz için hiçbir kilit listelemiyor.",
+          "partly": "Bunun {share} kadarı listelediği bir kilitle kapsanmıyor.",
+          "locks": "{count} kilit. İlki: {first}",
+          "multisig": "Çekmek için {signers} imzacıdan {threshold} tanesinin onaylaması gerekir. Bunu yine de her an yapabilirler.",
+          "multisigOne": "Bir imzacının ({signers} imzacıdan) tek başına çekebildiği bir multisig.",
+          "timelock": "Her çekim yaklaşık {hours, plural, one {# saat} other {# saat}} beklemek zorundadır (kontrattan okundu), bu yüzden önceden görünür olur.",
+          "farm": "Tek bir sahip değil, birçok kişi tarafından stake edilmiş.",
+          "exchange": "Borsanın ücret toplayıcısı: her havuzdan küçük bir pay kazanır.",
+          "owner": "Token sahibi her an çekebilir.",
+          "token": "Tokenın kendi kontratının elinde. Neler yapabileceği o kontratın koduna bağlıdır.",
+          "pool": "Havuza geri gönderilmiş; bir sonraki çekimle birlikte gider.",
+          "wallet": "Her an çekilebilir.",
+          "contract": "CRYPY bu kontratın likiditeyi serbest bırakıp bırakamayacağını söyleyemiyor. CRYPY'nin bilinen kilitleyiciler listesinde değil.",
+          "burn": "Kalıcı olarak gitti: kimse çekemez.",
+          "upgradeable": "Bu kilit kontratı operatörü tarafından yükseltilebilir, bu yüzden kilit ancak o operatör kadar güvenlidir."
+        },
+        "kind": {
+          "burn": "Yakım adresi",
+          "locker": "Kilit kontratı",
+          "vault": "Kilit kasası",
+          "multisig": "Multisig (Safe)",
+          "timelock": "Timelock",
+          "farm": "Staking farm",
+          "exchange": "Borsa ücret toplayıcısı",
+          "owner": "Token sahibi",
+          "token": "Tokenın kendi kontratı",
+          "pool": "Havuzun kendisi",
+          "wallet": "Cüzdan",
+          "contract": "Tanımlanamayan kontrat",
+          "exchangeOf": "{name} ücret toplayıcısı"
+        },
+        "type": {
+          "burn": "Yakılmış",
+          "locker": "Kilit kontratı",
+          "vault": "Kilit kasası",
+          "multisig": "Multisig",
+          "timelock": "Timelock",
+          "farm": "Staking farm",
+          "exchange": "Borsa",
+          "owner": "Sahip",
+          "token": "Token kontratı",
+          "pool": "Havuz",
+          "wallet": "Cüzdan",
+          "contract": "Kontrat, tanınmadı"
+        },
+        "tiny": "Her biri %0,05'ten az olan {count, plural, one {# sahip daha} other {# sahip daha}} (birlikte {share}), tüm toplamlara sayıldı."
+      },
+      "notOnChain": "Token güvenlik kontrolleri {chain} üzerinde henüz kullanılamıyor: CRYPY, işlem testi ve likidite kontrolleri orada doğrulandığında bunları ekleyecek. Yukarıdaki token ayrıntıları zincirden okunur."
+    },
+    "tabs": {
+      "label": "Adres bölümleri",
+      "overview": "Genel bakış",
+      "approvals": "Onaylar",
+      "activity": "Etkinlik"
+    },
+    "approvals": {
+      "metaTitle": "{short} onayları",
+      "title": "Onaylar",
+      "intro": "Bir onay, başka bir adresin tekrar sormadan tokenlarınızı taşımasına izin verir. Kullanmadıklarınızı ve tanımadıklarınızı iptal edin.",
+      "ui": {
+        "readOnlyTitle": "Bağlı cüzdanınız değil (salt okunur)",
+        "readOnlyBody": "Herkes herhangi bir adresi kontrol edebilir. İptal etmek yalnızca onayı veren cüzdan bağlıyken çalışır.",
+        "connectToRevoke": "İptal etmek için bu cüzdanı bağlayın",
+        "attentionOne": "1 onay dikkat gerektiriyor",
+        "attentionOther": "{count} onay dikkat gerektiriyor",
+        "attentionBody": "Şu anda tokenlarınızdan {usd} değerine kadar taşıyabilirler.",
+        "attentionBodyNoPrice": "Kontrol edin ve tanımadıklarınızı iptal edin.",
+        "noneAttention": "Dikkat gerektiren onay yok",
+        "noneAttentionBody": "Bulunan tüm onaylar bilinen uygulamalara veya kaynak kodu yayınlanmış kontratlara gidiyor. Artık kullanmadıklarınızı iptal edin.",
+        "noneFoundTitle": "Onay bulunamadı",
+        "noneFoundBody": "{chains} üzerinde etkin onay bulunamadı. CRYPY, GoPlus'ın listesini ve kendi kontrollerini taradı; bulamadığı bir onay burada görünmez.",
+        "revokeFlaggedOne": "İşaretli olanı iptal et",
+        "revokeFlaggedOther": "İşaretli {count} onayı iptal et",
+        "revokeFlaggedNote": "Her biri için bir cüzdan onayı · ağ ücretleri dışında ücretsiz",
+        "readAt": "Zincirden okundu: {time} · {blocks}",
+        "blockOn": "{chain} üzerinde blok {block}",
+        "checkAgain": "Tekrar kontrol et",
+        "statActive": "Etkin onaylar",
+        "statActiveDetail": "{tokens} token · {nfts} NFT koleksiyonu · {permit2} Permit2 üzerinden",
+        "statAtRisk": "Şu an taşınabilir",
+        "statAtRiskDetail": "bakiyelerinizle sınırlı",
+        "statUnlimited": "Sınırsız",
+        "statAttention": "Dikkat gerektiren",
+        "statAttentionDetail": "{malicious} kötü niyetli · {wallets} cüzdan harcayıcı",
+        "listTitle": "Bu cüzdandaki onaylar",
+        "filters": "Onayları filtrele",
+        "all": "Tümü ({count})",
+        "fAttention": "Dikkat gerektiren ({count})",
+        "fUnlimited": "Sınırsız ({count})",
+        "fTokens": "Tokenlar ({count})",
+        "fNfts": "NFT'ler ({count})",
+        "allChains": "Tüm ağlar",
+        "groupAttention": "Dikkat gerektiriyor ({count})",
+        "groupAttentionNote": "gerektiğinden emin değilseniz bunları iptal edin",
+        "groupNormal": "Normal görünüyor ({count})",
+        "groupNormalNote": "bilinen uygulamalar veya kaynak kodu yayınlanmış kontratlar: artık kullanmadıklarınızı iptal edin",
+        "groupCheck": "Bunları kontrol edin ({count})",
+        "groupCheckNote": "bilinmeyen kontratlar: her birinin kullanmak istediğiniz bir uygulama olduğundan emin olun",
+        "colToken": "Token",
+        "colSpender": "Harcayıcı (kim taşıyabilir)",
+        "colAllowance": "İzin",
+        "colAtRisk": "Şu an risk altında",
+        "colLast": "Son değişiklik",
+        "youHold": "{amount} tutuyorsunuz",
+        "youHoldNfts": "{count} tutuyorsunuz",
+        "holdUnknown": "Bakiye okunamadı",
+        "unlimited": "Sınırsız",
+        "unlimitedNote": "sonradan alacağınız tokenları da kapsar",
+        "allItems": "Koleksiyondaki tüm öğeler",
+        "expires": "{date} tarihinde sona erer",
+        "viaPermit2": "{permit2} → {name}",
+        "nftCount": "{count} NFT",
+        "noPrice": "Fiyat yok",
+        "unknownDate": "Bilinmiyor",
+        "tx": "işlem {hash}",
+        "spenderWallet": "Bir cüzdan, kontrat değil",
+        "spenderDelegated": "Yetki devredilmiş kodlu cüzdan",
+        "spenderContract": "Bilinmeyen kontrat",
+        "spenderUnreadable": "Okunamadı",
+        "badgeMalicious": "Kötü niyetli (GoPlus)",
+        "badgeHigh": "Yüksek risk",
+        "badgeCheck": "Kontrol et",
+        "badgeKnown": "Bilinen uygulama",
+        "badgeNormal": "Kontrat",
+        "badgeSourceVerified": "Kaynak doğrulandı",
+        "badgeSourceMissing": "Kaynak yayınlanmamış",
+        "badgeGoplusDoubt": "GoPlus: şüpheli",
+        "badgeGoplusTrusted": "GoPlus: güvenilir",
+        "badgeUnused": "Kullanılmıyor",
+        "badgeRevoked": "İptal edildi",
+        "reasonMalicious": "GoPlus bu adresi kötü niyetli olarak listeliyor. {symbol} tokenlarınızı şimdi ve sonra alabilir.",
+        "reasonWallet": "Bu bir uygulama değil, bir kişinin cüzdanı. Uygulamaların buna asla ihtiyacı olmaz; dolandırıcıların cüzdanları boşaltmasının yaygın bir yoludur.",
+        "reasonUnknownContract": "Kaynak kodu yayınlanmamış ve CRYPY'nin bilinen uygulamalar listesinde yok. Kullanmak istediğiniz bir uygulama olduğundan emin olun.",
+        "reasonUnreadable": "CRYPY bu harcayıcının ne olduğunu okuyamadı. Onayı tutmadan önce kontrol edin.",
+        "reasonUnused": "Hiç {symbol} tutmuyorsunuz, bu yüzden bugün risk altında bir şey yok. Artık kullanmıyorsanız gönül rahatlığıyla iptal edebilirsiniz.",
+        "revoke": "İptal et",
+        "howTitle": "Nasıl kontrol ettik.",
+        "how": "Onaylar GoPlus'ın onay listesi ve CRYPY'nin kendi kontrolleriyle bulundu (tuttuğunuz her token için popüler uygulamalar ve Permit2, ayrıca bu tokenlar için son birkaç saatteki onaylarınız). Gösterilen her izin ardından blokzincirden yeniden okundu. \"Şu an risk altında\", izin ile tuttuğunuz miktarın küçük olanıdır, zincir üstü fiyatlarla. CRYPY'nin bulamadığı bir onay gösterilmez, bu yüzden bu liste eksik olabilir.",
+        "howSafety": "İptal etmek küçük bir ağ ücreti tutar ve kendi cüzdanınızda imzalanır. CRYPY asla kurtarma ifadenizi veya özel anahtarınızı istemez ve tıklamanız olmadan hiçbir şey göndermez.",
+        "goplusDown": "GoPlus {chains} üzerinde yanıt vermedi. Orada yalnızca CRYPY'nin kendi kontrolleri çalıştı (tuttuğunuz tokenlar için popüler uygulamalar ve Permit2), bu yüzden diğer harcayıcılara verilen onaylar eksik olabilir. Bir dakika sonra tekrar kontrol edin.",
+        "chainDown": "{chain} şu anda okunamadı. Bir dakika sonra tekrar kontrol edin.",
+        "batchNote": "Tek işlemde birkaç onayı iptal etmek (toplu iptal) daha sonra ücretli bir araç olarak planlanıyor. Tekli iptaller ve temel kontroller her zaman ücretsiz kalır.",
+        "dialogTitle": "Bu onayı iptal et",
+        "dialogToken": "Token",
+        "dialogCollection": "Koleksiyon",
+        "dialogSpender": "Harcayıcı",
+        "dialogNow": "Şu anki izin",
+        "dialogAfter": "İptalden sonra",
+        "dialogAfterNft": "Onaylı değil",
+        "dialogFee": "Ağ ücreti",
+        "dialogFeeValue": "yaklaşık {fee} {symbol}",
+        "dialogFeeUnknown": "cüzdanınız gösterir",
+        "dialogWalletShows": "Cüzdanınızın göstereceği",
+        "dialogContract": "Kontrat",
+        "dialogFunction": "fonksiyon",
+        "dialogValue": "değer 0 {symbol}",
+        "dialogTested": "CRYPY önce tam olarak bu işlemi test etti: başarılı olur ve yalnızca bu izni 0'a ayarlar.",
+        "dialogNotTested": "CRYPY şu anda bu işlemi test edemedi, bu yüzden cüzdanınızı açmayacak. Bir dakika sonra tekrar deneyin.",
+        "dialogPreparing": "İşlem hazırlanıyor ve test ediliyor…",
+        "dialogOpen": "İptal için cüzdanımı aç",
+        "dialogMatch": "Onaylamadan önce cüzdanınızdaki kontrat ve fonksiyonun yukarıdakilerle eşleştiğini kontrol edin.",
+        "stepChecking": "Cüzdanınız kontrol ediliyor…",
+        "stepSwitching": "Cüzdanınız ağ değiştirmenizi isteyecek. Hiçbir şey imzalanmaz.",
+        "stepTesting": "İşlem test ediliyor…",
+        "stepConfirm": "Cüzdanınızda onaylayın",
+        "stepPending": "İşlemin bloğa girmesi bekleniyor…",
+        "stepVerifying": "İzin blokzincirden yeniden okunuyor…",
+        "doneTitle": "İptal edildi",
+        "doneCleared": "İzin artık 0",
+        "doneNotCleared": "İşlem gerçekleşti ama izin henüz 0 olarak okunmadı. Bir dakika sonra tekrar kontrol edin.",
+        "doneReadAgain": "Blok {block} itibarıyla blokzincirden yeniden okundu.",
+        "doneTx": "İşlem",
+        "doneFee": "Ödenen ücret",
+        "done": "Tamam",
+        "next": "Sonraki",
+        "stop": "Bundan sonra dur",
+        "queueTitle": "{total} onaydan {done} tanesi iptal ediliyor",
+        "queueNote": "Her biri ayrı bir işlemdir: cüzdanınız her biri için sorar ve istediğiniz zaman durabilirsiniz.",
+        "wrongAccountTitle": "Doğru hesaba geçin",
+        "wrongAccount": "Bir onayı yalnızca onu veren cüzdan iptal edebilir. Cüzdanınız {connected} olarak bağlı; bu sayfa {owner} hakkında.",
+        "wrongAccountDone": "Hesap değiştirdim",
+        "wrongNetworkTitle": "Ağ değiştirin",
+        "wrongNetwork": "Bu onay {chain} üzerinde. Cüzdanınız bu ağa geçmedi, bu yüzden hiçbir şey gönderilmedi.",
+        "failTitle": "İptal gerçekleşmedi",
+        "rejected": "İsteği cüzdanınızda reddettiniz. Hiçbir şey gönderilmedi ve onay değişmedi.",
+        "testFailed": "Bu işlemin testi başarısız oldu, bu yüzden CRYPY cüzdanınızı açmadı. Token şu anda onay değişikliğine izin vermiyor olabilir.",
+        "failed": "İşlem başarısız oldu. Onay değişmemiş olabilir; bir kez daha denemeden önce tekrar kontrol edin.",
+        "tryAgain": "Tekrar dene",
+        "close": "Kapat",
+        "groupSpam": "Spam tokenlar ({count})",
+        "groupSpamNote": "CRYPY'nin olası spam olarak gizlediği tokenlar: değerli hiçbir şey risk altında değil",
+        "badgeSpam": "Olası spam token",
+        "reasonSpamToken": "Bu token spam gibi görünüyor (CRYPY bakiyelerde gizliyor), bu yüzden değerli hiçbir şey risk altında değil. İptal etmek isteğe bağlıdır; token adındaki linkleri asla ziyaret etmeyin.",
+        "reasonNewContract": "Bu kontrat onayınızdan {days} gün önce oluşturuldu ve CRYPY'nin bilinen uygulamalar listesinde yok. Yeni ve bilinmeyen kontratlar dolandırıcıların cüzdan boşaltmasının yaygın bir yoludur: kullanmak istediğiniz bir uygulama olduğundan emin olun.",
+        "goplusPartial": "GoPlus {chains} üzerinde kısmi bir liste gönderdi; yoğun cüzdanlarda bu yaygındır. CRYPY onu kendi kontrolleriyle birlikte kullandı; bazı onaylar yine de eksik olabilir.",
+        "badgeNewContract": "Yeni kontrat",
+        "goplusName": "GoPlus'a göre adı: {name}",
+        "reasonDisputed": "GoPlus bu adresi kötü niyetli olarak listeliyor, ancak CRYPY'nin kendi listesi onu resmî bir kontrat olan {name} olarak tanımlıyor. Kimlik avı siteleri bazen onayları resmî kontratlar üzerinden gönderir, bu yüzden kendiniz onayladığınızı hatırlamıyorsanız iptal edin.",
+        "badgeDisputed": "GoPlus: işaretli",
+        "checkOne": "Kontrol edilecek 1 onay",
+        "checkOther": "Kontrol edilecek {count} onay",
+        "checkBody": "Hiçbiri bir cüzdana veya kötü niyetli olarak işaretlenmiş bir adrese gitmiyor, ancak bunlar CRYPY'nin tam olarak tanımlayamadığı kontratlara gidiyor. Tanımadıklarınızı veya artık kullanmadıklarınızı iptal edin.",
+        "recentSkipped": "Son birkaç saatteki onaylarınız şu anda {chains} üzerinde aranamadı (düğüm yavaştı). Diğer kontrollerle bulunan onaylar gösteriliyor; bir dakika sonra tekrar kontrol edin."
+      }
+    },
+    "activity": {
+      "metaTitle": "{short} etkinliği",
+      "title": "Etkinlik",
+      "intro": "Bu adrese gelen veya bu adresten giden tüm coin, token ve NFT transferleri, en yeniden en eskiye. Asla geçmişinizden adres kopyalamayın: dolandırıcılar benzer adresli transferler gönderir.",
+      "ui": {
+        "recentOnly": "{chains} üzerinde tam geçmiş şu anda kullanılamıyor, bu yüzden yalnızca bu cüzdanın tuttuğu tokenların son birkaç saatlik token transferleri gösteriliyor (coin transferleri bu yolla bulunamaz). Daha sonra tekrar kontrol edin.",
+        "chainDown": "{chain} şu anda okunamadı. Bir dakika sonra tekrar kontrol edin.",
+        "statLast": "Son etkinlik",
+        "statFirst": "İlk etkinlik",
+        "statFirstUnknown": "henüz bilinmiyor",
+        "statLoaded": "Yüklenen transferler",
+        "statMore": "daha eskileri var",
+        "statAll": "tam geçmiş",
+        "statSpam": "Olası spam olarak gizlendi",
+        "statSpamDetail": "linkli airdroplar, sıfır değerli tokenlar",
+        "listTitle": "Transferler",
+        "exportCsv": "CSV dışa aktar",
+        "checkAgain": "Tekrar kontrol et",
+        "filters": "Etkinliği filtrele",
+        "dir_all": "Tümü",
+        "dir_in": "Alınan",
+        "dir_out": "Gönderilen",
+        "kind_all": "Her tür",
+        "kind_coin": "Coinler",
+        "kind_token": "Tokenlar",
+        "kind_nft": "NFT'ler",
+        "allChains": "Tüm ağlar",
+        "search": "Etkinlikte ara",
+        "searchPlaceholder": "Token, adres veya işlem hash'i",
+        "range": "Zaman aralığı",
+        "range_all": "Yüklenenlerin tümü",
+        "range_1": "Son 24 saat",
+        "range_7": "Son 7 gün",
+        "range_30": "Son 30 gün",
+        "hideSpam": "Olası spamı gizle ({count} gizli)",
+        "empty": "Bu ağlarda bu adres için transfer bulunamadı.",
+        "noMatch": "Bu filtrelerle eşleşen transfer yok.",
+        "unknownTime": "Zaman bilinmiyor",
+        "titleIn": "{what} alındı",
+        "titleOut": "{what} gönderildi",
+        "titleSelf": "{what} kendisine taşındı",
+        "titleSwap": "{out} ile {in} takas edildi",
+        "titleMulti": "Tek işlemde {count} transfer",
+        "subSwap": "tek işlemde",
+        "subNft": "NFT",
+        "subInternal": "bir kontratın gönderdiği coin",
+        "subCoin": "coin transferi",
+        "subToken": "token transferi",
+        "from": "gönderen",
+        "to": "alıcı",
+        "interpretation": "Yorum",
+        "heuristic": "Sezgisel",
+        "poisoning": "Olası adres zehirleme: {sender}, {lookalike} ile aynı şekilde başlayıp bitiyor. Dolandırıcılar bunları sonradan yanlış adresi kopyalamanız için gönderir. Asla geçmişinizden adres kopyalamayın.",
+        "loadMore": "Daha eski etkinliği yükle",
+        "loading": "Yükleniyor…",
+        "loadError": "Daha fazlası yüklenemedi. Tekrar deneyin.",
+        "showingMore": "{count} gösteriliyor · en yeniden · daha fazlası var",
+        "showingAll": "{count} tanesinin hepsi gösteriliyor",
+        "howTitle": "Bunu nasıl elde ettik.",
+        "how": "Bu adrese gelen veya bu adresten giden coin, token ve NFT transferleri Alchemy'nin ücretsiz transfer geçmişinden, en yeniden en eskiye. \"Şimdiki değer\" o zamanın değil bugünün zincir üstü fiyatını kullanır. Takaslar, tek işlemdeki transferlere dair \"Yorum\" etiketli okumamızdır. Olası spam varsayılan olarak gizlenir ve asla silinmez.",
+        "noInternal": "{chains} üzerinde kontratların içinde taşınan coinler (dahili transferler) ücretsiz kaynağımızda yok, bu yüzden bir kontrattan gelen ödeme eksik olabilir.",
+        "statRecent": "yalnızca son birkaç saat",
+        "howRecent": "Geçmiş kaynağı olmadan CRYPY son birkaç saatin token transferlerini doğrudan zincirden, yalnızca bu cüzdanın şu anda tuttuğu tokenlar için okur."
+      }
+    },
+    "chainScope": {
+      "picker": {
+        "button": "Ağlar:",
+        "used": "Kullanılan",
+        "all": "Tümü",
+        "title": "Hangi ağlar?",
+        "usedTitle": "Kullanıldığı ağlar",
+        "usedDesc": "Önerilen. CRYPY önce her ağı kontrol eder ve yalnızca bu adresin etkinliği olan ağları tarar.",
+        "allTitle": "Tüm ağlar",
+        "allDesc": "Kullanılsın veya kullanılmasın desteklenen tüm ağları tara.",
+        "pickTitle": "Ağ seç",
+        "pickDesc": "Bir veya daha fazla ağ seçin.",
+        "isUsed": "kullanılıyor",
+        "notUsed": "kullanılmıyor",
+        "cancel": "İptal",
+        "scan": "{count} ağı tara",
+        "scanOne": "1 ağı tara",
+        "remembered": "Seçiminiz linkte tutulur ve bu cihazda hatırlanır.",
+        "updating": "Taranıyor…"
+      },
+      "scanned": "<b>{chains}</b> üzerinde tarandı",
+      "scannedOnly": "Yalnızca <b>{chains}</b> üzerinde tarandı",
+      "notUsed": "{chains} üzerinde etkinlik bulunamadı",
+      "noneUsed": "Desteklenen hiçbir ağda etkinlik bulunamadı",
+      "scanToo": "Bunları da tara",
+      "scanAll": "Tüm ağları tara",
+      "leftOutTitle": "{chains}: kontrol edilmedi",
+      "leftOut": "Taramayı daralttınız, ancak bu cüzdan {chains} üzerinde de kullanılıyor. Oradaki onaylar hâlâ uygulamaların tokenlarınızı taşımasına izin verebilir.",
+      "checkToo": "{chains} ağını da kontrol et"
+    }
+  },
+  "wallet": {
+    "connect": "Cüzdan bağla",
+    "connecting": "Bağlanıyor…",
+    "title": "Cüzdan bağlayın",
+    "intro": "Bağlanmak yalnızca genel adresinizi paylaşır. CRYPY kurtarma ifadenizi asla istemez ve cüzdanınızda onaylamadığınız hiçbir işlemi göndermez.",
+    "detected": "Bu tarayıcıdaki cüzdanlar",
+    "noneDetected": "Tarayıcı cüzdanı bulunamadı. MetaMask'ı yükleyin, CRYPY'yi mobil cüzdanınızın tarayıcısında açın veya WalletConnect kullanın.",
+    "walletConnect": "WalletConnect (mobil cüzdanlar)",
+    "walletConnectUnavailable": "WalletConnect henüz kurulmadı.",
+    "scanQr": "Mobil cüzdanınızla tarayın",
+    "openIn": "{wallet} ile aç",
+    "copyLink": "Bağlantı linkini kopyala",
+    "back": "Geri",
+    "connectedAs": "Bağlı",
+    "network": "Ağ",
+    "unsupportedNetwork": "Bu ağ henüz desteklenmiyor. CRYPY; Ethereum, BNB Chain, Base, Arbitrum ve Polygon'u destekler.",
+    "viewMyAddress": "Adresimi görüntüle",
+    "disconnect": "Bağlantıyı kes",
+    "close": "Kapat",
+    "rejected": "Bağlantı cüzdanınızda iptal edildi.",
+    "failed": "Bağlanılamadı. Lütfen tekrar deneyin.",
+    "useMyWallet": "Cüzdanımı kullan"
+  },
+  "utilities": {
+    "common": {
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "example": "Bir örnek dene",
+      "clear": "Temizle"
+    },
+    "unit-converter": {
+      "units": {
+        "wei": "Wei",
+        "gwei": "Gwei",
+        "ether": "ETH / BNB"
+      },
+      "hint": "1 ETH (veya BNB) = 1 000 000 000 gwei = 1 000 000 000 000 000 000 wei",
+      "errors": {
+        "format": "1.5 veya 1e9 gibi bir sayı girin.",
+        "negative": "Tutarlar negatif olamaz.",
+        "comma": "Ondalık için virgül değil nokta kullanın (1.5).",
+        "too-precise": "Çok fazla ondalık basamak: wei en küçük birimdir.",
+        "too-large": "Çok büyük: en fazla 2^256 − 1 wei.",
+        "empty": ""
+      }
+    },
+    "hex-converter": {
+      "label": "Hex veya ondalık değer",
+      "placeholder": "0x1a2b veya 6699",
+      "readAs": "Bu sayıyı şöyle oku",
+      "decimal": "Ondalık",
+      "hex": "Hex",
+      "rows": {
+        "decimal": "Ondalık",
+        "hex": "Hex",
+        "padded": "32 baytlık hex",
+        "bytes": "Uzunluk",
+        "signed": "İşaretli (int256)",
+        "text": "Metin olarak"
+      },
+      "bytes": {
+        "one": "# bayt",
+        "other": "# bayt"
+      },
+      "detected": {
+        "hex": "Hex olarak okundu",
+        "decimal": "Ondalık olarak okundu"
+      },
+      "errors": {
+        "format": "Ondalık için 0–9, hex için 0–9 ve a–f rakamlarını kullanın.",
+        "negative": "Negatif sayılar desteklenmez; işaretli değeri görmek için 32 baytlık hex yapıştırın.",
+        "too-large": "Çok büyük: en fazla 256 bit (2^256 − 1).",
+        "empty": ""
+      }
+    },
+    "address-formatter": {
+      "label": "Adresler (her satıra bir tane)",
+      "placeholder": "0x…",
+      "summary": "Kontrol edildi: {total} · Doğru: {ok} · Dikkat gereken: {problems}",
+      "tooMany": "Yalnızca ilk {max} adres kontrol edilir.",
+      "copyAll": "Tüm doğru adresleri kopyala",
+      "open": "Ara",
+      "checksummed": "Sağlama toplamlı",
+      "status": {
+        "valid": "Doğru",
+        "no-checksum": "Sağlama toplamı yok",
+        "bad-checksum": "Yazım hatası",
+        "missing-prefix": "0x eksik",
+        "invalid": "Adres değil"
+      },
+      "explain": {
+        "valid": "Doğru yazılmış ve sağlama toplamı eşleşiyor.",
+        "no-checksum": "Biçim geçerli ama tamamen küçük veya büyük harf, bu yüzden yazım hataları yakalanamaz. Aşağıdaki sağlama toplamlı biçimi kullanın.",
+        "bad-checksum": "Sağlama toplamı eşleşmiyor, yani bir karakter değişmiş. Bu adresi kullanmayın: asıl kaynaktan yeniden kopyalayın.",
+        "missing-prefix": "Adresler 0x ile başlar. İşte tam biçimi.",
+        "zero": "Bu sıfır adresidir. Buraya gönderilen tokenlar sonsuza dek kaybolur."
+      },
+      "invalid": {
+        "length": "Yanlış uzunluk: 0x'ten sonra 40 yerine {length} karakter var.",
+        "characters": "İzin verilmeyen karakterler içeriyor (yalnızca 0–9 ve a–f).",
+        "empty": "Boş."
+      }
+    },
+    "tx-decoder": {
+      "label": "İşlem giriş verisi",
+      "placeholder": "0xa9059cbb…",
+      "function": "Fonksiyon",
+      "standard": "Standart",
+      "selector": "Seçici",
+      "signature": "İmza",
+      "parameters": "Değerler",
+      "name": "Ad",
+      "type": "Tür",
+      "value": "Değer",
+      "unlimited": "Sınırsız",
+      "yes": "Evet",
+      "no": "Hayır",
+      "nested": "Çağrı {index}",
+      "rawNote": "Değerler tokenın en küçük biriminde gösterilir. Normal tutarı elde etmek için tokenın ondalık basamaklarına bölün.",
+      "known": "{count} bilinen fonksiyonu çözer. Bilinmeyen fonksiyonlar ham veri olarak gösterilir, asla tahmin edilmez.",
+      "native": "Boş veri (0x): kontrat çağrısı olmayan düz bir ETH veya BNB transferi.",
+      "unknownTitle": "Bilinmeyen fonksiyon",
+      "unknownText": "Bu fonksiyon CRYPY'nin bilinen fonksiyonlar listesinde değil, bu yüzden çözülmez. Ham 32 baytlık kelimeler aşağıda gösterilir.",
+      "mismatch": "Seçici bilinen bir fonksiyonla eşleşiyor ama veri onun değerlerine uymuyor. Aynı seçiciye sahip başka bir fonksiyon olabilir. Bilinen fonksiyon:",
+      "moreWords": "{count} kelime daha gösterilmedi.",
+      "extraBytes": "Sonunda {count} fazla bayt var.",
+      "errors": {
+        "format": "İşlem verisi hex'tir: 0x ve ardından 0–9 ve a–f.",
+        "odd-length": "Verinin hex basamak sayısı tek; bir kısmı eksik olabilir.",
+        "too-short": "Çok kısa: veri 4 baytlık bir fonksiyon seçiciyle (8 hex basamak) başlar.",
+        "too-long": "Burada çözmek için çok uzun (100 KB'den fazla).",
+        "tx-hash": "Bu işlem verisi değil, bir işlem hash'i gibi görünüyor. İşlemi görmek için arayın."
+      },
+      "searchHash": "Bu hash'i ara",
+      "functions": {
+        "transfer": "Bir adrese token gönder.",
+        "approve": "Başka bir adresin (harcayıcı) tokenlarınızı taşımasına izin ver.",
+        "transfer-from": "Bir onay kullanarak tokenları bir adresten diğerine taşı.",
+        "increase-allowance": "Bir harcayıcının taşıyabileceği token miktarını artır.",
+        "decrease-allowance": "Bir harcayıcının taşıyabileceği token miktarını azalt.",
+        "permit": "İmzalı bir token onayını (permit) zincire kaydet.",
+        "set-approval-for-all": "Bir operatöre bu koleksiyondaki tüm NFT'leriniz üzerinde kontrol ver veya geri al.",
+        "nft-safe-transfer": "Bir adrese NFT gönder.",
+        "multi-token-transfer": "Bir adrese tek türde ERC-1155 token gönder.",
+        "multi-token-batch-transfer": "Bir adrese birden fazla türde ERC-1155 token gönder.",
+        "wrap": "ETH veya BNB'yi WETH ya da WBNB'ye sar.",
+        "unwrap": "WETH veya WBNB'yi tekrar ETH ya da BNB'ye çöz.",
+        "permit2-approve": "Bir harcayıcının Uniswap Permit2 üzerinden bir tokenı taşımasına izin ver.",
+        "multicall": "Tek işlemde birkaç çağrı çalıştır. Her çağrı aşağıda çözülür.",
+        "swap": "Merkeziyetsiz bir borsanın router'ı üzerinden token takas et.",
+        "add-liquidity": "Bir likidite havuzuna token ekle.",
+        "remove-liquidity": "Bir likidite havuzundan token çek.",
+        "transfer-ownership": "Bu kontratın kontrolünü yeni bir sahibe devret.",
+        "renounce-ownership": "Bu kontratın sahipliğinden kalıcı olarak vazgeç.",
+        "router-execute": "Bir Universal Router üzerinden takas adımları listesini çalıştır. Adımlar \"commands\" içinde paketlidir ve burada çözülmez."
+      },
+      "warnings": {
+        "unlimited-approval": "Sınırsız onay: harcayıcı, siz iptal edene kadar şimdi ve sonra bu tokenın tamamını cüzdanınızdan taşıyabilir.",
+        "approval": "Onay: harcayıcı tokenlarınızdan bu tutara kadar taşıyabilecek.",
+        "approval-for-all": "Tam NFT erişimi: operatör bu koleksiyondaki tüm NFT'lerinizi transfer edebilir.",
+        "revoke": "Bu bir onayı kaldırır ve riski azaltır.",
+        "ownership-transfer": "Sahiplik değişikliği: yeni sahip kontratın yalnızca sahibe açık fonksiyonlarını kontrol eder.",
+        "ownership-renounce": "Vazgeçme: bundan sonra kimse kontratın yalnızca sahibe açık fonksiyonlarını kullanamaz."
+      },
+      "heuristic": "Uyarılar fonksiyona ve değerlere dayanır. Harcayıcının kim olduğunu kontrol etmez."
+    },
+    "balance-scanner": {
+      "label": "Cüzdan adresi",
+      "placeholder": "0x…",
+      "submit": "Bakiyeleri görüntüle",
+      "invalid": "Bir cüzdan adresi girin: 0x ve ardından 40 karakter (0–9, a–f)."
+    },
+    "tx-checker": {
+      "label": "İşlem hash'i",
+      "placeholder": "0x… 64 karakter",
+      "submit": "İşlemi kontrol et",
+      "invalid": "İşlem hash'i, 0x ve ardından 64 harf (a–f) ve rakamdan oluşur.",
+      "supportTitle": "Desteklenen ağlar",
+      "feature": "Özellik",
+      "levels": {
+        "supported": "Destekleniyor",
+        "partial": "Kısmen",
+        "planned": "Planlanıyor"
+      },
+      "features": {
+        "lookup": "İşlemleri bul ve oku",
+        "status": "Başarılı, başarısız, bekliyor",
+        "assets": "Token ve NFT hareketleri",
+        "decoding": "Fonksiyon çözme",
+        "failure": "Başarısızlık nedenleri",
+        "fees": "Ücret dökümü",
+        "pricesAtTx": "İşlem anındaki fiyat",
+        "actions": "Eylemler ve olay kapsamı",
+        "permissions": "İzinler: verilen, kullanılan, kaldırılan ve güncel değer",
+        "pools": "Likidite havuzu takasları",
+        "routerReports": "Router raporları",
+        "smartWallets": "Akıllı cüzdanlar (Safe, ERC-4337)",
+        "coinsInside": "Kontratların içinde ödenen coinler"
+      },
+      "notes": {
+        "failure": "Ücretsiz düğümlerde yakın tarihli bloklar gerekir",
+        "pricesAtTx": "Ücretsiz düğümlerde yakın tarihli bloklar gerekir",
+        "decoding": "Yalnızca bilinen fonksiyonlar",
+        "pools": "Uniswap/PancakeSwap/SushiSwap/Biswap v2 ve v3 havuzları factory ile doğrulanır; diğerleri doğrulanmamış olarak gösterilir",
+        "routerReports": "Yalnızca KyberSwap; diğer router'lar token olaylarından okunur",
+        "smartWallets": "Standart olaylardan tanınır; daha fazla çözülmez",
+        "coinsInside": "Yakın tarihli bloklarda veya arşiv sağlayıcıyla ölçülür; aksi hâlde router raporundan"
+      }
+    },
+    "batch-balance": {
+      "steps": {
+        "addresses": "Adresler",
+        "chains": "Ağlar",
+        "assets": "Varlıklar"
+      },
+      "addressesHint": "Yapıştırın, yazın veya dosya bırakın",
+      "chainsHint": "Bir veya daha fazla seçin",
+      "assetsHint": "Tarama başına en fazla 6",
+      "upload": "CSV veya TXT yükle",
+      "example": "Örnek yükle",
+      "clear": "Temizle",
+      "editorLabel": "Adres listesi, her satıra bir tane, virgülden sonra isteğe bağlı etiket",
+      "placeholder": "0x… her satıra bir adres\n0x…,Hazine",
+      "dropHere": "Bir CSV veya TXT dosyası bırakın",
+      "fileTooBig": "Bu dosya çok büyük. Sınır 1 MB.",
+      "fileUnreadable": "Bu dosya metin olarak okunamadı.",
+      "valid": "{count} geçerli",
+      "duplicates": "Birleştirilen kopyalar: {count}",
+      "problems": "Sorunlar: {count} · ilki {line}. satırda",
+      "overLimit": "{count} tanesi sınırın üzerinde, taranmadı",
+      "countLine": "{count} / {max} adres · virgülden sonraki etiketler isteğe bağlıdır",
+      "notes": {
+        "duplicate": "{line}. satırın kopyası · birleştirildi",
+        "checksum": "Sağlama toplamı eşleşmiyor (olası yazım hatası) · atlandı",
+        "invalid": "Geçerli bir adres değil · atlandı",
+        "over-limit": "{max} adres sınırının üzerinde · atlandı",
+        "several": "Bu satırda {count} adres var"
+      },
+      "chainsMore": "CRYPY ekledikçe daha fazla ağ burada görünür.",
+      "nativeCoin": "Yerel coin",
+      "alwaysIncluded": "Her zaman dahil",
+      "notOnChain": "{chain} ağında token değil (orada atlanır)",
+      "onlyOn": "Yalnızca {chain}",
+      "remove": "{symbol} kaldır",
+      "addPlaceholder": "Bir token kontratı yapıştırın",
+      "add": "Ekle",
+      "pick": "veya seçin:",
+      "checking": "Kontrat kontrol ediliyor…",
+      "notToken": "Bu adres desteklenen hiçbir ağda token değil.",
+      "tokenLimit": "Tarama başına en fazla 5 token.",
+      "alreadyAdded": "Bu token zaten listede.",
+      "lookupFailed": "Bu kontrat şu anda kontrol edilemedi. Biraz sonra tekrar deneyin.",
+      "decimals": "{decimals} ondalık",
+      "ready": "Hazır: {addresses} adres × {chains} ağ × {assets} varlık",
+      "readyNone": "En az bir geçerli adres ekleyin ve bir ağ seçin.",
+      "estimate": "Yaklaşık {requests} blokzincir isteği",
+      "scan": "Bakiyeleri tara",
+      "scanning": "Taranıyor… {total} partiden {done} tanesi",
+      "cancel": "İptal",
+      "trust": {
+        "public": "Yalnızca genel adresler: asla anahtar veya kurtarma ifadesi istemez",
+        "notStored": "Listeniz saklanmaz veya kaydedilmez",
+        "noWallet": "Cüzdan bağlamanız gerekmez"
+      },
+      "complete": "Tarama tamamlandı",
+      "cancelled": "Tarama durduruldu",
+      "completeLine": "{addresses} adres · {checks} kontrol · {blocks} itibarıyla okundu · {time} UTC",
+      "blockOn": "blok {block} ({chain})",
+      "editList": "Listeyi düzenle",
+      "scanAgain": "Tekrar tara",
+      "cards": {
+        "total": "Toplam değer",
+        "totalNote": "Yalnızca fiyatı olan varlıklar",
+        "withBalance": "Bakiyesi olan adresler",
+        "withBalanceValue": "{total} adresten {count}",
+        "withBalanceNote": "En az bir ağda",
+        "empty": "Boş adresler",
+        "emptyNote": "Kontrol edilen ağlarda hiçbir şey yok",
+        "failed": "Başarısız kontroller",
+        "failedNone": "Yok",
+        "failedNote": "Bir kez yeniden denendi; aşağıdan tekrar deneyin"
+      },
+      "noPrice": "güvenilir fiyat yok",
+      "searchPlaceholder": "Adres veya etiket ara",
+      "allChains": "Tüm ağlar",
+      "hideEmpty": "Boşları gizle",
+      "copy": "Kopyala",
+      "copyResults": "Sonuçları kopyala (tablo)",
+      "copyWithBalance": "Bakiyesi olan adresleri kopyala",
+      "copyEmpty": "Boş adresleri kopyala",
+      "copied": "Kopyalandı",
+      "export": "CSV dışa aktar",
+      "table": {
+        "index": "#",
+        "label": "Etiket",
+        "address": "Adres",
+        "chain": "Ağ",
+        "type": "Tür",
+        "native": "Yerel",
+        "value": "Değer",
+        "share": "Pay",
+        "status": "Durum",
+        "total": "Toplam · {count} satır gösteriliyor",
+        "sortBy": "{column} sütununa göre sırala"
+      },
+      "types": {
+        "wallet": "Cüzdan",
+        "contract": "Kontrat",
+        "delegated": "Yetki devretmiş cüzdan",
+        "unknown": "Bilinmiyor"
+      },
+      "status": {
+        "ok": "Tamam",
+        "failed": "Başarısız",
+        "pending": "Okunmadı"
+      },
+      "noLabel": "Etiket yok",
+      "rowFailed": "Bu adres {chain} ağında okunamadı.",
+      "retryRow": "Tekrar dene",
+      "unreadable": "Bu bakiye okunamadı",
+      "noRows": "Bu filtrelerle eşleşen satır yok.",
+      "footer": "{count} satırdan {from}–{to} arası gösteriliyor{hidden} · Fiyatlar PancakeSwap ve Uniswap havuzlarından zincir üstünde okundu. Güvenilir fiyatı olmayan tokenlar yalnızca miktarları gösterir.",
+      "hiddenEmpty": " ({count} boş satır gizlendi)",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "sortedBy": "Değere göre sıralandı",
+      "copyAddress": "Adresi kopyala",
+      "error": {
+        "rateLimited": "Kısa sürede çok fazla tarama yapıldı. Bir dakika bekleyip başarısız satırları tekrar deneyin.",
+        "failed": "Bazı partiler okunamadı. Aşağıdaki başarısız satırları tekrar deneyin."
+      },
+      "csv": {
+        "label": "Etiket",
+        "address": "Adres",
+        "chain": "Ağ",
+        "type": "Tür",
+        "value": "Değer (USD)",
+        "status": "Durum"
+      }
+    },
+    "token-security": {
+      "label": "Token kontrat adresi",
+      "placeholder": "0x… token kontratı",
+      "chain": "Ağ",
+      "anyChain": "Benim için bul",
+      "submit": "Token kontrol et",
+      "invalid": "Bir token kontrat adresi girin: 0x ve ardından 40 karakter."
+    },
+    "approval-checker": {
+      "label": "Cüzdan adresi",
+      "placeholder": "0x… cüzdan adresi",
+      "submit": "Onayları kontrol et",
+      "useConnected": "Bağlı cüzdanımı kontrol et",
+      "invalid": "Bir cüzdan adresi girin: 0x ve ardından 40 karakter.",
+      "noConnection": "Kontrol için cüzdan bağlamanız gerekmez. Yalnızca iptal etmek istediğinizde bağlayın."
+    },
+    "address-analyzer": {
+      "label": "Cüzdan adresi",
+      "placeholder": "0x… cüzdan adresi",
+      "submit": "Etkinliği görüntüle",
+      "useConnected": "Bağlı cüzdanımı görüntüle",
+      "invalid": "Bir cüzdan adresi girin: 0x ve ardından 40 karakter.",
+      "noConnection": "Cüzdan bağlamanız gerekmez: herhangi bir genel adres işe yarar."
+    },
+    "gas-tracker": {
+      "chainDown": "{chain} ücretleri şu anda okunamadı. 12 saniyede bir yeniden deneniyor.",
+      "low": "Düşük öncelik",
+      "average": "Ortalama",
+      "high": "Yüksek öncelik",
+      "lowNote": "genellikle birkaç blok içinde",
+      "averageNote": "genellikle bir sonraki blokta",
+      "highNote": "yoğun anlar için",
+      "updated": "blok {block} · {seconds} sn önce güncellendi",
+      "toSend": "Coin göndermek {usd}",
+      "baseFee": "Şu anki taban ücret",
+      "noBaseFee": "Bu ağda taban ücret yok",
+      "trendLabel": "Son bloklardaki ücret eğilimi",
+      "trendBase": "taban ücret, son 1.024 blok ({span})",
+      "trendTip": "ödenen tipik bahşiş, son 1.024 blok ({span})",
+      "hours": "~{n} sa",
+      "minutes": "~{n} dk",
+      "costsTitle": "Yaygın işlemlerin şu anki maliyeti (ortalama)",
+      "action": "İşlem",
+      "typicalGas": "Tipik gas",
+      "onChain": "{chain}",
+      "action_sendCoin": "Coin gönder",
+      "action_sendToken": "Token gönder",
+      "action_approve": "Token onayla veya iptal et",
+      "action_swap": "DEX'te takas et",
+      "action_sendNft": "NFT gönder",
+      "costsNote": "Tipik gas bir tahmindir: gerçek miktar tokena veya uygulamaya bağlıdır ve cüzdanınız onaylamadan önce tam ücreti gösterir. Dolar tutarları zincir üstü fiyatları kullanır:",
+      "howTitle": "Nasıl ölçüyoruz.",
+      "how": "Her ağın son 20 bloğundan (eth_feeHistory): bir sonraki bloğun taban ücreti artı dahil edilen işlemlerin %25, %50 ve %90'ının ödediği bahşiş. \"Genellikle bir sonraki blokta\" yakın tarihli blokları anlatır, bir söz değildir. Bu sayfa açıkken 12 saniyede bir güncellenir; hesap veya cüzdan gerekmez.",
+      "l1Note": "{chains} ağında maliyetler, bu ağların eklediği Ethereum veri ücreti tahminini içerir."
+    },
+    "timestamp-block": {
+      "modes": "Dönüştürme",
+      "mode_date": "Tarih → blok",
+      "mode_block": "Blok → tarih",
+      "mode_unix": "Unix zaman damgası ↔ tarih",
+      "dateLabel": "Tarih ve saat",
+      "zoneLabel": "Saat dilimi",
+      "zoneUtc": "UTC",
+      "zoneLocal": "Benim saat dilimim",
+      "findBlocks": "Blokları bul",
+      "working": "Zincir okunuyor…",
+      "estimate": "Tahmin: bu zaman gelecekte",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "chainDown": "{chain} şu anda okunamadı.",
+      "dateNote": "Her ağda bu zamanda veya sonrasındaki ilk blok, gerçek blok zamanları okunarak bulunur (birkaç düğüm sorgusu). Gelecek tarihler beklenen bloğu tahmin olarak işaretleyerek gösterir.",
+      "chainLabel": "Ağ",
+      "blockLabel": "Blok numarası",
+      "findTime": "Tarihi bul",
+      "blockResult": "{chain} ağında blok {block}:",
+      "yourTime": "sizin saatinizle {time}",
+      "unixIs": "Unix {unix}",
+      "unixLabel": "Zaman damgası (saniye veya milisaniye)",
+      "unixNote": "Tarayıcınızda dönüştürülür; hiçbir şey gönderilmez.",
+      "badDate": "Bir tarih ve saat seçin.",
+      "badBlock": "Bir blok numarası girin (yalnızca rakam).",
+      "badUnix": "Yalnızca rakam girin: saniye veya milisaniye.",
+      "noBlock": "Bu blok bu ağda henüz yok.",
+      "failed": "Zincir şu anda okunamadı. Bir dakika sonra tekrar deneyin."
+    },
+    "portfolio": {
+      "loadingSaved": "Portföyünüz yükleniyor…",
+      "emptyTitle": "Tüm cüzdanlarınızı tek yerden takip edin",
+      "emptyText": "Ağa, cüzdana ve tokena göre ayrılmış tek bir toplam görmek için cüzdanlarınızın genel adreslerini ekleyin. Hesap ve anahtar gerekmez.",
+      "emptyPoint1": "Kendi etiketlerinizle en fazla 20 cüzdan",
+      "emptyPoint2": "Yalnızca bu tarayıcıda kaydedilir",
+      "emptyPoint3": "Cüzdan başına onaylar ve riskli tokenlar işaretlenir",
+      "addWallet": "Cüzdan ekle",
+      "addConnected": "Bağlı cüzdanımı ekle ({address})",
+      "myWallet": "Cüzdanım",
+      "totalOf": "Toplam değer · {count} cüzdan",
+      "sinceLast": "Son bakışınızdan bu yana {change} ({when})",
+      "notProfit": "Bugünkü değerdeki bir değişiklik, kâr veya zarar değil.",
+      "loadingWallets": "Cüzdanlar yükleniyor: {total} cüzdandan {done}",
+      "refresh": "Yenile",
+      "exportCsv": "CSV dışa aktar",
+      "statTokens": "Değeri olan coin ve tokenlar",
+      "statTokensNote": "{count} tane daha güvenilir fiyatsız",
+      "statApprovals": "Kontrol edilecek onaylar",
+      "statFlagged": "GoPlus'ın işaretlediği tokenlar",
+      "inWallets": "{count} cüzdanda",
+      "noneFound": "Yapılan kontrollerde bulunamadı",
+      "flaggedBy": "GoPlus'tan ikinci görüş",
+      "byChain": "Ağa göre",
+      "someFailed": "{count} cüzdan şu anda yüklenemedi.",
+      "rateLimited": "{count} cüzdan yüklenmedi: bir dakikada çok fazla istek. Biraz bekleyin, sonra",
+      "retry": "Tekrar deneyin",
+      "chainsDown": "Şu anda okunmadı: {chains}. Toplamlar bunları içermez.",
+      "pricesMissing": "Bazı ağlar için fiyatlar okunamadı: bakiyeleri değersiz gösteriliyor.",
+      "walletsTitle": "Cüzdanlar",
+      "walletCount": "{count} / {max}",
+      "unnamed": "Adsız cüzdan",
+      "notLoaded": "Yüklenmedi",
+      "badgeApprovals": "{count} onay kontrol edilecek",
+      "badgeFlagged": "{count} işaretli token",
+      "badgeNothing": "İşaretli bir şey yok",
+      "open": "Aç",
+      "editLabel": "{name} adını değiştir",
+      "remove": "{name} cüzdanını portföyden kaldır",
+      "safetyTitle": "Güvenlik",
+      "approvalsIn": "{name} içinde kontrol edilecek {count} onay",
+      "onChains": "{chains} ağında: tokenlarınızı taşıma için sınırsız veya riskli izinler.",
+      "reviewApprovals": "Onayları incele →",
+      "flagHoneypot": "{name} ({chain}) içindeki {symbol}: GoPlus satılamadığını bildiriyor (honeypot)",
+      "flagSellTax": "{name} ({chain}) içindeki {symbol}: GoPlus {tax} satış vergisi bildiriyor",
+      "flagSource": "GoPlus Security bulgusu, CRYPY hükmü değil.",
+      "openReport": "Token raporunu aç →",
+      "someUnchecked": "Bazı kontroller her cüzdan için çalışmadı: zamanında bitmediler veya GoPlus'ın ücretsiz kapasitesi token ve onay sayfalarına ayrıldı. Bir dakika sonra yenileyin veya tam raporu için cüzdanı açın.",
+      "safetyNote": "Kontroller yukarıdaki cüzdanların onayları ve en değerli tokenları üzerinde çalışır. CRYPY bir cüzdanın veya tokenın güvenli olduğunu asla söylemez.",
+      "holdingsTitle": "En büyük varlıklar",
+      "holdingsNote": "Tüm cüzdanlarda. Birkaç ağdaki aynı coin veya bilinen token birleştirilir.",
+      "colToken": "Token",
+      "colChains": "Ağlar",
+      "colAmount": "Miktar",
+      "colValue": "Değer",
+      "colWallets": "Cüzdanlar",
+      "noPrice": "Fiyat yok",
+      "spamHidden": "{count} olası spam token gizlendi",
+      "showAll": "{count} tanesinin hepsini göster",
+      "showFewer": "Daha az göster",
+      "privacyNote": "Portföyünüz yalnızca bu tarayıcıda kaydedilir. CRYPY genel bakiyeleri cüzdan cüzdan okur ve listenizi veya etiketlerinizi saklamaz.",
+      "addTitle": "Cüzdan ekle",
+      "editTitle": "Cüzdan adını değiştir",
+      "addText": "Yalnızca izleme: genel bir adres yapıştırın. CRYPY onu blokzincirden okur ve hiçbir şeyi taşıyamaz.",
+      "addressLabel": "Cüzdan adresi",
+      "labelLabel": "Etiket (isteğe bağlı)",
+      "labelPlaceholder": "ör. Ana, Birikim, Trading",
+      "watchOnly": "Buraya veya başka bir yere asla kurtarma ifadesi ya da özel anahtar yapıştırmayın. CRYPY bunları asla istemez.",
+      "cancel": "İptal",
+      "add": "Ekle",
+      "save": "Kaydet",
+      "errEmpty": "Bir cüzdan adresi yapıştırın.",
+      "errInvalid": "Bu bir cüzdan adresi değil. 0x ile başlamalı ve ardından 40 karakter gelmeli.",
+      "errChecksum": "Bu adresteki büyük harfler sağlama toplamıyla eşleşmiyor. Yazım hatası olabilir; yeniden kopyalayın.",
+      "errSecret": "Bu bir kurtarma ifadesi veya özel anahtar gibi görünüyor. Temizlendi, kaydedilmedi ve gönderilmedi. Bunu asla hiçbir siteyle paylaşmayın.",
+      "errDuplicate": "Bu cüzdan zaten portföyünüzde.",
+      "errFull": "Portföy en fazla {max} cüzdan tutar. Başka birini eklemek için birini kaldırın.",
+      "syncLocalOnly": "Yalnızca bu cihazda kaydedildi (hesap yok).",
+      "syncSignIn": "Cüzdanınızla giriş yapın",
+      "syncOptional": "ve tüm cihazlarınızda görün — isteğe bağlı.",
+      "syncOn": "Hesabınızda tutuluyor: giriş yaptığınız her cihazda aynı liste. Yalnızca bu cihazda tutmak için kapatın.",
+      "syncOff": "Bu listeyi hesabınızda da tutun; giriş yaptığınız her cihazda olsun.",
+      "syncConnectFirst": "Önce bir cüzdan bağlayın, sonra tekrar Giriş yap'a basın. Giriş yapmak ücretsiz bir mesajdır, işlem değildir.",
+      "syncRejected": "Mesajı cüzdanınızda reddettiniz. Hiçbir şey imzalanmadı.",
+      "syncError": "Şu anda hesabınıza ulaşılamadı. Listeniz bu tarayıcıda güvende; biraz sonra tekrar deneyin.",
+      "watchTitle": "Değişiklikleri izle",
+      "watchText": "Bu cüzdanlardan biri gönderdiğinde, aldığında veya yeni bir onay verdiğinde Telegram mesajı alın.",
+      "watchButton": "Uyarıları kur",
+      "watchNote": "Cüzdanınızla ücretsiz giriş gerekir (imzalanacak bir mesaj, işlem değil). En fazla 10 izlenen öğe; {count} cüzdanınızdan hangilerini seçeceğinize siz karar verirsiniz."
+    },
+    "watchlist": {
+      "loading": "Yükleniyor…",
+      "signInTitle": "İzleme listesini kullanmak için giriş yapın",
+      "signInIntro": "Uyarılar, sunucunun sizin için neyi izleyeceğini bilmesi için bir hesap gerektirir. Cüzdanınız girişinizdir: şifre yok, e-posta yok.",
+      "step1Title": "Cüzdanınızla giriş yapın",
+      "step1Text": "Henüz bağlamadıysanız bir cüzdan bağlayın, sonra Giriş yap'a basın. Portföy ve diğer tüm araçlar giriş yapmadan çalışmaya devam eder.",
+      "step2Title": "Mesajı cüzdanınızda imzalayın",
+      "step2Text": "Cüzdanınız kısa bir metin gösterir. {site} ile başladığını ve bunun bir işlem değil mesaj olduğunu söylediğini kontrol edin: hiçbir ücreti yoktur ve fonlarınızı taşıyamaz.",
+      "step2Warning": "Bir site giriş için transfer, onay veya permit içeren bir şey imzalamanızı isterse imzalamayın.",
+      "signIn": "Giriş yap",
+      "connectAndSignIn": "Cüzdan bağla ve giriş yap",
+      "signingIn": "Cüzdanınız bekleniyor…",
+      "noAccountNeeded": "Giriş yalnızca izleme listesi ve uyarılar için gerekir.",
+      "errNoWallet": "Önce bir cüzdan bağlayın, sonra Giriş yap'a basın.",
+      "errChain": "Cüzdanınızı Ethereum, BNB Chain, Base, Arbitrum veya Polygon'a geçirip tekrar deneyin.",
+      "errRejected": "Mesajı cüzdanınızda reddettiniz. Hiçbir şey imzalanmadı.",
+      "errRateLimited": "Bir dakikada çok fazla deneme. Biraz bekleyip tekrar deneyin.",
+      "errSignInFailed": "Giriş yapılamadı. Tekrar deneyin; sorun devam ederse sayfayı yenileyin.",
+      "errUnavailable": "Hesap hizmeti şu anda kullanılamıyor. Bir dakika sonra tekrar deneyin.",
+      "watchTitle": "İzleme listesi",
+      "watching": "{max} öğeden {count} tanesi izleniyor",
+      "watchAnother": "Bir adres veya token izle",
+      "emptyTitle": "Henüz izlenen bir şey yok",
+      "emptyText": "Neyin uyarı tetikleyeceğini seçmek için bir cüzdan veya token ekleyin.",
+      "watchMine": "Cüzdanımı izle ({address})",
+      "myWallet": "Cüzdanım",
+      "unnamedWallet": "Adsız cüzdan",
+      "unnamedToken": "Adsız token",
+      "badgeOwn": "Sizin cüzdanınız (imzalı)",
+      "badgeWatchOnly": "Yalnızca izleme",
+      "badgeToken": "Token",
+      "rename": "{name} adını değiştir",
+      "remove": "{name} izlemeyi bırak",
+      "ruleSent": "Gönderildi",
+      "ruleSentOwnHint": "Bu cüzdandan gönderilen coin veya tokenlar",
+      "ruleSentHint": "Bu adresten gönderilen coin veya tokenlar",
+      "ruleReceived": "Alındı",
+      "ruleReceivedHint": "Bir alt sınır tozu ve spamı gizler; piyasa fiyatı olmayan tokenlar asla bildirilmez",
+      "ruleApprovals": "Yeni onay verildi",
+      "ruleApprovalsHint": "Artık bu cüzdandan kimin token taşıyabileceği, iptal etme linkiyle",
+      "ruleDrop": "Büyük değer düşüşü",
+      "ruleDropHint": "Bir günde %{percent} üzeri",
+      "ruleSecurity": "Güvenlik sonucu değişti",
+      "ruleSecurityHint": "Örneğin: satış başarısız olmaya başlar veya yeni bir sahip yetkisi ortaya çıkar",
+      "ruleLiquidity": "Likidite kilidi biter veya likidite çekilir",
+      "ruleLiquidityHint": "Saatte bir kontrol edilir",
+      "anyAmount": "Herhangi bir tutar",
+      "above": "Yalnızca {amount} üzeri",
+      "amountFor": "{rule}: {name} için alt tutar",
+      "whereTitle": "Uyarıların gideceği yer",
+      "accountTitle": "Hesabınız",
+      "signedInAs": "Giriş yapılan hesap",
+      "accountText": "imzalı bir mesajla: şifre yok, e-posta yok. CRYPY cüzdan adresinizi, izleme listenizi, Telegram sohbet kimliğinizi, uyarı geçmişinizi ve isterseniz portföy listenizi saklar.",
+      "signOut": "Çıkış yap",
+      "download": "Verilerimi indir",
+      "deleteAccount": "Hesabı sil",
+      "deleteConfirmTitle": "Hesabınız silinsin mi?",
+      "deleteConfirmText": "Bu, izleme listenizi siler ve tüm cihazlarda oturumunuzu kapatır. Geri alınamaz. Cüzdanınız ve fonları etkilenmez.",
+      "deleteConfirm": "Her şeyi sil",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "add": "İzle",
+      "addTitle": "Bir adres veya token izle",
+      "addText": "Yalnızca genel adresler. CRYPY onları blokzincirden okur ve hiçbir şeyi taşıyamaz.",
+      "kindLabel": "Ne izlenecek",
+      "kindAddress": "Cüzdan veya adres",
+      "kindToken": "Token",
+      "chainLabel": "Ağ",
+      "addressLabel": "Adres",
+      "tokenLabel": "Token kontrat adresi",
+      "labelLabel": "Etiket (isteğe bağlı)",
+      "labelPlaceholder": "ör. Ana, Birikim, Borsa",
+      "neverSecret": "Buraya veya başka bir yere asla kurtarma ifadesi ya da özel anahtar yapıştırmayın. CRYPY bunları asla istemez.",
+      "renameTitle": "Adını değiştir",
+      "errEmpty": "Bir adres yapıştırın.",
+      "errInvalid": "Bu bir adres değil. 0x ile başlamalı ve ardından 40 karakter gelmeli.",
+      "errChecksum": "Bu adresteki büyük harfler sağlama toplamıyla eşleşmiyor. Yazım hatası olabilir; yeniden kopyalayın.",
+      "errSecret": "Bu bir kurtarma ifadesi veya özel anahtar gibi görünüyor. Temizlendi, kaydedilmedi ve gönderilmedi. Bunu asla hiçbir siteyle paylaşmayın.",
+      "errDuplicateOrFull": "Zaten izleniyor veya liste dolu (10 öğe). Başka birini eklemek için birini kaldırın.",
+      "errSignedOut": "Oturumunuz kapandı. Devam etmek için tekrar giriş yapın.",
+      "errSave": "Bu değişiklik kaydedilemedi. Tekrar deneyin.",
+      "checkedEveryMinute": "Yaklaşık dakikada bir kontrol edilir",
+      "checkerOff": "Uyarılar şu anda bu sunucuda kontrol edilmiyor.",
+      "chainsNotChecked": "Şu anda kontrol edilmiyor: {chains}. CRYPY sunucusu şu an bu ağlarda arama yapamıyor.",
+      "mutedBadge": "Sessizde",
+      "mute": "{name} uyarılarını sessize al",
+      "unmute": "{name} uyarılarını yeniden aç",
+      "tgUnavailable": "Telegram uyarıları bu sunucuda henüz kurulmadı. İzleme listeniz kaydedildi ve uyarılar aşağıdaki geçmişte tutuluyor.",
+      "tgConnectText": "Uyarıları orada almak için Telegram'ı bir kez bağlayın. Botumuz yalnızca uyarı gönderir.",
+      "tgConnect": "Telegram'ı bağla",
+      "tgNeverAsks": "Uyarılar asla cüzdan bağlamanızı veya bir şey imzalamanızı istemez, bu yüzden sahte bir \"CRYPY\" botunu fark etmek kolaydır.",
+      "tgStepText": "Botumuzu açın ve Başlat'a basın. Kod, Telegram'ınızı bu hesaba bağlar ve 10 dakika içinde geçerliliğini yitirir.",
+      "tgQrAlt": "Telegram'da CRYPY uyarı botunu açan QR kod",
+      "tgOpen": "Telegram'ı aç",
+      "tgOrSend": "veya şunu gönderin",
+      "tgToBot": "{bot} botuna",
+      "tgCode": "Kod:",
+      "tgWaiting": "Telegram bekleniyor… bu sayfa kendiliğinden güncellenir.",
+      "tgExpired": "Bu kodun süresi kullanılmadan doldu. Yeni bir kod alın.",
+      "tgNewCode": "Yeni kod al",
+      "tgConnectedAs": "{name} olarak bağlı",
+      "tgConnected": "bağlı",
+      "tgFromBot": "Mesajlar {bot} botundan gelir. Yalnızca uyarılar; asla bir şey istemez.",
+      "tgSendTest": "Test gönder",
+      "tgTestSent": "Test gönderildi. Telegram'ı kontrol edin.",
+      "tgError": "İşe yaramadı. Biraz sonra tekrar deneyin.",
+      "tgDisconnect": "Telegram bağlantısını kes",
+      "tgDisconnectTitle": "Telegram bağlantısı kesilsin mi?",
+      "tgDisconnectText": "Uyarılar artık Telegram'a gitmez. Burada geçmişte tutulmaya devam eder ve istediğiniz zaman yeniden bağlanabilirsiniz.",
+      "tgDisconnectConfirm": "Bağlantıyı kes",
+      "emailLater": "E-posta uyarıları daha sonra.",
+      "quietOnText": "Sessiz saatler {start}–{end} (uyarılar bitene kadar bekler)",
+      "quietOffText": "Sessiz saat yok (uyarılar her an gelir)",
+      "quietChange": "Değiştir",
+      "quietTitle": "Sessiz saatler",
+      "quietText": "Sessiz saatlerde bulunan uyarılar bekler ve saatler bitince birlikte gelir.",
+      "quietUse": "Sessiz saatleri kullan",
+      "quietFrom": "Başlangıç",
+      "quietTo": "Bitiş",
+      "quietZone": "Saat diliminize göre: {zone}",
+      "quietInvalid": "İki saati de girin, örneğin 23:00 ve 07:00.",
+      "recentTitle": "Son uyarılar",
+      "recentAll": "Tümü",
+      "recentFewer": "Daha az",
+      "recentEmpty": "Henüz uyarı yok. Burada ve Telegram'da görünecekler.",
+      "recentOlder": "Daha eski uyarıları yükle",
+      "statusWaiting": "Gönderilmeyi bekliyor (sessiz saatler)",
+      "statusNoChannel": "Gönderilmedi: Telegram bağlı değildi",
+      "statusFailed": "Telegram'a gönderilemedi",
+      "statusMuted": "Gönderilmedi: sessizde",
+      "importTitle": "Portföy cüzdanlarınızı izleyin",
+      "importText": "Bu tarayıcının portföyündeki {count} cüzdan, etiketleriyle izlensin mi? Her birinin hangi durumda uyarı vereceğini sonra değiştirebilirsiniz.",
+      "importNone": "Bu tarayıcının portföyündeki tüm cüzdanlar zaten izleniyor.",
+      "importButton": "{count} cüzdanı izle",
+      "importNotNow": "Şimdi değil"
+    }
+  },
+  "seo": {
+    "homeTitle": "CRYPY: Ücretsiz Kripto Cüzdan, Token ve İşlem Kontrolü",
+    "toolsTitle": "Tüm Ücretsiz Kripto Cüzdan ve Token Araçları | CRYPY",
+    "toolsDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da cüzdan, token ve işlem kontrolü için 14 ücretsiz araç: token tarayıcı, onaylar, gas ve daha fazlası."
+  },
+  "learn": {
+    "seoTitle": "Kripto Güvenlik Rehberleri: Dolandırıcılık, Gas | CRYPY",
+    "seoDescription": "Dolandırıcı tokenlar, honeypotlar, token onayları, başarısız işlemler, gas ücretleri ve kurtarma ifadesi güvenliği üzerine sade rehberler ve ücretsiz araçlar.",
+    "title": "Kripto risklerini size pahalıya patlamadan fark etmeyi öğrenin",
+    "intro": "Dolandırıcı tokenlar, onaylar, başarısız işlemler ve gas hakkında kısa, sade rehberler. Her biri, sizin yerinize kontrol eden ücretsiz CRYPY aracıyla biter.",
+    "topicsLabel": "Konular",
+    "allTopics": "Tüm rehberler",
+    "topics": {
+      "token-scams": "Token dolandırıcılıkları",
+      "approvals": "Onaylar",
+      "transactions": "İşlemler",
+      "gas-units": "Gas ve birimler",
+      "wallet-safety": "Cüzdan güvenliği"
+    },
+    "startHere": "Buradan başlayın",
+    "checkNowTitle": "Hemen bir şey kontrol edin",
+    "checkNowText": "Bir adres, token kontratı veya işlem hash'i yapıştırın. Cüzdan bağlamanız gerekmez.",
+    "guideCount": "{count, plural, one {# rehber} other {# rehber}}",
+    "allGuidesHeading": "Tüm rehberler",
+    "readTime": "{minutes} dk okuma",
+    "toolLabel": "Araç:",
+    "noTool": "Tüm araçlar",
+    "byline": "CRYPY tarafından",
+    "updated": "Güncellendi: {date}",
+    "inShort": "Kısaca",
+    "onThisPage": "Bu sayfada",
+    "questions": "Sorular",
+    "relatedGuides": "İlgili rehberler",
+    "ctaTitle": "Kendiniz kontrol edin: {tool}",
+    "ctaButton": "Aç: {tool}",
+    "ctaAllTitle": "Kurtarma ifadenizi asla istemeyen ücretsiz araçlar",
+    "ctaAllText": "Cüzdanları, tokenları, onayları ve işlemleri yalnızca genel verilerle kontrol edin.",
+    "ctaAllButton": "Tüm araçlara göz atın",
+    "notTranslated": "Bu rehber henüz çevrilmedi, bu yüzden İngilizce gösteriliyor.",
+    "learnMore": "Daha fazla bilgi",
+    "relatedTools": "İlgili araçlar"
+  },
+  "gasChain": {
+    "seoTitle": "{chain} Anlık Gas Fiyatı: Canlı Gwei ve Ücretler | CRYPY",
+    "title": "{chain} anlık gas fiyatı",
+    "intro": "Gwei cinsinden canlı gas fiyatları ve yaygın işlemlerin dolar maliyeti; doğrudan zincirden okunur ve 12 saniyede bir yenilenir.",
+    "howTitle": "{chain} ağında gas nasıl çalışır",
+    "questions": "Sorular",
+    "otherChains": "Diğer ağlarda gas",
+    "compareAll": "Gas Takipçisi'nde tüm ağları karşılaştırın",
+    "guideLink": "Okuyun: Gas ücretleri açıklandı",
+    "byChain": "Ağa göre gas:",
+    "chains": {
+      "ethereum": {
+        "description": "Gwei cinsinden canlı Ethereum gas fiyatı: düşük, ortalama ve yüksek; ayrıca şu anda ETH, token gönderme, onay ve takasın dolar maliyeti.",
+        "how": [
+          "Her Ethereum işlemi, yakılan blok taban ücretini ve doğrulayıcıya giden bir öncelik ücretini (bahşiş) öder. Yaklaşık her 12 saniyede yeni bir blok gelir ve taban ücret, önceki bloğun ne kadar dolu olduğuna göre artar veya azalır.",
+          "Cüzdanınız bir azami ücret belirler: taban ücret artı bahşişinizi ödersiniz, asla bu azamiden fazlasını değil. Başarısız bir işlem de kullandığı gas'ın ücretini öder."
+        ],
+        "faq": [
+          {
+            "q": "Gas fiyatı neden bu kadar sık değişiyor?",
+            "a": "Taban ücret, önceki bloğun doluluğuna göre her blok için yeniden hesaplanır, bu yüzden her 12 saniyede değişebilir. Popüler bir token lansmanı gibi yoğun anlar onu hızla yükseltir."
+          },
+          {
+            "q": "Hangi hızı seçmeliyim?",
+            "a": "Ortalama çoğu işlem için uygundur. Bekleyebiliyorsanız düşük, zamana duyarlı bir takas gibi hızlı geçmesi gerekiyorsa yüksek seçin."
+          },
+          {
+            "q": "Neden burada gösterilenden farklı bir tutar ödedim?",
+            "a": "Maliyet, işleminizin gerçekte ne kadar gas kullandığına bağlıdır: karmaşık bir takas burada gösterilen tipik miktarlardan fazlasını kullanır. Ayrıca taban ücret, baktığınız an ile işleminizin bloğa girdiği an arasında değişebilir."
+          }
+        ]
+      },
+      "bsc": {
+        "description": "Gwei cinsinden canlı BNB Chain gas fiyatı: düşük, ortalama ve yüksek; ayrıca şu anda BNB, token gönderme, onay ve takasın dolar maliyeti.",
+        "how": [
+          "BNB Chain'de taban ücret yoktur: belirlediğiniz gas fiyatı fiyatın tamamıdır ve doğrulayıcılara gider. Bloklar Ethereum'dan çok daha hızlı gelir ve fiyat genellikle düşük ve sabit kalır.",
+          "Ücretler BNB ile ödenir, bu yüzden yalnızca token tutsanız bile cüzdanınızda biraz BNB bulundurun."
+        ],
+        "faq": [
+          {
+            "q": "BNB Chain ücretleri neden bu kadar düşük?",
+            "a": "Blokları çok sayıda işleme yer açar ve hızlı gelir, bu yüzden gas fiyatı genellikle doğrulayıcıların kabul ettiği asgari değere yakın kalır. Yoğun anlarda yine de yükselebilir."
+          },
+          {
+            "q": "BNB Chain'de token göndermek için BNB gerekir mi?",
+            "a": "Evet. USDT veya başka bir token gönderseniz bile her işlem BNB ile ödenir."
+          },
+          {
+            "q": "Hangi hızı seçmeliyim?",
+            "a": "Ortalama çoğu işlem için uygundur. Bekleyebiliyorsanız düşük, zamana duyarlı bir takas gibi hızlı geçmesi gerekiyorsa yüksek seçin."
+          }
+        ]
+      },
+      "base": {
+        "description": "Gwei cinsinden canlı Base gas fiyatı; Ethereum veri ücreti dahil ETH, token gönderme, onay ve takasın dolar maliyeti.",
+        "how": [
+          "Base, Ethereum üzerine kurulu bir rollup'tır. Her işlem Base'de küçük bir ağ ücreti (Ethereum'daki gibi taban ücret artı bahşiş) ve verilerini Ethereum'da yayınlamak için bir veri ücreti öder.",
+          "Her iki kısım da genellikle küçüktür. CRYPY'nin maliyetleri, zincirden okunan veri ücreti tahminini içerir. Base'de ücretler ETH ile ödenir."
+        ],
+        "faq": [
+          {
+            "q": "Base neden Ethereum'dan ucuz?",
+            "a": "Base birçok işlemi bir araya toplar ve Ethereum'a tek seferde yayınlar, böylece her işlem yalnızca küçük bir pay öder."
+          },
+          {
+            "q": "Ethereum veri ücreti nedir?",
+            "a": "Ücretinizin, işlem verilerinizi Ethereum'da yayınlamak için ödenen kısmı. Ethereum'un kendi ücretlerini izler, bu yüzden Ethereum sakinken daha düşüktür."
+          },
+          {
+            "q": "Base'de ETH gerekir mi?",
+            "a": "Evet. Base'deki ücretler Ethereum'daki değil, Base'deki ETH ile ödenir."
+          }
+        ]
+      },
+      "arbitrum": {
+        "description": "Gwei cinsinden canlı Arbitrum gas fiyatı; şu anda ETH, token gönderme, onay ve takasın zincirden okunan dolar maliyeti.",
+        "how": [
+          "Arbitrum One, Ethereum üzerine kurulu bir rollup'tır. İşlem verilerini Ethereum'da yayınlamanın maliyeti ek gas olarak alınır, bu yüzden kullanılan gas'a ve burada gösterilen maliyetlere zaten dahildir.",
+          "İşlemler geliş sırasına göre sıralanır, bu yüzden daha yüksek bahşiş genellikle onları hızlandırmaz. Arbitrum'da ücretler ETH ile ödenir."
+        ],
+        "faq": [
+          {
+            "q": "Arbitrum'da yüksek bahşiş işlemimi hızlandırır mı?",
+            "a": "Genellikle hayır. Arbitrum işlemleri geliş sırasına göre sıralar, bu yüzden öncelik bahşişinin etkisi azdır."
+          },
+          {
+            "q": "Arbitrum neden Ethereum'dan ucuz?",
+            "a": "Birçok işlemi toplar ve Ethereum'a birlikte yayınlar, böylece her biri yalnızca küçük bir pay öder."
+          },
+          {
+            "q": "Arbitrum'da ETH gerekir mi?",
+            "a": "Evet. Ücretler Ethereum'daki değil, Arbitrum'daki ETH ile ödenir."
+          }
+        ]
+      },
+      "polygon": {
+        "description": "Gwei cinsinden canlı Polygon gas fiyatı; şu anda POL, token gönderme, onay ve takasın zincirden okunan dolar maliyeti.",
+        "how": [
+          "Polygon, Ethereum gibi çalışır: her işlem yakılan bir taban ücret ve doğrulayıcıya bir bahşiş öder. Ücretler POL ile ödenir.",
+          "Polygon'da gwei cinsinden gas fiyatları yüksek görünür, çünkü POL'ün değeri ETH'den çok daha düşüktür. Önemli olan burada gösterilen dolar maliyetidir."
+        ],
+        "faq": [
+          {
+            "q": "Polygon'un gwei cinsinden gas fiyatı neden bu kadar yüksek?",
+            "a": "Bir gwei, bir POL'ün küçük bir parçasıdır ve POL'ün değeri ETH'den çok düşüktür. Polygon'da birkaç yüz gwei genellikle Ethereum'daki birkaç gwei'den çok daha ucuzdur."
+          },
+          {
+            "q": "Polygon'da token göndermek için POL gerekir mi?",
+            "a": "Evet. USDC veya başka bir token gönderseniz bile her işlem POL ile ödenir."
+          },
+          {
+            "q": "Hangi hızı seçmeliyim?",
+            "a": "Ortalama çoğu işlem için uygundur. Bekleyebiliyorsanız düşük, zamana duyarlı bir takas gibi hızlı geçmesi gerekiyorsa yüksek seçin."
+          }
+        ]
+      }
+    }
+  },
+  "tokenChecks": {
+    "seoTitle": "Token Güvenlik Kontrolleri: Günlük Testler | CRYPY",
+    "seoDescription": "5 ağda bilinen 50 tokenın günlük otomatik güvenlik kontrolü: satılabilir mi, alım ve satım vergileri, sahip yetkileri ve likidite.",
+    "nav": "Token kontrolleri",
+    "title": "Token güvenlik kontrolleri",
+    "intro": "CRYPY'nin bilinen tokenlar için her gün yeniden çalışan otomatik kontrolleri: satılabilir mi, ne kadar vergi alıyor, sahip neleri değiştirebilir ve likidite kimde. Sonuçlar sinyaldir, bir tokenın güvenli olduğu sözü asla değildir.",
+    "checkAny": "Herhangi bir tokenı kontrol edin",
+    "chainsLabel": "Bir ağa git",
+    "colToken": "Token",
+    "colResult": "Sonuç",
+    "colSell": "Satılabilir (test)",
+    "colTax": "Alım / satım vergisi",
+    "colChecked": "Kontrol",
+    "sellYes": "Evet",
+    "sellNo": "Hayır",
+    "sellNoPool": "Havuz bulunamadı",
+    "sellUnchecked": "Kontrol edilmedi",
+    "tax": "{buy} / {sell}",
+    "notMeasured": "Ölçülmedi",
+    "pending": "Kontrol ediliyor",
+    "selection": "Hangi tokenlar listelenir: her ağda derin likiditeye sahip, CRYPY'nin seçtiği bilinen tokenlar. Kimse listelenmek veya bir sonucu değiştirmek için ödeme yapamaz.",
+    "fromToolPage": "Bilinen tokenların günlük kontrollerini görün",
+    "page": {
+      "seoTitle": "{chain} ağında {symbol}: Token Güvenlik Kontrolü | CRYPY",
+      "seoDescription": "{chain} ağında {symbol}: CRYPY'nin günlük otomatik kontrolünden satış testi, alım ve satım vergisi, sahip yetkileri ve likidite. Sonuçlar sinyaldir.",
+      "title": "{name} ({symbol}) token güvenlik kontrolü",
+      "pendingTitle": "{chain} ağında {symbol}: token güvenlik kontrolü",
+      "checked": "Kontrol: {time} UTC · her gün yeniden kontrol edilir",
+      "fresh": "Yeni bir kontrol çalıştır",
+      "aboutTitle": "Bu kontrol hakkında",
+      "about": "Bu sayfa, CRYPY'nin {chain} ağındaki {symbol} kontratı için günde yaklaşık bir kez kaydedilen otomatik kontrolünü gösterir. Satışı, vergileri, sahip yetkilerini ve likiditeyi kapsar ve her bulgunun nasıl kontrol edildiğini belirtir. Bir denetim veya onay değildir; sahipler kontrolden sonra ayarları değiştirebilir. En güncel veriler için yeni bir kontrol çalıştırın.",
+      "preparingTitle": "Bu kontrol hazırlanıyor",
+      "preparingText": "CRYPY henüz {chain} ağındaki {symbol} için bir kontrol kaydetmedi; genellikle iki saat içinde görünür. Şimdi canlı bir kontrol çalıştırabilirsiniz.",
+      "questions": "Sorular",
+      "sellQ": "{symbol} satabilir miyim?",
+      "sellOk": "CRYPY'nin son test işleminde {symbol} alınabildi, gönderilebildi ve satılabildi. Token kuralları sonradan değişebilir, bu yüzden büyük bir işlemden önce yeniden kontrol edin.",
+      "sellNo": "CRYPY'nin son test işleminde işlem tamamlanmadı. Yukarıdaki işlem testi hangi adımın başarısız olduğunu gösterir; nedenini öğrenene kadar satın almayın.",
+      "sellUnchecked": "CRYPY'nin son kontrolü {symbol} için test işlemi çalıştıramadı (desteklenen havuz yok veya simülasyon çalışmadı). Yukarıdaki işlem testi nedenini söyler.",
+      "taxQ": "{symbol} alım veya satım vergisi alıyor mu?",
+      "taxA": "CRYPY'nin son test işleminde alımda {buy}, satımda {sell} ve transferde {transfer} alındı.",
+      "taxNone": "Test işlemi tamamlanmadığı için son kontrolde vergiler ölçülmedi.",
+      "safeQ": "{symbol} güvenli mi?",
+      "safeA": "Hiçbir kontrol bir tokenın güvenli olduğunu kanıtlayamaz. CRYPY'nin son kontrolü \"{level}\" diyor; {high} yüksek ve {medium} orta düzey bulgu var. Yukarıdaki bulguları okuyun ve kendiniz karar verin.",
+      "related": "{chain} ağındaki diğer kontrol edilen tokenlar",
+      "allChecks": "Tüm token kontrolleri",
+      "learn": "Daha fazla bilgi"
+    }
+  },
+  "status": {
+    "seoTitle": "CRYPY Durumu: Tüm Araçlar ve Ağlar Çalışıyor mu?",
+    "seoDescription": "Her CRYPY aracının ve blokzincir bağlantısının canlı durumu. Sunucumuz her birini birkaç dakikada bir gerçek verilerle dener ve 90 günlük kaydı tutar.",
+    "title": "CRYPY durumu",
+    "intro": "Her şey çalışıyor mu? Sunucumuz birkaç dakikada bir her aracı ve ağı gerçekten dener ve sonuçları burada gösterir.",
+    "headline": {
+      "operational": "Her şey çalışıyor",
+      "degraded": "Bazı bölümlerde sorun var",
+      "down": "Sitede büyük bir sorun var",
+      "unknown": "Henüz kontrol edilmedi"
+    },
+    "headlineText": {
+      "operational": "Tüm araçlar ve ağlar son kontrolden geçti.",
+      "degraded": "{names}: {count, plural, one {sorun yaşanıyor} other {sorun yaşanıyor}}. Diğer her şey çalışıyor.",
+      "down": "Web sitesinin kendisi son kontrollerden geçemedi. Üzerinde çalışıyoruz.",
+      "unknown": "Sunucu henüz hiçbir kontrol sonucunu kaydetmedi. Başladıktan birkaç dakika sonra görünürler.",
+      "partial": "Şimdiye kadar kontrol edilen her şey geçti. {count, plural, one {# bölüm} other {# bölüm}} henüz kontrol edilmedi."
+    },
+    "lastChecked": "Son kontrol {minutes, plural, =0 {bir dakikadan az önce} one {# dakika önce} other {# dakika önce}}",
+    "checksEvery": "Kontroller 5 dakikada bir yapılır",
+    "state": {
+      "operational": "Çalışıyor",
+      "degraded": "Sorun var",
+      "down": "Çalışmıyor",
+      "unknown": "Henüz kontrol edilmedi"
+    },
+    "legendLabel": "Çubukların anlamı",
+    "legend": {
+      "operational": "Gün boyu çalıştı",
+      "degraded": "Bazı sorunlar",
+      "down": "Bir süre çalışmadı",
+      "none": "Henüz kontrol yok"
+    },
+    "daysAgo": "90 gün önce",
+    "today": "Bugün",
+    "uptime": "{percent} çalışıyor",
+    "noUptime": "Henüz kontrol yok",
+    "dayTitle": "{day}: kontrollerin {percent} kadarı geçti",
+    "dayNone": "{day}: kontrol yok",
+    "groups": {
+      "core": {
+        "title": "Web sitesi",
+        "sub": ""
+      },
+      "tools": {
+        "title": "Araçlar",
+        "sub": "Her araç yaklaşık 30 dakikada bir gerçek genel verilerle denenir"
+      },
+      "chains": {
+        "title": "Ağlar",
+        "sub": "Her ağın bağlantısı, 5 dakikada bir"
+      },
+      "alerts": {
+        "title": "Uyarılar ve günlük kontroller",
+        "sub": ""
+      }
+    },
+    "components": {
+      "website": "Web sitesi",
+      "search": "Arama",
+      "alerts": "Telegram cüzdan uyarıları",
+      "token-checks": "Günlük token güvenlik kontrolleri"
+    },
+    "updates": {
+      "title": "Güncellemeler",
+      "none": "Son 90 günde güncelleme yok.",
+      "earlier": "Önceki güncellemeler (son 90 gün)",
+      "state": {
+        "ongoing": "Devam ediyor",
+        "fixed": "Düzeltildi",
+        "planned": "Planlı çalışma"
+      },
+      "affects": "Etkilenen: {name}",
+      "wholeSite": "Tüm site"
+    },
+    "features": {
+      "title": "Özellikler: yayında ve yakında",
+      "live": "Yayında",
+      "beta": "Beta",
+      "soon": "Yakında",
+      "liveTools": "{count} araç, yukarıda listelendi",
+      "liveChains": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon",
+      "liveAlerts": "Telegram cüzdan uyarıları",
+      "betaSite": "Sitenin tamamı herkese açık beta: sonuçlar gerçek, tasarım hâlâ değişebilir",
+      "soonItems": [
+        "Gözden geçirilmiş çeviriler: İspanyolca, Portekizce (Brezilya), Çince, Rusça, Türkçe ve Vietnamca",
+        "Daha fazla dil"
+      ]
+    },
+    "howItWorks": "Nasıl çalışır: kontroller genel test verilerini (bilinen bir cüzdan, işlem ve token) kullanır, asla kimsenin aramalarını kullanmaz. \"Çalışıyor\", son kontrolün geçtiği anlamına gelir; her sonucun eksiksiz olduğu sözü değildir. Bu sayfa hiç açılmıyorsa sitenin tamamı çalışmıyordur ve bize ayrıca uyarı gelir."
+  }
+}

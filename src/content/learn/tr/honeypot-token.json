@@ -1,0 +1,99 @@
+{
+  "title": "Honeypot token nedir ve nasıl anlaşılır",
+  "seoTitle": "Honeypot Token Nedir ve Nasıl Anlaşılır | CRYPY",
+  "description": "Honeypot token alınır ama satılamaz. Honeypotların hilelerini ve bir test işleminin, tokenın satılıp satılamayacağını almadan önce nasıl gösterdiğini öğrenin.",
+  "summary": "Alabildiğiniz ama asla satamadığınız bir token. Nasıl çalışır ve bir test işlemi onu nasıl ortaya çıkarır.",
+  "inShort": [
+    "Honeypot, alabildiğiniz ama satamadığınız ya da yalnızca büyük zararla satabildiğiniz bir tokendır.",
+    "Tuzak tokenın kontratına yazılıdır, bu yüzden grafik normal görünebilir.",
+    "Almadan önce bir test işlemi, onu bulmanın en güvenilir yoludur."
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "heading": "Honeypot nedir",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Honeypot token, alımın çalışacağı, satışın ise çalışmayacağı şekilde yapılır. Fiyat grafiği yalnızca alımları gösterir, bu yüzden çoğu zaman istikrarlı şekilde yükselir ve daha fazla alıcı çeker. Biri satmaya çalıştığında işlem başarısız olur veya neredeyse her şey ücret olarak alınır."
+        },
+        {
+          "type": "p",
+          "text": "Arkasındaki kişiler genellikle kendi tokenlarını hâlâ satabilir, böylece alıcıların yatırdığı parayı alırlar."
+        }
+      ]
+    },
+    {
+      "id": "tricks",
+      "heading": "Yaygın hileler",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Seçilmiş cüzdanlar dışında herkes için satış engelli:** kontrat yalnızca izin verilen bir listenin havuza token transfer etmesine izin verir.",
+            "**Aldıktan sonra kara liste:** cüzdanınız bir engel listesine eklenir, sonraki transferler başarısız olur.",
+            "**%100'e yakın satış vergisi:** satış teknik olarak başarılı olur ama neredeyse hiçbir şey almazsınız.",
+            "**Yalnızca satışları vuran sınırlar:** çok küçük bir azami satış tutarı veya hiç bitmeyen bir bekleme süresi.",
+            "**Sonradan değiştirilen ayarlar:** token lansmanda normal işlem görür, sonra sahip tuzağı açar."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spot",
+      "heading": "Nasıl anlaşılır",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Kontrat kodunu okumak bazı hileleri ortaya çıkarabilir, ama kod bir proxy'nin arkasına gizlenebilir veya kafa karıştırıcı yazılabilir. En güvenilir kontrol, gerçek bir işlemde ne olduğunu izlemektir: al, transfer et ve sat."
+        },
+        {
+          "type": "p",
+          "text": "Bunu kendi paranızla yapmak risklidir. Bir simülasyon, hiçbir şey göndermeden aynı adımları gerçek havuza karşı yapar."
+        }
+      ]
+    },
+    {
+      "id": "crypy",
+      "heading": "CRYPY'nin test işlemi nasıl çalışır",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "[Token Güvenlik Tarayıcı](tool:token-security), tokenın gerçek borsa havuzuna karşı salt okunur bir çağrı içinde küçük bir test kontratı çalıştırır. Yaklaşık 10 $ değerinde alır, bir kısmını ikinci bir adrese gönderir, sonra kalanını satar. Varsa hangi adımın başarısız olduğunu kontratın kendi hatasıyla ve her adımda ölçülen vergiyi bildirir."
+        },
+        {
+          "type": "p",
+          "text": "Hiçbir şey imzalanmaz, gönderilmez veya ödenmez ve cüzdan gerekmez. Test, o token için desteklediği en derin havuzu kullanır."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "heading": "Test işleminin gösteremedikleri",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Bir simülasyon, tokenın şu anda yeni bir cüzdan için nasıl davrandığını gösterir. Sahibin yarın bir engel açmayacağını veya vergiyi artırmayacağını vaat edemez. Bu yüzden tarayıcı, ücretleri değiştirmek veya kara listeye almak gibi sahip yetkilerini de listeler."
+        },
+        {
+          "type": "warning",
+          "text": "Bir token testte satılamıyorsa, grafik ne kadar iyi görünürse görünsün almayın."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Ben aldıktan sonra bir token honeypot'a dönüşebilir mi?",
+      "a": "Evet, sahip kara liste, duraklatma veya ücret değiştirme gibi yetkileri elinde tuttuysa. Test işleminin yanı sıra sahip yetkilerini de kontrol edin."
+    },
+    {
+      "q": "Test işlemi bir şeye mal olur mu?",
+      "a": "Hayır. Salt okunur bir simülasyondur: blokzincire hiçbir şey gönderilmez."
+    },
+    {
+      "q": "Bir honeypot'un grafiği neden bu kadar iyi görünür?",
+      "a": "Çünkü yalnızca alımlar gerçekleşir. Neredeyse hiç satış olmadan istikrarlı alımlar fiyatı yukarı iter."
+    }
+  ]
+}
