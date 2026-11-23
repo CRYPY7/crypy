@@ -287,7 +287,27 @@ Urdu + Arabic translations & RTL QA; security review; accessibility & performanc
   contact address on them; Google Search Console and Bing Webmaster set up by the owner.
 - **SEO (owner priority 2026-11-22):** own plan in SEO_ROADMAP.md. Phase 1 (technical and on-page) ✅ built;
   Phase 2 (Learn hub, 12 guides) ✅ and Phase 3 (gas by chain, daily checks of 50 curated tokens) ✅ built.
-- **Next parts (proposed order):** Urdu translations (reviewed by the owner) and RTL QA, Arabic as preview until a
+- **Part 5 — Monitoring, status page and admin dashboard (owner request 2026-11-23; designs first):** health checks
+  built 2026-11-23; status page and admin dashboard designed (boards 51–54), awaiting approval.
+  - **Health checks (core):** every 5 minutes the server runs a small real check of each tool and chain (a known
+    wallet's balance, a known transaction, a token check, gas, search) and of the alerts worker, Telegram bot, daily
+    token checks and database; each result (pass / slow / fail, time taken) is kept 90 days. Both pages read these
+    results, so neither starts provider calls when someone opens it.
+  - **Public status page** (`/status`): every tool and chain as Working, Slow or Down, 90-day uptime bars, incident
+    notes written by the owner, and Live / Beta / Coming soon for features (from the tool registry and a short public
+    list, never the private roadmap). No provider names, keys, addresses or server details. Indexable.
+  - **Admin dashboard** (`/admin`, private, `noindex`): sign-in with the owner's wallet (SIWE, already built) plus an
+    allowlist of admin addresses in the server's `.env.local`; optional second lock with Cloudflare Access (free).
+    Shows providers and free-plan usage (Alchemy, GoPlus), rate-limit hits, the alerts worker per chain, Telegram
+    bot, token-check freshness and failures, database size and last backup, disk and memory, certificate expiry and
+    recent errors (redacted). Lets the owner write incident notes for the status page. Sends the owner a Telegram
+    message when a check keeps failing, and when it recovers. Read-only otherwise: no buttons that change user data.
+  - **External uptime monitor** (owner, free): a service outside the server (for example UptimeRobot's free plan)
+    checks crypy.org every 5 minutes and emails the owner if the whole server is down, which the server can't report
+    about itself.
+  - **Done when:** a provider or the bot stopped on purpose on staging shows as Down on both pages within 10
+    minutes, the owner gets the Telegram message, and recovery shows too; the status page has no private detail.
+- **Next parts (proposed order):** Part 5 health checks and status pages, Urdu translations (reviewed by the owner) and RTL QA, Arabic as preview until a
   native review; lawyer review of the legal pages; a staging copy, then the alerts "Done when" on staging and
   production.
 

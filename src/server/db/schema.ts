@@ -2,6 +2,7 @@ import {
   bigint,
   boolean,
   index,
+  integer,
   jsonb,
   pgTable,
   smallint,
@@ -163,6 +164,23 @@ export const tokenChecks = pgTable("token_checks", {
   checkedAt: timestamp("checked_at", { withTimezone: true }).notNull(),
 });
 
+/**
+ * Health check results (M9 Part 5): one row per check run, kept 90 days. Read by the public status page and the admin
+ * dashboard. `detail` is a short reason with keys removed; it is shown on the admin dashboard only.
+ */
+export const healthChecks = pgTable(
+  "health_checks",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
+    check: text("check").notNull(),
+    status: text("status").notNull(),
+    ms: integer("ms"),
+    detail: text("detail"),
+    checkedAt: timestamp("checked_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("health_checks_checked_at_idx").on(table.checkedAt)],
+);
+
 export const schema = {
   users,
   accounts,
@@ -172,6 +190,7 @@ export const schema = {
   telegramLinkCodes,
   alerts,
   tokenChecks,
+  healthChecks,
   checkerCursors,
   portfolios,
 };

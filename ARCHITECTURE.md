@@ -723,6 +723,23 @@ DEX decoders, per chain family:                      (one per DEX design)
   `TokenSecuritySection` (fetches the live one), so saved and live checks render the same.
 - `app/sitemap.ts` is built per request (`connection()`), listing token pages only once a check is saved.
 
+## 12n. Health checks, status page and admin dashboard (M9 Part 5)
+
+- `lib/health/checks.ts`: every check (`id`, `group`, `everyMs`, `slowMs`) and every public status component, which
+  lists the checks it needs (`checks`: worst of them) or alternatives (`someOf`, one per chain: down only when all are
+  down). Shared by server and pages; no secrets or provider names.
+- `lib/health/status.ts` (pure): check state from its newest results, component state, UTC daily bars, uptime share.
+- `server/health/probes.ts`: one function per check; returns normally (passed; `"slow:<reason>"` marks it slow),
+  throws (failed) or throws `Skip` (not set up here). Tool checks call the same adapters and services as the pages,
+  uncached, with fixed public test data. `server/health/jobs.ts`: worker job heartbeats (the worker's `every` records
+  each run), so job checks cost nothing.
+- `server/health/runner.ts`: `dueChecks` (pure; tool checks capped at 2 per round, longest-waiting first),
+  `runProbe` (25 s limit, keys removed from reasons), `runHealthRound` (worker, every 5 minutes; saves one row per
+  check to `health_checks`), `pruneHealthChecks` (hourly housekeeping, 90 days), `publicStatus` (states and bars
+  only) and `recentResults` (the admin dashboard will show reasons from it).
+- Pages read saved rows only; opening them never calls a provider. A status page on the same server can't report
+  the server being down: an external free uptime monitor covers that.
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

@@ -119,9 +119,20 @@ interface BotState {
   running: boolean;
   offset: number;
   conflictLogged: boolean;
+  /** Last time Telegram answered (for the health checks). */
+  lastOkAt?: number;
+  /** Another server reads this bot's messages (alerts can't be linked here). */
+  conflict?: boolean;
 }
 const stateKey = Symbol.for("crypy.telegramBot");
 const store = globalThis as typeof globalThis & { [stateKey]?: BotState };
+
+/** For the health checks: null when no bot is set up on this server. */
+export function botHealth(): { running: boolean; lastOkAt: number | null; conflict: boolean } | null {
+  if (!telegramConfigured()) return null;
+  const state = store[stateKey];
+  return { running: state?.running ?? false, lastOkAt: state?.lastOkAt ?? null, conflict: state?.conflict ?? false };
+}
 
 /** Starts reading the bot's messages (once per server process). Does nothing without a token. */
 export function startTelegramBot(): void {
@@ -150,11 +161,14 @@ export function startTelegramBot(): void {
           );
         }
         state.conflictLogged = false;
+        state.conflict = false;
+        state.lastOkAt = Date.now();
       } catch (error) {
         if (error instanceof TelegramConflictError) {
           if (!state.conflictLogged)
             console.warn("[crypy] Another server is reading this Telegram bot's messages; retrying in a minute.");
           state.conflictLogged = true;
+          state.conflict = true;
           await new Promise((resolve) => setTimeout(resolve, 60_000));
         } else {
           await new Promise((resolve) => setTimeout(resolve, 5_000));

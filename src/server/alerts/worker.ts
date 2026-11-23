@@ -2,6 +2,9 @@ import "server-only";
 import { getDb } from "@/server/db/client";
 import { serverEnv } from "@/server/env";
 import { redactKeys } from "@/server/redact";
+import { noteJobRun, registerJob } from "@/server/health/jobs";
+import { pruneHealthChecks, runHealthRound } from "@/server/health/runner";
+import { ROUND_MS } from "@/lib/health/checks";
 import { pruneLinkCodes } from "@/server/services/telegram";
 import { runDueTokenChecks } from "@/server/services/token-checks";
 import { startTelegramBot } from "@/server/telegram/bot";
@@ -13,7 +16,8 @@ import { pruneAlerts } from "./store";
  * Runs the alerts inside the always-on server process (approved: a background checker about every minute):
  *  - the checker every 60 s (a round never overlaps the next);
  *  - delivery of waiting alerts every 10 s (quiet hours, Telegram's pace);
- *  - housekeeping hourly (old alerts, expired link codes);
+ *  - housekeeping hourly (old alerts, expired link codes, health results older than 90 days);
+ *  - health checks every 5 minutes (status page and admin dashboard);
  *  - the Telegram bot.
  * One server process per database and bot token (see .env.example). CRYPY_WORKER=off turns all of it off.
  */
@@ -32,6 +36,7 @@ const busy = (busyStore.__crypyWorkerBusy ??= new Set<string>());
 function every(ms: number, task: () => Promise<unknown>, label: string, firstDelay = ms) {
   let running = false;
   let lastError = "";
+  registerJob(label, ms);
   const tick = async () => {
     if (running) return;
     running = true;
@@ -39,8 +44,10 @@ function every(ms: number, task: () => Promise<unknown>, label: string, firstDel
     try {
       await task();
       lastError = "";
+      noteJobRun(label, null);
     } catch (error) {
       const message = redactKeys((error as Error)?.message ?? "failed");
+      noteJobRun(label, message);
       // The same error again isn't repeated in the log every minute.
       if (message !== lastError) console.warn(`[crypy] alerts ${label}: ${message}`);
       lastError = message;
@@ -95,6 +102,7 @@ export function startAlertsWorker(): void {
     async () => {
       await pruneAlerts();
       await pruneLinkCodes();
+      await pruneHealthChecks();
     },
     "housekeeping",
   );
@@ -109,6 +117,18 @@ export function startAlertsWorker(): void {
       },
       "token-checks",
       60_000,
+    );
+  // Health checks for the status page and admin dashboard (M9 Part 5): quick checks every round, real tool runs
+  // about every 30 minutes, 2 at most per round. Results are saved; the pages only read them.
+  if (!skip.has("health"))
+    every(
+      ROUND_MS,
+      async () => {
+        const { failed } = await runHealthRound();
+        if (failed.length) console.warn(`[crypy] health: not passing: ${failed.join(", ")}`);
+      },
+      "health",
+      90_000,
     );
   if (!skip.has("bot")) startTelegramBot();
 }
