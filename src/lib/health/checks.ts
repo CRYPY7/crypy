@@ -114,3 +114,9 @@ export const statusComponents: readonly StatusComponent[] = [
   { id: "alerts", group: "alerts", checks: ["database", "job:checker", "job:delivery", "bot"] },
   { id: "token-checks", group: "alerts", checks: ["database", "job:token-checks"] },
 ];
+
+/** Dictionary key for a check's name under `admin.checks.label` (chains share one text with the chain's name). */
+export function checkLabelKey(id: string): { key: string; chain?: string } {
+  if (id.startsWith("chain:")) return { key: "chain", chain: id.slice(6) };
+  return { key: id.replace(":", "_") };
+}

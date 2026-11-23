@@ -29,6 +29,13 @@
       "when": 1795410238963,
       "tag": "0003_health_checks",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795412419779,
+      "tag": "0004_status_updates",
+      "breakpoints": true
     }
   ]
 }

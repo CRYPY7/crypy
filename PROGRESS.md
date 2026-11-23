@@ -1,43 +1,43 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-22
+Last updated: 2026-11-23
 
 ## Milestones
 
-| Milestone                                              | Status                                                                                         |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                                                        |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                           |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                           |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                           |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                        |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                          |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                           |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                          |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                 |
-| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                         |
-| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                          |
-| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses   |
-| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)              |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                  |
-| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)              |
-| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test  |
-| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                 |
-| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                            |
-| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred   |
-| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3        |
-| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                    |
-| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                             |
-| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)           |
-| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)       |
-| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap)  |
-| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified         |
-| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)          |
-| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending                |
-| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                            |
-| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server          |
-| M9 Part 5 Monitoring: health checks, status, admin     | 🟡 Health checks built 2026-11-23; status page and admin designs await approval (boards 51–54) |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                           |
+| Milestone                                              | Status                                                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                                       |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                          |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                          |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                          |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                         |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                          |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                         |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                        |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
+| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                 |
+| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
+| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
+| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
+| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
+| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
+| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3       |
+| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                   |
+| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                            |
+| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
+| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
+| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
+| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified        |
+| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
+| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending               |
+| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                           |
+| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
+| M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
 ## M9 Part 5 — Monitoring: health checks, status page, admin dashboard (owner request 2026-11-23)
 
@@ -57,16 +57,46 @@ Last updated: 2026-11-22
   problems. The public summary has states and 90-day bars only, never reasons, timings or provider names.
 - `CRYPY_WORKER_SKIP=health` turns it off (browser tests do). No new settings, keys or dependencies.
 
-**Designs for approval (canvas boards 51–54):** public `/status` (desktop and phone) and the private `/admin`
-dashboard with its sign-in, not-an-admin and Telegram-message states. Nothing is built for these screens until
-approved.
+**Status page and admin dashboard (designs approved 2026-11-23, boards 51–54), built:**
 
-**Checks (2026-11-23):** typecheck, lint, Prettier: clean. Unit: 376 passed (13 new). Build: passed. Browser: 216
-passed, 12 skipped, 0 failed (one earlier full run had 1 intermittent failure in an existing SEO test, see Known
-issues). Live run on the built site: website, all 5 chains, search, balances, jobs and database passed on real data;
+- **`/status` (public, in the sitemap, footer link "Status"):** headline (working / some problems / major problem / not
+  checked yet; "everything checked so far passed" while some parts are still waiting for their first check), last
+  check time, updates written by the owner (ongoing and planned first, fixed ones for 90 days), and every component
+  with its state and 90 daily bars (30 on phones): website and search, the 14 tools (linked), the 5 chains, wallet
+  alerts and the daily token checks; then "Features: live and coming" and how the checks work. States, bars and the
+  owner's updates only: no reasons, timings, provider names or server details.
+- **`/admin` (private: `noindex`, disallowed in robots.txt, not in the sitemap):** the usual wallet sign-in, then
+  only wallets listed in `ADMIN_WALLETS` on the server see anything. Others get "This wallet isn't an admin". Shows:
+  right now / last 24 hours / Alchemy free plan / Telegram tiles; every check with state, time taken, when and reason
+  (filters: problems, website, chains, tools, alerts, data, server); free-plan use today per provider, GoPlus calls
+  sent and held back, requests refused by the rate limit; server (disk, memory, certificate, database size, uptime,
+  backup schedule); failed checks of the last 24 hours grouped by reason; and the form to publish a status update and
+  mark it fixed. Publishing uses `POST /api/v1/admin/status-updates` and `PATCH …/{id}` (same-site, rate-limited,
+  admin only, plain text only, length limits, invisible characters removed).
+- **Telegram to the owner:** when a check fails for the second time in a row, one message with the reason; one more
+  when it passes again ("Fixed … after N minutes"). Sent only to the Telegram chats linked to admin wallets (link
+  Telegram on the Watchlist page while signed in with that wallet). Never asks to connect or sign anything.
+- **New:** table `status_updates` (migration `0004_status_updates`); `ADMIN_WALLETS` setting (public addresses,
+  comma-separated; empty = nobody); daily counters for GoPlus and the rate limit.
+- **Differences from the boards:** the admin page sits inside the normal site layout (header and sidebar) instead of
+  its own header; Health / Providers / Status updates are jump links to sections of one page; the backup row shows
+  the schedule, because the backup folder isn't readable by the app; "Recent errors" lists failed health checks
+  (other server errors aren't saved).
+
+**Checks (2026-11-23, health checks):** typecheck, lint, Prettier: clean. Unit: 376 passed (13 new). Build: passed.
+Browser: 216 passed, 12 skipped, 0 failed (one earlier full run had 1 intermittent failure in an existing SEO test,
+see Known issues).
+
+**Checks (2026-11-23, status page and admin):** typecheck, lint, Prettier, i18n check: clean. Unit: 385 passed, 72
+skipped (9 new: owner messages once per problem and once when fixed, escaping and key removal, admin list, update
+validation, which updates show, counters, sorting and grouping). Build passed. Browser: 234 passed, 12 skipped, 0
+failed (new: status page and sitemap, admin signed out, APIs refuse visitors and other sites, a non-admin wallet sees
+nothing, admin dashboard and filters, a published update appears on /status and is marked fixed; accessibility on
+both pages). Screenshots checked on desktop and phone with real health results. Live run on the built site: website, all 5 chains, search, balances, jobs and database passed on real data;
 bot, token checks and certificate skipped as expected (not set up there).
 
-**Owner:** set up the free external uptime monitor (UptimeRobot or similar) for `https://crypy.org/en`.
+**Owner:** add `ADMIN_WALLETS=<your wallet address>` to the server's `.env.local`, then run `update.sh`; link
+Telegram on the Watchlist page with that wallet to get the messages. External uptime monitor: done by the owner.
 
 ## M8 Part 3 — Alerts: background checker, Telegram, quiet hours, history, Portfolio sync (boards 36, 39–41)
 
@@ -1452,7 +1482,9 @@ Not yet run: Lighthouse score, testing on real phones, checks on the owner's Win
 
 - **Intermittent (seen once, 2026-11-23):** on the phone-size browser test, a pending token-check page once had its
   `noindex, follow` robots tag twice (same content, harmless for search engines); 6 repeat runs and a second full
-  run passed. Watch for it; likely React placing the page's robots tag in the head twice during streaming.
+  run passed. Cause found while building the status page: while a page streams, Next.js keeps a hidden copy of the incoming part
+  for a moment before moving it into place; a test that counts elements at that instant sees two. Visitors and
+  search engines see one. Tests now look inside the visible main area.
 
 - **Fixed (2026-11-21): server crash on the owner's Windows PC.** Under the full browser suite the app server sometimes
   exited with Windows code 0xC0000409 (a native abort inside Node v26.13.1, no JavaScript error, normal memory): 3 of

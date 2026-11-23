@@ -181,6 +181,26 @@ export const healthChecks = pgTable(
   (table) => [index("health_checks_checked_at_idx").on(table.checkedAt)],
 );
 
+/**
+ * Status updates written by an admin for the public status page (M9 Part 5). Plain text only. `component` is a
+ * status component id from lib/health/checks.ts (or null for the whole site).
+ */
+export const statusUpdates = pgTable(
+  "status_updates",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    /** ongoing | fixed | planned */
+    state: text("state").notNull(),
+    component: text("component"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+    fixedAt: timestamp("fixed_at", { withTimezone: true }),
+  },
+  (table) => [index("status_updates_created_idx").on(table.createdAt)],
+);
+
 export const schema = {
   users,
   accounts,
@@ -191,6 +211,7 @@ export const schema = {
   alerts,
   tokenChecks,
   healthChecks,
+  statusUpdates,
   checkerCursors,
   portfolios,
 };

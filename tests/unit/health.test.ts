@@ -92,7 +92,9 @@ describe("component state", () => {
   ]);
   it("is as bad as the worst check it needs", () => {
     expect(status.componentState({ checks: ["website", "tool:tx"] }, states)).toBe("down");
-    expect(status.componentState({ checks: ["website", "bot"] }, states)).toBe("operational");
+    // A skipped check is left out, but a component with nothing of its own set up isn't claimed as working.
+    expect(status.componentState({ checks: ["website", "tool:tx", "bot"] }, states)).toBe("down");
+    expect(status.componentState({ checks: ["website", "bot"] }, states)).toBe("unknown");
   });
   it("is down only when every per-chain alternative is down", () => {
     expect(status.componentState({ checks: ["website"], someOf: ["a", "b"] }, states)).toBe("degraded");

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { fakeTelegramUrl } from "./fake-telegram";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { installSigningWallet } from "./signing-wallet";
 
 /**
  * Watchlist (M8 Part 2): wallet sign-in, saving items and alert choices, data download and account deletion.
@@ -10,55 +11,6 @@ const USDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 const VITALIK = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";
 
 const FORBIDDEN = ["eth_sign", "eth_signTypedData", "eth_signTypedData_v4", "eth_sendTransaction", "wallet_sendCalls"];
-
-const installSigningWallet = (address: string) => {
-  const w = window as unknown as {
-    __walletRequests: { method: string; params?: unknown }[];
-    __testSign: (raw: string) => Promise<string>;
-  };
-  w.__walletRequests = [];
-  const provider = {
-    request: async ({ method, params }: { method: string; params?: unknown[] }) => {
-      w.__walletRequests.push({ method, params });
-      const approved = localStorage.getItem("__walletApproved") === "1";
-      switch (method) {
-        case "eth_requestAccounts":
-          localStorage.setItem("__walletApproved", "1");
-          return [address];
-        case "eth_accounts":
-          return approved ? [address] : [];
-        case "eth_chainId":
-          return "0x1";
-        case "net_version":
-          return "1";
-        case "wallet_requestPermissions":
-        case "wallet_getPermissions":
-          return [{ parentCapability: "eth_accounts" }];
-        case "personal_sign": {
-          if (localStorage.getItem("__walletReject") === "1")
-            throw Object.assign(new Error("User rejected the request."), { code: 4001 });
-          return w.__testSign(String(params?.[0]));
-        }
-        default:
-          throw Object.assign(new Error("Unsupported"), { code: 4200 });
-      }
-    },
-    on: () => {},
-    removeListener: () => {},
-  };
-  const detail = Object.freeze({
-    info: {
-      uuid: "8f7c1e1e-0000-4000-8000-000000000002",
-      name: "Test Wallet",
-      icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'/%3E",
-      rdns: "org.crypy.testwallet",
-    },
-    provider,
-  });
-  const announce = () => window.dispatchEvent(new CustomEvent("eip6963:announceProvider", { detail }));
-  window.addEventListener("eip6963:requestProvider", announce);
-  announce();
-};
 
 async function setUp(page: Page) {
   const account = privateKeyToAccount(generatePrivateKey());

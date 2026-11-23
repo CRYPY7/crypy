@@ -739,6 +739,17 @@ DEX decoders, per chain family:                      (one per DEX design)
   only) and `recentResults` (the admin dashboard will show reasons from it).
 - Pages read saved rows only; opening them never calls a provider. A status page on the same server can't report
   the server being down: an external free uptime monitor covers that.
+- **Status page** `app/[locale]/status` (`publicStatus` + `publicUpdates`; dynamic part behind `connection()`).
+  Components whose own checks aren't set up on a server show "not checked", never "working" on the strength of the
+  shared website and database checks.
+- **Admin** `app/[locale]/admin` (`noindex`, robots-disallowed): `server/admin/auth.ts` (`adminAccessFromCookies`,
+  `adminAccessFromRequest`: SIWE session + `ADMIN_WALLETS`), `server/health/admin.ts` (`adminHealth`: checks with
+  reasons, 24-hour pass rate, provider usage, `server/health/counters.ts` daily counts, database size, uptime),
+  `components/admin/admin-client.tsx` (sign-in through the existing wallet sign-in, sign-out, update form). Status
+  updates: table `status_updates`, `lib/health/updates.ts` (zod, plain-text cleaning), `server/services/status-updates.ts`,
+  `/api/v1/admin/status-updates[/id]`.
+- **Owner messages** `server/health/notify.ts`: `transitions` (pure: second failure in a row → problem; pass after a
+  failing streak → fixed) and `notifyAdmins` (Telegram chats linked to admin wallets; errors logged with keys removed).
 
 ## 13. Performance budget
 

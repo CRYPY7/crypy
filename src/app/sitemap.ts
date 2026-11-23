@@ -26,6 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       "/learn",
       ...liveChains.filter((chain) => chain.capabilities.fees).map((chain) => `/gas/${chainSlugs[chain.key]}`),
       "/tokens",
+      "/status",
     ].map((path) => ({ path })),
     // Guides carry their real "updated" date, so search engines know when to read them again.
     ...guideMetas.map((guide) => ({ path: `/learn/${guide.slug}`, lastModified: guide.updated })),

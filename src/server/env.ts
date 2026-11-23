@@ -59,6 +59,22 @@ const schema = z.object({
     .default("https://api.telegram.org"),
   /** The background checker and the Telegram bot run in the server process unless this is "off". */
   CRYPY_WORKER: z.enum(["on", "off"]).default("on"),
+  /**
+   * M9 Part 5: wallet addresses allowed to open /admin (comma-separated). Public addresses only, never keys. Empty: no
+   * one can open the admin dashboard.
+   */
+  ADMIN_WALLETS: z
+    .string()
+    .optional()
+    .transform((value) =>
+      value
+        ? value
+            .split(",")
+            .map((part) => part.trim().toLowerCase())
+            .filter(Boolean)
+        : [],
+    )
+    .pipe(z.array(z.string().regex(/^0x[0-9a-f]{40}$/, "ADMIN_WALLETS must list 0x addresses"))),
 });
 
 const parsed = schema.safeParse({
@@ -76,6 +92,7 @@ const parsed = schema.safeParse({
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || undefined,
   TELEGRAM_API_URL: process.env.TELEGRAM_API_URL || undefined,
   CRYPY_WORKER: process.env.CRYPY_WORKER || undefined,
+  ADMIN_WALLETS: process.env.ADMIN_WALLETS || undefined,
 });
 
 if (!parsed.success) {

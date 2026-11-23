@@ -5,6 +5,7 @@ import {
   TOOL_CHECKS_PER_ROUND,
   checkDefinitions,
   checkIds,
+  checkLabelKey,
   statusComponents,
 } from "@/lib/health/checks";
 import {
@@ -22,6 +23,8 @@ import {
 import { getDb } from "@/server/db/client";
 import { healthChecks } from "@/server/db/schema";
 import { redactKeys } from "@/server/redact";
+import messages from "../../../messages/en.json";
+import { notifyAdmins, transitions } from "./notify";
 import { type Probe, Skip, probes } from "./probes";
 
 /** Results older than this are removed by the hourly housekeeping. */
@@ -97,8 +100,20 @@ export async function runHealthRound(now = Date.now()): Promise<{ ran: number; f
     const db = await getDb();
     const at = new Date();
     await db.insert(healthChecks).values(results.map((r) => ({ ...r, checkedAt: at })));
+    // Telegram to the admins when a check starts failing (second failure in a row) or passes again.
+    const ran = new Set(results.map((r) => r.check));
+    const recent = groupByCheck((await recentResults(26, now)).filter((r) => ran.has(r.check)));
+    await notifyAdmins(transitions(recent), englishLabel);
   }
   return { ran: results.length, failed: results.filter((r) => r.status === "fail").map((r) => r.check) };
+}
+
+/** A check's English name for admin messages (from the dictionary). */
+export function englishLabel(check: string): string {
+  const { key, chain } = checkLabelKey(check);
+  const labels = messages.admin.checks.label as Record<string, string>;
+  const text = labels[key] ?? check;
+  return chain ? text.replace("{chain}", (messages.chains as Record<string, string>)[chain] ?? chain) : text;
 }
 
 export async function pruneHealthChecks(now = Date.now()): Promise<void> {
@@ -191,4 +206,9 @@ export async function publicStatus(now = Date.now(), days = KEEP_DAYS): Promise<
   });
   const overall = overallState(components);
   return { overall, components, checkedAt: recent[0]?.at.toISOString() ?? null };
+}
+
+/** The time a page reads the results at (one value per request, so every number on the page agrees). */
+export function readTime(): number {
+  return Date.now();
 }

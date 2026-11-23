@@ -1,4 +1,5 @@
 import "server-only";
+import { countToday } from "@/server/health/counters";
 
 /**
  * Fixed-window rate limiter. Protects free API quotas from bots and abuse.
@@ -39,6 +40,7 @@ export function createRateLimiter({
     }
     window.count += 1;
     const allowed = window.count <= limit;
+    if (!allowed) countToday("rateLimit.refused", now);
     return {
       allowed,
       remaining: Math.max(0, limit - window.count),

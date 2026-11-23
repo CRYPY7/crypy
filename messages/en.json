@@ -45,7 +45,8 @@
     "clearRecent": "Clear",
     "new": "New",
     "beta": "Beta",
-    "learn": "Learn"
+    "learn": "Learn",
+    "status": "Status"
   },
   "categories": {
     "all": "All",
@@ -3123,6 +3124,250 @@
       "related": "Other checked tokens on {chain}",
       "allChecks": "All token checks",
       "learn": "Learn more"
+    }
+  },
+  "status": {
+    "seoTitle": "CRYPY Status: Are All Tools and Chains Working?",
+    "seoDescription": "Live status of every CRYPY tool and blockchain connection. Our server tries each one with real data every few minutes and keeps 90 days of uptime.",
+    "title": "CRYPY status",
+    "intro": "Is everything working? Our server tries every tool and chain for real, every few minutes, and shows the results here.",
+    "headline": {
+      "operational": "Everything is working",
+      "degraded": "Some parts are having problems",
+      "down": "The site is having a major problem",
+      "unknown": "Not checked yet"
+    },
+    "headlineText": {
+      "operational": "Every tool and chain passed its latest check.",
+      "degraded": "{names} {count, plural, one {is} other {are}} having problems. Everything else is working.",
+      "down": "The website itself didn't pass its latest checks. We're on it.",
+      "unknown": "The server hasn't saved any check results yet. They appear a few minutes after it starts.",
+      "partial": "Everything checked so far passed. {count, plural, one {# part hasn't} other {# parts haven't}} been checked yet."
+    },
+    "lastChecked": "Last checked {minutes, plural, =0 {less than a minute ago} one {# minute ago} other {# minutes ago}}",
+    "checksEvery": "Checks run every 5 minutes",
+    "state": {
+      "operational": "Working",
+      "degraded": "Having problems",
+      "down": "Down",
+      "unknown": "Not checked yet"
+    },
+    "legendLabel": "What the bars mean",
+    "legend": {
+      "operational": "Working all day",
+      "degraded": "Some problems",
+      "down": "Down for a while",
+      "none": "No checks yet"
+    },
+    "daysAgo": "90 days ago",
+    "today": "Today",
+    "uptime": "{percent} working",
+    "noUptime": "No checks yet",
+    "dayTitle": "{day}: {percent} of checks passed",
+    "dayNone": "{day}: no checks",
+    "groups": {
+      "core": {
+        "title": "Website",
+        "sub": ""
+      },
+      "tools": {
+        "title": "Tools",
+        "sub": "Each tool is tried with real public data about every 30 minutes"
+      },
+      "chains": {
+        "title": "Chains",
+        "sub": "Each chain's connection, every 5 minutes"
+      },
+      "alerts": {
+        "title": "Alerts and daily checks",
+        "sub": ""
+      }
+    },
+    "components": {
+      "website": "Website",
+      "search": "Search",
+      "alerts": "Wallet alerts on Telegram",
+      "token-checks": "Daily token security checks"
+    },
+    "updates": {
+      "title": "Updates",
+      "none": "No updates in the last 90 days.",
+      "earlier": "Earlier updates (last 90 days)",
+      "state": {
+        "ongoing": "Ongoing",
+        "fixed": "Fixed",
+        "planned": "Planned work"
+      },
+      "affects": "Affects: {name}",
+      "wholeSite": "Whole site"
+    },
+    "features": {
+      "title": "Features: live and coming",
+      "live": "Live",
+      "beta": "Beta",
+      "soon": "Coming soon",
+      "liveTools": "{count} tools, listed above",
+      "liveChains": "Ethereum, BNB Chain, Base, Arbitrum and Polygon",
+      "liveAlerts": "Telegram wallet alerts",
+      "betaSite": "The whole site is a public beta: results are real, the design may still change",
+      "soonItems": [
+        "Urdu language",
+        "Arabic language"
+      ]
+    },
+    "howItWorks": "How this works: the checks use public test data (a well-known wallet, transaction and token), never anyone's searches. \"Working\" means the last check passed; it doesn't promise every result is complete. If this page doesn't load at all, the whole site is down, and we're alerted separately."
+  },
+  "admin": {
+    "metaTitle": "Admin",
+    "badge": "Admin · private",
+    "nav": {
+      "label": "Admin",
+      "health": "Health",
+      "providers": "Providers",
+      "updates": "Status updates"
+    },
+    "signedInAs": "Signed in as {address} (admin)",
+    "viewPublic": "View public status page",
+    "signOut": "Sign out",
+    "title": "Site health",
+    "intro": "Everything the server checks, with reasons. Only admin wallets can open this page.",
+    "lastRound": "Last round {minutes, plural, =0 {less than a minute ago} one {# minute ago} other {# minutes ago}}",
+    "noRounds": "No check results saved yet: the first round runs about 2 minutes after the server starts.",
+    "tiles": {
+      "now": "Right now",
+      "nowProblems": "{count, plural, one {# having problems} other {# having problems}}",
+      "nowAll": "All working",
+      "nowSub": "{down} down · {working} working · {skipped} not set up here",
+      "day": "Last 24 hours",
+      "daySub": "of checks passed",
+      "dayNone": "No checks yet",
+      "alchemy": "Alchemy free plan",
+      "alchemySub": "used today · resets 00:00 UTC",
+      "alchemyNone": "No Alchemy key",
+      "telegram": "Telegram alerts to you",
+      "telegramOn": "On",
+      "telegramOff": "Off",
+      "telegramOnSub": "{count, plural, one {# linked chat} other {# linked chats}} of admin wallets",
+      "telegramOffSub": "Link Telegram on the Watchlist page while signed in with your admin wallet",
+      "telegramNoBot": "No Telegram bot on this server"
+    },
+    "checks": {
+      "title": "All checks",
+      "sub": "Problems first",
+      "filters": "Show",
+      "all": "All",
+      "problems": "Problems",
+      "group": {
+        "website": "Website",
+        "chain": "Chains",
+        "tool": "Tools",
+        "alerts": "Alerts",
+        "data": "Data",
+        "server": "Server"
+      },
+      "cols": {
+        "check": "Check",
+        "type": "Type",
+        "state": "State",
+        "took": "Took",
+        "when": "When",
+        "reason": "Reason"
+      },
+      "skipped": "Not set up here",
+      "never": "Not run yet",
+      "ago": "{minutes, plural, =0 {just now} one {# min ago} other {# min ago}}",
+      "none": "No checks match.",
+      "label": {
+        "website": "Website (home page)",
+        "chain": "{chain} connection",
+        "tool_search": "Search",
+        "tool_balances": "Balances",
+        "tool_tx": "Transaction lookup",
+        "tool_token-security": "Token security",
+        "tool_approvals": "Approvals",
+        "tool_activity": "Wallet activity (Ethereum)",
+        "tool_gas": "Gas prices (all chains)",
+        "tool_block-time": "Block at a time",
+        "job_checker": "Alerts checker",
+        "job_delivery": "Alert delivery",
+        "bot": "Telegram bot",
+        "job_token-checks": "Daily token checks",
+        "database": "Database",
+        "server_memory": "Memory",
+        "server_disk": "Disk",
+        "server_certificate": "Certificate"
+      }
+    },
+    "providers": {
+      "title": "Free plans used today",
+      "sub": "Each provider stops being used before its daily share runs out (zero-cost rule). Counts since this server started today.",
+      "usage": "{used} of {limit} today",
+      "usageNoLimit": "{used} requests today · no limit",
+      "units": "units",
+      "requests": "requests",
+      "kind": {
+        "alchemy": "main provider",
+        "extra": "extra provider",
+        "public": "public node, last resort"
+      },
+      "none": "No provider calls yet today.",
+      "goplus": "GoPlus security data",
+      "goplusValue": "{sent} sent · {held} held back today (pace 30 a minute)",
+      "rateLimit": "Requests refused by the rate limit today"
+    },
+    "server": {
+      "title": "Server",
+      "disk": "Disk free",
+      "memory": "Memory free",
+      "certificate": "Certificate",
+      "database": "Database size",
+      "uptime": "Server running for",
+      "backups": "Database backups",
+      "backupsValue": "Daily at 03:17 UTC, kept 14 days (checked on the server; the folder isn't readable by the app)",
+      "unknown": "Not known yet",
+      "uptimeValue": "{hours, plural, =0 {less than an hour} one {# hour} other {# hours}}"
+    },
+    "failures": {
+      "title": "Failed checks (last 24 hours)",
+      "sub": "Grouped by reason. Keys are removed before anything is saved.",
+      "none": "No failed checks in the last 24 hours.",
+      "count": "×{count}"
+    },
+    "updates": {
+      "title": "Status updates on the public page",
+      "fieldTitle": "Title",
+      "fieldState": "State",
+      "fieldAffects": "Affects",
+      "fieldBody": "What visitors should know",
+      "hint": "Plain text only. Shown on /status at once; you can mark it Fixed later.",
+      "publish": "Publish update",
+      "publishing": "Publishing…",
+      "published": "Published. It's on the status page now.",
+      "error": "That didn't save. Check the fields and try again.",
+      "signedOut": "You were signed out. Reload the page and sign in again.",
+      "recent": "Recent updates",
+      "none": "No updates yet.",
+      "markFixed": "Mark fixed",
+      "markOngoing": "Mark ongoing",
+      "changed": "Saved."
+    },
+    "signIn": {
+      "title": "Admin sign-in",
+      "text": "Sign in with an admin wallet. Your wallet will ask you to sign a short message; it costs nothing and gives no permission to move funds.",
+      "button": "Connect wallet and sign in",
+      "buttonConnected": "Sign in",
+      "busy": "Waiting for your wallet…",
+      "hint": "This page is hidden from search engines. Admin wallets are set on the server, not here.",
+      "errNoWallet": "Connect a wallet first, then press Sign in.",
+      "errChain": "Switch your wallet to Ethereum, BNB Chain, Base, Arbitrum or Polygon, then try again.",
+      "errRejected": "You declined the message in your wallet. Nothing was signed.",
+      "errRateLimited": "Too many tries in a minute. Wait a moment, then try again.",
+      "errFailed": "Sign-in didn't work. Try again; if it keeps failing, reload the page."
+    },
+    "denied": {
+      "title": "This wallet isn't an admin",
+      "text": "You're signed in as {address}, which isn't on the admin list. Nothing about the site's health is shown.",
+      "publicLink": "Public status page"
     }
   }
 }

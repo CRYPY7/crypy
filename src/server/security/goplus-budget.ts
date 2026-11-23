@@ -1,4 +1,5 @@
 import "server-only";
+import { countToday } from "@/server/health/counters";
 
 /**
  * One shared pace for GoPlus calls from this server (free plan: 150 compute units a minute, 30,000 a day; in tests
@@ -55,9 +56,11 @@ export function takeGoPlusSlot(priority: GoPlusPriority, now = Date.now()): bool
   }
   if (now < p.pausedUntil || p.used >= (priority === "page" ? PER_MINUTE : BACKGROUND_PER_MINUTE)) {
     p.refused[priority] += 1;
+    countToday("goplus.heldBack", now);
     return false;
   }
   p.used += 1;
+  countToday("goplus.sent", now);
   return true;
 }
 

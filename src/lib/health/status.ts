@@ -60,6 +60,9 @@ export function checkStates(
   return states;
 }
 
+/** Checks shared by many components (they show the site works, not that a particular feature does). */
+const SHARED = new Set(["website", "database"]);
+
 /** A component's state: the worst of the checks it needs; per-chain alternatives are down only when all are down. */
 export function componentState(
   component: Pick<StatusComponent, "checks" | "someOf">,
@@ -73,6 +76,10 @@ export function componentState(
     else if (alternatives.every((s) => s === "unknown")) fromAlternatives = ["unknown"];
     else if (alternatives.some((s) => s !== "operational")) fromAlternatives = ["degraded"];
   }
+  // A component whose own checks aren't set up here (e.g. token checks turned off) isn't vouched for by the shared
+  // website and database checks alone.
+  const own = component.checks.filter((id) => !SHARED.has(id));
+  if (own.length && own.every((id) => states.get(id) == null) && !alternatives.length) return "unknown";
   const all = [...needed, ...fromAlternatives];
   return all.length ? worst(all) : "unknown";
 }

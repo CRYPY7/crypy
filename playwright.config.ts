@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { ADMIN_TEST_ADDRESS } from "./tests/e2e/admin-wallet";
 import { FAKE_TELEGRAM_TOKEN, fakeTelegramUrl } from "./tests/e2e/fake-telegram";
 
 const port = 3200;
@@ -31,6 +32,8 @@ export default defineConfig({
       PGLITE_DIR: "memory",
       // The daily token checks would add live network load to every test run; their logic has unit tests.
       CRYPY_WORKER_SKIP: "token-checks,health",
+      // The admin dashboard tests sign in with this test-only wallet.
+      ADMIN_WALLETS: ADMIN_TEST_ADDRESS,
       ...(fakeTelegram ? { TELEGRAM_API_URL: fakeTelegramUrl, TELEGRAM_BOT_TOKEN: FAKE_TELEGRAM_TOKEN } : {}),
     },
   },
