@@ -30,7 +30,8 @@ export default async function SettingsPage() {
         <LanguageMenu
           current={locale}
           label={t("nav.language")}
-          betaLabel={t("common.betaTranslation")}
+          betaLabel={t("common.beta")}
+          betaTitle={t("common.betaTranslation")}
           options={selectableLocales.map((config) => ({
             code: config.code,
             nativeName: config.nativeName,

@@ -62,7 +62,10 @@ interface LanguageMenuProps {
   current: Locale;
   options: LanguageOption[];
   label: string;
+  /** Short chip text ("Beta"). */
   betaLabel: string;
+  /** Full explanation, used as the chip's tooltip and accessible name. */
+  betaTitle: string;
 }
 
 export function LanguageMenu(props: LanguageMenuProps) {
@@ -83,6 +86,7 @@ function LanguageMenuView({
   options,
   label,
   betaLabel,
+  betaTitle,
   pathname,
 }: LanguageMenuProps & { pathname: string | null }) {
   const id = useId();
@@ -105,7 +109,7 @@ function LanguageMenuView({
       <div
         id={popoverId}
         popover="auto"
-        className="lang-menu-popover w-56 rounded-lg border bg-popover p-1 text-popover-foreground shadow-lg"
+        className="lang-menu-popover w-60 rounded-lg border bg-popover p-1 text-popover-foreground shadow-lg"
       >
         <ul>
           {options.map((option) => (
@@ -116,10 +120,18 @@ function LanguageMenuView({
                 lang={option.code}
                 aria-current={option.code === current ? "true" : undefined}
                 onClick={() => saveLocaleChoice(option.code)}
-                className="flex min-h-11 items-center justify-between rounded-md px-3 text-base hover:bg-muted aria-[current=true]:font-semibold"
+                className="flex min-h-11 items-center justify-between gap-3 rounded-md px-3 text-base hover:bg-muted aria-[current=true]:font-semibold"
               >
-                <span>{option.nativeName}</span>
-                {option.beta && <span className="text-xs text-muted-foreground">{betaLabel}</span>}
+                <span className="whitespace-nowrap">{option.nativeName}</span>
+                {option.beta && (
+                  <span
+                    title={betaTitle}
+                    className="shrink-0 rounded-full border px-2 py-0.5 text-xs font-normal text-muted-foreground"
+                  >
+                    <span aria-hidden="true">{betaLabel}</span>
+                    <span className="sr-only">{betaTitle}</span>
+                  </span>
+                )}
               </a>
             </li>
           ))}
