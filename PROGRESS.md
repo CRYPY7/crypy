@@ -63,8 +63,16 @@ could get errors or pages without styles, and the build competed with the site f
 - `tsconfig.json` lists the type folders of both build folders, so Next.js never edits it on the server (an edited
   tracked file would stop the next `git pull`).
 - Expected on the droplet: about 3–4 minutes per update (compile about 1 min, pages about 2.3 min), with the site
-  up the whole time except the restart. The next step (redesign R1): build on GitHub Actions (free for a public
+  up the whole time except the restart. The next step (stabilization S4): build on GitHub Actions (free for a public
   repository), so the server only downloads and switches, in under a minute.
+
+- **First run on the server (owner, 2026-11-24):** the build into `.next-a` succeeded, then the script stopped at the
+  static-file copy: `find`, run as the `crypy` user from root's home folder, couldn't return to it ("Failed to restore
+  initial working directory: /root: Permission denied"). Nothing was switched; the site kept running the previous
+  version. Fixed: the script works from the app folder. Re-tested with a real second user starting in `/root`.
+- That run compiled in 3.5 min instead of 67 s: a new build folder has no build cache. Measured here: a folder's own
+  cache cuts compiling from 34 s to 2.3 s; a cache copied from another folder doesn't help (40 s). So the first build
+  into each of `.next-a` and `.next-b` is slow once; after that each reuses its own.
 
 **Checks (2026-11-24):** typecheck, lint, Prettier, i18n check: clean. Unit 469 passed, 72 skipped. Builds into
 `.next-a`, `.next-b` and `.next` passed, `tsconfig.json` unchanged by them. Browser: 260 passed, 12 skipped, 0 failed,
@@ -98,7 +106,7 @@ memory down to 5% free once.
 - **Memory:** the app used 620–770 MB here under load with the worker running; with Alchemy's full token lists and
   the lock indexes it is higher on the server. 26% free on the 2 GB droplet is expected; the 5% dip most likely came
   from `update.sh` building while the site runs (the build needs about 1–1.5 GB; 2 GB swap covers it). No setting
-  changed; the redesign's R1 (worker split, build headroom) addresses it.
+  changed; stabilization S4 (worker split, build headroom) addresses it.
 - **Alchemy limit follows the month (owner's Alchemy dashboard, 2026-11-24):** Alchemy showed 3.5M of 30M units used
   this month while CRYPY stopped at a fixed 1M a day, and every restart reset the count. Now the counters are saved
   every minute (new table `provider_usage`, migration `0005_provider_usage`) and added back after a restart, and

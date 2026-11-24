@@ -8,6 +8,8 @@
 set -euo pipefail
 APP_DIR="/opt/crypy/app"
 [ "$(id -u)" -eq 0 ] || { echo "Run as root."; exit 1; }
+# Commands below run as the crypy user, who may not enter root's home folder: work from the app folder.
+cd "$APP_DIR"
 
 # Step 1: get the code, then run the freshly pulled copy of this script (a script must not be rewritten while bash is
 # reading it; this whole block is read before it runs).
@@ -24,15 +26,17 @@ case "$LIVE" in .next | .next-a | .next-b) ;; *) LIVE=".next" ;; esac
 if [ "$LIVE" = ".next-a" ]; then NEW=".next-b"; else NEW=".next-a"; fi
 
 echo "Building the new version into $NEW while the site keeps running from $LIVE ..."
+# Each build folder keeps its own build cache (a folder's own cache makes compiling much faster; a copied one doesn't
+# help). The very first build into a folder therefore takes longer.
 # The type check already ran before the push (and on the PC); it costs about 80 s on this server.
 sudo -u crypy bash -c "cd '$APP_DIR' && pnpm install --frozen-lockfile && CRYPY_DIST_DIR='$NEW' CRYPY_SKIP_TYPECHECK=1 pnpm build"
 
 # Static files of every recent version, side by side (names carry content hashes, so they never clash).
-sudo -u crypy bash -c "mkdir -p '$APP_DIR/.static' && cp -r '$APP_DIR/$NEW/static/.' '$APP_DIR/.static/' && find '$APP_DIR/.static' -type f -mtime +30 -delete && find '$APP_DIR/.static' -type d -empty -delete"
+sudo -u crypy bash -c "cd '$APP_DIR' && mkdir -p '$APP_DIR/.static' && cp -r '$APP_DIR/$NEW/static/.' '$APP_DIR/.static/' && find '$APP_DIR/.static' -type f -mtime +30 -delete && find '$APP_DIR/.static' -type d -empty -delete"
 mkdir -p "$APP_DIR/.static"
 
 switch_to() {
-  sudo -u crypy bash -c "printf '%s\n' '$1' > '$APP_DIR/.crypy-dist.tmp' && mv '$APP_DIR/.crypy-dist.tmp' '$APP_DIR/.crypy-dist'"
+  sudo -u crypy bash -c "cd '$APP_DIR' && printf '%s\n' '$1' > '$APP_DIR/.crypy-dist.tmp' && mv '$APP_DIR/.crypy-dist.tmp' '$APP_DIR/.crypy-dist'"
   systemctl restart crypy
 }
 
