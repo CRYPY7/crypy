@@ -60,6 +60,15 @@ Last updated: 2026-11-24
   - Build passed; CSS is 80.2 KB of the 80 KB budget.
   - Browser: 267 passed, 13 skipped, 0 failed. New: browser mode shows the warning, reads from public nodes and never calls the server scan.
 
+**Owner's first browser-mode scan (2026-11-24):** 10,000 wallets × 2 chains, complete, 110 cross-checked, all matched, nothing left unread. But every price was missing, so the total showed $0.00. That couldn't be reproduced here: the price API answers, and the browser test now checks that the total isn't $0.
+
+- Prices are now tried 3 times (waiting as the server asks) and once more when the scan ends.
+- Big numbers are formatted ("10,000", not "10000").
+- The tool description mentions the 10,000-wallet browser mode in all 7 languages.
+- The owner checks `https://crypy.org/api/v1/batch-prices?chain=bsc&tokens=` on the live site.
+
+Checks: unit 507 passed; browser 267 passed, 13 skipped, 0 failed.
+
 ## Batch scanner that never shows a failed row, and loading feedback (S2 Part A, B-028, B-029; designs approved 2026-11-24, boards 55–59)
 
 **Cause found (reproduced here):**

@@ -288,8 +288,8 @@ export function ResultsView({
               <span className="text-muted-foreground">
                 {" · "}
                 {fill(s.completeLine, {
-                  addresses: summary.addresses,
-                  checks: summary.checks,
+                  addresses: number.format(summary.addresses),
+                  checks: number.format(summary.checks),
                   blocks: blocksText || "—",
                   time,
                 })}
@@ -354,12 +354,15 @@ export function ResultsView({
         />
         <Card
           label={s.cards.withBalance}
-          value={fill(s.cards.withBalanceValue, { count: summary.withBalance, total: summary.addresses })}
+          value={fill(s.cards.withBalanceValue, {
+            count: number.format(summary.withBalance),
+            total: number.format(summary.addresses),
+          })}
           note={s.cards.withBalanceNote}
         />
         <Card
           label={s.cards.empty}
-          value={String(summary.empty)}
+          value={number.format(summary.empty)}
           note={s.cards.emptyNote}
           tone={summary.empty > 0 ? "high" : undefined}
         />

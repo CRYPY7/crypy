@@ -693,7 +693,7 @@
     "batch-balance": {
       "name": "Scanner de saldos em lote",
       "question": "O que todas estas carteiras têm?",
-      "description": "Verifique saldos de moedas e tokens de até 500 endereços de uma vez, nas redes que você escolher. Lidos direto da blockchain.",
+      "description": "Verifique saldos de moedas e tokens de até 500 endereços de uma vez nos servidores da CRYPY, ou até 10.000 no seu próprio navegador, nas redes que você escolher. Lidos direto da blockchain.",
       "input": "Uma lista de endereços",
       "cta": "Analisar uma lista",
       "features": [

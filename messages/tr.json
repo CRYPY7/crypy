@@ -693,7 +693,7 @@
     "batch-balance": {
       "name": "Toplu Bakiye Tarayıcı",
       "question": "Tüm bu cüzdanlarda ne var?",
-      "description": "Seçtiğiniz ağlarda 500 adrese kadar coin ve token bakiyesini tek seferde kontrol edin. Doğrudan blokzincirden okunur.",
+      "description": "Seçtiğiniz ağlarda coin ve token bakiyelerini CRYPY sunucularında tek seferde 500 adrese, kendi tarayıcınızda 10.000 adrese kadar kontrol edin. Doğrudan blokzincirden okunur.",
       "input": "Bir adres listesi",
       "cta": "Liste tara",
       "features": [

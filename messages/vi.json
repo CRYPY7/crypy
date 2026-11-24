@@ -693,7 +693,7 @@
     "batch-balance": {
       "name": "Quét số dư hàng loạt",
       "question": "Tất cả các ví này có gì?",
-      "description": "Kiểm tra số dư coin và token của tối đa 500 địa chỉ cùng lúc trên các mạng bạn chọn. Đọc trực tiếp từ blockchain.",
+      "description": "Kiểm tra số dư coin và token của tối đa 500 địa chỉ cùng lúc trên máy chủ CRYPY, hoặc tối đa 10.000 địa chỉ ngay trong trình duyệt của bạn, trên các mạng bạn chọn. Đọc trực tiếp từ blockchain.",
       "input": "Một danh sách địa chỉ",
       "cta": "Quét danh sách",
       "features": [

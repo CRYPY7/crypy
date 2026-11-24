@@ -104,6 +104,12 @@ test("scan in my browser: a warning first, then balances read from public nodes 
   const done = page.getByRole("status").filter({ hasText: "Scan complete" });
   await expect(done).toBeVisible({ timeout: 60_000 });
   await expect(done).toContainText("scanned in your browser");
+  // Prices come from CRYPY (token contracts only): Binance 8 holds coins, so the total isn't $0.
+  const total = page
+    .locator("div")
+    .filter({ has: page.getByText("Total value", { exact: true }) })
+    .last();
+  await expect(total).not.toContainText("$0.00", { timeout: 20_000 });
   await expect(page.getByText("Binance 8").filter({ visible: true }).first()).toBeVisible();
   expect(toServer).toEqual([]);
   expect(toNodes.length).toBeGreaterThan(0);

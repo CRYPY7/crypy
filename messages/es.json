@@ -693,7 +693,7 @@
     "batch-balance": {
       "name": "Escáner de saldos en lote",
       "question": "¿Qué tienen todas estas billeteras?",
-      "description": "Revisa los saldos de monedas y tokens de hasta 500 direcciones a la vez, en las cadenas que elijas. Leídos directamente de la blockchain.",
+      "description": "Revisa los saldos de monedas y tokens de hasta 500 direcciones a la vez en los servidores de CRYPY, o hasta 10.000 en tu propio navegador, en las cadenas que elijas. Leídos directamente de la blockchain.",
       "input": "Una lista de direcciones",
       "cta": "Analizar una lista",
       "features": [

@@ -373,15 +373,27 @@ export function BatchBalanceScanner({
     setJob({ id: "", status: "running", position: null, startsIn: null });
     setScan(null);
     setPhase("scanning");
-    // Prices: only the token contracts go to CRYPY, never the wallet list.
-    for (const chain of chainKeys) {
-      void fetch(`/api/v1/batch-prices?chain=${chain}&tokens=${tokensOf[chain]!.join(",")}`)
-        .then((r) => r.json() as Promise<{ ok: boolean; data?: { prices: Record<string, number> } }>)
-        .then((json) => {
-          if (json.ok && json.data) setPrices((p) => ({ ...p, [chain]: json.data!.prices }));
-        })
-        .catch(() => {});
-    }
+    // Prices: only the token contracts go to CRYPY, never the wallet list. Tried 3 times now, and once more at the
+    // end for any chain still without prices, so a busy moment never leaves the totals at $0.
+    const priced = new Set<string>();
+    const loadPrices = async (chain: string) => {
+      for (let attempt = 0; attempt < 3 && !priced.has(chain); attempt++) {
+        try {
+          const response = await fetch(`/api/v1/batch-prices?chain=${chain}&tokens=${tokensOf[chain]!.join(",")}`);
+          const json = (await response.json()) as { ok: boolean; data?: { prices: Record<string, number> } };
+          if (json.ok && json.data) {
+            priced.add(chain);
+            setPrices((p) => ({ ...p, [chain]: json.data!.prices }));
+            return;
+          }
+          const wait = Number(response.headers.get("retry-after") ?? "0");
+          await sleep(Math.min(30, Math.max(wait, 2 * (attempt + 1))) * 1000);
+        } catch {
+          await sleep(2_000 * (attempt + 1));
+        }
+      }
+    };
+    const pricesLoaded = Promise.all(chainKeys.map(loadPrices));
     // Rows arrive many times a second on big lists: put them into the table at most every 0.75 s, so the page (and
     // the scan's own timers on this same thread) stay responsive with tens of thousands of rows.
     let buffer: JobView["rows"] = [];
@@ -406,6 +418,8 @@ export function BatchBalanceScanner({
     });
     clearInterval(flusher);
     flush();
+    await pricesLoaded;
+    await Promise.all(chainKeys.filter((c) => !priced.has(c)).map(loadPrices));
     if (browserRun.current !== run) return;
     const cancelled = Object.values(finalStates).some((st) => st.phase === "cancelled");
     setJob((j) => ({ ...j, status: cancelled ? "cancelled" : "done" }));
