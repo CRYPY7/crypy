@@ -6,6 +6,7 @@ import { sql } from "drizzle-orm";
 import { type ChainConfig, getChain, liveChains } from "@/config/chains";
 import { siteUrl } from "@/config/env";
 import { allCuratedTokens } from "@/config/seo-pages";
+import { alchemyProvider, budgetExhausted } from "@/server/chains/evm/providers";
 import { registry } from "@/server/chains/registry";
 import { getDb } from "@/server/db/client";
 import { tokenChecks } from "@/server/db/schema";
@@ -138,7 +139,16 @@ export const probes: Record<string, Probe> = {
   async "tool:activity"() {
     const { chain, adapter } = withAdapter("ethereum");
     if (!adapter.getActivity) throw new Skip("not supported");
-    const { transfers } = await adapter.getActivity(chain, ACTIVITY_WALLET, null, []);
+    const { transfers, chain: page } = await adapter.getActivity(chain, ACTIVITY_WALLET, null, []);
+    const source = page.source;
+    if (source !== "history") {
+      // Visitors get the last few hours only: a real limitation, but not an outage.
+      const alchemy = alchemyProvider(chain);
+      if (!alchemy) throw new Skip("full history needs an Alchemy key on this server");
+      if (budgetExhausted(alchemy))
+        return "slow:full history paused until 00:00 UTC (Alchemy daily budget used); recent activity only";
+      throw new Error(`full history didn't load (${source}); recent activity only`);
+    }
     if (!transfers.length) throw new Error("no transfers for a wallet that has them");
   },
 

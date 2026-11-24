@@ -300,6 +300,31 @@ async function Dashboard({ locale, address, show }: { locale: Locale; address: s
                       />
                     </span>
                   )}
+                  {p.alchemy && (
+                    <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                      <span>
+                        {t("admin.providers.alchemySplit", {
+                          background: n.format(p.alchemy.backgroundUnits),
+                          visitors: n.format(Math.max(0, used - p.alchemy.backgroundUnits)),
+                        })}
+                      </span>
+                      <span>
+                        {t("admin.providers.alchemyTiers", {
+                          ordinary: n.format(p.alchemy.ordinaryLimit),
+                          background: n.format(p.alchemy.backgroundLimit),
+                        })}
+                      </span>
+                      {p.alchemy.methods.length > 0 && (
+                        <span>
+                          {t("admin.providers.alchemyTop")}{" "}
+                          {p.alchemy.methods
+                            .slice(0, 6)
+                            .map((m) => `${m.method} ${n.format(m.units)}`)
+                            .join(" · ")}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </li>
               );
             })}

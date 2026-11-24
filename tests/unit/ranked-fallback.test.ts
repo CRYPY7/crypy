@@ -1,5 +1,6 @@
 import { type Server, createServer } from "node:http";
 import type { AddressInfo } from "node:net";
+import { createPublicClient } from "viem";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   type Provider,
@@ -13,7 +14,14 @@ import {
 } from "@/server/chains/evm/providers";
 
 /** Fake JSON-RPC nodes on this machine (test fixtures only). Each answers by its configured behaviour. */
-type Behaviour = { result?: unknown; error?: { code: number; message: string }; status?: number; delay?: number };
+type Behaviour = {
+  result?: unknown;
+  error?: { code: number; message: string };
+  status?: number;
+  delay?: number;
+  /** Reply with the id only: no result and no error (a malformed answer seen from free providers). */
+  idOnly?: boolean;
+};
 const servers: Server[] = [];
 const hits: Record<string, number> = {};
 const behaviours: Record<string, Behaviour> = {};
@@ -32,7 +40,11 @@ async function node(name: string): Promise<Provider> {
       }
       const parsed = JSON.parse(body);
       const one = (r: { id: number }) =>
-        b.error ? { jsonrpc: "2.0", id: r.id, error: b.error } : { jsonrpc: "2.0", id: r.id, result: b.result ?? null };
+        b.idOnly
+          ? { jsonrpc: "2.0", id: r.id }
+          : b.error
+            ? { jsonrpc: "2.0", id: r.id, error: b.error }
+            : { jsonrpc: "2.0", id: r.id, result: b.result ?? null };
       res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify(Array.isArray(parsed) ? parsed.map(one) : one(parsed)));
     });
@@ -63,6 +75,24 @@ const ask = (method: string) =>
 const TX = { hash: "0x01", blockNumber: "0x10" };
 
 describe("ranked fallback", () => {
+  it("an answer without a result is a provider failure: the next node is asked and the faulty one rests", async () => {
+    behaviours.a = { idOnly: true, delay: 0 };
+    behaviours.b = { result: "0x2a", delay: 30 };
+    expect(await ask("eth_blockNumber")).toBe("0x2a");
+    expect(hits.a).toBe(1);
+    expect(hits.b).toBe(1);
+    // a now rests: the next request goes straight to b.
+    expect(await ask("eth_blockNumber")).toBe("0x2a");
+    expect(hits.a).toBe(1);
+  });
+
+  it("a viem client gets the block number from the next node instead of 'Cannot convert undefined to a BigInt'", async () => {
+    behaviours.a = { idOnly: true };
+    behaviours.b = { result: "0x64" };
+    const client = createPublicClient({ transport: rankedFallback([a, b]) });
+    expect(await client.getBlockNumber({ cacheTime: 0 })).toBe(100n);
+  });
+
   it("when every node is resting, the one whose rest ends soonest is asked again instead of failing at once", async () => {
     behaviours.a = { result: "0x1" };
     behaviours.b = { result: "0x2" };

@@ -1,6 +1,7 @@
 import "server-only";
 import { AlchemyBusyError, noteAlchemyLimited, takeAlchemyNow, waitForAlchemy } from "./alchemy-pace";
 import { limitedFetch } from "@/server/http/limit";
+import { isBackground } from "@/server/background";
 import {
   type Chain,
   type EIP1193RequestFn,
@@ -90,6 +91,9 @@ interface Usage {
   day: string;
   requests: number;
   units: number;
+  /** Alchemy only: compute units by method, and the part spent by background work. */
+  byMethod: Map<string, number>;
+  backgroundUnits: number;
 }
 
 // One meter per server process. Next.js can load this module more than once (pages, API routes),
@@ -103,7 +107,7 @@ function usageFor(key: string): Usage {
   const day = today();
   let entry = usage.get(key);
   if (!entry || entry.day !== day) {
-    entry = { day, requests: 0, units: 0 };
+    entry = { day, requests: 0, units: 0, byMethod: new Map(), backgroundUnits: 0 };
     usage.set(key, entry);
   }
   return entry;
@@ -114,18 +118,39 @@ function budgetKey(provider: Provider): string {
   return provider.kind === "alchemy" ? "alchemy" : provider.name;
 }
 
-export function budgetExhausted(provider: Provider): boolean {
+/**
+ * Alchemy's daily budget is split in tiers, so what only Alchemy can do (full token lists, transfer history, old-block
+ * reads) stays available for visitors all day:
+ * - ordinary reads that other providers can also answer use Alchemy only for the first 30% of the day's units;
+ * - background work (alerts worker, health checks, daily token checks, lock index) stops using Alchemy at 50%;
+ * - the rest is kept for visitors' Alchemy-only requests.
+ * Each tier falls back as before: ordinary reads to the next provider, Alchemy-only parts to "not available" notes.
+ */
+export const ALCHEMY_ORDINARY_SHARE = 0.3;
+export const ALCHEMY_BACKGROUND_SHARE = 0.5;
+
+/**
+ * Whether this provider must not take the request. `ordinary` = a read inside the rotation that another provider can
+ * also answer (as opposed to an Alchemy-only call).
+ */
+export function budgetExhausted(provider: Provider, ordinary = false): boolean {
   if (provider.kind === "public") return false;
   const used = usageFor(budgetKey(provider));
-  return provider.kind === "alchemy"
-    ? used.units >= serverEnv.ALCHEMY_DAILY_CU
-    : used.requests >= serverEnv.RPC_DAILY_REQUESTS;
+  if (provider.kind !== "alchemy") return used.requests >= serverEnv.RPC_DAILY_REQUESTS;
+  let limit = serverEnv.ALCHEMY_DAILY_CU;
+  if (isBackground()) limit = Math.min(limit, serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_BACKGROUND_SHARE);
+  if (ordinary) limit = Math.min(limit, serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_ORDINARY_SHARE);
+  return used.units >= limit;
 }
 
 export function recordUsage(provider: Provider, method: string): void {
   const used = usageFor(budgetKey(provider));
   used.requests += 1;
-  used.units += provider.kind === "alchemy" ? alchemyUnits(method) : 0;
+  if (provider.kind !== "alchemy") return;
+  const units = alchemyUnits(method);
+  used.units += units;
+  used.byMethod.set(method, (used.byMethod.get(method) ?? 0) + units);
+  if (isBackground()) used.backgroundUnits += units;
 }
 
 export class BudgetExhaustedError extends Error {
@@ -135,14 +160,43 @@ export class BudgetExhaustedError extends Error {
   }
 }
 
+export interface AlchemyBreakdown {
+  /** Units spent by background work (the rest by visitors). */
+  backgroundUnits: number;
+  /** Methods by units spent today, largest first. */
+  methods: { method: string; units: number }[];
+  /** Where the tiers start, in units. */
+  ordinaryLimit: number;
+  backgroundLimit: number;
+}
+
 /** Today's usage per provider, for the health page (names and numbers only). */
-export function usageSnapshot(): { provider: string; requests: number; units?: number; limit: number | null }[] {
+export function usageSnapshot(): {
+  provider: string;
+  requests: number;
+  units?: number;
+  limit: number | null;
+  alchemy?: AlchemyBreakdown;
+}[] {
   const day = today();
   return [...usage.entries()]
     .filter(([, value]) => value.day === day)
     .map(([provider, value]) =>
       provider === "alchemy"
-        ? { provider, requests: value.requests, units: value.units, limit: serverEnv.ALCHEMY_DAILY_CU }
+        ? {
+            provider,
+            requests: value.requests,
+            units: value.units,
+            limit: serverEnv.ALCHEMY_DAILY_CU,
+            alchemy: {
+              backgroundUnits: value.backgroundUnits,
+              methods: [...value.byMethod.entries()]
+                .map(([method, units]) => ({ method, units }))
+                .sort((a, b) => b.units - a.units),
+              ordinaryLimit: Math.round(serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_ORDINARY_SHARE),
+              backgroundLimit: Math.round(serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_BACKGROUND_SHARE),
+            },
+          }
         : provider.startsWith("public:")
           ? { provider, requests: value.requests, limit: null }
           : { provider, requests: value.requests, limit: serverEnv.RPC_DAILY_REQUESTS },
@@ -176,10 +230,36 @@ export class ProviderCoolingDownError extends Error {
   }
 }
 
+/**
+ * A node answered without a result or an error (seen from free providers under load: a batch reply carrying only its
+ * id). JSON-RPC always sends one of the two, so the answer is unusable: treated like an unreachable node, so the next
+ * provider is asked and this one rests for a minute. Without this, viem passes `undefined` on as the result and the
+ * caller fails with "Cannot convert undefined to a BigInt".
+ */
+export class MalformedAnswerError extends Error {
+  constructor(name: string, method: string) {
+    super(`Provider ${name} answered ${method} without a result`);
+    this.name = "MalformedAnswerError";
+  }
+}
+
+const malformedKey = Symbol.for("crypy.providerMalformed");
+const malformedLogged: Map<string, number> = ((globalThis as Record<symbol, Map<string, number>>)[malformedKey] ??=
+  new Map());
+
+/** One server log line per provider and method per 10 minutes (host name only, never the URL with its key). */
+function logMalformed(provider: Provider, method: string, now = Date.now()): void {
+  const key = `${provider.name}|${method}`;
+  const last = malformedLogged.get(key);
+  if (last !== undefined && now - last < 10 * 60_000) return;
+  malformedLogged.set(key, now);
+  console.warn(`[crypy] provider ${provider.name} answered ${method} without a result; asking the next provider`);
+}
+
 /** Only connection problems count (timeouts, network errors, HTTP 5xx/429), never a node's answer such as a revert. */
 export function isUnreachable(error: unknown): boolean {
   const name = error instanceof Error ? error.name : "";
-  if (name === "TimeoutError") return true;
+  if (name === "TimeoutError" || name === "MalformedAnswerError") return true;
   if (name === "HttpRequestError") {
     const status = (error as { status?: number }).status;
     return status === undefined || status === 429 || status >= 500;
@@ -198,7 +278,7 @@ export function isCoolingDown(provider: Provider, now = Date.now()): boolean {
  * Providers over their daily budget stay off (zero-cost rule).
  */
 export function wakeOneIfAllResting(providers: Provider[], now = Date.now()): void {
-  const withBudget = providers.filter((p) => !budgetExhausted(p));
+  const withBudget = providers.filter((p) => !budgetExhausted(p, true));
   if (withBudget.length === 0 || withBudget.some((p) => !isCoolingDown(p, now))) return;
   const soonest = withBudget.reduce((x, y) => ((coolDown.get(y.url) ?? 0) < (coolDown.get(x.url) ?? 0) ? y : x));
   coolDown.delete(soonest.url);
@@ -244,7 +324,7 @@ export function expectedLatency(provider: Provider, now = Date.now()): number {
 
 /** Providers in the order to try: fastest expected first; cooling-down or over-budget ones last. */
 export function rankProviders(providers: Provider[], now = Date.now()): Provider[] {
-  const usable = (p: Provider) => !isCoolingDown(p, now) && !budgetExhausted(p);
+  const usable = (p: Provider) => !isCoolingDown(p, now) && !budgetExhausted(p, true);
   return [...providers].sort((a, b) => {
     const ua = usable(a);
     const ub = usable(b);
@@ -351,7 +431,7 @@ export function rankedFallback(providers: Provider[]): Transport {
               // Everyone else failed or refused, and some providers are only resting after an earlier slow answer:
               // a rest is a speed measure, not a ban, so the one whose rest ends soonest gets one more try.
               woke = true;
-              const resting = providers.filter((p) => isCoolingDown(p) && !budgetExhausted(p));
+              const resting = providers.filter((p) => isCoolingDown(p) && !budgetExhausted(p, pace === "skip"));
               if (resting.length > 0) {
                 const soonest = resting.reduce((x, y) =>
                   (coolDown.get(y.url) ?? 0) < (coolDown.get(x.url) ?? 0) ? y : x,
@@ -430,7 +510,8 @@ export function meteredHttp(provider: Provider, timeout = 5_000, pace: AlchemyPa
     return {
       ...transport,
       async request(args: { method: string; params?: unknown }, requestOptions?: unknown) {
-        if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
+        // Inside a rotation ("skip"), Alchemy takes ordinary reads only within its ordinary share.
+        if (budgetExhausted(provider, pace === "skip")) throw new BudgetExhaustedError(provider.name);
         if (isCoolingDown(provider)) throw new ProviderCoolingDownError(provider.name);
         if (provider.kind === "alchemy") {
           const units = alchemyUnits(args.method);
@@ -445,6 +526,10 @@ export function meteredHttp(provider: Provider, timeout = 5_000, pace: AlchemyPa
             args,
             requestOptions,
           );
+          if (result === undefined) {
+            logMalformed(provider, args.method);
+            throw new MalformedAnswerError(provider.name, args.method);
+          }
           recordLatency(provider, Date.now() - started);
           return result;
         } catch (error) {

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { getChain } from "@/config/chains";
+import { runInBackground } from "@/server/background";
 import {
   alchemyUnits,
   budgetExhausted,
@@ -46,6 +47,49 @@ describe("provider rotation", () => {
     for (let i = 0; i < 100_000; i++) recordUsage(pub, "eth_call");
     expect(budgetExhausted(pub)).toBe(false);
     expect(usageSnapshot().find((u) => u.provider === "alchemy")).toMatchObject({ requests: 38_462 });
+  });
+});
+
+describe("Alchemy budget tiers", () => {
+  beforeEach(() => resetUsage());
+  const alchemy = { name: "alchemy", kind: "alchemy" as const, url: "https://x.invalid" };
+  // 26 CU per eth_call; the default day is 1,000,000 CU.
+  const spend = (calls: number) => {
+    for (let i = 0; i < calls; i++) recordUsage(alchemy, "eth_call");
+  };
+
+  it("ordinary reads stop using Alchemy at 30% of the day; Alchemy-only calls go on", () => {
+    spend(11_538); // 299,988 CU
+    expect(budgetExhausted(alchemy, true)).toBe(false);
+    spend(1); // 300,014 CU
+    expect(budgetExhausted(alchemy, true)).toBe(true);
+    expect(budgetExhausted(alchemy)).toBe(false);
+  });
+
+  it("background work stops at 50%; visitors keep the rest", () => {
+    spend(19_231); // 500,006 CU
+    expect(budgetExhausted(alchemy)).toBe(false);
+    expect(runInBackground(() => budgetExhausted(alchemy))).toBe(true);
+    spend(19_231); // 1,000,012 CU
+    expect(budgetExhausted(alchemy)).toBe(true);
+  });
+
+  it("counts units by method and the part spent by background work", async () => {
+    recordUsage(alchemy, "alchemy_getTokenBalances");
+    runInBackground(() => recordUsage(alchemy, "alchemy_getAssetTransfers"));
+    // Background is kept across awaits inside the task.
+    await runInBackground(async () => {
+      await new Promise((r) => setTimeout(r, 1));
+      recordUsage(alchemy, "alchemy_getAssetTransfers");
+    });
+    const row = usageSnapshot().find((u) => u.provider === "alchemy")!;
+    expect(row.units).toBe(20 + 2 * alchemyUnits("alchemy_getAssetTransfers"));
+    expect(row.alchemy?.backgroundUnits).toBe(2 * alchemyUnits("alchemy_getAssetTransfers"));
+    expect(row.alchemy?.methods[0]).toEqual({
+      method: "alchemy_getAssetTransfers",
+      units: 2 * alchemyUnits("alchemy_getAssetTransfers"),
+    });
+    expect(row.alchemy).toMatchObject({ ordinaryLimit: 300_000, backgroundLimit: 500_000 });
   });
 });
 

@@ -3305,6 +3305,9 @@
       "usageNoLimit": "{used} requests today · no limit",
       "units": "units",
       "requests": "requests",
+      "alchemySplit": "Background work {background} units · visitors {visitors} units",
+      "alchemyTiers": "Ordinary reads stop using Alchemy at {ordinary} units; background work at {background}; the rest is kept for visitors' Alchemy-only requests (token lists, history).",
+      "alchemyTop": "Largest today:",
       "kind": {
         "alchemy": "main provider",
         "extra": "extra provider",

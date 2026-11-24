@@ -22,7 +22,9 @@ export async function register() {
   }
   try {
     const { warmTokenSecurity } = await import("@/server/chains/evm/security/warm");
-    warmTokenSecurity();
+    const { runInBackground } = await import("@/server/background");
+    // The lock index is background work: it may not use the share of free plans kept for visitors.
+    runInBackground(() => warmTokenSecurity());
   } catch {
     // Ignored.
   }

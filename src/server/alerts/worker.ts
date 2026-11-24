@@ -11,6 +11,7 @@ import { startTelegramBot } from "@/server/telegram/bot";
 import { checkRound } from "./checker";
 import { deliverQueued } from "./deliver";
 import { pruneAlerts } from "./store";
+import { runInBackground } from "@/server/background";
 
 /**
  * Runs the alerts inside the always-on server process (approved: a background checker about every minute):
@@ -42,7 +43,8 @@ function every(ms: number, task: () => Promise<unknown>, label: string, firstDel
     running = true;
     busy.add(label);
     try {
-      await task();
+      // Worker jobs are background work: free-plan budgets keep a share for visitors (server/background.ts).
+      await runInBackground(task);
       lastError = "";
       noteJobRun(label, null);
     } catch (error) {

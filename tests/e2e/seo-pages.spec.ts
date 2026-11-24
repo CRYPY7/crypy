@@ -40,7 +40,8 @@ test("the token checks list shows every curated token, waiting for its first che
 test("a token without a saved check says so, links to a live check and stays out of search", async ({ page }) => {
   await page.goto("/en/tokens/ethereum/usdc", { waitUntil: "load" });
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("USDC on Ethereum: token security check");
-  await expect(page.getByText("This check is being prepared")).toBeVisible();
+  // While the page streams, Next.js keeps a hidden copy of the incoming part for a moment: count visible text only.
+  await expect(page.getByText("This check is being prepared").filter({ visible: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Run a fresh check" })).toHaveAttribute(
     "href",
     "/en/token/ethereum/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",

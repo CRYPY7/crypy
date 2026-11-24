@@ -1,6 +1,6 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-23
+Last updated: 2026-11-24
 
 ## Milestones
 
@@ -39,6 +39,38 @@ Last updated: 2026-11-23
 | M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Admin dashboard findings fixed (owner report 2026-11-24)
+
+The owner's /admin showed: Alchemy at 1,000,010 of 1,000,000 units for the day, "Wallet activity (Ethereum)" down
+16 times ("no transfers for a wallet that has them"), "Cannot convert undefined to a BigInt" on the BNB Chain, Base,
+Arbitrum and Polygon connections, the alerts checker, approvals, token security, transaction lookup and gas, and
+memory down to 5% free once.
+
+- **"Cannot convert undefined to a BigInt" (fixed):** a free provider sometimes answers a batched request with its id
+  only, no result and no error (seen under load). viem passes `undefined` on as the result and reading the block number
+  fails. Reproduced with a fake node: exactly this error. Now such an answer counts as a provider failure: the next
+  provider is asked, the faulty one rests a minute, and the server log names it once per 10 minutes (host only).
+  Two regression tests (they fail without the fix).
+- **Alchemy daily budget (tiers):** ordinary reads that other providers can also answer went to Alchemy whenever it was
+  fastest, and background work spent from the same budget, so by evening nothing was left for what only Alchemy does
+  (full token lists, transfer history, old blocks). Now: ordinary reads use Alchemy only for the first 30% of the
+  day's units; background work (alerts worker, health checks, daily token checks, the lock index at start) stops at
+  50%; the rest is kept for visitors' Alchemy-only requests. Each tier falls back as before. Background is marked with
+  AsyncLocalStorage (`server/background.ts`); health checks of tools run with visitors' rules, since they measure what
+  a visitor gets. /admin now shows Alchemy units by background vs visitors, the tier limits and the largest methods
+  today, so the next report shows exactly where the units go. 3 unit tests.
+- **Wallet activity check:** when full history isn't available it now says why: "full history paused until 00:00 UTC
+  (Alchemy daily budget used); recent activity only" (shown as having problems, not down), or that it didn't load.
+- **Memory:** the app used 620–770 MB here under load with the worker running; with Alchemy's full token lists and
+  the lock indexes it is higher on the server. 26% free on the 2 GB droplet is expected; the 5% dip most likely came
+  from `update.sh` building while the site runs (the build needs about 1–1.5 GB; 2 GB swap covers it). No setting
+  changed; the redesign's R1 (worker split, build headroom) addresses it.
+- A browser test that counted a streaming page's hidden copy (known issue) now counts visible text only.
+
+**Checks (2026-11-24):** typecheck, lint, Prettier, i18n check: clean. Unit: 465 passed, 72 skipped (5 new). Build
+passed. Browser: 259 passed, 12 skipped, 1 failed (the streaming-copy test above, fixed; its file then passed 10 of
+10 twice).
 
 ## Languages wave 1 — six Beta languages (owner decision 2026-11-23)
 

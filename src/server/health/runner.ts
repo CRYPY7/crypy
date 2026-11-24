@@ -20,6 +20,7 @@ import {
   lastDays,
   uptimeShare,
 } from "@/lib/health/status";
+import { runAsVisitor } from "@/server/background";
 import { getDb } from "@/server/db/client";
 import { healthChecks } from "@/server/db/schema";
 import { redactKeys } from "@/server/redact";
@@ -67,8 +68,9 @@ export async function runProbe(
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     if (!probe) throw new Skip("no check");
+    // Tool checks see what a visitor would get, so they use visitors' share of the free plans.
     const note = await Promise.race([
-      probe(),
+      definition.group === "tool" ? runAsVisitor(probe) : probe(),
       new Promise<never>((_, reject) => {
         timer = setTimeout(() => reject(new Error(`no answer in ${Math.round(timeoutMs / 1000)} s`)), timeoutMs);
       }),
