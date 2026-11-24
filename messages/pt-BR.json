@@ -2633,7 +2633,8 @@
           "done": "Concluído",
           "gave-up": "Parou de tentar após 1 hora",
           "cancelled": "Interrompido"
-        }
+        },
+        "whereBrowser": "No seu navegador · deixe esta aba aberta até terminar"
       },
       "refused": {
         "busy": "A CRYPY está muito ocupada agora e a fila está cheia. Tente de novo em alguns minutos.",
@@ -2650,6 +2651,21 @@
         "title": "{count} saldos ainda estão sendo lidos",
         "note": "Os nós de {chains} pararam de responder. Todo o resto está completo. Essas linhas dizem “Ainda lendo” e aparecem separadas na exportação, para nunca serem confundidas com carteiras vazias.",
         "retry": "Tentar agora"
+      },
+      "mode": {
+        "title": "Onde o escaneamento deve rodar?",
+        "server": "Nos servidores da CRYPY",
+        "serverBadge": "Recomendado",
+        "serverNote": "Privado: sua lista e seu endereço IP nunca chegam a um serviço de nós. Continua mesmo se você recarregar ou fechar a aba.",
+        "serverLimit": "Grátis: até {max} carteiras por escaneamento.",
+        "browser": "No meu navegador",
+        "browserBadge": "Sempre grátis",
+        "browserNote": "Listas maiores, até {max} carteiras. Seu navegador lê direto de nós públicos da blockchain.",
+        "browserKeepOpen": "Deixe esta aba aberta até terminar.",
+        "warningTitle": "Seu endereço IP e sua lista de carteiras vão para nós públicos",
+        "warning": "Serviços de nós públicos (como PublicNode, dRPC e o nó próprio de cada rede) verão seu endereço IP e as carteiras que você escaneia. A CRYPY não as vê. Se esses nós não conseguirem ler algumas carteiras, você pode concluí-las nos servidores da CRYPY com um clique.",
+        "finishOnServer": "Concluir nos servidores da CRYPY",
+        "scannedInBrowser": "escaneado no seu navegador"
       }
     },
     "token-security": {

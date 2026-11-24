@@ -9,14 +9,14 @@ import type { BatchStrings } from "./widget";
 
 const MAX_FILE_BYTES = 1_000_000;
 
-function noteText(s: BatchStrings, note: LineNote): string {
+function noteText(s: BatchStrings, note: LineNote, max: number): string {
   switch (note.kind) {
     case "duplicate":
       return fill(s.notes.duplicate, { line: note.firstLine });
     case "several":
       return fill(s.notes.several, { count: note.count });
     case "over-limit":
-      return fill(s.notes["over-limit"], { max: MAX_ADDRESSES });
+      return fill(s.notes["over-limit"], { max });
     default:
       return s.notes[note.kind];
   }
@@ -31,11 +31,14 @@ export function AddressEditor({
   text,
   onText,
   parsed,
+  max = MAX_ADDRESSES,
 }: {
   s: BatchStrings;
   text: string;
   onText: (text: string) => void;
   parsed: ParsedList;
+  /** Addresses per scan (500 on CRYPY's servers, more in the browser mode). */
+  max?: number;
 }) {
   const area = useRef<HTMLTextAreaElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
@@ -160,7 +163,7 @@ export function AddressEditor({
                     <span className="text-transparent">{line || " "}</span>
                     {note && (
                       <span className={cn("ms-3 font-sans text-xs", bad ? "text-critical" : "text-high")}>
-                        {noteText(s, note)}
+                        {noteText(s, note, max)}
                       </span>
                     )}
                   </div>
@@ -210,7 +213,7 @@ export function AddressEditor({
           </span>
         )}
         <span className="ms-auto text-muted-foreground">
-          {fill(s.countLine, { count: parsed.entries.length, max: MAX_ADDRESSES })}
+          {fill(s.countLine, { count: parsed.entries.length, max })}
         </span>
       </div>
       {fileError && (

@@ -37,6 +37,7 @@ export function ScanProgress({
   onPause,
   onResume,
   onCancel,
+  where,
 }: {
   s: BatchStrings;
   locale: string;
@@ -51,6 +52,8 @@ export function ScanProgress({
   onPause: () => void;
   onResume: () => void;
   onCancel: () => void;
+  /** Where it runs ("On CRYPY's servers…" or "In your browser…"). */
+  where: string;
 }) {
   const number = new Intl.NumberFormat(locale);
   const total = chains.reduce((sum, c) => sum + wallets * (assets[c.key] ?? 1), 0);
@@ -72,7 +75,7 @@ export function ScanProgress({
           <h2 className="font-heading text-xl font-bold sm:text-2xl">
             {fill(s.run.heading, { wallets: number.format(wallets) })}
           </h2>
-          <p className="mt-1 text-sm text-muted-foreground">{s.run.where}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{where}</p>
         </div>
         <div className="flex gap-2">
           {status === "paused" ? (

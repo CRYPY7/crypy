@@ -2633,7 +2633,8 @@
           "done": "Done",
           "gave-up": "Stopped trying after 1 hour",
           "cancelled": "Stopped"
-        }
+        },
+        "whereBrowser": "In your browser · keep this tab open until it finishes"
       },
       "refused": {
         "busy": "CRYPY is very busy right now and the line is full. Please try again in a few minutes.",
@@ -2650,6 +2651,21 @@
         "title": "{count} balances are still being read",
         "note": "The nodes for {chains} stopped answering. Everything else is complete. These rows say “Still being read” and are listed separately in the export, so they're never mistaken for empty wallets.",
         "retry": "Try these now"
+      },
+      "mode": {
+        "title": "Where should the scan run?",
+        "server": "On CRYPY's servers",
+        "serverBadge": "Recommended",
+        "serverNote": "Private: your list and IP address never reach a node service. Keeps going if you refresh or close the tab.",
+        "serverLimit": "Free: up to {max} wallets per scan.",
+        "browser": "In my browser",
+        "browserBadge": "Always free",
+        "browserNote": "Bigger lists, up to {max} wallets. Your browser reads directly from public blockchain nodes.",
+        "browserKeepOpen": "Keep this tab open until it finishes.",
+        "warningTitle": "Your IP address and wallet list go to public nodes",
+        "warning": "Public node services (such as PublicNode, dRPC and each chain's own node) will see your IP address and the wallets you scan. CRYPY doesn't see them. If those nodes can't read some wallets, you can finish them on CRYPY's servers with one click.",
+        "finishOnServer": "Finish them on CRYPY's servers",
+        "scannedInBrowser": "scanned in your browser"
       }
     },
     "token-security": {

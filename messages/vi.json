@@ -2633,7 +2633,8 @@
           "done": "Xong",
           "gave-up": "Đã ngừng thử sau 1 giờ",
           "cancelled": "Đã dừng"
-        }
+        },
+        "whereBrowser": "Trong trình duyệt của bạn · hãy để tab này mở cho đến khi xong"
       },
       "refused": {
         "busy": "CRYPY hiện đang rất bận và hàng chờ đã đầy. Vui lòng thử lại sau vài phút.",
@@ -2650,6 +2651,21 @@
         "title": "Vẫn đang đọc {count} số dư",
         "note": "Các nút của {chains} đã ngừng phản hồi. Mọi thứ khác đã hoàn tất. Các dòng này ghi “Vẫn đang đọc” và được liệt kê riêng khi xuất, để không bao giờ bị nhầm là ví trống.",
         "retry": "Thử ngay"
+      },
+      "mode": {
+        "title": "Chạy quét ở đâu?",
+        "server": "Trên máy chủ của CRYPY",
+        "serverBadge": "Khuyên dùng",
+        "serverNote": "Riêng tư: danh sách và địa chỉ IP của bạn không bao giờ đến dịch vụ nút mạng nào. Vẫn tiếp tục nếu bạn tải lại hoặc đóng tab.",
+        "serverLimit": "Miễn phí: tối đa {max} ví mỗi lần quét.",
+        "browser": "Trong trình duyệt của tôi",
+        "browserBadge": "Luôn miễn phí",
+        "browserNote": "Danh sách lớn hơn, tối đa {max} ví. Trình duyệt của bạn đọc trực tiếp từ các nút blockchain công khai.",
+        "browserKeepOpen": "Hãy để tab này mở cho đến khi xong.",
+        "warningTitle": "Địa chỉ IP và danh sách ví của bạn được gửi đến các nút công khai",
+        "warning": "Các dịch vụ nút công khai (như PublicNode, dRPC và nút riêng của từng chuỗi) sẽ thấy địa chỉ IP của bạn và các ví bạn quét. CRYPY không thấy chúng. Nếu các nút đó không đọc được một số ví, bạn có thể hoàn tất chúng trên máy chủ CRYPY chỉ với một lần nhấp.",
+        "finishOnServer": "Hoàn tất trên máy chủ CRYPY",
+        "scannedInBrowser": "đã quét trong trình duyệt của bạn"
       }
     },
     "token-security": {

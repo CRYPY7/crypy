@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Layers, Lock, Plus, Search, X } from "lucide-react";
+import { Check, Layers, Lock, Plus, Search, TriangleAlert, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChainIcon } from "@/components/chain-icon";
 import type { BatchAssetDef } from "@/config/batch-assets";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { fill } from "@/modules/tools/shared/ui";
 import type enMessages from "../../../../messages/en.json";
 import { AddressEditor } from "./editor";
-import { type Entry, parseList } from "./parse";
+import { BROWSER_MAX_ADDRESSES, type Entry, MAX_ADDRESSES, parseList } from "./parse";
 import type { ScanAsset, ScanPrices, ScanRow } from "./results";
 import { type ChainProgress, type JobStatus, ScanProgress } from "./progress";
 import { ResultsView } from "./results-view";
@@ -19,6 +19,8 @@ export interface BatchChain {
   key: string;
   name: string;
   nativeSymbol: string;
+  /** Keyless public nodes ("Scan in my browser"). */
+  publicRpcUrls?: string[];
 }
 
 const MAX_TOKENS = 5;
@@ -135,6 +137,10 @@ export function BatchBalanceScanner({
   }>({ id: "", status: "starting", position: null, startsIn: null });
   const [progress, setProgress] = useState<Record<string, ChainProgress>>({});
   const [notice, setNotice] = useState<{ text: string; stopJob?: string } | null>(null);
+  /** Where the scan runs: CRYPY's servers (default, private) or this browser (public nodes, always free). */
+  const [mode, setMode] = useState<"server" | "browser">("server");
+  const [runMode, setRunMode] = useState<"server" | "browser">("server");
+  const browserRun = useRef<{ controller: AbortController; paused: boolean } | null>(null);
   const [scan, setScan] = useState<{
     assets: ScanAsset[];
     entries: Entry[];
@@ -150,7 +156,8 @@ export function BatchBalanceScanner({
   const following = useRef(0);
   useEffect(() => () => void (following.current += 1), []);
 
-  const parsed = useMemo(() => parseList(text), [text]);
+  const maxAddresses = mode === "browser" ? BROWSER_MAX_ADDRESSES : MAX_ADDRESSES;
+  const parsed = useMemo(() => parseList(text, maxAddresses), [text, maxAddresses]);
   const activeChains = chains.filter((c) => selected.includes(c.key));
   const assets = useMemo(() => [nativeAsset(activeChains), ...tokens], [activeChains, tokens]);
   const balances = activeChains.reduce(
@@ -159,6 +166,7 @@ export function BatchBalanceScanner({
   );
   const canScan = parsed.entries.length > 0 && activeChains.length > 0 && phase !== "scanning";
   const seconds = estimateSeconds(balances);
+  const number = new Intl.NumberFormat(locale);
 
   /** Fresh rows (all "pending") for a scan, and the lookup from chain + address to a row. */
   const prepare = useCallback((entries: Entry[], chainKeys: string[], scanAssets: ScanAsset[]) => {
@@ -181,6 +189,29 @@ export function BatchBalanceScanner({
     setProgress({});
   }, []);
 
+  /** Puts read rows into the table; `order` gives the token addresses in the order the row's balances use. */
+  function merge(updates: JobView["rows"], order: (chain: string) => string[], scanAssets: ScanAsset[]) {
+    if (updates.length === 0) return;
+    setRows((current) => {
+      const next = current.slice();
+      for (const { chain, block, row } of updates) {
+        const i = index.current.get(`${chain}|${row.address.toLowerCase()}`);
+        if (i === undefined) continue;
+        const target = next[i]!;
+        const tokensOrder = order(chain);
+        const balances: ScanRow["balances"] = { ...target.balances, native: row.native };
+        for (const asset of scanAssets) {
+          const deployment = asset.chains[chain];
+          if (asset.key === "native" || !deployment) continue;
+          const at = tokensOrder.indexOf(deployment.address.toLowerCase());
+          balances[asset.key] = at === -1 ? undefined : (row.tokens[at] ?? null);
+        }
+        next[i] = { ...target, status: "ok", type: row.type, balances, block };
+      }
+      return next;
+    });
+  }
+
   /** Applies one progress answer from the server to the rows, prices and chain states. */
   const apply = useCallback((view: JobView, scanAssets: ScanAsset[]) => {
     seq.current = view.seq;
@@ -191,25 +222,7 @@ export function BatchBalanceScanner({
       for (const [chain, state] of Object.entries(view.chains)) if (state.prices) next[chain] = state.prices;
       return next;
     });
-    if (view.rows.length === 0) return;
-    setRows((current) => {
-      const next = current.slice();
-      for (const { chain, block, row } of view.rows) {
-        const i = index.current.get(`${chain}|${row.address.toLowerCase()}`);
-        if (i === undefined) continue;
-        const target = next[i]!;
-        const order = view.chains[chain]?.tokens ?? [];
-        const balances: ScanRow["balances"] = { ...target.balances, native: row.native };
-        for (const asset of scanAssets) {
-          const deployment = asset.chains[chain];
-          if (asset.key === "native" || !deployment) continue;
-          const at = order.indexOf(deployment.address.toLowerCase());
-          balances[asset.key] = at === -1 ? undefined : (row.tokens[at] ?? null);
-        }
-        next[i] = { ...target, status: "ok", type: row.type, balances, block };
-      }
-      return next;
-    });
+    merge(view.rows, (chain) => view.chains[chain]?.tokens ?? [], scanAssets);
   }, []);
 
   /** Follows a scan on the server until it ends (about once a second). */
@@ -289,6 +302,8 @@ export function BatchBalanceScanner({
   async function startScan() {
     if (!canScan && phase !== "done") return;
     setNotice(null);
+    if (mode === "browser") return startBrowserScan();
+    setRunMode("server");
     const scanAssets = assets;
     const entries = parsed.entries;
     const chainKeys = activeChains.map((c) => c.key);
@@ -333,7 +348,132 @@ export function BatchBalanceScanner({
     void follow(result.jobId, entries, chainKeys, scanAssets, at);
   }
 
+  /** "Scan in my browser": the same engine against the chains' public nodes, straight from this page. */
+  async function startBrowserScan() {
+    const scanAssets = assets;
+    const entries = parsed.entries;
+    const scanChains = activeChains;
+    const chainKeys = scanChains.map((c) => c.key);
+    const tokensOf = Object.fromEntries(
+      chainKeys.map((chain) => [
+        chain,
+        scanAssets
+          .filter((a) => a.key !== "native" && a.chains[chain])
+          .map((a) => a.chains[chain]!.address.toLowerCase()),
+      ]),
+    );
+    following.current += 1;
+    writeSaved(null);
+    browserRun.current?.controller.abort();
+    const run = { controller: new AbortController(), paused: false };
+    browserRun.current = run;
+    const at = new Date();
+    prepare(entries, chainKeys, scanAssets);
+    setRunMode("browser");
+    setJob({ id: "", status: "running", position: null, startsIn: null });
+    setScan(null);
+    setPhase("scanning");
+    // Prices: only the token contracts go to CRYPY, never the wallet list.
+    for (const chain of chainKeys) {
+      void fetch(`/api/v1/batch-prices?chain=${chain}&tokens=${tokensOf[chain]!.join(",")}`)
+        .then((r) => r.json() as Promise<{ ok: boolean; data?: { prices: Record<string, number> } }>)
+        .then((json) => {
+          if (json.ok && json.data) setPrices((p) => ({ ...p, [chain]: json.data!.prices }));
+        })
+        .catch(() => {});
+    }
+    // Rows arrive many times a second on big lists: put them into the table at most every 0.75 s, so the page (and
+    // the scan's own timers on this same thread) stay responsive with tens of thousands of rows.
+    let buffer: JobView["rows"] = [];
+    const flush = () => {
+      if (buffer.length === 0) return;
+      const updates = buffer;
+      buffer = [];
+      merge(updates, (c) => tokensOf[c] ?? [], scanAssets);
+    };
+    const flusher = setInterval(flush, 750);
+    const { runBrowserScan } = await import("./browser-scan");
+    const finalStates = await runBrowserScan({
+      chains: scanChains.map((c) => ({ key: c.key, urls: c.publicRpcUrls ?? [], tokens: tokensOf[c.key]! })),
+      addresses: entries.map((e) => e.address),
+      signal: run.controller.signal,
+      isPaused: () => run.paused,
+      onRows: (chain, list, block) => {
+        for (const row of list) buffer.push({ chain, block, row });
+      },
+      onState: (chain, state) =>
+        setProgress((p) => ({ ...p, [chain]: { ...state, tokens: tokensOf[chain]!, notOnChain: [], prices: null } })),
+    });
+    clearInterval(flusher);
+    flush();
+    if (browserRun.current !== run) return;
+    const cancelled = Object.values(finalStates).some((st) => st.phase === "cancelled");
+    setJob((j) => ({ ...j, status: cancelled ? "cancelled" : "done" }));
+    setScan({ assets: scanAssets, entries, chains: chainKeys, at, cancelled, rateLimited: false, lost: false });
+    setPhase("done");
+  }
+
+  /** Browser mode: rows the public nodes couldn't read are finished by a scan on CRYPY's servers. */
+  async function finishOnServer(list: ScanRow[]) {
+    if (!scan) return;
+    const current = scan;
+    const chainKeys = [...new Set(list.map((r) => r.chain))];
+    const addresses = [...new Set(list.map((r) => r.entry.address))];
+    const body = {
+      chains: chainKeys,
+      addresses,
+      tokens: Object.fromEntries(
+        chainKeys.map((chain) => [
+          chain,
+          current.assets.filter((a) => a.key !== "native" && a.chains[chain]).map((a) => a.chains[chain]!.address),
+        ]),
+      ),
+    };
+    let result: CreateResult | null = null;
+    try {
+      const response = await fetch("/api/v1/batch-scans", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const json = (await response.json()) as { ok: boolean; data?: CreateResult };
+      if (json.ok && json.data) result = json.data;
+    } catch {
+      // Shown below.
+    }
+    if (!result || result.refused) {
+      setNotice({
+        text:
+          result?.refused === "busy"
+            ? s.refused.busy
+            : result?.refused === "daily-limit"
+              ? fill(s.refused.daily, { limit: new Intl.NumberFormat(locale).format(result.dailyWallets) })
+              : result?.refused === "too-many"
+                ? fill(s.refused.tooMany, { max: result.maxWallets })
+                : result?.refused === "active"
+                  ? s.refused.active
+                  : s.refused.failed,
+        stopJob: result?.refused === "active" ? result.jobId : undefined,
+      });
+      return;
+    }
+    setNotice(null);
+    seq.current = 0;
+    setRunMode("server");
+    setJob({ id: result.jobId, status: "starting", position: null, startsIn: null });
+    setPhase("scanning");
+    void follow(result.jobId, current.entries, current.chains, current.assets, current.at);
+  }
+
   async function control(action: "pause" | "resume" | "cancel", id = job.id) {
+    if (runMode === "browser" && browserRun.current && id === job.id) {
+      if (action === "cancel") browserRun.current.controller.abort();
+      else {
+        browserRun.current.paused = action === "pause";
+        setJob((j) => ({ ...j, status: action === "pause" ? "paused" : "running" }));
+      }
+      return;
+    }
     try {
       await fetch(`/api/v1/batch-scans/${id}`, {
         method: "POST",
@@ -411,7 +551,13 @@ export function BatchBalanceScanner({
             onPause={() => void control("pause")}
             onResume={() => void control("resume")}
             onCancel={() => void control("cancel")}
+            where={runMode === "browser" ? s.run.whereBrowser : s.run.where}
           />
+        )}
+        {notice && (
+          <p role="alert" className="rounded-xl border border-high/40 bg-high/8 px-4 py-3 text-sm">
+            {notice.text}
+          </p>
         )}
         <ResultsView
           s={s}
@@ -430,12 +576,15 @@ export function BatchBalanceScanner({
           addressPathPrefix={addressPathPrefix}
           onEdit={() => {
             following.current += 1;
+            browserRun.current?.controller.abort();
             writeSaved(null);
             setPhase("input");
           }}
           onScanAgain={() => void startScan()}
           onRetry={(row) => void retryRows([row])}
-          onRetryAll={(list) => void retryRows(list)}
+          onRetryAll={(list) => void (runMode === "browser" ? finishOnServer(list) : retryRows(list))}
+          retryLabel={runMode === "browser" ? s.mode.finishOnServer : undefined}
+          doneNote={runMode === "browser" ? s.mode.scannedInBrowser : undefined}
         />
       </div>
     );
@@ -445,7 +594,7 @@ export function BatchBalanceScanner({
     <div className="flex flex-col gap-4">
       <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Step n={1} title={s.steps.addresses} hint={s.addressesHint}>
-          <AddressEditor s={s} text={text} onText={setText} parsed={parsed} />
+          <AddressEditor s={s} text={text} onText={setText} parsed={parsed} max={maxAddresses} />
         </Step>
         <div className="flex flex-col gap-4">
           <Step n={2} title={s.steps.chains} hint={s.chainsHint}>
@@ -486,6 +635,62 @@ export function BatchBalanceScanner({
           </Step>
         </div>
       </div>
+
+      <fieldset className="flex flex-col gap-3">
+        <legend className="mb-3 font-semibold">{s.mode.title}</legend>
+        <div className="grid gap-3 md:grid-cols-2">
+          {(["server", "browser"] as const).map((value) => (
+            <label
+              key={value}
+              className={cn(
+                "flex cursor-pointer gap-3 rounded-2xl border bg-card p-4 transition-colors focus-within:ring-3 focus-within:ring-ring/25",
+                mode === value ? "border-primary bg-primary/8" : "hover:border-primary/60",
+              )}
+            >
+              <input
+                type="radio"
+                name="scan-mode"
+                value={value}
+                checked={mode === value}
+                onChange={() => setMode(value)}
+                className="mt-1 size-4 accent-primary"
+              />
+              <span className="flex flex-col gap-1 text-sm">
+                <span className="text-base font-semibold">
+                  {value === "server" ? s.mode.server : s.mode.browser}{" "}
+                  <span
+                    className={cn(
+                      "ms-1 rounded px-1.5 py-0.5 text-[11px] font-semibold",
+                      value === "server" ? "bg-primary/15 text-primary" : "bg-low/15 text-low",
+                    )}
+                  >
+                    {value === "server" ? s.mode.serverBadge : s.mode.browserBadge}
+                  </span>
+                </span>
+                <span>
+                  {value === "server"
+                    ? s.mode.serverNote
+                    : fill(s.mode.browserNote, { max: number.format(BROWSER_MAX_ADDRESSES) })}
+                </span>
+                <span className="text-muted-foreground">
+                  {value === "server"
+                    ? fill(s.mode.serverLimit, { max: number.format(MAX_ADDRESSES) })
+                    : s.mode.browserKeepOpen}
+                </span>
+              </span>
+            </label>
+          ))}
+        </div>
+        {mode === "browser" && (
+          <div role="note" className="flex gap-3 rounded-xl border border-high/40 bg-high/8 px-4 py-3 text-sm">
+            <TriangleAlert className="mt-0.5 size-5 shrink-0 text-high" aria-hidden="true" />
+            <div>
+              <p className="font-semibold">{s.mode.warningTitle}</p>
+              <p className="mt-0.5 text-muted-foreground">{s.mode.warning}</p>
+            </div>
+          </div>
+        )}
+      </fieldset>
 
       <div className="flex flex-col gap-3 rounded-2xl border bg-card p-4 sm:flex-row sm:items-center sm:p-5">
         <div className="min-w-0 flex-1">

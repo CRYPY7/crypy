@@ -2633,7 +2633,8 @@
           "done": "完成",
           "gave-up": "尝试 1 小时后已停止",
           "cancelled": "已停止"
-        }
+        },
+        "whereBrowser": "在你的浏览器中 · 请保持此标签页打开直到完成"
       },
       "refused": {
         "busy": "CRYPY 现在非常繁忙，排队已满。请几分钟后再试。",
@@ -2650,6 +2651,21 @@
         "title": "仍有 {count} 个余额正在读取",
         "note": "{chains} 的节点停止了响应。其他所有结果均已完成。这些行显示“仍在读取”，并在导出中单独列出，因此绝不会被误认为是空钱包。",
         "retry": "立即重试"
+      },
+      "mode": {
+        "title": "在哪里运行扫描？",
+        "server": "在 CRYPY 服务器上",
+        "serverBadge": "推荐",
+        "serverNote": "私密：你的列表和 IP 地址不会到达任何节点服务。刷新或关闭标签页后仍会继续。",
+        "serverLimit": "免费：每次扫描最多 {max} 个钱包。",
+        "browser": "在我的浏览器中",
+        "browserBadge": "永久免费",
+        "browserNote": "更大的列表，最多 {max} 个钱包。你的浏览器直接从公共区块链节点读取。",
+        "browserKeepOpen": "请保持此标签页打开直到完成。",
+        "warningTitle": "你的 IP 地址和钱包列表会发送到公共节点",
+        "warning": "公共节点服务（如 PublicNode、dRPC 以及各链自己的节点）会看到你的 IP 地址和你扫描的钱包。CRYPY 看不到这些。如果这些节点无法读取某些钱包，你可以一键在 CRYPY 服务器上完成它们。",
+        "finishOnServer": "在 CRYPY 服务器上完成",
+        "scannedInBrowser": "在你的浏览器中扫描"
       }
     },
     "token-security": {

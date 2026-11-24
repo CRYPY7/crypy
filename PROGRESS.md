@@ -41,6 +41,25 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0 and S1 started 2026-11-24; new features paused until S6                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## "Scan in my browser" (S2 Part A.2, board 55; always free, owner decision 2026-11-24)
+
+- **Choice before the scan.** "On CRYPY's servers" (recommended, private, up to 500 wallets in the page) or "In my browser" (always free, up to 10,000 wallets). Choosing the browser first shows the warning that public node services see the visitor's IP address and the wallets.
+- **Same engine, run in the page** (`modules/tools/batch-balance/browser-scan.ts`, loaded only when that mode runs). It reads from each chain's keyless public nodes (`config/chains.ts`), with the same retries, splitting, waiting and cross-check as the server. The reader code moved to `lib/batch-scan/read.ts`, so server and browser share it.
+  - Prices: only the token contracts go to CRYPY (`GET /api/v1/batch-prices`, cached 60 s), never the wallet list.
+  - The page's CSP now allows every public node; `tests/unit/csp.test.ts` keeps the CSP and `config/chains.ts` in step.
+- **Rows the public nodes can't read** (the engine stops trying after 10 minutes in the browser) get "Finish them on CRYPY's servers": a server scan of just those rows, merged into the same table.
+- **Found and fixed while load-testing:**
+  - The results view did work proportional to wallets × rows on every render: listing empty addresses, and sorting with a position lookup per comparison. With 10,000 wallets on 5 chains (50,000 rows) this froze the page. The scan's own timers ran late, so nodes looked slow and chunks shrank to a few wallets; after 8 minutes only 201 balances had been read.
+  - Now every pass over the rows is memoized and linear (sort keys computed once), and new rows go into the table at most every 0.75 s. This also helps big server scans.
+- **Load test (real Chromium, public nodes):** 10,000 wallets × 5 chains × 1 asset, complete in 34 s; nothing left unread.
+  - Pasting a 10,000-line list takes about 0.2 s in the page.
+  - Playwright's `fill` is the slow part for huge text, not the page, so the test sets the value as a paste would.
+- **Checks:**
+  - Typecheck, lint, Prettier and the i18n check are clean.
+  - Unit: 507 passed, 73 skipped. New: reader error mapping, one reader per public node, the bigger list limit, the CSP covering every public node.
+  - Build passed; CSS is 80.2 KB of the 80 KB budget.
+  - Browser: 267 passed, 13 skipped, 0 failed. New: browser mode shows the warning, reads from public nodes and never calls the server scan.
+
 ## Batch scanner that never shows a failed row, and loading feedback (S2 Part A, B-028, B-029; designs approved 2026-11-24, boards 55–59)
 
 **Cause found (reproduced here):**

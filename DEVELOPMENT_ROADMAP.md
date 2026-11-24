@@ -43,7 +43,7 @@ Compared with tokentools.app and chaintx.tools: both run in the visitor's browse
 and one token per scan; chaintx.tools lets the visitor set chunk size and delay. CRYPY keeps reads on its server
 (privacy: visitors' IPs never reach node providers) and does several chains and tokens in one scan.
 
-- **Part A (S2, bug B-028): never fails.** Built 2026-11-24 (see PROGRESS.md), apart from the browser mode (A.2). Load tests passed in the workspace; limits are set after the same tests run on the server.
+- **Part A (S2, bug B-028): never fails.** Built 2026-11-24 (see PROGRESS.md). Load tests passed in the workspace; limits are set after the same tests run on the server.
   - A scan is a server job that paces itself.
   - Small multicalls whose size adapts per provider.
   - It retries on other providers and waits when asked to slow down, until every address is read.
@@ -65,7 +65,7 @@ and one token per scan; chaintx.tools lets the visitor set chunk size and delay.
     The privacy page wording changes with it.
   - Limits are settings, so free and premium plans differ only in numbers and priority.
   - Load test on staging: about 100 scans at once with the website staying fast.
-- **Part A.2 (owner decision 2026-11-24, right after Part A): optional "Scan in my browser" mode.**
+- **Part A.2 (owner decision 2026-11-24, right after Part A): optional "Scan in my browser" mode.** Built 2026-11-24 (see PROGRESS.md).
   - Off by default. It explains that the visitor's IP and list go to public nodes.
   - It uses the same pacing and retry engine, only keyless public nodes (and later the visitor's own node), and the
     same results format, labelled "scanned in your browser".

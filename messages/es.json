@@ -2633,7 +2633,8 @@
           "done": "Listo",
           "gave-up": "Se dejó de intentar tras 1 hora",
           "cancelled": "Detenido"
-        }
+        },
+        "whereBrowser": "En tu navegador · deja esta pestaña abierta hasta que termine"
       },
       "refused": {
         "busy": "CRYPY está muy ocupado ahora y la fila está llena. Vuelve a intentarlo en unos minutos.",
@@ -2650,6 +2651,21 @@
         "title": "Aún se están leyendo {count} saldos",
         "note": "Los nodos de {chains} dejaron de responder. Todo lo demás está completo. Estas filas dicen «Aún leyendo» y aparecen aparte en la exportación, para que nunca se confundan con billeteras vacías.",
         "retry": "Intentarlo ahora"
+      },
+      "mode": {
+        "title": "¿Dónde debe ejecutarse el escaneo?",
+        "server": "En los servidores de CRYPY",
+        "serverBadge": "Recomendado",
+        "serverNote": "Privado: tu lista y tu dirección IP nunca llegan a un servicio de nodos. Sigue aunque recargues o cierres la pestaña.",
+        "serverLimit": "Gratis: hasta {max} billeteras por escaneo.",
+        "browser": "En mi navegador",
+        "browserBadge": "Siempre gratis",
+        "browserNote": "Listas más grandes, hasta {max} billeteras. Tu navegador lee directamente de nodos públicos de la blockchain.",
+        "browserKeepOpen": "Deja esta pestaña abierta hasta que termine.",
+        "warningTitle": "Tu dirección IP y tu lista de billeteras van a nodos públicos",
+        "warning": "Los servicios de nodos públicos (como PublicNode, dRPC y el nodo propio de cada cadena) verán tu dirección IP y las billeteras que escaneas. CRYPY no las ve. Si esos nodos no pueden leer algunas billeteras, puedes terminarlas en los servidores de CRYPY con un clic.",
+        "finishOnServer": "Terminarlas en los servidores de CRYPY",
+        "scannedInBrowser": "escaneado en tu navegador"
       }
     },
     "token-security": {

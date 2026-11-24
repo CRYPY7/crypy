@@ -85,3 +85,26 @@ test("starting a second scan while one runs offers to stop it", async ({ page, r
   const done = page.getByRole("status").filter({ hasText: "Scan complete" });
   await expect(offer.or(done)).toBeVisible({ timeout: 30_000 });
 });
+
+test("scan in my browser: a warning first, then balances read from public nodes without the server scan", async ({
+  page,
+}) => {
+  const toServer: string[] = [];
+  const toNodes: string[] = [];
+  page.on("request", (r) => {
+    if (r.url().includes("/api/v1/batch-scans")) toServer.push(r.url());
+    if (/publicnode\.com|drpc\.org|bnbchain\.org|arbitrum\.io|base\.org/.test(r.url())) toNodes.push(r.url());
+  });
+  await page.goto("/en/tools/batch-balance");
+  await page.getByRole("radio", { name: /In my browser/ }).check();
+  await expect(page.getByText("Your IP address and wallet list go to public nodes")).toBeVisible();
+  await expect(page.getByText(/\/ 10,?000 addresses/)).toBeVisible();
+  await page.getByRole("textbox", { name: /Address list/ }).fill(`${BINANCE_8},Binance 8\n${DEAD},Burn`);
+  await page.getByRole("button", { name: "Scan balances" }).click();
+  const done = page.getByRole("status").filter({ hasText: "Scan complete" });
+  await expect(done).toBeVisible({ timeout: 60_000 });
+  await expect(done).toContainText("scanned in your browser");
+  await expect(page.getByText("Binance 8").filter({ visible: true }).first()).toBeVisible();
+  expect(toServer).toEqual([]);
+  expect(toNodes.length).toBeGreaterThan(0);
+});

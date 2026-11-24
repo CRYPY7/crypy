@@ -146,6 +146,9 @@ export function viewRows(rows: ScanRow[], assets: ScanAsset[], prices: ScanPrice
       (!options.hideEmpty || !isEmptyRow(row)) &&
       (!query || row.entry.address.toLowerCase().includes(query) || row.entry.label.toLowerCase().includes(query)),
   );
+  // Keys and original positions are computed once per row (not per comparison): big scans sort tens of thousands
+  // of rows, and many share a key (empty wallets).
+  const position = new Map(rows.map((row, i) => [row, i]));
   const keyOf = (row: ScanRow): number | string => {
     if (options.sort === "value") return rowUsd(row, assets, prices);
     if (options.sort === "label") return row.entry.label.toLowerCase();
@@ -156,15 +159,13 @@ export function viewRows(rows: ScanRow[], assets: ScanAsset[], prices: ScanPrice
       const deployment = asset?.chains[row.chain];
       return raw && deployment ? toNumber(raw, deployment.decimals) : -1;
     }
-    return rows.indexOf(row);
+    return position.get(row) ?? 0;
   };
   const direction = options.descending ? -1 : 1;
-  return [...filtered].sort((a, b) => {
-    const ka = keyOf(a);
-    const kb = keyOf(b);
-    if (ka === kb) return rows.indexOf(a) - rows.indexOf(b);
-    return (ka < kb ? -1 : 1) * direction;
-  });
+  return filtered
+    .map((row) => ({ row, key: keyOf(row), at: position.get(row) ?? 0 }))
+    .sort((a, b) => (a.key === b.key ? a.at - b.at : (a.key < b.key ? -1 : 1) * direction))
+    .map((x) => x.row);
 }
 
 /** Keeps spreadsheet apps from running a cell as a formula (CSV injection). */

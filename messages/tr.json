@@ -2633,7 +2633,8 @@
           "done": "Tamam",
           "gave-up": "1 saat sonra denemeyi bıraktı",
           "cancelled": "Durduruldu"
-        }
+        },
+        "whereBrowser": "Tarayıcınızda · bitene kadar bu sekmeyi açık tutun"
       },
       "refused": {
         "busy": "CRYPY şu anda çok yoğun ve sıra dolu. Lütfen birkaç dakika sonra tekrar deneyin.",
@@ -2650,6 +2651,21 @@
         "title": "{count} bakiye hâlâ okunuyor",
         "note": "{chains} düğümleri yanıt vermeyi bıraktı. Geri kalan her şey tamam. Bu satırlarda “Hâlâ okunuyor” yazar ve dışa aktarımda ayrı listelenir; böylece asla boş cüzdan sanılmaz.",
         "retry": "Şimdi dene"
+      },
+      "mode": {
+        "title": "Tarama nerede çalışsın?",
+        "server": "CRYPY sunucularında",
+        "serverBadge": "Önerilen",
+        "serverNote": "Gizli: listeniz ve IP adresiniz hiçbir düğüm hizmetine ulaşmaz. Sayfayı yenileseniz veya kapatsanız da devam eder.",
+        "serverLimit": "Ücretsiz: tarama başına en fazla {max} cüzdan.",
+        "browser": "Tarayıcımda",
+        "browserBadge": "Her zaman ücretsiz",
+        "browserNote": "Daha büyük listeler, en fazla {max} cüzdan. Tarayıcınız doğrudan herkese açık blokzincir düğümlerinden okur.",
+        "browserKeepOpen": "Bitene kadar bu sekmeyi açık tutun.",
+        "warningTitle": "IP adresiniz ve cüzdan listeniz herkese açık düğümlere gider",
+        "warning": "Herkese açık düğüm hizmetleri (PublicNode, dRPC ve her ağın kendi düğümü gibi) IP adresinizi ve taradığınız cüzdanları görür. CRYPY bunları görmez. Bu düğümler bazı cüzdanları okuyamazsa, tek tıkla CRYPY sunucularında tamamlayabilirsiniz.",
+        "finishOnServer": "CRYPY sunucularında tamamla",
+        "scannedInBrowser": "tarayıcınızda tarandı"
       }
     },
     "token-security": {

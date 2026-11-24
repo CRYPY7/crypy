@@ -12,7 +12,13 @@ export async function BatchBalanceWorkspace({ locale }: { locale: Locale }) {
   const strings = t.raw("utilities.batch-balance") as BatchStrings;
   const scannable = chains
     .filter((chain) => chain.family === "evm" && chain.status === "live" && chain.capabilities.tokenBalances)
-    .map((chain) => ({ key: chain.key, name: t(`chains.${chain.key}`), nativeSymbol: chain.nativeSymbol }));
+    .map((chain) => ({
+      key: chain.key,
+      name: t(`chains.${chain.key}`),
+      nativeSymbol: chain.nativeSymbol,
+      // Keyless public nodes, for "Scan in my browser".
+      publicRpcUrls: chain.publicRpcUrls,
+    }));
   return (
     <BatchBalanceScanner
       strings={strings}

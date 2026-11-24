@@ -6,9 +6,11 @@
 import { getAddress, isAddress } from "viem";
 
 export const MAX_ADDRESSES = 500;
+/** "Scan in my browser" (S2 Part A.2): bigger lists, limited only to keep the tab responsive. */
+export const BROWSER_MAX_ADDRESSES = 10_000;
 export const MAX_LABEL = 40;
 /** Text accepted in the editor or from a file (about 60 characters × 2,000 lines). */
-export const MAX_INPUT_CHARS = 120_000;
+export const MAX_INPUT_CHARS = 1_000_000;
 
 export interface Entry {
   /** Checksummed address. */
@@ -52,7 +54,7 @@ function checkToken(token: string): { status: "ok"; address: string } | { status
   return { status: "ok", address: getAddress(token.toLowerCase()) };
 }
 
-export function parseList(text: string): ParsedList {
+export function parseList(text: string, max = MAX_ADDRESSES): ParsedList {
   const entries: Entry[] = [];
   const notes: LineNote[] = [];
   const seen = new Map<string, Entry>();
@@ -94,7 +96,7 @@ export function parseList(text: string): ParsedList {
           duplicates++;
           continue;
         }
-        if (entries.length >= MAX_ADDRESSES) {
+        if (entries.length >= max) {
           notes.push({ kind: "over-limit", line });
           overLimit++;
           continue;

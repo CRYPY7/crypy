@@ -1,0 +1,159 @@
+import { type PublicClient, concat, erc20Abi, getAddress, hexToBigInt, pad, parseAbi, slice } from "viem";
+
+/**
+ * Batch balances for many addresses at one block (Batch Balance Scanner, M4.5). Plain viem reads with no server code,
+ * so the server (scan jobs) and the browser ("Scan in my browser", S2 Part A.2) use the same reader.
+ * Two reads per batch, both standard `eth_call`s that any node answers:
+ *  1. one multicall: native balance (Multicall3.getEthBalance) + balanceOf for each token, per address;
+ *  2. one "deployless" call that returns each address's code size, to tell wallets from contracts.
+ * Nothing is deployed or sent; the server only reads.
+ */
+
+export const MAX_BATCH_ADDRESSES = 100;
+export const MAX_BATCH_TOKENS = 5;
+
+/**
+ * 37-byte EVM program run as the init code of an eth_call (no `to`). It copies the 32-byte address words appended
+ * after it into memory, replaces each with EXTCODESIZE(address) and returns them. Hand-assembled:
+ *   PUSH2 0x25 DUP1 CODESIZE SUB DUP1 SWAP2 PUSH1 0 CODECOPY        ; mem[0..n) = appended words
+ *   PUSH1 0 JUMPDEST(0d) DUP2 DUP2 LT ISZERO PUSH1 0x20 JUMPI       ; for i = 0; i < n; i += 32
+ *   DUP1 MLOAD EXTCODESIZE DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x0d JUMP ;   mem[i] = extcodesize(mem[i])
+ *   JUMPDEST(20) POP PUSH1 0 RETURN                                 ; return mem[0..n)
+ * Tested in tests/unit/batch-live.test.ts against known contracts and wallets on both chains.
+ */
+export const CODE_SIZE_PROGRAM =
+  "0x610025803803809160003960005b8181101560205780513b8152602001600d565b506000f3" as `0x${string}`;
+const PROGRAM = CODE_SIZE_PROGRAM;
+
+/** EIP-7702: a wallet that delegates to code has exactly 23 bytes of code starting with 0xef0100. */
+const DELEGATION_SIZE = 23n;
+const DELEGATION_PREFIX = "0xef0100";
+
+const multicall3Abi = parseAbi(["function getEthBalance(address addr) view returns (uint256 balance)"]);
+
+export type AccountType = "wallet" | "contract" | "delegated";
+
+export interface BatchRow {
+  address: string;
+  /** null: the type couldn't be read. */
+  type: AccountType | null;
+  /** Raw integers as strings; null when that read failed. */
+  native: string | null;
+  tokens: (string | null)[];
+}
+
+export interface BatchResult {
+  block: string;
+  rows: BatchRow[];
+}
+
+export async function accountTypes(
+  client: PublicClient,
+  addresses: `0x${string}`[],
+  blockNumber: bigint,
+): Promise<(AccountType | null)[]> {
+  try {
+    const { data } = await client.call({ data: concat([PROGRAM, ...addresses.map((a) => pad(a))]), blockNumber });
+    if (!data || (data.length - 2) / 64 !== addresses.length) return addresses.map(() => null);
+    const sizes = addresses.map((_, i) => hexToBigInt(slice(data, i * 32, (i + 1) * 32)));
+    // Confirm possible delegated wallets by their code (rare, so a few extra reads at most).
+    const delegated = await Promise.all(
+      sizes.map((size, i) =>
+        size === DELEGATION_SIZE
+          ? client
+              .getCode({ address: addresses[i]!, blockNumber })
+              .then((code) => (code ?? "").toLowerCase().startsWith(DELEGATION_PREFIX))
+              .catch(() => false)
+          : false,
+      ),
+    );
+    return sizes.map((size, i) => (size === 0n ? "wallet" : delegated[i] ? "delegated" : "contract"));
+  } catch {
+    return addresses.map(() => null);
+  }
+}
+
+async function readAt(
+  client: PublicClient,
+  addresses: `0x${string}`[],
+  tokens: `0x${string}`[],
+  blockNumber: bigint,
+  multicallBytes?: number,
+): Promise<BatchRow[]> {
+  const multicall3 = client.chain?.contracts?.multicall3?.address;
+  if (!multicall3) throw new Error("Multicall3 not configured for this chain");
+  const per = 1 + tokens.length;
+  const [results, types] = await Promise.all([
+    client.multicall({
+      allowFailure: true,
+      blockNumber,
+      ...(multicallBytes ? { batchSize: multicallBytes } : {}),
+      contracts: addresses.flatMap((address) => [
+        { address: multicall3, abi: multicall3Abi, functionName: "getEthBalance" as const, args: [address] as const },
+        ...tokens.map((token) => ({
+          address: token,
+          abi: erc20Abi,
+          functionName: "balanceOf" as const,
+          args: [address] as const,
+        })),
+      ]),
+    }),
+    accountTypes(client, addresses, blockNumber),
+  ]);
+  // viem turns a whole request that failed (timeout, limit, too large) into "failure" for every call in it. That is a
+  // failed read, not unreadable balances: pass the error on so the caller can try another node or a smaller batch.
+  const failure = results.find((r) => r.status === "failure");
+  if (results.length > 0 && results.every((r) => r.status === "failure")) {
+    throw failure?.error ?? new Error("Every call in the multicall failed");
+  }
+  return addresses.map((address, i) => {
+    const cell = (j: number) => {
+      const r = results[i * per + j];
+      return r?.status === "success" ? String(r.result) : null;
+    };
+    return {
+      address,
+      type: types[i] ?? null,
+      native: cell(0),
+      tokens: tokens.map((_, t) => cell(1 + t)),
+    };
+  });
+}
+
+/**
+ * Reads one batch. `blockNumber` keeps every batch of a scan on the same block; if the node no longer has that
+ * block's state, the batch is read at the latest block instead (the response says which block it used).
+ */
+export async function readBatchBalances(
+  client: PublicClient,
+  addresses: string[],
+  tokens: string[],
+  blockNumber?: bigint,
+  /** Calldata per multicall request; scans send one large request per chunk instead of viem's 1 KB pieces. */
+  multicallBytes?: number,
+): Promise<BatchResult> {
+  const list = addresses.slice(0, MAX_BATCH_ADDRESSES).map((a) => getAddress(a));
+  const tokenList = tokens.slice(0, MAX_BATCH_TOKENS).map((a) => getAddress(a));
+  if (blockNumber !== undefined) {
+    try {
+      return {
+        block: blockNumber.toString(),
+        rows: await readAt(client, list, tokenList, blockNumber, multicallBytes),
+      };
+    } catch (error) {
+      // A node that no longer has the block answers with an error: read at the latest block instead.
+      // Other failures (timeouts, limits) are passed on, so the caller can try another node.
+      if (!isMissingState(error)) throw error;
+    }
+  }
+  const latest = await client.getBlockNumber();
+  return { block: latest.toString(), rows: await readAt(client, list, tokenList, latest, multicallBytes) };
+}
+
+/** "missing trie node", "header not found", "state … not available": the node pruned that block's state. */
+export function isMissingState(error: unknown): boolean {
+  const text = error instanceof Error ? `${error.message} ${(error as { details?: string }).details ?? ""}` : "";
+  return /missing trie node|header not found|state .*not available|pruned|archive|unknown block|block not found/i.test(
+    text,
+  );
+}

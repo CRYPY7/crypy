@@ -19,7 +19,9 @@ const contentSecurityPolicy = [
     "connect-src 'self'",
     // Public RPCs used by the browser wallet layer (read-only, no keys)
     "https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org",
-    "https://base-rpc.publicnode.com https://arb1.arbitrum.io https://polygon-bor-rpc.publicnode.com",
+    "https://base-rpc.publicnode.com https://mainnet.base.org https://base.drpc.org https://arb1.arbitrum.io",
+    "https://arbitrum-one-rpc.publicnode.com https://polygon-bor-rpc.publicnode.com https://polygon.drpc.org",
+    // ("Scan in my browser" reads balances from these same public nodes; tests/unit/csp.test.ts keeps them in step.)
     // WalletConnect relay and services (only used after the user chooses WalletConnect)
     "wss://relay.walletconnect.org wss://relay.walletconnect.com https://*.walletconnect.org https://*.walletconnect.com https://api.web3modal.org https://*.reown.com",
     isDev ? "ws: wss:" : "",

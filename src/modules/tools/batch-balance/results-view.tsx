@@ -87,6 +87,8 @@ export function ResultsView({
   onScanAgain,
   onRetry,
   onRetryAll,
+  retryLabel,
+  doneNote,
 }: {
   s: BatchStrings;
   locale: string;
@@ -109,6 +111,10 @@ export function ResultsView({
   onScanAgain: () => void;
   onRetry: (row: ScanRow) => void;
   onRetryAll?: (rows: ScanRow[]) => void;
+  /** Label of the button for rows still being read (default "Try these now"). */
+  retryLabel?: string;
+  /** Added to the finished line, e.g. "scanned in your browser". */
+  doneNote?: string;
 }) {
   const [search, setSearch] = useState("");
   const [chain, setChain] = useState<string | null>(null);
@@ -127,13 +133,22 @@ export function ResultsView({
     () => viewRows(rows, assets, prices, { search, chain, hideEmpty, sort, descending }),
     [rows, assets, prices, search, chain, hideEmpty, sort, descending],
   );
-  const hidden = hideEmpty
-    ? viewRows(rows, assets, prices, { search, chain, hideEmpty: false, sort, descending }).length - shown.length
-    : 0;
+  // Big scans have tens of thousands of rows and this view re-renders often while a scan runs: everything that walks
+  // the rows is memoized and linear.
+  const hidden = useMemo(() => {
+    if (!hideEmpty) return 0;
+    const query = search.trim().toLowerCase();
+    return rows.filter(
+      (r) =>
+        isEmptyRow(r) &&
+        (!chain || r.chain === chain) &&
+        (!query || r.entry.address.toLowerCase().includes(query) || r.entry.label.toLowerCase().includes(query)),
+    ).length;
+  }, [rows, hideEmpty, chain, search]);
   const pages = Math.max(1, Math.ceil(shown.length / PAGE));
   const current = Math.min(page, pages - 1);
   const pageRows = shown.slice(current * PAGE, current * PAGE + PAGE);
-  const usedChains = [...new Set(rows.map((r) => r.chain))];
+  const usedChains = useMemo(() => [...new Set(rows.map((r) => r.chain))], [rows]);
 
   const amount = (row: ScanRow, asset: ScanAsset) => {
     const raw = row.balances[asset.key];
@@ -157,13 +172,20 @@ export function ResultsView({
     setCopied(key);
     setTimeout(() => setCopied(""), 1500);
   };
-  const withBalance = [...new Set(rows.filter((r) => r.status === "ok" && !isEmptyRow(r)).map((r) => r.entry.address))];
-  const emptyAddresses = entries
-    .map((e) => e.address)
-    .filter((a) => {
-      const mine = rows.filter((r) => r.entry.address === a);
-      return mine.length > 0 && mine.every((r) => r.status === "ok" && isEmptyRow(r));
-    });
+  const { withBalance, emptyAddresses } = useMemo(() => {
+    const funded = new Set<string>();
+    const notEmpty = new Set<string>();
+    const seen = new Set<string>();
+    for (const r of rows) {
+      seen.add(r.entry.address);
+      if (r.status === "ok" && !isEmptyRow(r)) funded.add(r.entry.address);
+      if (!(r.status === "ok" && isEmptyRow(r))) notEmpty.add(r.entry.address);
+    }
+    return {
+      withBalance: [...funded],
+      emptyAddresses: entries.map((e) => e.address).filter((a) => seen.has(a) && !notEmpty.has(a)),
+    };
+  }, [rows, entries]);
   const tableText = () =>
     [
       [
@@ -226,7 +248,7 @@ export function ResultsView({
       : corrected > 0
         ? fill(s.crossCorrected, { compared, corrected })
         : fill(s.crossChecked, { compared });
-  const unread = rows.filter((r) => r.status !== "ok");
+  const unread = useMemo(() => rows.filter((r) => r.status !== "ok"), [rows]);
   const unreadChains = [...new Set(unread.map((r) => chainOf(r.chain)?.name ?? r.chain))].join(", ");
   const button =
     "inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm hover:border-primary focus-visible:ring-3 focus-visible:ring-ring/25 focus-visible:outline-none";
@@ -272,6 +294,7 @@ export function ResultsView({
                   time,
                 })}
                 {crossText ? ` · ${crossText}` : ""}
+                {doneNote ? ` · ${doneNote}` : ""}
               </span>
             </span>
           </p>
@@ -310,7 +333,7 @@ export function ResultsView({
               className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
               onClick={() => onRetryAll(unread)}
             >
-              {s.stillReading.retry}
+              {retryLabel ?? s.stillReading.retry}
             </button>
           )}
         </div>

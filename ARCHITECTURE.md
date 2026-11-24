@@ -577,6 +577,12 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 
   The older `POST /api/v1/batch-balances` (one batch of 100) stays for retrying single rows and for the S1 audit. A multicall whose calls all failed now throws, so callers try another node.
 
+- **Browser mode** (S2 Part A.2): `modules/tools/batch-balance/browser-scan.ts`, loaded on demand.
+  - It runs the same engine with one reader per keyless public node of each chain (`publicRpcUrls`), sharing `lib/batch-scan/read.ts` with the server.
+  - The engine gives up after 10 minutes there, and unread rows can be finished by a server job.
+  - Prices come from `GET /api/v1/batch-prices` (token contracts only, cached 60 s).
+  - The CSP `connect-src` lists every public node (checked by `tests/unit/csp.test.ts`).
+  - Lists up to `BROWSER_MAX_ADDRESSES` (10,000); the page merges rows into the table at most every 0.75 s.
 - Other chain families plug in by adding a reader for their adapter; the page lists every live chain with the `tokenBalances` capability.
 
 ## 12p. Page-change feedback (B-029)
