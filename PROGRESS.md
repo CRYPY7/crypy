@@ -38,7 +38,51 @@ Last updated: 2026-11-24
 | SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
 | M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
+| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0 and S1 started 2026-11-24; new features paused until S6                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Stabilization S0 and S1 started (owner decision 2026-11-24)
+
+Owner's answers: pause new features until S6; more free providers per chain; a staging droplet; the bug list in a
+Sheet ("CRYPY — Bug list", 16 entries so far). Plan: DEVELOPMENT_ROADMAP.md "Stabilization".
+
+**S0 — See every failure (built):**
+
+- Every visitor request to a tool is classified and counted: **full**, **partial** (something missing and the page says
+  so: a chain unavailable, a cut or well-known-only token list, prices missing, GoPlus unavailable, activity limited to
+  recent transfers, approvals' recent-event search skipped) or **error**, with time taken. Rules: `lib/outcomes/classify.ts`
+  (pure). Search, balances, approvals, activity, token security, transactions, gas, batch balances, portfolio,
+  timestamp & block and token info, on their pages and APIs (`observe` in `server/outcomes/record.ts`). The answer is
+  passed on unchanged; counting never breaks a page.
+- Every error that reaches Next.js while serving a visitor is counted too (`onRequestError` in `instrumentation.ts`),
+  as "Server errors" with the tool it belongs to.
+- Counts only: per tool and 5-minute bucket (full, partial, errors, slow ≥ 3 s, total time, the 12 most frequent
+  reason codes). Reasons are cleaned of addresses, hashes, URLs, long numbers and keys. Saved every minute in
+  `visitor_outcomes` (migration `0006_visitor_outcomes`), counts added so several processes can save; kept 90 days.
+  CRYPY's own background work isn't counted.
+- **/admin → "What visitors got (last 24 hours)":** per tool the requests, full / partial / error shares, slow
+  requests, average time, the 7-day error share and the most frequent reasons.
+- **Telegram to the owner** when a tool fails for visitors (over 2% of requests in 10 minutes, at least 3 errors), and
+  once when it works again.
+
+**S1 — Audit (tool built, first run):** `scripts/audit/run.mjs` runs 51 cases through every tool's API on all 5
+chains: normal, empty and tricky inputs (wrong checksum, spaces, unknown hash, a contract or a wallet as a token),
+paging, and consistency checks (fee = gas used × price + L1 fee; gas speeds in order; balances equal to a direct
+read from a public node at the same block; activity only involves the wallet, newest first, no repeats on page 2;
+totals add up; never a "safe" verdict). It waits when CRYPY asks it to slow down, and writes `audit-report.md`.
+
+- First run here (no Alchemy key, no GoPlus access in this workspace): 51 cases, 0 findings, 0 errors, 12 partial
+  (all explained by the missing key and GoPlus). Slow first visits recorded as bugs: token security 9–10 s (USDT,
+  CAKE), approvals 4.7 s, activity 3.8 s, date → block 3.3 s.
+- Found while building it: the outcome rules first counted "recent events not searched" on chains where the wallet
+  holds no token (nothing to search); fixed before release (the page itself never showed that warning).
+- **Next:** the owner runs the audit on the server (real Alchemy key and GoPlus), which gives the real picture; a
+  week of S0 numbers; then S2 (saved results) and S3 (sources).
+
+**Checks (2026-11-24):** typecheck, lint, Prettier, i18n check: clean. Unit: 478 passed, 72 skipped (9 new: every
+classifier, reason cleaning, route mapping, counting with a throwing classifier, the reason cap, saving twice into the
+same bucket with the real migration, the alert rule). Build passed. Browser: 260 passed, 12 skipped, 0 failed, plus the
+admin test now expecting the new section (10 of 10). A live run with the worker on saved without errors.
 
 ## Faster updates without downtime (owner report 2026-11-24: "each update takes 5–10 minutes")
 

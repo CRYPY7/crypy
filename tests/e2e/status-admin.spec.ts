@@ -102,6 +102,7 @@ test("admin: dashboard after sign-in; a published update shows on the status pag
   await expect(page.getByTestId("admin-signed-in")).toContainText("(admin)");
   for (const section of [
     "All checks",
+    "What visitors got (last 24 hours)",
     "Free plans used today",
     "Server",
     "Failed checks (last 24 hours)",

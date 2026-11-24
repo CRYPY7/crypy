@@ -219,6 +219,25 @@ export const providerUsage = pgTable(
   (table) => [uniqueIndex("provider_usage_day_provider_idx").on(table.day, table.provider)],
 );
 
+/**
+ * What visitors got from each tool (stabilization S0), per 5-minute bucket: full, partial and failed requests, slow
+ * ones, total time and short reason codes with counts. No addresses, hashes, IPs or anything a visitor typed.
+ */
+export const visitorOutcomes = pgTable(
+  "visitor_outcomes",
+  {
+    bucket: timestamp("bucket", { withTimezone: true }).notNull(),
+    tool: text("tool").notNull(),
+    full: integer("full").notNull().default(0),
+    partial: integer("partial").notNull().default(0),
+    errors: integer("errors").notNull().default(0),
+    slow: integer("slow").notNull().default(0),
+    totalMs: bigint("total_ms", { mode: "number" }).notNull().default(0),
+    reasons: jsonb("reasons").$type<Record<string, number>>().notNull().default({}),
+  },
+  (table) => [uniqueIndex("visitor_outcomes_bucket_tool_idx").on(table.bucket, table.tool)],
+);
+
 export const schema = {
   users,
   accounts,
@@ -233,4 +252,5 @@ export const schema = {
   checkerCursors,
   portfolios,
   providerUsage,
+  visitorOutcomes,
 };

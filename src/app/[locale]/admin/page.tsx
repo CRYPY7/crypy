@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { adminAccessFromCookies } from "@/server/admin/auth";
 import { adminHealth } from "@/server/health/admin";
 import { readTime } from "@/server/health/runner";
+import { outcomesSince } from "@/server/outcomes/store";
 import { publicUpdates } from "@/server/services/status-updates";
 
 /**
@@ -95,7 +96,13 @@ const groups: CheckGroup[] = ["website", "chain", "tool", "alerts", "data", "ser
 async function Dashboard({ locale, address, show }: { locale: Locale; address: string; show?: string }) {
   const t = await getTranslations();
   const now = readTime();
-  const [health, updates] = await Promise.all([adminHealth(now), publicUpdates(now)]);
+  const [health, updates, day, week] = await Promise.all([
+    adminHealth(now),
+    publicUpdates(now),
+    outcomesSince(now - 86_400_000).catch(() => []),
+    outcomesSince(now - 7 * 86_400_000).catch(() => []),
+  ]);
+  const weekOf = (tool: string) => week.find((w) => w.tool === tool);
   const n = numberFormat(locale);
   const percent = numberFormat(locale, { style: "percent", maximumFractionDigits: 1 });
   const ago = (iso: string) => Math.max(0, Math.floor((now - Date.parse(iso)) / 60_000));
@@ -125,7 +132,7 @@ async function Dashboard({ locale, address, show }: { locale: Locale; address: s
           {t("admin.badge")}
         </span>
         <nav aria-label={t("admin.nav.label")} className="flex flex-wrap gap-1">
-          {(["health", "providers", "updates"] as const).map((id) => (
+          {(["health", "visitors", "providers", "updates"] as const).map((id) => (
             <a key={id} href={`#${id}`} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted">
               {t(`admin.nav.${id}`)}
             </a>
@@ -249,6 +256,72 @@ async function Dashboard({ locale, address, show }: { locale: Locale; address: s
                 <tr className="border-t">
                   <td colSpan={6} className="px-4 py-4 text-muted-foreground">
                     {t("admin.checks.none")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="visitors" aria-labelledby="visitors-title" className={cn(card, "overflow-hidden")}>
+        <div className="px-4 py-4">
+          <h2 id="visitors-title" className="text-lg font-semibold">
+            {t("admin.outcomes.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground">{t("admin.outcomes.sub")}</p>
+        </div>
+        <div className="overflow-x-auto" tabIndex={0} role="group" aria-labelledby="visitors-title">
+          <table className="w-full min-w-[52rem] text-sm">
+            <thead>
+              <tr className="text-start text-xs tracking-wide text-muted-foreground uppercase">
+                {(["tool", "requests", "full", "partial", "errors", "slow", "average", "week", "reasons"] as const).map(
+                  (col) => (
+                    <th key={col} scope="col" className="px-4 py-2 text-start font-semibold">
+                      {t(`admin.outcomes.cols.${col}`)}
+                    </th>
+                  ),
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {day.map((o) => {
+                const w = weekOf(o.tool);
+                const share = (x: number, total: number) => (total ? percent.format(x / total) : "\u2014");
+                return (
+                  <tr key={o.tool} className="border-t align-top" data-testid={`outcome-${o.tool}`}>
+                    <th scope="row" className="px-4 py-2 text-start font-medium">
+                      {t(`admin.outcomes.tools.${o.tool}`)}
+                    </th>
+                    <td className="px-4 py-2 tabular-nums">{n.format(o.total)}</td>
+                    <td className="px-4 py-2 tabular-nums">{share(o.full, o.total)}</td>
+                    <td className={cn("px-4 py-2 tabular-nums", o.partial > 0 && "text-medium")}>
+                      {share(o.partial, o.total)}
+                    </td>
+                    <td className={cn("px-4 py-2 tabular-nums", o.errors > 0 && "font-semibold text-critical")}>
+                      {share(o.errors, o.total)}
+                    </td>
+                    <td className="px-4 py-2 tabular-nums">{n.format(o.slow)}</td>
+                    <td className="px-4 py-2 tabular-nums">
+                      {o.averageMs === null ? "\u2014" : t("admin.outcomes.ms", { ms: n.format(o.averageMs) })}
+                    </td>
+                    <td className="px-4 py-2 tabular-nums">
+                      {w
+                        ? t("admin.outcomes.weekValue", { errors: share(w.errors, w.total), total: n.format(w.total) })
+                        : "\u2014"}
+                    </td>
+                    <td className="px-4 py-2 text-xs text-muted-foreground">
+                      {o.reasons.length
+                        ? o.reasons.map((r) => `${r.reason} \u00d7${n.format(r.count)}`).join(" \u00b7 ")
+                        : "\u2014"}
+                    </td>
+                  </tr>
+                );
+              })}
+              {day.length === 0 && (
+                <tr className="border-t">
+                  <td colSpan={9} className="px-4 py-4 text-muted-foreground">
+                    {t("admin.outcomes.none")}
                   </td>
                 </tr>
               )}

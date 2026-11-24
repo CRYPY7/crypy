@@ -37,3 +37,28 @@ export async function register() {
     console.warn(`[crypy] alerts didn't start: ${redactKeys((error as Error).message)}`);
   }
 }
+
+/**
+ * Every error that reaches Next.js while serving a visitor (stabilization S0): counted under "Server errors" with
+ * the tool its page belongs to and a cleaned message (no addresses, hashes, URLs or keys). Never throws.
+ */
+export async function onRequestError(
+  error: unknown,
+  _request: { path: string; method: string },
+  context: { routePath: string; routeType: string },
+): Promise<void> {
+  if (process.env.NEXT_RUNTIME !== "nodejs") return;
+  try {
+    const { cleanReason, errorOutcome, toolForRoute } = await import("@/lib/outcomes/classify");
+    const { recordOutcome } = await import("@/server/outcomes/record");
+    const tool = toolForRoute(context.routePath);
+    const { reasons } = errorOutcome(error);
+    recordOutcome(
+      "pages",
+      { outcome: "error", reasons: [cleanReason(`${tool ?? context.routeType}: ${reasons[0] ?? ""}`)] },
+      0,
+    );
+  } catch {
+    // Ignored: counting must never add a second error.
+  }
+}

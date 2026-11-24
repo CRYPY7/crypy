@@ -62,3 +62,7 @@ next-env.d.ts
 .crash-reports/
 memory-log.txt
 isolate-*.log
+
+# Feature audit output (scripts/audit/run.mjs)
+audit-report.md
+audit-report.json

@@ -4,6 +4,8 @@ import { fail, ok } from "@/server/http/response";
 import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedApprovals } from "@/server/services/approvals";
 import { apiChains, validChainsParam } from "@/server/services/chain-scope";
+import { observe } from "@/server/outcomes/record";
+import { classifyApprovals } from "@/lib/outcomes/classify";
 
 /**
  * GET /api/v1/address/{address}/approvals — a wallet's approvals on every supported chain, each allowance read
@@ -21,7 +23,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const owner = getAddress(address.toLowerCase());
     const chains = await apiChains(owner, "approvals", chainsParam);
     if (chains === null) return fail("INVALID_INPUT");
-    const report = await cachedApprovals(owner, chains);
+    const report = await observe("approvals", () => cachedApprovals(owner, chains), classifyApprovals);
     return ok(report, { sources: ["rpc", "goplus"] });
   } catch {
     return fail("UPSTREAM_UNAVAILABLE");

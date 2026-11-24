@@ -3,6 +3,8 @@ import { getAddress } from "viem";
 import { fail, ok } from "@/server/http/response";
 import { clientKey, portfolioLimiter } from "@/server/rate-limit";
 import { portfolioWallet } from "@/server/services/portfolio";
+import { observe } from "@/server/outcomes/record";
+import { classifyPortfolio } from "@/lib/outcomes/classify";
 
 /**
  * GET /api/v1/address/{address}/portfolio — one Portfolio wallet: balances on the chains it uses, how many approvals
@@ -15,7 +17,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const limit = portfolioLimiter(clientKey(request.headers));
   if (!limit.allowed) return fail("RATE_LIMITED", { "Retry-After": String(limit.retryAfterSeconds) });
   try {
-    const report = await portfolioWallet(getAddress(address.toLowerCase()));
+    const report = await observe(
+      "portfolio",
+      () => portfolioWallet(getAddress(address.toLowerCase())),
+      classifyPortfolio,
+    );
     return ok(report, { sources: ["rpc", "goplus"] });
   } catch {
     return fail("UPSTREAM_UNAVAILABLE");

@@ -773,6 +773,19 @@ DEX decoders, per chain family:                      (one per DEX design)
 - **Owner messages** `server/health/notify.ts`: `transitions` (pure: second failure in a row → problem; pass after a
   failing streak → fixed) and `notifyAdmins` (Telegram chats linked to admin wallets; errors logged with keys removed).
 
+## 12o. Visitor outcomes (stabilization S0)
+
+- `lib/outcomes/classify.ts` (pure): per tool, what a visitor got (`full` / `partial` / `error`) and short reason codes,
+  cleaned of addresses, hashes, URLs and long numbers (`cleanReason`); `toolForRoute` for Next.js route patterns.
+- `server/outcomes/record.ts`: `observe(tool, run, classify)` wraps the service call on a page or API route, passes the
+  result or error through unchanged and counts it in memory per 5-minute bucket; a timer saves every minute (any
+  process that counts). Background work calls the services directly, so it is never counted.
+- `server/outcomes/store.ts`: `visitor_outcomes` (bucket, tool, counts, total ms, reasons jsonb); upserts add counts and
+  merge reasons in SQL; `outcomesSince` for /admin; `outcomeTransitions` (pure) for the owner's Telegram messages,
+  run by the worker each minute (`server/outcomes/watch.ts`).
+- `instrumentation.ts` `onRequestError`: every error Next.js reports while serving a visitor, counted as "pages".
+- `scripts/audit/run.mjs`: the S1 audit against any CRYPY address (read-only).
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

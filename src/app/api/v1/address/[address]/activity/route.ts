@@ -4,6 +4,8 @@ import { fail, ok } from "@/server/http/response";
 import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedActivity, formatCursor } from "@/server/services/activity";
 import { apiChains, validChainsParam } from "@/server/services/chain-scope";
+import { observe } from "@/server/outcomes/record";
+import { classifyActivity } from "@/lib/outcomes/classify";
 
 /**
  * GET /api/v1/address/{address}/activity?cursor=bsc:123,ethereum:456 — the wallet's transfers on every supported
@@ -23,7 +25,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const owner = getAddress(address.toLowerCase());
     const chains = await apiChains(owner, "activity", chainsParam);
     if (chains === null) return fail("INVALID_INPUT");
-    const report = await cachedActivity(owner, cursor, chains);
+    const report = await observe("activity", () => cachedActivity(owner, cursor, chains), classifyActivity);
     return ok({ ...report, next: formatCursor(report.chains) }, { sources: ["rpc", "alchemy"] });
   } catch {
     return fail("UPSTREAM_UNAVAILABLE");

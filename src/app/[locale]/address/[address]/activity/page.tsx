@@ -19,6 +19,8 @@ import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedActivity, formatCursor } from "@/server/services/activity";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { cachedResolve, explorerLink } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifyActivity } from "@/lib/outcomes/classify";
 
 type Props = PageProps<"/[locale]/address/[address]/activity">;
 
@@ -69,7 +71,7 @@ async function ActivityContent({
   if (result.status !== "address") notFound();
 
   const scope = await chainScopeFor(result.address, "activity", query.chains);
-  const report = await cachedActivity(result.address, null, scope.scan);
+  const report = await observe("activity", () => cachedActivity(result.address, null, scope.scan), classifyActivity);
   const basePath = localePath(locale, `/address/${result.address}`);
   const links = result.lookups.flatMap((lookup) => {
     const chain = getChain(lookup.chain);

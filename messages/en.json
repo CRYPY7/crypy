@@ -3223,6 +3223,7 @@
     "nav": {
       "label": "Admin",
       "health": "Health",
+      "visitors": "What visitors got",
       "providers": "Providers",
       "updates": "Status updates"
     },
@@ -3374,6 +3375,39 @@
       "title": "This wallet isn't an admin",
       "text": "You're signed in as {address}, which isn't on the admin list. Nothing about the site's health is shown.",
       "publicLink": "Public status page"
+    },
+    "outcomes": {
+      "title": "What visitors got (last 24 hours)",
+      "sub": "Every visitor request, counted per tool from real visits: full result, partial (something was missing and the page said so) or error. Counts only: no addresses, IPs or what anyone typed. Saved every minute; CRYPY's own checks are not counted.",
+      "cols": {
+        "tool": "Tool",
+        "requests": "Requests",
+        "full": "Full",
+        "partial": "Partial",
+        "errors": "Errors",
+        "slow": "Slow (3 s+)",
+        "average": "Average",
+        "week": "Errors, 7 days",
+        "reasons": "Most frequent reasons"
+      },
+      "ms": "{ms} ms",
+      "weekValue": "{errors} of {total}",
+      "none": "No visitor requests counted yet. Counting starts with this update.",
+      "tools": {
+        "search": "Search",
+        "balances": "Balances (address overview)",
+        "approvals": "Approvals",
+        "activity": "Activity",
+        "token-security": "Token security",
+        "transaction": "Transaction page",
+        "gas": "Gas",
+        "batch-balance": "Batch balances",
+        "portfolio": "Portfolio",
+        "timestamp-block": "Timestamp & block",
+        "token-info": "Token info (batch scanner)",
+        "account": "Sign-in, watchlist and alerts",
+        "pages": "Server errors (any page)"
+      }
     }
   }
 }

@@ -19,6 +19,8 @@ import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedApprovals } from "@/server/services/approvals";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { cachedResolve, explorerLink } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifyApprovals } from "@/lib/outcomes/classify";
 
 type Props = PageProps<"/[locale]/address/[address]/approvals">;
 
@@ -69,7 +71,7 @@ async function ApprovalsContent({
   if (result.status !== "address") notFound();
 
   const scope = await chainScopeFor(result.address, "approvals", query.chains);
-  const report = await cachedApprovals(result.address, scope.scan);
+  const report = await observe("approvals", () => cachedApprovals(result.address, scope.scan), classifyApprovals);
   const basePath = localePath(locale, `/address/${result.address}`);
   const links = result.lookups.flatMap((lookup) => {
     const chain = getChain(lookup.chain);

@@ -3,6 +3,8 @@ import { getChain } from "@/config/chains";
 import { fail, ok } from "@/server/http/response";
 import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedTokenSecurity } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifyTokenSecurity } from "@/lib/outcomes/classify";
 
 /**
  * GET /api/v1/token/{chain}/{address}/security — the token security report (facts, checks, counts, comparison).
@@ -14,7 +16,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { chain, address } = await params;
   if (!getChain(chain) || !/^0x[0-9a-fA-F]{40}$/.test(address)) return fail("INVALID_INPUT");
   try {
-    const report = await cachedTokenSecurity(chain, address);
+    const report = await observe("token-security", () => cachedTokenSecurity(chain, address), classifyTokenSecurity);
     if (!report) return fail("NOT_FOUND");
     return ok(report, { sources: ["rpc", "simulation", ...(report.facts.external ? ["goplus"] : []), "sourcify"] });
   } catch {

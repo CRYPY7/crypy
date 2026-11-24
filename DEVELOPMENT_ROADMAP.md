@@ -2,6 +2,42 @@
 
 Status: **Approved** — Nov 2026 (rev. 6). **M0–M2.5 done; M3–M6 built (M6 on 2026-11-21).** Every milestone ends with typecheck, lint, tests and build actually run, PROGRESS.md updated, owner review.
 
+> **Current priority (owner decision 2026-11-24): Stabilization (S0–S6, below).** New features (Token Market &
+> Charts, new chains, new tools) wait until S6 passes. No redesign: the current design stays.
+
+## Stabilization — make every live feature work for everyone, always (owner decision 2026-11-24)
+
+Why: features sometimes stopped and came back by themselves. Almost every case had one shape: a free outside
+service said no for a few minutes and CRYPY had nothing saved to show instead. Full plan: the "CRYPY —
+Stabilization roadmap" doc. Owner answers (2026-11-24): pause new features; add 2–3 more free providers per chain;
+add a staging droplet (about $6 a month), grow production to 4 GB only if measured; keep the bug list in a Sheet.
+
+**Targets (14 days in a row, measured from real visitors):** site up 99.9%; 99.5% of visitor requests per tool end in
+a full or clearly labelled partial result; errors or blank cards under 0.5% and never 5 minutes in a row for a tool;
+a failed source recovers by itself within 2 minutes; first visit to a popular token or address under 3 s for 95%;
+repeat visit under 1 s; updates without downtime beyond a 10 s restart, bad updates rolled back; free plans never
+used up before 00:00 UTC on a normal day.
+
+- **S0 — See every failure.** Outcome of every visitor request per tool (full / partial / error, reason, time; no
+  addresses or IPs); server errors saved (keys removed); /admin "What visitors got" per tool and hour; Telegram to the
+  owner when a tool's errors pass 2% over 10 minutes, and on recovery. **Done when:** a week of real numbers per tool
+  and the top failure reasons named.
+- **S1 — Audit every feature** (with S0). The checklist in the doc on all 5 chains: data checked against explorers
+  and Revoke.cash, unusual inputs, behaviour when a source fails. Findings in the bug list Sheet with severity.
+  **Done when:** every feature checked and every finding listed.
+- **S2 — Never show an error when a good answer exists.** Last good result saved in the database for token checks,
+  address summaries, approvals, activity and gas; shown with its age while a fresh check runs; one shared
+  partial-result design. **Done when:** stopping any one provider on staging leaves every tool showing a result.
+- **S3 — Sources that don't fall over.** Health score per provider and method (bench failing providers until they
+  recover); more free providers per chain and a map of what each supports; GoPlus queue with priorities and saved
+  results; a queue for heavy checks. **Done when:** a day with one provider down and GoPlus at its limit stays on target.
+- **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
+  cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
+  2026-11-24: two build folders, rollback); a tested backup restore. **Done when:** an update, a worker crash and a
+  restart each leave the site serving.
+- **S5 — Fix everything found**, most harmful first, each with a test that fails without the fix; slow first visits.
+- **S6 — Prove it:** 14 days in a row on target. Then new features resume.
+
 ## M0 — Setup (owner) + design approval
 
 - [x] Node.js LTS, pnpm 12, Git, VS Code installed
@@ -314,8 +350,8 @@ Translations (wave 1, owner decision 2026-11-23: Spanish, Portuguese (Brazil), C
   **Done when (per language):** a native speaker has reviewed it and the owner approves; then its status becomes
   `complete`, which adds it to search engines (hreflang, sitemap) and to automatic language detection.
   **Later:** Urdu and Arabic (hidden; right-to-left support kept), then Hindi, French, German.
-- **Next parts (proposed order):** native reviews of the six Beta languages; lawyer review of the legal pages; a
-  staging copy, then the alerts "Done when" on staging and production.
+- **Next parts:** Stabilization S0–S6 (above) first; native reviews of the six Beta languages and the lawyer review
+  of the legal pages continue on the owner's side; the staging copy and the alerts "Done when" are part of S4.
 
 ## After V1 — revenue phases (approved 2026-11-19)
 

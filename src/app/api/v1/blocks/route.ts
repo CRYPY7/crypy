@@ -3,6 +3,8 @@ import { liveChains } from "@/config/chains";
 import { registry } from "@/server/chains/registry";
 import { fail, ok } from "@/server/http/response";
 import { blocksLimiter, clientKey } from "@/server/rate-limit";
+import { observe } from "@/server/outcomes/record";
+import { classifyDone, classifyGas } from "@/lib/outcomes/classify";
 
 /**
  * GET /api/v1/blocks?time=<unix seconds>  → the first block at or after that time on every chain
@@ -20,12 +22,21 @@ export async function GET(request: NextRequest) {
     if (time !== null) {
       if (!/^\d{1,11}$/.test(time)) return fail("INVALID_INPUT");
       const t = Number(time);
-      const results = await Promise.allSettled(
-        liveChains.map((c) => {
-          const a = adapterFor(c.family);
-          if (!a?.blockAtTime) throw new Error("unsupported");
-          return a.blockAtTime(c, t);
-        }),
+      const results = await observe(
+        "timestamp-block",
+        () =>
+          Promise.allSettled(
+            liveChains.map((c) => {
+              const a = adapterFor(c.family);
+              if (!a?.blockAtTime) throw new Error("unsupported");
+              return a.blockAtTime(c, t);
+            }),
+          ),
+        (settled) =>
+          classifyGas({
+            chains: settled.filter((r) => r.status === "fulfilled"),
+            unavailable: liveChains.filter((_, i) => settled[i]?.status === "rejected").map((c) => c.key),
+          }),
       );
       return ok(
         {
@@ -38,7 +49,11 @@ export async function GET(request: NextRequest) {
     if (block !== null) {
       const chain = liveChains.find((c) => c.key === q.get("chain"));
       if (!chain || !/^\d{1,12}$/.test(block)) return fail("INVALID_INPUT");
-      const result = await adapterFor(chain.family)?.blockTime?.(chain, Number(block));
+      const result = await observe(
+        "timestamp-block",
+        async () => (await adapterFor(chain.family)?.blockTime?.(chain, Number(block))) ?? null,
+        classifyDone,
+      );
       return result ? ok(result, { sources: ["rpc"] }) : fail("NOT_FOUND");
     }
     return fail("INVALID_INPUT");

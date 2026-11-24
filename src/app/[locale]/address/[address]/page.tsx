@@ -23,6 +23,8 @@ import { pageRequestAllowed } from "@/server/page-guard";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { cachedResolve, explorerLink } from "@/server/services/lookups";
 import { type AddressOverview, cachedAddressOverview } from "@/server/services/overview";
+import { observe } from "@/server/outcomes/record";
+import { classifyOverview } from "@/lib/outcomes/classify";
 
 type Props = PageProps<"/[locale]/address/[address]">;
 
@@ -95,7 +97,7 @@ async function AddressContent({
   if (result.status === "unavailable") return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
   if (result.status !== "address") notFound();
   const scope = await chainScopeFor(result.address, "tokenBalances", query.chains);
-  const overview = await cachedAddressOverview(result.address, scope.scan);
+  const overview = await observe("balances", () => cachedAddressOverview(result.address, scope.scan), classifyOverview);
 
   // Only scanned chains are shown; the scope line names the rest.
   const views = buildViews(

@@ -21,6 +21,8 @@ export interface Transition {
   detail: string | null;
   /** Fixed: how long it was failing, in minutes. */
   minutes: number | null;
+  /** What happened, when it isn't a check failing twice in a row (visitor outcomes, stabilization S0). */
+  what?: string;
 }
 
 /**
@@ -61,11 +63,11 @@ export function transitionMessage(t: Transition, label: string, site: URL, now: 
   const link = isPublicSite(site) ? `\n${escapeHtml(new URL("/en/admin", site).toString())}` : "";
   if (t.kind === "problem")
     return (
-      `<b>CRYPY Alerts</b>\n<b>Problem:</b> ${escapeHtml(label)} has failed twice in a row.` +
+      `<b>CRYPY Alerts</b>\n<b>Problem:</b> ${escapeHtml(label)} ${escapeHtml(t.what ?? "has failed twice in a row.")}` +
       (t.detail ? `\nReason: ${escapeHtml(redactKeys(t.detail).slice(0, 200))}` : "") +
       `\n${time} · open the admin dashboard${link}`
     );
-  return `<b>CRYPY Alerts</b>\n<b>Fixed:</b> ${escapeHtml(label)} is passing again after ${t.minutes ?? 0} minutes.\n${time}`;
+  return `<b>CRYPY Alerts</b>\n<b>Fixed:</b> ${escapeHtml(label)} ${t.what ? "is working again for visitors" : "is passing again"} after ${t.minutes ?? 0} minutes.\n${time}`;
 }
 
 /** Telegram chats linked to admin wallets. */

@@ -10,6 +10,8 @@ import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedTxDetails } from "@/server/services/lookups";
 import { getEvmClient } from "@/server/chains/evm/providers";
 import { summaryText } from "@/components/entity/tx-story";
+import { observe } from "@/server/outcomes/record";
+import { classifyTransaction } from "@/lib/outcomes/classify";
 
 const hashSchema = z.string().regex(/^0x[0-9a-fA-F]{64}$/);
 const formatSchema = z.enum(["json", "text", "raw"]).default("json");
@@ -49,7 +51,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       });
     }
 
-    const tx = await cachedTxDetails(chain.key, hash);
+    const tx = await observe("transaction", () => cachedTxDetails(chain.key, hash), classifyTransaction);
     if (!tx) return fail("NOT_FOUND");
     const interpretation = interpret(tx, chain.nativeSymbol);
 

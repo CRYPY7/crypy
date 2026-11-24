@@ -7,6 +7,7 @@ import { getEvmClient } from "@/server/chains/evm/providers";
 import { readBodyJson } from "@/server/http/body";
 import { fail, ok } from "@/server/http/response";
 import { batchLimiter, clientKey } from "@/server/rate-limit";
+import { observe } from "@/server/outcomes/record";
 
 const MAX_BODY_BYTES = 16_384;
 const PRICES_MS = 4_000;
@@ -50,19 +51,27 @@ export async function POST(request: NextRequest) {
 
   try {
     const client = getEvmClient(chain);
-    const [result, quotes] = await Promise.all([
-      readBatchBalances(client, addresses, tokens, parsed.data.block ? BigInt(parsed.data.block) : undefined),
-      parsed.data.prices
-        ? withTimeout(
-            getOnchainPrices(
-              client,
-              chain,
-              tokens.map((token) => ({ address: token, decimals: null })),
-            ),
-            PRICES_MS,
-          )
-        : null,
-    ]);
+    const [result, quotes] = await observe(
+      "batch-balance",
+      () =>
+        Promise.all([
+          readBatchBalances(client, addresses, tokens, parsed.data.block ? BigInt(parsed.data.block) : undefined),
+          parsed.data.prices
+            ? withTimeout(
+                getOnchainPrices(
+                  client,
+                  chain,
+                  tokens.map((token) => ({ address: token, decimals: null })),
+                ),
+                PRICES_MS,
+              )
+            : null,
+        ]),
+      ([, prices]) =>
+        parsed.data.prices && prices === null
+          ? { outcome: "partial", reasons: [`prices unavailable: ${chain.key}`] }
+          : { outcome: "full", reasons: [] },
+    );
     let prices: Record<string, number> | undefined;
     if (quotes) {
       prices = {};

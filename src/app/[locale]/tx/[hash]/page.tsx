@@ -36,6 +36,8 @@ import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedResolve, cachedTxDetails, explorerLink } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifyTransaction } from "@/lib/outcomes/classify";
 
 type Props = PageProps<"/[locale]/tx/[hash]">;
 
@@ -78,7 +80,7 @@ async function TxContent({ params, searchParams }: Props) {
 
   let tx;
   try {
-    tx = await cachedTxDetails(chain.key, hash);
+    tx = await observe("transaction", () => cachedTxDetails(chain.key, hash), classifyTransaction);
   } catch {
     return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
   }

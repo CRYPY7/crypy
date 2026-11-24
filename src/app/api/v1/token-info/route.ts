@@ -4,6 +4,8 @@ import { getChain } from "@/config/chains";
 import { fail, ok } from "@/server/http/response";
 import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedTokenLookup } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifyDone } from "@/lib/outcomes/classify";
 
 const query = z.object({ chain: z.string().max(32), address: z.string().regex(/^0x[0-9a-fA-F]{40}$/) });
 
@@ -17,7 +19,11 @@ export async function GET(request: NextRequest) {
   });
   if (!parsed.success || !getChain(parsed.data.chain)) return fail("INVALID_INPUT");
   try {
-    const lookup = await cachedTokenLookup(parsed.data.chain, parsed.data.address);
+    const lookup = await observe(
+      "token-info",
+      () => cachedTokenLookup(parsed.data.chain, parsed.data.address),
+      classifyDone,
+    );
     const token =
       lookup?.kind === "token" && lookup.token
         ? { name: lookup.token.name, symbol: lookup.token.symbol, decimals: lookup.token.decimals }

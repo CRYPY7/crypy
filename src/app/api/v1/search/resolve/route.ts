@@ -3,6 +3,8 @@ import { z } from "zod";
 import { fail, ok } from "@/server/http/response";
 import { clientKey, searchLimiter } from "@/server/rate-limit";
 import { cachedResolve } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifySearch } from "@/lib/outcomes/classify";
 
 const query = z.string().trim().min(1).max(200);
 
@@ -15,7 +17,7 @@ export async function GET(request: NextRequest) {
   if (!parsed.success) return fail("INVALID_INPUT");
 
   try {
-    const result = await cachedResolve(parsed.data);
+    const result = await observe("search", () => cachedResolve(parsed.data), classifySearch);
     if (result.status === "invalid" || result.status === "bad-checksum") return ok(result, { sources: [] });
     if (result.status === "unavailable") return fail("UPSTREAM_UNAVAILABLE");
     return ok(result, { sources: ["rpc"] });

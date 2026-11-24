@@ -10,6 +10,8 @@ import { isLocale } from "@/i18n/locales";
 import { localePath } from "@/lib/routes";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedResolve } from "@/server/services/lookups";
+import { observe } from "@/server/outcomes/record";
+import { classifySearch } from "@/lib/outcomes/classify";
 
 /**
  * /en/search?q=… — works without JavaScript and is the target of the search-engine
@@ -36,7 +38,7 @@ async function SearchResult({ searchParams }: PageProps<"/[locale]/search">) {
   if (!q) return <Notice>{t("search.result.empty")}</Notice>;
   if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("search.result.rate-limited")}</Notice>;
 
-  const result = await cachedResolve(q).catch(() => null);
+  const result = await observe("search", () => cachedResolve(q), classifySearch).catch(() => null);
   if (!result || result.status === "unavailable")
     return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
   if (result.status === "invalid") return <Notice tone="warning">{t("search.result.invalid")}</Notice>;

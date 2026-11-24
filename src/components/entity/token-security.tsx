@@ -25,6 +25,8 @@ import { cachedTokenSecurity } from "@/server/services/lookups";
 import { Notice } from "./entity-parts";
 import { LiquidityHoldersCard } from "./token-liquidity";
 import { CopyText } from "./tx-client";
+import { observe } from "@/server/outcomes/record";
+import { classifyTokenSecurity } from "@/lib/outcomes/classify";
 
 type T = Awaited<ReturnType<typeof getTranslations>>;
 const K = "entity.tokenSecurity";
@@ -183,7 +185,11 @@ export async function TokenSecuritySection({
   // Chains added before their security checks are verified (e.g. Base, Arbitrum, Polygon): say so plainly.
   if (!chain?.capabilities.tokenSecurity)
     return <Notice>{t(`${K}.notOnChain`, { chain: t(`chains.${chainKey}`) })}</Notice>;
-  const report = await cachedTokenSecurity(chainKey, address).catch(() => null);
+  const report = await observe(
+    "token-security",
+    () => cachedTokenSecurity(chainKey, address),
+    classifyTokenSecurity,
+  ).catch(() => null);
   if (!report) return <Notice tone="warning">{t(`${K}.unavailable`)}</Notice>;
   return <TokenSecurityReportView report={report} chainKey={chainKey} locale={locale} />;
 }
