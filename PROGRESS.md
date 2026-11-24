@@ -41,6 +41,29 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0 and S1 started 2026-11-24; new features paused until S6                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Cloudflare traffic check and B-010 (2026-11-24)
+
+**Who visits.** Cloudflare showed 49k requests and 31k "visits" a day. Most are bots; real people are likely a few hundred page views a day.
+- **Meta's AI crawler** (`meta-externalagent/1.1`, ASN 32934) made about 30k requests in 7 days. It opened address pages in every language, even though robots.txt disallows them.
+  - The owner blocked Meta-ExternalAgent in AI Crawl Control.
+  - robots.txt now also lists each language's result pages explicitly (`/en/address/`, `/zh-CN/tx/` …), besides the `/*/address/` wildcards. Test: tests/unit/robots.test.ts.
+- **Googlebot** made about 10k requests a day (good).
+- **The 404s** (about 1.1k a day) are scanners looking for `/.env`, `/.git/config` and `/wp-login.php`. The owner added a Cloudflare custom rule that blocks those paths at the edge.
+- **DMARC** is now on with p=none (reports only). Move it to quarantine after about 2 weeks of reports.
+- Bug list: B-021 to B-027 added; B-021, B-022 fixed; B-024 won't fix. Still open:
+  - B-023: 502s around updates
+  - B-025: 499s from slow pages
+  - B-026: unexplained 403s
+  - B-027: prefetch load
+
+**B-010 fixed: a real token reported as "not a token".**
+- Cause: one node answered empty code, or failed the decimals/supply read, and that single answer was final.
+- Fix: before concluding "not a token", token security asks up to 3 other providers at once (`token-recheck.ts`, cooling-down providers skipped, 4 s limit). The first full answer is used. A bad node can't invent a valid answer, so any full answer is trusted.
+- Real wallets and non-token contracts still return "not a token", only after the other providers agree.
+- Logic in `token-basics.ts`; tests: tests/unit/token-recheck.test.ts (5).
+
+**Planned for S3:** an app-side limit on result pages, so any future bot that ignores robots.txt costs little.
+
 ## First live numbers: audit on the server and "What visitors got" (2026-11-24)
 
 Live audit (server, real Alchemy key and GoPlus): 52 cases, 43 ok, 9 partial, **0 findings, 0 errors** (wrong data or

@@ -10,6 +10,8 @@ import { getEvmClient } from "../providers";
 import { HAS_ROLE_SELECTOR, PROXY_SLOTS, minimalProxyTarget, powersIn, selectorsIn } from "./bytecode";
 import { readPoolHolders } from "./lp-holders";
 import { findPools, poolUsd, readPools, verifyLeadPools } from "./pools";
+import { type TokenBasics, isTokenAnswer } from "./token-basics";
+import { recheckToken } from "./token-recheck";
 import { runTradeTest } from "./trade";
 
 /**
@@ -53,7 +55,7 @@ export async function getEvmTokenSecurity(
   const sourceP = withTimeout(sourcifyVerified(chainId, token), OPTIONAL_MS, notRead);
 
   // Round 1
-  const [block, code, meta, owners, slots, found, prices] = await Promise.all([
+  const [block, firstCode, firstMeta, owners, slots, found, prices] = await Promise.all([
     client.getBlockNumber(),
     client.getCode({ address: token }),
     client.multicall({
@@ -84,8 +86,19 @@ export async function getEvmTokenSecurity(
     withTimeout(findPools(client, chain.key, token), OPTIONAL_MS, []),
     withTimeout(getOnchainPrices(client, chain, []), OPTIONAL_MS, null),
   ]);
-  if (!code || code === "0x") return null;
-  const [name, symbol, decimals, supply] = meta.map((r) => (r.status === "success" ? r.result : null));
+  // A missing code or decimals/supply read may be one node's bad answer (B-010): ask other providers before
+  // concluding "not a token".
+  let basics: TokenBasics = {
+    code: firstCode ?? null,
+    meta: firstMeta,
+  };
+  if (!isTokenAnswer(basics)) {
+    const second = await recheckToken(chain, token);
+    if (!second) return null;
+    basics = second;
+  }
+  const code = basics.code as Hex;
+  const [name, symbol, decimals, supply] = basics.meta.map((r) => (r.status === "success" ? r.result : null));
   if (decimals === null || supply === null) return null;
 
   const ownerValue = owners.find((r) => r.status === "success")?.result as string | undefined;
