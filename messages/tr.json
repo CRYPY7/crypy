@@ -2548,7 +2548,11 @@
         "emptyNote": "Kontrol edilen ağlarda hiçbir şey yok",
         "failed": "Hâlâ okunuyor",
         "failedNone": "Yok",
-        "failedNote": "CRYPY denemeye devam ediyor"
+        "failedNote": "CRYPY denemeye devam ediyor",
+        "priceUnavailable": "Fiyat alınamadı",
+        "pricesMissingNote": "{chains} için fiyatlar yüklenemedi",
+        "pricesRetry": "Tekrar dene",
+        "pricesRetrying": "Fiyatlar yükleniyor…"
       },
       "noPrice": "güvenilir fiyat yok",
       "searchPlaceholder": "Adres veya etiket ara",

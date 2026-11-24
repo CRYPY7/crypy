@@ -65,9 +65,10 @@ Last updated: 2026-11-24
 - Prices are now tried 3 times (waiting as the server asks) and once more when the scan ends.
 - Big numbers are formatted ("10,000", not "10000").
 - The tool description mentions the 10,000-wallet browser mode in all 7 languages.
-- The owner checks `https://crypy.org/api/v1/batch-prices?chain=bsc&tokens=` on the live site.
+- The owner checked `https://crypy.org/api/v1/batch-prices?chain=bsc&tokens=` on the live site: it answers (BNB $548, USDT $1). Most likely cause: the old page asked for prices only once and never retried. The owner will confirm with a new browser scan.
+- **A missing price is never shown as $0.00** (approved 2026-11-24). If wallets hold something on a chain whose prices never arrived, the "Total value" card says "Price unavailable" (or the partial total), names the chains, and offers "Try again", which asks for those prices once more. This works in both modes. A single token without a reliable price is normal and is still marked per cell.
 
-Checks: unit 507 passed; browser 267 passed, 13 skipped, 0 failed.
+Checks: typecheck, lint, Prettier and the i18n check are clean; unit 507 passed, 73 skipped; build passed; browser 269 passed, 13 skipped, 0 failed. New browser test: the price service fails → "Price unavailable", never $0.00 → "Try again" loads the prices.
 
 ## Batch scanner that never shows a failed row, and loading feedback (S2 Part A, B-028, B-029; designs approved 2026-11-24, boards 55–59)
 

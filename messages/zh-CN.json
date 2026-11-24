@@ -2548,7 +2548,11 @@
         "emptyNote": "在已检查的网络上一无所有",
         "failed": "仍在读取",
         "failedNone": "无",
-        "failedNote": "CRYPY 仍在继续尝试"
+        "failedNote": "CRYPY 仍在继续尝试",
+        "priceUnavailable": "价格暂不可用",
+        "pricesMissingNote": "{chains} 的价格未能加载",
+        "pricesRetry": "重试",
+        "pricesRetrying": "正在加载价格…"
       },
       "noPrice": "无可靠价格",
       "searchPlaceholder": "搜索地址或标签",

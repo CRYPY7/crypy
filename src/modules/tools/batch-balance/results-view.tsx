@@ -11,7 +11,7 @@ import {
   Search,
   TriangleAlert,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 import { ChainIcon } from "@/components/chain-icon";
 import { formatAmount } from "@/lib/format/amount";
 import { formatUsd } from "@/lib/format/money";
@@ -87,6 +87,7 @@ export function ResultsView({
   onScanAgain,
   onRetry,
   onRetryAll,
+  onRetryPrices,
   retryLabel,
   doneNote,
 }: {
@@ -111,6 +112,8 @@ export function ResultsView({
   onScanAgain: () => void;
   onRetry: (row: ScanRow) => void;
   onRetryAll?: (rows: ScanRow[]) => void;
+  /** Asks again for the prices of chains whose prices never arrived. */
+  onRetryPrices?: (chains: string[]) => Promise<void>;
   /** Label of the button for rows still being read (default "Try these now"). */
   retryLabel?: string;
   /** Added to the finished line, e.g. "scanned in your browser". */
@@ -123,12 +126,21 @@ export function ResultsView({
   const [descending, setDescending] = useState(true);
   const [page, setPage] = useState(0);
   const [copied, setCopied] = useState("");
+  const [retryingPrices, setRetryingPrices] = useState(false);
 
   const chainOf = (key: string) => chains.find((c) => c.key === key);
   const summary = useMemo(
     () => summarize(rows, assets, prices, entries.length),
     [rows, assets, prices, entries.length],
   );
+  // Chains where wallets hold something but no prices arrived at all (the price request failed). A token without a
+  // reliable price is normal and shown per cell; a whole chain without prices is an error, never shown as $0.00.
+  const missingPrices = useMemo(() => {
+    if (running) return [];
+    const missing = new Set<string>();
+    for (const row of rows) if (!prices[row.chain] && row.status === "ok" && !isEmptyRow(row)) missing.add(row.chain);
+    return [...missing];
+  }, [rows, prices, running]);
   const shown = useMemo(
     () => viewRows(rows, assets, prices, { search, chain, hideEmpty, sort, descending }),
     [rows, assets, prices, search, chain, hideEmpty, sort, descending],
@@ -348,9 +360,35 @@ export function ResultsView({
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Card
           label={s.cards.total}
-          value={usd(summary.totalUsd, locale)}
-          note={s.cards.totalNote}
+          value={
+            missingPrices.length > 0 && summary.totalUsd === 0
+              ? s.cards.priceUnavailable
+              : usd(summary.totalUsd, locale)
+          }
+          note={
+            missingPrices.length > 0
+              ? fill(s.cards.pricesMissingNote, {
+                  chains: missingPrices.map((c) => chainOf(c)?.name ?? c).join(", "),
+                })
+              : s.cards.totalNote
+          }
+          tone={missingPrices.length > 0 ? "high" : undefined}
           className="col-span-2 lg:col-span-1"
+          action={
+            missingPrices.length > 0 && onRetryPrices ? (
+              <button
+                type="button"
+                disabled={retryingPrices}
+                onClick={() => {
+                  setRetryingPrices(true);
+                  void onRetryPrices(missingPrices).finally(() => setRetryingPrices(false));
+                }}
+                className="mt-2 rounded-lg border px-3 py-1 text-xs font-medium hover:bg-muted disabled:opacity-60"
+              >
+                {retryingPrices ? s.cards.pricesRetrying : s.cards.pricesRetry}
+              </button>
+            ) : null
+          }
         />
         <Card
           label={s.cards.withBalance}
@@ -756,12 +794,14 @@ function Card({
   note,
   tone,
   className,
+  action,
 }: {
   label: string;
   value: string;
   note: string;
   tone?: "high" | "critical";
   className?: string;
+  action?: ReactNode;
 }) {
   return (
     <div className={cn("rounded-xl border bg-card px-4 py-3", className)}>
@@ -776,6 +816,7 @@ function Card({
         {value}
       </p>
       {note && <p className="text-xs text-muted-foreground">{note}</p>}
+      {action}
     </div>
   );
 }

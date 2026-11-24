@@ -348,6 +348,44 @@ export function BatchBalanceScanner({
     void follow(result.jobId, entries, chainKeys, scanAssets, at);
   }
 
+  /**
+   * On-chain USD prices for one chain's coin and tokens, from CRYPY (only the token contracts are sent, never the
+   * wallet list). Tried 3 times with growing waits (honouring Retry-After), so a busy moment doesn't leave totals empty.
+   */
+  async function loadChainPrices(chain: string, tokens: string[]): Promise<boolean> {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const response = await fetch(`/api/v1/batch-prices?chain=${chain}&tokens=${tokens.join(",")}`);
+        const json = (await response.json()) as { ok: boolean; data?: { prices: Record<string, number> } };
+        if (json.ok && json.data) {
+          const loaded = json.data.prices;
+          setPrices((p) => ({ ...p, [chain]: loaded }));
+          return true;
+        }
+        const wait = Number(response.headers.get("retry-after") ?? "0");
+        if (attempt < 2) await sleep(Math.min(30, Math.max(wait, 2 * (attempt + 1))) * 1000);
+      } catch {
+        if (attempt < 2) await sleep(2_000 * (attempt + 1));
+      }
+    }
+    return false;
+  }
+
+  /** "Try again" on the total: asks once more for chains whose prices never arrived. */
+  async function retryPrices(chainKeys: string[]) {
+    const scanAssets = scan?.assets ?? assets;
+    await Promise.all(
+      chainKeys.map((chain) =>
+        loadChainPrices(
+          chain,
+          scanAssets
+            .filter((a) => a.key !== "native" && a.chains[chain])
+            .map((a) => a.chains[chain]!.address.toLowerCase()),
+        ),
+      ),
+    );
+  }
+
   /** "Scan in my browser": the same engine against the chains' public nodes, straight from this page. */
   async function startBrowserScan() {
     const scanAssets = assets;
@@ -377,21 +415,7 @@ export function BatchBalanceScanner({
     // end for any chain still without prices, so a busy moment never leaves the totals at $0.
     const priced = new Set<string>();
     const loadPrices = async (chain: string) => {
-      for (let attempt = 0; attempt < 3 && !priced.has(chain); attempt++) {
-        try {
-          const response = await fetch(`/api/v1/batch-prices?chain=${chain}&tokens=${tokensOf[chain]!.join(",")}`);
-          const json = (await response.json()) as { ok: boolean; data?: { prices: Record<string, number> } };
-          if (json.ok && json.data) {
-            priced.add(chain);
-            setPrices((p) => ({ ...p, [chain]: json.data!.prices }));
-            return;
-          }
-          const wait = Number(response.headers.get("retry-after") ?? "0");
-          await sleep(Math.min(30, Math.max(wait, 2 * (attempt + 1))) * 1000);
-        } catch {
-          await sleep(2_000 * (attempt + 1));
-        }
-      }
+      if (!priced.has(chain) && (await loadChainPrices(chain, tokensOf[chain]!))) priced.add(chain);
     };
     const pricesLoaded = Promise.all(chainKeys.map(loadPrices));
     // Rows arrive many times a second on big lists: put them into the table at most every 0.75 s, so the page (and
@@ -597,6 +621,7 @@ export function BatchBalanceScanner({
           onScanAgain={() => void startScan()}
           onRetry={(row) => void retryRows([row])}
           onRetryAll={(list) => void (runMode === "browser" ? finishOnServer(list) : retryRows(list))}
+          onRetryPrices={retryPrices}
           retryLabel={runMode === "browser" ? s.mode.finishOnServer : undefined}
           doneNote={runMode === "browser" ? s.mode.scannedInBrowser : undefined}
         />

@@ -2548,7 +2548,11 @@
         "emptyNote": "Nothing on the chains checked",
         "failed": "Still being read",
         "failedNone": "None",
-        "failedNote": "CRYPY keeps trying"
+        "failedNote": "CRYPY keeps trying",
+        "priceUnavailable": "Price unavailable",
+        "pricesMissingNote": "Prices didn't load for {chains}",
+        "pricesRetry": "Try again",
+        "pricesRetrying": "Loading prices…"
       },
       "noPrice": "no reliable price",
       "searchPlaceholder": "Search address or label",

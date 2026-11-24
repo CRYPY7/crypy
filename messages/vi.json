@@ -2548,7 +2548,11 @@
         "emptyNote": "Không có gì trên các mạng đã kiểm tra",
         "failed": "Vẫn đang đọc",
         "failedNone": "Không có",
-        "failedNote": "CRYPY vẫn tiếp tục thử"
+        "failedNote": "CRYPY vẫn tiếp tục thử",
+        "priceUnavailable": "Không có giá",
+        "pricesMissingNote": "Không tải được giá cho {chains}",
+        "pricesRetry": "Thử lại",
+        "pricesRetrying": "Đang tải giá…"
       },
       "noPrice": "không có giá đáng tin cậy",
       "searchPlaceholder": "Tìm địa chỉ hoặc nhãn",

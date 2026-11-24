@@ -2548,7 +2548,11 @@
         "emptyNote": "Nada en las cadenas revisadas",
         "failed": "Aún leyendo",
         "failedNone": "Ninguna",
-        "failedNote": "CRYPY sigue intentándolo"
+        "failedNote": "CRYPY sigue intentándolo",
+        "priceUnavailable": "Precio no disponible",
+        "pricesMissingNote": "No se cargaron los precios de {chains}",
+        "pricesRetry": "Reintentar",
+        "pricesRetrying": "Cargando precios…"
       },
       "noPrice": "sin precio confiable",
       "searchPlaceholder": "Buscar dirección o etiqueta",

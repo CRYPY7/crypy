@@ -2548,7 +2548,11 @@
         "emptyNote": "Ничего в проверенных сетях",
         "failed": "Ещё читается",
         "failedNone": "Нет",
-        "failedNote": "CRYPY продолжает попытки"
+        "failedNote": "CRYPY продолжает попытки",
+        "priceUnavailable": "Цена недоступна",
+        "pricesMissingNote": "Не удалось загрузить цены для {chains}",
+        "pricesRetry": "Повторить",
+        "pricesRetrying": "Загрузка цен…"
       },
       "noPrice": "нет надежной цены",
       "searchPlaceholder": "Поиск по адресу или метке",

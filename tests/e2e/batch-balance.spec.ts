@@ -114,3 +114,32 @@ test("scan in my browser: a warning first, then balances read from public nodes 
   expect(toServer).toEqual([]);
   expect(toNodes.length).toBeGreaterThan(0);
 });
+
+test("when prices can't be loaded the total says so (never $0.00), and Try again loads them", async ({ page }) => {
+  let failPrices = true;
+  await page.route("**/api/v1/batch-prices**", async (route) => {
+    if (!failPrices) return route.continue();
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: false, error: { code: "UPSTREAM_UNAVAILABLE" } }),
+    });
+  });
+  await page.goto("/en/tools/batch-balance");
+  await page.getByRole("radio", { name: /In my browser/ }).check();
+  await page.getByRole("textbox", { name: /Address list/ }).fill(`${BINANCE_8},Binance 8`);
+  await page.getByRole("button", { name: "Scan balances" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Scan complete" })).toBeVisible({ timeout: 90_000 });
+  const total = page
+    .locator("div")
+    .filter({ has: page.getByText("Total value", { exact: true }) })
+    .last();
+  await expect(total).toContainText("Price unavailable");
+  await expect(total).toContainText("Prices didn't load for");
+  await expect(total).not.toContainText("$0.00");
+  failPrices = false;
+  await total.getByRole("button", { name: "Try again" }).click();
+  await expect(total).not.toContainText("Price unavailable", { timeout: 20_000 });
+  await expect(total).toContainText("$");
+  await expect(total).toContainText("Priced assets only");
+});
