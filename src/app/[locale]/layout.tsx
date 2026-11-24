@@ -11,7 +11,7 @@ import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
 import { ToolsDialogLoader } from "@/components/layout/tools-dialog-loader";
 import { ToolIcon } from "@/components/tool-icon";
 import { siteUrl } from "@/config/env";
-import { isLocale, localeConfigs, locales } from "@/i18n/locales";
+import { builtLocales, isLocale, localeConfigs } from "@/i18n/locales";
 import { pageAlternates } from "@/lib/metadata";
 import { chains } from "@/config/chains";
 import { WalletRoot } from "@/wallets/wallet-root";
@@ -28,7 +28,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return builtLocales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata(): Promise<Metadata> {

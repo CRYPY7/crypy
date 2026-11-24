@@ -323,6 +323,7 @@ crypy/
   ≤ 160 (unit-tested). A missing translation shows the English guide with a notice. Reading time counts each Chinese
   character as half a word.
 - Translations are resolved on the server (`next-intl/server` with `next/root-params`); client components receive ready-made strings as props, so no i18n code ships to the browser.
+- Pages are built in advance only for `builtLocales` (complete + Beta); hidden (planned) locales render on request.
 - `src/proxy.ts` redirects un-prefixed URLs using the saved `NEXT_LOCALE` cookie, then `Accept-Language`, choosing only `complete` locales. Unreviewed locales are reachable by URL for testing, show a notice and are `noindex`.
 - RTL via logical utilities; `TechnicalText` for addresses/hashes of every family.
 - bigint-safe amounts with per-asset decimals; `Intl` formatting.

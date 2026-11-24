@@ -1,4 +1,6 @@
 .next
+.next-a
+.next-b
 node_modules
 pnpm-lock.yaml
 messages

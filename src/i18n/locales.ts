@@ -49,6 +49,12 @@ export const selectableLocales: LocaleConfig[] = locales
   .map((code) => localeConfigs[code])
   .filter((config) => config.status !== "planned");
 
+/**
+ * Locales whose pages are built in advance (`generateStaticParams`). Hidden ("planned") locales still answer when
+ * their address is opened, rendered on request, so the build doesn't spend time on pages nobody can choose.
+ */
+export const builtLocales: Locale[] = selectableLocales.map((config) => config.code);
+
 /** Locales the proxy may auto-select from the browser's language. Only reviewed ones. */
 export const detectableLocales: Locale[] = locales.filter((code) => localeConfigs[code].status === "complete");
 

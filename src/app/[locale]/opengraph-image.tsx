@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { locales } from "@/i18n/locales";
+import { builtLocales } from "@/i18n/locales";
 import { ogImage, ogSize } from "@/lib/og";
 
 export const size = ogSize;
@@ -7,7 +7,7 @@ export const contentType = "image/png";
 export const alt = "CRYPY";
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return builtLocales.map((locale) => ({ locale }));
 }
 
 // Preview images use English for every language until reviewed non-Latin fonts ship (M9).

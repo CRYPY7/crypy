@@ -40,6 +40,39 @@ Last updated: 2026-11-24
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Faster updates without downtime (owner report 2026-11-24: "each update takes 5–10 minutes")
+
+The owner's server log: compile 67 s, TypeScript check 82 s, 1,548 pages generated in 3.8 min on the 1-CPU droplet.
+And `update.sh` built inside the live site's own `.next`, which `next build` empties first: for those minutes visitors
+could get errors or pages without styles, and the build competed with the site for memory.
+
+- **No downtime:** the new version is built into the folder that isn't live (`.next-a` / `.next-b`), then
+  `.crypy-dist` names it and the app restarts (a few seconds). `next.config.ts` reads the build folder from
+  `CRYPY_DIST_DIR` (while building) or `.crypy-dist` (at start); anywhere else it stays `.next`. If the new version
+  doesn't answer within a minute, the previous folder is put back automatically; a failed build never touches the
+  live site.
+- **Static files of recent versions side by side** in `.static` (nginx serves from there): a page already open in a
+  browser keeps finding its files after the switch. Files unused for 30 days are removed.
+- **Only the languages people can choose are built in advance** (`builtLocales`: complete + Beta). The 5 hidden ones
+  (Urdu, Arabic, Hindi, French, German) still answer when their address is opened, rendered on request. 928 pages
+  instead of 1,548 (−40%).
+- **No second type check on the server** (`CRYPY_SKIP_TYPECHECK=1`, set only by `update.sh`): it already ran before
+  the push.
+- `update.sh` now runs the freshly pulled copy of itself (a script rewritten by `git pull` while bash reads it could
+  misbehave), and prints how long the update took.
+- `tsconfig.json` lists the type folders of both build folders, so Next.js never edits it on the server (an edited
+  tracked file would stop the next `git pull`).
+- Expected on the droplet: about 3–4 minutes per update (compile about 1 min, pages about 2.3 min), with the site
+  up the whole time except the restart. The next step (redesign R1): build on GitHub Actions (free for a public
+  repository), so the server only downloads and switches, in under a minute.
+
+**Checks (2026-11-24):** typecheck, lint, Prettier, i18n check: clean. Unit 469 passed, 72 skipped. Builds into
+`.next-a`, `.next-b` and `.next` passed, `tsconfig.json` unchanged by them. Browser: 260 passed, 12 skipped, 0 failed,
+with the site served from `.next-a` through `.crypy-dist`; hidden languages answered on request (0.1–0.7 s the first
+time). `update.sh` run with stand-ins for git, pnpm, systemd and curl: first switch from `.next`, second switch
+(old `.next` removed), a new version that doesn't answer (rolled back), a failed build (live site untouched), a normal
+update after that. ShellCheck clean.
+
 ## Admin dashboard findings fixed (owner report 2026-11-24)
 
 The owner's /admin showed: Alchemy at 1,000,010 of 1,000,000 units for the day, "Wallet activity (Ethereum)" down

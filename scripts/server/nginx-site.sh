@@ -39,8 +39,20 @@ mkdir -p /var/www/html/.well-known/acme-challenge
 
 # nginx (user www-data) must be able to read the static files: the folders above them may be entered, nothing more.
 chmod o+x /opt/crypy "$APP_DIR"
-[ -d "$APP_DIR/.next" ] && chmod o+x "$APP_DIR/.next"
+# Static files: the shared folder of recent versions (update.sh), else the live build folder (first setup).
+LIVE_DIST="$(cat "$APP_DIR/.crypy-dist" 2>/dev/null || echo .next)"
+case "$LIVE_DIST" in .next | .next-a | .next-b) ;; *) LIVE_DIST=".next" ;; esac
+if [ -d "$APP_DIR/.static" ]; then STATIC_DIR="$APP_DIR/.static"; else STATIC_DIR="$APP_DIR/$LIVE_DIST/static"; fi
+for d in "$APP_DIR/.next" "$APP_DIR/.next-a" "$APP_DIR/.next-b" "$APP_DIR/.static"; do
+  if [ -d "$d" ]; then chmod o+x "$d"; fi
+done
+# Every folder below the static folder must be enterable and every file readable by nginx.
+if [ -d "$STATIC_DIR" ]; then
+  find "$STATIC_DIR" -type d -exec chmod o+rx {} +
+  find "$STATIC_DIR" -type f -exec chmod o+r {} +
+fi
 
+# shellcheck disable=SC2016 # nginx variables, written literally
 PROXY='
         proxy_pass http://crypy_app;
         proxy_http_version 1.1;
@@ -56,7 +68,7 @@ PROXY='
 STATIC="
     # Built files have content hashes in their names, so they never change: cache them for a year.
     location /_next/static/ {
-        alias ${APP_DIR}/.next/static/;
+        alias ${STATIC_DIR}/;
         add_header Cache-Control \"public, max-age=31536000, immutable\";
         add_header X-Content-Type-Options nosniff;
         access_log off;

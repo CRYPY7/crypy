@@ -15,6 +15,11 @@
 
 # next.js
 /.next/
+/.next-a/
+/.next-b/
+/.crypy-dist
+/.crypy-dist.tmp
+/.static/
 /out/
 
 # production
