@@ -114,3 +114,23 @@ test("a slow page change shows the clicked item's spinner and the top bar (B-029
   await expect(page.locator(".nav-progress[data-state='loading']")).toHaveCount(0, { timeout: 10_000 });
   await expect(link).not.toHaveAttribute("data-nav-pending", "");
 });
+
+test("the page-change spinner turns at a calm speed, also with 'reduce motion' on", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the sidebar is desktop-only; the bottom tabs use the same CSS");
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/en/tools");
+    await page.route("**/en/tools/gas-tracker**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1_500));
+      await route.continue();
+    });
+    const link = page.locator('#tools-sidebar a[data-sidebar-href="/en/tools/gas-tracker"]');
+    await link.click();
+    await expect(link).toHaveAttribute("data-nav-pending", "");
+    const duration = await link.evaluate((el) => getComputedStyle(el, "::after").animationDuration);
+    // A "reduce motion" setting used to shrink it to 0.01 ms, so it flickered instead of turning.
+    expect(duration).toBe(reducedMotion === "reduce" ? "1.5s" : "0.7s");
+    await expect(page).toHaveURL(/\/en\/tools\/gas-tracker/, { timeout: 30_000 });
+    await page.unroute("**/en/tools/gas-tracker**");
+  }
+});

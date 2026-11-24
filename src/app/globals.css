@@ -131,6 +131,11 @@
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
+    /* Loading spinners still turn (a calm 1.5 s per turn): at 0.01 ms they flickered "100× too fast". */
+    .animate-spin,
+    [data-nav-pending]::after {
+      animation-duration: 1.5s !important;
+    }
   }
 }
 

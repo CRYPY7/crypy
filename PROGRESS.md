@@ -41,6 +41,14 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 saved results built 2026-11-24; features paused until S6   |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Spinner too fast with "reduce motion" on (owner report 2026-11-24)
+
+The page-change spinner (B-029) turns once every 0.7 s. The site's "reduce motion" rule (for visitors whose device asks
+for less animation) shrank every animation to 0.01 ms, so on those devices the spinner flickered instead of turning.
+Now loading spinners (the page-change one and every `animate-spin` icon) keep turning, at a calm 1.5 s per turn, when
+"reduce motion" is on; other animations stay off. New browser test checks the speed both ways (0.7 s and 1.5 s).
+Layout and budget tests: 44 passed.
+
 ## Saved results: never an error when a good answer exists (S2, boards 60–61, approved 2026-11-24)
 
 Owner decision: wallet results are saved in the database and deleted 7 days after the wallet was last looked up; no IP
