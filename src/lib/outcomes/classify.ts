@@ -103,7 +103,8 @@ export function classifyActivity(page: { chains: { chain: string; source: string
 export function classifyTokenSecurity(
   report: { facts: { externalStatus: string; trade?: { outcome?: string } | null } } | null,
 ): Classified {
-  if (!report) return { outcome: "error", reasons: ["no report"] };
+  // No report = the address isn't a token on that chain (the page says so). Failures throw and are counted as errors.
+  if (!report) return { outcome: "full", reasons: [] };
   const reasons: string[] = [];
   if (report.facts.externalStatus === "unavailable") reasons.push("goplus unavailable");
   return partialOrFull(reasons);

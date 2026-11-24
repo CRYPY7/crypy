@@ -41,6 +41,34 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0 and S1 started 2026-11-24; new features paused until S6                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## First live numbers: audit on the server and "What visitors got" (2026-11-24)
+
+Live audit (server, real Alchemy key and GoPlus): 52 cases, 43 ok, 9 partial, **0 findings, 0 errors** (wrong data or
+crashes: none). Visitor numbers after a few hours: errors 0% on every tool (the 2 "token security" errors were the
+audit's own "not a token" cases, see below); partial results: balances 16.5% (token lists cut for big wallets),
+approvals 72.7% (GoPlus busy or partial), activity 35.7%, portfolio 66.7%. Findings, all in the bug list:
+
+- **Activity lost its history on Base, Arbitrum and Polygon (B-017, fixed):** a first page sends Alchemy 4 calls per
+  chain at once (sent, received, first sent, first received: 20 × 120 units); at 250 units a second the last chains
+  waited over 4 s, gave up and fell back to "recent only" on most visits. Now the transfer lists go first and may wait
+  up to 10 s; the first-activity calls come after them with a 1.5 s limit (a busy second costs only the first-activity
+  date, never the history). New test: 5 chains at once against a stand-in Alchemy; it failed before the fix
+  (Arbitrum and Polygon "recent") and passes now.
+- **Updates slowed the live site (B-019, improved):** during the 9-minute build every chain check timed out, the home
+  page check failed and memory fell to 5% free. The build now runs at the lowest CPU and disk priority (`nice`,
+  `ionice`); the full fix is building elsewhere (S4).
+- **"Not a token" counted as an error (B-020, fixed):** a missing report means the address isn't a token there, which
+  the page explains; failures throw and are still counted.
+- **Can show "not a token" for a real token (B-010, cause found):** one bad node answer (empty code, unreadable
+  decimals) is taken as final. Next: ask another provider before concluding that.
+- Slow first visits measured live: balances 29.1 s for Vitalik and 12.1 s for the test wallet (B-018, needs a timing
+  log), approvals 10.8 s, token security 9.6–9.9 s (USDT, CAKE). Saved results (S2) are the main fix.
+- Earlier gas and BNB Chain balance failures (B-008, B-009) haven't come back since the broken-answer fix (B-001).
+
+**Checks:** typecheck, lint, Prettier, i18n check: clean. Unit 479 passed, 72 skipped. Build passed. Browser: first run
+258 passed, 1 failed (the token page's trade test while GoPlus was at its limit; 8 of 8 alone, twice); second full run
+260 passed, 0 failed.
+
 ## Stabilization S0 and S1 started (owner decision 2026-11-24)
 
 Owner's answers: pause new features until S6; more free providers per chain; a staging droplet; the bug list in a

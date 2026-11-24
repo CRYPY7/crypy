@@ -60,7 +60,8 @@ describe("classifying what a visitor got", () => {
       "history recent: ethereum",
     ]);
     expect(classifyActivity({ chains: [{ chain: "ethereum", source: "unavailable" }] }).outcome).toBe("error");
-    expect(classifyTokenSecurity(null).outcome).toBe("error");
+    // "Not a token" is an answer, not a failure (the owner's audit asked for two on purpose).
+    expect(classifyTokenSecurity(null).outcome).toBe("full");
     expect(classifyTokenSecurity({ facts: { externalStatus: "unavailable" } }).outcome).toBe("partial");
     expect(classifyTokenSecurity({ facts: { externalStatus: "not-listed" } }).outcome).toBe("full");
     expect(classifyGas({ chains: [], unavailable: ["base"] }).outcome).toBe("error");

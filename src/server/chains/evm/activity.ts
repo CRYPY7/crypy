@@ -141,9 +141,18 @@ export function parseAlchemyTransfer(
   };
 }
 
-async function alchemyCall(provider: Provider, params: Record<string, unknown>) {
+/**
+ * How long a transfer-list call may wait for Alchemy's per-second budget. A first page asks every chain at once
+ * (2 calls each, 120 units per call): with a short limit the last chains lost their history and fell back to "recent
+ * only" on every visit (owner's live audit, 2026-11-24). The lists wait longer; the optional "first activity" calls
+ * come afterwards and wait briefly, so they never push a chain's history out.
+ */
+export const HISTORY_WAIT_MS = 10_000;
+export const FIRST_ACTIVITY_WAIT_MS = 1_500;
+
+async function alchemyCall(provider: Provider, params: Record<string, unknown>, maxWaitMs = HISTORY_WAIT_MS) {
   if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
-  await waitForAlchemy(alchemyUnits("alchemy_getAssetTransfers"), 4_000);
+  await waitForAlchemy(alchemyUnits("alchemy_getAssetTransfers"), maxWaitMs);
   recordUsage(provider, "alchemy_getAssetTransfers");
   const response = await limitedFetch(provider.url, {
     method: "POST",
@@ -195,20 +204,26 @@ async function historyPage(
     ...(before !== null ? { toBlock: `0x${before.toString(16)}` } : {}),
   };
   const firstOf = (dir: "fromAddress" | "toAddress") =>
-    alchemyCall(provider, {
-      category: categories(chain),
-      order: "asc",
-      excludeZeroValue: false,
-      maxCount: "0x1",
-      [dir]: owner,
-      ...(METADATA.has(chain.key) ? { withMetadata: true } : {}),
-    });
-  const [sent, received, firstSent, firstReceived] = await Promise.all([
+    alchemyCall(
+      provider,
+      {
+        category: categories(chain),
+        order: "asc",
+        excludeZeroValue: false,
+        maxCount: "0x1",
+        [dir]: owner,
+        ...(METADATA.has(chain.key) ? { withMetadata: true } : {}),
+      },
+      FIRST_ACTIVITY_WAIT_MS,
+    );
+  // The lists first (they take their place in Alchemy's queue now), the optional first-activity calls after them.
+  const [sent, received] = await Promise.all([
     alchemyCall(provider, { ...base, fromAddress: owner }),
     alchemyCall(provider, { ...base, toAddress: owner }),
-    withFirst ? firstOf("fromAddress").catch(() => null) : null,
-    withFirst ? firstOf("toAddress").catch(() => null) : null,
   ]);
+  const [firstSent, firstReceived] = withFirst
+    ? await Promise.all([firstOf("fromAddress").catch(() => null), firstOf("toAddress").catch(() => null)])
+    : [null, null];
   const parse = (items: unknown[]) =>
     items.flatMap((raw) => {
       const t = parseAlchemyTransfer(raw, chain, owner);

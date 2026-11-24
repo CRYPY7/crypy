@@ -29,7 +29,11 @@ echo "Building the new version into $NEW while the site keeps running from $LIVE
 # Each build folder keeps its own build cache (a folder's own cache makes compiling much faster; a copied one doesn't
 # help). The very first build into a folder therefore takes longer.
 # The type check already ran before the push (and on the PC); it costs about 80 s on this server.
-sudo -u crypy bash -c "cd '$APP_DIR' && pnpm install --frozen-lockfile && CRYPY_DIST_DIR='$NEW' CRYPY_SKIP_TYPECHECK=1 pnpm build"
+# Lowest CPU and disk priority: on a 1-CPU server the live site must keep answering while this builds (health checks
+# timed out during an earlier build).
+LOW="nice -n 19"
+if command -v ionice >/dev/null 2>&1; then LOW="$LOW ionice -c 2 -n 7"; fi
+sudo -u crypy bash -c "cd '$APP_DIR' && pnpm install --frozen-lockfile && CRYPY_DIST_DIR='$NEW' CRYPY_SKIP_TYPECHECK=1 $LOW pnpm build"
 
 # Static files of every recent version, side by side (names carry content hashes, so they never clash).
 sudo -u crypy bash -c "cd '$APP_DIR' && mkdir -p '$APP_DIR/.static' && cp -r '$APP_DIR/$NEW/static/.' '$APP_DIR/.static/' && find '$APP_DIR/.static' -type f -mtime +30 -delete && find '$APP_DIR/.static' -type d -empty -delete"
