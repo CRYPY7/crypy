@@ -31,6 +31,7 @@ import {
   toCsv,
   viewRows,
 } from "./results";
+import type { ChainProgress } from "./progress";
 import type { BatchChain, BatchStrings } from "./widget";
 
 const PAGE = 50;
@@ -78,10 +79,14 @@ export function ResultsView({
   scannedAt,
   cancelled,
   rateLimited,
+  lost = false,
+  running = false,
+  progress = {},
   addressPathPrefix,
   onEdit,
   onScanAgain,
   onRetry,
+  onRetryAll,
 }: {
   s: BatchStrings;
   locale: string;
@@ -93,10 +98,17 @@ export function ResultsView({
   scannedAt: Date;
   cancelled: boolean;
   rateLimited: boolean;
+  /** The scan's results were no longer on the server (more than 1 hour after it ended). */
+  lost?: boolean;
+  /** The scan is still running: the progress panel above replaces the status line. */
+  running?: boolean;
+  /** Per chain: block range and cross-check from the scan job. */
+  progress?: Record<string, ChainProgress>;
   addressPathPrefix: string;
   onEdit: () => void;
   onScanAgain: () => void;
   onRetry: (row: ScanRow) => void;
+  onRetryAll?: (rows: ScanRow[]) => void;
 }) {
   const [search, setSearch] = useState("");
   const [chain, setChain] = useState<string | null>(null);
@@ -192,11 +204,30 @@ export function ResultsView({
   };
 
   const time = new Intl.DateTimeFormat(locale, { timeStyle: "short", timeZone: "UTC" }).format(scannedAt);
+  const number = new Intl.NumberFormat(locale);
   const blocksText = Object.entries(summary.blocks)
-    .map(([key, block]) =>
-      fill(s.blockOn, { block: new Intl.NumberFormat(locale).format(BigInt(block)), chain: chainOf(key)?.name ?? key }),
-    )
+    .map(([key, block]) => {
+      const range = progress[key]?.blocks;
+      const text =
+        range && range[0] !== range[1]
+          ? `${number.format(BigInt(range[0]))}–${number.format(BigInt(range[1]))}`
+          : number.format(BigInt(range?.[0] ?? block));
+      return fill(s.blockOn, { block: text, chain: chainOf(key)?.name ?? key });
+    })
     .join(", ");
+  const checks = Object.values(progress)
+    .map((p) => p.crossCheck)
+    .filter((c): c is NonNullable<typeof c> => !!c && c.compared > 0);
+  const compared = checks.reduce((sum, c) => sum + c.compared, 0);
+  const corrected = checks.reduce((sum, c) => sum + c.corrected, 0);
+  const crossText =
+    compared === 0
+      ? ""
+      : corrected > 0
+        ? fill(s.crossCorrected, { compared, corrected })
+        : fill(s.crossChecked, { compared });
+  const unread = rows.filter((r) => r.status !== "ok");
+  const unreadChains = [...new Set(unread.map((r) => chainOf(r.chain)?.name ?? r.chain))].join(", ");
   const button =
     "inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm hover:border-primary focus-visible:ring-3 focus-visible:ring-ring/25 focus-visible:outline-none";
   const nativeLabel = (key: string) => chainOf(key)?.nativeSymbol ?? "";
@@ -222,41 +253,72 @@ export function ResultsView({
 
   return (
     <div className="flex flex-col gap-4 pb-20 md:pb-0">
-      <div className="flex flex-col gap-3 rounded-2xl border bg-card px-4 py-3 sm:flex-row sm:items-center">
-        <p className="flex min-w-0 flex-1 items-start gap-2 text-sm" role="status">
-          {cancelled ? (
-            <TriangleAlert className="mt-0.5 size-4 shrink-0 text-high" aria-hidden="true" />
-          ) : (
-            <CircleCheck className="mt-0.5 size-4 shrink-0 text-low" aria-hidden="true" />
-          )}
-          <span>
-            <span className="font-semibold">{cancelled ? s.cancelled : s.complete}</span>
-            <span className="text-muted-foreground">
-              {" · "}
-              {fill(s.completeLine, {
-                addresses: summary.addresses,
-                checks: summary.checks,
-                blocks: blocksText || "—",
-                time,
-              })}
+      {!running && (
+        <div className="flex flex-col gap-3 rounded-2xl border bg-card px-4 py-3 sm:flex-row sm:items-center">
+          <p className="flex min-w-0 flex-1 items-start gap-2 text-sm" role="status">
+            {cancelled || lost ? (
+              <TriangleAlert className="mt-0.5 size-4 shrink-0 text-high" aria-hidden="true" />
+            ) : (
+              <CircleCheck className="mt-0.5 size-4 shrink-0 text-low" aria-hidden="true" />
+            )}
+            <span>
+              <span className="font-semibold">{cancelled || lost ? s.cancelled : s.complete}</span>
+              <span className="text-muted-foreground">
+                {" · "}
+                {fill(s.completeLine, {
+                  addresses: summary.addresses,
+                  checks: summary.checks,
+                  blocks: blocksText || "—",
+                  time,
+                })}
+                {crossText ? ` · ${crossText}` : ""}
+              </span>
             </span>
-          </span>
-        </p>
-        <div className="flex gap-2">
-          <button type="button" className={button} onClick={onEdit}>
-            <FilePen className="size-4" aria-hidden="true" />
-            {s.editList}
-          </button>
-          <button type="button" className={button} onClick={onScanAgain}>
-            <RotateCcw className="size-4" aria-hidden="true" />
-            {s.scanAgain}
-          </button>
+          </p>
+          <div className="flex gap-2">
+            <button type="button" className={button} onClick={onEdit}>
+              <FilePen className="size-4" aria-hidden="true" />
+              {s.editList}
+            </button>
+            <button type="button" className={button} onClick={onScanAgain}>
+              <RotateCcw className="size-4" aria-hidden="true" />
+              {s.scanAgain}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      {(rateLimited || summary.failed > 0) && (
+      {lost && (
         <p role="alert" className="rounded-xl border border-high/40 bg-high/8 px-4 py-2.5 text-sm">
-          {rateLimited ? s.error.rateLimited : s.error.failed}
+          {s.refused.lost}
+        </p>
+      )}
+
+      {!running && !lost && !cancelled && unread.length > 0 && (
+        <div
+          role="alert"
+          className="flex flex-col gap-3 rounded-xl border border-high/40 bg-high/8 px-4 py-3 sm:flex-row sm:items-center"
+        >
+          <RotateCcw className="hidden size-5 shrink-0 text-high sm:block" aria-hidden="true" />
+          <div className="min-w-0 flex-1 text-sm">
+            <p className="font-semibold">{fill(s.stillReading.title, { count: number.format(unread.length) })}</p>
+            <p className="mt-0.5 text-muted-foreground">{fill(s.stillReading.note, { chains: unreadChains })}</p>
+          </div>
+          {onRetryAll && (
+            <button
+              type="button"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+              onClick={() => onRetryAll(unread)}
+            >
+              {s.stillReading.retry}
+            </button>
+          )}
+        </div>
+      )}
+
+      {rateLimited && (
+        <p role="alert" className="rounded-xl border border-high/40 bg-high/8 px-4 py-2.5 text-sm">
+          {s.error.rateLimited}
         </p>
       )}
 
@@ -280,9 +342,9 @@ export function ResultsView({
         />
         <Card
           label={s.cards.failed}
-          value={summary.failed > 0 ? String(summary.failed) : s.cards.failedNone}
-          note={summary.failed > 0 ? s.cards.failedNote : ""}
-          tone={summary.failed > 0 ? "critical" : undefined}
+          value={running ? "…" : unread.length > 0 ? number.format(unread.length) : s.cards.failedNone}
+          note={!running && unread.length > 0 ? s.cards.failedNote : ""}
+          tone={!running && unread.length > 0 ? "high" : undefined}
           className="hidden lg:block"
         />
       </div>

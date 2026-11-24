@@ -544,17 +544,49 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   their adapter; their own decoders add protocol events. The UI reads only the engine's output.
 - **UI:** `components/entity/tx-intel.tsx` (route, actions, permissions, parties) next to `tx-story.tsx`.
 
-## 12d. Batch Balance Scanner (M4.5)
+## 12d. Batch Balance Scanner (M4.5; scan jobs since S2 Part A, BATCH_SCANNER_DESIGN.md)
 
-- Browser: `modules/tools/batch-balance/` — `parse.ts` (list parsing, pure), `results.ts` (values, totals, sorting,
-  CSV, pure), `editor.tsx`, `widget.tsx` (scan orchestration: 100 addresses per request, chains in parallel, one retry,
-  one block per chain), `results-view.tsx`. Picker tokens: `config/batch-assets.ts`.
-- Server: `POST /api/v1/batch-balances` → `server/chains/evm/batch.ts` (`readBatchBalances`): multicall balances plus a
-  deployless code-size program (`CODE_SIZE_PROGRAM`, 37 bytes, plain `eth_call` without `to`). `GET /api/v1/token-info`
-  checks a pasted contract per chain. Rate limiter `batchLimiter` (40/min). Nothing stored or logged; labels stay in the
-  browser.
-- Other chain families plug in by adding the same reader to their adapter; the page lists every live chain with the
-  `tokenBalances` capability.
+- Browser: `modules/tools/batch-balance/`:
+  - `parse.ts` (list parsing, pure) and `results.ts` (values, totals, sorting, CSV, pure);
+  - `editor.tsx`;
+  - `widget.tsx`: starts a scan job, follows it about once a second (`?since=` returns only new rows), keeps the job id and the list in sessionStorage so a refresh finds it again (labels never leave the browser);
+  - `progress.tsx` (boards 56/58) and `results-view.tsx`.
+
+  Picker tokens: `config/batch-assets.ts`.
+
+- **Scan engine** (`lib/batch-scan/engine.ts`, no server code, so the browser mode of Part A.2 reuses it): `scanChain` reads one chain's list through a set of readers.
+  - It picks the healthiest reader; "slow down" rests that reader; timeouts and "too big" split the chunk; failures rest the reader with a growing pause.
+  - Unread cells are read again elsewhere (3 times).
+  - It waits, then "stalled" after 10 minutes, and gives up after 1 hour.
+  - It cross-checks a 2% sample (at least 5) with a different reader at the same block, and a third reading settles disagreements.
+- **Server readers** (`server/batch-scan/readers.ts`):
+  - One per provider from `providersFor`, Alchemy excluded.
+  - At most 2 scan requests in flight per provider (`SCAN_IN_FLIGHT`); extra providers stop at 40% of their daily request budget (`SCAN_DAILY_SHARE`).
+  - Each reader calls `readBatchBalances` with one multicall request per chunk (`MULTICALL_BYTES`).
+- **Jobs** (`server/batch-scan/jobs.ts`, one `ScanManager` per process in `service.ts`):
+  - `SCAN_MAX_RUNNING` at once, `SCAN_MAX_QUEUED` in line, one active job per visitor (`clientKey`).
+  - `SCAN_MAX_WALLETS` per scan and `SCAN_DAILY_WALLETS` per visitor per UTC day.
+  - Tokens are checked first (`decimals()`; a clear failure means "not on this chain"). Prices are read with 3 tries.
+  - Results are kept 1 hour after the end; a place in line nobody asks about for 30 minutes is dropped.
+  - Lists stay in memory only.
+  - Each finished job records a visitor outcome.
+  - Runs in the website process for now; moves to the worker service in S4.
+- API (`app/api/v1/batch-scans`):
+  - `POST /` (same-site, `scanStartLimiter` 10/min; refusals are answers, not errors: `active`, `busy`, `too-many`, `daily-limit`);
+  - `GET /{id}?since=N` and `POST /{id}` with `{action}` (`scanPollLimiter` 300/min).
+
+  The older `POST /api/v1/batch-balances` (one batch of 100) stays for retrying single rows and for the S1 audit. A multicall whose calls all failed now throws, so callers try another node.
+
+- Other chain families plug in by adding a reader for their adapter; the page lists every live chain with the `tokenBalances` capability.
+
+## 12p. Page-change feedback (B-029)
+
+`components/layout/navigation-progress.tsx`, mounted once in the locale layout:
+
+- A capturing click listener marks the clicked sidebar item or bottom tab with `data-nav-pending` (spinner).
+- After 150 ms it sets `html[data-navigating]` (the main area fades) and shows the top bar. It ends on the next pathname, or when the address matches (query-only changes), or after 20 s.
+- Pointer-over, focus or touch on `a[data-sidebar-href]` or `a[data-intent-prefetch]` calls `router.prefetch` once per page. Result pages are never prefetched.
+- Styles are in `globals.css` (`.nav-progress`).
 
 ## 12e. Token security (M5)
 

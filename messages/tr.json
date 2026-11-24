@@ -17,7 +17,8 @@
     "betaTranslation": "Beta çeviri: henüz anadili konuşan biri tarafından kontrol edilmedi",
     "languageNotReady": "Bu dil hâlâ çevriliyor, bu yüzden şimdilik İngilizce görüyorsunuz.",
     "beta": "Beta",
-    "betaSiteLabel": "CRYPY beta aşamasında: özellikler değişebilir ve sonuçlar eksik olabilir."
+    "betaSiteLabel": "CRYPY beta aşamasında: özellikler değişebilir ve sonuçlar eksik olabilir.",
+    "loading": "Yükleniyor"
   },
   "nav": {
     "main": "Ana",
@@ -715,7 +716,7 @@
         },
         {
           "q": "Listem saklanıyor mu?",
-          "a": "Hayır. Adresler yalnızca bakiyeleri okumak için CRYPY sunucusuna gönderilir ve saklanmaz veya kaydedilmez. Etiketler tarayıcınızdan asla çıkmaz ve liste asla sayfa adresine girmez."
+          "a": "Yalnızca taranırken. Adresler tarama sürerken sunucunun belleğinde tutulur ve bittikten en geç 1 saat sonra silinir; asla kayda geçirilmez veya diske yazılmaz. Etiketler tarayıcınızdan hiç çıkmaz ve liste asla sayfa adresine konmaz."
         },
         {
           "q": "Bakiyeler nereden geliyor?",
@@ -723,7 +724,7 @@
         },
         {
           "q": "Kaç adres kontrol edebilirim?",
-          "a": "Tarama başına en fazla 2 ağda 500 adres ve en fazla 6 varlık. Çok büyük listeler, kayıtlı listeler ve zamanlanmış taramalar daha sonra için planlanıyor."
+          "a": "Tarama başına en fazla 500 adres, 5 ağın herhangi birinde, yerel coin ve en fazla 5 token ile. Daha büyük listeler, kayıtlı listeler ve zamanlanmış yeniden taramalar daha sonra gelecek."
         },
         {
           "q": "Bir adres neden kontrat olarak gösteriliyor?",
@@ -780,6 +781,7 @@
         "CRYPY asla kurtarma ifadesi, gizli ifade veya özel anahtar istemez, toplamaz veya saklamaz. Hiçbir CRYPY sayfası veya mesajı bunları sizden istemez.",
         "Aradığınız adresler, tokenlar ve işlem hash'leri herkese açık blokzincir verileridir. Yanıt vermek için CRYPY sunucusu blokzincir veri sağlayıcılarına (Alchemy, Infura, Ankr, dRPC ve genel düğümler gibi) ve güvenlik hizmetlerine (GoPlus, Sourcify) sorgu gönderir. Bu sorgular tarayıcınızdan değil CRYPY sunucusundan çıkar, bu yüzden sağlayıcılar IP adresinizi görmez. CRYPY kimin neyi aradığının kaydını tutmaz; sitenin hızlı olması için sonuçlar kısa süre önbelleğe alınır.",
         "Hesap olmadan diliniz, temanız, portföy listeniz, son görüntülenen öğeler ve görüntüleme tercihleriniz yalnızca kendi tarayıcınızda saklanır. Portföy adresleri bakiyeleri sorgulamak için tek tek gönderilir ve saklanmaz.",
+        "Toplu Bakiye Tarayıcı'da bir liste taradığınızda adresler tarama sürerken sunucunun belleğinde tutulur ve bittikten en geç 1 saat sonra silinir. Asla kayda geçirilmez veya diske yazılmaz; etiketler tarayıcınızdan hiç çıkmaz.",
         "Çerezler: CRYPY yalnızca çalışmak için gereken çerezleri kullanır: NEXT_LOCALE (diliniz), crypy_chains (hangi ağların taranacağı) ve crypy_session (yalnızca giriş yaptıktan sonra). Reklam veya analiz çerezi ya da izleme betiği yoktur. Siteyi koruyan Cloudflare, insanları botlardan ayırmak için kendi güvenlik çerezini (__cf_bm gibi) ayarlayabilir.",
         "Cüzdan bağlamak isteğe bağlıdır. CRYPY yalnızca genel adresinizi okur ve bağlanmak asla bir şey imzalamanızı istemez. WalletConnect ile bağlanırsanız bağlantı Reown'un WalletConnect hizmeti üzerinden geçer.",
         "Cüzdanınızla giriş yapmak isteğe bağlıdır ve yalnızca izleme listesi ve uyarılar için gerekir. Bu imzalı bir mesajdır, asla bir işlem değil. Ardından CRYPY cüzdan adresinizi, etiketleri ve uyarı seçenekleriyle izleme listenizi, sessiz saatlerinizi ve saat diliminizi ve bir oturum kodunu (yalnızca parmak izi) saklar. Portföyünüzü hesabınızda tutmayı seçerseniz adresleri ve etiketleri de saklanır.",
@@ -2527,7 +2529,7 @@
       "cancel": "İptal",
       "trust": {
         "public": "Yalnızca genel adresler: asla anahtar veya kurtarma ifadesi istemez",
-        "notStored": "Listeniz saklanmaz veya kaydedilmez",
+        "notStored": "Listeniz asla kayda geçirilmez ve 1 saat içinde CRYPY sunucularından silinir",
         "noWallet": "Cüzdan bağlamanız gerekmez"
       },
       "complete": "Tarama tamamlandı",
@@ -2544,9 +2546,9 @@
         "withBalanceNote": "En az bir ağda",
         "empty": "Boş adresler",
         "emptyNote": "Kontrol edilen ağlarda hiçbir şey yok",
-        "failed": "Başarısız kontroller",
+        "failed": "Hâlâ okunuyor",
         "failedNone": "Yok",
-        "failedNote": "Bir kez yeniden denendi; aşağıdan tekrar deneyin"
+        "failedNote": "CRYPY denemeye devam ediyor"
       },
       "noPrice": "güvenilir fiyat yok",
       "searchPlaceholder": "Adres veya etiket ara",
@@ -2579,8 +2581,8 @@
       },
       "status": {
         "ok": "Tamam",
-        "failed": "Başarısız",
-        "pending": "Okunmadı"
+        "failed": "Okunamadı",
+        "pending": "Hâlâ okunuyor"
       },
       "noLabel": "Etiket yok",
       "rowFailed": "Bu adres {chain} ağında okunamadı.",
@@ -2604,6 +2606,50 @@
         "type": "Tür",
         "value": "Değer (USD)",
         "status": "Durum"
+      },
+      "estimateTime": "Okunacak {balances} bakiye · {time}",
+      "estimateUnderMinute": "bir dakikadan kısa",
+      "estimateMinutes": "yaklaşık {minutes} dk",
+      "run": {
+        "heading": "{wallets} cüzdan taranıyor",
+        "where": "CRYPY sunucularında · sayfayı yenileseniz veya kapatsanız da devam eder",
+        "overall": "{total} bakiyeden {read} tanesi okundu",
+        "usable": "Aşağıdaki sonuçlar şimdiden kullanılabilir: istediğiniz zaman sıralayın, kopyalayın veya dışa aktarın",
+        "chains": "Her ağ",
+        "pause": "Duraklat",
+        "resume": "Devam et",
+        "paused": "Duraklatıldı",
+        "starting": "Başlıyor…",
+        "queued": "Taramanız sırada: {position}. sıra, yaklaşık {seconds} saniye içinde başlar",
+        "queuedNote": "Şu anda çok kişi tarama yapıyor. Bu sekmeyi açık tutun veya daha sonra gelin: yeriniz 30 dakika korunur.",
+        "blocks": "bloklar {from}–{to}",
+        "block": "blok {block}",
+        "notOn": "{symbols}: {chain} ağında yok",
+        "phase": {
+          "reading": "Okunuyor",
+          "waiting": "Düğümler meşgul, yavaşlayıp yeniden deneniyor · hiçbir şey kaybolmaz",
+          "stalled": "Düğümler bir süredir yanıt vermiyor · CRYPY denemeye devam ediyor",
+          "cross-checking": "Çapraz kontrol",
+          "done": "Tamam",
+          "gave-up": "1 saat sonra denemeyi bıraktı",
+          "cancelled": "Durduruldu"
+        }
+      },
+      "refused": {
+        "busy": "CRYPY şu anda çok yoğun ve sıra dolu. Lütfen birkaç dakika sonra tekrar deneyin.",
+        "daily": "Bugün CRYPY sunucularında {limit} cüzdan taradınız. Ücretsiz hak 00:00 UTC'de yenilenir.",
+        "tooMany": "Tarama başına en fazla {max} cüzdan. Listeyi daha küçük parçalara bölün.",
+        "active": "Zaten çalışan bir taramanız var, belki başka bir sekmede. Bitmesini bekleyin veya burada durdurun.",
+        "stopOther": "O taramayı durdur",
+        "lost": "Bu tarama artık CRYPY sunucularında değil (sonuçlar tarama bittikten sonra 1 saat saklanır). Güncel sonuçlar için yeniden tarayın.",
+        "failed": "Tarama başlatılamadı. Lütfen tekrar deneyin."
+      },
+      "crossChecked": "{compared} cüzdan ikinci bir düğümle çapraz kontrol edildi: hepsi eşleşti",
+      "crossCorrected": "{compared} cüzdan ikinci bir düğümle çapraz kontrol edildi: üçüncü bir okumayla {corrected} tanesi düzeltildi",
+      "stillReading": {
+        "title": "{count} bakiye hâlâ okunuyor",
+        "note": "{chains} düğümleri yanıt vermeyi bıraktı. Geri kalan her şey tamam. Bu satırlarda “Hâlâ okunuyor” yazar ve dışa aktarımda ayrı listelenir; böylece asla boş cüzdan sanılmaz.",
+        "retry": "Şimdi dene"
       }
     },
     "token-security": {

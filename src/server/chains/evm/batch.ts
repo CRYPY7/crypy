@@ -78,6 +78,7 @@ async function readAt(
   addresses: `0x${string}`[],
   tokens: `0x${string}`[],
   blockNumber: bigint,
+  multicallBytes?: number,
 ): Promise<BatchRow[]> {
   const multicall3 = client.chain?.contracts?.multicall3?.address;
   if (!multicall3) throw new Error("Multicall3 not configured for this chain");
@@ -86,6 +87,7 @@ async function readAt(
     client.multicall({
       allowFailure: true,
       blockNumber,
+      ...(multicallBytes ? { batchSize: multicallBytes } : {}),
       contracts: addresses.flatMap((address) => [
         { address: multicall3, abi: multicall3Abi, functionName: "getEthBalance" as const, args: [address] as const },
         ...tokens.map((token) => ({
@@ -98,6 +100,12 @@ async function readAt(
     }),
     accountTypes(client, addresses, blockNumber),
   ]);
+  // viem turns a whole request that failed (timeout, limit, too large) into "failure" for every call in it. That is a
+  // failed read, not unreadable balances: pass the error on so the caller can try another node or a smaller batch.
+  const failure = results.find((r) => r.status === "failure");
+  if (results.length > 0 && results.every((r) => r.status === "failure")) {
+    throw failure?.error ?? new Error("Every call in the multicall failed");
+  }
   return addresses.map((address, i) => {
     const cell = (j: number) => {
       const r = results[i * per + j];
@@ -121,16 +129,31 @@ export async function readBatchBalances(
   addresses: string[],
   tokens: string[],
   blockNumber?: bigint,
+  /** Calldata per multicall request; scans send one large request per chunk instead of viem's 1 KB pieces. */
+  multicallBytes?: number,
 ): Promise<BatchResult> {
   const list = addresses.slice(0, MAX_BATCH_ADDRESSES).map((a) => getAddress(a));
   const tokenList = tokens.slice(0, MAX_BATCH_TOKENS).map((a) => getAddress(a));
   if (blockNumber !== undefined) {
     try {
-      return { block: blockNumber.toString(), rows: await readAt(client, list, tokenList, blockNumber) };
-    } catch {
-      // Fall through to the latest block.
+      return {
+        block: blockNumber.toString(),
+        rows: await readAt(client, list, tokenList, blockNumber, multicallBytes),
+      };
+    } catch (error) {
+      // A node that no longer has the block answers with an error: read at the latest block instead.
+      // Other failures (timeouts, limits) are passed on, so the caller can try another node.
+      if (!isMissingState(error)) throw error;
     }
   }
   const latest = await client.getBlockNumber();
-  return { block: latest.toString(), rows: await readAt(client, list, tokenList, latest) };
+  return { block: latest.toString(), rows: await readAt(client, list, tokenList, latest, multicallBytes) };
+}
+
+/** "missing trie node", "header not found", "state … not available": the node pruned that block's state. */
+export function isMissingState(error: unknown): boolean {
+  const text = error instanceof Error ? `${error.message} ${(error as { details?: string }).details ?? ""}` : "";
+  return /missing trie node|header not found|state .*not available|pruned|archive|unknown block|block not found/i.test(
+    text,
+  );
 }

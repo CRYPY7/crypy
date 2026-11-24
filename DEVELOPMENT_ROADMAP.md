@@ -38,6 +38,52 @@ used up before 00:00 UTC on a normal day.
 - **S5 — Fix everything found**, most harmful first, each with a test that fails without the fix; slow first visits.
 - **S6 — Prove it:** 14 days in a row on target. Then new features resume.
 
+**Batch Balance Scanner (owner request 2026-11-24): the most reliable and capable bulk scanner.**
+Compared with tokentools.app and chaintx.tools: both run in the visitor's browser against one public node, one chain
+and one token per scan; chaintx.tools lets the visitor set chunk size and delay. CRYPY keeps reads on its server
+(privacy: visitors' IPs never reach node providers) and does several chains and tokens in one scan.
+
+- **Part A (S2, bug B-028): never fails.** Built 2026-11-24 (see PROGRESS.md), apart from the browser mode (A.2). Load tests passed in the workspace; limits are set after the same tests run on the server.
+  - A scan is a server job that paces itself.
+  - Small multicalls whose size adapts per provider.
+  - It retries on other providers and waits when asked to slow down, until every address is read.
+  - It survives a page refresh, with progress and time left.
+  - A sample is cross-checked on a second provider.
+  - A row is marked failed only after repeated tries, with the reason.
+  - Limits count a scan as one job, so the per-visitor limits and the Cloudflare /api/ rule don't cut it off.
+  - Load tests must finish fully every time: 500 wallets × 5 chains × 6 tokens repeated, and 10,000 wallets on BNB
+    Chain.
+  - Then the 500-wallet limit is raised to what the tests prove safe.
+- **Strategy (owner decision 2026-11-24): server queue.**
+  - Scans run in the background worker, never in the website process; they move to the separate worker service when
+    S4 is done.
+  - Hard caps: how many scans run at once, the share of each provider's capacity scans may use (pages keep theirs)
+    and the queue length (when full: "very busy, try again in a few minutes").
+  - Fair use: one active scan per visitor; a daily wallet allowance per IP (anonymous) or per signed-in wallet.
+  - The same address, chain and block is read once, even when several scans ask for it.
+  - Lists are held in memory only while the scan runs, deleted at the end or after 1 hour at most, and never logged.
+    The privacy page wording changes with it.
+  - Limits are settings, so free and premium plans differ only in numbers and priority.
+  - Load test on staging: about 100 scans at once with the website staying fast.
+- **Part A.2 (owner decision 2026-11-24, right after Part A): optional "Scan in my browser" mode.**
+  - Off by default. It explains that the visitor's IP and list go to public nodes.
+  - It uses the same pacing and retry engine, only keyless public nodes (and later the visitor's own node), and the
+    same results format, labelled "scanned in your browser".
+  - Free permanently (owner decision 2026-11-24): it costs CRYPY nothing, limits in a browser can't be enforced, and
+    competitors offer it free. Its size limit exists only to keep browser tabs responsive.
+  - Premium sells what browser mode can't do: private, priority server scans, saved lists, scheduled re-scans with
+    alerts, history and snapshots. Design approved before building.
+- **Part B (owner decision 2026-11-24: after S6, the first feature work):**
+  - balances at a past block or date (snapshots; needs Alchemy archive reads)
+  - "what changed since your last scan"
+  - which wallets can't pay gas
+  - automatic discovery of the tokens each wallet holds
+  - ENS names
+  - Excel and JSON export
+  - watching the list for alerts
+
+  Designs approved before building.
+
 ## M0 — Setup (owner) + design approval
 
 - [x] Node.js LTS, pnpm 12, Git, VS Code installed

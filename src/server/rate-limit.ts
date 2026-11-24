@@ -94,6 +94,10 @@ export const healthLimiter = createRateLimiter({ limit: 20, windowMs: 60_000 });
 export const pageLimiter = createRateLimiter({ limit: 60, windowMs: 60_000 });
 /** Batch Balance Scanner: one request = up to 100 addresses on one chain; a full 500 × 2 scan is 10 requests. */
 export const batchLimiter = createRateLimiter({ limit: 40, windowMs: 60_000 });
+/** Batch scan jobs: starting a scan (the job itself is limited by the scan manager's caps). */
+export const scanStartLimiter = createRateLimiter({ limit: 10, windowMs: 60_000 });
+/** Batch scan jobs: progress checks (the page asks about once a second) and pause / resume / cancel. */
+export const scanPollLimiter = createRateLimiter({ limit: 300, windowMs: 60_000 });
 /**
  * Portfolio: one request per wallet (up to 20 wallets), so opening or refreshing a full portfolio is about 20 calls.
  * Its own budget, so it doesn't use up a visitor's searches.

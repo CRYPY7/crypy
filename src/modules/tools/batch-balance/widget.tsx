@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Layers, Lock, Plus, Search, X } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChainIcon } from "@/components/chain-icon";
 import type { BatchAssetDef } from "@/config/batch-assets";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ import type enMessages from "../../../../messages/en.json";
 import { AddressEditor } from "./editor";
 import { type Entry, parseList } from "./parse";
 import type { ScanAsset, ScanPrices, ScanRow } from "./results";
+import { type ChainProgress, type JobStatus, ScanProgress } from "./progress";
 import { ResultsView } from "./results-view";
 
 export type BatchStrings = (typeof enMessages)["utilities"]["batch-balance"];
@@ -21,7 +22,6 @@ export interface BatchChain {
 }
 
 const MAX_TOKENS = 5;
-const BATCH = 100;
 
 interface BatchResponse {
   ok: boolean;
@@ -51,14 +51,62 @@ function fromDef(def: BatchAssetDef): ScanAsset {
   return { key: def.key, symbol: def.symbol, name: def.name, chains: { ...def.chains } };
 }
 
-const sleep = (ms: number, signal: AbortSignal) =>
-  new Promise<void>((resolve) => {
-    const timer = setTimeout(resolve, ms);
-    signal.addEventListener("abort", () => {
-      clearTimeout(timer);
-      resolve();
-    });
-  });
+const STORAGE_KEY = "crypy.batchScan";
+const POLL_MS = 1_000;
+
+/** What the page keeps in this tab (sessionStorage) so a refresh finds the scan again. Labels stay in the browser. */
+interface SavedScan {
+  jobId: string;
+  text: string;
+  selected: string[];
+  tokens: ScanAsset[];
+  at: string;
+}
+
+interface JobView {
+  status: JobStatus;
+  position: number | null;
+  startsIn: number | null;
+  chains: Record<string, ChainProgress>;
+  rows: {
+    chain: string;
+    block: string;
+    row: { address: string; type: ScanRow["type"]; native: string | null; tokens: (string | null)[] };
+  }[];
+  seq: number;
+}
+
+type CreateResult =
+  | { jobId: string; refused?: undefined }
+  | { refused: "active"; jobId: string }
+  | { refused: "busy" }
+  | { refused: "too-many"; maxWallets: number }
+  | { refused: "daily-limit"; dailyWallets: number; resetsAt: string };
+
+function readSaved(): SavedScan | null {
+  try {
+    const value = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "null") as SavedScan | null;
+    return value && typeof value.jobId === "string" && /^[0-9a-f]{32}$/.test(value.jobId) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeSaved(value: SavedScan | null) {
+  try {
+    if (value) sessionStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    else sessionStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Storage blocked: the scan still runs, it just isn't found again after a refresh.
+  }
+}
+
+/** Rough time before the scan: about 400 balances a second on the server, plus a few seconds to start. */
+export function estimateSeconds(balances: number): number {
+  return Math.ceil(5 + balances / 400);
+}
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 export function BatchBalanceScanner({
   strings: s,
@@ -79,7 +127,14 @@ export function BatchBalanceScanner({
   const [phase, setPhase] = useState<"input" | "scanning" | "done">("input");
   const [rows, setRows] = useState<ScanRow[]>([]);
   const [prices, setPrices] = useState<ScanPrices>({});
-  const [progress, setProgress] = useState({ done: 0, total: 0 });
+  const [job, setJob] = useState<{
+    id: string;
+    status: JobStatus | "starting";
+    position: number | null;
+    startsIn: number | null;
+  }>({ id: "", status: "starting", position: null, startsIn: null });
+  const [progress, setProgress] = useState<Record<string, ChainProgress>>({});
+  const [notice, setNotice] = useState<{ text: string; stopJob?: string } | null>(null);
   const [scan, setScan] = useState<{
     assets: ScanAsset[];
     entries: Entry[];
@@ -87,87 +142,26 @@ export function BatchBalanceScanner({
     at: Date;
     cancelled: boolean;
     rateLimited: boolean;
+    lost: boolean;
   } | null>(null);
-  const abort = useRef<AbortController | null>(null);
-  const blocks = useRef<Record<string, string>>({});
+  const seq = useRef(0);
+  const index = useRef(new Map<string, number>());
+  /** Bumped to stop following a scan (new scan, editing the list, leaving the page). */
+  const following = useRef(0);
+  useEffect(() => () => void (following.current += 1), []);
 
   const parsed = useMemo(() => parseList(text), [text]);
   const activeChains = chains.filter((c) => selected.includes(c.key));
   const assets = useMemo(() => [nativeAsset(activeChains), ...tokens], [activeChains, tokens]);
-  const requests = activeChains.length * Math.ceil(parsed.entries.length / BATCH) * 2;
+  const balances = activeChains.reduce(
+    (sum, c) => sum + parsed.entries.length * assets.filter((a) => a.key === "native" || a.chains[c.key]).length,
+    0,
+  );
   const canScan = parsed.entries.length > 0 && activeChains.length > 0 && phase !== "scanning";
+  const seconds = estimateSeconds(balances);
 
-  async function request(
-    chain: string,
-    entries: Entry[],
-    scanAssets: ScanAsset[],
-    first: boolean,
-    signal: AbortSignal,
-  ) {
-    const tokenAssets = scanAssets.filter((a) => a.key !== "native" && a.chains[chain]);
-    const body = JSON.stringify({
-      chain,
-      addresses: entries.map((e) => e.address),
-      tokens: tokenAssets.map((a) => a.chains[chain]!.address),
-      ...(blocks.current[chain] ? { block: blocks.current[chain] } : {}),
-      ...(first ? { prices: true } : {}),
-    });
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const response = await fetch("/api/v1/batch-balances", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body,
-          signal,
-        });
-        const json = (await response.json()) as BatchResponse;
-        if (json.ok && json.data) return { ok: true as const, data: json.data, tokenAssets };
-        if (response.status === 429) {
-          const wait = Number(response.headers.get("retry-after") ?? "5");
-          if (attempt === 0 && wait <= 10) {
-            await sleep(wait * 1000, signal);
-            continue;
-          }
-          return { ok: false as const, rateLimited: true };
-        }
-        if (response.status === 400) return { ok: false as const, rateLimited: false };
-      } catch {
-        if (signal.aborted) return { ok: false as const, rateLimited: false };
-      }
-      if (attempt === 0) await sleep(1500, signal);
-    }
-    return { ok: false as const, rateLimited: false };
-  }
-
-  function apply(
-    chain: string,
-    entries: Entry[],
-    result: Awaited<ReturnType<typeof request>>,
-    update: (fn: (rows: ScanRow[]) => ScanRow[]) => void,
-  ) {
-    const keys = new Set(entries.map((e) => `${e.address.toLowerCase()}|${chain}`));
-    update((current) =>
-      current.map((row) => {
-        if (!keys.has(`${row.entry.address.toLowerCase()}|${row.chain}`)) return row;
-        if (!result.ok) return { ...row, status: "failed" };
-        const read = result.data.rows.find((r) => r.address.toLowerCase() === row.entry.address.toLowerCase());
-        if (!read) return { ...row, status: "failed" };
-        const balances: ScanRow["balances"] = { ...row.balances, native: read.native };
-        result.tokenAssets.forEach((asset, i) => (balances[asset.key] = read.tokens[i] ?? null));
-        return { ...row, status: "ok", type: read.type, balances, block: result.data.block };
-      }),
-    );
-  }
-
-  async function startScan() {
-    if (!canScan) return;
-    abort.current?.abort();
-    const controller = new AbortController();
-    abort.current = controller;
-    blocks.current = {};
-    const scanAssets = assets;
-    const entries = parsed.entries;
-    const chainKeys = activeChains.map((c) => c.key);
+  /** Fresh rows (all "pending") for a scan, and the lookup from chain + address to a row. */
+  const prepare = useCallback((entries: Entry[], chainKeys: string[], scanAssets: ScanAsset[]) => {
     const initial: ScanRow[] = entries.flatMap((entry) =>
       chainKeys.map((chain) => ({
         entry,
@@ -180,63 +174,270 @@ export function BatchBalanceScanner({
         block: null,
       })),
     );
+    index.current = new Map(initial.map((row, i) => [`${row.chain}|${row.entry.address.toLowerCase()}`, i]));
+    seq.current = 0;
     setRows(initial);
     setPrices({});
-    setPhase("scanning");
-    let rateLimited = false;
-    const chunks: Entry[][] = [];
-    for (let i = 0; i < entries.length; i += BATCH) chunks.push(entries.slice(i, i + BATCH));
-    setProgress({ done: 0, total: chunks.length * chainKeys.length });
+    setProgress({});
+  }, []);
 
-    // Chains run side by side; batches of one chain run in order, all at that chain's first block.
-    await Promise.all(
-      chainKeys.map(async (chain) => {
-        for (const [index, chunk] of chunks.entries()) {
-          if (controller.signal.aborted) return;
-          const result = await request(chain, chunk, scanAssets, index === 0, controller.signal);
-          if (controller.signal.aborted) return;
-          if (result.ok) {
-            blocks.current[chain] ??= result.data.block;
-            if (result.data.prices) setPrices((p) => ({ ...p, [chain]: result.data.prices! }));
-          } else if (result.rateLimited) rateLimited = true;
-          apply(chain, chunk, result, setRows);
-          setProgress((p) => ({ ...p, done: p.done + 1 }));
+  /** Applies one progress answer from the server to the rows, prices and chain states. */
+  const apply = useCallback((view: JobView, scanAssets: ScanAsset[]) => {
+    seq.current = view.seq;
+    setJob((j) => ({ ...j, status: view.status, position: view.position, startsIn: view.startsIn }));
+    setProgress(view.chains);
+    setPrices((current) => {
+      const next = { ...current };
+      for (const [chain, state] of Object.entries(view.chains)) if (state.prices) next[chain] = state.prices;
+      return next;
+    });
+    if (view.rows.length === 0) return;
+    setRows((current) => {
+      const next = current.slice();
+      for (const { chain, block, row } of view.rows) {
+        const i = index.current.get(`${chain}|${row.address.toLowerCase()}`);
+        if (i === undefined) continue;
+        const target = next[i]!;
+        const order = view.chains[chain]?.tokens ?? [];
+        const balances: ScanRow["balances"] = { ...target.balances, native: row.native };
+        for (const asset of scanAssets) {
+          const deployment = asset.chains[chain];
+          if (asset.key === "native" || !deployment) continue;
+          const at = order.indexOf(deployment.address.toLowerCase());
+          balances[asset.key] = at === -1 ? undefined : (row.tokens[at] ?? null);
         }
-      }),
-    );
-    const cancelled = controller.signal.aborted;
-    // Anything not read (cancelled) is shown as failed, with a retry button.
-    setRows((current) => current.map((row) => (row.status === "pending" ? { ...row, status: "failed" } : row)));
-    setScan({ assets: scanAssets, entries, chains: chainKeys, at: new Date(), cancelled, rateLimited });
-    setPhase("done");
+        next[i] = { ...target, status: "ok", type: row.type, balances, block };
+      }
+      return next;
+    });
+  }, []);
+
+  /** Follows a scan on the server until it ends (about once a second). */
+  const follow = useCallback(
+    async (id: string, entries: Entry[], chainKeys: string[], scanAssets: ScanAsset[], at: Date) => {
+      const run = (following.current += 1);
+      let misses = 0;
+      for (;;) {
+        if (following.current !== run) return;
+        let view: JobView | null = null;
+        try {
+          const response = await fetch(`/api/v1/batch-scans/${id}?since=${seq.current}`);
+          if (response.status === 404) {
+            writeSaved(null);
+            setScan({
+              assets: scanAssets,
+              entries,
+              chains: chainKeys,
+              at,
+              cancelled: false,
+              rateLimited: false,
+              lost: true,
+            });
+            setPhase("done");
+            return;
+          }
+          const json = (await response.json()) as { ok: boolean; data?: JobView };
+          if (json.ok && json.data) view = json.data;
+        } catch {
+          // Offline for a moment: keep asking. The scan carries on on the server.
+        }
+        if (following.current !== run) return;
+        if (view) {
+          misses = 0;
+          apply(view, scanAssets);
+          if (view.status === "done" || view.status === "cancelled") {
+            setScan({
+              assets: scanAssets,
+              entries,
+              chains: chainKeys,
+              at,
+              cancelled: view.status === "cancelled",
+              rateLimited: false,
+              lost: false,
+            });
+            setPhase("done");
+            return;
+          }
+        } else misses += 1;
+        await sleep(Math.min(10_000, POLL_MS * (1 + misses)));
+      }
+    },
+    [apply],
+  );
+
+  // After a refresh: find this tab's scan again (sessionStorage is outside React, so read it after the first render).
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const saved = readSaved();
+      if (!saved) return;
+      const restored = parseList(saved.text);
+      setText(saved.text);
+      setSelected(saved.selected);
+      setTokens(saved.tokens);
+      const chainKeys = chains.filter((c) => saved.selected.includes(c.key)).map((c) => c.key);
+      const scanAssets = [nativeAsset(chains.filter((c) => saved.selected.includes(c.key))), ...saved.tokens];
+      prepare(restored.entries, chainKeys, scanAssets);
+      setJob({ id: saved.jobId, status: "starting", position: null, startsIn: null });
+      setPhase("scanning");
+      void follow(saved.jobId, restored.entries, chainKeys, scanAssets, new Date(saved.at));
+    }, 0);
+    return () => clearTimeout(timer);
+    // Only after the first render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function startScan() {
+    if (!canScan && phase !== "done") return;
+    setNotice(null);
+    const scanAssets = assets;
+    const entries = parsed.entries;
+    const chainKeys = activeChains.map((c) => c.key);
+    const body = {
+      chains: chainKeys,
+      addresses: entries.map((e) => e.address),
+      tokens: Object.fromEntries(
+        chainKeys.map((chain) => [
+          chain,
+          scanAssets.filter((a) => a.key !== "native" && a.chains[chain]).map((a) => a.chains[chain]!.address),
+        ]),
+      ),
+    };
+    let result: CreateResult | null = null;
+    try {
+      const response = await fetch("/api/v1/batch-scans", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const json = (await response.json()) as { ok: boolean; data?: CreateResult; error?: { code: string } };
+      if (json.ok && json.data) result = json.data;
+      else if (json.error?.code === "RATE_LIMITED") return setNotice({ text: s.error.rateLimited });
+    } catch {
+      // Shown below.
+    }
+    if (!result) return setNotice({ text: s.refused.failed });
+    if (result.refused === "busy") return setNotice({ text: s.refused.busy });
+    if (result.refused === "too-many") return setNotice({ text: fill(s.refused.tooMany, { max: result.maxWallets }) });
+    if (result.refused === "daily-limit") {
+      return setNotice({
+        text: fill(s.refused.daily, { limit: new Intl.NumberFormat(locale).format(result.dailyWallets) }),
+      });
+    }
+    if (result.refused === "active") return setNotice({ text: s.refused.active, stopJob: result.jobId });
+    const at = new Date();
+    writeSaved({ jobId: result.jobId, text, selected, tokens, at: at.toISOString() });
+    prepare(entries, chainKeys, scanAssets);
+    setJob({ id: result.jobId, status: "starting", position: null, startsIn: null });
+    setScan(null);
+    setPhase("scanning");
+    void follow(result.jobId, entries, chainKeys, scanAssets, at);
   }
 
-  async function retryRow(row: ScanRow) {
+  async function control(action: "pause" | "resume" | "cancel", id = job.id) {
+    try {
+      await fetch(`/api/v1/batch-scans/${id}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+    } catch {
+      // The next progress answer shows the real state.
+    }
+    if (action === "cancel" && id !== job.id) setNotice(null);
+  }
+
+  /** One row again (old single-batch API), for rows still unread after the scan. */
+  async function retryRows(list: ScanRow[]) {
     if (!scan) return;
-    const controller = new AbortController();
-    const result = await request(row.chain, [row.entry], scan.assets, !prices[row.chain], controller.signal);
-    if (result.ok && result.data.prices) setPrices((p) => ({ ...p, [row.chain]: result.data.prices! }));
-    apply(row.chain, [row.entry], result, setRows);
+    const byChain = new Map<string, ScanRow[]>();
+    for (const row of list) byChain.set(row.chain, [...(byChain.get(row.chain) ?? []), row]);
+    for (const [chain, chainRows] of byChain) {
+      for (let i = 0; i < chainRows.length; i += 100) {
+        const part = chainRows.slice(i, i + 100);
+        const tokenAssets = scan.assets.filter((a) => a.key !== "native" && a.chains[chain]);
+        try {
+          const response = await fetch("/api/v1/batch-balances", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              chain,
+              addresses: part.map((r) => r.entry.address),
+              tokens: tokenAssets.map((a) => a.chains[chain]!.address),
+            }),
+          });
+          const json = (await response.json()) as BatchResponse;
+          if (!json.ok || !json.data) continue;
+          const data = json.data;
+          setRows((current) =>
+            current.map((row) => {
+              if (row.chain !== chain) return row;
+              const read = data.rows.find((r) => r.address.toLowerCase() === row.entry.address.toLowerCase());
+              if (!read) return row;
+              const balances: ScanRow["balances"] = { ...row.balances, native: read.native };
+              tokenAssets.forEach((asset, t) => (balances[asset.key] = read.tokens[t] ?? null));
+              return { ...row, status: "ok", type: read.type, balances, block: data.block };
+            }),
+          );
+        } catch {
+          // Stays "still being read".
+        }
+      }
+    }
   }
 
-  if (phase === "done" && scan) {
+  const scanChains = scan ? chains.filter((c) => scan.chains.includes(c.key)) : activeChains;
+  const assetCount = Object.fromEntries(
+    scanChains.map((c) => [
+      c.key,
+      (scan?.assets ?? assets).filter((a) => a.key === "native" || a.chains[c.key]).length,
+    ]),
+  );
+
+  if ((phase === "done" && scan) || phase === "scanning") {
+    const shownAssets = scan?.assets ?? assets;
     return (
-      <ResultsView
-        s={s}
-        locale={locale}
-        chains={chains}
-        rows={rows}
-        assets={scan.assets}
-        prices={prices}
-        entries={scan.entries}
-        scannedAt={scan.at}
-        cancelled={scan.cancelled}
-        rateLimited={scan.rateLimited}
-        addressPathPrefix={addressPathPrefix}
-        onEdit={() => setPhase("input")}
-        onScanAgain={() => void startScan()}
-        onRetry={(row) => void retryRow(row)}
-      />
+      <div className="flex flex-col gap-4">
+        {phase === "scanning" && (
+          <ScanProgress
+            s={s}
+            locale={locale}
+            chains={scanChains}
+            wallets={parsed.entries.length}
+            assets={assetCount}
+            status={job.status}
+            position={job.position}
+            startsIn={job.startsIn}
+            progress={progress}
+            onPause={() => void control("pause")}
+            onResume={() => void control("resume")}
+            onCancel={() => void control("cancel")}
+          />
+        )}
+        <ResultsView
+          s={s}
+          locale={locale}
+          chains={chains}
+          rows={rows}
+          assets={shownAssets}
+          prices={prices}
+          entries={scan?.entries ?? parsed.entries}
+          scannedAt={scan?.at ?? new Date()}
+          cancelled={scan?.cancelled ?? false}
+          rateLimited={false}
+          lost={scan?.lost ?? false}
+          running={phase === "scanning"}
+          progress={progress}
+          addressPathPrefix={addressPathPrefix}
+          onEdit={() => {
+            following.current += 1;
+            writeSaved(null);
+            setPhase("input");
+          }}
+          onScanAgain={() => void startScan()}
+          onRetry={(row) => void retryRows([row])}
+          onRetryAll={(list) => void retryRows(list)}
+        />
+      </div>
     );
   }
 
@@ -288,19 +489,7 @@ export function BatchBalanceScanner({
 
       <div className="flex flex-col gap-3 rounded-2xl border bg-card p-4 sm:flex-row sm:items-center sm:p-5">
         <div className="min-w-0 flex-1">
-          {phase === "scanning" ? (
-            <>
-              <p className="font-semibold" role="status">
-                {fill(s.scanning, progress)}
-              </p>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-primary transition-all"
-                  style={{ width: `${progress.total ? (progress.done / progress.total) * 100 : 0}%` }}
-                />
-              </div>
-            </>
-          ) : canScan ? (
+          {canScan ? (
             <>
               <p className="font-semibold">
                 {fill(s.ready, {
@@ -309,33 +498,49 @@ export function BatchBalanceScanner({
                   assets: assets.length,
                 })}
               </p>
-              <p className="text-sm text-muted-foreground">{fill(s.estimate, { requests })}</p>
+              <p className="text-sm text-muted-foreground">
+                {fill(s.estimateTime, {
+                  balances: new Intl.NumberFormat(locale).format(balances),
+                  time:
+                    seconds < 60
+                      ? s.estimateUnderMinute
+                      : fill(s.estimateMinutes, { minutes: Math.ceil(seconds / 60) }),
+                })}
+              </p>
             </>
           ) : (
             <p className="text-sm text-muted-foreground">{s.readyNone}</p>
           )}
         </div>
-        {phase === "scanning" ? (
-          <button
-            type="button"
-            onClick={() => abort.current?.abort()}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border px-5 font-semibold hover:border-primary"
-          >
-            <X className="size-4" aria-hidden="true" />
-            {s.cancel}
-          </button>
-        ) : (
-          <button
-            type="button"
-            disabled={!canScan}
-            onClick={() => void startScan()}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Search className="size-4" aria-hidden="true" />
-            {s.scan}
-          </button>
-        )}
+        <button
+          type="button"
+          disabled={!canScan}
+          onClick={() => void startScan()}
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 font-semibold text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <Search className="size-4" aria-hidden="true" />
+          {s.scan}
+        </button>
       </div>
+
+      {notice && (
+        <div
+          role="alert"
+          className="flex flex-col gap-2 rounded-xl border border-high/40 bg-high/8 px-4 py-3 text-sm sm:flex-row sm:items-center"
+        >
+          <p className="flex-1">{notice.text}</p>
+          {notice.stopJob && (
+            <button
+              type="button"
+              onClick={() => void control("cancel", notice.stopJob)}
+              className="inline-flex h-9 items-center gap-2 rounded-lg border px-3 hover:border-primary"
+            >
+              <X className="size-4" aria-hidden="true" />
+              {s.refused.stopOther}
+            </button>
+          )}
+        </div>
+      )}
 
       <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
         <li className="flex items-center gap-2">

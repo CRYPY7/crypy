@@ -17,7 +17,8 @@
     "betaTranslation": "Traducción beta: aún no la ha revisado un hablante nativo",
     "languageNotReady": "Este idioma todavía se está traduciendo, así que por ahora ves el texto en inglés.",
     "beta": "Beta",
-    "betaSiteLabel": "CRYPY está en beta: las funciones pueden cambiar y los resultados pueden estar incompletos."
+    "betaSiteLabel": "CRYPY está en beta: las funciones pueden cambiar y los resultados pueden estar incompletos.",
+    "loading": "Cargando"
   },
   "nav": {
     "main": "Principal",
@@ -715,7 +716,7 @@
         },
         {
           "q": "¿Se guarda mi lista?",
-          "a": "No. Las direcciones se envían al servidor de CRYPY solo para leer sus saldos y no se guardan ni se registran. Las etiquetas nunca salen de tu navegador, y la lista nunca se pone en la dirección de la página."
+          "a": "Solo mientras se escanea. Las direcciones se guardan en la memoria del servidor durante el escaneo y se borran como máximo 1 hora después de terminar; nunca se registran ni se escriben en disco. Las etiquetas nunca salen de tu navegador y la lista nunca se pone en la dirección de la página."
         },
         {
           "q": "¿De dónde salen los saldos?",
@@ -723,7 +724,7 @@
         },
         {
           "q": "¿Cuántas direcciones puedo revisar?",
-          "a": "Hasta 500 direcciones en hasta 2 cadenas con hasta 6 activos por análisis. Las listas muy grandes, las listas guardadas y los análisis programados están previstos para más adelante."
+          "a": "Hasta 500 direcciones por escaneo, en cualquiera de las 5 cadenas, con la moneda nativa y hasta 5 tokens. Listas más grandes, listas guardadas y escaneos programados llegarán más adelante."
         },
         {
           "q": "¿Por qué una dirección aparece como contrato?",
@@ -780,6 +781,7 @@
         "CRYPY nunca pide, recopila ni guarda frases semilla, frases de recuperación ni claves privadas. Ninguna página ni mensaje de CRYPY te las pedirá jamás.",
         "Las direcciones, tokens y hashes de transacción que consultas son datos públicos de la blockchain. Para responder, el servidor de CRYPY consulta a proveedores de datos de blockchain (como Alchemy, Infura, Ankr, dRPC y nodos públicos) y a servicios de seguridad (GoPlus, Sourcify). Estas consultas salen del servidor de CRYPY, no de tu navegador, así que los proveedores no ven tu dirección IP. CRYPY no guarda un registro de quién consultó qué; los resultados se guardan en caché por poco tiempo para que el sitio sea rápido.",
         "Sin una cuenta, tu idioma, tema, lista de portafolio, elementos vistos recientemente y preferencias de visualización se guardan solo en tu propio navegador. Las direcciones del portafolio se envían una por una para consultar sus saldos y no se guardan.",
+        "Cuando escaneas una lista en el Escáner de saldos en lote, sus direcciones se guardan en la memoria del servidor mientras dura el escaneo y se borran como máximo 1 hora después de terminar. Nunca se registran ni se escriben en disco, y las etiquetas nunca salen de tu navegador.",
         "Cookies: CRYPY usa solo las cookies que necesita para funcionar: NEXT_LOCALE (tu idioma), crypy_chains (qué cadenas analizar) y crypy_session (solo después de iniciar sesión). No hay cookies de publicidad ni de analítica, ni scripts de seguimiento. Cloudflare, que protege el sitio, puede poner su propia cookie de seguridad (como __cf_bm) para distinguir a las personas de los bots.",
         "Conectar una billetera es opcional. CRYPY solo lee tu dirección pública, y conectarla nunca te pide firmar nada. Si te conectas mediante WalletConnect, la conexión pasa por el servicio WalletConnect de Reown.",
         "Iniciar sesión con tu billetera es opcional y solo hace falta para el seguimiento y las alertas. Es un mensaje firmado, nunca una transacción. Luego CRYPY guarda la dirección de tu billetera, tu lista de seguimiento con sus etiquetas y opciones de alerta, tus horas de silencio y tu zona horaria, y un código de sesión (solo su huella). Si eliges guardar tu portafolio en tu cuenta, también se guardan sus direcciones y etiquetas.",
@@ -2527,7 +2529,7 @@
       "cancel": "Cancelar",
       "trust": {
         "public": "Solo direcciones públicas: nunca pide claves ni frases semilla",
-        "notStored": "Tu lista no se guarda ni se registra",
+        "notStored": "Tu lista nunca se registra y se borra de los servidores de CRYPY en menos de 1 hora",
         "noWallet": "Sin conectar tu billetera"
       },
       "complete": "Análisis completo",
@@ -2544,9 +2546,9 @@
         "withBalanceNote": "En al menos una cadena",
         "empty": "Direcciones vacías",
         "emptyNote": "Nada en las cadenas revisadas",
-        "failed": "Revisiones fallidas",
+        "failed": "Aún leyendo",
         "failedNone": "Ninguna",
-        "failedNote": "Se reintentaron una vez; reinténtalas abajo"
+        "failedNote": "CRYPY sigue intentándolo"
       },
       "noPrice": "sin precio confiable",
       "searchPlaceholder": "Buscar dirección o etiqueta",
@@ -2579,8 +2581,8 @@
       },
       "status": {
         "ok": "OK",
-        "failed": "Fallida",
-        "pending": "Sin leer"
+        "failed": "No leído",
+        "pending": "Aún leyendo"
       },
       "noLabel": "Sin etiqueta",
       "rowFailed": "No se pudo leer esta dirección en {chain}.",
@@ -2604,6 +2606,50 @@
         "type": "Tipo",
         "value": "Valor (USD)",
         "status": "Estado"
+      },
+      "estimateTime": "{balances} saldos por leer · {time}",
+      "estimateUnderMinute": "menos de un minuto",
+      "estimateMinutes": "unos {minutes} min",
+      "run": {
+        "heading": "Escaneando {wallets} billeteras",
+        "where": "En los servidores de CRYPY · sigue aunque recargues o cierres esta pestaña",
+        "overall": "{read} de {total} saldos leídos",
+        "usable": "Los resultados de abajo ya se pueden usar: ordena, copia o exporta cuando quieras",
+        "chains": "Cada cadena",
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "paused": "En pausa",
+        "starting": "Empezando…",
+        "queued": "Tu escaneo está en la fila: número {position}, empieza en unos {seconds} segundos",
+        "queuedNote": "Mucha gente está escaneando ahora. Deja esta pestaña abierta o vuelve más tarde: tu lugar se guarda 30 minutos.",
+        "blocks": "bloques {from}–{to}",
+        "block": "bloque {block}",
+        "notOn": "{symbols}: no está en {chain}",
+        "phase": {
+          "reading": "Leyendo",
+          "waiting": "Nodos ocupados, bajando el ritmo y reintentando · no se pierde nada",
+          "stalled": "Los nodos no responden desde hace un rato · CRYPY sigue intentándolo",
+          "cross-checking": "Verificando con otro nodo",
+          "done": "Listo",
+          "gave-up": "Se dejó de intentar tras 1 hora",
+          "cancelled": "Detenido"
+        }
+      },
+      "refused": {
+        "busy": "CRYPY está muy ocupado ahora y la fila está llena. Vuelve a intentarlo en unos minutos.",
+        "daily": "Hoy has escaneado {limit} billeteras en los servidores de CRYPY. El límite gratuito se reinicia a las 00:00 UTC.",
+        "tooMany": "Hasta {max} billeteras por escaneo. Divide la lista en partes más pequeñas.",
+        "active": "Ya tienes un escaneo en marcha, quizá en otra pestaña. Espera a que termine o detenlo aquí.",
+        "stopOther": "Detener ese escaneo",
+        "lost": "Este escaneo ya no está en los servidores de CRYPY (los resultados se guardan 1 hora después de terminar). Vuelve a escanear para obtener resultados nuevos.",
+        "failed": "No se pudo iniciar el escaneo. Vuelve a intentarlo."
+      },
+      "crossChecked": "{compared} billeteras verificadas con un segundo nodo: todas coinciden",
+      "crossCorrected": "{compared} billeteras verificadas con un segundo nodo: {corrected} corregidas tras una tercera lectura",
+      "stillReading": {
+        "title": "Aún se están leyendo {count} saldos",
+        "note": "Los nodos de {chains} dejaron de responder. Todo lo demás está completo. Estas filas dicen «Aún leyendo» y aparecen aparte en la exportación, para que nunca se confundan con billeteras vacías.",
+        "retry": "Intentarlo ahora"
       }
     },
     "token-security": {

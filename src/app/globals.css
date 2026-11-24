@@ -206,3 +206,52 @@ html:not([data-txview="advanced"]) .tx-advanced {
 :root:lang(ru) {
   --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* B-029 (board 59): page-change feedback, driven by components/layout/navigation-progress.tsx. */
+@layer components {
+  .nav-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 60;
+    height: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .nav-progress > div {
+    width: 0;
+  }
+  .nav-progress[data-state="loading"] {
+    opacity: 1;
+  }
+  .nav-progress[data-state="loading"] > div {
+    width: 85%;
+    transition: width 8s cubic-bezier(0.1, 0.7, 0.2, 1);
+  }
+  .nav-progress[data-state="finishing"] > div {
+    width: 100%;
+  }
+  html[data-navigating] #main {
+    opacity: 0.6;
+  }
+  [data-nav-pending]::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    margin-inline-start: auto;
+    border: 2px solid var(--color-primary);
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    animation: nav-spin 0.7s linear infinite;
+  }
+  [data-tab-item][data-nav-pending]::after {
+    position: absolute;
+    top: 4px;
+  }
+}
+
+@keyframes nav-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

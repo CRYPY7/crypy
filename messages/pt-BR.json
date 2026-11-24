@@ -17,7 +17,8 @@
     "betaTranslation": "Tradução beta: ainda não revisada por um falante nativo",
     "languageNotReady": "Este idioma ainda está sendo traduzido, então por enquanto você vê o texto em inglês.",
     "beta": "Beta",
-    "betaSiteLabel": "O CRYPY está em beta: os recursos podem mudar e os resultados podem estar incompletos."
+    "betaSiteLabel": "O CRYPY está em beta: os recursos podem mudar e os resultados podem estar incompletos.",
+    "loading": "Carregando"
   },
   "nav": {
     "main": "Principal",
@@ -715,7 +716,7 @@
         },
         {
           "q": "Minha lista fica guardada?",
-          "a": "Não. Os endereços são enviados ao servidor do CRYPY só para ler os saldos e não são guardados nem registrados. Os rótulos nunca saem do seu navegador, e a lista nunca vai para o endereço da página."
+          "a": "Só enquanto é escaneada. Os endereços ficam na memória do servidor durante o escaneamento e são apagados em até 1 hora depois do fim; nunca são registrados nem gravados em disco. Os rótulos nunca saem do seu navegador, e a lista nunca vai para o endereço da página."
         },
         {
           "q": "De onde vêm os saldos?",
@@ -723,7 +724,7 @@
         },
         {
           "q": "Quantos endereços posso verificar?",
-          "a": "Até 500 endereços em até 2 redes com até 6 ativos por análise. Listas muito grandes, listas salvas e análises agendadas estão previstas para depois."
+          "a": "Até 500 endereços por escaneamento, em qualquer uma das 5 redes, com a moeda nativa e até 5 tokens. Listas maiores, listas salvas e reescaneamentos agendados estão planejados para depois."
         },
         {
           "q": "Por que um endereço aparece como contrato?",
@@ -780,6 +781,7 @@
         "O CRYPY nunca pede, coleta ou guarda frases-semente, frases de recuperação ou chaves privadas. Nenhuma página ou mensagem do CRYPY vai pedir isso a você.",
         "Os endereços, tokens e hashes de transação que você pesquisa são dados públicos da blockchain. Para responder, o servidor do CRYPY consulta provedores de dados de blockchain (como Alchemy, Infura, Ankr, dRPC e nós públicos) e serviços de segurança (GoPlus, Sourcify). Essas consultas saem do servidor do CRYPY, não do seu navegador, então os provedores não veem o seu endereço IP. O CRYPY não guarda registro de quem pesquisou o quê; os resultados ficam em cache por pouco tempo para o site ser rápido.",
         "Sem conta, seu idioma, tema, lista de portfólio, itens vistos recentemente e preferências de exibição ficam salvos só no seu próprio navegador. Os endereços do portfólio são enviados um por vez para consultar os saldos e não são guardados.",
+        "Quando você escaneia uma lista no Scanner de saldos em lote, os endereços ficam na memória do servidor durante o escaneamento e são apagados em até 1 hora depois do fim. Nunca são registrados nem gravados em disco, e os rótulos nunca saem do seu navegador.",
         "Cookies: o CRYPY usa só os cookies de que precisa para funcionar: NEXT_LOCALE (seu idioma), crypy_chains (quais redes analisar) e crypy_session (só depois que você entra). Não há cookies de publicidade nem de análise, nem scripts de rastreamento. A Cloudflare, que protege o site, pode definir o próprio cookie de segurança (como __cf_bm) para diferenciar pessoas de robôs.",
         "Conectar uma carteira é opcional. O CRYPY só lê o seu endereço público, e conectar nunca pede que você assine nada. Se você conectar pelo WalletConnect, a conexão passa pelo serviço WalletConnect da Reown.",
         "Entrar com a sua carteira é opcional e só é necessário para o monitoramento e os alertas. É uma mensagem assinada, nunca uma transação. Depois disso, o CRYPY guarda o endereço da sua carteira, sua lista de monitoramento com rótulos e opções de alerta, seu horário de silêncio e fuso horário, e um código de sessão (só a impressão digital dele). Se você escolher manter o portfólio na sua conta, os endereços e rótulos dele também são guardados.",
@@ -2527,7 +2529,7 @@
       "cancel": "Cancelar",
       "trust": {
         "public": "Só endereços públicos: nunca pede chaves nem frases-semente",
-        "notStored": "Sua lista não é guardada nem registrada",
+        "notStored": "Sua lista nunca é registrada e é apagada dos servidores da CRYPY em até 1 hora",
         "noWallet": "Sem conectar a carteira"
       },
       "complete": "Análise concluída",
@@ -2544,9 +2546,9 @@
         "withBalanceNote": "Em pelo menos uma rede",
         "empty": "Endereços vazios",
         "emptyNote": "Nada nas redes verificadas",
-        "failed": "Verificações que falharam",
+        "failed": "Ainda lendo",
         "failedNone": "Nenhuma",
-        "failedNote": "Tentadas de novo uma vez; tente de novo abaixo"
+        "failedNote": "A CRYPY continua tentando"
       },
       "noPrice": "sem preço confiável",
       "searchPlaceholder": "Pesquisar endereço ou rótulo",
@@ -2579,8 +2581,8 @@
       },
       "status": {
         "ok": "OK",
-        "failed": "Falhou",
-        "pending": "Não lido"
+        "failed": "Não lido",
+        "pending": "Ainda lendo"
       },
       "noLabel": "Sem rótulo",
       "rowFailed": "Não foi possível ler este endereço na {chain}.",
@@ -2604,6 +2606,50 @@
         "type": "Tipo",
         "value": "Valor (USD)",
         "status": "Status"
+      },
+      "estimateTime": "{balances} saldos para ler · {time}",
+      "estimateUnderMinute": "menos de um minuto",
+      "estimateMinutes": "cerca de {minutes} min",
+      "run": {
+        "heading": "Escaneando {wallets} carteiras",
+        "where": "Nos servidores da CRYPY · continua mesmo se você recarregar ou fechar esta aba",
+        "overall": "{read} de {total} saldos lidos",
+        "usable": "Os resultados abaixo já podem ser usados: ordene, copie ou exporte quando quiser",
+        "chains": "Cada rede",
+        "pause": "Pausar",
+        "resume": "Retomar",
+        "paused": "Pausado",
+        "starting": "Iniciando…",
+        "queued": "Seu escaneamento está na fila: número {position}, começa em cerca de {seconds} segundos",
+        "queuedNote": "Muita gente está escaneando agora. Deixe esta aba aberta ou volte mais tarde: seu lugar fica guardado por 30 minutos.",
+        "blocks": "blocos {from}–{to}",
+        "block": "bloco {block}",
+        "notOn": "{symbols}: não existe em {chain}",
+        "phase": {
+          "reading": "Lendo",
+          "waiting": "Nós ocupados, diminuindo o ritmo e tentando de novo · nada se perde",
+          "stalled": "Os nós não respondem há algum tempo · a CRYPY continua tentando",
+          "cross-checking": "Conferindo com outro nó",
+          "done": "Concluído",
+          "gave-up": "Parou de tentar após 1 hora",
+          "cancelled": "Interrompido"
+        }
+      },
+      "refused": {
+        "busy": "A CRYPY está muito ocupada agora e a fila está cheia. Tente de novo em alguns minutos.",
+        "daily": "Você escaneou {limit} carteiras nos servidores da CRYPY hoje. O limite gratuito é renovado às 00:00 UTC.",
+        "tooMany": "Até {max} carteiras por escaneamento. Divida a lista em partes menores.",
+        "active": "Você já tem um escaneamento em andamento, talvez em outra aba. Espere terminar ou interrompa-o aqui.",
+        "stopOther": "Interromper esse escaneamento",
+        "lost": "Este escaneamento não está mais nos servidores da CRYPY (os resultados ficam guardados por 1 hora depois do fim). Escaneie de novo para ter resultados novos.",
+        "failed": "Não foi possível iniciar o escaneamento. Tente de novo."
+      },
+      "crossChecked": "{compared} carteiras conferidas com um segundo nó: todas iguais",
+      "crossCorrected": "{compared} carteiras conferidas com um segundo nó: {corrected} corrigidas após uma terceira leitura",
+      "stillReading": {
+        "title": "{count} saldos ainda estão sendo lidos",
+        "note": "Os nós de {chains} pararam de responder. Todo o resto está completo. Essas linhas dizem “Ainda lendo” e aparecem separadas na exportação, para nunca serem confundidas com carteiras vazias.",
+        "retry": "Tentar agora"
       }
     },
     "token-security": {

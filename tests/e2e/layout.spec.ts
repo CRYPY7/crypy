@@ -96,3 +96,21 @@ test("entity pages show breadcrumbs and appear under recently viewed", async ({ 
   await recent.getByRole("button", { name: "Clear" }).click();
   await expect(page.getByTestId("recent")).toHaveCount(0);
 });
+
+test("a slow page change shows the clicked item's spinner and the top bar (B-029)", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the sidebar is desktop-only; the bottom tabs use the same code");
+  await page.goto("/en/tools");
+  // Make the next page slow to arrive.
+  await page.route("**/en/tools/gas-tracker**", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1_500));
+    await route.continue();
+  });
+  const link = page.locator('#tools-sidebar a[data-sidebar-href="/en/tools/gas-tracker"]');
+  await link.click();
+  await expect(link).toHaveAttribute("data-nav-pending", "");
+  await expect(page.locator('.nav-progress[data-state="loading"]')).toBeAttached();
+  await expect(page.locator("html")).toHaveAttribute("data-navigating", "on");
+  await expect(page).toHaveURL(/\/en\/tools\/gas-tracker/, { timeout: 30_000 });
+  await expect(page.locator(".nav-progress[data-state='loading']")).toHaveCount(0, { timeout: 10_000 });
+  await expect(link).not.toHaveAttribute("data-nav-pending", "");
+});

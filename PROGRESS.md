@@ -41,9 +41,76 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0 and S1 started 2026-11-24; new features paused until S6                    |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Batch scanner that never shows a failed row, and loading feedback (S2 Part A, B-028, B-029; designs approved 2026-11-24, boards 55–59)
+
+**Cause found (reproduced here):**
+
+- The page sent one request per 100 wallets per chain: 25 for the owner's scan. Our limit is 40 a minute per visitor.
+- A second scan within a minute had 10 of 25 batches refused ("too many requests"). The page gave up on any wait over 10 s, so those rows showed as failed.
+- On the server, viem split every batch into 1 KB multicall pieces: about 100 node requests per batch, around 800 per scan. That made free nodes refuse too.
+
+**Built:**
+
+- **Scan engine** (`lib/batch-scan/engine.ts`, plain code, shared with the browser mode in Part A.2):
+  - Chunks go to the healthiest node.
+  - "Slow down" answers rest that node for as long as it asks.
+  - Timeouts and "too big" answers split the chunk, down to single wallets, and the node's chunk size is remembered.
+  - Empty or wrong answers count as failures.
+  - Cells a node couldn't read are read elsewhere, up to 3 times.
+  - When every node is down, the chain waits, says "stalled" after 10 minutes and gives up only after 1 hour.
+  - At the end a sample (2%, at least 5 wallets) is read again by a different node at the same block. A third reading settles any disagreement and corrects the row.
+  - A pruned block is read at the latest block instead, and the block range is reported.
+- **Server readers** (`server/batch-scan/readers.ts`):
+  - One reader per node provider; Alchemy is excluded, so its units stay with pages.
+  - At most 2 scan requests at once per provider. Extra providers stop at 40% of their daily budget, so pages keep theirs.
+  - One multicall request per chunk instead of 1 KB pieces.
+  - A multicall whose every call failed is a failed read, not unreadable balances.
+- **Scan jobs** (`server/batch-scan/jobs.ts`, `service.ts`):
+  - At most `SCAN_MAX_RUNNING` (4) scans at once; up to `SCAN_MAX_QUEUED` (50) wait in line, with their place and expected start.
+  - One scan per visitor at a time. `SCAN_MAX_WALLETS` (1,000) per scan, `SCAN_DAILY_WALLETS` (5,000) per visitor per UTC day.
+  - Tokens are checked per chain first ("not on this chain"). Prices are read separately, with retries.
+  - Results are kept 1 hour after the scan ends; an abandoned place in line is dropped after 30 minutes.
+  - Lists live in memory only, never logged or written to disk.
+  - The outcome of each scan goes into "What visitors got".
+- **API:**
+  - `POST /api/v1/batch-scans` (same-site, 10 starts a minute) answers with the scan's id, or why it can't start: busy, daily limit, too many, already running.
+  - `GET /api/v1/batch-scans/{id}?since=N` (progress plus new rows) and `POST …/{id}` (pause, resume, cancel), 300 a minute.
+- **Page:**
+  - Before the scan: number of balances and the expected time.
+  - While running (board 56/58): overall and per-chain progress with plain states ("Nodes busy, slowing down and retrying · nothing lost"), pause and cancel, and results usable at once.
+  - The scan survives a refresh (sessionStorage in this tab; labels never leave the browser).
+  - Finished (board 57): block ranges per chain and the cross-check result. "Checks that failed" became "Still being read". The rare-outage box has "Try these now".
+  - Refusals are shown as messages, never errors; when a scan is already running, "Stop that scan" is offered.
+- **Privacy page and FAQ (7 languages):** lists are held in memory while scanning and deleted within 1 hour. The outdated "2 chains" answer was corrected.
+- **Not built yet:** the "In my browser" choice on board 55 is Part A.2, next. Until then the page shows only the server scan.
+- **Loading feedback (B-029, board 59):**
+  - The clicked sidebar item or bottom tab shows a spinner.
+  - After 150 ms, a thin bar runs along the top and the page fades a little. Screen readers hear "Loading".
+  - Sidebar pages are prefetched when the pointer rests on them, focus reaches them or a finger touches them. Result pages are never prefetched.
+  - Measured here, tool pages answer in 10–150 ms. The 2–5 s delays on the live server most likely come from pages not being prefetched (sidebar links had prefetch off) while the server was busy (Meta's crawler, updates). Server-side fixes continue in S2 and S4.
+
+**Load tests (this workspace, public nodes only, no API keys):**
+
+| Test                                                                              | Result                                                                                                                                                       |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Owner's scan (500 wallets × 5 chains × 6 assets), 10 times in a row, same visitor | 10 of 10 complete, 0 unread, about 2.1 s each, every cross-check matched                                                                                     |
+| 10,000 wallets on BNB Chain                                                       | complete in 25 s, 0 unread                                                                                                                                   |
+| 10,000 wallets × 5 chains × 6 assets (300,000 balances), twice                    | complete in 25–32 s, 0 unread. The first try found 800 unread rows on Arbitrum (whole failed multicalls reported as unreadable); fixed, see "Server readers" |
+| 100 scans at once (500 × 5 × 6 each), with pages measured meanwhile               | all 100 complete, 0 unread, the last one ended after 85 s (in line). Pages: p50 12 ms, p95 157 ms (idle: 10 / 44 ms)                                         |
+
+This workspace has more CPU than the 1-vCPU droplet: the limits stay as set until the same tests run on the server.
+
+**Checks:**
+
+- Typecheck, lint, Prettier and the i18n check are clean.
+- Unit: 503 passed, 73 skipped. New: engine 12 (slow down, splitting, wrong answers, unread cells, outage, stall, correction, block range, cancel, give up, pause, sample), jobs 6 (end to end, line, one at a time, daily allowance, pause/cancel, 1-hour retention), plus a live test (500 × 5 chains × 6 assets, all read, cross-checks matched).
+- Build passed. CSS stays inside the 80 KB budget at 80.2 KB (a first version was at 80.5 KB and was slimmed).
+- Browser: 264 passed, 12 skipped, 0 failed. Before that, a mobile run failed once on a hidden duplicate label in my new test; fixed. New tests: server scan and finding it again after a refresh, the offer to stop a running scan, and the spinner plus top bar on a slow page change.
+
 ## Cloudflare traffic check and B-010 (2026-11-24)
 
 **Who visits.** Cloudflare showed 49k requests and 31k "visits" a day. Most are bots; real people are likely a few hundred page views a day.
+
 - **Meta's AI crawler** (`meta-externalagent/1.1`, ASN 32934) made about 30k requests in 7 days. It opened address pages in every language, even though robots.txt disallows them.
   - The owner blocked Meta-ExternalAgent in AI Crawl Control.
   - robots.txt now also lists each language's result pages explicitly (`/en/address/`, `/zh-CN/tx/` …), besides the `/*/address/` wildcards. Test: tests/unit/robots.test.ts.
@@ -57,6 +124,7 @@ Last updated: 2026-11-24
   - B-027: prefetch load
 
 **B-010 fixed: a real token reported as "not a token".**
+
 - Cause: one node answered empty code, or failed the decimals/supply read, and that single answer was final.
 - Fix: before concluding "not a token", token security asks up to 3 other providers at once (`token-recheck.ts`, cooling-down providers skipped, 4 s limit). The first full answer is used. A bad node can't invent a valid answer, so any full answer is trusted.
 - Real wallets and non-token contracts still return "not a token", only after the other providers agree.

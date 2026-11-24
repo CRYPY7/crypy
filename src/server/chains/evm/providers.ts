@@ -171,6 +171,11 @@ export function budgetExhausted(provider: Provider, ordinary = false): boolean {
   return used.units >= limit;
 }
 
+/** Requests this provider's account has taken today (the budget of extra providers is counted in requests). */
+export function requestsToday(provider: Provider): number {
+  return usageFor(budgetKey(provider)).requests;
+}
+
 export function recordUsage(provider: Provider, method: string): void {
   const used = usageFor(budgetKey(provider));
   used.requests += 1;
@@ -563,7 +568,7 @@ export function rankedFallback(providers: Provider[]): Transport {
 export type AlchemyPace = "skip" | "wait";
 const ALCHEMY_MAX_WAIT_MS = 3_000;
 
-function isTooManyRequests(error: unknown): boolean {
+export function isTooManyRequests(error: unknown): boolean {
   return error instanceof Error && error.name === "HttpRequestError" && (error as { status?: number }).status === 429;
 }
 

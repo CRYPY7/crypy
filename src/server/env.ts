@@ -37,6 +37,14 @@ const schema = z.object({
   ALCHEMY_DAILY_CU: z.coerce.number().int().positive().optional(),
   /** Requests per day per extra provider. */
   RPC_DAILY_REQUESTS: z.coerce.number().int().positive().default(50_000),
+  /**
+   * Batch scans on the server (BATCH_SCANNER_DESIGN.md §7). Limits are settings so plans can differ later: scans
+   * running at once, scans waiting in line, wallets per scan, wallets per visitor per UTC day.
+   */
+  SCAN_MAX_RUNNING: z.coerce.number().int().positive().default(4),
+  SCAN_MAX_QUEUED: z.coerce.number().int().positive().default(50),
+  SCAN_MAX_WALLETS: z.coerce.number().int().positive().default(1_000),
+  SCAN_DAILY_WALLETS: z.coerce.number().int().positive().default(5_000),
   /** M8: PostgreSQL for accounts and the watchlist (production). Without it, PGlite keeps a local database. */
   DATABASE_URL: z
     .string()
@@ -92,6 +100,10 @@ const parsed = schema.safeParse({
   ALCHEMY_MONTHLY_CU: process.env.ALCHEMY_MONTHLY_CU || undefined,
   ALCHEMY_DAILY_CU: process.env.ALCHEMY_DAILY_CU || undefined,
   RPC_DAILY_REQUESTS: process.env.RPC_DAILY_REQUESTS || undefined,
+  SCAN_MAX_RUNNING: process.env.SCAN_MAX_RUNNING || undefined,
+  SCAN_MAX_QUEUED: process.env.SCAN_MAX_QUEUED || undefined,
+  SCAN_MAX_WALLETS: process.env.SCAN_MAX_WALLETS || undefined,
+  SCAN_DAILY_WALLETS: process.env.SCAN_DAILY_WALLETS || undefined,
   DATABASE_URL: process.env.DATABASE_URL || undefined,
   PGLITE_DIR: process.env.PGLITE_DIR || undefined,
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || undefined,

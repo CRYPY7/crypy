@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 import { locale as localeParam } from "next/root-params";
@@ -8,6 +9,7 @@ import { Providers } from "@/components/providers";
 import { LanguageNotice, SiteFooter, SiteHeader } from "@/components/layout/site-chrome";
 import { ToolsSidebar, sidebarInitScript } from "@/components/layout/sidebar";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
+import { NavigationProgress } from "@/components/layout/navigation-progress";
 import { ToolsDialogLoader } from "@/components/layout/tools-dialog-loader";
 import { ToolIcon } from "@/components/tool-icon";
 import { siteUrl } from "@/config/env";
@@ -107,6 +109,9 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
             >
               {t("common.skipToContent")}
             </a>
+            <Suspense fallback={null}>
+              <NavigationProgress label={t("common.loading")} />
+            </Suspense>
             {/* Phones and tablets: notice above the header. Desktop: inside the content column, so only the
                 fixed header sits above the sidebar. */}
             <div className="lg:hidden">

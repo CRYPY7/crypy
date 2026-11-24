@@ -17,7 +17,8 @@
     "betaTranslation": "Bản dịch beta: chưa được người bản ngữ kiểm tra",
     "languageNotReady": "Ngôn ngữ này vẫn đang được dịch, nên tạm thời bạn đang xem tiếng Anh.",
     "beta": "Beta",
-    "betaSiteLabel": "CRYPY đang ở giai đoạn beta: tính năng có thể thay đổi và kết quả có thể chưa đầy đủ."
+    "betaSiteLabel": "CRYPY đang ở giai đoạn beta: tính năng có thể thay đổi và kết quả có thể chưa đầy đủ.",
+    "loading": "Đang tải"
   },
   "nav": {
     "main": "Chính",
@@ -715,7 +716,7 @@
         },
         {
           "q": "Danh sách của tôi có được lưu không?",
-          "a": "Không. Địa chỉ chỉ được gửi tới máy chủ CRYPY để đọc số dư và không được lưu hay ghi lại. Nhãn không bao giờ rời khỏi trình duyệt, và danh sách không bao giờ xuất hiện trong địa chỉ trang."
+          "a": "Chỉ trong lúc quét. Các địa chỉ được giữ trong bộ nhớ máy chủ khi đang quét và bị xóa trong vòng 1 giờ sau khi xong; không bao giờ được ghi log hay ghi ra đĩa. Nhãn không bao giờ rời khỏi trình duyệt của bạn, và danh sách không bao giờ được đưa vào địa chỉ trang."
         },
         {
           "q": "Số dư lấy từ đâu?",
@@ -723,7 +724,7 @@
         },
         {
           "q": "Tôi kiểm tra được bao nhiêu địa chỉ?",
-          "a": "Tối đa 500 địa chỉ trên tối đa 2 mạng với tối đa 6 tài sản mỗi lần quét. Danh sách rất lớn, danh sách đã lưu và quét theo lịch được lên kế hoạch cho sau này."
+          "a": "Tối đa 500 địa chỉ mỗi lần quét, trên bất kỳ chuỗi nào trong 5 chuỗi, gồm đồng gốc và tối đa 5 token. Danh sách lớn hơn, danh sách đã lưu và quét lại theo lịch sẽ có sau."
         },
         {
           "q": "Vì sao một địa chỉ hiện là hợp đồng?",
@@ -780,6 +781,7 @@
         "CRYPY không bao giờ yêu cầu, thu thập hay lưu cụm từ khôi phục, cụm từ bí mật hoặc khóa riêng. Không trang hay tin nhắn nào của CRYPY sẽ hỏi bạn những thứ này.",
         "Địa chỉ, token và hash giao dịch bạn tìm là dữ liệu blockchain công khai. Để trả lời, máy chủ CRYPY truy vấn các nhà cung cấp dữ liệu blockchain (như Alchemy, Infura, Ankr, dRPC và node công khai) và dịch vụ bảo mật (GoPlus, Sourcify). Các truy vấn này đi từ máy chủ CRYPY, không phải từ trình duyệt của bạn, nên nhà cung cấp không thấy địa chỉ IP của bạn. CRYPY không ghi lại ai đã tìm gì; kết quả được lưu đệm ngắn hạn để trang chạy nhanh.",
         "Khi không có tài khoản, ngôn ngữ, giao diện, danh sách danh mục, mục đã xem gần đây và tùy chọn hiển thị chỉ được lưu trong trình duyệt của bạn. Địa chỉ trong danh mục được gửi từng cái để tra số dư và không được lưu.",
+        "Khi bạn quét một danh sách trong Quét số dư hàng loạt, các địa chỉ chỉ được giữ trong bộ nhớ máy chủ khi đang quét và bị xóa trong vòng 1 giờ sau khi xong. Chúng không bao giờ được ghi log hay ghi ra đĩa, và nhãn không bao giờ rời khỏi trình duyệt của bạn.",
         "Cookie: CRYPY chỉ dùng các cookie cần thiết để hoạt động: NEXT_LOCALE (ngôn ngữ), crypy_chains (mạng cần quét) và crypy_session (chỉ sau khi bạn đăng nhập). Không có cookie quảng cáo, phân tích hay tập lệnh theo dõi. Cloudflare, dịch vụ bảo vệ trang, có thể đặt cookie bảo mật riêng (như __cf_bm) để phân biệt người với bot.",
         "Kết nối ví là tùy chọn. CRYPY chỉ đọc địa chỉ công khai của bạn, và kết nối không bao giờ yêu cầu bạn ký gì. Nếu bạn kết nối qua WalletConnect, kết nối đi qua dịch vụ WalletConnect của Reown.",
         "Đăng nhập bằng ví là tùy chọn và chỉ cần cho danh sách theo dõi và cảnh báo. Đó là một tin nhắn được ký, không bao giờ là giao dịch. Sau đó CRYPY lưu địa chỉ ví, danh sách theo dõi kèm nhãn và tùy chọn cảnh báo, giờ yên lặng và múi giờ, cùng một mã phiên (chỉ lưu dấu vân tay của mã). Nếu bạn chọn giữ danh mục trong tài khoản, địa chỉ và nhãn của danh mục cũng được lưu.",
@@ -2527,7 +2529,7 @@
       "cancel": "Hủy",
       "trust": {
         "public": "Chỉ địa chỉ công khai: không bao giờ hỏi khóa hay cụm từ khôi phục",
-        "notStored": "Danh sách của bạn không được lưu hay ghi lại",
+        "notStored": "Danh sách của bạn không bao giờ được ghi log và được xóa khỏi máy chủ CRYPY trong vòng 1 giờ",
         "noWallet": "Không cần kết nối ví"
       },
       "complete": "Đã quét xong",
@@ -2544,9 +2546,9 @@
         "withBalanceNote": "Trên ít nhất một mạng",
         "empty": "Địa chỉ trống",
         "emptyNote": "Không có gì trên các mạng đã kiểm tra",
-        "failed": "Lần kiểm tra lỗi",
+        "failed": "Vẫn đang đọc",
         "failedNone": "Không có",
-        "failedNote": "Đã thử lại một lần; thử lại bên dưới"
+        "failedNote": "CRYPY vẫn tiếp tục thử"
       },
       "noPrice": "không có giá đáng tin cậy",
       "searchPlaceholder": "Tìm địa chỉ hoặc nhãn",
@@ -2579,8 +2581,8 @@
       },
       "status": {
         "ok": "OK",
-        "failed": "Lỗi",
-        "pending": "Chưa đọc"
+        "failed": "Chưa đọc được",
+        "pending": "Vẫn đang đọc"
       },
       "noLabel": "Không có nhãn",
       "rowFailed": "Không đọc được địa chỉ này trên {chain}.",
@@ -2604,6 +2606,50 @@
         "type": "Loại",
         "value": "Giá trị (USD)",
         "status": "Trạng thái"
+      },
+      "estimateTime": "{balances} số dư cần đọc · {time}",
+      "estimateUnderMinute": "chưa đến một phút",
+      "estimateMinutes": "khoảng {minutes} phút",
+      "run": {
+        "heading": "Đang quét {wallets} ví",
+        "where": "Trên máy chủ của CRYPY · vẫn tiếp tục nếu bạn tải lại hoặc đóng tab này",
+        "overall": "Đã đọc {read} / {total} số dư",
+        "usable": "Kết quả bên dưới đã dùng được: sắp xếp, sao chép hoặc xuất bất cứ lúc nào",
+        "chains": "Từng chuỗi",
+        "pause": "Tạm dừng",
+        "resume": "Tiếp tục",
+        "paused": "Đã tạm dừng",
+        "starting": "Đang bắt đầu…",
+        "queued": "Lượt quét của bạn đang xếp hàng: số {position}, bắt đầu sau khoảng {seconds} giây",
+        "queuedNote": "Hiện có nhiều người đang quét. Hãy để tab này mở hoặc quay lại sau: chỗ của bạn được giữ 30 phút.",
+        "blocks": "khối {from}–{to}",
+        "block": "khối {block}",
+        "notOn": "{symbols}: không có trên {chain}",
+        "phase": {
+          "reading": "Đang đọc",
+          "waiting": "Nút mạng đang bận, đang giảm tốc và thử lại · không mất dữ liệu nào",
+          "stalled": "Các nút mạng đã không phản hồi một lúc · CRYPY vẫn tiếp tục thử",
+          "cross-checking": "Đang đối chiếu",
+          "done": "Xong",
+          "gave-up": "Đã ngừng thử sau 1 giờ",
+          "cancelled": "Đã dừng"
+        }
+      },
+      "refused": {
+        "busy": "CRYPY hiện đang rất bận và hàng chờ đã đầy. Vui lòng thử lại sau vài phút.",
+        "daily": "Hôm nay bạn đã quét {limit} ví trên máy chủ của CRYPY. Hạn mức miễn phí được làm mới lúc 00:00 UTC.",
+        "tooMany": "Tối đa {max} ví mỗi lần quét. Hãy chia danh sách thành các phần nhỏ hơn.",
+        "active": "Bạn đã có một lượt quét đang chạy, có thể ở tab khác. Hãy đợi nó xong hoặc dừng nó tại đây.",
+        "stopOther": "Dừng lượt quét đó",
+        "lost": "Lượt quét này không còn trên máy chủ của CRYPY (kết quả được giữ 1 giờ sau khi quét xong). Hãy quét lại để có kết quả mới.",
+        "failed": "Không thể bắt đầu quét. Vui lòng thử lại."
+      },
+      "crossChecked": "Đã đối chiếu {compared} ví với nút thứ hai: tất cả khớp",
+      "crossCorrected": "Đã đối chiếu {compared} ví với nút thứ hai: {corrected} ví được sửa sau lần đọc thứ ba",
+      "stillReading": {
+        "title": "Vẫn đang đọc {count} số dư",
+        "note": "Các nút của {chains} đã ngừng phản hồi. Mọi thứ khác đã hoàn tất. Các dòng này ghi “Vẫn đang đọc” và được liệt kê riêng khi xuất, để không bao giờ bị nhầm là ví trống.",
+        "retry": "Thử ngay"
       }
     },
     "token-security": {

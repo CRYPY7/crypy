@@ -17,7 +17,8 @@
     "betaTranslation": "Beta translation: not yet checked by a native speaker",
     "languageNotReady": "This language is still being translated, so you're seeing English for now.",
     "beta": "Beta",
-    "betaSiteLabel": "CRYPY is in beta: features may change and results can be incomplete."
+    "betaSiteLabel": "CRYPY is in beta: features may change and results can be incomplete.",
+    "loading": "Loading"
   },
   "nav": {
     "main": "Main",
@@ -715,7 +716,7 @@
         },
         {
           "q": "Is my list stored?",
-          "a": "No. Addresses are sent to CRYPY's server only to read their balances and are not stored or logged. Labels never leave your browser, and the list is never put in the page address."
+          "a": "Only while it's being scanned. The addresses are held in the server's memory while the scan runs and deleted within 1 hour after it ends; they're never logged or written to disk. Labels never leave your browser, and the list is never put in the page address."
         },
         {
           "q": "Where do the balances come from?",
@@ -723,7 +724,7 @@
         },
         {
           "q": "How many addresses can I check?",
-          "a": "Up to 500 addresses on up to 2 chains with up to 6 assets per scan. Very large lists, saved lists and scheduled re-scans are planned for later."
+          "a": "Up to 500 addresses per scan, on any of the 5 chains, with the native coin plus up to 5 tokens. Bigger lists, saved lists and scheduled re-scans are planned for later."
         },
         {
           "q": "Why does an address show as a contract?",
@@ -780,6 +781,7 @@
         "CRYPY never asks for, collects or stores seed phrases, recovery phrases or private keys. No CRYPY page or message will ever ask you for them.",
         "Addresses, tokens and transaction hashes you look up are public blockchain data. To answer, CRYPY's server asks blockchain data providers (such as Alchemy, Infura, Ankr, dRPC and public nodes) and security services (GoPlus, Sourcify) about them. These requests come from CRYPY's server, not your browser, so the providers don't see your IP address. CRYPY doesn't keep a record of who looked up what; results are cached for a short time to keep the site fast.",
         "Without an account, your language, theme, portfolio list, recently viewed items and display choices are saved only in your own browser. The portfolio's addresses are sent one at a time to look up their balances and are not stored.",
+        "When you scan a list in the Batch Balance Scanner, its addresses are held in the server's memory while the scan runs and deleted within 1 hour after it ends. They are never logged or written to disk, and labels never leave your browser.",
         "Cookies: CRYPY uses only cookies it needs to work: NEXT_LOCALE (your language), crypy_chains (which chains to scan) and crypy_session (only after you sign in). There are no advertising or analytics cookies and no tracking scripts. Cloudflare, which protects the site, may set its own security cookie (such as __cf_bm) to tell people apart from bots.",
         "Connecting a wallet is optional. CRYPY only reads your public address from it, and connecting never asks you to sign anything. If you connect through WalletConnect, the connection runs through Reown's WalletConnect service.",
         "Signing in with your wallet is optional and needed only for the Watchlist and alerts. It is a signed message, never a transaction. CRYPY then stores your wallet address, your watchlist with its labels and alert choices, your quiet hours and time zone, and a session code (only its fingerprint). If you choose to keep your portfolio on your account, its addresses and labels are stored too.",
@@ -2527,7 +2529,7 @@
       "cancel": "Cancel",
       "trust": {
         "public": "Public addresses only — never asks for keys or seed phrases",
-        "notStored": "Your list is not stored or logged",
+        "notStored": "Your list is never logged and is deleted from CRYPY's servers within 1 hour",
         "noWallet": "No wallet connection needed"
       },
       "complete": "Scan complete",
@@ -2544,9 +2546,9 @@
         "withBalanceNote": "On at least one chain",
         "empty": "Empty addresses",
         "emptyNote": "Nothing on the chains checked",
-        "failed": "Checks that failed",
+        "failed": "Still being read",
         "failedNone": "None",
-        "failedNote": "Retried once; retry them below"
+        "failedNote": "CRYPY keeps trying"
       },
       "noPrice": "no reliable price",
       "searchPlaceholder": "Search address or label",
@@ -2579,8 +2581,8 @@
       },
       "status": {
         "ok": "OK",
-        "failed": "Failed",
-        "pending": "Not read"
+        "failed": "Not read",
+        "pending": "Still being read"
       },
       "noLabel": "No label",
       "rowFailed": "Couldn't read this address on {chain}.",
@@ -2604,6 +2606,50 @@
         "type": "Type",
         "value": "Value (USD)",
         "status": "Status"
+      },
+      "estimateTime": "{balances} balances to read · {time}",
+      "estimateUnderMinute": "under a minute",
+      "estimateMinutes": "about {minutes} min",
+      "run": {
+        "heading": "Scanning {wallets} wallets",
+        "where": "On CRYPY's servers · keeps going if you refresh or close this tab",
+        "overall": "{read} of {total} balances read",
+        "usable": "Results below are usable now: sort, copy or export any time",
+        "chains": "Each chain",
+        "pause": "Pause",
+        "resume": "Resume",
+        "paused": "Paused",
+        "starting": "Starting…",
+        "queued": "Your scan is in line: number {position}, starts in about {seconds} seconds",
+        "queuedNote": "Many people are scanning right now. Keep this tab open, or come back later: your place is kept for 30 minutes.",
+        "blocks": "blocks {from}–{to}",
+        "block": "block {block}",
+        "notOn": "{symbols}: not on {chain}",
+        "phase": {
+          "reading": "Reading",
+          "waiting": "Nodes busy, slowing down and retrying · nothing lost",
+          "stalled": "Nodes haven't answered for a while · CRYPY keeps trying",
+          "cross-checking": "Cross-checking",
+          "done": "Done",
+          "gave-up": "Stopped trying after 1 hour",
+          "cancelled": "Stopped"
+        }
+      },
+      "refused": {
+        "busy": "CRYPY is very busy right now and the line is full. Please try again in a few minutes.",
+        "daily": "You've scanned {limit} wallets on CRYPY's servers today. The free allowance resets at 00:00 UTC.",
+        "tooMany": "Up to {max} wallets per scan. Split the list into smaller parts.",
+        "active": "You already have a scan running, perhaps in another tab. Wait for it to finish, or stop it here.",
+        "stopOther": "Stop that scan",
+        "lost": "This scan is no longer on CRYPY's servers (results are kept for 1 hour after a scan ends). Scan again for fresh results.",
+        "failed": "The scan couldn't be started. Please try again."
+      },
+      "crossChecked": "{compared} wallets cross-checked with a second node: all matched",
+      "crossCorrected": "{compared} wallets cross-checked with a second node: {corrected} corrected after a third reading",
+      "stillReading": {
+        "title": "{count} balances are still being read",
+        "note": "The nodes for {chains} stopped answering. Everything else is complete. These rows say “Still being read” and are listed separately in the export, so they're never mistaken for empty wallets.",
+        "retry": "Try these now"
       }
     },
     "token-security": {

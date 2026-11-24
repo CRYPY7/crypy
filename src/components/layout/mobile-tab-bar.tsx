@@ -17,7 +17,7 @@ export interface TabBarStrings {
 }
 
 const itemClass =
-  "flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-semibold text-muted-foreground aria-[current=page]:text-primary hover:text-foreground";
+  "relative flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-semibold text-muted-foreground aria-[current=page]:text-primary hover:text-foreground";
 
 /** Bottom navigation on phones; every tool is one tap away via "Tools". */
 type TabHrefs = Record<"home" | "portfolio" | "alerts" | "learn", string>;
@@ -52,7 +52,7 @@ function TabBarView({
       className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
       <div className="grid grid-cols-5 px-1 pt-1">
-        <Link href={hrefs.home} aria-current={current(hrefs.home)} className={itemClass}>
+        <Link href={hrefs.home} aria-current={current(hrefs.home)} className={itemClass} data-tab-item="">
           <House className="size-5" aria-hidden="true" />
           {strings.home}
         </Link>
@@ -60,15 +60,15 @@ function TabBarView({
           <LayoutGrid className="size-5" aria-hidden="true" />
           {strings.tools}
         </button>
-        <Link href={hrefs.learn} aria-current={current(hrefs.learn)} className={itemClass}>
+        <Link href={hrefs.learn} aria-current={current(hrefs.learn)} className={itemClass} data-tab-item="">
           <BookOpen className="size-5" aria-hidden="true" />
           {strings.learn}
         </Link>
-        <Link href={hrefs.portfolio} aria-current={current(hrefs.portfolio)} className={itemClass}>
+        <Link href={hrefs.portfolio} aria-current={current(hrefs.portfolio)} className={itemClass} data-tab-item="">
           <ChartPie className="size-5" aria-hidden="true" />
           {strings.portfolio}
         </Link>
-        <Link href={hrefs.alerts} aria-current={current(hrefs.alerts)} className={itemClass}>
+        <Link href={hrefs.alerts} aria-current={current(hrefs.alerts)} className={itemClass} data-tab-item="">
           <Bell className="size-5" aria-hidden="true" />
           {strings.alerts}
         </Link>
