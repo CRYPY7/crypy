@@ -483,6 +483,13 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   transfers) use `waitForAlchemy`; reservations may put the bucket into debt, so they go before ordinary reads.
   An Alchemy 429 pauses it for 2 s instead of the 60 s outage cool-down. With several server processes, each has its
   own bucket: lower `ALCHEMY_CU_PER_SECOND` accordingly or move it to the shared Redis store.
+- Alchemy daily limit (`alchemy-budget.ts`, pure): (90% of `ALCHEMY_MONTHLY_CU` − units spent earlier this month)
+  ÷ days left, at most 2× a normal day; `ALCHEMY_DAILY_CU` fixes it instead. Tiers inside the day: ordinary
+  reads in a rotation use Alchemy up to 30%, background work (`server/background.ts`, AsyncLocalStorage: worker
+  jobs, lock index at start) up to 50%, visitors' Alchemy-only calls up to 100%; health checks of tools run as
+  visitors. Counters are saved every minute in `provider_usage` and added back after a restart (`usage-store.ts`).
+- A JSON-RPC answer without a result or an error (`MalformedAnswerError`) counts as an unreachable provider: next
+  provider, one-minute rest, one log line per 10 minutes.
 - Adapter methods: `getUsdPrices` (keys `native` and lower-case token addresses), `checkProviders`.
 
 ## 11a. Balances (M3)

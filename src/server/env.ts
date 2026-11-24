@@ -29,8 +29,12 @@ const schema = z.object({
   BASE_RPC_URLS: urlList,
   ARBITRUM_RPC_URLS: urlList,
   POLYGON_RPC_URLS: urlList,
-  /** Daily budgets (zero-API-cost rule). Alchemy free plan: 30M CU a month ≈ 1M a day. */
-  ALCHEMY_DAILY_CU: z.coerce.number().int().positive().default(1_000_000),
+  /**
+   * Alchemy budget (zero-API-cost rule). The free plan allows 30M compute units a month; CRYPY spreads what is left
+   * over the days left (server/chains/evm/alchemy-budget.ts). ALCHEMY_DAILY_CU, when set, fixes the day instead.
+   */
+  ALCHEMY_MONTHLY_CU: z.coerce.number().int().positive().default(30_000_000),
+  ALCHEMY_DAILY_CU: z.coerce.number().int().positive().optional(),
   /** Requests per day per extra provider. */
   RPC_DAILY_REQUESTS: z.coerce.number().int().positive().default(50_000),
   /** M8: PostgreSQL for accounts and the watchlist (production). Without it, PGlite keeps a local database. */
@@ -85,6 +89,7 @@ const parsed = schema.safeParse({
   BASE_RPC_URLS: process.env.BASE_RPC_URLS || undefined,
   ARBITRUM_RPC_URLS: process.env.ARBITRUM_RPC_URLS || undefined,
   POLYGON_RPC_URLS: process.env.POLYGON_RPC_URLS || undefined,
+  ALCHEMY_MONTHLY_CU: process.env.ALCHEMY_MONTHLY_CU || undefined,
   ALCHEMY_DAILY_CU: process.env.ALCHEMY_DAILY_CU || undefined,
   RPC_DAILY_REQUESTS: process.env.RPC_DAILY_REQUESTS || undefined,
   DATABASE_URL: process.env.DATABASE_URL || undefined,

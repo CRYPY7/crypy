@@ -309,6 +309,16 @@ async function Dashboard({ locale, address, show }: { locale: Locale; address: s
                         })}
                       </span>
                       <span>
+                        {p.alchemy.fixedDaily
+                          ? t("admin.providers.alchemyFixed")
+                          : p.alchemy.usedEarlierThisMonth === null
+                            ? t("admin.providers.alchemyMonthUnknown")
+                            : t("admin.providers.alchemyMonth", {
+                                monthly: n.format(p.alchemy.monthly),
+                                earlier: n.format(p.alchemy.usedEarlierThisMonth),
+                              })}
+                      </span>
+                      <span>
                         {t("admin.providers.alchemyTiers", {
                           ordinary: n.format(p.alchemy.ordinaryLimit),
                           background: n.format(p.alchemy.backgroundLimit),

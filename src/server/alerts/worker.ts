@@ -12,6 +12,7 @@ import { checkRound } from "./checker";
 import { deliverQueued } from "./deliver";
 import { pruneAlerts } from "./store";
 import { runInBackground } from "@/server/background";
+import { pruneProviderUsage, saveProviderUsage } from "@/server/chains/evm/usage-store";
 
 /**
  * Runs the alerts inside the always-on server process (approved: a background checker about every minute):
@@ -24,6 +25,7 @@ import { runInBackground } from "@/server/background";
  */
 const CHECK_MS = 60_000;
 const DELIVER_MS = 10_000;
+const USAGE_MS = 60_000;
 const HOUSEKEEPING_MS = 60 * 60_000;
 const TOKEN_CHECKS_MS = 10 * 60_000;
 
@@ -105,9 +107,12 @@ export function startAlertsWorker(): void {
       await pruneAlerts();
       await pruneLinkCodes();
       await pruneHealthChecks();
+      await pruneProviderUsage();
     },
     "housekeeping",
   );
+  // Free-plan counters saved every minute, so restarts keep the day's count and Alchemy's limit follows the month.
+  every(USAGE_MS, () => saveProviderUsage(), "usage", 5_000);
   // Daily security checks for the curated token pages (SEO Phase 3): a few every 10 minutes, oldest first.
   if (!skip.has("token-checks"))
     every(

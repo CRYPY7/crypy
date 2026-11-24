@@ -66,11 +66,22 @@ memory down to 5% free once.
   the lock indexes it is higher on the server. 26% free on the 2 GB droplet is expected; the 5% dip most likely came
   from `update.sh` building while the site runs (the build needs about 1–1.5 GB; 2 GB swap covers it). No setting
   changed; the redesign's R1 (worker split, build headroom) addresses it.
-- A browser test that counted a streaming page's hidden copy (known issue) now counts visible text only.
+- **Alchemy limit follows the month (owner's Alchemy dashboard, 2026-11-24):** Alchemy showed 3.5M of 30M units used
+  this month while CRYPY stopped at a fixed 1M a day, and every restart reset the count. Now the counters are saved
+  every minute (new table `provider_usage`, migration `0005_provider_usage`) and added back after a restart, and
+  today's Alchemy limit = (90% of the monthly plan − units spent earlier this month) ÷ days left, at most 2× a
+  normal day (2M in a 30-day month). The 10% margin covers the same key used on the owner's PC, which the server
+  can't see. `ALCHEMY_MONTHLY_CU` (default 30M) is new; `ALCHEMY_DAILY_CU`, when set, still fixes the day. The tiers
+  above apply to today's limit. /admin explains the day's limit and the units spent earlier this month. For the rest
+  of November the server knows only what it saves from now on, so it uses at most 2M a day: with the 3.5M already
+  spent, the month stays under 18M of 30M. 5 unit tests (month lengths, spreading, cap, unknown history, save and
+  reload with the real migration).
+- Browser tests that counted a streaming page's hidden copy (known issue) now count visible text only, and the robots
+  tag check accepts the brief repeat (same content).
 
-**Checks (2026-11-24):** typecheck, lint, Prettier, i18n check: clean. Unit: 465 passed, 72 skipped (5 new). Build
-passed. Browser: 259 passed, 12 skipped, 1 failed (the streaming-copy test above, fixed; its file then passed 10 of
-10 twice).
+**Checks (2026-11-24, final):** typecheck, lint, Prettier, i18n check: clean. Unit: 469 passed, 72 skipped (10 new
+in total). Build passed. Browser: 259 passed, 12 skipped, 1 failed (the robots-tag repeat above, fixed; its file then
+passed 10 of 10 three times).
 
 ## Languages wave 1 — six Beta languages (owner decision 2026-11-23)
 

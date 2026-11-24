@@ -2,6 +2,7 @@ import "server-only";
 import { AlchemyBusyError, noteAlchemyLimited, takeAlchemyNow, waitForAlchemy } from "./alchemy-pace";
 import { limitedFetch } from "@/server/http/limit";
 import { isBackground } from "@/server/background";
+import { alchemyDailyLimit } from "./alchemy-budget";
 import {
   type Chain,
   type EIP1193RequestFn,
@@ -118,6 +119,32 @@ function budgetKey(provider: Provider): string {
   return provider.kind === "alchemy" ? "alchemy" : provider.name;
 }
 
+// ---- Alchemy's limit for today ---------------------------------------------------------------------
+
+/** Units spent earlier this month (from the database), per UTC day; unknown until the usage store has been read. */
+interface MonthState {
+  day: string;
+  usedEarlier: number;
+}
+const monthKey = Symbol.for("crypy.alchemyMonth");
+const monthHolder = globalThis as unknown as Record<symbol, MonthState | undefined>;
+
+/** Called by the usage store after reading the database. */
+export function setAlchemyMonthUsage(day: string, usedEarlier: number): void {
+  monthHolder[monthKey] = { day, usedEarlier };
+}
+
+/**
+ * Today's Alchemy limit in compute units: a fixed ALCHEMY_DAILY_CU when set, otherwise what is left of the monthly
+ * plan spread over the days left (alchemy-budget.ts).
+ */
+export function alchemyLimitToday(now = Date.now()): number {
+  if (serverEnv.ALCHEMY_DAILY_CU) return serverEnv.ALCHEMY_DAILY_CU;
+  const month = monthHolder[monthKey];
+  const known = month && month.day === new Date(now).toISOString().slice(0, 10) ? month.usedEarlier : null;
+  return alchemyDailyLimit({ monthly: serverEnv.ALCHEMY_MONTHLY_CU, usedEarlierThisMonth: known, now });
+}
+
 /**
  * Alchemy's daily budget is split in tiers, so what only Alchemy can do (full token lists, transfer history, old-block
  * reads) stays available for visitors all day:
@@ -137,9 +164,10 @@ export function budgetExhausted(provider: Provider, ordinary = false): boolean {
   if (provider.kind === "public") return false;
   const used = usageFor(budgetKey(provider));
   if (provider.kind !== "alchemy") return used.requests >= serverEnv.RPC_DAILY_REQUESTS;
-  let limit = serverEnv.ALCHEMY_DAILY_CU;
-  if (isBackground()) limit = Math.min(limit, serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_BACKGROUND_SHARE);
-  if (ordinary) limit = Math.min(limit, serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_ORDINARY_SHARE);
+  const today = alchemyLimitToday();
+  let limit = today;
+  if (isBackground()) limit = Math.min(limit, today * ALCHEMY_BACKGROUND_SHARE);
+  if (ordinary) limit = Math.min(limit, today * ALCHEMY_ORDINARY_SHARE);
   return used.units >= limit;
 }
 
@@ -168,6 +196,10 @@ export interface AlchemyBreakdown {
   /** Where the tiers start, in units. */
   ordinaryLimit: number;
   backgroundLimit: number;
+  /** The monthly plan, whether ALCHEMY_DAILY_CU fixes the day instead, and units spent before today (null: unknown). */
+  monthly: number;
+  fixedDaily: boolean;
+  usedEarlierThisMonth: number | null;
 }
 
 /** Today's usage per provider, for the health page (names and numbers only). */
@@ -187,14 +219,17 @@ export function usageSnapshot(): {
             provider,
             requests: value.requests,
             units: value.units,
-            limit: serverEnv.ALCHEMY_DAILY_CU,
+            limit: alchemyLimitToday(),
             alchemy: {
               backgroundUnits: value.backgroundUnits,
               methods: [...value.byMethod.entries()]
                 .map(([method, units]) => ({ method, units }))
                 .sort((a, b) => b.units - a.units),
-              ordinaryLimit: Math.round(serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_ORDINARY_SHARE),
-              backgroundLimit: Math.round(serverEnv.ALCHEMY_DAILY_CU * ALCHEMY_BACKGROUND_SHARE),
+              ordinaryLimit: Math.round(alchemyLimitToday() * ALCHEMY_ORDINARY_SHARE),
+              backgroundLimit: Math.round(alchemyLimitToday() * ALCHEMY_BACKGROUND_SHARE),
+              monthly: serverEnv.ALCHEMY_MONTHLY_CU,
+              fixedDaily: Boolean(serverEnv.ALCHEMY_DAILY_CU),
+              usedEarlierThisMonth: monthHolder[monthKey]?.usedEarlier ?? null,
             },
           }
         : provider.startsWith("public:")
@@ -206,6 +241,42 @@ export function usageSnapshot(): {
 /** Test helper: forget all usage. */
 export function resetUsage(): void {
   usage.clear();
+  delete monthHolder[monthKey];
+}
+
+/** Today's counts per budget key, for saving (usage-store.ts). */
+export function usageToSave(): {
+  day: string;
+  provider: string;
+  requests: number;
+  units: number;
+  backgroundUnits: number;
+}[] {
+  const day = today();
+  return [...usage.entries()]
+    .filter(([, value]) => value.day === day)
+    .map(([provider, value]) => ({
+      day,
+      provider,
+      requests: value.requests,
+      units: value.units,
+      backgroundUnits: value.backgroundUnits,
+    }));
+}
+
+/**
+ * Adds today's saved counts from before a restart to this process's counts (once, when the usage store is first read).
+ * Requests made by an earlier process after its last save (at most a minute) are not known.
+ */
+export function addSavedUsage(
+  saved: { provider: string; requests: number; units: number; backgroundUnits: number }[],
+): void {
+  for (const row of saved) {
+    const entry = usageFor(row.provider);
+    entry.requests += row.requests;
+    entry.units += row.units;
+    entry.backgroundUnits += row.backgroundUnits;
+  }
 }
 
 // ---- Transports ----------------------------------------------------------------------------------

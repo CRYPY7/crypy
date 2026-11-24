@@ -201,6 +201,24 @@ export const statusUpdates = pgTable(
   (table) => [index("status_updates_created_idx").on(table.createdAt)],
 );
 
+/**
+ * Free-plan use per provider and UTC day (Alchemy in compute units, others in requests), saved every minute so a
+ * restart doesn't reset the day's count, and so Alchemy's daily limit can follow the monthly plan. Provider names are
+ * host names only (never URLs or keys).
+ */
+export const providerUsage = pgTable(
+  "provider_usage",
+  {
+    day: text("day").notNull(),
+    provider: text("provider").notNull(),
+    requests: integer("requests").notNull().default(0),
+    units: bigint("units", { mode: "number" }).notNull().default(0),
+    backgroundUnits: bigint("background_units", { mode: "number" }).notNull().default(0),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex("provider_usage_day_provider_idx").on(table.day, table.provider)],
+);
+
 export const schema = {
   users,
   accounts,
@@ -214,4 +232,5 @@ export const schema = {
   statusUpdates,
   checkerCursors,
   portfolios,
+  providerUsage,
 };

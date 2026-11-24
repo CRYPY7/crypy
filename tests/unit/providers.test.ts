@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { getChain } from "@/config/chains";
 import { runInBackground } from "@/server/background";
 import {
+  alchemyLimitToday,
   alchemyUnits,
   budgetExhausted,
   providerLabel,
@@ -37,8 +38,9 @@ describe("provider rotation", () => {
     const alchemy = { name: "alchemy", kind: "alchemy" as const, url: "https://x.invalid" };
     const extra = { name: "ankr.com", kind: "extra" as const, url: "https://x.invalid" };
     const pub = { name: "public:publicnode.com", kind: "public" as const, url: "https://x.invalid" };
-    // Defaults: 1,000,000 Alchemy CU and 50,000 requests per provider per day.
-    for (let i = 0; i < 38_462; i++) recordUsage(alchemy, "eth_call");
+    // Defaults: a normal day of the monthly plan for Alchemy and 50,000 requests per provider per day.
+    const calls = Math.ceil(alchemyLimitToday() / 26);
+    for (let i = 0; i < calls; i++) recordUsage(alchemy, "eth_call");
     expect(budgetExhausted(alchemy)).toBe(true);
     for (let i = 0; i < 49_999; i++) recordUsage(extra, "eth_call");
     expect(budgetExhausted(extra)).toBe(false);
@@ -46,31 +48,37 @@ describe("provider rotation", () => {
     expect(budgetExhausted(extra)).toBe(true);
     for (let i = 0; i < 100_000; i++) recordUsage(pub, "eth_call");
     expect(budgetExhausted(pub)).toBe(false);
-    expect(usageSnapshot().find((u) => u.provider === "alchemy")).toMatchObject({ requests: 38_462 });
+    expect(usageSnapshot().find((u) => u.provider === "alchemy")).toMatchObject({ requests: calls });
   });
 });
 
 describe("Alchemy budget tiers", () => {
   beforeEach(() => resetUsage());
   const alchemy = { name: "alchemy", kind: "alchemy" as const, url: "https://x.invalid" };
-  // 26 CU per eth_call; the default day is 1,000,000 CU.
-  const spend = (calls: number) => {
-    for (let i = 0; i < calls; i++) recordUsage(alchemy, "eth_call");
+  // Spends eth_calls (26 units each) until the day's total reaches `units`.
+  const spendTo = (units: number) => {
+    let spent = usageSnapshot().find((u) => u.provider === "alchemy")?.units ?? 0;
+    while (spent < units) {
+      recordUsage(alchemy, "eth_call");
+      spent += 26;
+    }
   };
 
   it("ordinary reads stop using Alchemy at 30% of the day; Alchemy-only calls go on", () => {
-    spend(11_538); // 299,988 CU
+    const day = alchemyLimitToday();
+    spendTo(day * 0.3 - 30);
     expect(budgetExhausted(alchemy, true)).toBe(false);
-    spend(1); // 300,014 CU
+    spendTo(day * 0.3);
     expect(budgetExhausted(alchemy, true)).toBe(true);
     expect(budgetExhausted(alchemy)).toBe(false);
   });
 
   it("background work stops at 50%; visitors keep the rest", () => {
-    spend(19_231); // 500,006 CU
+    const day = alchemyLimitToday();
+    spendTo(day * 0.5);
     expect(budgetExhausted(alchemy)).toBe(false);
     expect(runInBackground(() => budgetExhausted(alchemy))).toBe(true);
-    spend(19_231); // 1,000,012 CU
+    spendTo(day);
     expect(budgetExhausted(alchemy)).toBe(true);
   });
 
@@ -89,7 +97,10 @@ describe("Alchemy budget tiers", () => {
       method: "alchemy_getAssetTransfers",
       units: 2 * alchemyUnits("alchemy_getAssetTransfers"),
     });
-    expect(row.alchemy).toMatchObject({ ordinaryLimit: 300_000, backgroundLimit: 500_000 });
+    expect(row.alchemy).toMatchObject({
+      ordinaryLimit: Math.round(alchemyLimitToday() * 0.3),
+      backgroundLimit: Math.round(alchemyLimitToday() * 0.5),
+    });
   });
 });
 

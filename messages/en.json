@@ -3300,7 +3300,7 @@
     },
     "providers": {
       "title": "Free plans used today",
-      "sub": "Each provider stops being used before its daily share runs out (zero-cost rule). Counts since this server started today.",
+      "sub": "Each provider stops being used before its share runs out (zero-cost rule). Counts are saved every minute, so restarts don't reset them.",
       "usage": "{used} of {limit} today",
       "usageNoLimit": "{used} requests today · no limit",
       "units": "units",
@@ -3308,6 +3308,9 @@
       "alchemySplit": "Background work {background} units · visitors {visitors} units",
       "alchemyTiers": "Ordinary reads stop using Alchemy at {ordinary} units; background work at {background}; the rest is kept for visitors' Alchemy-only requests (token lists, history).",
       "alchemyTop": "Largest today:",
+      "alchemyMonth": "Today's limit: 90% of the monthly plan ({monthly}) minus {earlier} already spent this month, spread over the days left (at most twice a normal day). Your PC uses the same key and isn't counted here: compare with Alchemy's dashboard now and then.",
+      "alchemyMonthUnknown": "Earlier use this month not read yet: a normal day is the limit until it is.",
+      "alchemyFixed": "Fixed daily limit set by ALCHEMY_DAILY_CU in .env.local.",
       "kind": {
         "alchemy": "main provider",
         "extra": "extra provider",

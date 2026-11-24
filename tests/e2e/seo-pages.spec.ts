@@ -46,7 +46,9 @@ test("a token without a saved check says so, links to a live check and stays out
     "href",
     "/en/token/ethereum/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
   );
-  await expect(page.locator('meta[name="robots"][content="noindex, follow"]')).toHaveCount(1);
+  // Streaming can briefly repeat the tag (same content, harmless): every robots tag must say noindex, and one must exist.
+  await expect(page.locator('meta[name="robots"][content="noindex, follow"]').first()).toBeAttached();
+  await expect(page.locator('meta[name="robots"]:not([content="noindex, follow"])')).toHaveCount(0);
 });
 
 test("unknown chains and tokens answer 404; the sitemap lists gas pages and the checks list", async ({ request }) => {
