@@ -320,7 +320,7 @@
       "cta": "Abrir portafolio",
       "features": [
         "Hasta 20 billeteras con tus propias etiquetas, sin crear una cuenta",
-        "Se guarda solo en este navegador; nada se almacena en el servidor de CRYPY",
+        "Se guarda solo en este navegador: tu lista y tus etiquetas nunca se almacenan en el servidor de CRYPY",
         "Un total entre Ethereum, BNB Chain, Base, Arbitrum y Polygon",
         "Por cadena, por billetera y principales tenencias combinadas entre cadenas",
         "Aprobaciones que requieren atención y tokens que GoPlus marca, por billetera",
@@ -338,7 +338,7 @@
         },
         {
           "q": "¿Dónde se guarda mi portafolio?",
-          "a": "Solo en este navegador (almacenamiento local). Tu lista de billeteras y etiquetas nunca se envía a CRYPY como lista ni se guarda en su servidor; los saldos de cada billetera se leen dirección por dirección y no se guardan. Si borras los datos del navegador, se borra el portafolio."
+          "a": "Solo en este navegador (almacenamiento local). Tu lista de billeteras y etiquetas nunca se envía a CRYPY como lista ni se guarda en su servidor; los saldos de cada billetera se leen dirección por dirección. Como en cualquier consulta de dirección, el último resultado de cada billetera se conserva hasta 7 días después de la última consulta, para que las páginas funcionen cuando falla un proveedor. Si borras los datos del navegador, se borra el portafolio."
         },
         {
           "q": "¿Qué significa \"desde tu última visita\"?",
@@ -779,8 +779,8 @@
       "description": "Qué guarda CRYPY, qué nunca recopila, qué cookies usa y qué servicios intervienen.",
       "body": [
         "CRYPY nunca pide, recopila ni guarda frases semilla, frases de recuperación ni claves privadas. Ninguna página ni mensaje de CRYPY te las pedirá jamás.",
-        "Las direcciones, tokens y hashes de transacción que consultas son datos públicos de la blockchain. Para responder, el servidor de CRYPY consulta a proveedores de datos de blockchain (como Alchemy, Infura, Ankr, dRPC y nodos públicos) y a servicios de seguridad (GoPlus, Sourcify). Estas consultas salen del servidor de CRYPY, no de tu navegador, así que los proveedores no ven tu dirección IP. CRYPY no guarda un registro de quién consultó qué; los resultados se guardan en caché por poco tiempo para que el sitio sea rápido.",
-        "Sin una cuenta, tu idioma, tema, lista de portafolio, elementos vistos recientemente y preferencias de visualización se guardan solo en tu propio navegador. Las direcciones del portafolio se envían una por una para consultar sus saldos y no se guardan.",
+        "Las direcciones, tokens y hashes de transacción que consultas son datos públicos de la blockchain. Para responder, el servidor de CRYPY consulta a proveedores de datos de blockchain (como Alchemy, Infura, Ankr, dRPC y nodos públicos) y a servicios de seguridad (GoPlus, Sourcify). Estas consultas salen del servidor de CRYPY, no de tu navegador, así que los proveedores no ven tu dirección IP. CRYPY no guarda un registro de quién consultó qué. Para que una página siga funcionando cuando falla un proveedor, el último resultado completo de cada dirección, token y cadena (saldos, actividad, aprobaciones, comprobaciones de tokens) se guarda en la base de datos de CRYPY y se borra 7 días después de la última vez que alguien lo consultó. Se guarda sin tu dirección IP ni nada que te identifique.",
+        "Sin una cuenta, tu idioma, tema, lista de portafolio, elementos vistos recientemente y preferencias de visualización se guardan solo en tu propio navegador. Las direcciones del portafolio se envían una por una para consultar sus saldos; como en cualquier consulta de dirección, el último resultado de cada billetera se conserva hasta 7 días, pero tu lista y tus etiquetas nunca.",
         "Cuando escaneas una lista en el Escáner de saldos en lote, sus direcciones se guardan en la memoria del servidor mientras dura el escaneo y se borran como máximo 1 hora después de terminar. Nunca se registran ni se escriben en disco, y las etiquetas nunca salen de tu navegador.",
         "Cookies: CRYPY usa solo las cookies que necesita para funcionar: NEXT_LOCALE (tu idioma), crypy_chains (qué cadenas analizar) y crypy_session (solo después de iniciar sesión). No hay cookies de publicidad ni de analítica, ni scripts de seguimiento. Cloudflare, que protege el sitio, puede poner su propia cookie de seguridad (como __cf_bm) para distinguir a las personas de los bots.",
         "Conectar una billetera es opcional. CRYPY solo lee tu dirección pública, y conectarla nunca te pide firmar nada. Si te conectas mediante WalletConnect, la conexión pasa por el servicio WalletConnect de Reown.",
@@ -2266,6 +2266,29 @@
       "leftOutTitle": "{chains}: sin revisar",
       "leftOut": "Limitaste el análisis, pero esta billetera también se usa en {chains}. Las aprobaciones de ahí todavía podrían permitir que aplicaciones muevan tus tokens.",
       "checkToo": "Revisar también {chains}"
+    },
+    "freshness": {
+      "read": "Leído {ago} · {time}",
+      "readPending": "Leído hace poco",
+      "refresh": "Actualizar",
+      "refreshing": "Actualizando…",
+      "retry": "Reintentar",
+      "retrying": "Reintentando…",
+      "savedTitle": "{chain}: mostrado desde {ago} ({time})",
+      "savedPending": "{chain}: mostrado de una lectura anterior",
+      "savedBalances": "{chain} no respondió ahora. Los saldos pueden haber cambiado desde entonces.",
+      "savedApprovals": "No se pudieron comprobar ahora las aprobaciones de {chain}. Algunas pueden haber cambiado desde entonces. Revocar siempre vuelve a leer la cadena primero, así que nunca actúa sobre una lectura antigua.",
+      "savedActivity": "{chain} no respondió ahora. Pueden faltar transferencias más recientes.",
+      "savedGas": "{chain} no respondió ahora. Las comisiones pueden haber cambiado desde entonces.",
+      "savedTag": "De {ago}",
+      "savedTagPending": "De una lectura anterior",
+      "tokenTitle": "Informe de {ago} ({time})",
+      "tokenPending": "Informe de una comprobación anterior",
+      "tokenBody": "Una comprobación nueva no pudo terminar ahora. El propietario puede haber cambiado la configuración desde entonces. Vuelve a comprobarlo antes de comprar.",
+      "checkAgain": "Comprobar de nuevo",
+      "notCheckedTitle": "{chain}: sin comprobar",
+      "notCheckedBody": "{chain} no respondió y no hay ninguna lectura anterior. No se supone nada: esto no significa \"vacío\".",
+      "totalIncludes": "Incluye {chains} de una lectura anterior."
     }
   },
   "wallet": {
@@ -2725,7 +2748,8 @@
       "costsNote": "El gas típico es una estimación: la cantidad real depende del token o de la aplicación, y tu billetera muestra la comisión exacta antes de que confirmes. Los valores en dólares usan precios de la cadena:",
       "howTitle": "Cómo medimos.",
       "how": "A partir de los últimos 20 bloques de cada cadena (eth_feeHistory): la comisión base del siguiente bloque más la propina que pagaron el 25 %, el 50 % y el 90 % de las transacciones incluidas. \"Normalmente en el siguiente bloque\" describe los bloques recientes, no es una promesa. Se actualiza cada 12 segundos mientras esta página está abierta; no hace falta cuenta ni billetera.",
-      "l1Note": "En {chains}, los costos incluyen una estimación de la comisión de datos de Ethereum que añaden estas redes."
+      "l1Note": "En {chains}, los costos incluyen una estimación de la comisión de datos de Ethereum que añaden estas redes.",
+      "savedChain": "Hace {minutes} min: {chain} no respondió ahora. Las comisiones pueden haber cambiado desde entonces."
     },
     "timestamp-block": {
       "modes": "Conversión",
@@ -2845,7 +2869,8 @@
       "watchTitle": "Vigilar cambios",
       "watchText": "Recibe un mensaje en Telegram cuando una de estas billeteras envíe o reciba fondos, o dé una nueva aprobación.",
       "watchButton": "Configurar alertas",
-      "watchNote": "Requiere iniciar sesión gratis con tu billetera (un mensaje para firmar, sin transacción). Hasta 10 elementos vigilados; tú eliges cuáles de tus {count} billeteras."
+      "watchNote": "Requiere iniciar sesión gratis con tu billetera (un mensaje para firmar, sin transacción). Hasta 10 elementos vigilados; tú eliges cuáles de tus {count} billeteras.",
+      "chainsSaved": "No se pudo leer ahora; se muestra una lectura anterior (de hasta 7 días): {chains}. Los totales la incluyen."
     },
     "watchlist": {
       "loading": "Cargando…",

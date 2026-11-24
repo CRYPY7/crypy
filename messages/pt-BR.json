@@ -320,7 +320,7 @@
       "cta": "Abrir portfólio",
       "features": [
         "Até 20 carteiras com seus próprios rótulos, sem criar conta",
-        "Salvo só neste navegador; nada fica guardado no servidor do CRYPY",
+        "Salvo só neste navegador: sua lista e seus rótulos nunca ficam no servidor do CRYPY",
         "Um total entre Ethereum, BNB Chain, Base, Arbitrum e Polygon",
         "Por rede, por carteira e principais ativos combinados entre redes",
         "Aprovações que precisam de atenção e tokens que o GoPlus marca, por carteira",
@@ -338,7 +338,7 @@
         },
         {
           "q": "Onde meu portfólio fica salvo?",
-          "a": "Só neste navegador (armazenamento local). Sua lista de carteiras e rótulos nunca é enviada ao CRYPY como lista nem guardada no servidor; os saldos de cada carteira são lidos um endereço por vez e não são guardados. Limpar os dados do navegador apaga o portfólio."
+          "a": "Só neste navegador (armazenamento local). Sua lista de carteiras e rótulos nunca é enviada ao CRYPY como lista nem salva no servidor; os saldos de cada carteira são lidos um endereço por vez. Como em qualquer consulta de endereço, o último resultado de cada carteira é mantido por até 7 dias após a última consulta, para que as páginas funcionem quando um provedor falha. Limpar os dados do navegador apaga o portfólio."
         },
         {
           "q": "O que significa \"desde a sua última visita\"?",
@@ -779,8 +779,8 @@
       "description": "O que o CRYPY guarda, o que nunca coleta, quais cookies usa e quais serviços participam.",
       "body": [
         "O CRYPY nunca pede, coleta ou guarda frases-semente, frases de recuperação ou chaves privadas. Nenhuma página ou mensagem do CRYPY vai pedir isso a você.",
-        "Os endereços, tokens e hashes de transação que você pesquisa são dados públicos da blockchain. Para responder, o servidor do CRYPY consulta provedores de dados de blockchain (como Alchemy, Infura, Ankr, dRPC e nós públicos) e serviços de segurança (GoPlus, Sourcify). Essas consultas saem do servidor do CRYPY, não do seu navegador, então os provedores não veem o seu endereço IP. O CRYPY não guarda registro de quem pesquisou o quê; os resultados ficam em cache por pouco tempo para o site ser rápido.",
-        "Sem conta, seu idioma, tema, lista de portfólio, itens vistos recentemente e preferências de exibição ficam salvos só no seu próprio navegador. Os endereços do portfólio são enviados um por vez para consultar os saldos e não são guardados.",
+        "Os endereços, tokens e hashes de transação que você pesquisa são dados públicos da blockchain. Para responder, o servidor do CRYPY consulta provedores de dados de blockchain (como Alchemy, Infura, Ankr, dRPC e nós públicos) e serviços de segurança (GoPlus, Sourcify). Essas consultas saem do servidor do CRYPY, não do seu navegador, então os provedores não veem o seu endereço IP. O CRYPY não mantém registro de quem consultou o quê. Para que uma página continue funcionando quando um provedor falha, o último resultado completo de cada endereço, token e rede (saldos, atividade, aprovações, verificações de tokens) é salvo no banco de dados do CRYPY e apagado 7 dias depois da última consulta feita por qualquer pessoa. Ele é salvo sem o seu endereço IP nem nada que identifique você.",
+        "Sem uma conta, seu idioma, tema, lista do portfólio, itens vistos recentemente e preferências de exibição ficam salvos apenas no seu navegador. Os endereços do portfólio são enviados um de cada vez para consultar os saldos; como em qualquer consulta de endereço, o último resultado de cada carteira é mantido por até 7 dias, mas sua lista e seus rótulos nunca.",
         "Quando você escaneia uma lista no Scanner de saldos em lote, os endereços ficam na memória do servidor durante o escaneamento e são apagados em até 1 hora depois do fim. Nunca são registrados nem gravados em disco, e os rótulos nunca saem do seu navegador.",
         "Cookies: o CRYPY usa só os cookies de que precisa para funcionar: NEXT_LOCALE (seu idioma), crypy_chains (quais redes analisar) e crypy_session (só depois que você entra). Não há cookies de publicidade nem de análise, nem scripts de rastreamento. A Cloudflare, que protege o site, pode definir o próprio cookie de segurança (como __cf_bm) para diferenciar pessoas de robôs.",
         "Conectar uma carteira é opcional. O CRYPY só lê o seu endereço público, e conectar nunca pede que você assine nada. Se você conectar pelo WalletConnect, a conexão passa pelo serviço WalletConnect da Reown.",
@@ -2266,6 +2266,29 @@
       "leftOutTitle": "{chains}: não verificadas",
       "leftOut": "Você restringiu a análise, mas esta carteira também é usada na {chains}. Aprovações lá ainda podem permitir que apps movam seus tokens.",
       "checkToo": "Verificar a {chains} também"
+    },
+    "freshness": {
+      "read": "Lido {ago} · {time}",
+      "readPending": "Lido recentemente",
+      "refresh": "Atualizar",
+      "refreshing": "Atualizando…",
+      "retry": "Tentar de novo",
+      "retrying": "Tentando de novo…",
+      "savedTitle": "{chain}: exibido de {ago} ({time})",
+      "savedPending": "{chain}: exibido de uma leitura anterior",
+      "savedBalances": "{chain} não respondeu agora. Os saldos podem ter mudado desde então.",
+      "savedApprovals": "Não foi possível verificar agora as aprovações em {chain}. Algumas podem ter mudado desde então. A revogação sempre lê a rede de novo antes, então nunca age sobre uma leitura antiga.",
+      "savedActivity": "{chain} não respondeu agora. Transferências mais recentes podem estar faltando.",
+      "savedGas": "{chain} não respondeu agora. As taxas podem ter mudado desde então.",
+      "savedTag": "De {ago}",
+      "savedTagPending": "De uma leitura anterior",
+      "tokenTitle": "Relatório de {ago} ({time})",
+      "tokenPending": "Relatório de uma verificação anterior",
+      "tokenBody": "Uma nova verificação não conseguiu terminar agora. O dono pode ter mudado configurações desde então. Verifique de novo antes de comprar.",
+      "checkAgain": "Verificar de novo",
+      "notCheckedTitle": "{chain}: não verificado",
+      "notCheckedBody": "{chain} não respondeu e não há leitura anterior. Nada é presumido: isto não significa \"vazio\".",
+      "totalIncludes": "Inclui {chains} de uma leitura anterior."
     }
   },
   "wallet": {
@@ -2725,7 +2748,8 @@
       "costsNote": "O gás típico é uma estimativa: o valor real depende do token ou do app, e a sua carteira mostra a taxa exata antes de você confirmar. Os valores em dólar usam preços da rede:",
       "howTitle": "Como medimos.",
       "how": "A partir dos últimos 20 blocos de cada rede (eth_feeHistory): a taxa base do próximo bloco mais a gorjeta que 25%, 50% e 90% das transações incluídas pagaram. \"Normalmente no próximo bloco\" descreve os blocos recentes, não é uma promessa. Atualizado a cada 12 segundos enquanto esta página estiver aberta; não precisa de conta nem de carteira.",
-      "l1Note": "Na {chains}, os custos incluem uma estimativa da taxa de dados da Ethereum que essas redes acrescentam."
+      "l1Note": "Na {chains}, os custos incluem uma estimativa da taxa de dados da Ethereum que essas redes acrescentam.",
+      "savedChain": "De {minutes} min atrás: {chain} não respondeu agora. As taxas podem ter mudado desde então."
     },
     "timestamp-block": {
       "modes": "Conversão",
@@ -2845,7 +2869,8 @@
       "watchTitle": "Monitorar mudanças",
       "watchText": "Receba uma mensagem no Telegram quando uma destas carteiras enviar, receber ou der uma nova aprovação.",
       "watchButton": "Configurar alertas",
-      "watchNote": "Exige entrar grátis com sua carteira (uma mensagem para assinar, sem transação). Até 10 itens monitorados; você escolhe quais das suas {count} carteiras."
+      "watchNote": "Exige entrar grátis com sua carteira (uma mensagem para assinar, sem transação). Até 10 itens monitorados; você escolhe quais das suas {count} carteiras.",
+      "chainsSaved": "Não foi possível ler agora; exibido de uma leitura anterior (de até 7 dias): {chains}. Os totais incluem esses valores."
     },
     "watchlist": {
       "loading": "Carregando…",

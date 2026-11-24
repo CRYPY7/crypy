@@ -34,6 +34,8 @@ export interface ChainHoldings {
   /** Visible holdings without a reliable price (not counted in totals). */
   unpricedCount: number;
   totalUsd: number;
+  /** False when this chain's prices couldn't be read (values missing). Set by the address overview. */
+  pricesRead?: boolean;
 }
 
 const BAIT = /\b(claim|reward|rewards|airdrop|visit|voucher|bonus|gift|free|access|redeem)\b|\$\s?\d/i;

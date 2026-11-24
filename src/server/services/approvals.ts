@@ -1,9 +1,11 @@
 import "server-only";
+import { assertChainUp } from "@/server/fault";
 import { cacheLife } from "next/cache";
 import { type ChainKey, liveChains } from "@/config/chains";
 import { type ApprovalsSummary, type RatedApproval, rateApprovals, summarize } from "@/lib/approvals/evaluate";
 import type { ApprovalsFacts } from "@/lib/approvals/types";
 import { registry } from "@/server/chains/registry";
+import { readSaved, saveResults } from "@/server/saved/store";
 import { cachedAddressOverview } from "./overview";
 
 export interface ChainApprovals {
@@ -20,6 +22,8 @@ export interface ApprovalsReport {
   /** Chains that couldn't be read right now. */
   unavailable: ChainKey[];
   summary: ApprovalsSummary;
+  /** Chains shown from their last full check (at most 6 hours old) because a fresh one failed now: ISO time. */
+  saved?: Partial<Record<ChainKey, string>>;
 }
 
 /**
@@ -33,7 +37,6 @@ export async function cachedApprovals(
   priority: "page" | "background" = "page",
 ): Promise<ApprovalsReport> {
   "use cache";
-  cacheLife({ stale: 15, revalidate: 20, expire: 120 });
   // Not awaited here: each chain starts its outside lookups while the balances load.
   const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
   const targets = liveChains.filter((chain) => chain.capabilities.approvals && (!only || only.includes(chain.key)));
@@ -41,6 +44,7 @@ export async function cachedApprovals(
     targets.map(async (chain) => {
       const adapter = registry.adapters.find((a) => a.family === chain.family);
       if (!adapter?.getApprovals) throw new Error("Approvals not supported");
+      assertChainUp(chain.key, owner);
       const held = overviewRequest.then((overview) => {
         const holdings = overview?.chains.find((c) => c.chain === chain.key);
         return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
@@ -69,12 +73,32 @@ export async function cachedApprovals(
         ]
       : [],
   );
-  const unavailable = targets.filter((_, i) => settled[i]?.status === "rejected").map((c) => c.key);
+  const failed = targets.filter((_, i) => settled[i]?.status === "rejected").map((c) => c.key);
+  // Stabilization S2: save each chain checked in full; a chain that failed now shows its last full check (≤ 6 h).
+  void saveResults(
+    "approvals",
+    owner,
+    chains.filter(isFullCheck).map((c) => ({ chain: c.chain, data: c })),
+  );
+  const saved = failed.length ? await readSaved<ChainApprovals>("approvals", owner, failed) : new Map();
+  const all = [...chains, ...[...saved.values()].map((s) => s.data)];
+  const unavailable = failed.filter((c) => !saved.has(c));
+  cacheLife(
+    unavailable.length || saved.size
+      ? { stale: 0, revalidate: 1, expire: 1 }
+      : { stale: 15, revalidate: 20, expire: 120 },
+  );
   return {
     owner,
     checkedAt: Date.now(),
-    chains,
+    chains: all,
     unavailable,
-    summary: summarize(chains.flatMap((c) => c.approvals)),
+    summary: summarize(all.flatMap((c) => c.approvals)),
+    ...(saved.size ? { saved: Object.fromEntries([...saved].map(([chain, s]) => [chain, s.savedAt])) } : {}),
   };
+}
+
+/** Every discovery source answered (recent events need a held token to search: none held is complete). */
+export function isFullCheck(c: ChainApprovals): boolean {
+  return c.sources.goplus === "ok" && (c.sources.recentLogs || c.sources.knownSpenders === false);
 }

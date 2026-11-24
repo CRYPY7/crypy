@@ -238,6 +238,29 @@ export const visitorOutcomes = pgTable(
   (table) => [uniqueIndex("visitor_outcomes_bucket_tool_idx").on(table.bucket, table.tool)],
 );
 
+/**
+ * Last good result per tool, subject and chain (stabilization S2), shown with its age when a fresh read fails. A
+ * complete reading is never replaced by an incomplete one (unless it is over a day old). Wallet results are deleted 7 days after the wallet was last looked up (`used_at`); no IP
+ * or visitor id is stored with them.
+ */
+export const savedResults = pgTable(
+  "saved_results",
+  {
+    kind: text("kind").notNull(),
+    subject: text("subject").notNull(),
+    chain: text("chain").notNull(),
+    data: jsonb("data").notNull(),
+    /** 2 = complete reading; 1 = usable but incomplete (e.g. well-known tokens only). Never replaced by a lower one. */
+    quality: smallint("quality").notNull().default(2),
+    savedAt: timestamp("saved_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("saved_results_key_idx").on(table.kind, table.subject, table.chain),
+    index("saved_results_used_idx").on(table.usedAt),
+  ],
+);
+
 export const schema = {
   users,
   accounts,
@@ -253,4 +276,5 @@ export const schema = {
   portfolios,
   providerUsage,
   visitorOutcomes,
+  savedResults,
 };

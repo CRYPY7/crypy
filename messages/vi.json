@@ -320,7 +320,7 @@
       "cta": "Mở danh mục",
       "features": [
         "Tối đa 20 ví với nhãn riêng của bạn, không cần tài khoản",
-        "Chỉ lưu trong trình duyệt này; máy chủ CRYPY không lưu gì",
+        "Chỉ lưu trong trình duyệt này: danh sách và nhãn của bạn không bao giờ được lưu trên máy chủ CRYPY",
         "Một tổng chung trên Ethereum, BNB Chain, Base, Arbitrum và Polygon",
         "Theo mạng, theo ví và tài sản lớn nhất được gộp qua các mạng",
         "Phê duyệt cần chú ý và token bị GoPlus đánh dấu, theo từng ví",
@@ -338,7 +338,7 @@
         },
         {
           "q": "Danh mục của tôi được lưu ở đâu?",
-          "a": "Chỉ trong trình duyệt này (bộ nhớ cục bộ). Danh sách ví và nhãn của bạn không bao giờ được gửi tới CRYPY dưới dạng danh sách hay lưu trên máy chủ; số dư của từng ví được đọc theo từng địa chỉ và không được lưu. Xóa dữ liệu trình duyệt sẽ xóa danh mục."
+          "a": "Chỉ trong trình duyệt này (bộ nhớ cục bộ). Danh sách ví và nhãn của bạn không bao giờ được gửi tới CRYPY dưới dạng danh sách hay lưu trên máy chủ; số dư của mỗi ví được đọc lần lượt từng địa chỉ. Như mọi lần tra cứu địa chỉ, kết quả gần nhất của mỗi ví được giữ tối đa 7 ngày sau lần tra cứu cuối, để trang vẫn hoạt động khi nhà cung cấp gặp sự cố. Xóa dữ liệu trình duyệt sẽ xóa danh mục."
         },
         {
           "q": "\"Kể từ lần xem trước\" nghĩa là gì?",
@@ -779,8 +779,8 @@
       "description": "CRYPY lưu gì, không bao giờ thu thập gì, dùng cookie nào và những dịch vụ nào tham gia.",
       "body": [
         "CRYPY không bao giờ yêu cầu, thu thập hay lưu cụm từ khôi phục, cụm từ bí mật hoặc khóa riêng. Không trang hay tin nhắn nào của CRYPY sẽ hỏi bạn những thứ này.",
-        "Địa chỉ, token và hash giao dịch bạn tìm là dữ liệu blockchain công khai. Để trả lời, máy chủ CRYPY truy vấn các nhà cung cấp dữ liệu blockchain (như Alchemy, Infura, Ankr, dRPC và node công khai) và dịch vụ bảo mật (GoPlus, Sourcify). Các truy vấn này đi từ máy chủ CRYPY, không phải từ trình duyệt của bạn, nên nhà cung cấp không thấy địa chỉ IP của bạn. CRYPY không ghi lại ai đã tìm gì; kết quả được lưu đệm ngắn hạn để trang chạy nhanh.",
-        "Khi không có tài khoản, ngôn ngữ, giao diện, danh sách danh mục, mục đã xem gần đây và tùy chọn hiển thị chỉ được lưu trong trình duyệt của bạn. Địa chỉ trong danh mục được gửi từng cái để tra số dư và không được lưu.",
+        "Địa chỉ, token và hash giao dịch bạn tìm là dữ liệu blockchain công khai. Để trả lời, máy chủ CRYPY truy vấn các nhà cung cấp dữ liệu blockchain (như Alchemy, Infura, Ankr, dRPC và node công khai) và dịch vụ bảo mật (GoPlus, Sourcify). Các truy vấn này đi từ máy chủ CRYPY, không phải từ trình duyệt của bạn, nên nhà cung cấp không thấy địa chỉ IP của bạn. CRYPY không lưu lại ai đã tra cứu gì. Để trang vẫn hoạt động khi một nhà cung cấp gặp sự cố, kết quả đầy đủ gần nhất cho mỗi địa chỉ, token và chuỗi (số dư, hoạt động, phê duyệt, kiểm tra token) được lưu trong cơ sở dữ liệu của CRYPY và bị xóa 7 ngày sau lần cuối có người tra cứu. Kết quả được lưu mà không kèm địa chỉ IP của bạn hay bất cứ thông tin nào nhận dạng bạn.",
+        "Khi không có tài khoản, ngôn ngữ, giao diện, danh sách danh mục, mục đã xem gần đây và tùy chọn hiển thị chỉ được lưu trong trình duyệt của bạn. Các địa chỉ trong danh mục được gửi lần lượt từng cái để tra số dư; như mọi lần tra cứu địa chỉ, kết quả gần nhất của mỗi ví được giữ tối đa 7 ngày, nhưng danh sách và nhãn của bạn thì không bao giờ.",
         "Khi bạn quét một danh sách trong Quét số dư hàng loạt, các địa chỉ chỉ được giữ trong bộ nhớ máy chủ khi đang quét và bị xóa trong vòng 1 giờ sau khi xong. Chúng không bao giờ được ghi log hay ghi ra đĩa, và nhãn không bao giờ rời khỏi trình duyệt của bạn.",
         "Cookie: CRYPY chỉ dùng các cookie cần thiết để hoạt động: NEXT_LOCALE (ngôn ngữ), crypy_chains (mạng cần quét) và crypy_session (chỉ sau khi bạn đăng nhập). Không có cookie quảng cáo, phân tích hay tập lệnh theo dõi. Cloudflare, dịch vụ bảo vệ trang, có thể đặt cookie bảo mật riêng (như __cf_bm) để phân biệt người với bot.",
         "Kết nối ví là tùy chọn. CRYPY chỉ đọc địa chỉ công khai của bạn, và kết nối không bao giờ yêu cầu bạn ký gì. Nếu bạn kết nối qua WalletConnect, kết nối đi qua dịch vụ WalletConnect của Reown.",
@@ -2266,6 +2266,29 @@
       "leftOutTitle": "{chains}: chưa kiểm tra",
       "leftOut": "Bạn đã thu hẹp phạm vi quét, nhưng ví này cũng được dùng trên {chains}. Phê duyệt ở đó vẫn có thể cho ứng dụng chuyển token của bạn.",
       "checkToo": "Kiểm tra cả {chains}"
+    },
+    "freshness": {
+      "read": "Đã đọc {ago} · {time}",
+      "readPending": "Vừa đọc gần đây",
+      "refresh": "Làm mới",
+      "refreshing": "Đang làm mới…",
+      "retry": "Thử lại",
+      "retrying": "Đang thử lại…",
+      "savedTitle": "{chain}: hiển thị kết quả từ {ago} ({time})",
+      "savedPending": "{chain}: hiển thị kết quả đọc trước đó",
+      "savedBalances": "{chain} vừa không phản hồi. Số dư có thể đã thay đổi kể từ đó.",
+      "savedApprovals": "Không thể kiểm tra các phê duyệt trên {chain} lúc này. Một số có thể đã thay đổi kể từ đó. Thu hồi luôn đọc lại chuỗi trước, nên không bao giờ dựa vào kết quả cũ.",
+      "savedActivity": "{chain} vừa không phản hồi. Có thể thiếu các giao dịch chuyển mới hơn.",
+      "savedGas": "{chain} vừa không phản hồi. Phí có thể đã thay đổi kể từ đó.",
+      "savedTag": "Từ {ago}",
+      "savedTagPending": "Từ lần đọc trước",
+      "tokenTitle": "Báo cáo từ {ago} ({time})",
+      "tokenPending": "Báo cáo từ lần kiểm tra trước",
+      "tokenBody": "Lần kiểm tra mới chưa thể hoàn tất lúc này. Chủ sở hữu có thể đã thay đổi cài đặt kể từ đó. Hãy kiểm tra lại trước khi mua.",
+      "checkAgain": "Kiểm tra lại",
+      "notCheckedTitle": "{chain}: chưa kiểm tra",
+      "notCheckedBody": "{chain} không phản hồi và không có lần đọc nào trước đó. Không giả định gì cả: điều này không có nghĩa là \"trống\".",
+      "totalIncludes": "Bao gồm {chains} từ lần đọc trước."
     }
   },
   "wallet": {
@@ -2725,7 +2748,8 @@
       "costsNote": "Gas điển hình là ước tính: lượng thực tế tùy token hoặc ứng dụng, và ví sẽ hiển thị phí chính xác trước khi bạn xác nhận. Số tiền đô la dùng giá on-chain:",
       "howTitle": "Cách chúng tôi đo.",
       "how": "Từ 20 khối gần nhất của mỗi mạng (eth_feeHistory): phí cơ bản của khối kế tiếp cộng tiền boa mà 25%, 50% và 90% giao dịch được đưa vào đã trả. \"Thường ở khối kế tiếp\" mô tả các khối gần đây, không phải lời hứa. Cập nhật mỗi 12 giây khi trang mở; không cần tài khoản hay ví.",
-      "l1Note": "Trên {chains}, chi phí gồm ước tính phí dữ liệu Ethereum mà các mạng này cộng thêm."
+      "l1Note": "Trên {chains}, chi phí gồm ước tính phí dữ liệu Ethereum mà các mạng này cộng thêm.",
+      "savedChain": "Từ {minutes} phút trước: {chain} vừa không phản hồi. Phí có thể đã thay đổi kể từ đó."
     },
     "timestamp-block": {
       "modes": "Chuyển đổi",
@@ -2845,7 +2869,8 @@
       "watchTitle": "Theo dõi thay đổi",
       "watchText": "Nhận tin nhắn Telegram khi một trong các ví này gửi, nhận hoặc cấp phê duyệt mới.",
       "watchButton": "Thiết lập cảnh báo",
-      "watchNote": "Cần đăng nhập miễn phí bằng ví (ký một tin nhắn, không phải giao dịch). Tối đa 10 mục theo dõi; bạn chọn ví nào trong {count} ví của mình."
+      "watchNote": "Cần đăng nhập miễn phí bằng ví (ký một tin nhắn, không phải giao dịch). Tối đa 10 mục theo dõi; bạn chọn ví nào trong {count} ví của mình.",
+      "chainsSaved": "Không đọc được lúc này, hiển thị lần đọc trước (tối đa 7 ngày): {chains}. Tổng có bao gồm phần này."
     },
     "watchlist": {
       "loading": "Đang tải…",

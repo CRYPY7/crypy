@@ -126,7 +126,9 @@ async function ActivityContent({
           transfers: report.transfers,
           next: formatCursor(report.chains),
           checkedAt: report.checkedAt,
+          saved: report.saved,
         }}
+        fresh={t.raw("entity.freshness") as Record<string, string>}
         hiddenTokens={report.hiddenTokens}
         names={names}
         strings={t.raw("entity.activity.ui") as ActivityStrings}

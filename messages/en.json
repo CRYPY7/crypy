@@ -320,7 +320,7 @@
       "cta": "Open portfolio",
       "features": [
         "Up to 20 wallets with your own labels, no account needed",
-        "Saved only in this browser; nothing is stored on CRYPY's server",
+        "Saved only in this browser: your list and labels are never stored on CRYPY's server",
         "One total across Ethereum, BNB Chain, Base, Arbitrum and Polygon",
         "By chain, by wallet and top holdings merged across chains",
         "Approvals that need attention and tokens GoPlus flags, per wallet",
@@ -338,7 +338,7 @@
         },
         {
           "q": "Where is my portfolio saved?",
-          "a": "Only in this browser (local storage). Your list of wallets and labels is never sent to CRYPY as a list or stored on its server; each wallet's balances are read one address at a time and not stored. Clearing your browser data removes the portfolio."
+          "a": "Only in this browser (local storage). Your list of wallets and labels is never sent to CRYPY as a list or stored on its server; each wallet's balances are read one address at a time. Like any address lookup, the last result for each wallet is kept for up to 7 days after it was last looked up, so pages work when a provider fails. Clearing your browser data removes the portfolio."
         },
         {
           "q": "What does \"since you last looked\" mean?",
@@ -779,8 +779,8 @@
       "description": "What CRYPY stores, what it never collects, the cookies it uses and the services involved.",
       "body": [
         "CRYPY never asks for, collects or stores seed phrases, recovery phrases or private keys. No CRYPY page or message will ever ask you for them.",
-        "Addresses, tokens and transaction hashes you look up are public blockchain data. To answer, CRYPY's server asks blockchain data providers (such as Alchemy, Infura, Ankr, dRPC and public nodes) and security services (GoPlus, Sourcify) about them. These requests come from CRYPY's server, not your browser, so the providers don't see your IP address. CRYPY doesn't keep a record of who looked up what; results are cached for a short time to keep the site fast.",
-        "Without an account, your language, theme, portfolio list, recently viewed items and display choices are saved only in your own browser. The portfolio's addresses are sent one at a time to look up their balances and are not stored.",
+        "Addresses, tokens and transaction hashes you look up are public blockchain data. To answer, CRYPY's server asks blockchain data providers (such as Alchemy, Infura, Ankr, dRPC and public nodes) and security services (GoPlus, Sourcify) about them. These requests come from CRYPY's server, not your browser, so the providers don't see your IP address. CRYPY doesn't keep a record of who looked up what. So that a page still works when a provider fails, the last complete result for each address, token and chain (balances, activity, approvals, token checks) is saved in CRYPY's database and deleted 7 days after anyone last looked it up. It is saved without your IP address or anything else that identifies you.",
+        "Without an account, your language, theme, portfolio list, recently viewed items and display choices are saved only in your own browser. The portfolio's addresses are sent one at a time to look up their balances; like any address lookup, each wallet's last result is kept for up to 7 days, but your list and labels never are.",
         "When you scan a list in the Batch Balance Scanner, its addresses are held in the server's memory while the scan runs and deleted within 1 hour after it ends. They are never logged or written to disk, and labels never leave your browser.",
         "Cookies: CRYPY uses only cookies it needs to work: NEXT_LOCALE (your language), crypy_chains (which chains to scan) and crypy_session (only after you sign in). There are no advertising or analytics cookies and no tracking scripts. Cloudflare, which protects the site, may set its own security cookie (such as __cf_bm) to tell people apart from bots.",
         "Connecting a wallet is optional. CRYPY only reads your public address from it, and connecting never asks you to sign anything. If you connect through WalletConnect, the connection runs through Reown's WalletConnect service.",
@@ -2266,6 +2266,29 @@
       "leftOutTitle": "{chains}: not checked",
       "leftOut": "You narrowed the scan, but this wallet is also used on {chains}. Approvals there could still let apps move your tokens.",
       "checkToo": "Check {chains} too"
+    },
+    "freshness": {
+      "read": "Read {ago} · {time}",
+      "readPending": "Read recently",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing…",
+      "retry": "Try again",
+      "retrying": "Trying again…",
+      "savedTitle": "{chain}: shown from {ago} ({time})",
+      "savedPending": "{chain}: shown from an earlier reading",
+      "savedBalances": "{chain} didn't answer just now. Balances may have changed since.",
+      "savedApprovals": "{chain} approvals couldn't be checked just now. Some may have changed since. Revoke always reads the chain again first, so it never acts on an old reading.",
+      "savedActivity": "{chain} didn't answer just now. Newer transfers may be missing.",
+      "savedGas": "{chain} didn't answer just now. Fees may have changed since.",
+      "savedTag": "From {ago}",
+      "savedTagPending": "From an earlier reading",
+      "tokenTitle": "Report from {ago} ({time})",
+      "tokenPending": "Report from an earlier check",
+      "tokenBody": "A fresh check couldn't finish now. The owner may have changed settings since. Check again before you buy.",
+      "checkAgain": "Check again",
+      "notCheckedTitle": "{chain}: not checked",
+      "notCheckedBody": "{chain} didn't answer and there's no earlier reading. Nothing is assumed: this isn't \"empty\".",
+      "totalIncludes": "Includes {chains} from an earlier reading."
     }
   },
   "wallet": {
@@ -2725,7 +2748,8 @@
       "costsNote": "Typical gas is an estimate: the real amount depends on the token or app, and your wallet shows the exact fee before you confirm. Dollar values use on-chain prices:",
       "howTitle": "How we measure.",
       "how": "From each chain's last 20 blocks (eth_feeHistory): the next block's base fee plus the tip that 25%, 50% and 90% of included transactions paid. \"Usually the next block\" describes recent blocks, not a promise. Refreshed every 12 seconds while this page is open; no account or wallet needed.",
-      "l1Note": "On {chains}, costs include an estimate of the Ethereum data fee these networks add."
+      "l1Note": "On {chains}, costs include an estimate of the Ethereum data fee these networks add.",
+      "savedChain": "From {minutes} min ago: {chain} didn't answer just now. Fees may have changed since."
     },
     "timestamp-block": {
       "modes": "Conversion",
@@ -2845,7 +2869,8 @@
       "watchTitle": "Watch for changes",
       "watchText": "Get a Telegram message when one of these wallets sends or receives, or gives a new approval.",
       "watchButton": "Set up alerts",
-      "watchNote": "Needs a free sign-in with your wallet (a message to sign, no transaction). Up to 10 watched items; you choose which of your {count} wallets."
+      "watchNote": "Needs a free sign-in with your wallet (a message to sign, no transaction). Up to 10 watched items; you choose which of your {count} wallets.",
+      "chainsSaved": "Couldn't read now, shown from an earlier reading (up to 7 days old): {chains}. Totals include them."
     },
     "watchlist": {
       "loading": "Loading…",

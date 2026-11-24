@@ -1,13 +1,22 @@
 import "server-only";
+import { assertChainUp } from "@/server/fault";
 import { cacheLife } from "next/cache";
 import { type ChainKey, liveChains } from "@/config/chains";
 import type { ActivityFacts, ChainActivity } from "@/lib/activity/types";
 import { registry } from "@/server/chains/registry";
+import { readSaved, saveResults } from "@/server/saved/store";
 import { cachedAddressOverview } from "./overview";
 
 export interface ActivityReport extends ActivityFacts {
   /** Tokens the balance view hides as likely spam (lower-case), for the spam filter. */
   hiddenTokens: string[];
+  /** First page: chains shown from their last full history (up to 7 days old) because reading failed now. */
+  saved?: Record<string, string>;
+}
+
+interface SavedActivity {
+  chain: ChainActivity;
+  transfers: ActivityFacts["transfers"];
 }
 
 /** "bsc:123,ethereum:456" ↔ per-chain cursors. Unknown chains and bad numbers are dropped. */
@@ -35,7 +44,6 @@ export async function cachedActivity(
   only?: readonly string[],
 ): Promise<ActivityReport> {
   "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 1800 }); // M9 speed: a repeat visit within 30 min opens at once (refreshed in the background)
   const cursors = parseCursor(cursor);
   // Not awaited here: the history source doesn't need balances, so it starts at once.
   const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
@@ -47,6 +55,7 @@ export async function cachedActivity(
     targets.map(async (chain) => {
       const adapter = registry.adapters.find((a) => a.family === chain.family);
       if (!adapter?.getActivity) throw new Error("Activity not supported");
+      assertChainUp(chain.key, owner);
       const held = overviewRequest.then((overview) => {
         const holdings = overview?.chains.find((c) => c.chain === chain.key);
         return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
@@ -57,16 +66,56 @@ export async function cachedActivity(
     }),
   );
   const overview = await overviewRequest;
+  // Stabilization S2, first page only: save each chain's first page; a chain that failed now shows its last one (up to
+  // 7 days old). Older pages always read fresh.
+  const firstPage = cursor === null;
+  if (firstPage)
+    void saveResults(
+      "activity",
+      owner,
+      settled.flatMap((r) =>
+        // Full history is complete; "recent only" (no history source) can fill a gap but never replaces it.
+        r.status === "fulfilled" && r.value.chain.source !== "unavailable"
+          ? [
+              {
+                chain: r.value.chain.chain,
+                data: { chain: r.value.chain, transfers: r.value.transfers },
+                quality: r.value.chain.source === "history" ? (2 as const) : (1 as const),
+              },
+            ]
+          : [],
+      ),
+    );
+  const failed = targets.filter((_, i) => settled[i]?.status === "rejected").map((c) => c.key);
+  const saved =
+    firstPage && failed.length ? await readSaved<SavedActivity>("activity", owner, failed) : new Map<string, never>();
   const chains: ChainActivity[] = settled.map((r, i) =>
     r.status === "fulfilled"
       ? r.value.chain
-      : { chain: targets[i]!.key as ChainKey, source: "unavailable", next: null, first: null, internalIncluded: false },
+      : (saved.get(targets[i]!.key)?.data.chain ?? {
+          chain: targets[i]!.key as ChainKey,
+          source: "unavailable",
+          next: null,
+          first: null,
+          internalIncluded: false,
+        }),
   );
-  const transfers = settled
-    .flatMap((r) => (r.status === "fulfilled" ? r.value.transfers : []))
-    .sort((a, b) => (b.time ?? 0) - (a.time ?? 0) || b.block - a.block);
+  const transfers = [
+    ...settled.flatMap((r) => (r.status === "fulfilled" ? r.value.transfers : [])),
+    ...[...saved.values()].flatMap((s) => s.data.transfers),
+  ].sort((a, b) => (b.time ?? 0) - (a.time ?? 0) || b.block - a.block);
+  cacheLife(
+    failed.length ? { stale: 0, revalidate: 1, expire: 1 } : { stale: 30, revalidate: 60, expire: 1800 }, // a repeat visit within 30 min opens at once (refreshed in the background)
+  );
   const hiddenTokens = (overview?.chains ?? []).flatMap((c) =>
     c.hidden.flatMap((h) => (h.kind === "token" && h.address ? [h.address.toLowerCase()] : [])),
   );
-  return { owner, checkedAt: Date.now(), chains, transfers, hiddenTokens };
+  return {
+    owner,
+    checkedAt: Date.now(),
+    chains,
+    transfers,
+    hiddenTokens,
+    ...(saved.size ? { saved: Object.fromEntries([...saved].map(([chain, s]) => [chain, s.savedAt])) } : {}),
+  };
 }

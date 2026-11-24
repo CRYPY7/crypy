@@ -45,6 +45,29 @@ const schema = z.object({
   SCAN_MAX_QUEUED: z.coerce.number().int().positive().default(50),
   SCAN_MAX_WALLETS: z.coerce.number().int().positive().default(1_000),
   SCAN_DAILY_WALLETS: z.coerce.number().int().positive().default(5_000),
+  /**
+   * Outage drill (stabilization S2, staging only): chains listed here (comma-separated keys, e.g. "polygon") are
+   * treated as down by balances, activity, approvals, token security and gas, to check that pages still show a
+   * result. Set only in the server's .env.local; never leave it set in production.
+   */
+  CRYPY_FAULT_CHAINS: z
+    .string()
+    .optional()
+    .transform((value) =>
+      (value ?? "")
+        .split(",")
+        .map((part) => part.trim())
+        .filter((part) => /^[a-z0-9-]{1,32}$/.test(part)),
+    ),
+  /**
+   * Outage drill from a file (browser tests): each line "chain" or "chain:address" is treated as down, read again
+   * within a second of a change. A relative path inside the project; unset everywhere else.
+   */
+  CRYPY_FAULT_FILE: z
+    .string()
+    .regex(/^[A-Za-z0-9._\/-]+$/, "CRYPY_FAULT_FILE must be a simple relative path")
+    .refine((v) => !v.includes("..") && !v.startsWith("/"), "CRYPY_FAULT_FILE must stay inside the project")
+    .optional(),
   /** M8: PostgreSQL for accounts and the watchlist (production). Without it, PGlite keeps a local database. */
   DATABASE_URL: z
     .string()
@@ -104,6 +127,8 @@ const parsed = schema.safeParse({
   SCAN_MAX_QUEUED: process.env.SCAN_MAX_QUEUED || undefined,
   SCAN_MAX_WALLETS: process.env.SCAN_MAX_WALLETS || undefined,
   SCAN_DAILY_WALLETS: process.env.SCAN_DAILY_WALLETS || undefined,
+  CRYPY_FAULT_CHAINS: process.env.CRYPY_FAULT_CHAINS || undefined,
+  CRYPY_FAULT_FILE: process.env.CRYPY_FAULT_FILE || undefined,
   DATABASE_URL: process.env.DATABASE_URL || undefined,
   PGLITE_DIR: process.env.PGLITE_DIR || undefined,
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || undefined,

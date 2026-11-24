@@ -55,6 +55,16 @@ export async function TotalValue({
           ))}
         </ul>
       )}
+      {overview.saved && overview.chains.some((c) => overview.saved?.[c.chain]) && (
+        <p className="mt-3 text-sm font-medium text-medium">
+          {t("entity.freshness.totalIncludes", {
+            chains: overview.chains
+              .filter((c) => overview.saved?.[c.chain])
+              .map((c) => t(`chains.${c.chain}`))
+              .join(", "),
+          })}
+        </p>
+      )}
       <p className="mt-3 text-xs text-muted-foreground">
         {t("entity.address.balances.totalNote")} {t("entity.address.balances.pricesBy")} ·{" "}
         {t("entity.address.balances.updated", { time: `${time} UTC` })}

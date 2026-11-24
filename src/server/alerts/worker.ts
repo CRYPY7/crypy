@@ -14,6 +14,7 @@ import { pruneAlerts } from "./store";
 import { runInBackground } from "@/server/background";
 import { pruneProviderUsage, saveProviderUsage } from "@/server/chains/evm/usage-store";
 import { pruneOutcomes } from "@/server/outcomes/store";
+import { pruneSaved } from "@/server/saved/store";
 import { watchVisitorOutcomes } from "@/server/outcomes/watch";
 
 /**
@@ -111,6 +112,7 @@ export function startAlertsWorker(): void {
       await pruneHealthChecks();
       await pruneProviderUsage();
       await pruneOutcomes();
+      await pruneSaved();
     },
     "housekeeping",
   );

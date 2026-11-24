@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { AddressTabs } from "@/components/entity/address-tabs";
 import { ChainScopeBar } from "@/components/entity/chain-scope";
 import { EntityHeader, EntitySkeleton, Notice } from "@/components/entity/entity-parts";
+import { FreshLine, NotCheckedNotice, SavedNotice, SavedTag } from "@/components/entity/freshness";
 import { ChainHoldingsSection, TotalValue } from "@/components/entity/holdings";
 import { type ChainKey, getChain } from "@/config/chains";
 import { type Locale, isLocale } from "@/i18n/locales";
@@ -106,9 +107,13 @@ async function AddressContent({
   );
   const active = views.filter((view) => view.active);
   const inactive = views.filter((view) => !view.active);
-  const unavailable = [...new Set([...overview.unavailable, ...result.unavailable])].filter((c) =>
-    scope.scan.includes(c),
+  // A chain is "not checked" only when neither a fresh nor a saved reading of its balances exists.
+  const unavailable = [...new Set([...overview.unavailable, ...result.unavailable])].filter(
+    (c) => scope.scan.includes(c) && !overview.chains.some((h) => h.chain === c),
   );
+  const savedChains = Object.entries(overview.saved ?? {}).filter(([c]) => scope.scan.includes(c));
+  const f = t.raw("entity.freshness") as Record<string, string>;
+  const retry = { retry: f.retry!, retrying: f.retrying! };
   const total = scope.chains.length;
 
   // ?chain=bsc focuses one chain; anything else shows all.
@@ -158,6 +163,13 @@ async function AddressContent({
       />
 
       <ChainScopeBar scope={scope} path={basePath} />
+      <FreshLine
+        at={overview.fetchedAt}
+        locale={locale}
+        text={f.read!}
+        pending={f.readPending!}
+        labels={{ retry: f.refresh!, retrying: f.refreshing! }}
+      />
 
       {scope.scan.length > 0 && (
         <section aria-labelledby="identity" className="flex flex-col gap-3">
@@ -179,6 +191,9 @@ async function AddressContent({
                     locale={locale}
                     selected={focused === view.chain}
                     pricesAvailable={overview.pricesAvailable}
+                    savedAt={overview.saved?.[view.chain as ChainKey]}
+                    notChecked={unavailable.includes(view.chain)}
+                    savedTag={{ text: f.savedTag!, pending: f.savedTagPending! }}
                     t={t}
                   />
                 </li>
@@ -192,10 +207,25 @@ async function AddressContent({
               })}
             </p>
           )}
+          {savedChains.map(([chain, at]) => (
+            <SavedNotice
+              key={chain}
+              at={at}
+              locale={locale}
+              chain={t(`chains.${chain}`)}
+              title={f.savedTitle!}
+              pending={f.savedPending!}
+              body={f.savedBalances}
+              labels={retry}
+            />
+          ))}
           {unavailable.map((chain) => (
-            <p key={chain} className="rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
-              {t("entity.unavailableChain", { chain: t(`chains.${chain}`) })}
-            </p>
+            <NotCheckedNotice
+              key={chain}
+              title={t("entity.freshness.notCheckedTitle", { chain: t(`chains.${chain}`) })}
+              body={t("entity.freshness.notCheckedBody", { chain: t(`chains.${chain}`) })}
+              labels={retry}
+            />
           ))}
         </section>
       )}
@@ -292,6 +322,9 @@ function IdentityCard({
   locale,
   selected,
   pricesAvailable,
+  savedAt,
+  notChecked,
+  savedTag,
   t,
 }: {
   view: ChainView;
@@ -299,6 +332,10 @@ function IdentityCard({
   locale: Locale;
   selected: boolean;
   pricesAvailable: boolean;
+  savedAt?: string;
+  /** Balances couldn't be read now and nothing is saved: never shown as "no coins or tokens". */
+  notChecked?: boolean;
+  savedTag: { text: string; pending: string };
   t: T;
 }) {
   const lookup = view.lookup;
@@ -314,6 +351,7 @@ function IdentityCard({
     fact = `${formatUsd(holdings.totalUsd, locale)}${tokenCount ? ` · ${t("entity.address.identity.tokens", { count: tokenCount })}` : ""}`;
   else if (nativeBalance && nativeBalance.amount.raw !== "0")
     fact = `${formatAmount(nativeBalance.amount.raw, nativeBalance.amount.decimals, locale, 4)} ${nativeBalance.symbol}`;
+  else if (notChecked && !holdings) fact = t("entity.freshness.notCheckedTitle", { chain: t(`chains.${view.chain}`) });
   else fact = t("entity.address.balances.empty", { chain: t(`chains.${view.chain}`) });
 
   const href = isToken
@@ -326,6 +364,7 @@ function IdentityCard({
       aria-current={selected ? "true" : undefined}
       className={cn(
         "flex h-full flex-col gap-2 rounded-xl border bg-card p-4 transition-colors hover:border-primary",
+        savedAt && "border-medium/50",
         selected && "border-2 border-primary",
       )}
     >
@@ -337,6 +376,7 @@ function IdentityCard({
         {t(`entity.kinds.${kind}`)}
       </span>
       <span className="text-sm">{fact}</span>
+      {savedAt && <SavedTag at={savedAt} locale={locale} text={savedTag.text} pending={savedTag.pending} />}
       <span className="mt-auto text-sm font-semibold text-primary">
         {isToken
           ? `${t("entity.address.identity.openToken")} →`

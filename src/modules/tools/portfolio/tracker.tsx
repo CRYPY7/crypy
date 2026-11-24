@@ -45,7 +45,13 @@ interface FlaggedToken {
 }
 
 interface WalletReport {
-  overview: { chains: ChainHoldings[]; unavailable: string[]; pricesAvailable: boolean };
+  overview: {
+    chains: ChainHoldings[];
+    unavailable: string[];
+    pricesAvailable: boolean;
+    /** Chains shown from an earlier reading (stabilization S2). */
+    saved?: Record<string, string>;
+  };
   approvals: { attention: number; chains: string[]; partial: boolean } | null;
   flagged: { tokens: FlaggedToken[]; checked: number; skipped: number } | null;
 }
@@ -204,13 +210,20 @@ export default function PortfolioTracker({
   useEffect(() => {
     if (!data || !allLoaded || snapshotDone.current) return;
     if (overviews.some((o) => !o.pricesAvailable)) return;
+    // A chain left out, or shown from an earlier reading, would make the comparison wrong.
+    if (
+      Object.values(loads).some(
+        (l) => l?.status === "ok" && (l.report.overview.unavailable.length > 0 || l.report.overview.saved),
+      )
+    )
+      return;
     snapshotDone.current = true;
     const now = Date.now();
     const { compareTo, keep } = nextSnapshot(data.snapshot, summary.totalUsd, now);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- runs once per visit, after the wallets load
     if (compareTo) setComparison({ snapshot: compareTo, now });
     if (keep !== data.snapshot) writeSaved({ ...data, snapshot: keep });
-  }, [allLoaded, data, overviews, summary.totalUsd]);
+  }, [allLoaded, data, loads, overviews, summary.totalUsd]);
 
   const reports = (data?.wallets ?? []).flatMap((w) => {
     const load = loads[w.address];
@@ -224,6 +237,7 @@ export default function PortfolioTracker({
   const someUnchecked = reports.some((r) => !fullyChecked(r.report));
   const unavailableChains = [...new Set(reports.flatMap((r) => r.report.overview.unavailable))];
   const pricesMissing = reports.some((r) => !r.report.overview.pricesAvailable);
+  const savedChains = [...new Set(reports.flatMap((r) => Object.keys(r.report.overview.saved ?? {})))];
 
   const refresh = () => {
     if (!data) return;
@@ -423,7 +437,7 @@ export default function PortfolioTracker({
           </div>
         )}
 
-        {(failed.length > 0 || unavailableChains.length > 0 || pricesMissing) && (
+        {(failed.length > 0 || unavailableChains.length > 0 || savedChains.length > 0 || pricesMissing) && (
           <div className="mt-4 flex flex-col gap-1 rounded-xl border border-medium/40 bg-medium/8 p-3 text-sm">
             {failed.length > 0 && (
               <p className="flex items-start gap-2">
@@ -449,6 +463,9 @@ export default function PortfolioTracker({
             )}
             {unavailableChains.length > 0 && (
               <p>{fill(s.chainsDown!, { chains: unavailableChains.map(chainName).join(", ") })}</p>
+            )}
+            {savedChains.length > 0 && (
+              <p data-freshness="saved">{fill(s.chainsSaved!, { chains: savedChains.map(chainName).join(", ") })}</p>
             )}
             {pricesMissing && <p>{s.pricesMissing}</p>}
           </div>

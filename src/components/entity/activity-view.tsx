@@ -25,13 +25,23 @@ import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import { formatAmount, shortenId } from "@/lib/format/amount";
 import { formatUsd } from "@/lib/format/money";
 import { cn } from "@/lib/utils";
+import { NotCheckedNotice, SavedNotice } from "./freshness";
 import { type ApprovalsChainInfo as ChainInfo, fill } from "./approvals-shared";
 
 export type ActivityStrings = Record<string, string>;
 
 interface Props {
   owner: string;
-  initial: { chains: ChainActivity[]; transfers: Transfer[]; next: string | null; checkedAt: number };
+  initial: {
+    chains: ChainActivity[];
+    transfers: Transfer[];
+    next: string | null;
+    checkedAt: number;
+    /** Chains shown from their last full history because reading failed now: ISO time (stabilization S2). */
+    saved?: Record<string, string>;
+  };
+  /** entity.freshness strings. */
+  fresh: Record<string, string>;
   hiddenTokens: string[];
   /** Names from CRYPY's list of known contracts, lower-case address → name (per chain key). */
   names: Record<string, Record<string, string>>;
@@ -45,7 +55,7 @@ type Dir = "all" | "in" | "out";
 type Kind = "all" | "coin" | "token" | "nft";
 type Range = "all" | "1" | "7" | "30";
 
-export function ActivityView({ owner, initial, hiddenTokens, names, strings: s, locale, chains, paths }: Props) {
+export function ActivityView({ owner, initial, hiddenTokens, names, strings: s, locale, chains, paths, fresh }: Props) {
   const router = useRouter();
   const [refreshing, startRefresh] = useTransition();
   const [transfers, setTransfers] = useState<Transfer[]>(initial.transfers);
@@ -187,10 +197,25 @@ export function ActivityView({ owner, initial, hiddenTokens, names, strings: s, 
           {fill(s.recentOnly!, { chains: recent.join(", ") })}
         </p>
       )}
+      {Object.entries(initial.saved ?? {}).map(([chain, at]) => (
+        <SavedNotice
+          key={chain}
+          at={at}
+          locale={locale}
+          chain={chainInfo(chain)?.name ?? chain}
+          title={fresh.savedTitle!}
+          pending={fresh.savedPending!}
+          body={fresh.savedActivity}
+          labels={{ retry: fresh.retry!, retrying: fresh.retrying! }}
+        />
+      ))}
       {down.map((name) => (
-        <p key={name} role="alert" className="rounded-xl border border-high/50 bg-high/8 p-4 text-sm">
-          {fill(s.chainDown!, { chain: name })}
-        </p>
+        <NotCheckedNotice
+          key={name}
+          title={fill(fresh.notCheckedTitle!, { chain: name })}
+          body={fill(fresh.notCheckedBody!, { chain: name })}
+          labels={{ retry: fresh.retry!, retrying: fresh.retrying! }}
+        />
       ))}
 
       <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">

@@ -445,6 +445,8 @@ ETHERSCAN_API_KEY=            # M7
 BSCTRACE_API_KEY=             # M7
 DATABASE_URL=                 # M8: real PostgreSQL (production); empty = PGlite in .data/pglite
 PGLITE_DIR=                   # M8: PGlite folder, or "memory" (browser tests)
+CRYPY_FAULT_CHAINS=           # S2 outage drill, staging only: chains treated as down
+CRYPY_FAULT_FILE=             # S2 outage drill for browser tests (chain or chain:address per line)
 TELEGRAM_BOT_TOKEN=           # M8 Part 3: alerts bot (server-only)
 CRYPY_WORKER=                 # M8 Part 3: "off" stops the checker and the bot
 ALCHEMY_WEBHOOK_SIGNING_KEY=  # M8
@@ -823,6 +825,30 @@ DEX decoders, per chain family:                      (one per DEX design)
   run by the worker each minute (`server/outcomes/watch.ts`).
 - `instrumentation.ts` `onRequestError`: every error Next.js reports while serving a visitor, counted as "pages".
 - `scripts/audit/run.mjs`: the S1 audit against any CRYPY address (read-only).
+
+## 12q. Saved results (stabilization S2, boards 60–61)
+
+- `server/saved/store.ts`: table `saved_results` (migration `0007_saved_results`): kind, subject (address, token or
+  "all" for gas), chain, data (jsonb), quality (2 complete, 1 usable but incomplete), saved_at, used_at. `saveResults`
+  upserts and never replaces a complete reading with an incomplete one unless it is over a day old; results over
+  512 KB aren't saved. `readSaved` returns readings young enough to show (`MAX_AGE_MS`: balances and activity 7 days,
+  approvals and token security 6 hours, gas 10 minutes), gives up after 1.5 s, and marks them as looked up.
+  `pruneSaved` (hourly housekeeping) deletes rows not looked up for 7 days. No IP or visitor id is stored (owner
+  decision 2026-11-24; privacy page says so). Saving and reading never throw.
+- Services (page paths only; the health checks and alerts checker use the uncached functions and always see chains as
+  they are): `cachedAddressOverview` → `withSavedChains` (readings with prices saved; failed chains filled, `saved`
+  map), `cachedApprovals` (complete checks only: GoPlus "ok" and recent events searched), `cachedActivity` (first page
+  only; history quality 2, recent-only 1), `cachedTokenSecurity` (saved when GoPlus answered; a thrown check returns
+  the saved report with `savedAt`), `cachedGas` (saved at most once a minute per chain; `saved: true`). An answer with
+  a missing or saved chain is cached for 1 second only (`cacheLife`), so "Try again" reads again; full answers keep
+  their usual lifetimes.
+- UI: `components/entity/freshness.tsx` (client): `FreshLine`, `SavedNotice` (amber, per chain), `NotCheckedNotice`
+  (grey dashed), `SavedTag`; ages are worked out in the browser (`useSyncExternalStore`, server render shows a neutral
+  text). Strings in `entity.freshness`. Used on the address overview (cards, notices, total), approvals, activity,
+  token security; gas shows "From N min ago" on the chain card; the Portfolio lists saved chains and skips "since you
+  last looked" while any chain is missing or saved.
+- Outage drill (`server/fault.ts`): `CRYPY_FAULT_CHAINS` (staging: chains down for everyone) and `CRYPY_FAULT_FILE`
+  (browser tests: lines `chain` or `chain:address`), both operator-only settings; never set in production.
 
 ## 13. Performance budget
 

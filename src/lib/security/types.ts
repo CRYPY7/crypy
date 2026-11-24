@@ -251,4 +251,6 @@ export interface SecurityReport {
   /** Headline level, never "safe". */
   level: "serious" | "risks" | "warnings" | "none-found";
   comparison: Comparison | null;
+  /** Shown from the last full check (at most 6 hours old) because a fresh check failed now: its time (ISO). */
+  savedAt?: string;
 }

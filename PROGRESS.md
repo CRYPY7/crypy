@@ -38,8 +38,43 @@ Last updated: 2026-11-24
 | SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
 | M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
-| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0 and S1 started 2026-11-24; new features paused until S6                    |
+| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 saved results built 2026-11-24; features paused until S6   |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Saved results: never an error when a good answer exists (S2, boards 60–61, approved 2026-11-24)
+
+Owner decision: wallet results are saved in the database and deleted 7 days after the wallet was last looked up; no IP
+or visitor id is stored with them.
+
+- **Saved per chain** (`saved_results`, migration 0007): balances, activity (first page), approvals, token security
+  and gas. When a fresh read of a chain fails, its last reading is shown with its age, for at most 7 days (balances,
+  activity), 6 hours (approvals, token security) or 10 minutes (gas). A complete reading is never replaced by an
+  incomplete one (a well-known-tokens-only list, recent-only activity) unless it is over a day old. Approvals and token
+  security are saved only when every source answered.
+- **One shared notice** on every tool: "Read 12 minutes ago · Refresh"; amber "Ethereum: shown from 2 hours ago …
+  Try again" per chain; grey dashed "BNB Chain: not checked … this isn't 'empty'" instead of red error boxes. The total
+  says "Includes Ethereum from an earlier reading." Chain cards say "From 2 hours ago", and a chain that wasn't checked
+  no longer says "No coins or tokens" (that was wrong before too). Token reports: "Report from 3 hours ago … Check
+  again before you buy." Revoke still reads the chain first. Gas: "From 3 min ago" on the chain card.
+- **Partial answers are no longer kept for 30 minutes**: an answer with a missing or saved chain is cached for 1 second,
+  so "Try again" really reads again. Full answers keep their lifetimes.
+- **Portfolio:** lists chains shown from an earlier reading, and skips "since you last looked" while any chain is
+  missing or saved (a missing chain used to be able to look like a loss).
+- **Privacy page and Portfolio FAQ** updated in all 7 languages.
+- **Outage drill:** `CRYPY_FAULT_CHAINS=polygon` on staging makes Polygon look down for every tool (S2's "Done when");
+  browser tests use `CRYPY_FAULT_FILE` for one address at a time.
+- **Differences from the boards:** states 1 and 2 are one line ("Read 12 minutes ago · Refresh"): the page doesn't
+  update itself when a background refresh finishes; Refresh or the next visit shows it. The approvals page keeps its
+  own "checked at" line instead of the new one.
+- **Not covered yet:** the transaction page and search (a search failing on every chain still shows an error); the
+  staging check needs the staging server (S4).
+
+**Checks:** typecheck, lint, Prettier and the i18n check are clean. Unit: 518 passed, 73 skipped (11 new: saving,
+age limits, quality rule, size cap, 7-day deletion, overview fill-in, and per tool: gas, approvals, activity, token
+security). Build passed. Browser: 270 passed, 14 skipped, 0 failed. New test: a chain taken down for one address shows
+the saved reading with its age, the other says "not checked" (never "empty"), and "Try again" reads them fresh. The
+first full run had one failure in this new test (it counted a hidden copy of streaming text); fixed, then 5 of 5 alone
+and the full run passed.
 
 ## "Scan in my browser" (S2 Part A.2, board 55; always free, owner decision 2026-11-24)
 

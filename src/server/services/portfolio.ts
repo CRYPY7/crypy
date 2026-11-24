@@ -88,7 +88,8 @@ export async function portfolioWallet(address: string): Promise<PortfolioWalletR
     withTimeout(
       cachedApprovals(address, approvalChains, "background").then((r) => ({
         attention: r.summary.attention,
-        partial: r.unavailable.length > 0 || r.chains.some((c) => c.sources.goplus === "unavailable"),
+        partial:
+          r.unavailable.length > 0 || Boolean(r.saved) || r.chains.some((c) => c.sources.goplus === "unavailable"),
         chains: [...new Set(r.chains.filter((c) => c.approvals.some((a) => a.attention)).map((c) => c.chain))],
       })),
       APPROVALS_MS,

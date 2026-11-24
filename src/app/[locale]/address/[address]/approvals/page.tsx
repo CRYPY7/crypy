@@ -122,6 +122,7 @@ async function ApprovalsContent({
           }))}
         tokenPath={localePath(locale, "/token")}
         addressPath={localePath(locale, "/address")}
+        fresh={t.raw("entity.freshness") as Record<string, string>}
       />
     </div>
   );

@@ -67,7 +67,12 @@ export function GasTracker({
   return (
     <div className="flex flex-col gap-5">
       {data.unavailable.map((c) => (
-        <p key={c} role="alert" className="rounded-xl border border-high/50 bg-high/8 p-4 text-sm">
+        <p
+          key={c}
+          role="status"
+          data-freshness="not-checked"
+          className="rounded-xl border border-dashed p-4 text-sm text-muted-foreground"
+        >
           {fill(s.chainDown!, { chain: info(c)?.name ?? c })}
         </p>
       ))}
@@ -83,7 +88,7 @@ export function GasTracker({
             <section
               key={c.chain}
               aria-labelledby={`gas-${c.chain}`}
-              className="flex flex-col gap-4 rounded-xl border bg-card p-5"
+              className={cn("flex flex-col gap-4 rounded-xl border bg-card p-5", c.saved && "border-medium/50")}
             >
               <div className="flex flex-wrap items-center gap-3">
                 <ChainIcon chain={c.chain} size={26} />
@@ -97,6 +102,14 @@ export function GasTracker({
                   })}
                 </span>
               </div>
+              {c.saved && (
+                <p role="status" data-freshness="saved" className="text-sm font-medium text-medium">
+                  {fill(s.savedChain!, {
+                    chain: chain?.name ?? c.chain,
+                    minutes: now ? Math.max(1, Math.round((now - c.checkedAt) / 60_000)) : 1,
+                  })}
+                </p>
+              )}
               <div className="grid grid-cols-3 gap-2">
                 {cards.map((card) => {
                   const cost = actionCost("sendCoin", card.gwei, c.coinUsd, c.l1Fees?.sendCoin);

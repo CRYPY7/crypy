@@ -1,4 +1,6 @@
 import "server-only";
+import { assertChainUp } from "@/server/fault";
+import { readSaved, saveResults } from "@/server/saved/store";
 import { cacheLife } from "next/cache";
 import { getChain } from "@/config/chains";
 import type { AddressLookup, TxDetails, TxLookup } from "@/lib/chains/types";
@@ -70,8 +72,21 @@ export function explorerLink(chainKey: string, kind: "address" | "tx" | "token",
  */
 export async function cachedTokenSecurity(chainKey: string, address: string): Promise<SecurityReport | null> {
   "use cache";
+  let report: SecurityReport | null;
+  try {
+    report = await tokenSecurityReport(chainKey, address);
+  } catch (error) {
+    // Stabilization S2: a check that failed now shows the last full one (at most 6 hours old), marked with its time.
+    const saved = (await readSaved<SecurityReport>("token-security", address, [chainKey])).get(chainKey);
+    if (!saved) throw error;
+    cacheLife({ stale: 0, revalidate: 1, expire: 1 });
+    return { ...saved.data, savedAt: saved.savedAt };
+  }
+  // Saved only when every source answered (GoPlus included).
+  if (report && report.facts.externalStatus !== "unavailable")
+    void saveResults("token-security", address, [{ chain: chainKey, data: report }]);
   cacheLife({ stale: 60, revalidate: 300, expire: 900 });
-  return tokenSecurityReport(chainKey, address);
+  return report;
 }
 
 /** The same without the page cache, for the background alerts checker (GoPlus at background priority there). */
@@ -84,6 +99,7 @@ export async function tokenSecurityReport(
   if (!found?.adapter.getTokenSecurity || !found.chain.capabilities.tokenSecurity) return null;
   const parsed = found.adapter.parseAddress(address);
   if (!parsed || parsed.checksumValid === false) return null;
+  assertChainUp(found.chain.key, parsed.normalized);
   const facts = await found.adapter.getTokenSecurity(found.chain, parsed.normalized, priority);
   return facts ? evaluate(facts) : null;
 }

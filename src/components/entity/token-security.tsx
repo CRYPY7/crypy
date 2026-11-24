@@ -22,6 +22,7 @@ import type { CheckClass, SecurityCheck, SecurityReport } from "@/lib/security/t
 import { cn } from "@/lib/utils";
 import { dexDeployments } from "@/server/chains/evm/security/dex-registry";
 import { cachedTokenSecurity } from "@/server/services/lookups";
+import { NotCheckedNotice, SavedNotice } from "./freshness";
 import { Notice } from "./entity-parts";
 import { LiquidityHoldersCard } from "./token-liquidity";
 import { CopyText } from "./tx-client";
@@ -190,8 +191,31 @@ export async function TokenSecuritySection({
     () => cachedTokenSecurity(chainKey, address),
     classifyTokenSecurity,
   ).catch(() => null);
-  if (!report) return <Notice tone="warning">{t(`${K}.unavailable`)}</Notice>;
-  return <TokenSecurityReportView report={report} chainKey={chainKey} locale={locale} />;
+  const f = t.raw("entity.freshness") as Record<string, string>;
+  const retry = { retry: f.checkAgain!, retrying: f.retrying! };
+  if (!report)
+    return (
+      <NotCheckedNotice
+        title={t("entity.freshness.notCheckedTitle", { chain: t(`chains.${chainKey}`) })}
+        body={t(`${K}.unavailable`)}
+        labels={retry}
+      />
+    );
+  return (
+    <div className="flex flex-col gap-4">
+      {report.savedAt && (
+        <SavedNotice
+          at={report.savedAt}
+          locale={locale}
+          title={f.tokenTitle!}
+          pending={f.tokenPending!}
+          body={f.tokenBody}
+          labels={retry}
+        />
+      )}
+      <TokenSecurityReportView report={report} chainKey={chainKey} locale={locale} />
+    </div>
+  );
 }
 
 /**

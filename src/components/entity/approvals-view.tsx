@@ -13,6 +13,7 @@ import type { ApprovalsReport } from "@/server/services/approvals";
 import type { RevokeRequest } from "@/wallets/types";
 import { useWallet } from "@/wallets/wallet-root";
 import { type ApprovalsChainInfo, type ApprovalsStrings, fill } from "./approvals-shared";
+import { NotCheckedNotice, SavedNotice } from "./freshness";
 import { RevokeDialog, type RevokeTarget } from "./revoke-dialog";
 
 type Row = RatedApproval & { chain: string; id: string };
@@ -25,9 +26,12 @@ export function ApprovalsView({
   chains,
   tokenPath,
   addressPath,
+  fresh,
 }: {
   report: ApprovalsReport;
   strings: ApprovalsStrings;
+  /** entity.freshness strings (stabilization S2). */
+  fresh: Record<string, string>;
   locale: string;
   chains: ApprovalsChainInfo[];
   /** "/en/token" */
@@ -143,10 +147,25 @@ export function ApprovalsView({
         </div>
       )}
 
+      {Object.entries(report.saved ?? {}).map(([chain, at]) => (
+        <SavedNotice
+          key={chain}
+          at={at}
+          locale={locale}
+          chain={chainInfo(chain)?.name ?? chain}
+          title={fresh.savedTitle!}
+          pending={fresh.savedPending!}
+          body={fresh.savedApprovals}
+          labels={{ retry: fresh.retry!, retrying: fresh.retrying! }}
+        />
+      ))}
       {report.unavailable.map((chain) => (
-        <p key={chain} role="alert" className="rounded-xl border border-high/50 bg-high/8 p-4 text-sm">
-          {fill(s.chainDown!, { chain: chainInfo(chain)?.name ?? chain })}
-        </p>
+        <NotCheckedNotice
+          key={chain}
+          title={fill(fresh.notCheckedTitle!, { chain: chainInfo(chain)?.name ?? chain })}
+          body={fill(fresh.notCheckedBody!, { chain: chainInfo(chain)?.name ?? chain })}
+          labels={{ retry: fresh.retry!, retrying: fresh.retrying! }}
+        />
       ))}
       {goplusPartial.length > 0 && (
         <p role="note" className="rounded-xl border p-4 text-sm text-muted-foreground">

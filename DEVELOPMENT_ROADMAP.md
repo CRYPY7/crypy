@@ -28,6 +28,12 @@ used up before 00:00 UTC on a normal day.
 - **S2 — Never show an error when a good answer exists.** Last good result saved in the database for token checks,
   address summaries, approvals, activity and gas; shown with its age while a fresh check runs; one shared
   partial-result design. **Done when:** stopping any one provider on staging leaves every tool showing a result.
+  - **Built 2026-11-24 (boards 60–61, see PROGRESS.md):** saved results for balances, activity (first page),
+    approvals, token security and gas; one shared notice (fresh / saved with its age / not checked); wallet results
+    deleted 7 days after the last lookup. The outage drill (`CRYPY_FAULT_CHAINS`) is ready for the staging check.
+  - **Still to do in S2:** the staging check itself (S4 creates staging); the transaction page and search have no
+    saved results yet (a search that fails on every chain still shows an error); slow first visits (B-006, B-013,
+    B-018).
 - **S3 — Sources that don't fall over.** Health score per provider and method (bench failing providers until they
   recover); more free providers per chain and a map of what each supports; GoPlus queue with priorities and saved
   results; a queue for heavy checks. **Done when:** a day with one provider down and GoPlus at its limit stays on target.

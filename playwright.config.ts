@@ -34,6 +34,8 @@ export default defineConfig({
       CRYPY_WORKER_SKIP: "token-checks,health",
       // The admin dashboard tests sign in with this test-only wallet.
       ADMIN_WALLETS: ADMIN_TEST_ADDRESS,
+      // Outage drill for one address at a time (tests/e2e/saved-results.spec.ts); other tests aren't affected.
+      CRYPY_FAULT_FILE: ".data/e2e-faults",
       ...(fakeTelegram ? { TELEGRAM_API_URL: fakeTelegramUrl, TELEGRAM_BOT_TOKEN: FAKE_TELEGRAM_TOKEN } : {}),
     },
   },
