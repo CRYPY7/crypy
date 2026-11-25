@@ -4,42 +4,78 @@ Last updated: 2026-11-24
 
 ## Milestones
 
-| Milestone                                              | Status                                                                                         |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                                                        |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                           |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                           |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                           |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                        |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                          |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                           |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                          |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                 |
-| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                         |
-| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                          |
-| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses   |
-| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)              |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                  |
-| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)              |
-| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test  |
-| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                 |
-| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                            |
-| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred   |
-| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3        |
-| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                    |
-| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                             |
-| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)           |
-| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)       |
-| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap)  |
-| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified         |
-| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)          |
-| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending                |
-| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                            |
-| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server          |
-| M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server   |
-| Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each         |
-| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 saved results built 2026-11-24/25; features paused until S6 |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                           |
+| Milestone                                              | Status                                                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                                       |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                          |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                          |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                          |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                         |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                          |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                         |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                        |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
+| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                 |
+| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
+| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
+| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
+| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
+| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
+| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3       |
+| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                   |
+| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                            |
+| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
+| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
+| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
+| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified        |
+| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
+| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending               |
+| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                           |
+| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
+| M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
+| Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
+| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Day 2026-11-25: S3 started — saved GoPlus answers, crawlers cost nothing, per-method provider rest
+
+Unattended (owner out); nothing deployed, committed or pushed. No new screens; one new notice text (7 languages).
+
+- **GoPlus answers saved (B-005, S3):** token answers are reused without a call for up to 1 hour and kept as a
+  fallback for 24 hours (the shown time is when GoPlus answered); approval lists are reused for 5 minutes and a
+  fallback list up to 24 hours old is marked partial. Kinds `goplus-token` / `goplus-approvals` in `saved_results`
+  (same table, same 7-day clean-up). Test: `tests/unit/goplus-store.test.ts`.
+- **Crawlers cost nothing on result pages (B-021 follow-up):** `src/lib/crawler.ts` recognises crawlers, link
+  previews and scripted clients by user agent (an empty one counts as scripted). On address, approvals, activity,
+  token, transaction and search pages they get a short notice and no blockchain lookups at all (`pageAccess()` in
+  `page-guard.ts` replaces `pageRequestAllowed()`). Page titles for link previews still work. Real browsers
+  (including the browser tests' headless Chrome) are unaffected. Tests: `tests/unit/crawler.test.ts`, one e2e test.
+- **Per-method provider rest (S3):** a node that times out, answers malformed or with HTTP 5xx on one kind of
+  request now rests for 60 s for that method only; cheap reads keep using it. A second method failing in the same
+  minute, a connection failure or "too many requests" still rests the whole provider. Ranking, the "wake one if all
+  rest" rule and the last-try rule look at the method asked. Test: `tests/unit/provider-method-rest.test.ts`.
+
+- **Provider capability map (S3):** `pnpm providers:map` (`scripts/providers/map.mjs`, read-only, prints host names
+  only) measures each provider: right chain, speed, largest batch, old-block reads (100,000 blocks back), token
+  events over 1,000 blocks, wallet-wide event searches. `--candidates` also tests keyless nodes CRYPY doesn't use;
+  `--md` prints a table. Run here 2026-11-25 on the public nodes (no keys in this workspace):
+  - Old-block reads: only eth.drpc.org, base.drpc.org and base-rpc.publicnode.com answered; BNB Chain, Arbitrum and
+    Polygon have no free public node that does (Alchemy or an extra provider needed).
+  - Token events over 1,000 blocks: PublicNode on Ethereum, Base, Polygon and Arbitrum's own node; dRPC stops at 100.
+  - Wallet-wide searches (alerts checker): dRPC on every chain and Arbitrum's own node; PublicNode refuses them, and
+    on BNB Chain no public node CRYPY uses allows them (bsc-dataseed answers "limit exceeded").
+  - Candidates: 1rpc.io answers on all 5 chains but limits event searches to 50 blocks and was rate-limited during
+    the run; eth.llamarpc.com and base.llamarpc.com were down (HTTP 525), polygon-rpc.com didn't answer, bsc.drpc.org
+    was rate-limited, rpc.mevblocker.io is a transaction-protection service. None is worth adding as is; the owner's
+    keyed free providers (dRPC, Ankr, Chainstack, NodeReal, Infura) remain the way to add capacity. The owner can run
+    `pnpm providers:map` on the server to see the keyed ones too.
+
+**Checks:** typecheck, lint, Prettier, i18n clean. Unit: 535 passed, 76 skipped (live tests). Build passed.
+Browser: 275 passed, 17 skipped, 0 failed.
 
 ## Morning 2026-11-25: B-014 faster, B-007 measured, B-015
 

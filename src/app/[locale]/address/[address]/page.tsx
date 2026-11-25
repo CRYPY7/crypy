@@ -20,7 +20,7 @@ import { formatUsd } from "@/lib/format/money";
 import type { ChainHoldings } from "@/lib/portfolio/holdings";
 import { localePath } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { pageRequestAllowed } from "@/server/page-guard";
+import { pageAccess } from "@/server/page-guard";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
 import { type AddressOverview, cachedAddressOverview } from "@/server/services/overview";
@@ -78,7 +78,9 @@ async function AddressContent({
   if (!isLocale(locale)) notFound();
   const t = await getTranslations();
 
-  if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
+  const access = await pageAccess();
+  if (access !== "ok")
+    return <Notice tone="warning">{t(access === "crawler" ? "entity.crawler" : "entity.rateLimited")}</Notice>;
 
   const result = await resolveAddressPage(address);
   if (result.status === "bad-checksum") {

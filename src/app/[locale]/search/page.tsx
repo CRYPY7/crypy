@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import { EntitySkeleton, Notice } from "@/components/entity/entity-parts";
 import { isLocale } from "@/i18n/locales";
 import { localePath } from "@/lib/routes";
-import { pageRequestAllowed } from "@/server/page-guard";
+import { pageAccess } from "@/server/page-guard";
 import { cachedResolve } from "@/server/services/lookups";
 import { observe } from "@/server/outcomes/record";
 import { classifySearch } from "@/lib/outcomes/classify";
@@ -37,7 +37,9 @@ async function SearchResult({ searchParams }: PageProps<"/[locale]/search">) {
   const q = typeof query.q === "string" ? query.q.trim().slice(0, 200) : "";
 
   if (!q) return <Notice>{t("search.result.empty")}</Notice>;
-  if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("search.result.rate-limited")}</Notice>;
+  const access = await pageAccess();
+  if (access !== "ok")
+    return <Notice tone="warning">{t(access === "crawler" ? "entity.crawler" : "search.result.rate-limited")}</Notice>;
 
   const result = await observe("search", () => cachedResolve(q), classifySearch).catch(() => null);
   if (!result || result.status === "unavailable") {

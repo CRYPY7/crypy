@@ -11,7 +11,15 @@ import { savedResults } from "@/server/db/schema";
  * Privacy (owner decision 2026-11-24): wallet results are deleted 7 days after the wallet was last looked up. Only the
  * public subject (address or token), the chain and the result are stored: never an IP address or visitor id.
  */
-export type SavedKind = "balances" | "activity" | "approvals" | "token-security" | "gas" | "transaction";
+export type SavedKind =
+  | "balances"
+  | "activity"
+  | "approvals"
+  | "token-security"
+  | "gas"
+  | "transaction"
+  | "goplus-token"
+  | "goplus-approvals";
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -25,6 +33,9 @@ export const MAX_AGE_MS: Record<SavedKind, number> = {
   gas: 10 * 60_000,
   /** Only confirmed transactions are saved, and those don't change (only the confirmation count grows). */
   transaction: 7 * DAY,
+  /** GoPlus answers (S3, B-005): reused for an hour (approvals 5 minutes); kept a day as a fallback when GoPlus is down. */
+  "goplus-token": DAY,
+  "goplus-approvals": DAY,
 };
 
 /** Deleted this long after the subject was last looked up. */

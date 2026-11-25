@@ -16,7 +16,7 @@ import { looksLikeLink } from "@/lib/chains/sanitize";
 import { localePath } from "@/lib/routes";
 import { OtherChains } from "@/components/entity/other-chains";
 import { TokenSecuritySection } from "@/components/entity/token-security";
-import { pageRequestAllowed } from "@/server/page-guard";
+import { pageAccess } from "@/server/page-guard";
 import { cachedTokenLookup, explorerLink } from "@/server/services/lookups";
 
 type Props = PageProps<"/[locale]/token/[chain]/[address]">;
@@ -50,7 +50,9 @@ async function TokenContent({ params }: { params: Props["params"] }) {
   if (!isLocale(locale) || !chain) notFound();
   const t = await getTranslations();
 
-  if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
+  const access = await pageAccess();
+  if (access !== "ok")
+    return <Notice tone="warning">{t(access === "crawler" ? "entity.crawler" : "entity.rateLimited")}</Notice>;
 
   let lookup;
   try {

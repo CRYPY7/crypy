@@ -90,3 +90,17 @@ test("a slow chain shows its last reading at once, marked 'checking for changes'
   await expect(checking).toHaveCount(0, { timeout: 30_000 });
   await expect(page.getByText("Includes Ethereum from an earlier reading.").filter({ visible: true })).toHaveCount(0);
 });
+
+test.describe("crawlers on result pages (S3, B-021 follow-up)", () => {
+  test("a known crawler gets the light page with no blockchain lookups", async ({ request }, info) => {
+    test.skip(info.project.name !== "desktop", "one run is enough");
+    const res = await request.get("/en/address/0x000000000000000000000000000000000000dEaD", {
+      headers: {
+        "user-agent": "meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)",
+      },
+    });
+    expect(res.status()).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("Automated clients and crawlers get no live data here.");
+  });
+});

@@ -34,7 +34,7 @@ import { getChain } from "@/config/chains";
 import { isLocale } from "@/i18n/locales";
 import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
-import { pageRequestAllowed } from "@/server/page-guard";
+import { pageAccess } from "@/server/page-guard";
 import { SavedNotice } from "@/components/entity/freshness";
 import { cachedResolve, cachedTxDetails, explorerLink } from "@/server/services/lookups";
 import { observe } from "@/server/outcomes/record";
@@ -63,7 +63,9 @@ async function TxContent({ params, searchParams }: Props) {
   if (!isLocale(locale)) notFound();
   const t = await getTranslations();
 
-  if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
+  const access = await pageAccess();
+  if (access !== "ok")
+    return <Notice tone="warning">{t(access === "crawler" ? "entity.crawler" : "entity.rateLimited")}</Notice>;
 
   const chainKey = typeof query.chain === "string" ? query.chain : undefined;
   const chain = chainKey ? getChain(chainKey) : undefined;

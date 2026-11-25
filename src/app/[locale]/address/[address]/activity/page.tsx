@@ -15,7 +15,7 @@ import { knownContract, knownContractsFor } from "@/config/known-contracts";
 import { isLocale } from "@/i18n/locales";
 import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
-import { pageRequestAllowed } from "@/server/page-guard";
+import { pageAccess } from "@/server/page-guard";
 import { cachedActivity, formatCursor } from "@/server/services/activity";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
@@ -50,7 +50,9 @@ async function ActivityContent({
   const [{ address }, query, locale] = await Promise.all([params, searchParams, localeParam()]);
   if (!isLocale(locale)) notFound();
   const t = await getTranslations();
-  if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
+  const access = await pageAccess();
+  if (access !== "ok")
+    return <Notice tone="warning">{t(access === "crawler" ? "entity.crawler" : "entity.rateLimited")}</Notice>;
 
   const result = await resolveAddressPage(address);
   if (result.status === "bad-checksum") {

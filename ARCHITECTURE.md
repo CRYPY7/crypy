@@ -352,6 +352,8 @@ crypy/
 - Secrets server-only (`src/server/*` imports `server-only`); only `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` public (domain-restricted to crypy.org + localhost in Reown).
 - CSP `connect-src` lists only the RPC hosts and WalletConnect/Reown services in use; add a host there when adding a provider the browser talks to.
 - Result pages that call providers are rate-limited per visitor (`page-guard.ts`), `noindex` and disallowed in robots.txt.
+  `pageAccess()` returns `ok | limited | crawler`: known crawlers and scripted clients (`lib/crawler.ts`, by user
+  agent; empty counts as scripted) get a notice and no lookups at all, so a bot that ignores robots.txt costs nothing.
 - zod validation; family-specific format/checksum validation in adapters.
 - Rate limiting, security headers, plain-text rendering of third-party strings, allow-listed explorer links.
 - Each new family gets a security review before going live.
@@ -484,7 +486,12 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   a rotation with other providers (no budget → `AlchemyBusyError`, next provider at once, no cool-down), "wait"
   where Alchemy is the only source (archive client, health checks; up to 3 s). Alchemy-only HTTP calls (token list,
   transfers) use `waitForAlchemy`; reservations may put the bucket into debt, so they go before ordinary reads.
-  An Alchemy 429 pauses it for 2 s instead of the 60 s outage cool-down. With several server processes, each has its
+  An Alchemy 429 pauses it for 2 s instead of the 60 s outage cool-down. Outage rest is per method (S3,
+  `restAfterFailure`): a timeout, malformed answer or 5xx rests only that provider+method for 60 s; a connection
+  failure, a 429 from a free node, or a second method failing within the minute rests the whole provider. GoPlus
+  answers are saved in `saved_results` (`goplus-token` reused < 1 h, `goplus-approvals` < 5 min; 24 h fallback).
+  `scripts/providers/map.mjs` (`pnpm providers:map`) measures each provider's capabilities (batch size, old blocks,
+  event ranges, wallet-wide searches); host names only. With several server processes, each has its
   own bucket: lower `ALCHEMY_CU_PER_SECOND` accordingly or move it to the shared Redis store.
 - Alchemy daily limit (`alchemy-budget.ts`, pure): (90% of `ALCHEMY_MONTHLY_CU` − units spent earlier this month)
   ÷ days left, at most 2× a normal day; `ALCHEMY_DAILY_CU` fixes it instead. Tiers inside the day: ordinary

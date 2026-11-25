@@ -343,9 +343,50 @@ export function isUnreachable(error: unknown): boolean {
   return false;
 }
 
-export function isCoolingDown(provider: Provider, now = Date.now()): boolean {
-  const until = coolDown.get(provider.url);
-  return until !== undefined && until > now;
+/**
+ * Per-method rest (S3): a node that times out or fails on one kind of request (often heavy log or multicall reads)
+ * usually still answers cheap ones, so only that method rests. Connection failures and "too many requests" rest the
+ * whole provider, and so does a second method failing during the same minute: then the node itself is struggling.
+ */
+const methodKey = Symbol.for("crypy.providerMethodCoolDown");
+const methodCoolDown: Health = ((globalThis as Record<symbol, Health>)[methodKey] ??= new Map());
+const methodSlot = (provider: Provider, method: string) => `${provider.url}|${method}`;
+
+/** No answer at all (refused connection, DNS, reset) or "too many requests": the whole provider is unavailable. */
+export function isConnectionFailure(error: unknown): boolean {
+  if (!(error instanceof Error) || error.name !== "HttpRequestError") return false;
+  const status = (error as { status?: number }).status;
+  return status === undefined || status === 429;
+}
+
+/** Rest after an unreachable-type failure: just this method, or the whole provider (see above). */
+export function restAfterFailure(provider: Provider, method: string, error: unknown, now = Date.now()): void {
+  if (isConnectionFailure(error)) {
+    coolDown.set(provider.url, now + COOL_DOWN_MS);
+    return;
+  }
+  const prefix = `${provider.url}|`;
+  const othersResting = [...methodCoolDown].some(
+    ([slot, until]) => until > now && slot.startsWith(prefix) && slot !== methodSlot(provider, method),
+  );
+  if (othersResting) coolDown.set(provider.url, now + COOL_DOWN_MS);
+  else methodCoolDown.set(methodSlot(provider, method), now + COOL_DOWN_MS);
+}
+
+/** When the provider (or, given a method, that method on it) may be asked again; 0 when it isn't resting. */
+function restEnds(provider: Provider, method?: string): number {
+  const whole = coolDown.get(provider.url) ?? 0;
+  return method === undefined ? whole : Math.max(whole, methodCoolDown.get(methodSlot(provider, method)) ?? 0);
+}
+
+/** End a rest early (the whole provider and, given one, that method). */
+function wake(provider: Provider, method?: string): void {
+  coolDown.delete(provider.url);
+  if (method !== undefined) methodCoolDown.delete(methodSlot(provider, method));
+}
+
+export function isCoolingDown(provider: Provider, now = Date.now(), method?: string): boolean {
+  return restEnds(provider, method) > now;
 }
 
 /**
@@ -353,11 +394,11 @@ export function isCoolingDown(provider: Provider, now = Date.now()): boolean {
  * for up to a minute would make CRYPY look broken. Instead, the provider whose rest ends soonest gets another try now.
  * Providers over their daily budget stay off (zero-cost rule).
  */
-export function wakeOneIfAllResting(providers: Provider[], now = Date.now()): void {
+export function wakeOneIfAllResting(providers: Provider[], now = Date.now(), method?: string): void {
   const withBudget = providers.filter((p) => !budgetExhausted(p, true));
-  if (withBudget.length === 0 || withBudget.some((p) => !isCoolingDown(p, now))) return;
-  const soonest = withBudget.reduce((x, y) => ((coolDown.get(y.url) ?? 0) < (coolDown.get(x.url) ?? 0) ? y : x));
-  coolDown.delete(soonest.url);
+  if (withBudget.length === 0 || withBudget.some((p) => !isCoolingDown(p, now, method))) return;
+  const soonest = withBudget.reduce((x, y) => (restEnds(y, method) < restEnds(x, method) ? y : x));
+  wake(soonest, method);
 }
 
 /** Test helper. */
@@ -368,6 +409,7 @@ export function coolDownFor(provider: Provider, ms: number): void {
 /** Test helper. */
 export function resetCoolDown(): void {
   coolDown.clear();
+  methodCoolDown.clear();
 }
 
 // ---- Speed ranking ----------------------------------------------------------------------------------
@@ -399,8 +441,8 @@ export function expectedLatency(provider: Provider, now = Date.now()): number {
 }
 
 /** Providers in the order to try: fastest expected first; cooling-down or over-budget ones last. */
-export function rankProviders(providers: Provider[], now = Date.now()): Provider[] {
-  const usable = (p: Provider) => !isCoolingDown(p, now) && !budgetExhausted(p, true);
+export function rankProviders(providers: Provider[], now = Date.now(), method?: string): Provider[] {
+  const usable = (p: Provider) => !isCoolingDown(p, now, method) && !budgetExhausted(p, true);
   return [...providers].sort((a, b) => {
     const ua = usable(a);
     const ub = usable(b);
@@ -481,8 +523,8 @@ export function rankedFallback(providers: Provider[]): Transport {
           // Try the fastest provider; if it is slow to answer, also ask the next one ("hedging") and take the
           // first answer. Safe because the server only reads: it never sends transactions.
           // Fastest first; providers that recently refused this kind of request (old data) go last.
-          wakeOneIfAllResting(providers);
-          const ranked = rankProviders(providers);
+          wakeOneIfAllResting(providers, Date.now(), args.method);
+          const ranked = rankProviders(providers, Date.now(), args.method);
           const ordered = [
             ...ranked.filter((p) => !refusesLately(p, args.method)),
             ...ranked.filter((p) => refusesLately(p, args.method)),
@@ -507,12 +549,12 @@ export function rankedFallback(providers: Provider[]): Transport {
               // Everyone else failed or refused, and some providers are only resting after an earlier slow answer:
               // a rest is a speed measure, not a ban, so the one whose rest ends soonest gets one more try.
               woke = true;
-              const resting = providers.filter((p) => isCoolingDown(p) && !budgetExhausted(p, pace === "skip"));
+              const resting = providers.filter(
+                (p) => isCoolingDown(p, Date.now(), args.method) && !budgetExhausted(p, pace === "skip"),
+              );
               if (resting.length > 0) {
-                const soonest = resting.reduce((x, y) =>
-                  (coolDown.get(y.url) ?? 0) < (coolDown.get(x.url) ?? 0) ? y : x,
-                );
-                coolDown.delete(soonest.url);
+                const soonest = resting.reduce((x, y) => (restEnds(y, args.method) < restEnds(x, args.method) ? y : x));
+                wake(soonest, args.method);
                 ordered.push(soonest);
               }
             }
@@ -588,7 +630,7 @@ export function meteredHttp(provider: Provider, timeout = 5_000, pace: AlchemyPa
       async request(args: { method: string; params?: unknown }, requestOptions?: unknown) {
         // Inside a rotation ("skip"), Alchemy takes ordinary reads only within its ordinary share.
         if (budgetExhausted(provider, pace === "skip")) throw new BudgetExhaustedError(provider.name);
-        if (isCoolingDown(provider)) throw new ProviderCoolingDownError(provider.name);
+        if (isCoolingDown(provider, Date.now(), args.method)) throw new ProviderCoolingDownError(provider.name);
         if (provider.kind === "alchemy") {
           const units = alchemyUnits(args.method);
           if (pace === "skip") {
@@ -611,7 +653,7 @@ export function meteredHttp(provider: Provider, timeout = 5_000, pace: AlchemyPa
         } catch (error) {
           // Alchemy's "too many requests" is about this second, not an outage: pause it briefly instead of a minute.
           if (provider.kind === "alchemy" && isTooManyRequests(error)) noteAlchemyLimited();
-          else if (isUnreachable(error)) coolDown.set(provider.url, Date.now() + COOL_DOWN_MS);
+          else if (isUnreachable(error)) restAfterFailure(provider, args.method, error);
           // A node's own error answer still tells us how fast it is.
           else recordLatency(provider, Date.now() - started);
           throw error;

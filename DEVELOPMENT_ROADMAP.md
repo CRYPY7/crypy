@@ -38,6 +38,11 @@ used up before 00:00 UTC on a normal day.
 - **S3 — Sources that don't fall over.** Health score per provider and method (bench failing providers until they
   recover); more free providers per chain and a map of what each supports; GoPlus queue with priorities and saved
   results; a queue for heavy checks. **Done when:** a day with one provider down and GoPlus at its limit stays on target.
+  - **Built 2026-11-25:** GoPlus answers saved (reuse 1 h for tokens, 5 min for approvals; 24 h fallback); per-method
+    provider rest; crawlers get no lookups on result pages; `pnpm providers:map` (what each provider supports; first map
+    of the public nodes in PROGRESS.md).
+  - **Still to do in S3:** more free providers per chain and a map of what each supports; a GoPlus queue with
+    priorities; a queue for heavy checks; a measured health score shown on the admin page; the "done when" day.
 - **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
   cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
   2026-11-24: two build folders, rollback); a tested backup restore. **Done when:** an update, a worker crash and a

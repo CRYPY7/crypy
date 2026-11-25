@@ -2297,7 +2297,8 @@
       "tokenCheckingPending": "Report from an earlier check · checking for changes…",
       "tokenCheckingBody": "A fresh check is running and this page updates by itself. The owner may have changed settings since: wait for it before you buy.",
       "savedTx": "{chain} didn't answer just now. A confirmed transaction doesn't change: only its confirmation count and today's dollar values may have."
-    }
+    },
+    "crawler": "This page shows live blockchain data for people using a browser. Automated clients and crawlers get no live data here."
   },
   "wallet": {
     "connect": "Connect wallet",

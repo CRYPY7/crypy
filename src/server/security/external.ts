@@ -1,6 +1,7 @@
 import "server-only";
 import { limitedFetch } from "@/server/http/limit";
 import { cacheLife } from "next/cache";
+import { readSavedOne, saveResults } from "@/server/saved/store";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { ExternalFacts, PowerFact, SourceFacts } from "@/lib/security/types";
 import { type AbiEntry, powersFromSource } from "@/server/chains/evm/security/source";
@@ -94,9 +95,21 @@ export async function goPlusToken(
   priority: GoPlusPriority = "page",
 ): Promise<GoPlusResult> {
   "use cache";
+  // S3 (B-005): GoPlus's answers are saved in the database. One up to an hour old is reused without calling GoPlus
+  // (also after a restart); when GoPlus is busy or down, one up to a day old fills in. The page shows when GoPlus
+  // checked (`facts.fetchedAt`), so an older answer is never presented as new.
+  const stored = await readSavedOne<GoPlusResult>("goplus-token", address, String(chainId));
+  if (stored && Date.now() - Date.parse(stored.savedAt) < GOPLUS_REUSE_MS) {
+    cacheLife({ revalidate: 600, expire: 3600 });
+    return stored.data;
+  }
+  const fallback = (): GoPlusResult => {
+    cacheLife({ revalidate: 60, expire: 300 });
+    return stored?.data ?? { status: "unavailable" };
+  };
   if (!takeGoPlusSlot(priority)) {
     cacheLife({ revalidate: 30, expire: 60 });
-    return { status: "unavailable" };
+    return stored?.data ?? { status: "unavailable" };
   }
   try {
     const response = await limitedFetch(
@@ -116,8 +129,7 @@ export async function goPlusToken(
     if (json.code !== 1 || !json.result) {
       if (isLimitMessage(json.message)) pauseGoPlus();
       noteGoPlusFailure();
-      cacheLife({ revalidate: 60, expire: 300 });
-      return { status: "unavailable" };
+      return fallback();
     }
     const entry = json.result[address.toLowerCase()];
     // GoPlus answers with an empty entry for tokens it hasn't analysed yet.
@@ -125,14 +137,24 @@ export async function goPlusToken(
       cacheLife({ revalidate: 600, expire: 3600 });
       return { status: "not-listed" };
     }
+    const result: GoPlusResult = {
+      status: "ok",
+      facts: parseGoPlus(entry, Date.now()),
+      leads: parseGoPlusLeads(entry),
+    };
+    void saveResults("goplus-token", address, [{ chain: String(chainId), data: result }]);
     cacheLife({ revalidate: 3600, expire: 86_400 });
-    return { status: "ok", facts: parseGoPlus(entry, Date.now()), leads: parseGoPlusLeads(entry) };
+    return result;
   } catch {
     noteGoPlusFailure();
-    cacheLife({ revalidate: 60, expire: 300 });
-    return { status: "unavailable" };
+    return fallback();
   }
 }
+
+/** A saved GoPlus token answer this young is reused without asking GoPlus (the page cache kept it as long). */
+const GOPLUS_REUSE_MS = 3_600_000;
+/** A saved approval list this young is reused (the page cache kept it as long). */
+const GOPLUS_APPROVALS_REUSE_MS = 300_000;
 
 /** Sourcify answers bigger than this are not analysed (a token's source is normally far smaller). */
 const MAX_SOURCE_BYTES = 3_000_000;
@@ -259,6 +281,14 @@ export async function goPlusApprovals(
   priority: GoPlusPriority = "page",
 ): Promise<GoPlusApprovals> {
   "use cache";
+  // S3 (B-005): saved like goPlusToken. A list up to 5 minutes old is reused; when GoPlus is busy or down, one up to a
+  // day old fills in as "partial" (newer approvals may be missing). Lists are only leads: every approval shown is read
+  // on-chain again.
+  const stored = await readSavedOne<GoPlusApprovals>("goplus-approvals", owner, String(chainId));
+  if (stored && Date.now() - Date.parse(stored.savedAt) < GOPLUS_APPROVALS_REUSE_MS) {
+    cacheLife({ revalidate: 300, expire: 900 });
+    return stored.data;
+  }
   let partial = false;
   const get = async (path: string) => {
     if (!takeGoPlusSlot(priority)) throw new Error("GoPlus pace");
@@ -290,8 +320,7 @@ export async function goPlusApprovals(
       get("nft721_approval_security").catch(() => []),
       get("nft1155_approval_security").catch(() => []),
     ]);
-    cacheLife({ revalidate: 300, expire: 900 });
-    return {
+    const result: GoPlusApprovals = {
       status: partial ? "partial" : "ok",
       leads: [
         ...parseGoPlusApprovals(tokens, "token"),
@@ -299,8 +328,12 @@ export async function goPlusApprovals(
         ...parseGoPlusApprovals(nft1155, "nft-all"),
       ],
     };
+    void saveResults("goplus-approvals", owner, [{ chain: String(chainId), data: result }]);
+    cacheLife({ revalidate: 300, expire: 900 });
+    return result;
   } catch {
     cacheLife({ revalidate: 60, expire: 300 });
+    if (stored && stored.data.status !== "unavailable") return { status: "partial", leads: stored.data.leads };
     return { status: "unavailable" };
   }
 }

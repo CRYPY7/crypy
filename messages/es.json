@@ -2297,7 +2297,8 @@
       "tokenCheckingPending": "Informe de una comprobación anterior · buscando cambios…",
       "tokenCheckingBody": "Se está haciendo una comprobación nueva y esta página se actualiza sola. El propietario puede haber cambiado la configuración desde entonces: espera el resultado antes de comprar.",
       "savedTx": "{chain} no respondió ahora. Una transacción confirmada no cambia: solo pueden haber cambiado su número de confirmaciones y los valores en dólares de hoy."
-    }
+    },
+    "crawler": "Esta página muestra datos de blockchain en vivo para personas que usan un navegador. Los clientes automáticos y rastreadores no reciben datos en vivo aquí."
   },
   "wallet": {
     "connect": "Conectar billetera",

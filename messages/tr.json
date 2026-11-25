@@ -2297,7 +2297,8 @@
       "tokenCheckingPending": "Daha önceki bir kontrolün raporu · değişiklikler kontrol ediliyor…",
       "tokenCheckingBody": "Yeni bir kontrol yapılıyor ve bu sayfa kendiliğinden güncellenir. Sahip o zamandan beri ayarları değiştirmiş olabilir: satın almadan önce sonucu bekleyin.",
       "savedTx": "{chain} şu anda yanıt vermedi. Onaylanmış bir işlem değişmez: yalnızca onay sayısı ve bugünkü dolar değerleri değişmiş olabilir."
-    }
+    },
+    "crawler": "Bu sayfa, tarayıcı kullanan kişilere canlı blokzincir verisi gösterir. Otomatik istemciler ve tarayıcı botları burada canlı veri almaz."
   },
   "wallet": {
     "connect": "Cüzdan bağla",
