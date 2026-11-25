@@ -41,6 +41,22 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## S3: GoPlus calls wait in line instead of failing (2026-11-25)
+
+- Before, GoPlus calls had a fixed allowance per minute (30, of which background checks could take 8 at the start of
+  the minute). A call that found the allowance used was refused at once, so a busy moment showed "not checked" (or a
+  saved answer) although GoPlus would have had room 2 seconds later.
+- Now (`server/security/goplus-budget.ts`): a smooth pace, one call every 2 s (30 a minute), at most 10 saved up. A call
+  with no free slot waits in a line: page reports first, up to 4 s; background checks (Portfolio badges, daily token
+  checks) behind every page call, up to 20 s, never taking the last 4 slots and at most 8 a minute. After GoPlus says
+  "too many requests", everyone pauses 60 s and calls that can't wait that long are told at once. The once-a-minute
+  log line now also counts calls sent after waiting. Saved GoPlus answers (earlier today) still fill in when a call is
+  refused.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 586 passed, 76 skipped (GoPlus pace tests rewritten: burst and
+pace, background share and reserve, waiting, page before background, giving up, pause). Build passed. Browser: 309
+passed, 19 skipped, 0 failed.
+
 ## Utilities U3: developer tools (2026-11-25)
 
 - **New sidebar group "Developer"** (folds like Calculators, opens itself on its pages). The Hex Converter and the

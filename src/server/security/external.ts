@@ -6,7 +6,13 @@ import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { ExternalFacts, PowerFact, SourceFacts } from "@/lib/security/types";
 import { type AbiEntry, powersFromSource } from "@/server/chains/evm/security/source";
 import { discardBody } from "@/server/http/discard";
-import { type GoPlusPriority, isLimitMessage, noteGoPlusFailure, pauseGoPlus, takeGoPlusSlot } from "./goplus-budget";
+import {
+  type GoPlusPriority,
+  isLimitMessage,
+  noteGoPlusFailure,
+  pauseGoPlus,
+  waitForGoPlusSlot,
+} from "./goplus-budget";
 
 /**
  * Outside sources for token security. Both are free and need no key:
@@ -107,7 +113,7 @@ export async function goPlusToken(
     cacheLife({ revalidate: 60, expire: 300 });
     return stored?.data ?? { status: "unavailable" };
   };
-  if (!takeGoPlusSlot(priority)) {
+  if (!(await waitForGoPlusSlot(priority))) {
     cacheLife({ revalidate: 30, expire: 60 });
     return stored?.data ?? { status: "unavailable" };
   }
@@ -291,7 +297,7 @@ export async function goPlusApprovals(
   }
   let partial = false;
   const get = async (path: string) => {
-    if (!takeGoPlusSlot(priority)) throw new Error("GoPlus pace");
+    if (!(await waitForGoPlusSlot(priority))) throw new Error("GoPlus pace");
     const response = await limitedFetch(
       `https://api.gopluslabs.io/api/v2/${path}/${chainId}?addresses=${owner.toLowerCase()}`,
       {

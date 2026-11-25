@@ -40,9 +40,9 @@ used up before 00:00 UTC on a normal day.
   results; a queue for heavy checks. **Done when:** a day with one provider down and GoPlus at its limit stays on target.
   - **Built 2026-11-25:** GoPlus answers saved (reuse 1 h for tokens, 5 min for approvals; 24 h fallback); per-method
     provider rest; crawlers get no lookups on result pages; `pnpm providers:map` (what each provider supports; first map
-    of the public nodes in PROGRESS.md).
-  - **Still to do in S3:** more free providers per chain and a map of what each supports; a GoPlus queue with
-    priorities; a queue for heavy checks; a measured health score shown on the admin page; the "done when" day.
+    of the public nodes in PROGRESS.md). GoPlus queue with priorities (pages first, background behind, short waits
+    instead of refusals).
+  - **Still to do in S3:** more free providers per chain and a map of what each supports; a queue for heavy checks; a measured health score shown on the admin page; the "done when" day.
 - **Utilities track U1–U3 (owner decision 2026-11-24), alongside S3–S5:** browser-only tools only, one batch at a
   time; backlog and statuses in FEATURE_REGISTRY.md and the "CRYPY — Feature registry" Sheet (291 catalog tools).
   U1: token decimals, manual gas fee, supply & valuation, APR/APY, address QR. U2: loan-to-value, impermanent loss,
