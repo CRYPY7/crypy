@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useId, useMemo, useState } from "react";
+import { AddressQrButton, type AddressQrStrings, type QrNetwork } from "@/components/entity/address-qr";
 import { CopyButton } from "@/components/entity/copy-button";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { checkWalletInput } from "@/lib/portfolio/input";
 import { cn } from "@/lib/utils";
 import { type CommonStrings, LinkButton, Panel, fill, inputClass } from "../shared/ui";
 import {
@@ -23,6 +25,7 @@ export interface AddressFormatterStrings {
   copyAll: string;
   open: string;
   checksummed: string;
+  secret: string;
   status: Record<AddressStatus, string>;
   explain: Record<Exclude<AddressStatus, "invalid"> | "zero", string>;
   invalid: Record<InvalidReason, string>;
@@ -43,18 +46,23 @@ export function AddressFormatter({
   strings,
   common,
   addressPathPrefix,
+  qr,
 }: {
   strings: AddressFormatterStrings;
   common: CommonStrings;
   /** e.g. "/en/address/" */
   addressPathPrefix: string;
+  qr: { strings: AddressQrStrings; networks: QrNetwork[] };
 }) {
   const id = useId();
   const [text, setText] = useState("");
+  // A recovery phrase or private key is never checked, listed or turned into a QR code.
+  const secret = checkWalletInput(text).kind === "secret";
   const { checks, total } = useMemo(() => {
+    if (secret) return { checks: [], total: 0 };
     const parts = splitAddresses(text);
     return { checks: parts.slice(0, MAX_ADDRESSES).map(checkAddress), total: parts.length };
-  }, [text]);
+  }, [text, secret]);
   const good = checks.filter(
     (check) => check.status === "valid" || check.status === "no-checksum" || check.status === "missing-prefix",
   );
@@ -77,6 +85,11 @@ export function AddressFormatter({
         className={`${inputClass} technical resize-y`}
       />
 
+      {secret && (
+        <p role="alert" className="mt-3 rounded-xl bg-critical/10 px-3 py-2 text-sm text-critical">
+          {strings.secret}
+        </p>
+      )}
       {checks.length > 0 && (
         <div className="mt-5 border-t border-border pt-4" aria-live="polite">
           {checks.length > 1 && (
@@ -129,6 +142,7 @@ export function AddressFormatter({
                     >
                       {strings.open}
                     </Link>
+                    <AddressQrButton address={check.checksummed} variant="text" {...qr} />
                   </div>
                 )}
               </li>

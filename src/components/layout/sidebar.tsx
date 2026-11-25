@@ -8,7 +8,7 @@ import type { Locale } from "@/i18n/locales";
 import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { SidebarActiveMarker, SidebarCollapseButton } from "./sidebar-controls";
 
-const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "utilities"];
+const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "calculators", "utilities"];
 
 /**
  * Desktop tools sidebar (lg and up). Plain server-rendered links: the only browser code is the
@@ -18,7 +18,7 @@ const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "u
 export async function ToolsSidebar({ locale }: { locale: Locale }) {
   const t = await getTranslations();
   const item =
-    "sidebar-item flex min-h-9 items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground aria-[current=page]:bg-primary/14 aria-[current=page]:font-semibold aria-[current=page]:text-foreground";
+    "sidebar-item flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground aria-[current=page]:bg-primary/14 aria-[current=page]:font-semibold aria-[current=page]:text-foreground";
   return (
     <aside
       id="tools-sidebar"
@@ -53,17 +53,20 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
           </span>
         </Link>
         {order.map((category) => (
-          <div key={category} className="mt-2.5">
+          <div key={category} className="mt-2">
             <p className="sidebar-label px-2.5 pb-0.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
               {t(`categories.${category}`)}
             </p>
             <div className="sidebar-divider mx-3 mb-1 hidden border-t" aria-hidden="true" />
-            <ul className="flex flex-col gap-0.5">
+            <ul className="flex flex-col">
               {tools
                 .filter((tool) => tool.category === category)
                 .map((tool) => {
                   const href = toolPath(locale, tool.id);
-                  const name = t(`tools.${tool.id}.name`);
+                  // Long names have a short form for the sidebar; the page itself shows the full name.
+                  const name = t.has(`tools.${tool.id}.shortName`)
+                    ? t(`tools.${tool.id}.shortName`)
+                    : t(`tools.${tool.id}.name`);
                   return (
                     <li key={tool.id}>
                       <Link href={href} data-sidebar-href={href} prefetch={false} className={item} title={name}>

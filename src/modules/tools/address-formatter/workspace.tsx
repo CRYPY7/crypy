@@ -1,5 +1,6 @@
 import "server-only";
 import { getTranslations } from "next-intl/server";
+import { addressQrProps } from "@/components/entity/address-qr-props";
 import type { Locale } from "@/i18n/locales";
 import { localePath } from "@/lib/routes";
 import type { CommonStrings } from "../shared/ui";
@@ -14,6 +15,7 @@ export async function AddressFormatterWorkspace({ locale }: { locale: Locale }) 
       strings={t.raw("address-formatter") as AddressFormatterStrings}
       common={common}
       addressPathPrefix={`${localePath(locale, "/address")}/`}
+      qr={await addressQrProps()}
     />
   );
 }

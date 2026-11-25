@@ -16,6 +16,8 @@ import { isLocale } from "@/i18n/locales";
 import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
 import { pageAccess } from "@/server/page-guard";
+import { AddressQrButton } from "@/components/entity/address-qr";
+import { addressQrProps } from "@/components/entity/address-qr-props";
 import { cachedApprovals } from "@/server/services/approvals";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
@@ -81,6 +83,7 @@ async function ApprovalsContent({
     return chain && href ? [{ href, label: t("entity.viewOn", { explorer: chain.explorer.name }) }] : [];
   });
 
+  const qr = await addressQrProps();
   return (
     <div className="flex flex-col gap-6">
       <Breadcrumbs
@@ -98,6 +101,7 @@ async function ApprovalsContent({
         id={result.address}
         copyLabel={t("entity.copy")}
         copiedLabel={t("entity.copied")}
+        idActions={<AddressQrButton address={result.address} {...qr} />}
         links={links}
       >
         <p className="max-w-3xl text-sm text-muted-foreground">{t("entity.approvals.intro")}</p>

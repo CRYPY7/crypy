@@ -55,7 +55,8 @@
     "wallet": "Wallet",
     "network": "Network",
     "monitoring": "Monitoring",
-    "utilities": "Utilities"
+    "utilities": "Utilities",
+    "calculators": "Calculators"
   },
   "search": {
     "label": "Search a wallet address, token contract or transaction hash",
@@ -403,14 +404,15 @@
     "gas-tracker": {
       "name": "Gas Tracker",
       "question": "How much will it cost now?",
-      "description": "Current gas prices and the cost of common actions on each chain.",
+      "description": "Current gas prices and the cost of common actions on each chain, plus a calculator for any gas and price.",
       "input": "Nothing — just open it",
       "cta": "See gas prices",
       "features": [
         "Low, average and high priority fees per chain",
         "Cost in dollars of sends, approvals, swaps and NFT transfers",
         "Base fee trend over the last 1,024 blocks",
-        "Refreshes every 12 seconds, update time shown"
+        "Refreshes every 12 seconds, update time shown",
+        "Work out any fee yourself from gas and gas price"
       ],
       "seoTitle": "Gas Tracker: Live Gwei Prices on 5 Chains | CRYPY",
       "seoDescription": "Live gas prices in gwei for Ethereum, BNB Chain, Base, Arbitrum and Polygon, with the cost in USD to send, swap or approve.",
@@ -488,12 +490,13 @@
     "unit-converter": {
       "name": "Unit Converter",
       "question": "How many gwei is this?",
-      "description": "Convert between wei, gwei and ETH or BNB exactly, without rounding.",
+      "description": "Convert between wei, gwei and ETH or BNB, and between token amounts and base units for any decimals, exactly.",
       "input": "An amount",
       "cta": "Convert units",
       "features": [
         "Wei, gwei and ETH or BNB, both ways",
         "Exact to the last wei, no rounding",
+        "Token amounts ↔ base units for any decimals (6, 8, 18…)",
         "Runs in your browser"
       ],
       "howTo": [
@@ -524,7 +527,7 @@
         }
       ],
       "seoTitle": "Wei to Gwei to ETH Converter (Exact) | CRYPY",
-      "seoDescription": "Convert wei, gwei, ETH and BNB exactly, with no rounding, including amounts in scientific notation. Runs in your browser; nothing is sent."
+      "seoDescription": "Convert wei, gwei, ETH and BNB exactly, and token amounts to base units for any decimals (6, 8, 18…). Runs in your browser; nothing is sent."
     },
     "hex-converter": {
       "name": "Hex Converter",
@@ -567,12 +570,13 @@
     "address-formatter": {
       "name": "Address Formatter",
       "question": "Is this address written correctly?",
-      "description": "Check that an address is written correctly and get its checksummed form. Works for one address or a list.",
+      "description": "Check that an address is written correctly, get its checksummed form and a QR code. Works for one address or a list.",
       "input": "An address",
       "cta": "Check address",
       "features": [
         "Detects typing mistakes using the EIP-55 checksum",
         "Checks up to 500 addresses at once",
+        "QR code to share an address, with its network named",
         "Works for every EVM chain",
         "Runs in your browser"
       ],
@@ -733,6 +737,90 @@
       ],
       "seoTitle": "Batch Wallet Balance Checker: 500 Addresses | CRYPY",
       "seoDescription": "Check coin and token balances for up to 500 addresses at once on Ethereum, BNB Chain, Base, Arbitrum and Polygon, then export to CSV. Free."
+    },
+    "token-valuation": {
+      "name": "Token Supply & Valuation Calculator",
+      "question": "What is this token worth in total?",
+      "description": "Work out market cap, fully diluted valuation and how much of the supply circulates, from the numbers you type.",
+      "input": "Supply and price",
+      "cta": "Calculate",
+      "features": [
+        "Market cap and fully diluted valuation, kept apart",
+        "Circulating share, locked and not-yet-created supply",
+        "Exact with huge supplies and tiny prices"
+      ],
+      "howTo": [
+        "Type the token's total supply, and the circulating supply if you know it.",
+        "Add the maximum supply if the token has one, and the price you want to use.",
+        "Read market cap, fully diluted valuation and the supply split. Nothing is looked up for you."
+      ],
+      "faq": [
+        {
+          "q": "What is the difference between market cap and FDV?",
+          "a": "Market cap is the circulating supply times the price: the value of the tokens that can trade today. Fully diluted valuation (FDV) is the maximum supply times the price (or the total supply when there's no maximum): what the token would be worth if every token existed and circulated at today's price."
+        },
+        {
+          "q": "Why does a big gap between FDV and market cap matter?",
+          "a": "Tokens that don't circulate yet (team, investors, rewards) usually unlock over time. When they do, more tokens compete for buyers, which can push the price down. A FDV many times the market cap means a lot of supply may still arrive."
+        },
+        {
+          "q": "Where do I find the supply numbers?",
+          "a": "The total supply is on the token page on CRYPY (it's read from the contract). Circulating and maximum supply come from the project's own documents or data sites; they aren't stored in the contract, so check more than one source."
+        },
+        {
+          "q": "Does CRYPY fill in the price?",
+          "a": "No. This calculator only uses what you type, so you can try any price. CRYPY never invents a price."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. Everything is worked out in your browser."
+        }
+      ],
+      "seoTitle": "Market Cap & FDV Calculator for Tokens | CRYPY",
+      "seoDescription": "Calculate a token's market cap, fully diluted valuation and circulating share from its supply and price. Exact, in your browser; nothing is sent.",
+      "shortName": "Market Cap & FDV"
+    },
+    "apy-calculator": {
+      "name": "APR / APY & Compound Interest Calculator",
+      "question": "How much could this grow?",
+      "description": "See how an amount grows at a fixed APR or APY with compounding and regular deposits. An estimate, worked out in your browser.",
+      "input": "Amount, rate and time",
+      "cta": "Calculate",
+      "features": [
+        "APR or APY, compounded daily to yearly",
+        "Regular deposits and a year-by-year table",
+        "Shows the effective yearly rate"
+      ],
+      "howTo": [
+        "Type the starting amount and the yearly rate, and say whether it's an APR or an APY.",
+        "Choose how often interest is added and for how long.",
+        "Add a regular deposit if you like, then read the estimate and the year-by-year table."
+      ],
+      "faq": [
+        {
+          "q": "What is the difference between APR and APY?",
+          "a": "APR is the yearly rate before compounding. APY includes compounding: the growth you get over a whole year when the interest itself earns interest. 10% APR compounded monthly is about 10.47% APY."
+        },
+        {
+          "q": "Are these returns guaranteed?",
+          "a": "No. The calculator assumes the rate stays the same for the whole time. In crypto, rates change often, rewards can be paid in tokens whose price moves, and protocols can fail. Treat the result as an illustration, not a promise."
+        },
+        {
+          "q": "When are deposits added?",
+          "a": "At the end of each compounding period, after that period's interest. A part of a period left at the end earns simple interest for that part."
+        },
+        {
+          "q": "How exact is it?",
+          "a": "It calculates with 30 digits after the point and rounds only what it shows. Years count as 365 days and a month as one twelfth of a year."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. Everything is worked out in your browser."
+        }
+      ],
+      "seoTitle": "APY & Compound Interest Calculator (Crypto) | CRYPY",
+      "seoDescription": "Convert APR to APY and see how an amount grows with compounding and regular deposits, year by year. An estimate in your browser; nothing is sent.",
+      "shortName": "APY Calculator"
     }
   },
   "toolPage": {
@@ -2298,7 +2386,17 @@
       "tokenCheckingBody": "A fresh check is running and this page updates by itself. The owner may have changed settings since: wait for it before you buy.",
       "savedTx": "{chain} didn't answer just now. A confirmed transaction doesn't change: only its confirmation count and today's dollar values may have."
     },
-    "crawler": "This page shows live blockchain data for people using a browser. Automated clients and crawlers get no live data here."
+    "crawler": "This page shows live blockchain data for people using a browser. Automated clients and crawlers get no live data here.",
+    "qr": {
+      "open": "QR code",
+      "title": "Address QR code",
+      "network": "Network",
+      "caption": "{network} address",
+      "warning": "The same 0x address exists on every EVM network. Tell the sender to use {network}: coins sent on a network you don't use can be hard or impossible to get back.",
+      "download": "Download PNG",
+      "close": "Close",
+      "local": "Made in your browser. A public address only: never share a recovery phrase or private key."
+    }
   },
   "wallet": {
     "connect": "Connect wallet",
@@ -2401,7 +2499,8 @@
         "length": "Wrong length: {length} characters after 0x instead of 40.",
         "characters": "Contains characters that aren't allowed (only 0–9 and a–f).",
         "empty": "Empty."
-      }
+      },
+      "secret": "This looks like a recovery phrase or a private key. Never type it into any website: anyone who sees it can take everything in the wallet. Nothing was checked or sent; clear the box."
     },
     "tx-decoder": {
       "label": "Transaction input data",
@@ -3016,6 +3115,156 @@
       "importNone": "Every wallet in this browser's Portfolio is already watched.",
       "importButton": "Watch {count} wallet(s)",
       "importNotNow": "Not now"
+    },
+    "manualFee": {
+      "title": "Work out a fee yourself",
+      "intro": "Type the gas and the gas price, for example from your wallet's confirmation screen or a contract's documentation. Nothing is looked up: the result comes only from what you type.",
+      "gas": "Gas (units)",
+      "gasHint": "The gas a transaction uses, or its gas limit for the most it could cost.",
+      "typical": "Typical:",
+      "price": "Gas price",
+      "usd": "{coin} price in USD (optional)",
+      "usdHint": "Type the price to see the fee in dollars. CRYPY doesn't fill it in here.",
+      "anyCoin": "coin",
+      "feeCoin": "Fee in {coin}",
+      "feeGwei": "Fee in gwei",
+      "feeWei": "Fee in wei",
+      "feeUsd": "Fee in USD",
+      "noUsd": "Type a price to see it in dollars",
+      "formula": "Fee = gas × gas price. Exact to the last wei; the dollar value is rounded to cents.",
+      "limitNote": "The gas limit is the most a transaction may use. You pay only for the gas it actually uses, so a fee worked out from the limit is the highest it could cost, not what you'll pay.",
+      "l1Note": "On Base, Arbitrum and other rollups an Ethereum data fee comes on top of this; on Arbitrum it's already included in the gas used shown after the transaction.",
+      "local": "Worked out in your browser; nothing you type is sent anywhere.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 21000 or 1.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (1.5); commas only between thousands (1,000).",
+        "too-precise": "Too many decimal places: wei is the smallest unit.",
+        "too-large": "Too large.",
+        "whole-number": "Enter a whole number.",
+        "gas-too-large": "That's more gas than any block holds. Check the number."
+      }
+    },
+    "tokenDecimals": {
+      "title": "Token amount ↔ base units (any decimals)",
+      "intro": "Tokens store amounts as whole numbers of their smallest unit. Their decimals say where the point goes: 1 USDC with 6 decimals is 1000000 base units. Not every token uses 18.",
+      "decimals": "Token decimals",
+      "common": "Common:",
+      "amount": "Amount (as wallets show it)",
+      "base": "Base units (as stored on-chain)",
+      "baseHint": "A whole number: what contracts and raw transaction data use.",
+      "explain": "1 token = 1 followed by {decimals} zeros base units. Exact, no rounding.",
+      "local": "Check the token's own decimals before you rely on a number (the token page shows them). Worked out in your browser.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1.5 or 1e6.",
+        "negative": "Amounts can't be negative.",
+        "comma": "Use a dot for decimals (1.5), not a comma.",
+        "too-precise": "More decimal places than this token has.",
+        "too-large": "Too large: the most a token amount can hold is 2^256 − 1 base units.",
+        "whole-number": "Enter a whole number, like 6 or 18.",
+        "range": "Token decimals go from 0 to 36 here (most tokens use 6, 8 or 18).",
+        "base-whole": "Base units are whole numbers: no decimal point."
+      }
+    },
+    "tokenValuation": {
+      "total": "Total supply",
+      "totalHint": "Tokens that exist now (the contract's totalSupply).",
+      "circulating": "Circulating supply (optional)",
+      "circulatingHint": "Tokens that can trade today. Needed for market cap.",
+      "max": "Maximum supply (optional)",
+      "maxHint": "The most that can ever exist, if the token has a cap.",
+      "price": "Price per token in USD (optional)",
+      "priceHint": "Type the price you want to use. CRYPY doesn't fill it in.",
+      "results": "Results",
+      "marketCap": "Market cap",
+      "marketCapHelp": "Circulating supply × price",
+      "marketCapNeeds": "Needs the circulating supply and a price",
+      "fdv": "Fully diluted valuation (FDV)",
+      "fdvMax": "Maximum supply × price",
+      "fdvTotal": "Total supply × price (no maximum given)",
+      "fdvNeeds": "Needs a supply and a price",
+      "ratio": "FDV is {ratio}× the market cap: much of the supply isn't circulating yet, and may unlock later.",
+      "supply": "Supply",
+      "circulatingOfTotal": "Circulating, of total supply",
+      "circulatingOfMax": "Circulating, of maximum supply",
+      "notCirculating": "Created but not circulating",
+      "notCirculatingHelp": "Total − circulating: often locked, vesting or held by the project",
+      "notYetIssued": "Not created yet",
+      "notYetIssuedHelp": "Maximum − total: may still be minted",
+      "empty": "Type at least a supply and a price to see results.",
+      "local": "Worked out in your browser from what you type; nothing is looked up or sent.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1000000 or 1.5e9.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (0.5); commas only between thousands (1,000,000).",
+        "too-large": "Too large.",
+        "too-precise": "Too many decimal places.",
+        "circulating-over-total": "Circulating supply can't be more than the total supply.",
+        "total-over-max": "Total supply can't be more than the maximum supply.",
+        "circulating-over-max": "Circulating supply can't be more than the maximum supply."
+      }
+    },
+    "apyCalculator": {
+      "principal": "Starting amount",
+      "rate": "Yearly rate (%)",
+      "rateType": "The rate is",
+      "apr": "APR",
+      "apy": "APY",
+      "frequency": "Interest is added",
+      "frequencies": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "yearly": "Yearly"
+      },
+      "duration": "For",
+      "units": {
+        "days": "days",
+        "months": "months",
+        "years": "years"
+      },
+      "deposit": "Add each period (optional)",
+      "depositHint": "Added at the end of each {period} period.",
+      "periodNames": {
+        "daily": "daily",
+        "weekly": "weekly",
+        "monthly": "monthly",
+        "quarterly": "quarterly",
+        "yearly": "yearly"
+      },
+      "results": "Estimate",
+      "final": "Balance at the end",
+      "deposited": "You put in",
+      "interest": "Interest earned",
+      "effectiveApy": "Effective yearly rate (APY)",
+      "nominalApr": "Same rate as APR",
+      "formulaApr": "Each period grows by APR ÷ {n}. Balance after k periods = amount × (1 + APR ÷ {n})^k, plus deposits.",
+      "formulaApy": "Each period grows by (1 + APY)^(1/{n}) − 1, so a full year grows by exactly the APY.",
+      "partial": "The last {fraction} of a period earns simple interest.",
+      "table": "Year by year",
+      "year": "Year",
+      "balance": "Balance",
+      "totalIn": "Put in",
+      "earned": "Interest",
+      "warning": "An estimate that assumes the rate never changes. Crypto rates move, rewards can be paid in tokens whose price falls, and platforms can fail: this is not a promise of returns.",
+      "local": "Worked out in your browser with 30 digits after the point; only the display is rounded. Nothing is sent.",
+      "empty": "Type an amount, a rate and a time to see the estimate.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1000 or 5.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (5.5); commas only between thousands (1,000).",
+        "too-large": "Too large for this calculator.",
+        "too-precise": "Too many decimal places.",
+        "too-long": "At most 100 years.",
+        "rate-too-high": "At most 100,000% a year: check the rate.",
+        "whole-number": "Enter a whole number of days.",
+        "zero-duration": "Enter a time longer than zero."
+      }
     }
   },
   "seo": {

@@ -6,6 +6,10 @@
  *
  * Run: pnpm i18n:check. Fails if any file has errors, or if a "complete" or "beta" language is missing keys
  * (the private admin dashboard, `admin.*`, stays English and may be missing).
+ *
+ * While a batch of new tools is being built, its new texts may be English-only: their key prefixes are listed in
+ * `messages/pending-translation.json` (English shows meanwhile). The check prints how many are still untranslated;
+ * a batch is deployed only once that list is empty again.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -19,6 +23,17 @@ const read = (locale: string): Tree => JSON.parse(readFileSync(join(root, `${loc
 
 /** Texts allowed to stay English in every language. */
 const ENGLISH_ONLY = ["admin"];
+
+/** Key prefixes of the batch being built: allowed to be missing for now, but counted. */
+export function pendingPrefixes(): string[] {
+  try {
+    const list: unknown = JSON.parse(readFileSync(join(root, "pending-translation.json"), "utf8"));
+    return Array.isArray(list) ? list.filter((p): p is string => typeof p === "string") : [];
+  } catch {
+    return [];
+  }
+}
+const under = (key: string, prefixes: string[]) => prefixes.some((p) => key === p || key.startsWith(`${p}.`));
 
 /**
  * The arguments a message uses, as "name" or "name:plural" etc., and its rich-text tags. A small ICU reader: plural
@@ -136,7 +151,7 @@ function walk(base: Tree, other: Tree, prefix: string, errors: string[], missing
   }
 }
 
-export function findTranslationProblems(): string[] {
+export function findTranslationProblems(pending = pendingPrefixes()): string[] {
   const en = read("en");
   const problems: string[] = [];
   for (const locale of locales) {
@@ -146,7 +161,7 @@ export function findTranslationProblems(): string[] {
     walk(en, read(locale), "", errors, missing);
     problems.push(...errors.map((e) => `${locale}: ${e}`));
     if (localeConfigs[locale].status !== "planned") {
-      const required = missing.filter((m) => !ENGLISH_ONLY.some((p) => m === p || m.startsWith(`${p}.`)));
+      const required = missing.filter((m) => !under(m, ENGLISH_ONLY) && !under(m, pending));
       problems.push(...required.map((m) => `${locale}: missing ${m}`));
     }
   }
@@ -163,5 +178,12 @@ export function missingKeys(locale: string): string[] {
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const problems = findTranslationProblems();
   console.log(problems.length ? problems.join("\n") : "No translation problems.");
+  const pending = pendingPrefixes();
+  if (pending.length) {
+    const waiting = locales
+      .filter((l) => l !== "en" && localeConfigs[l].status !== "planned")
+      .map((l) => `${l} ${missingKeys(l).filter((m) => under(m, pending)).length}`);
+    console.log(`Waiting for translation (batch in progress: ${pending.join(", ")}): ${waiting.join(", ")}`);
+  }
   process.exitCode = problems.length ? 1 : 0;
 }

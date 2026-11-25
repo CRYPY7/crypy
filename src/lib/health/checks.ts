@@ -105,6 +105,8 @@ export const statusComponents: readonly StatusComponent[] = [
   toolComponent("hex-converter", []),
   toolComponent("address-formatter", []),
   toolComponent("tx-decoder", []),
+  toolComponent("token-valuation", []),
+  toolComponent("apy-calculator", []),
   ...liveChains.map((c) => ({
     id: `chain:${c.key}`,
     group: "chains" as const,

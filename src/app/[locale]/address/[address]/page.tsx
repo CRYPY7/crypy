@@ -21,6 +21,8 @@ import type { ChainHoldings } from "@/lib/portfolio/holdings";
 import { localePath } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { pageAccess } from "@/server/page-guard";
+import { AddressQrButton } from "@/components/entity/address-qr";
+import { addressQrProps } from "@/components/entity/address-qr-props";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
 import { type AddressOverview, cachedAddressOverview } from "@/server/services/overview";
@@ -140,6 +142,7 @@ async function AddressContent({
       .reduce((sum, c) => sum + c.totalUsd, 0),
   };
 
+  const qr = await addressQrProps();
   return (
     <div className="flex flex-col gap-6">
       <Breadcrumbs
@@ -156,6 +159,7 @@ async function AddressContent({
         id={result.address}
         copyLabel={t("entity.copy")}
         copiedLabel={t("entity.copied")}
+        idActions={<AddressQrButton address={result.address} initialNetwork={focused ?? undefined} {...qr} />}
         links={links}
       />
       <AddressTabs

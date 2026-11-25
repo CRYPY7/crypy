@@ -7,10 +7,12 @@ import {
   ChartPie,
   Clock,
   CodeXml,
+  Coins,
   Fuel,
   KeyRound,
   Layers,
   type LucideProps,
+  Percent,
   Receipt,
   ShieldAlert,
   Wallet,
@@ -32,6 +34,8 @@ const icons = {
   clock: Clock,
   "code-xml": CodeXml,
   layers: Layers,
+  coins: Coins,
+  percent: Percent,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 
 /** Server-rendered tool icon. Decorative: the tool name is always shown as text. */

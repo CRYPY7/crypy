@@ -40,6 +40,8 @@ for (const theme of ["dark", "light"] as const) {
     ]) {
       test(`no accessibility violations: ${path}`, async ({ page }) => {
         await page.goto(path, { waitUntil: "load" });
+        // Streamed pages (the admin page) send their heading a moment after "load" when the server is busy.
+        await page.locator("h1").first().waitFor();
         await expectNoViolations(page);
       });
     }

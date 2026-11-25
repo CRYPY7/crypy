@@ -41,6 +41,53 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Utilities U1: five browser-only tools (owner decision 2026-11-24)
+
+Owner decisions 2026-11-24: browser-only tools may be built during stabilization; new screens are built directly
+without design approval first (the owner reviews them on the site); each batch is built in English, then translated
+into the Beta languages in one pass before it ships; Learn guides only where they really help.
+
+- **Token decimals** (Unit Converter, `#token-decimals`): token amount ↔ base units for any decimals 0–36, both ways,
+  exact BigInt, with 6 / 8 / 18 shortcuts; refuses more decimal places than the token has.
+- **Your own fee** (Gas Tracker and each chain's gas page): gas × gas price (gwei or wei), exact in wei, gwei and the
+  coin; dollars only from a price the visitor types. Says that a gas limit gives the highest possible fee, and that
+  rollups add an Ethereum data fee. Typical gas shortcuts (send, token send, approve, swap, NFT).
+- **Token Supply & Valuation Calculator** (`/tools/token-valuation`, new "Calculators" group): market cap
+  (circulating × price) and FDV (maximum, else total supply × price, labelled) kept apart; circulating share, created
+  but not circulating, not yet created; warns when FDV is 1.5× the market cap or more; refuses contradictory supplies.
+  Never fetches a price.
+- **APR / APY & Compound Interest Calculator** (`/tools/apy-calculator`): APR or APY, daily to yearly compounding,
+  days / months / years up to 100 years, a deposit at the end of each period, year-by-year table, effective APY and
+  the formula. Fixed-point decimals with 30 digits (`lib/math/decimal.ts`; APY→period rate by an exact Newton root);
+  only the display is rounded. Warns that it is an estimate and not a promise of returns.
+- **Address QR code** (Address Formatter and a QR button beside the address on every address page): drawn in the
+  browser from the checksummed address (the `qrcode` library, already a dependency, loaded on opening); the network is
+  chosen and printed beside the code and on the downloadable PNG, with a warning that the same 0x address exists on
+  every EVM network. The Address Formatter now refuses anything that looks like a recovery phrase or private key.
+- **Navigation:** sidebar group "Calculators" with short names (Market Cap & FDV, APY Calculator); sidebar rows are a
+  little tighter so every tool still fits on a 1440×900 screen.
+- **Translations:** all new and changed texts in the 6 Beta languages. New mechanism: `messages/pending-translation.json`
+  lets a batch's new keys stay English-only while it is built; `pnpm i18n:check` counts them, and the list is empty
+  again before delivery (it is now).
+- No new dependency, API route or server work. CSS 80.3 KB (budget 80, rounded).
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 553 passed, 76 skipped (19 new: exact decimals,
+valuation, compound interest incl. 100 years daily, token decimals, manual fee). Build passed. Browser: 286 passed,
+17 skipped, 1 failed: the admin page's accessibility test on a phone ran before the streamed heading arrived (12 of 12
+alone); the test now waits for the heading, and the accessibility file then passed 56 of 56. New browser tests (12,
+desktop and phone): each tool's results, refusals and that nothing typed is sent; QR download name; recovery phrase refused.
+
+## QUIC error on first load (B-031, owner report 2026-11-24)
+
+Edge sometimes showed a QUIC error on a first load, then reloaded by itself about 2 s later. Cause: Cloudflare offered
+HTTP/3 (`alt-svc: h3`), which runs over UDP; networks that block or throttle UDP (VPNs, some routers and providers)
+make that connection fail, and the browser falls back to HTTP/2. The owner turned off HTTP/3 (with QUIC) in Cloudflare;
+checked from outside: no `alt-svc: h3`, pages answer over HTTP/2. Browsers remember HTTP/3 for up to 24 hours, so the
+error may still appear until then. Our server never used QUIC (nginx speaks HTTP/2 to Cloudflare). Right after the switch, Edge on the owner's PC
+showed ERR_CONNECTION_RESET for a few minutes while the site answered normally from outside and from `curl` on the same
+PC (200 in 0.5 s); it cleared by itself (Edge's leftover connections). HTTP/3 was turned back on meanwhile, so it is on
+for now; plan: turn it off again at a quiet moment, fully restart Edge, and watch whether the QUIC error returns.
+
 ## Day 2026-11-25: S3 started — saved GoPlus answers, crawlers cost nothing, per-method provider rest
 
 Unattended (owner out); nothing deployed, committed or pushed. No new screens; one new notice text (7 languages).

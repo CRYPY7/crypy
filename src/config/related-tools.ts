@@ -16,4 +16,6 @@ export const relatedTools: Record<ToolId, readonly [ToolId, ToolId, ToolId]> = {
   "address-formatter": ["batch-balance", "balance-scanner", "address-analyzer"],
   "timestamp-block": ["tx-checker", "gas-tracker", "hex-converter"],
   "tx-decoder": ["tx-checker", "hex-converter", "approval-checker"],
+  "token-valuation": ["token-security", "apy-calculator", "unit-converter"],
+  "apy-calculator": ["token-valuation", "portfolio", "unit-converter"],
 };

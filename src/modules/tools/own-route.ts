@@ -16,4 +16,6 @@ export const ownRouteTools: readonly ToolId[] = [
   "hex-converter",
   "address-formatter",
   "tx-decoder",
+  "token-valuation",
+  "apy-calculator",
 ];

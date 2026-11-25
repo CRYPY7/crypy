@@ -872,6 +872,19 @@ DEX decoders, per chain family:                      (one per DEX design)
 - Prefetch policy (B-027): links on every page (logo, header, bottom tabs, footer) and related-link lists use
   `prefetch={false}` plus `data-intent-prefetch`: `NavigationProgress` prefetches them on touch, hover or focus.
 
+## 12r. Browser-only utilities U1 (FEATURE_REGISTRY.md)
+
+- `lib/math/decimal.ts`: exact decimals (`Dec` = BigInt units + scale), parse what people type (thousands commas,
+  exponents), add/sub/mul, rounded div, pow, Newton root, display with grouping and significant digits for tiny values.
+- Calculators: `modules/tools/token-valuation/valuation.ts` and `modules/tools/apy-calculator/compound.ts` (pure,
+  unit-tested), own routes, category `calculators`; `tools.<id>.shortName` gives the sidebar a short name.
+- Gas: `modules/tools/gas-tracker/manual-fee.ts` + `manual-fee-widget.tsx` under the live tracker (no requests).
+- Token decimals: `parseDecimals` and the existing exact `parseAmount` / `formatExact` (`unit-converter/units.ts`).
+- QR: `components/entity/address-qr.tsx` (native `<dialog>`, `qrcode` imported on opening, drawn as a React SVG path,
+  PNG via canvas); `EntityHeader` takes `idActions`; `address-qr-props.ts` gives strings and EVM networks.
+- i18n: `messages/pending-translation.json` lists key prefixes of a batch in progress that may be missing in Beta
+  languages (English shows); `scripts/check-translations.ts` counts them. Translations are `DeepPartial` in types.
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

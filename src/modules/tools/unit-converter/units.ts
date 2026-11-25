@@ -55,3 +55,14 @@ export function formatExact(wei: bigint, decimals: number): string {
 export function convertAll(wei: bigint): Record<UnitId, string> {
   return Object.fromEntries(units.map((unit) => [unit.id, formatExact(wei, unit.decimals)])) as Record<UnitId, string>;
 }
+
+/** Token decimals the converter accepts: every real token uses 0–36 (most use 6, 8 or 18). */
+export const MAX_TOKEN_DECIMALS = 36;
+export type DecimalsError = "empty" | "whole-number" | "range";
+export function parseDecimals(input: string): { ok: true; decimals: number } | { ok: false; error: DecimalsError } {
+  const text = input.trim();
+  if (!text) return { ok: false, error: "empty" };
+  if (!/^\d+$/.test(text)) return { ok: false, error: "whole-number" };
+  const decimals = Number(text);
+  return decimals <= MAX_TOKEN_DECIMALS ? { ok: true, decimals } : { ok: false, error: "range" };
+}

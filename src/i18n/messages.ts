@@ -3,12 +3,14 @@ import type { Locale } from "./locales";
 import en from "../../messages/en.json";
 
 export type Messages = typeof en;
+/** Translations may lack any key (new texts are translated after a batch is built); English fills the gaps. */
+type DeepPartial<T> = T extends readonly unknown[] ? T : T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } : T;
 
 /**
  * Each locale has one JSON file in `/messages`. Missing keys fall back to English,
  * so an incomplete translation never breaks a page.
  */
-const loaders: Record<Locale, () => Promise<Partial<Messages>>> = {
+const loaders: Record<Locale, () => Promise<DeepPartial<Messages>>> = {
   en: async () => en,
   ur: () => import("../../messages/ur.json").then((m) => m.default),
   ar: () => import("../../messages/ar.json").then((m) => m.default),

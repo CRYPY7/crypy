@@ -43,6 +43,14 @@ used up before 00:00 UTC on a normal day.
     of the public nodes in PROGRESS.md).
   - **Still to do in S3:** more free providers per chain and a map of what each supports; a GoPlus queue with
     priorities; a queue for heavy checks; a measured health score shown on the admin page; the "done when" day.
+- **Utilities track U1–U3 (owner decision 2026-11-24), alongside S3–S5:** browser-only tools only, one batch at a
+  time; backlog and statuses in FEATURE_REGISTRY.md and the "CRYPY — Feature registry" Sheet (291 catalog tools).
+  U1: token decimals, manual gas fee, supply & valuation, APR/APY, address QR. U2: loan-to-value, impermanent loss,
+  slippage, Bitcoin and Solana address formats, EIP-712 / Permit signature decoder. U3: Keccak, selectors and topics,
+  ABI validator and encoder/decoder, Base58/Base64, JSON/CSV. Designs first; English first, translated per batch
+  before deploy; Learn guides only where useful. RPC or server tools from the catalog wait for S6.
+  - **U1 built 2026-11-24** (see PROGRESS.md). Owner decision 2026-11-24: new screens are built without design
+    approval first; the owner reviews them on the site. Next: U2.
 - **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
   cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
   2026-11-24: two build folders, rollback); a tested backup restore. **Done when:** an update, a worker crash and a

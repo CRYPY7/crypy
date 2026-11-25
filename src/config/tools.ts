@@ -5,7 +5,7 @@
  * Adding a tool = one entry here + its texts in `messages/en.json` under `tools.<id>`.
  * `status` must stay "soon" until the tool works with real data and has been verified.
  */
-export const toolCategories = ["security", "wallet", "network", "monitoring", "utilities"] as const;
+export const toolCategories = ["security", "wallet", "network", "monitoring", "calculators", "utilities"] as const;
 export type ToolCategory = (typeof toolCategories)[number];
 
 export const toolIds = [
@@ -23,6 +23,8 @@ export const toolIds = [
   "address-formatter",
   "timestamp-block",
   "tx-decoder",
+  "token-valuation",
+  "apy-calculator",
 ] as const;
 export type ToolId = (typeof toolIds)[number];
 
@@ -42,7 +44,9 @@ export type ToolIconName =
   | "at-sign"
   | "clock"
   | "code-xml"
-  | "layers";
+  | "layers"
+  | "coins"
+  | "percent";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -50,7 +54,7 @@ export interface ToolDefinition {
   icon: ToolIconName;
   status: ToolStatus;
   /** Roadmap milestone in which the tool becomes available. */
-  milestone: `M${number}`;
+  milestone: `M${number}` | `U${number}`;
   /** Shown as a question tile on the home page. */
   featured?: boolean;
   requiresAccount?: boolean;
@@ -111,6 +115,8 @@ export const tools: readonly ToolDefinition[] = [
     isNew: true,
   },
   { id: "tx-decoder", category: "utilities", icon: "code-xml", status: "live", milestone: "M2.5" },
+  { id: "token-valuation", category: "calculators", icon: "coins", status: "live", milestone: "U1", isNew: true },
+  { id: "apy-calculator", category: "calculators", icon: "percent", status: "live", milestone: "U1", isNew: true },
 ];
 
 export function getTool(id: string): ToolDefinition | undefined {

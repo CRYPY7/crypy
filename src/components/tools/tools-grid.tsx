@@ -11,6 +11,7 @@ const categoryColor: Record<ToolCategory, string> = {
   wallet: "text-primary",
   network: "text-low",
   monitoring: "text-high",
+  calculators: "text-medium",
   utilities: "text-muted-foreground",
 };
 

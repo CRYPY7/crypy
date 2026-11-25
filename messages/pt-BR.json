@@ -55,7 +55,8 @@
     "wallet": "Carteira",
     "network": "Rede",
     "monitoring": "Monitoramento",
-    "utilities": "Utilitários"
+    "utilities": "Utilitários",
+    "calculators": "Calculadoras"
   },
   "search": {
     "label": "Pesquise um endereço de carteira, um contrato de token ou um hash de transação",
@@ -403,14 +404,15 @@
     "gas-tracker": {
       "name": "Rastreador de gás",
       "question": "Quanto vai custar agora?",
-      "description": "Preços atuais do gás e o custo das ações comuns em cada rede.",
+      "description": "Preços de gas atuais e o custo das ações comuns em cada rede, além de uma calculadora para qualquer gas e preço.",
       "input": "Nada: é só abrir",
       "cta": "Ver preços do gás",
       "features": [
         "Taxas de prioridade baixa, média e alta por rede",
         "Custo em dólares de envios, aprovações, swaps e transferências de NFT",
         "Tendência da taxa base nos últimos 1.024 blocos",
-        "Atualiza a cada 12 segundos e mostra o horário da atualização"
+        "Atualiza a cada 12 segundos e mostra o horário da atualização",
+        "Calcule você mesmo qualquer taxa a partir do gas e do preço do gas"
       ],
       "seoTitle": "Rastreador de gás: preços em gwei em 5 redes | CRYPY",
       "seoDescription": "Preços do gás ao vivo em gwei para Ethereum, BNB Chain, Base, Arbitrum e Polygon, com o custo em USD de enviar, fazer swap ou aprovar.",
@@ -488,12 +490,13 @@
     "unit-converter": {
       "name": "Conversor de unidades",
       "question": "Quantos gwei são isso?",
-      "description": "Converta entre wei, gwei e ETH ou BNB com exatidão, sem arredondar.",
+      "description": "Converta entre wei, gwei e ETH ou BNB, e entre quantidades de tokens e unidades base para qualquer número de decimais, com exatidão.",
       "input": "Um valor",
       "cta": "Converter unidades",
       "features": [
         "Wei, gwei e ETH ou BNB, nos dois sentidos",
         "Exato até o último wei, sem arredondamento",
+        "Quantidades de tokens ↔ unidades base para qualquer número de decimais (6, 8, 18…)",
         "Funciona no seu navegador"
       ],
       "howTo": [
@@ -524,7 +527,7 @@
         }
       ],
       "seoTitle": "Conversor exato de wei para gwei e ETH | CRYPY",
-      "seoDescription": "Converta wei, gwei, ETH e BNB com exatidão, sem arredondar, inclusive valores em notação científica. Funciona no seu navegador; nada é enviado."
+      "seoDescription": "Converta wei, gwei, ETH e BNB com exatidão, e quantidades de tokens em unidades base para qualquer número de decimais (6, 8, 18…). No seu navegador."
     },
     "hex-converter": {
       "name": "Conversor hexadecimal",
@@ -567,12 +570,13 @@
     "address-formatter": {
       "name": "Formatador de endereços",
       "question": "Este endereço está escrito certo?",
-      "description": "Confira se um endereço está escrito certo e obtenha a forma com checksum. Serve para um endereço ou para uma lista.",
+      "description": "Verifique se um endereço está escrito corretamente, obtenha a forma com checksum e um QR code. Funciona com um endereço ou uma lista.",
       "input": "Um endereço",
       "cta": "Verificar endereço",
       "features": [
         "Detecta erros de digitação com o checksum EIP-55",
         "Verifica até 500 endereços de uma vez",
+        "QR code para compartilhar um endereço, com a rede indicada",
         "Funciona em todas as redes EVM",
         "Funciona no seu navegador"
       ],
@@ -733,6 +737,90 @@
       ],
       "seoTitle": "Verificador de saldos em lote: 500 endereços | CRYPY",
       "seoDescription": "Verifique saldos de moedas e tokens de até 500 endereços de uma vez na Ethereum, BNB Chain, Base, Arbitrum e Polygon e exporte para CSV."
+    },
+    "token-valuation": {
+      "name": "Calculadora de oferta e avaliação de tokens",
+      "question": "Quanto este token vale no total?",
+      "description": "Calcule o market cap, a avaliação totalmente diluída e quanto da oferta circula, a partir dos números que você digita.",
+      "input": "Oferta e preço",
+      "cta": "Calcular",
+      "features": [
+        "Market cap e avaliação totalmente diluída, separados",
+        "Parte circulante, oferta bloqueada e ainda não criada",
+        "Exata com ofertas enormes e preços minúsculos"
+      ],
+      "howTo": [
+        "Digite a oferta total do token e, se souber, a oferta circulante.",
+        "Adicione a oferta máxima se o token tiver uma, e o preço que quiser usar.",
+        "Leia o market cap, a avaliação totalmente diluída e a divisão da oferta. Nada é consultado por você."
+      ],
+      "faq": [
+        {
+          "q": "Qual é a diferença entre market cap e FDV?",
+          "a": "O market cap é a oferta circulante vezes o preço: o valor dos tokens que podem ser negociados hoje. A avaliação totalmente diluída (FDV) é a oferta máxima vezes o preço (ou a oferta total, se não houver máximo): quanto o token valeria se todos os tokens existissem e circulassem ao preço de hoje."
+        },
+        {
+          "q": "Por que uma grande diferença entre FDV e market cap importa?",
+          "a": "Tokens que ainda não circulam (equipe, investidores, recompensas) costumam ser desbloqueados com o tempo. Quando isso acontece, mais tokens disputam compradores, o que pode derrubar o preço. Uma FDV muitas vezes maior que o market cap indica que ainda pode chegar muita oferta."
+        },
+        {
+          "q": "Onde encontro os números de oferta?",
+          "a": "A oferta total está na página do token no CRYPY (lida do contrato). A oferta circulante e a máxima vêm dos documentos do próprio projeto ou de sites de dados; elas não ficam no contrato, então confira mais de uma fonte."
+        },
+        {
+          "q": "O CRYPY preenche o preço?",
+          "a": "Não. Esta calculadora usa só o que você digita, então dá para testar qualquer preço. O CRYPY nunca inventa um preço."
+        },
+        {
+          "q": "Algo que eu digito é enviado a um servidor?",
+          "a": "Não. Tudo é calculado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de market cap e FDV de tokens | CRYPY",
+      "seoDescription": "Calcule o market cap, a avaliação totalmente diluída e a parte circulante de um token a partir da oferta e do preço. Exata, no seu navegador; nada é enviado.",
+      "shortName": "Market cap e FDV"
+    },
+    "apy-calculator": {
+      "name": "Calculadora de APR / APY e juros compostos",
+      "question": "Quanto isto poderia crescer?",
+      "description": "Veja como um valor cresce com APR ou APY fixo, com capitalização e aportes regulares. Uma estimativa calculada no seu navegador.",
+      "input": "Valor, taxa e prazo",
+      "cta": "Calcular",
+      "features": [
+        "APR ou APY, capitalizado de diário a anual",
+        "Aportes regulares e uma tabela ano a ano",
+        "Mostra a taxa anual efetiva"
+      ],
+      "howTo": [
+        "Digite o valor inicial e a taxa anual, e diga se é APR ou APY.",
+        "Escolha com que frequência os juros são somados e por quanto tempo.",
+        "Adicione um aporte regular se quiser e leia a estimativa e a tabela ano a ano."
+      ],
+      "faq": [
+        {
+          "q": "Qual é a diferença entre APR e APY?",
+          "a": "APR é a taxa anual antes da capitalização. O APY inclui a capitalização: quanto cresce em um ano inteiro quando os próprios juros rendem juros. 10% de APR capitalizado mensalmente é cerca de 10,47% de APY."
+        },
+        {
+          "q": "Esses rendimentos são garantidos?",
+          "a": "Não. A calculadora supõe que a taxa fica igual o tempo todo. Em cripto as taxas mudam com frequência, recompensas podem ser pagas em tokens cujo preço varia e protocolos podem falhar. Trate o resultado como uma ilustração, não como uma promessa."
+        },
+        {
+          "q": "Quando os aportes são somados?",
+          "a": "No fim de cada período de capitalização, depois dos juros desse período. Uma fração de período no final rende juros simples por essa fração."
+        },
+        {
+          "q": "Qual é a precisão?",
+          "a": "Calcula com 30 casas decimais e arredonda só o que mostra. Os anos têm 365 dias e um mês é um doze avos do ano."
+        },
+        {
+          "q": "Algo que eu digito é enviado a um servidor?",
+          "a": "Não. Tudo é calculado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de APY e juros compostos cripto | CRYPY",
+      "seoDescription": "Converta APR em APY e veja como um valor cresce com juros compostos e aportes regulares, ano a ano. Uma estimativa no seu navegador; nada é enviado.",
+      "shortName": "Calculadora de APY"
     }
   },
   "toolPage": {
@@ -2298,7 +2386,17 @@
       "tokenCheckingBody": "Uma nova verificação está em andamento e esta página se atualiza sozinha. O dono pode ter mudado configurações desde então: espere o resultado antes de comprar.",
       "savedTx": "{chain} não respondeu agora. Uma transação confirmada não muda: só o número de confirmações e os valores em dólar de hoje podem ter mudado."
     },
-    "crawler": "Esta página mostra dados de blockchain ao vivo para pessoas usando um navegador. Clientes automáticos e rastreadores não recebem dados ao vivo aqui."
+    "crawler": "Esta página mostra dados de blockchain ao vivo para pessoas usando um navegador. Clientes automáticos e rastreadores não recebem dados ao vivo aqui.",
+    "qr": {
+      "open": "QR code",
+      "title": "QR code do endereço",
+      "network": "Rede",
+      "caption": "Endereço na {network}",
+      "warning": "O mesmo endereço 0x existe em todas as redes EVM. Diga a quem vai enviar para usar a {network}: moedas enviadas por uma rede que você não usa podem ser difíceis ou impossíveis de recuperar.",
+      "download": "Baixar PNG",
+      "close": "Fechar",
+      "local": "Criado no seu navegador. Apenas um endereço público: nunca compartilhe uma frase de recuperação ou chave privada."
+    }
   },
   "wallet": {
     "connect": "Conectar carteira",
@@ -2401,7 +2499,8 @@
         "length": "Tamanho errado: {length} caracteres depois de 0x em vez de 40.",
         "characters": "Contém caracteres não permitidos (só 0–9 e a–f).",
         "empty": "Vazio."
-      }
+      },
+      "secret": "Isto parece uma frase de recuperação ou uma chave privada. Nunca digite isso em nenhum site: quem vir pode levar tudo o que há na carteira. Nada foi verificado nem enviado; apague a caixa."
     },
     "tx-decoder": {
       "label": "Dados de entrada da transação",
@@ -3016,6 +3115,156 @@
       "importNone": "Todas as carteiras do portfólio deste navegador já estão monitoradas.",
       "importButton": "Monitorar {count} carteira(s)",
       "importNotNow": "Agora não"
+    },
+    "manualFee": {
+      "title": "Calcule uma taxa você mesmo",
+      "intro": "Digite o gas e o preço do gas, por exemplo da tela de confirmação da sua carteira ou da documentação de um contrato. Nada é consultado: o resultado vem só do que você digita.",
+      "gas": "Gas (unidades)",
+      "gasHint": "O gas que uma transação usa, ou o limite de gas para ver o máximo que pode custar.",
+      "typical": "Típico:",
+      "price": "Preço do gas",
+      "usd": "Preço de {coin} em USD (opcional)",
+      "usdHint": "Digite o preço para ver a taxa em dólares. O CRYPY não preenche aqui.",
+      "anyCoin": "moeda",
+      "feeCoin": "Taxa em {coin}",
+      "feeGwei": "Taxa em gwei",
+      "feeWei": "Taxa em wei",
+      "feeUsd": "Taxa em USD",
+      "noUsd": "Digite um preço para ver em dólares",
+      "formula": "Taxa = gas × preço do gas. Exata até o último wei; o valor em dólares é arredondado para centavos.",
+      "limitNote": "O limite de gas é o máximo que uma transação pode usar. Você paga apenas o gas realmente usado, então uma taxa calculada com o limite é o máximo que poderia custar, não o que você vai pagar.",
+      "l1Note": "Na Base, na Arbitrum e em outros rollups, uma taxa de dados do Ethereum é somada a isto; na Arbitrum ela já está incluída no gas usado mostrado depois da transação.",
+      "local": "Calculado no seu navegador; nada do que você digita é enviado.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 21000 ou 1.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (1.5); vírgulas só entre milhares (1,000).",
+        "too-precise": "Casas decimais demais: wei é a menor unidade.",
+        "too-large": "Grande demais.",
+        "whole-number": "Digite um número inteiro.",
+        "gas-too-large": "É mais gas do que cabe em qualquer bloco. Confira o número."
+      }
+    },
+    "tokenDecimals": {
+      "title": "Quantidade de tokens ↔ unidades base (qualquer número de decimais)",
+      "intro": "Os tokens guardam as quantidades como números inteiros da sua menor unidade. Os decimais dizem onde fica o ponto: 1 USDC com 6 decimais são 1000000 unidades base. Nem todo token usa 18.",
+      "decimals": "Decimais do token",
+      "common": "Comuns:",
+      "amount": "Quantidade (como as carteiras mostram)",
+      "base": "Unidades base (como ficam na blockchain)",
+      "baseHint": "Um número inteiro: o que contratos e dados brutos de transação usam.",
+      "explain": "1 token = 1 seguido de {decimals} zeros em unidades base. Exato, sem arredondamento.",
+      "local": "Confira os decimais do próprio token antes de confiar num número (a página do token mostra). Calculado no seu navegador.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1.5 ou 1e6.",
+        "negative": "Quantidades não podem ser negativas.",
+        "comma": "Use ponto para decimais (1.5), não vírgula.",
+        "too-precise": "Mais casas decimais do que este token tem.",
+        "too-large": "Grande demais: o máximo que uma quantidade de tokens comporta é 2^256 − 1 unidades base.",
+        "whole-number": "Digite um número inteiro, como 6 ou 18.",
+        "range": "Aqui os decimais vão de 0 a 36 (a maioria dos tokens usa 6, 8 ou 18).",
+        "base-whole": "Unidades base são números inteiros: sem ponto decimal."
+      }
+    },
+    "tokenValuation": {
+      "total": "Oferta total",
+      "totalHint": "Os tokens que existem agora (o totalSupply do contrato).",
+      "circulating": "Oferta circulante (opcional)",
+      "circulatingHint": "Os tokens que podem ser negociados hoje. Necessária para o market cap.",
+      "max": "Oferta máxima (opcional)",
+      "maxHint": "O máximo que poderá existir, se o token tiver um teto.",
+      "price": "Preço por token em USD (opcional)",
+      "priceHint": "Digite o preço que quiser usar. O CRYPY não preenche.",
+      "results": "Resultados",
+      "marketCap": "Market cap",
+      "marketCapHelp": "Oferta circulante × preço",
+      "marketCapNeeds": "Precisa da oferta circulante e de um preço",
+      "fdv": "Avaliação totalmente diluída (FDV)",
+      "fdvMax": "Oferta máxima × preço",
+      "fdvTotal": "Oferta total × preço (sem máximo informado)",
+      "fdvNeeds": "Precisa de uma oferta e de um preço",
+      "ratio": "A FDV é {ratio}× o market cap: grande parte da oferta ainda não circula e pode ser desbloqueada depois.",
+      "supply": "Oferta",
+      "circulatingOfTotal": "Circulante, da oferta total",
+      "circulatingOfMax": "Circulante, da oferta máxima",
+      "notCirculating": "Criado mas não circulante",
+      "notCirculatingHelp": "Total − circulante: muitas vezes bloqueado, em vesting ou com o projeto",
+      "notYetIssued": "Ainda não criado",
+      "notYetIssuedHelp": "Máximo − total: ainda pode ser cunhado",
+      "empty": "Digite pelo menos uma oferta e um preço para ver os resultados.",
+      "local": "Calculado no seu navegador a partir do que você digita; nada é consultado ou enviado.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1000000 ou 1.5e9.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (0.5); vírgulas só entre milhares (1,000,000).",
+        "too-large": "Grande demais.",
+        "too-precise": "Casas decimais demais.",
+        "circulating-over-total": "A oferta circulante não pode ser maior que a oferta total.",
+        "total-over-max": "A oferta total não pode ser maior que a oferta máxima.",
+        "circulating-over-max": "A oferta circulante não pode ser maior que a oferta máxima."
+      }
+    },
+    "apyCalculator": {
+      "principal": "Valor inicial",
+      "rate": "Taxa anual (%)",
+      "rateType": "A taxa é",
+      "apr": "APR",
+      "apy": "APY",
+      "frequency": "Os juros são somados",
+      "frequencies": {
+        "daily": "Diariamente",
+        "weekly": "Semanalmente",
+        "monthly": "Mensalmente",
+        "quarterly": "Trimestralmente",
+        "yearly": "Anualmente"
+      },
+      "duration": "Por",
+      "units": {
+        "days": "dias",
+        "months": "meses",
+        "years": "anos"
+      },
+      "deposit": "Adicionar a cada período (opcional)",
+      "depositHint": "Adicionado no fim de cada período {period}.",
+      "periodNames": {
+        "daily": "diário",
+        "weekly": "semanal",
+        "monthly": "mensal",
+        "quarterly": "trimestral",
+        "yearly": "anual"
+      },
+      "results": "Estimativa",
+      "final": "Saldo no final",
+      "deposited": "Você aportou",
+      "interest": "Juros ganhos",
+      "effectiveApy": "Taxa anual efetiva (APY)",
+      "nominalApr": "A mesma taxa como APR",
+      "formulaApr": "Cada período cresce APR ÷ {n}. Saldo após k períodos = valor × (1 + APR ÷ {n})^k, mais os aportes.",
+      "formulaApy": "Cada período cresce (1 + APY)^(1/{n}) − 1, então um ano inteiro cresce exatamente o APY.",
+      "partial": "A última fração de período ({fraction}) rende juros simples.",
+      "table": "Ano a ano",
+      "year": "Ano",
+      "balance": "Saldo",
+      "totalIn": "Aportado",
+      "earned": "Juros",
+      "warning": "Uma estimativa que supõe que a taxa nunca muda. As taxas cripto variam, recompensas podem ser pagas em tokens cujo preço cai e plataformas podem falhar: não é uma promessa de rendimento.",
+      "local": "Calculado no seu navegador com 30 casas decimais; só a exibição é arredondada. Nada é enviado.",
+      "empty": "Digite um valor, uma taxa e um prazo para ver a estimativa.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1000 ou 5.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (5.5); vírgulas só entre milhares (1,000).",
+        "too-large": "Grande demais para esta calculadora.",
+        "too-precise": "Casas decimais demais.",
+        "too-long": "No máximo 100 anos.",
+        "rate-too-high": "No máximo 100.000% ao ano: confira a taxa.",
+        "whole-number": "Digite um número inteiro de dias.",
+        "zero-duration": "Digite um prazo maior que zero."
+      }
     }
   },
   "seo": {

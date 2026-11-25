@@ -16,6 +16,8 @@ import { isLocale } from "@/i18n/locales";
 import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
 import { pageAccess } from "@/server/page-guard";
+import { AddressQrButton } from "@/components/entity/address-qr";
+import { addressQrProps } from "@/components/entity/address-qr-props";
 import { cachedActivity, formatCursor } from "@/server/services/activity";
 import { chainScopeFor } from "@/server/services/chain-scope";
 import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
@@ -93,6 +95,7 @@ async function ActivityContent({
       }
   }
 
+  const qr = await addressQrProps();
   return (
     <div className="flex flex-col gap-6">
       <Breadcrumbs
@@ -110,6 +113,7 @@ async function ActivityContent({
         id={result.address}
         copyLabel={t("entity.copy")}
         copiedLabel={t("entity.copied")}
+        idActions={<AddressQrButton address={result.address} {...qr} />}
         links={links}
       >
         <p className="max-w-3xl text-sm text-muted-foreground">{t("entity.activity.intro")}</p>

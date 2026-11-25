@@ -55,7 +55,8 @@
     "wallet": "Cüzdan",
     "network": "Ağ",
     "monitoring": "İzleme",
-    "utilities": "Yardımcı araçlar"
+    "utilities": "Yardımcı araçlar",
+    "calculators": "Hesaplayıcılar"
   },
   "search": {
     "label": "Bir cüzdan adresi, token kontratı veya işlem hash'i arayın",
@@ -403,14 +404,15 @@
     "gas-tracker": {
       "name": "Gas Takipçisi",
       "question": "Şu an ne kadar tutar?",
-      "description": "Her ağda güncel gas fiyatları ve yaygın işlemlerin maliyeti.",
+      "description": "Her ağda güncel gas fiyatları ve yaygın işlemlerin maliyeti, ayrıca herhangi bir gas ve fiyat için bir hesaplayıcı.",
       "input": "Hiçbir şey: açmanız yeterli",
       "cta": "Gas fiyatlarını gör",
       "features": [
         "Ağ başına düşük, ortalama ve yüksek öncelik ücretleri",
         "Gönderme, onay, takas ve NFT transferlerinin dolar maliyeti",
         "Son 1.024 bloktaki taban ücret eğilimi",
-        "12 saniyede bir yenilenir ve ne zaman güncellendiğini gösterir"
+        "12 saniyede bir yenilenir ve ne zaman güncellendiğini gösterir",
+        "Gas ve gas fiyatından herhangi bir ücreti kendiniz hesaplayın"
       ],
       "seoTitle": "Gas Takipçisi: 5 Ağda Canlı Gwei Fiyatları | CRYPY",
       "seoDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon için gwei cinsinden canlı gas fiyatları ve gönderme, takas veya onayın USD maliyeti.",
@@ -488,12 +490,13 @@
     "unit-converter": {
       "name": "Birim Dönüştürücü",
       "question": "Bu kaç gwei eder?",
-      "description": "Wei, gwei ve ETH veya BNB arasında yuvarlamadan, tam dönüştürme.",
+      "description": "wei, gwei ile ETH veya BNB arasında ve herhangi bir ondalık sayısı için token miktarları ile temel birimler arasında kesin dönüşüm yapın.",
       "input": "Bir tutar",
       "cta": "Birimleri dönüştür",
       "features": [
         "Wei, gwei ve ETH veya BNB, iki yönde",
         "Son wei'ye kadar tam, yuvarlama yok",
+        "Herhangi bir ondalık sayısı (6, 8, 18…) için token miktarı ↔ temel birimler",
         "Tarayıcınızda çalışır"
       ],
       "howTo": [
@@ -524,7 +527,7 @@
         }
       ],
       "seoTitle": "Tam Wei, Gwei ve ETH Dönüştürücü | CRYPY",
-      "seoDescription": "Wei, gwei, ETH ve BNB'yi yuvarlamadan, bilimsel gösterimdeki tutarlar dahil tam olarak dönüştürün. Tarayıcınızda çalışır; hiçbir şey gönderilmez."
+      "seoDescription": "wei, gwei, ETH ve BNB'yi kesin olarak çevirin; token miktarlarını herhangi bir ondalık sayısı (6, 8, 18…) için temel birimlere dönüştürün. Tarayıcınızda çalışır."
     },
     "hex-converter": {
       "name": "Hex Dönüştürücü",
@@ -567,12 +570,13 @@
     "address-formatter": {
       "name": "Adres Biçimlendirici",
       "question": "Bu adres doğru yazılmış mı?",
-      "description": "Bir adresin doğru yazılıp yazılmadığını kontrol edin ve sağlama toplamlı biçimini alın. Tek adres veya liste için.",
+      "description": "Bir adresin doğru yazıldığını kontrol edin, sağlama toplamlı biçimini ve QR kodunu alın. Tek bir adres veya bir liste için çalışır.",
       "input": "Bir adres",
       "cta": "Adresi kontrol et",
       "features": [
         "EIP-55 sağlama toplamıyla yazım hatalarını yakalar",
         "Tek seferde 500 adrese kadar kontrol",
+        "Bir adresi paylaşmak için ağı belirtilmiş QR kodu",
         "Tüm EVM ağlarında çalışır",
         "Tarayıcınızda çalışır"
       ],
@@ -733,6 +737,90 @@
       ],
       "seoTitle": "Toplu Cüzdan Bakiye Kontrolü: 500 Adres | CRYPY",
       "seoDescription": "Ethereum, BNB Chain, Base, Arbitrum ve Polygon'da 500 adrese kadar coin ve token bakiyesini tek seferde kontrol edin ve CSV olarak dışa aktarın."
+    },
+    "token-valuation": {
+      "name": "Token arzı ve değerleme hesaplayıcısı",
+      "question": "Bu token toplamda ne kadar değerli?",
+      "description": "Yazdığınız sayılardan piyasa değerini, tamamen seyreltilmiş değerlemeyi ve arzın ne kadarının dolaşımda olduğunu hesaplayın.",
+      "input": "Arz ve fiyat",
+      "cta": "Hesapla",
+      "features": [
+        "Piyasa değeri ve tamamen seyreltilmiş değerleme, ayrı ayrı",
+        "Dolaşım oranı, kilitli ve henüz oluşturulmamış arz",
+        "Devasa arz ve çok küçük fiyatlarda bile kesin"
+      ],
+      "howTo": [
+        "Tokenın toplam arzını, biliyorsanız dolaşımdaki arzı yazın.",
+        "Tokenın azami arzı varsa onu ve kullanmak istediğiniz fiyatı ekleyin.",
+        "Piyasa değerini, tamamen seyreltilmiş değerlemeyi ve arz dağılımını okuyun. Sizin için hiçbir şey sorgulanmaz."
+      ],
+      "faq": [
+        {
+          "q": "Piyasa değeri ile FDV arasındaki fark nedir?",
+          "a": "Piyasa değeri, dolaşımdaki arz çarpı fiyattır: bugün işlem görebilen tokenların değeri. Tamamen seyreltilmiş değerleme (FDV), azami arz çarpı fiyattır (azami yoksa toplam arz): tüm tokenlar var olup bugünkü fiyattan dolaşsaydı tokenın edeceği değer."
+        },
+        {
+          "q": "FDV ile piyasa değeri arasındaki büyük fark neden önemli?",
+          "a": "Henüz dolaşımda olmayan tokenların (ekip, yatırımcılar, ödüller) kilidi genellikle zamanla açılır. Açıldığında daha fazla token alıcılar için yarışır ve bu fiyatı düşürebilir. Piyasa değerinin birkaç katı bir FDV, piyasaya hâlâ çok arz gelebileceği anlamına gelir."
+        },
+        {
+          "q": "Arz sayılarını nerede bulurum?",
+          "a": "Toplam arz, CRYPY'deki token sayfasında yer alır (sözleşmeden okunur). Dolaşımdaki ve azami arz, projenin kendi belgelerinden veya veri sitelerinden gelir; bunlar sözleşmede saklanmaz, bu yüzden birden fazla kaynağı karşılaştırın."
+        },
+        {
+          "q": "CRYPY fiyatı otomatik doldurur mu?",
+          "a": "Hayır. Bu hesaplayıcı yalnızca yazdıklarınızı kullanır, böylece istediğiniz fiyatı deneyebilirsiniz. CRYPY asla fiyat uydurmaz."
+        },
+        {
+          "q": "Yazdıklarım bir sunucuya gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Token piyasa değeri ve FDV hesaplayıcısı | CRYPY",
+      "seoDescription": "Bir tokenın arzından ve fiyatından piyasa değerini, tamamen seyreltilmiş değerlemesini ve dolaşım oranını hesaplayın. Kesin, tarayıcınızda; hiçbir şey gönderilmez.",
+      "shortName": "Piyasa değeri ve FDV"
+    },
+    "apy-calculator": {
+      "name": "APR / APY ve bileşik faiz hesaplayıcısı",
+      "question": "Bu ne kadar büyüyebilir?",
+      "description": "Bir tutarın sabit APR veya APY ile, bileşik faiz ve düzenli eklemelerle nasıl büyüdüğünü görün. Tarayıcınızda hesaplanan bir tahmin.",
+      "input": "Tutar, oran ve süre",
+      "cta": "Hesapla",
+      "features": [
+        "APR veya APY, günlükten yıllığa bileşik",
+        "Düzenli eklemeler ve yıl yıl tablo",
+        "Efektif yıllık oranı gösterir"
+      ],
+      "howTo": [
+        "Başlangıç tutarını ve yıllık oranı yazın, APR mı APY mi olduğunu seçin.",
+        "Faizin ne sıklıkla ekleneceğini ve süreyi seçin.",
+        "İsterseniz düzenli bir ekleme yapın, ardından tahmini ve yıl yıl tabloyu okuyun."
+      ],
+      "faq": [
+        {
+          "q": "APR ile APY arasındaki fark nedir?",
+          "a": "APR, bileşik faizden önceki yıllık orandır. APY bileşik faizi içerir: faizin kendisi de faiz kazandığında bir tam yılda elde edilen büyüme. Aylık bileşik %10 APR yaklaşık %10,47 APY'dir."
+        },
+        {
+          "q": "Bu getiriler garanti mi?",
+          "a": "Hayır. Hesaplayıcı oranın tüm süre boyunca aynı kaldığını varsayar. Kriptoda oranlar sık değişir, ödüller fiyatı oynayan tokenlarla ödenebilir ve protokoller çökebilir. Sonucu bir vaat değil, bir örnek olarak görün."
+        },
+        {
+          "q": "Eklemeler ne zaman yapılır?",
+          "a": "Her bileşik dönemin sonunda, o dönemin faizinden sonra. Sondaki tamamlanmamış dönem kısmı, o kısım için basit faiz kazanır."
+        },
+        {
+          "q": "Ne kadar kesin?",
+          "a": "Noktadan sonra 30 basamakla hesaplar ve yalnızca gösterdiğini yuvarlar. Yıllar 365 gün, bir ay yılın on ikide biri sayılır."
+        },
+        {
+          "q": "Yazdıklarım bir sunucuya gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Kripto APY ve bileşik faiz hesaplayıcısı | CRYPY",
+      "seoDescription": "APR'yi APY'ye çevirin ve bir tutarın bileşik faiz ve düzenli eklemelerle yıl yıl nasıl büyüdüğünü görün. Tarayıcınızda bir tahmin; hiçbir şey gönderilmez.",
+      "shortName": "APY hesaplayıcısı"
     }
   },
   "toolPage": {
@@ -2298,7 +2386,17 @@
       "tokenCheckingBody": "Yeni bir kontrol yapılıyor ve bu sayfa kendiliğinden güncellenir. Sahip o zamandan beri ayarları değiştirmiş olabilir: satın almadan önce sonucu bekleyin.",
       "savedTx": "{chain} şu anda yanıt vermedi. Onaylanmış bir işlem değişmez: yalnızca onay sayısı ve bugünkü dolar değerleri değişmiş olabilir."
     },
-    "crawler": "Bu sayfa, tarayıcı kullanan kişilere canlı blokzincir verisi gösterir. Otomatik istemciler ve tarayıcı botları burada canlı veri almaz."
+    "crawler": "Bu sayfa, tarayıcı kullanan kişilere canlı blokzincir verisi gösterir. Otomatik istemciler ve tarayıcı botları burada canlı veri almaz.",
+    "qr": {
+      "open": "QR kodu",
+      "title": "Adres QR kodu",
+      "network": "Ağ",
+      "caption": "{network} adresi",
+      "warning": "Aynı 0x adresi her EVM ağında bulunur. Gönderen kişiye {network} kullanmasını söyleyin: kullanmadığınız bir ağdan gönderilen coinleri geri almak zor ya da imkânsız olabilir.",
+      "download": "PNG indir",
+      "close": "Kapat",
+      "local": "Tarayıcınızda oluşturuldu. Yalnızca açık adres: kurtarma ifadesini veya özel anahtarı asla paylaşmayın."
+    }
   },
   "wallet": {
     "connect": "Cüzdan bağla",
@@ -2401,7 +2499,8 @@
         "length": "Yanlış uzunluk: 0x'ten sonra 40 yerine {length} karakter var.",
         "characters": "İzin verilmeyen karakterler içeriyor (yalnızca 0–9 ve a–f).",
         "empty": "Boş."
-      }
+      },
+      "secret": "Bu bir kurtarma ifadesine veya özel anahtara benziyor. Bunu hiçbir web sitesine yazmayın: gören herkes cüzdandaki her şeyi alabilir. Hiçbir şey kontrol edilmedi veya gönderilmedi; kutuyu temizleyin."
     },
     "tx-decoder": {
       "label": "İşlem giriş verisi",
@@ -3016,6 +3115,156 @@
       "importNone": "Bu tarayıcının portföyündeki tüm cüzdanlar zaten izleniyor.",
       "importButton": "{count} cüzdanı izle",
       "importNotNow": "Şimdi değil"
+    },
+    "manualFee": {
+      "title": "Ücreti kendiniz hesaplayın",
+      "intro": "Gas'ı ve gas fiyatını yazın; örneğin cüzdanınızın onay ekranından veya bir sözleşmenin belgelerinden. Hiçbir şey sorgulanmaz: sonuç yalnızca yazdıklarınızdan çıkar.",
+      "gas": "Gas (birim)",
+      "gasHint": "Bir işlemin kullandığı gas veya en fazla ne kadar tutabileceğini görmek için gas limiti.",
+      "typical": "Tipik:",
+      "price": "Gas fiyatı",
+      "usd": "{coin} USD fiyatı (isteğe bağlı)",
+      "usdHint": "Ücreti dolar olarak görmek için fiyatı yazın. CRYPY burada otomatik doldurmaz.",
+      "anyCoin": "coin",
+      "feeCoin": "{coin} cinsinden ücret",
+      "feeGwei": "gwei cinsinden ücret",
+      "feeWei": "wei cinsinden ücret",
+      "feeUsd": "USD cinsinden ücret",
+      "noUsd": "Dolar olarak görmek için bir fiyat yazın",
+      "formula": "Ücret = gas × gas fiyatı. Son wei'ye kadar kesin; dolar değeri sente yuvarlanır.",
+      "limitNote": "Gas limiti, bir işlemin kullanabileceği en fazla gas'tır. Yalnızca gerçekten kullanılan gas'ı ödersiniz; bu yüzden limitle hesaplanan ücret ödeyeceğiniz tutar değil, olabilecek en yüksek maliyettir.",
+      "l1Note": "Base, Arbitrum ve diğer rollup'larda buna bir Ethereum veri ücreti eklenir; Arbitrum'da bu ücret, işlemden sonra gösterilen kullanılan gas'a zaten dahildir.",
+      "local": "Tarayıcınızda hesaplanır; yazdığınız hiçbir şey hiçbir yere gönderilmez.",
+      "errors": {
+        "empty": "",
+        "format": "21000 veya 1.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (1.5); virgül yalnızca binlik ayırıcı olarak (1,000).",
+        "too-precise": "Çok fazla ondalık basamak: wei en küçük birimdir.",
+        "too-large": "Çok büyük.",
+        "whole-number": "Bir tam sayı girin.",
+        "gas-too-large": "Bu, herhangi bir bloğun alabileceğinden fazla gas. Sayıyı kontrol edin."
+      }
+    },
+    "tokenDecimals": {
+      "title": "Token miktarı ↔ temel birimler (herhangi bir ondalık sayısı)",
+      "intro": "Tokenlar miktarları en küçük birimlerinin tam sayısı olarak saklar. Ondalık sayısı noktanın yerini belirler: 6 ondalıklı 1 USDC, 1000000 temel birimdir. Her token 18 kullanmaz.",
+      "decimals": "Token ondalık sayısı",
+      "common": "Yaygın:",
+      "amount": "Miktar (cüzdanların gösterdiği gibi)",
+      "base": "Temel birimler (zincirde saklandığı gibi)",
+      "baseHint": "Bir tam sayı: sözleşmelerin ve ham işlem verilerinin kullandığı biçim.",
+      "explain": "1 token = 1 ve ardından {decimals} sıfır temel birim. Kesin, yuvarlama yok.",
+      "local": "Bir sayıya güvenmeden önce tokenın kendi ondalık sayısını kontrol edin (token sayfası gösterir). Tarayıcınızda hesaplanır.",
+      "errors": {
+        "empty": "",
+        "format": "1.5 veya 1e6 gibi bir sayı girin.",
+        "negative": "Miktarlar negatif olamaz.",
+        "comma": "Ondalık için virgül değil nokta kullanın (1.5).",
+        "too-precise": "Bu tokenın sahip olduğundan fazla ondalık basamak.",
+        "too-large": "Çok büyük: bir token miktarı en fazla 2^256 − 1 temel birim olabilir.",
+        "whole-number": "6 veya 18 gibi bir tam sayı girin.",
+        "range": "Burada ondalık sayısı 0 ile 36 arasındadır (çoğu token 6, 8 veya 18 kullanır).",
+        "base-whole": "Temel birimler tam sayıdır: ondalık nokta olmaz."
+      }
+    },
+    "tokenValuation": {
+      "total": "Toplam arz",
+      "totalHint": "Şu anda var olan tokenlar (sözleşmenin totalSupply değeri).",
+      "circulating": "Dolaşımdaki arz (isteğe bağlı)",
+      "circulatingHint": "Bugün işlem görebilen tokenlar. Piyasa değeri için gerekir.",
+      "max": "Azami arz (isteğe bağlı)",
+      "maxHint": "Tokenın bir üst sınırı varsa, var olabilecek en fazla miktar.",
+      "price": "Token başına USD fiyatı (isteğe bağlı)",
+      "priceHint": "Kullanmak istediğiniz fiyatı yazın. CRYPY otomatik doldurmaz.",
+      "results": "Sonuçlar",
+      "marketCap": "Piyasa değeri",
+      "marketCapHelp": "Dolaşımdaki arz × fiyat",
+      "marketCapNeeds": "Dolaşımdaki arz ve bir fiyat gerekir",
+      "fdv": "Tamamen seyreltilmiş değerleme (FDV)",
+      "fdvMax": "Azami arz × fiyat",
+      "fdvTotal": "Toplam arz × fiyat (azami arz girilmedi)",
+      "fdvNeeds": "Bir arz ve bir fiyat gerekir",
+      "ratio": "FDV, piyasa değerinin {ratio} katı: arzın büyük kısmı henüz dolaşımda değil ve daha sonra kilidi açılabilir.",
+      "supply": "Arz",
+      "circulatingOfTotal": "Dolaşımdaki, toplam arza göre",
+      "circulatingOfMax": "Dolaşımdaki, azami arza göre",
+      "notCirculating": "Oluşturulmuş ama dolaşımda değil",
+      "notCirculatingHelp": "Toplam − dolaşımdaki: çoğu zaman kilitli, vesting'de veya projede",
+      "notYetIssued": "Henüz oluşturulmadı",
+      "notYetIssuedHelp": "Azami − toplam: hâlâ basılabilir",
+      "empty": "Sonuçları görmek için en az bir arz ve bir fiyat yazın.",
+      "local": "Yazdıklarınızdan tarayıcınızda hesaplanır; hiçbir şey sorgulanmaz veya gönderilmez.",
+      "errors": {
+        "empty": "",
+        "format": "1000000 veya 1.5e9 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (0.5); virgül yalnızca binlik ayırıcı olarak (1,000,000).",
+        "too-large": "Çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak.",
+        "circulating-over-total": "Dolaşımdaki arz toplam arzdan fazla olamaz.",
+        "total-over-max": "Toplam arz azami arzdan fazla olamaz.",
+        "circulating-over-max": "Dolaşımdaki arz azami arzdan fazla olamaz."
+      }
+    },
+    "apyCalculator": {
+      "principal": "Başlangıç tutarı",
+      "rate": "Yıllık oran (%)",
+      "rateType": "Oran türü",
+      "apr": "APR",
+      "apy": "APY",
+      "frequency": "Faiz eklenme sıklığı",
+      "frequencies": {
+        "daily": "Günlük",
+        "weekly": "Haftalık",
+        "monthly": "Aylık",
+        "quarterly": "Üç aylık",
+        "yearly": "Yıllık"
+      },
+      "duration": "Süre",
+      "units": {
+        "days": "gün",
+        "months": "ay",
+        "years": "yıl"
+      },
+      "deposit": "Her dönem ekle (isteğe bağlı)",
+      "depositHint": "Her {period} dönemin sonunda eklenir.",
+      "periodNames": {
+        "daily": "günlük",
+        "weekly": "haftalık",
+        "monthly": "aylık",
+        "quarterly": "üç aylık",
+        "yearly": "yıllık"
+      },
+      "results": "Tahmin",
+      "final": "Sondaki bakiye",
+      "deposited": "Yatırdığınız",
+      "interest": "Kazanılan faiz",
+      "effectiveApy": "Efektif yıllık oran (APY)",
+      "nominalApr": "Aynı oranın APR karşılığı",
+      "formulaApr": "Her dönem APR ÷ {n} kadar büyür. k dönem sonraki bakiye = tutar × (1 + APR ÷ {n})^k, artı eklemeler.",
+      "formulaApy": "Her dönem (1 + APY)^(1/{n}) − 1 kadar büyür; böylece tam bir yıl tam olarak APY kadar büyür.",
+      "partial": "Sondaki tamamlanmamış dönem kısmı ({fraction}) basit faiz kazanır.",
+      "table": "Yıl yıl",
+      "year": "Yıl",
+      "balance": "Bakiye",
+      "totalIn": "Yatırılan",
+      "earned": "Faiz",
+      "warning": "Oranın hiç değişmediğini varsayan bir tahmindir. Kripto oranları değişir, ödüller fiyatı düşen tokenlarla ödenebilir ve platformlar çökebilir: bu bir getiri vaadi değildir.",
+      "local": "Tarayıcınızda noktadan sonra 30 basamakla hesaplanır; yalnızca gösterim yuvarlanır. Hiçbir şey gönderilmez.",
+      "empty": "Tahmini görmek için bir tutar, oran ve süre yazın.",
+      "errors": {
+        "empty": "",
+        "format": "1000 veya 5.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (5.5); virgül yalnızca binlik ayırıcı olarak (1,000).",
+        "too-large": "Bu hesaplayıcı için çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak.",
+        "too-long": "En fazla 100 yıl.",
+        "rate-too-high": "Yılda en fazla %100.000: oranı kontrol edin.",
+        "whole-number": "Gün sayısı için tam sayı girin.",
+        "zero-duration": "Sıfırdan uzun bir süre girin."
+      }
     }
   },
   "seo": {

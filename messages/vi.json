@@ -55,7 +55,8 @@
     "wallet": "Ví",
     "network": "Mạng",
     "monitoring": "Giám sát",
-    "utilities": "Tiện ích"
+    "utilities": "Tiện ích",
+    "calculators": "Máy tính"
   },
   "search": {
     "label": "Tìm địa chỉ ví, hợp đồng token hoặc mã hash giao dịch",
@@ -403,14 +404,15 @@
     "gas-tracker": {
       "name": "Theo dõi gas",
       "question": "Bây giờ tốn bao nhiêu?",
-      "description": "Giá gas hiện tại và chi phí của các thao tác phổ biến trên mỗi mạng.",
+      "description": "Giá gas hiện tại và chi phí các thao tác thường gặp trên mỗi chuỗi, cùng máy tính cho bất kỳ lượng gas và giá nào.",
       "input": "Không cần gì: chỉ cần mở",
       "cta": "Xem giá gas",
       "features": [
         "Phí ưu tiên thấp, trung bình và cao trên mỗi mạng",
         "Chi phí bằng đô la để gửi, phê duyệt, hoán đổi và chuyển NFT",
         "Xu hướng phí cơ bản trong 1.024 khối gần nhất",
-        "Làm mới mỗi 12 giây và hiển thị thời điểm cập nhật"
+        "Làm mới mỗi 12 giây và hiển thị thời điểm cập nhật",
+        "Tự tính mọi khoản phí từ gas và giá gas"
       ],
       "seoTitle": "Theo dõi gas: giá gwei trên 5 mạng | CRYPY",
       "seoDescription": "Giá gas trực tiếp bằng gwei cho Ethereum, BNB Chain, Base, Arbitrum và Polygon, kèm chi phí USD để gửi, hoán đổi hoặc phê duyệt.",
@@ -488,12 +490,13 @@
     "unit-converter": {
       "name": "Chuyển đổi đơn vị",
       "question": "Đây là bao nhiêu gwei?",
-      "description": "Chuyển đổi chính xác giữa wei, gwei và ETH hoặc BNB, không làm tròn.",
+      "description": "Chuyển đổi chính xác giữa wei, gwei và ETH hoặc BNB, và giữa số lượng token với đơn vị cơ sở cho số chữ số thập phân bất kỳ.",
       "input": "Một số lượng",
       "cta": "Chuyển đổi",
       "features": [
         "Wei, gwei và ETH hoặc BNB, hai chiều",
         "Chính xác đến từng wei, không làm tròn",
+        "Số lượng token ↔ đơn vị cơ sở cho số chữ số thập phân bất kỳ (6, 8, 18…)",
         "Chạy trong trình duyệt của bạn"
       ],
       "howTo": [
@@ -524,7 +527,7 @@
         }
       ],
       "seoTitle": "Chuyển đổi chính xác wei sang gwei và ETH | CRYPY",
-      "seoDescription": "Chuyển đổi chính xác wei, gwei, ETH và BNB, không làm tròn, kể cả số dạng khoa học. Chạy trong trình duyệt của bạn; không gửi gì đi."
+      "seoDescription": "Chuyển đổi chính xác wei, gwei, ETH và BNB, và số lượng token sang đơn vị cơ sở với số chữ số thập phân bất kỳ (6, 8, 18…). Chạy trong trình duyệt của bạn."
     },
     "hex-converter": {
       "name": "Chuyển đổi hex",
@@ -567,12 +570,13 @@
     "address-formatter": {
       "name": "Kiểm tra định dạng địa chỉ",
       "question": "Địa chỉ này viết đúng chưa?",
-      "description": "Kiểm tra địa chỉ có viết đúng không và lấy dạng có checksum. Cho một địa chỉ hoặc cả danh sách.",
+      "description": "Kiểm tra địa chỉ có được viết đúng không, lấy dạng checksum và mã QR. Dùng cho một địa chỉ hoặc một danh sách.",
       "input": "Một địa chỉ",
       "cta": "Kiểm tra địa chỉ",
       "features": [
         "Phát hiện lỗi gõ nhờ checksum EIP-55",
         "Kiểm tra tối đa 500 địa chỉ cùng lúc",
+        "Mã QR để chia sẻ địa chỉ, có ghi rõ mạng",
         "Hoạt động trên mọi mạng EVM",
         "Chạy trong trình duyệt của bạn"
       ],
@@ -733,6 +737,90 @@
       ],
       "seoTitle": "Kiểm tra số dư ví hàng loạt: 500 địa chỉ | CRYPY",
       "seoDescription": "Kiểm tra số dư coin và token của tối đa 500 địa chỉ cùng lúc trên Ethereum, BNB Chain, Base, Arbitrum và Polygon và xuất ra CSV."
+    },
+    "token-valuation": {
+      "name": "Máy tính nguồn cung và định giá token",
+      "question": "Tổng giá trị của token này là bao nhiêu?",
+      "description": "Tính vốn hóa thị trường, định giá pha loãng hoàn toàn và tỷ lệ nguồn cung đang lưu hành từ các con số bạn nhập.",
+      "input": "Nguồn cung và giá",
+      "cta": "Tính",
+      "features": [
+        "Vốn hóa thị trường và định giá pha loãng hoàn toàn, tách riêng",
+        "Tỷ lệ lưu hành, nguồn cung bị khóa và chưa được tạo",
+        "Chính xác với nguồn cung cực lớn và giá cực nhỏ"
+      ],
+      "howTo": [
+        "Nhập tổng cung của token và cung lưu hành nếu bạn biết.",
+        "Thêm cung tối đa nếu token có, cùng mức giá bạn muốn dùng.",
+        "Xem vốn hóa thị trường, định giá pha loãng hoàn toàn và phân bổ nguồn cung. Không có gì được tra cứu thay bạn."
+      ],
+      "faq": [
+        {
+          "q": "Vốn hóa thị trường và FDV khác nhau thế nào?",
+          "a": "Vốn hóa thị trường là cung lưu hành nhân với giá: giá trị của số token có thể giao dịch hôm nay. Định giá pha loãng hoàn toàn (FDV) là cung tối đa nhân với giá (hoặc tổng cung nếu không có mức tối đa): giá trị của token nếu mọi token đều tồn tại và lưu hành theo giá hôm nay."
+        },
+        {
+          "q": "Vì sao khoảng cách lớn giữa FDV và vốn hóa lại quan trọng?",
+          "a": "Các token chưa lưu hành (đội ngũ, nhà đầu tư, phần thưởng) thường được mở khóa dần theo thời gian. Khi đó, nhiều token hơn cạnh tranh để tìm người mua, có thể đẩy giá xuống. FDV gấp nhiều lần vốn hóa nghĩa là có thể còn rất nhiều nguồn cung sắp tới."
+        },
+        {
+          "q": "Tôi tìm số liệu nguồn cung ở đâu?",
+          "a": "Tổng cung có trên trang token của CRYPY (được đọc từ hợp đồng). Cung lưu hành và cung tối đa đến từ tài liệu của chính dự án hoặc các trang dữ liệu; chúng không nằm trong hợp đồng, nên hãy đối chiếu nhiều nguồn."
+        },
+        {
+          "q": "CRYPY có tự điền giá không?",
+          "a": "Không. Máy tính này chỉ dùng những gì bạn nhập, nên bạn có thể thử bất kỳ mức giá nào. CRYPY không bao giờ bịa ra giá."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính vốn hóa và FDV của token | CRYPY",
+      "seoDescription": "Tính vốn hóa thị trường, định giá pha loãng hoàn toàn và tỷ lệ lưu hành của token từ nguồn cung và giá. Chính xác, trong trình duyệt của bạn; không gửi đi gì.",
+      "shortName": "Vốn hóa và FDV"
+    },
+    "apy-calculator": {
+      "name": "Máy tính APR / APY và lãi kép",
+      "question": "Số tiền này có thể tăng bao nhiêu?",
+      "description": "Xem một khoản tiền tăng thế nào với APR hoặc APY cố định, lãi kép và các khoản góp định kỳ. Ước tính được tính trong trình duyệt của bạn.",
+      "input": "Số tiền, lãi suất và thời gian",
+      "cta": "Tính",
+      "features": [
+        "APR hoặc APY, ghép lãi từ hằng ngày đến hằng năm",
+        "Góp định kỳ và bảng theo từng năm",
+        "Hiển thị lãi suất năm thực tế"
+      ],
+      "howTo": [
+        "Nhập số tiền ban đầu và lãi suất năm, cho biết đó là APR hay APY.",
+        "Chọn tần suất cộng lãi và thời gian.",
+        "Thêm khoản góp định kỳ nếu muốn, rồi xem ước tính và bảng theo từng năm."
+      ],
+      "faq": [
+        {
+          "q": "APR và APY khác nhau thế nào?",
+          "a": "APR là lãi suất năm trước khi ghép lãi. APY đã tính ghép lãi: mức tăng trong cả năm khi chính tiền lãi cũng sinh lãi. 10% APR ghép lãi hằng tháng xấp xỉ 10,47% APY."
+        },
+        {
+          "q": "Lợi nhuận này có được đảm bảo không?",
+          "a": "Không. Máy tính giả định lãi suất giữ nguyên suốt thời gian. Trong crypto, lãi suất thay đổi thường xuyên, phần thưởng có thể được trả bằng token biến động giá và giao thức có thể gặp sự cố. Hãy xem kết quả là minh họa, không phải lời hứa."
+        },
+        {
+          "q": "Khoản góp được cộng khi nào?",
+          "a": "Vào cuối mỗi kỳ ghép lãi, sau khi tính lãi của kỳ đó. Phần kỳ chưa trọn ở cuối được tính lãi đơn cho phần đó."
+        },
+        {
+          "q": "Độ chính xác thế nào?",
+          "a": "Tính với 30 chữ số sau dấu chấm và chỉ làm tròn phần hiển thị. Một năm tính là 365 ngày, một tháng là một phần mười hai của năm."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính APY và lãi kép cho crypto | CRYPY",
+      "seoDescription": "Đổi APR sang APY và xem một khoản tiền tăng thế nào với lãi kép và các khoản góp định kỳ theo từng năm. Ước tính trong trình duyệt của bạn; không gửi đi gì.",
+      "shortName": "Máy tính APY"
     }
   },
   "toolPage": {
@@ -2298,7 +2386,17 @@
       "tokenCheckingBody": "Đang chạy lần kiểm tra mới và trang này sẽ tự cập nhật. Chủ sở hữu có thể đã thay đổi cài đặt kể từ đó: hãy chờ kết quả trước khi mua.",
       "savedTx": "{chain} vừa không phản hồi. Giao dịch đã xác nhận không thay đổi: chỉ số lần xác nhận và giá trị đô la hôm nay có thể đã khác."
     },
-    "crawler": "Trang này hiển thị dữ liệu blockchain trực tiếp cho người dùng trình duyệt. Ứng dụng tự động và trình thu thập dữ liệu không nhận được dữ liệu trực tiếp ở đây."
+    "crawler": "Trang này hiển thị dữ liệu blockchain trực tiếp cho người dùng trình duyệt. Ứng dụng tự động và trình thu thập dữ liệu không nhận được dữ liệu trực tiếp ở đây.",
+    "qr": {
+      "open": "Mã QR",
+      "title": "Mã QR của địa chỉ",
+      "network": "Mạng",
+      "caption": "Địa chỉ trên {network}",
+      "warning": "Cùng một địa chỉ 0x tồn tại trên mọi mạng EVM. Hãy dặn người gửi dùng {network}: coin gửi qua một mạng bạn không dùng có thể rất khó hoặc không thể lấy lại.",
+      "download": "Tải PNG",
+      "close": "Đóng",
+      "local": "Được tạo trong trình duyệt của bạn. Chỉ là địa chỉ công khai: đừng bao giờ chia sẻ cụm từ khôi phục hay khóa riêng tư."
+    }
   },
   "wallet": {
     "connect": "Kết nối ví",
@@ -2401,7 +2499,8 @@
         "length": "Sai độ dài: {length} ký tự sau 0x thay vì 40.",
         "characters": "Chứa ký tự không hợp lệ (chỉ 0–9 và a–f).",
         "empty": "Trống."
-      }
+      },
+      "secret": "Đây có vẻ là cụm từ khôi phục hoặc khóa riêng tư. Đừng bao giờ nhập nó vào bất kỳ trang web nào: ai nhìn thấy nó đều có thể lấy hết tài sản trong ví. Không có gì được kiểm tra hay gửi đi; hãy xóa ô nhập."
     },
     "tx-decoder": {
       "label": "Dữ liệu đầu vào giao dịch",
@@ -3016,6 +3115,156 @@
       "importNone": "Mọi ví trong danh mục của trình duyệt này đều đã được theo dõi.",
       "importButton": "Theo dõi {count} ví",
       "importNotNow": "Để sau"
+    },
+    "manualFee": {
+      "title": "Tự tính phí",
+      "intro": "Nhập gas và giá gas, ví dụ từ màn hình xác nhận của ví hoặc tài liệu của hợp đồng. Không tra cứu gì cả: kết quả chỉ đến từ những gì bạn nhập.",
+      "gas": "Gas (đơn vị)",
+      "gasHint": "Lượng gas một giao dịch sử dụng, hoặc giới hạn gas để biết mức phí cao nhất có thể.",
+      "typical": "Thường gặp:",
+      "price": "Giá gas",
+      "usd": "Giá {coin} theo USD (không bắt buộc)",
+      "usdHint": "Nhập giá để xem phí bằng đô la. CRYPY không tự điền ở đây.",
+      "anyCoin": "coin",
+      "feeCoin": "Phí bằng {coin}",
+      "feeGwei": "Phí bằng gwei",
+      "feeWei": "Phí bằng wei",
+      "feeUsd": "Phí bằng USD",
+      "noUsd": "Nhập giá để xem bằng đô la",
+      "formula": "Phí = gas × giá gas. Chính xác đến từng wei; giá trị đô la được làm tròn đến cent.",
+      "limitNote": "Giới hạn gas là lượng tối đa một giao dịch có thể dùng. Bạn chỉ trả cho lượng gas thực sự dùng, nên phí tính theo giới hạn là mức cao nhất có thể, không phải số bạn sẽ trả.",
+      "l1Note": "Trên Base, Arbitrum và các rollup khác còn cộng thêm phí dữ liệu Ethereum; trên Arbitrum phí này đã nằm trong lượng gas đã dùng hiển thị sau giao dịch.",
+      "local": "Được tính trong trình duyệt của bạn; không có gì bạn nhập được gửi đi.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 21000 hoặc 1.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (1.5); dấu phẩy chỉ để ngăn cách hàng nghìn (1,000).",
+        "too-precise": "Quá nhiều chữ số thập phân: wei là đơn vị nhỏ nhất.",
+        "too-large": "Quá lớn.",
+        "whole-number": "Nhập một số nguyên.",
+        "gas-too-large": "Nhiều gas hơn bất kỳ khối nào chứa được. Hãy kiểm tra lại số."
+      }
+    },
+    "tokenDecimals": {
+      "title": "Số lượng token ↔ đơn vị cơ sở (số chữ số thập phân bất kỳ)",
+      "intro": "Token lưu số lượng dưới dạng số nguyên của đơn vị nhỏ nhất. Số chữ số thập phân cho biết dấu chấm nằm ở đâu: 1 USDC với 6 chữ số thập phân là 1000000 đơn vị cơ sở. Không phải token nào cũng dùng 18.",
+      "decimals": "Số chữ số thập phân của token",
+      "common": "Phổ biến:",
+      "amount": "Số lượng (như ví hiển thị)",
+      "base": "Đơn vị cơ sở (như lưu trên chuỗi)",
+      "baseHint": "Một số nguyên: dạng mà hợp đồng và dữ liệu giao dịch thô sử dụng.",
+      "explain": "1 token = 1 theo sau là {decimals} chữ số 0 đơn vị cơ sở. Chính xác, không làm tròn.",
+      "local": "Hãy kiểm tra số chữ số thập phân của chính token trước khi tin vào một con số (trang token có hiển thị). Được tính trong trình duyệt của bạn.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1.5 hoặc 1e6.",
+        "negative": "Số lượng không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (1.5), không dùng dấu phẩy.",
+        "too-precise": "Nhiều chữ số thập phân hơn token này có.",
+        "too-large": "Quá lớn: số lượng token tối đa là 2^256 − 1 đơn vị cơ sở.",
+        "whole-number": "Nhập một số nguyên, như 6 hoặc 18.",
+        "range": "Ở đây số chữ số thập phân từ 0 đến 36 (hầu hết token dùng 6, 8 hoặc 18).",
+        "base-whole": "Đơn vị cơ sở là số nguyên: không có dấu chấm thập phân."
+      }
+    },
+    "tokenValuation": {
+      "total": "Tổng cung",
+      "totalHint": "Số token hiện đang tồn tại (totalSupply của hợp đồng).",
+      "circulating": "Cung lưu hành (không bắt buộc)",
+      "circulatingHint": "Số token có thể giao dịch hôm nay. Cần để tính vốn hóa thị trường.",
+      "max": "Cung tối đa (không bắt buộc)",
+      "maxHint": "Số lượng tối đa có thể tồn tại, nếu token có giới hạn.",
+      "price": "Giá mỗi token theo USD (không bắt buộc)",
+      "priceHint": "Nhập giá bạn muốn dùng. CRYPY không tự điền.",
+      "results": "Kết quả",
+      "marketCap": "Vốn hóa thị trường",
+      "marketCapHelp": "Cung lưu hành × giá",
+      "marketCapNeeds": "Cần cung lưu hành và giá",
+      "fdv": "Định giá pha loãng hoàn toàn (FDV)",
+      "fdvMax": "Cung tối đa × giá",
+      "fdvTotal": "Tổng cung × giá (không nhập cung tối đa)",
+      "fdvNeeds": "Cần một mức cung và giá",
+      "ratio": "FDV gấp {ratio} lần vốn hóa thị trường: phần lớn nguồn cung chưa lưu hành và có thể được mở khóa sau này.",
+      "supply": "Nguồn cung",
+      "circulatingOfTotal": "Lưu hành, so với tổng cung",
+      "circulatingOfMax": "Lưu hành, so với cung tối đa",
+      "notCirculating": "Đã tạo nhưng chưa lưu hành",
+      "notCirculatingHelp": "Tổng − lưu hành: thường bị khóa, đang vesting hoặc do dự án nắm giữ",
+      "notYetIssued": "Chưa được tạo",
+      "notYetIssuedHelp": "Tối đa − tổng: vẫn có thể được đúc thêm",
+      "empty": "Nhập ít nhất một mức cung và giá để xem kết quả.",
+      "local": "Được tính trong trình duyệt của bạn từ những gì bạn nhập; không tra cứu hay gửi đi bất cứ thứ gì.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1000000 hoặc 1.5e9.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (0.5); dấu phẩy chỉ để ngăn cách hàng nghìn (1,000,000).",
+        "too-large": "Quá lớn.",
+        "too-precise": "Quá nhiều chữ số thập phân.",
+        "circulating-over-total": "Cung lưu hành không thể lớn hơn tổng cung.",
+        "total-over-max": "Tổng cung không thể lớn hơn cung tối đa.",
+        "circulating-over-max": "Cung lưu hành không thể lớn hơn cung tối đa."
+      }
+    },
+    "apyCalculator": {
+      "principal": "Số tiền ban đầu",
+      "rate": "Lãi suất năm (%)",
+      "rateType": "Loại lãi suất",
+      "apr": "APR",
+      "apy": "APY",
+      "frequency": "Lãi được cộng",
+      "frequencies": {
+        "daily": "Hằng ngày",
+        "weekly": "Hằng tuần",
+        "monthly": "Hằng tháng",
+        "quarterly": "Hằng quý",
+        "yearly": "Hằng năm"
+      },
+      "duration": "Trong",
+      "units": {
+        "days": "ngày",
+        "months": "tháng",
+        "years": "năm"
+      },
+      "deposit": "Thêm mỗi kỳ (không bắt buộc)",
+      "depositHint": "Được thêm vào cuối mỗi kỳ ({period}).",
+      "periodNames": {
+        "daily": "ngày",
+        "weekly": "tuần",
+        "monthly": "tháng",
+        "quarterly": "quý",
+        "yearly": "năm"
+      },
+      "results": "Ước tính",
+      "final": "Số dư cuối kỳ",
+      "deposited": "Bạn đã góp",
+      "interest": "Tiền lãi nhận được",
+      "effectiveApy": "Lãi suất năm thực tế (APY)",
+      "nominalApr": "Cùng lãi suất dưới dạng APR",
+      "formulaApr": "Mỗi kỳ tăng APR ÷ {n}. Số dư sau k kỳ = số tiền × (1 + APR ÷ {n})^k, cộng các khoản góp thêm.",
+      "formulaApy": "Mỗi kỳ tăng (1 + APY)^(1/{n}) − 1, nên trọn một năm tăng đúng bằng APY.",
+      "partial": "Phần kỳ cuối chưa trọn ({fraction}) được tính lãi đơn.",
+      "table": "Theo từng năm",
+      "year": "Năm",
+      "balance": "Số dư",
+      "totalIn": "Đã góp",
+      "earned": "Tiền lãi",
+      "warning": "Đây là ước tính giả định lãi suất không bao giờ thay đổi. Lãi suất crypto biến động, phần thưởng có thể được trả bằng token bị giảm giá và nền tảng có thể sụp đổ: đây không phải lời hứa về lợi nhuận.",
+      "local": "Được tính trong trình duyệt của bạn với 30 chữ số sau dấu chấm; chỉ phần hiển thị được làm tròn. Không có gì được gửi đi.",
+      "empty": "Nhập số tiền, lãi suất và thời gian để xem ước tính.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1000 hoặc 5.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (5.5); dấu phẩy chỉ để ngăn cách hàng nghìn (1,000).",
+        "too-large": "Quá lớn đối với máy tính này.",
+        "too-precise": "Quá nhiều chữ số thập phân.",
+        "too-long": "Tối đa 100 năm.",
+        "rate-too-high": "Tối đa 100.000% mỗi năm: hãy kiểm tra lãi suất.",
+        "whole-number": "Nhập số ngày là số nguyên.",
+        "zero-duration": "Nhập thời gian lớn hơn 0."
+      }
     }
   },
   "seo": {

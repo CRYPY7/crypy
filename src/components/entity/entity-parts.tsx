@@ -10,6 +10,7 @@ export function EntityHeader({
   copyLabel,
   copiedLabel,
   links,
+  idActions,
   children,
 }: {
   eyebrow?: React.ReactNode;
@@ -18,6 +19,8 @@ export function EntityHeader({
   copyLabel: string;
   copiedLabel: string;
   links: { href: string; label: string }[];
+  /** Extra buttons beside the copy button (e.g. the address QR code). */
+  idActions?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   return (
@@ -27,6 +30,7 @@ export function EntityHeader({
       <div className="flex flex-wrap items-center gap-2">
         <span className="technical rounded-lg bg-muted px-3 py-2 text-sm sm:text-base">{id}</span>
         <CopyButton value={id} label={copyLabel} copiedLabel={copiedLabel} />
+        {idActions}
       </div>
       {links.length > 0 && (
         <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm">
