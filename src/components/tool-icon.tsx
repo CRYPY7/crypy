@@ -8,13 +8,17 @@ import {
   Clock,
   CodeXml,
   Coins,
+  Droplets,
+  FileSignature,
   Fuel,
   KeyRound,
   Layers,
   type LucideProps,
   Percent,
+  Scale,
   Receipt,
   ShieldAlert,
+  TrendingDown,
   Wallet,
 } from "lucide-react";
 import type { ToolIconName } from "@/config/tools";
@@ -36,6 +40,10 @@ const icons = {
   layers: Layers,
   coins: Coins,
   percent: Percent,
+  scale: Scale,
+  droplets: Droplets,
+  "trending-down": TrendingDown,
+  "file-signature": FileSignature,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 
 /** Server-rendered tool icon. Decorative: the tool name is always shown as text. */

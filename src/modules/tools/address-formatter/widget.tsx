@@ -27,7 +27,15 @@ export interface AddressFormatterStrings {
   checksummed: string;
   secret: string;
   status: Record<AddressStatus, string>;
-  explain: Record<Exclude<AddressStatus, "invalid"> | "zero", string>;
+  explain: Record<Exclude<AddressStatus, "invalid" | "other"> | "zero", string>;
+  other: {
+    bitcoin: string;
+    solana: string;
+    testnet: string;
+    types: Record<"p2pkh" | "p2sh" | "p2wpkh" | "p2wsh" | "p2tr" | "segwit-other", string>;
+    bitcoinNote: string;
+    solanaNote: string;
+  };
   invalid: Record<InvalidReason, string>;
 }
 
@@ -36,11 +44,14 @@ const tone: Record<AddressStatus, string> = {
   "no-checksum": "bg-medium/14 text-medium",
   "missing-prefix": "bg-medium/14 text-medium",
   "bad-checksum": "bg-critical/14 text-critical",
+  other: "bg-low/14 text-low",
+  "other-invalid": "bg-critical/14 text-critical",
   invalid: "bg-critical/14 text-critical",
 };
 
 /** Only these may be copied or opened: a mistyped address must never be "fixed" for the user. */
-const usable = (check: AddressCheck) => check.status !== "invalid" && check.status !== "bad-checksum";
+const usable = (check: AddressCheck) =>
+  check.status !== "invalid" && check.status !== "bad-checksum" && check.status !== "other-invalid";
 
 export function AddressFormatter({
   strings,
@@ -114,16 +125,32 @@ export function AddressFormatter({
               <li key={`${index}-${check.input}`} className="rounded-xl border border-border p-3 sm:p-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={cn("rounded-md px-2 py-0.5 text-xs font-semibold", tone[check.status])}>
-                    {strings.status[check.status]}
+                    {check.other ? otherLabel(check.other, strings) : strings.status[check.status]}
                   </span>
                   <span className="technical min-w-0 text-sm break-all text-muted-foreground">{check.input}</span>
                 </div>
                 <p className="mt-2 text-sm">
                   {check.status === "invalid"
                     ? fill(strings.invalid[check.reason!], { length: check.length ?? 0 })
-                    : strings.explain[check.status]}
+                    : check.status === "other"
+                      ? check.other?.family === "solana"
+                        ? strings.other.solanaNote
+                        : strings.other.bitcoinNote
+                      : strings.explain[check.status]}
                 </p>
                 {check.isZero && usable(check) && <p className="mt-1 text-sm text-critical">{strings.explain.zero}</p>}
+                {check.status === "other" && (
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <span className="technical min-w-0 flex-1 rounded-lg bg-muted px-3 py-2 text-sm break-all">
+                      {check.input}
+                    </span>
+                    <CopyButton
+                      value={check.input}
+                      label={`${common.copy}: ${check.input}`}
+                      copiedLabel={common.copied}
+                    />
+                  </div>
+                )}
                 {usable(check) && check.checksummed && (
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <span className="sr-only">{strings.checksummed}:</span>
@@ -165,6 +192,12 @@ export function AddressFormatter({
       </div>
     </Panel>
   );
+}
+
+function otherLabel(other: NonNullable<AddressCheck["other"]>, strings: AddressFormatterStrings): string {
+  if (other.family === "solana") return strings.other.solana;
+  const type = `${strings.other.bitcoin} · ${strings.other.types[other.type]}`;
+  return other.network === "testnet" ? `${type} · ${strings.other.testnet}` : type;
 }
 
 function CopyAll({ value, label, common }: { value: string; label: string; common: CommonStrings }) {

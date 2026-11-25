@@ -570,14 +570,14 @@
     "address-formatter": {
       "name": "Adres Biçimlendirici",
       "question": "Bu adres doğru yazılmış mı?",
-      "description": "Bir adresin doğru yazıldığını kontrol edin, sağlama toplamlı biçimini ve QR kodunu alın. Tek bir adres veya bir liste için çalışır.",
+      "description": "Bir adresin (EVM, Bitcoin veya Solana) doğru yazıldığını kontrol edin, sağlama toplamlı biçimini ve QR kodunu alın. Tek bir adres veya bir liste için çalışır.",
       "input": "Bir adres",
       "cta": "Adresi kontrol et",
       "features": [
         "EIP-55 sağlama toplamıyla yazım hatalarını yakalar",
         "Tek seferde 500 adrese kadar kontrol",
         "Bir adresi paylaşmak için ağı belirtilmiş QR kodu",
-        "Tüm EVM ağlarında çalışır",
+        "EVM zincirleri, ayrıca Bitcoin ve Solana adres biçimleri",
         "Tarayıcınızda çalışır"
       ],
       "howTo": [
@@ -821,6 +821,174 @@
       "seoTitle": "Kripto APY ve bileşik faiz hesaplayıcısı | CRYPY",
       "seoDescription": "APR'yi APY'ye çevirin ve bir tutarın bileşik faiz ve düzenli eklemelerle yıl yıl nasıl büyüdüğünü görün. Tarayıcınızda bir tahmin; hiçbir şey gönderilmez.",
       "shortName": "APY hesaplayıcısı"
+    },
+    "loan-to-value": {
+      "name": "LTV ve tasfiye hesaplayıcısı",
+      "shortName": "LTV ve tasfiye",
+      "question": "Bu kredi tasfiyeye ne kadar yakın?",
+      "description": "Bir kripto kredisinin LTV'sini, sağlık faktörünü, ne kadar daha borç alabileceğinizi ve tasfiye edileceği fiyatı hesaplayın.",
+      "input": "Teminat, fiyat ve borç",
+      "cta": "Hesapla",
+      "features": [
+        "LTV, sağlık faktörü ve kalan borç alma payı",
+        "Tasfiye fiyatı ve fiyatın ne kadar düşebileceği",
+        "Her teminat ve kredi protokolünün değerleriyle çalışır"
+      ],
+      "howTo": [
+        "Yatırdığınız teminat miktarını ve fiyatını yazın.",
+        "Aldığınız borcu, protokol sayfasındaki azami LTV'yi ve tasfiye eşiğini ekleyin.",
+        "LTV'yi, sağlık faktörünü ve tasfiye fiyatını okuyun, başka fiyatları deneyin."
+      ],
+      "faq": [
+        {
+          "q": "LTV nedir?",
+          "a": "Kredi/değer oranı, aldığınız borcun teminatınızın değerine bölünmesidir. 20.000 $'lık ETH karşılığında 8.000 $ borç almak %40 LTV'dir."
+        },
+        {
+          "q": "Tasfiye eşiği nedir?",
+          "a": "Bir kredi protokolünün borcu kapatmak için teminatınızın bir kısmını, genellikle bir cezayla satabileceği LTV. Varlık başına belirlenir, borç alabileceğiniz azami LTV'nin biraz üstündedir."
+        },
+        {
+          "q": "Sağlık faktörü nedir?",
+          "a": "Teminat değeri × tasfiye eşiği ÷ borç. 1'in üstünde pozisyon şimdilik tasfiyeden güvendedir; 1 veya altında tasfiye edilebilir. Birçok kişi 1,5'in üstünde tutar."
+        },
+        {
+          "q": "Protokolün gerçek değerlerini kullanıyor mu?",
+          "a": "Hayır. Yalnızca yazdıklarınızı kullanır. Protokoller kendi fiyat kaynaklarını ve ayarlarını kullanır, faiz de borca eklenmeye devam eder; harekete geçmeden önce protokolün sayfasını kontrol edin."
+        },
+        {
+          "q": "Yazdıklarım bir sunucuya gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Kripto LTV ve tasfiye fiyatı hesaplayıcısı | CRYPY",
+      "seoDescription": "Teminat, fiyat ve borçtan bir kripto kredisinin LTV'sini, sağlık faktörünü, borç alma payını ve tasfiye fiyatını hesaplayın. Tarayıcınızda; hiçbir şey gönderilmez."
+    },
+    "impermanent-loss": {
+      "name": "Geçici kayıp hesaplayıcısı",
+      "shortName": "Geçici kayıp",
+      "question": "Geçici kayıp yüzünden ne kadar kaybediyorum?",
+      "description": "Fiyatlar değiştikten sonra 50/50 bir likidite havuzu pozisyonunun, iki tokenı basitçe tutmaya göre ne kadar az değerli olduğunu görün.",
+      "input": "Fiyat değişimleri",
+      "cta": "Hesapla",
+      "features": [
+        "Her iki tokenın herhangi bir fiyat değişimi için geçici kayıp",
+        "Yatırdığınız tutarı eklerseniz dolar değerleri",
+        "Formülü ve sınırlarını gösterir"
+      ],
+      "howTo": [
+        "Token A'nın fiyatının yatırdığınızdan beri ne kadar değiştiğini yazın, örn. 2× için 100.",
+        "Stablecoin değilse token B'nin değişimini, dolar değerleri için de yatırdığınız tutarı ekleyin.",
+        "Tutmaya göre kaybı okuyun. Kazandığınız ücretler dahil değildir."
+      ],
+      "faq": [
+        {
+          "q": "Geçici kayıp nedir?",
+          "a": "50/50 bir havuzda bir tokenın fiyatı diğerine göre değişince havuz, yükselen tokenı satarak yeniden dengelenir. Payınız, iki tokenı tutmuş olsaydınız olacağından daha az değerli olur. Fiyatlar geri dönerse yeniden küçüldüğü için geçici denir."
+        },
+        {
+          "q": "Ne kadar büyük olabilir?",
+          "a": "2× (veya ½×) fiyat değişiminde yaklaşık %5,7. 3×'te yaklaşık %13,4. 5×'te yaklaşık %25,5. Yalnızca iki fiyat arasındaki oran önemlidir."
+        },
+        {
+          "q": "İşlem ücretleri bunu telafi eder mi?",
+          "a": "Bazen. Havuzlar işlem ücretlerinin bir kısmını öder, bazıları ödül de verir. Bu hesaplayıcı, havuzun ödedikleriyle karşılaştırabilmeniz için ücretlerden önceki kaybı gösterir."
+        },
+        {
+          "q": "Uniswap v3 için çalışır mı?",
+          "a": "Hayır. Yoğunlaştırılmış likidite fiyat aralığında daha fazla kaybeder ve aralık dışında kazanmayı bırakır. Bu hesaplayıcı Uniswap v2 ve PancakeSwap v2 gibi 50/50 havuzları modeller."
+        },
+        {
+          "q": "Yazdıklarım bir sunucuya gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Geçici kayıp hesaplayıcısı (50/50 havuzlar) | CRYPY",
+      "seoDescription": "İki tokenın fiyat değişimlerinden 50/50 bir likidite havuzunun geçici kaybını, dolar değerleriyle hesaplayın. Tarayıcınızda; hiçbir şey gönderilmez."
+    },
+    "slippage-calculator": {
+      "name": "Kayma ve fiyat etkisi hesaplayıcısı",
+      "shortName": "Kayma ve fiyat etkisi",
+      "question": "Bu takas bana gerçekte kaça mal olacak?",
+      "description": "Bir kayma toleransıyla alacağınız asgari miktarı ve bir işlemin havuzdaki fiyatı ne kadar hareket ettirdiğini hesaplayın.",
+      "input": "Miktar, tolerans veya havuz rezervleri",
+      "cta": "Hesapla",
+      "features": [
+        "Toleranstan asgari alınan ve azami gönderilen",
+        "v2 havuzunda fiyat etkisi ve toplam maliyet",
+        "Salt okunur: hiçbir işlem yapılmaz"
+      ],
+      "howTo": [
+        "En kötü durumu görmek için teklif edilen miktarı ve kayma toleransınızı yazın.",
+        "Bir havuz için iki rezervi ve sattığınız miktarı yazın.",
+        "Fiyat etkisini okuyun ve işlem büyüklüklerini karşılaştırın."
+      ],
+      "faq": [
+        {
+          "q": "Kayma toleransı nedir?",
+          "a": "Teklif ile işlem arasında kabul ettiğiniz en kötü fiyat değişimi. 1.000 tokenlık bir teklifte %0,5 ile, 995'ten az alacaksanız takas başarısız olur."
+        },
+        {
+          "q": "Fiyat etkisi nedir?",
+          "a": "Kendi işleminizin havuz fiyatını ne kadar hareket ettirdiği. Küçük havuzlardaki büyük işlemler, işlem öncesi tekliften çok daha kötü bir fiyat alır."
+        },
+        {
+          "q": "Yüksek tolerans neden risklidir?",
+          "a": "Botlar bekleyen bir takası görüp etrafında işlem yaparak fiyatınızı izin verdiğiniz en kötü seviyeye itebilir (\"sandviç\"). Toleransı işlemin izin verdiği kadar düşük tutun."
+        },
+        {
+          "q": "Bu bir işlem yapar mı?",
+          "a": "Hayır. CRYPY asla işlem yapmaz. Bu yalnızca yazdığınız sayılarla hesap yapar."
+        },
+        {
+          "q": "Yazdıklarım bir sunucuya gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Takas kayması ve fiyat etkisi hesaplayıcısı | CRYPY",
+      "seoDescription": "Bir kayma toleransından asgari alınan miktarı ve Uniswap v2 tarzı bir havuzda bir takasın fiyat etkisini hesaplayın. Salt okunur, tarayıcınızda."
+    },
+    "signature-decoder": {
+      "name": "İmza isteği çözücü",
+      "shortName": "İmza çözücü",
+      "question": "Benden ne imzalamam isteniyor?",
+      "description": "Cüzdanınızın imzalamanızı istediği şeyi yapıştırın ve neye izin verdiğini sade bir dille görün: token permit'leri, Permit2, NFT emirleri ve mesajlar.",
+      "input": "Bir imza isteği",
+      "cta": "Çöz",
+      "features": [
+        "Token permit'lerini, Permit2'yi ve pazar yeri emirlerini açıklar",
+        "Sınırsız miktarları, bilinmeyen harcayıcıları ve kör imzaları işaretler",
+        "Tarayıcınızda çözülür: hiçbir şey imzalanmaz veya gönderilmez"
+      ],
+      "howTo": [
+        "Cüzdanınızın veya sitenin gösterdiği isteği kopyalayın (türlendirilmiş veri JSON'u veya mesaj).",
+        "Kutuya yapıştırın.",
+        "Karar vermeden önce imzalamanın neye izin vereceğini okuyun."
+      ],
+      "faq": [
+        {
+          "q": "Gas tutmayan bir imza neden tehlikeli olabilir?",
+          "a": "Bazı imzalar izindir. Bir token permit'i veya Permit2 imzası birinin tokenlarınızı sonradan harcamasına izin verir, bir pazar yeri emri de NFT'lerinizi bedavaya satışa çıkarabilir. Dolandırıcılar zararsız göründükleri için bunları tercih eder."
+        },
+        {
+          "q": "İsteği nerede bulurum?",
+          "a": "Birçok cüzdan bir imza isteğinin verilerini gösterir veya kopyalamanıza izin verir. Geliştiriciler bunu sayfanın eth_signTypedData_v4 veya personal_sign çağrısında görebilir. Olduğu gibi yapıştırın."
+        },
+        {
+          "q": "CRYPY bir şey imzalar veya gönderir mi?",
+          "a": "Hayır. Yalnızca yapıştırdığınızı tarayıcınızda okur. İmzalayamaz: cüzdanınıza erişimi yoktur."
+        },
+        {
+          "q": "CRYPY'nin işaretlemediği bir istek güvenli midir?",
+          "a": "Mutlaka değil. CRYPY yaygın istek türlerini tanır ve bilinen tehlike işaretlerini kontrol eder; her uygulamayı bilemez. Bir isteğin ne yaptığını anlamıyorsanız imzalamayın."
+        },
+        {
+          "q": "EIP-712 hash nedir?",
+          "a": "Cüzdanınızın gerçekte imzaladığı değer. Bazı cüzdanlar bunu gösterir; böylece aynı isteğe baktığınızı kontrol edebilirsiniz."
+        }
+      ],
+      "seoTitle": "Cüzdan imza isteği çözücü (EIP-712) | CRYPY",
+      "seoDescription": "Bir cüzdan imza isteğini yapıştırın ve neye izin verdiğini görün: token permit'leri, Permit2, NFT satışları ve mesajlar, tehlike işaretleriyle. Tarayıcınızda."
     }
   },
   "toolPage": {
@@ -2486,21 +2654,39 @@
         "no-checksum": "Sağlama toplamı yok",
         "bad-checksum": "Yazım hatası",
         "missing-prefix": "0x eksik",
-        "invalid": "Adres değil"
+        "invalid": "Adres değil",
+        "other": "Geçerli biçim",
+        "other-invalid": "Yazım hatası"
       },
       "explain": {
         "valid": "Doğru yazılmış ve sağlama toplamı eşleşiyor.",
         "no-checksum": "Biçim geçerli ama tamamen küçük veya büyük harf, bu yüzden yazım hataları yakalanamaz. Aşağıdaki sağlama toplamlı biçimi kullanın.",
         "bad-checksum": "Sağlama toplamı eşleşmiyor, yani bir karakter değişmiş. Bu adresi kullanmayın: asıl kaynaktan yeniden kopyalayın.",
         "missing-prefix": "Adresler 0x ile başlar. İşte tam biçimi.",
-        "zero": "Bu sıfır adresidir. Buraya gönderilen tokenlar sonsuza dek kaybolur."
+        "zero": "Bu sıfır adresidir. Buraya gönderilen tokenlar sonsuza dek kaybolur.",
+        "other-invalid": "Bu bir Bitcoin adresine benziyor, ama yerleşik sağlama toplamı eşleşmiyor, yani bir karakter yanlış. Kullanmayın: orijinal kaynağından yeniden kopyalayın."
       },
       "invalid": {
         "length": "Yanlış uzunluk: 0x'ten sonra 40 yerine {length} karakter var.",
         "characters": "İzin verilmeyen karakterler içeriyor (yalnızca 0–9 ve a–f).",
         "empty": "Boş."
       },
-      "secret": "Bu bir kurtarma ifadesine veya özel anahtara benziyor. Bunu hiçbir web sitesine yazmayın: gören herkes cüzdandaki her şeyi alabilir. Hiçbir şey kontrol edilmedi veya gönderilmedi; kutuyu temizleyin."
+      "secret": "Bu bir kurtarma ifadesine veya özel anahtara benziyor. Bunu hiçbir web sitesine yazmayın: gören herkes cüzdandaki her şeyi alabilir. Hiçbir şey kontrol edilmedi veya gönderilmedi; kutuyu temizleyin.",
+      "other": {
+        "bitcoin": "Bitcoin",
+        "solana": "Solana",
+        "testnet": "testnet",
+        "types": {
+          "p2pkh": "Eski tip (P2PKH)",
+          "p2sh": "Betik (P2SH)",
+          "p2wpkh": "Yerel SegWit (P2WPKH)",
+          "p2wsh": "SegWit betik (P2WSH)",
+          "p2tr": "Taproot (P2TR)",
+          "segwit-other": "SegWit (gelecek sürüm)"
+        },
+        "bitcoinNote": "Doğru yazılmış: yerleşik sağlama toplamı eşleşiyor. Bu adrese yalnızca Bitcoin ağında Bitcoin gönderin. Bu, adresin kullanılıp kullanılmadığını veya kime ait olduğunu göstermez.",
+        "solanaNote": "Geçerli bir Solana açık anahtarı: base58 ile 32 bayt. Solana adreslerinde sağlama toplamı yoktur, bu yüzden bir yazım hatası da geçerli görünebilir: başını ve sonunu orijinaliyle karşılaştırın. Bu adrese yalnızca Solana varlıkları gönderin."
+      }
     },
     "tx-decoder": {
       "label": "İşlem giriş verisi",
@@ -3264,6 +3450,201 @@
         "rate-too-high": "Yılda en fazla %100.000: oranı kontrol edin.",
         "whole-number": "Gün sayısı için tam sayı girin.",
         "zero-duration": "Sıfırdan uzun bir süre girin."
+      }
+    },
+    "loanToValue": {
+      "collateral": "Teminat miktarı",
+      "collateralHint": "Yatırdığınız coin veya token sayısı, örn. 10 (ETH).",
+      "price": "Teminat fiyatı",
+      "priceHint": "Coin başına USD fiyatı. Denemek istediğiniz fiyatı yazın; hiçbir şey sorgulanmaz.",
+      "debt": "Borç alınan tutar (isteğe bağlı)",
+      "debtHint": "USD cinsinden (stablecoin'ler 1:1 sayılır).",
+      "maxLtv": "Azami LTV (isteğe bağlı)",
+      "maxLtvHint": "Bu teminatla en fazla ne kadar borç alabileceğiniz, protokolün sayfasından (genellikle %70–80).",
+      "threshold": "Tasfiye eşiği (isteğe bağlı)",
+      "thresholdHint": "Pozisyonun tasfiye edilebileceği LTV (azami LTV'nin biraz üstünde).",
+      "results": "Sonuçlar",
+      "ltv": "Kredi/değer oranı (LTV)",
+      "ltvHelp": "Borç ÷ teminat değeri",
+      "healthFactor": "Sağlık faktörü",
+      "healthFactorHelp": "Teminat değeri × tasfiye eşiği ÷ borç. 1'in altında pozisyon tasfiye edilebilir.",
+      "needsThreshold": "Borç tutarı ve tasfiye eşiği gerekir",
+      "collateralValue": "Teminat değeri",
+      "available": "Hâlâ alınabilecek borç",
+      "availableHelp": "Teminat değeri × azami LTV − borç",
+      "overLimit": "Negatif: azami LTV'nin izin verdiğinden fazla borç aldınız. Birçok protokol daha fazla borç almanıza veya çekim yapmanıza izin vermez.",
+      "liquidationPrice": "Tasfiye fiyatı",
+      "liquidationPriceHelp": "Sağlık faktörünün 1'e indiği teminat fiyatı.",
+      "drop": "Fiyat tasfiyeden önce {percent} düşebilir.",
+      "states": {
+        "safe": "Sağlık faktörü 1,2'nin üzerinde: tasfiyeye kadar pay var, ama fiyatlar hızlı değişebilir.",
+        "close": "Sağlık faktörü 1 ile 1,2 arasında: küçük bir fiyat düşüşü tasfiyeye yol açabilir. Bir kısmını ödemeyi veya teminat eklemeyi düşünün.",
+        "liquidatable": "Sağlık faktörü 1'in altında: bu fiyatta pozisyon tasfiye edilebilir.",
+        "no-debt": "Borç yok: tasfiye edilecek bir şey yok."
+      },
+      "note": "Protokoller kendi fiyat kaynaklarını, eşiklerini, ücretlerini ve faizlerini kullanır; borç da zamanla büyür: harekete geçmeden önce protokolün kendi sayfasını kontrol edin.",
+      "local": "Yazdıklarınızdan tarayıcınızda hesaplanır; hiçbir şey sorgulanmaz veya gönderilmez.",
+      "empty": "Sonuçları görmek için teminat miktarını ve fiyatını yazın.",
+      "errors": {
+        "empty": "",
+        "format": "1000 veya 2.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (2.5); virgül yalnızca binlik ayırıcı olarak (1,000).",
+        "too-large": "Çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak.",
+        "over-100": "En fazla %100.",
+        "zero": "Teminat değeri sıfırdan büyük olmalı."
+      }
+    },
+    "impermanentLoss": {
+      "changeA": "Token A'nın fiyat değişimi",
+      "changeAHint": "Yatırdığınızdan beri, örn. +%100 (2×) için 100, yarıya inmesi için −50.",
+      "changeB": "Token B'nin fiyat değişimi (isteğe bağlı)",
+      "changeBHint": "Stablecoin için boş bırakın (%0).",
+      "deposit": "Yatırılan değer (isteğe bağlı)",
+      "depositHint": "Dolar değerlerini görmek için yatırdığınız andaki USD değeri.",
+      "results": "Sonuçlar",
+      "loss": "Geçici kayıp",
+      "lossHelp": "Havuzdaki değerin, iki tokenı basitçe tutmaya göre karşılaştırması.",
+      "held": "Tokenları tutmuş olsaydınız",
+      "pooled": "Havuzda (ücretlerden önce)",
+      "difference": "Fark",
+      "formula": "Fiyat oranı r = (1 + A değişimi) ÷ (1 + B değişimi). Kayıp = 2·√r ÷ (1 + r) − 1. Yalnızca iki fiyat arasındaki oran önemlidir: ikisi de aynı şekilde değişirse kayıp olmaz.",
+      "limits": "Uniswap v2 veya PancakeSwap v2 gibi 50/50 havuzlar içindir. Kaybı telafi edebilecek işlem ücretleri ve ödüller dahil değildir. Yoğunlaştırılmış likidite (v3) kendi aralığında daha fazla kaybeder ve kayıp yalnızca çekim yaptığınızda kesinleşir.",
+      "local": "Tarayıcınızda hesaplanır; hiçbir şey gönderilmez.",
+      "empty": "Kaybı görmek için token A'nın fiyatının ne kadar değiştiğini yazın.",
+      "errors": {
+        "empty": "",
+        "format": "1000 veya 2.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (2.5); virgül yalnızca binlik ayırıcı olarak (1,000).",
+        "too-large": "Çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak.",
+        "below-minus-100": "Bir fiyat %100'den az düşebilir."
+      }
+    },
+    "slippage": {
+      "toleranceTitle": "Kayma toleransı",
+      "toleranceIntro": "Bir takasın kabul edeceği en kötü sonuç. Cüzdanlar ve borsalar buna \"kayma toleransı\" der.",
+      "amount": "Teklif edilen miktar",
+      "amountHint": "Borsanın teklif ettiği miktar: aldığınız (satarken) veya ödediğiniz (alırken).",
+      "tolerance": "Kayma toleransı",
+      "toleranceHint": "Genellikle %0,5. Daha yüksek değerler işlemin daha kötü fiyattan gerçekleşmesine izin verir.",
+      "minReceived": "Asgari alınan",
+      "minReceivedHelp": "Kesin bir miktar satarken: daha azını alacaksanız takas başarısız olur.",
+      "maxSent": "Azami gönderilen",
+      "maxSentHelp": "Kesin bir miktar alırken: daha pahalıya gelecekse takas başarısız olur.",
+      "impactTitle": "Havuzda fiyat etkisi",
+      "impactIntro": "Bu büyüklükte bir işlemin, sabit çarpımlı bir havuzda (Uniswap v2 tarzı) fiyatı ne kadar hareket ettirdiği, havuzun rezervlerinden.",
+      "reserveIn": "Sattığınız tokenın havuz rezervi",
+      "reserveInHint": "Havuz sayfasından veya bir gezginden.",
+      "reserveOut": "Aldığınız tokenın havuz rezervi",
+      "reserveOutHint": "Aynı havuz, diğer token.",
+      "amountIn": "Sattığınız miktar",
+      "amountInHint": "O tokenın rezerviyle aynı birimde.",
+      "fee": "Havuz ücreti (isteğe bağlı)",
+      "feeHint": "Uniswap v2 ve PancakeSwap v2 %0,3 ve %0,25 alır; boş = %0,3.",
+      "amountOut": "Alacağınız",
+      "priceImpact": "Fiyat etkisi",
+      "priceImpactHelp": "İşleminizin havuz fiyatını ne kadar hareket ettirdiği (ücret hariç). %1'in üstü kayda değer; %5'in üstü pahalı.",
+      "totalCost": "Güncel fiyata göre toplam maliyet",
+      "totalCostHelp": "Fiyat etkisi artı havuz ücreti.",
+      "spotPrice": "Önceki fiyat (alınan/satılan)",
+      "executionPrice": "Sizin fiyatınız (alınan/satılan)",
+      "priceAfter": "İşlemden sonraki fiyat",
+      "limits": "Tek bir havuzun modeli: gerçek takaslar birkaç havuzdan geçebilir, diğer işlemciler fiyatı önce hareket ettirebilir ve v3 havuzları farklı davranır. Kesin bir sonucu tahmin etmek için değil, işlem büyüklüklerini karşılaştırmak için kullanın.",
+      "local": "Tarayıcınızda hesaplanır; hiçbir işlem yapılmaz, sorgulanmaz veya gönderilmez.",
+      "empty": "İki rezervi ve sattığınız miktarı yazın.",
+      "errors": {
+        "empty": "",
+        "format": "1000 veya 2.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (2.5); virgül yalnızca binlik ayırıcı olarak (1,000).",
+        "too-large": "Çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak.",
+        "over-100": "%100'ün altında olmalı.",
+        "zero": "Sıfırdan büyük olmalı."
+      }
+    },
+    "signatureDecoder": {
+      "label": "Cüzdanın imzalamanızı istediği şey",
+      "placeholder": "İsteği yapıştırın: türlendirilmiş veri (types, domain, message içeren JSON) veya mesaj metni ya da hex.",
+      "examples": "Örnekler:",
+      "examplePermit": "Token permit",
+      "examplePermit2": "Permit2",
+      "exampleMessage": "Giriş mesajı",
+      "never": "Bu araç yalnızca okur. Kurtarma ifadesini veya özel anahtarı hiçbir yere yapıştırmayın ve anlamadığınız bir isteği asla imzalamayın.",
+      "results": "Sonuçlar",
+      "findings": "Bunu imzalamak ne yapar",
+      "severity": {
+        "critical": "Tehlike",
+        "high": "Önemli",
+        "medium": "Kontrol edin",
+        "info": "Not"
+      },
+      "finding": {
+        "permitAllowance": "İmzalamak, {spender} adresine bu tokenları cüzdanınızdan başka bir onay olmadan harcama izni verir. İmza gas tutmaz, ama izin zincir üstü bir onay kadar gerçektir.",
+        "permitTransfer": "İmzalamak, {spender} adresinin bu tokenları başka bir onay olmadan cüzdanınızdan bir kez çekmesine izin verir.",
+        "unlimited": "Miktar sınırsız: bu tokendan şimdi ve sonra sahip olduğunuz her şey.",
+        "unknownSpender": "Harcayıcı, CRYPY'nin bilinen uygulamalar listesinde değil. Bu onu kötü yapmaz, ama imzalamadan önce adresi uygulamanın resmî sitesinden kontrol edin.",
+        "knownSpender": "Harcayıcı {name}, bilinen bir sözleşme. Size soran sitenin o uygulamanın gerçek sitesi olduğundan emin olun.",
+        "noExpiry": "İzin asla sona ermez.",
+        "longDeadline": "İzin bir yıldan uzun sürer.",
+        "expired": "Son tarih geçti: bu istek artık kullanılamaz.",
+        "unknownChain": "{id} zinciri CRYPY tarafından desteklenmiyor, bu yüzden adlar gösterilemez.",
+        "noChain": "İstek hiçbir zincir belirtmiyor, bu yüzden başka bir zincirde tekrar kullanılabilir.",
+        "unrecognised": "CRYPY bu tür isteği ({type}) tanımıyor. Aşağıdaki her alanı okuyun; ne yaptığını anlayamıyorsanız imzalamayın.",
+        "malformed": "İstek EIP-712 biçimine tam uymuyor; bir cüzdan onu reddedebilir veya farklı gösterebilir.",
+        "seaportListing": "Bu bir pazar yeri emri: imzalamak cüzdanınızdaki {count} öğeyi satışa çıkarır.",
+        "seaportNoPayment": "Bu emirdeki hiçbir ödeme size gitmiyor: her şeyi başka biri alır. NFT boşaltan dolandırıcılıklar böyle çalışır.",
+        "blindHash": "32 baytlık ham bir hash imzalarsınız: neye izin verdiğini göremezsiniz. Meşru uygulamalar bunu neredeyse hiç istemez. İmzalamayın.",
+        "unreadableBytes": "Bu baytlar okunabilir metin değil, bu yüzden ne imzalayacağınızı bilemezsiniz. Tam olarak ne olduğunu bilmiyorsanız imzalamayın.",
+        "plainMessage": "Düz bir mesaj: imzalamak cüzdanın size ait olduğunu kanıtlar ve tek başına fon taşımaz.",
+        "signInMessage": "Bir giriş mesajına benziyor. İçinde adı geçen sitenin bulunduğunuz site olduğunu kontrol edin.",
+        "messageMentionsFunds": "Metinde onay, transfer, talep veya airdrop geçiyor. Bir mesaj tek başına fon taşıyamaz, ama dolandırıcılar bu kelimeleri sonradan başka şeyler imzalatmak için kullanır."
+      },
+      "patterns": {
+        "permit": "Token permit (ERC-2612): harcama izni",
+        "dai-permit": "DAI tarzı permit: harcama izni",
+        "permit2-single": "Permit2: harcama izni",
+        "permit2-batch": "Permit2: birden çok token için harcama izni",
+        "permit2-transfer": "Permit2: tek seferlik transfer",
+        "seaport": "Pazar yeri emri (Seaport)",
+        "other": "Türlendirilmiş veri (tanınmadı)"
+      },
+      "kindMessage": "Mesaj",
+      "kindHash": "Ham hash (kör imza)",
+      "type": "Tür",
+      "chain": "Zincir",
+      "unknownChain": "Zincir {id}",
+      "contract": "Sözleşme (verifyingContract)",
+      "spender": "Harcayıcı",
+      "tokens": "Token ve miktar",
+      "unlimited": "sınırsız",
+      "rawAmount": "(en küçük birim)",
+      "until": "Geçerlilik sonu",
+      "noDeadline": "Son tarih yok",
+      "gives": "Verdiğiniz",
+      "receives": "{recipient} adresine ödenen",
+      "itemTypes": {
+        "native": "Yerel coin",
+        "erc20": "Token",
+        "erc721": "NFT",
+        "erc1155": "NFT (1155)",
+        "erc721-any": "Koleksiyondan herhangi bir NFT",
+        "erc1155-any": "Koleksiyondan herhangi bir NFT (1155)",
+        "other": "Öğe"
+      },
+      "message": "Mesaj metni",
+      "allFields": "Tüm alanlar",
+      "hash": "EIP-712 hash",
+      "hashHelp": "Cüzdanın gerçekte imzaladığı değer. Cüzdanınız gösterdiğinde ekranıyla karşılaştırın.",
+      "local": "Tarayıcınızda çözüldü. Hiçbir şey imzalanmaz, gönderilmez veya sorgulanmaz; adresler yalnızca CRYPY'nin kendi listesinden adlandırılır.",
+      "errors": {
+        "empty": "",
+        "json": "Bu geçerli bir JSON değil. İsteğin tamamını, açılış ve kapanış süslü parantezleriyle yapıştırın.",
+        "not-typed-data": "Bu JSON EIP-712 türlendirilmiş veri değil: types, primaryType ve message gerekir.",
+        "too-large": "Çözmek için çok uzun."
       }
     }
   },

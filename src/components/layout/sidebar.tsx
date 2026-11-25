@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { BookOpen, House } from "lucide-react";
+import { BookOpen, ChevronDown, House } from "lucide-react";
 import { Suspense } from "react";
 import { ToolIcon } from "@/components/tool-icon";
 import { type ToolCategory, tools } from "@/config/tools";
@@ -9,6 +9,7 @@ import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { SidebarActiveMarker, SidebarCollapseButton } from "./sidebar-controls";
 
 const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "calculators", "utilities"];
+const folded: ToolCategory[] = ["calculators"];
 
 /**
  * Desktop tools sidebar (lg and up). Plain server-rendered links: the only browser code is the
@@ -52,12 +53,8 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
             {t("nav.new")}
           </span>
         </Link>
-        {order.map((category) => (
-          <div key={category} className="mt-2">
-            <p className="sidebar-label px-2.5 pb-0.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-              {t(`categories.${category}`)}
-            </p>
-            <div className="sidebar-divider mx-3 mb-1 hidden border-t" aria-hidden="true" />
+        {order.map((category) => {
+          const list = (
             <ul className="flex flex-col">
               {tools
                 .filter((tool) => tool.category === category)
@@ -87,8 +84,39 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
                   );
                 })}
             </ul>
-          </div>
-        ))}
+          );
+          const heading = (
+            <p className="sidebar-label px-2.5 pb-0.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+              {t(`categories.${category}`)}
+            </p>
+          );
+          // Groups that grow with many small tools fold, so the sidebar keeps fitting on one screen.
+          if (folded.includes(category)) {
+            const count = tools.filter((tool) => tool.category === category).length;
+            return (
+              <details key={category} className="sidebar-group group mt-2">
+                <summary className={`${item} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>
+                  <ToolIcon name="calculator" className="size-[18px] shrink-0 text-primary" />
+                  <span className="sidebar-label min-w-0 flex-1">
+                    {t(`categories.${category}`)} <span className="text-muted-foreground">({count})</span>
+                  </span>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className="sidebar-label size-4 shrink-0 transition-transform group-open:rotate-180"
+                  />
+                </summary>
+                {list}
+              </details>
+            );
+          }
+          return (
+            <div key={category} className="mt-2">
+              {heading}
+              <div className="sidebar-divider mx-3 mb-1 hidden border-t" aria-hidden="true" />
+              {list}
+            </div>
+          );
+        })}
       </nav>
       <div className="border-t p-2">
         <SidebarCollapseButton

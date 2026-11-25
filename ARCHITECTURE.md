@@ -885,6 +885,18 @@ DEX decoders, per chain family:                      (one per DEX design)
 - i18n: `messages/pending-translation.json` lists key prefixes of a batch in progress that may be missing in Beta
   languages (English shows); `scripts/check-translations.ts` counts them. Translations are `DeepPartial` in types.
 
+## 12s. Browser-only utilities U2
+
+- Calculators: `modules/tools/loan-to-value/ltv.ts`, `impermanent-loss/il.ts`, `slippage-calculator/slippage.ts` (pure,
+  `lib/math/decimal.ts`), shared field reading in `modules/tools/shared/read-dec.ts`, `NumberField` and `Figure` in
+  `shared/ui.tsx`.
+- Address formats: `lib/address/other-formats.ts` (`@scure/base` base58 / base58check with viem's sha256, bech32 /
+  bech32m), used by the Address Formatter (`status` "other" / "other-invalid").
+- Signature decoder: `modules/tools/signature-decoder/decode.ts` (pure; viem `hashTypedData`; names from
+  `config/known-contracts.ts`; findings as translated keys, sorted by severity).
+- Sidebar: categories in `folded` render as a native `<details>` group; `SidebarActiveMarker` opens the group that
+  holds the current page.
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

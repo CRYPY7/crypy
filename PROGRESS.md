@@ -41,6 +41,37 @@ Last updated: 2026-11-24
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Utilities U2: three DeFi calculators, Bitcoin and Solana formats, signature decoder (2026-11-24)
+
+- **Loan-to-Value & Liquidation Calculator** (`/tools/loan-to-value`): LTV, health factor (collateral value ×
+  liquidation threshold ÷ debt), room left at the maximum LTV (negative when over), liquidation price and how far the
+  price can fall; states safe / close (< 1.2) / liquidatable (< 1). Covers the catalog's "liquidation threshold
+  calculator" too. Says protocols use their own prices, thresholds and growing interest.
+- **Impermanent Loss Calculator** (`/tools/impermanent-loss`): 50/50 constant-product pools, loss = 2·√r ÷ (1 + r) − 1
+  from both tokens' price changes, with held vs pooled dollar values. Fees, rewards and v3 are stated as not included.
+- **Slippage & Price Impact Calculator** (`/tools/slippage-calculator`): minimum received / maximum sent from a
+  tolerance; price impact, total cost (with the pool fee, 0.3 % by default), spot, execution and after-trade prices for a
+  v2 pool from typed reserves. Read-only.
+- **Address Formatter** now recognises Bitcoin (legacy P2PKH and P2SH by base58check; native SegWit, SegWit script and
+  Taproot by bech32 / bech32m per BIP-173 and BIP-350; testnet) and Solana public keys (32 bytes in base58), catches
+  Bitcoin checksum typos and mixed-case bech32, and says what a valid format does and doesn't prove. New dependency:
+  `@scure/base` 1.2.6 (base58 / bech32; MIT, audited, already installed as part of viem, now a direct dependency).
+- **Signature Request Decoder** (`/tools/signature-decoder`, Security): paste EIP-712 typed data (object, JSON string,
+  or the wallet's `[address, data]` params) or a `personal_sign` message (text or hex). Recognises ERC-2612 permits,
+  DAI-style permits, Permit2 PermitSingle / PermitBatch / transfers and Seaport orders; flags unlimited amounts,
+  spenders not on CRYPY's list (names only from `known-contracts.ts`), no or very long expiry, missing or unsupported
+  chains, orders that pay someone else, raw 32-byte hashes (blind signing) and unreadable bytes; shows every field and
+  the EIP-712 hash. Unknown request types are never called harmless. Nothing is signed, sent or looked up.
+- **Sidebar:** the Calculators group folds (closed by default, opens itself on a calculator page), so new calculators
+  don't push the sidebar past one screen. Short sidebar names for the new tools.
+- Translations of every new and changed text in the 6 Beta languages; `messages/pending-translation.json` is empty.
+  Found while translating: an English error text containing "{ to }" was read as a placeholder; reworded everywhere.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 573 passed, 76 skipped (19 new: LTV, impermanent
+loss table, slippage and v2 impact, Bitcoin/Solana test vectors, signature decoder). Build passed. Browser: 298 passed,
+18 skipped, 0 failed (6 new U2 tests, each also checking that nothing typed is sent). CSS 80.5 KB: at the 80 KB budget
+(rounded); the next batch needs a little room, see below.
+
 ## Utilities U1: five browser-only tools (owner decision 2026-11-24)
 
 Owner decisions 2026-11-24: browser-only tools may be built during stabilization; new screens are built directly

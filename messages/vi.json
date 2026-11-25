@@ -570,14 +570,14 @@
     "address-formatter": {
       "name": "Kiểm tra định dạng địa chỉ",
       "question": "Địa chỉ này viết đúng chưa?",
-      "description": "Kiểm tra địa chỉ có được viết đúng không, lấy dạng checksum và mã QR. Dùng cho một địa chỉ hoặc một danh sách.",
+      "description": "Kiểm tra địa chỉ (EVM, Bitcoin hoặc Solana) có được viết đúng không, lấy dạng checksum và mã QR. Dùng cho một địa chỉ hoặc một danh sách.",
       "input": "Một địa chỉ",
       "cta": "Kiểm tra địa chỉ",
       "features": [
         "Phát hiện lỗi gõ nhờ checksum EIP-55",
         "Kiểm tra tối đa 500 địa chỉ cùng lúc",
         "Mã QR để chia sẻ địa chỉ, có ghi rõ mạng",
-        "Hoạt động trên mọi mạng EVM",
+        "Các chuỗi EVM, cùng định dạng địa chỉ Bitcoin và Solana",
         "Chạy trong trình duyệt của bạn"
       ],
       "howTo": [
@@ -821,6 +821,174 @@
       "seoTitle": "Máy tính APY và lãi kép cho crypto | CRYPY",
       "seoDescription": "Đổi APR sang APY và xem một khoản tiền tăng thế nào với lãi kép và các khoản góp định kỳ theo từng năm. Ước tính trong trình duyệt của bạn; không gửi đi gì.",
       "shortName": "Máy tính APY"
+    },
+    "loan-to-value": {
+      "name": "Máy tính LTV và thanh lý",
+      "shortName": "LTV và thanh lý",
+      "question": "Khoản vay này còn cách thanh lý bao xa?",
+      "description": "Tính LTV của khoản vay crypto, hệ số sức khỏe, có thể vay thêm bao nhiêu và mức giá khiến nó bị thanh lý.",
+      "input": "Tài sản thế chấp, giá và khoản vay",
+      "cta": "Tính",
+      "features": [
+        "LTV, hệ số sức khỏe và hạn mức vay còn lại",
+        "Giá thanh lý và giá có thể giảm bao nhiêu",
+        "Dùng được với số liệu của mọi tài sản thế chấp và giao thức cho vay"
+      ],
+      "howTo": [
+        "Nhập lượng tài sản thế chấp bạn gửi và giá của nó.",
+        "Thêm số đã vay, LTV tối đa và ngưỡng thanh lý từ trang của giao thức.",
+        "Xem LTV, hệ số sức khỏe và giá thanh lý, rồi thử các mức giá khác."
+      ],
+      "faq": [
+        {
+          "q": "LTV là gì?",
+          "a": "Tỷ lệ vay trên tài sản là số bạn đã vay chia cho giá trị tài sản thế chấp. Vay 8.000 $ với 20.000 $ ETH là LTV 40%."
+        },
+        {
+          "q": "Ngưỡng thanh lý là gì?",
+          "a": "Mức LTV mà giao thức cho vay có thể bán một phần tài sản thế chấp để trả nợ, thường kèm phạt. Ngưỡng được đặt theo từng tài sản, cao hơn một chút so với LTV tối đa được vay."
+        },
+        {
+          "q": "Hệ số sức khỏe là gì?",
+          "a": "Giá trị thế chấp × ngưỡng thanh lý ÷ nợ. Trên 1 thì vị thế tạm thời an toàn khỏi thanh lý; bằng hoặc dưới 1 thì có thể bị thanh lý. Nhiều người giữ trên 1,5."
+        },
+        {
+          "q": "Có dùng số liệu thật của giao thức không?",
+          "a": "Không. Chỉ dùng những gì bạn nhập. Các giao thức dùng nguồn giá và tham số riêng, và lãi vẫn tiếp tục cộng vào nợ, nên hãy kiểm tra trang của giao thức trước khi hành động."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính LTV và giá thanh lý khoản vay crypto | CRYPY",
+      "seoDescription": "Tính LTV, hệ số sức khỏe, hạn mức vay và giá thanh lý của khoản vay crypto từ tài sản thế chấp, giá và nợ. Trong trình duyệt của bạn; không gửi đi gì."
+    },
+    "impermanent-loss": {
+      "name": "Máy tính tổn thất tạm thời",
+      "shortName": "Tổn thất tạm thời",
+      "question": "Tôi mất bao nhiêu vì tổn thất tạm thời?",
+      "description": "Xem vị thế trong pool thanh khoản 50/50 kém giá trị hơn bao nhiêu so với chỉ giữ hai token, sau khi giá thay đổi.",
+      "input": "Thay đổi giá",
+      "cta": "Tính",
+      "features": [
+        "Tổn thất tạm thời cho mọi thay đổi giá của một trong hai token",
+        "Giá trị bằng đô la nếu bạn nhập khoản đã gửi",
+        "Hiển thị công thức và giới hạn của nó"
+      ],
+      "howTo": [
+        "Nhập mức giá token A đã thay đổi kể từ khi bạn gửi, ví dụ 100 cho 2×.",
+        "Thêm thay đổi của token B nếu không phải stablecoin, và khoản đã gửi để xem giá trị đô la.",
+        "Xem tổn thất so với việc giữ. Phí bạn đã kiếm không được tính."
+      ],
+      "faq": [
+        {
+          "q": "Tổn thất tạm thời là gì?",
+          "a": "Trong pool 50/50, khi giá một token thay đổi so với token kia, pool tự cân bằng lại bằng cách bán token đã tăng giá. Phần của bạn cuối cùng có giá trị thấp hơn so với chỉ giữ cả hai token. Gọi là tạm thời vì tổn thất thu hẹp lại nếu giá quay về."
+        },
+        {
+          "q": "Tổn thất lớn đến mức nào?",
+          "a": "Với thay đổi giá 2× (hoặc ½×): khoảng 5,7%. Với 3×: khoảng 13,4%. Với 5×: khoảng 25,5%. Chỉ tỷ lệ giữa hai giá là quan trọng."
+        },
+        {
+          "q": "Phí giao dịch có bù lại không?",
+          "a": "Đôi khi. Pool trả một phần phí giao dịch, và một số còn trả phần thưởng. Máy tính này hiển thị tổn thất trước phí để bạn so sánh với số pool trả."
+        },
+        {
+          "q": "Có dùng được cho Uniswap v3 không?",
+          "a": "Không. Thanh khoản tập trung mất nhiều hơn trong khoảng giá của nó và ngừng sinh phí khi ra ngoài khoảng. Máy tính này mô phỏng pool 50/50 như Uniswap v2 và PancakeSwap v2."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính tổn thất tạm thời (pool 50/50) | CRYPY",
+      "seoDescription": "Tính tổn thất tạm thời của pool thanh khoản 50/50 từ thay đổi giá của cả hai token, kèm giá trị bằng đô la. Trong trình duyệt của bạn; không gửi đi gì."
+    },
+    "slippage-calculator": {
+      "name": "Máy tính trượt giá và tác động giá",
+      "shortName": "Trượt giá và tác động",
+      "question": "Giao dịch hoán đổi này thực sự tốn bao nhiêu?",
+      "description": "Tính số lượng tối thiểu bạn sẽ nhận với một dung sai trượt giá, và một giao dịch làm giá trong pool dịch chuyển bao nhiêu.",
+      "input": "Số lượng, dung sai hoặc dự trữ pool",
+      "cta": "Tính",
+      "features": [
+        "Nhận tối thiểu và gửi tối đa từ dung sai",
+        "Tác động giá và tổng chi phí trong pool v2",
+        "Chỉ đọc: không giao dịch gì"
+      ],
+      "howTo": [
+        "Nhập số lượng báo giá và dung sai trượt giá để xem trường hợp tệ nhất.",
+        "Với một pool, nhập hai mức dự trữ và số lượng bạn bán.",
+        "Xem tác động giá và so sánh các quy mô giao dịch."
+      ],
+      "faq": [
+        {
+          "q": "Dung sai trượt giá là gì?",
+          "a": "Mức thay đổi giá tệ nhất bạn chấp nhận giữa báo giá và lúc khớp lệnh. Với 0,5% trên báo giá 1.000 token, hoán đổi thất bại nếu bạn nhận ít hơn 995."
+        },
+        {
+          "q": "Tác động giá là gì?",
+          "a": "Mức mà chính giao dịch của bạn làm giá pool dịch chuyển. Giao dịch lớn trong pool nhỏ nhận giá tệ hơn nhiều so với báo giá trước đó."
+        },
+        {
+          "q": "Vì sao dung sai cao lại rủi ro?",
+          "a": "Bot có thể thấy giao dịch đang chờ và giao dịch xung quanh nó để đẩy giá của bạn đến mức tệ nhất bạn cho phép (tấn công \"sandwich\"). Hãy giữ dung sai thấp nhất mà giao dịch cho phép."
+        },
+        {
+          "q": "Công cụ này có đặt lệnh không?",
+          "a": "Không. CRYPY không bao giờ giao dịch. Đây chỉ là phép tính với các số bạn nhập."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính trượt giá và tác động giá khi hoán đổi | CRYPY",
+      "seoDescription": "Tính số nhận tối thiểu từ dung sai trượt giá và tác động giá của một giao dịch trong pool kiểu Uniswap v2. Chỉ đọc, trong trình duyệt của bạn."
+    },
+    "signature-decoder": {
+      "name": "Trình giải mã yêu cầu ký",
+      "shortName": "Giải mã chữ ký",
+      "question": "Tôi đang được yêu cầu ký cái gì?",
+      "description": "Dán nội dung ví yêu cầu bạn ký và xem bằng lời đơn giản nó cho phép điều gì: permit token, Permit2, lệnh NFT và tin nhắn.",
+      "input": "Một yêu cầu ký",
+      "cta": "Giải mã",
+      "features": [
+        "Giải thích permit token, Permit2 và lệnh sàn NFT",
+        "Cảnh báo số lượng không giới hạn, bên chi tiêu lạ và ký mù",
+        "Giải mã trong trình duyệt của bạn: không ký hay gửi gì"
+      ],
+      "howTo": [
+        "Sao chép yêu cầu mà ví hoặc trang web hiển thị (JSON dữ liệu có kiểu hoặc tin nhắn).",
+        "Dán vào ô.",
+        "Đọc xem việc ký sẽ cho phép điều gì trước khi quyết định."
+      ],
+      "faq": [
+        {
+          "q": "Vì sao chữ ký không tốn gas vẫn có thể nguy hiểm?",
+          "a": "Một số chữ ký là quyền. Permit token hoặc chữ ký Permit2 cho phép người khác tiêu token của bạn sau này, và lệnh sàn NFT có thể rao bán NFT của bạn với giá 0. Kẻ lừa đảo ưa chuộng chúng vì trông vô hại."
+        },
+        {
+          "q": "Tôi tìm yêu cầu ở đâu?",
+          "a": "Nhiều ví hiển thị dữ liệu của yêu cầu ký hoặc cho phép sao chép. Nhà phát triển có thể thấy nó trong lệnh gọi eth_signTypedData_v4 hoặc personal_sign của trang. Hãy dán nguyên văn."
+        },
+        {
+          "q": "CRYPY có ký hay gửi gì không?",
+          "a": "Không. Nó chỉ đọc những gì bạn dán, trong trình duyệt của bạn. Nó không thể ký: nó không có quyền truy cập ví của bạn."
+        },
+        {
+          "q": "Yêu cầu không bị CRYPY cảnh báo có an toàn không?",
+          "a": "Không hẳn. CRYPY nhận ra các loại yêu cầu phổ biến và kiểm tra các dấu hiệu nguy hiểm đã biết; nó không thể biết mọi ứng dụng. Nếu bạn không hiểu một yêu cầu làm gì, đừng ký."
+        },
+        {
+          "q": "Hash EIP-712 là gì?",
+          "a": "Giá trị mà ví của bạn thực sự ký. Một số ví hiển thị nó, để bạn có thể kiểm tra mình đang xem cùng một yêu cầu."
+        }
+      ],
+      "seoTitle": "Trình giải mã yêu cầu ký của ví (EIP-712) | CRYPY",
+      "seoDescription": "Dán yêu cầu ký từ ví và xem nó cho phép điều gì: permit token, Permit2, rao bán NFT và tin nhắn, kèm dấu hiệu nguy hiểm. Trong trình duyệt của bạn."
     }
   },
   "toolPage": {
@@ -2486,21 +2654,39 @@
         "no-checksum": "Không có checksum",
         "bad-checksum": "Gõ sai",
         "missing-prefix": "Thiếu 0x",
-        "invalid": "Không phải địa chỉ"
+        "invalid": "Không phải địa chỉ",
+        "other": "Định dạng hợp lệ",
+        "other-invalid": "Lỗi gõ"
       },
       "explain": {
         "valid": "Viết đúng và checksum khớp.",
         "no-checksum": "Định dạng hợp lệ nhưng toàn chữ thường hoặc toàn chữ hoa, nên không phát hiện được lỗi gõ. Hãy dùng dạng có checksum bên dưới.",
         "bad-checksum": "Checksum không khớp, nghĩa là có ký tự đã bị đổi. Đừng dùng địa chỉ này: hãy sao chép lại từ nguồn gốc.",
         "missing-prefix": "Địa chỉ bắt đầu bằng 0x. Đây là dạng đầy đủ.",
-        "zero": "Đây là địa chỉ 0. Token gửi tới đây sẽ mất vĩnh viễn."
+        "zero": "Đây là địa chỉ 0. Token gửi tới đây sẽ mất vĩnh viễn.",
+        "other-invalid": "Đây có vẻ là địa chỉ Bitcoin, nhưng checksum tích hợp không khớp, nên có một ký tự sai. Đừng dùng: hãy sao chép lại từ nguồn gốc."
       },
       "invalid": {
         "length": "Sai độ dài: {length} ký tự sau 0x thay vì 40.",
         "characters": "Chứa ký tự không hợp lệ (chỉ 0–9 và a–f).",
         "empty": "Trống."
       },
-      "secret": "Đây có vẻ là cụm từ khôi phục hoặc khóa riêng tư. Đừng bao giờ nhập nó vào bất kỳ trang web nào: ai nhìn thấy nó đều có thể lấy hết tài sản trong ví. Không có gì được kiểm tra hay gửi đi; hãy xóa ô nhập."
+      "secret": "Đây có vẻ là cụm từ khôi phục hoặc khóa riêng tư. Đừng bao giờ nhập nó vào bất kỳ trang web nào: ai nhìn thấy nó đều có thể lấy hết tài sản trong ví. Không có gì được kiểm tra hay gửi đi; hãy xóa ô nhập.",
+      "other": {
+        "bitcoin": "Bitcoin",
+        "solana": "Solana",
+        "testnet": "testnet",
+        "types": {
+          "p2pkh": "Kiểu cũ (P2PKH)",
+          "p2sh": "Script (P2SH)",
+          "p2wpkh": "SegWit gốc (P2WPKH)",
+          "p2wsh": "Script SegWit (P2WSH)",
+          "p2tr": "Taproot (P2TR)",
+          "segwit-other": "SegWit (phiên bản tương lai)"
+        },
+        "bitcoinNote": "Được viết đúng: checksum tích hợp khớp. Chỉ gửi Bitcoin đến địa chỉ này, trên mạng Bitcoin. Điều này không cho biết địa chỉ có đang được dùng hay thuộc về ai.",
+        "solanaNote": "Khóa công khai Solana hợp lệ: 32 byte dạng base58. Địa chỉ Solana không có checksum, nên lỗi gõ vẫn có thể trông hợp lệ: hãy so sánh đầu và cuối với bản gốc. Chỉ gửi tài sản Solana đến địa chỉ này."
+      }
     },
     "tx-decoder": {
       "label": "Dữ liệu đầu vào giao dịch",
@@ -3264,6 +3450,201 @@
         "rate-too-high": "Tối đa 100.000% mỗi năm: hãy kiểm tra lãi suất.",
         "whole-number": "Nhập số ngày là số nguyên.",
         "zero-duration": "Nhập thời gian lớn hơn 0."
+      }
+    },
+    "loanToValue": {
+      "collateral": "Số lượng tài sản thế chấp",
+      "collateralHint": "Bạn gửi bao nhiêu coin hoặc token, ví dụ 10 (ETH).",
+      "price": "Giá tài sản thế chấp",
+      "priceHint": "Giá mỗi coin theo USD. Nhập mức giá bạn muốn thử; không tra cứu gì cả.",
+      "debt": "Số tiền đã vay (không bắt buộc)",
+      "debtHint": "Theo USD (stablecoin tính 1:1).",
+      "maxLtv": "LTV tối đa (không bắt buộc)",
+      "maxLtvHint": "Mức tối đa bạn được vay với tài sản thế chấp này, theo trang của giao thức (thường 70–80%).",
+      "threshold": "Ngưỡng thanh lý (không bắt buộc)",
+      "thresholdHint": "Mức LTV mà vị thế có thể bị thanh lý (cao hơn LTV tối đa một chút).",
+      "results": "Kết quả",
+      "ltv": "Tỷ lệ vay trên tài sản (LTV)",
+      "ltvHelp": "Đã vay ÷ giá trị tài sản thế chấp",
+      "healthFactor": "Hệ số sức khỏe",
+      "healthFactorHelp": "Giá trị thế chấp × ngưỡng thanh lý ÷ đã vay. Dưới 1, vị thế có thể bị thanh lý.",
+      "needsThreshold": "Cần số tiền đã vay và ngưỡng thanh lý",
+      "collateralValue": "Giá trị tài sản thế chấp",
+      "available": "Vẫn có thể vay thêm",
+      "availableHelp": "Giá trị thế chấp × LTV tối đa − đã vay",
+      "overLimit": "Số âm: bạn đã vay nhiều hơn mức LTV tối đa cho phép. Nhiều giao thức sẽ không cho vay thêm hoặc rút ra.",
+      "liquidationPrice": "Giá thanh lý",
+      "liquidationPriceHelp": "Giá tài sản thế chấp tại đó hệ số sức khỏe chạm mức 1.",
+      "drop": "Giá có thể giảm {percent} trước khi bị thanh lý.",
+      "states": {
+        "safe": "Hệ số sức khỏe trên 1,2: còn khoảng cách trước khi bị thanh lý, nhưng giá có thể biến động nhanh.",
+        "close": "Hệ số sức khỏe từ 1 đến 1,2: giá giảm một chút cũng có thể gây thanh lý. Hãy cân nhắc trả bớt nợ hoặc thêm tài sản thế chấp.",
+        "liquidatable": "Hệ số sức khỏe dưới 1: ở mức giá này vị thế có thể bị thanh lý.",
+        "no-debt": "Chưa vay gì: không có gì để thanh lý."
+      },
+      "note": "Các giao thức dùng nguồn giá, ngưỡng, phí và lãi suất riêng, và khoản nợ tăng theo thời gian: hãy kiểm tra trang của giao thức trước khi hành động.",
+      "local": "Được tính trong trình duyệt của bạn từ những gì bạn nhập; không tra cứu hay gửi đi bất cứ thứ gì.",
+      "empty": "Nhập số lượng tài sản thế chấp và giá để xem kết quả.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1000 hoặc 2.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (2.5); dấu phẩy chỉ để ngăn cách hàng nghìn (1,000).",
+        "too-large": "Quá lớn.",
+        "too-precise": "Quá nhiều chữ số thập phân.",
+        "over-100": "Tối đa 100%.",
+        "zero": "Giá trị tài sản thế chấp phải lớn hơn 0."
+      }
+    },
+    "impermanentLoss": {
+      "changeA": "Thay đổi giá của token A",
+      "changeAHint": "Kể từ khi bạn gửi, ví dụ 100 cho +100% (2×) hoặc −50 cho giảm một nửa.",
+      "changeB": "Thay đổi giá của token B (không bắt buộc)",
+      "changeBHint": "Để trống nếu là stablecoin (0%).",
+      "deposit": "Giá trị đã gửi (không bắt buộc)",
+      "depositHint": "Theo USD tại thời điểm gửi, để xem giá trị bằng đô la.",
+      "results": "Kết quả",
+      "loss": "Tổn thất tạm thời",
+      "lossHelp": "Giá trị trong pool so với việc chỉ giữ cả hai token.",
+      "held": "Nếu bạn chỉ giữ token",
+      "pooled": "Trong pool (trước phí)",
+      "difference": "Chênh lệch",
+      "formula": "Tỷ lệ giá r = (1 + thay đổi A) ÷ (1 + thay đổi B). Tổn thất = 2·√r ÷ (1 + r) − 1. Chỉ tỷ lệ giữa hai giá là quan trọng: nếu cả hai cùng biến động như nhau thì không có tổn thất.",
+      "limits": "Dành cho pool 50/50 như Uniswap v2 hoặc PancakeSwap v2. Không tính phí giao dịch và phần thưởng, vốn có thể bù đắp tổn thất. Thanh khoản tập trung (v3) mất nhiều hơn trong khoảng giá của nó, và tổn thất chỉ thành thực khi bạn rút ra.",
+      "local": "Được tính trong trình duyệt của bạn; không gửi đi gì.",
+      "empty": "Nhập mức thay đổi giá của token A để xem tổn thất.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1000 hoặc 2.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (2.5); dấu phẩy chỉ để ngăn cách hàng nghìn (1,000).",
+        "too-large": "Quá lớn.",
+        "too-precise": "Quá nhiều chữ số thập phân.",
+        "below-minus-100": "Giá chỉ có thể giảm ít hơn 100%."
+      }
+    },
+    "slippage": {
+      "toleranceTitle": "Dung sai trượt giá",
+      "toleranceIntro": "Mức tệ nhất mà một giao dịch hoán đổi chấp nhận. Ví và sàn gọi đây là \"dung sai trượt giá\".",
+      "amount": "Số lượng báo giá",
+      "amountHint": "Số lượng sàn báo giá: số bạn nhận (khi bán) hoặc trả (khi mua).",
+      "tolerance": "Dung sai trượt giá",
+      "toleranceHint": "Thường là 0,5%. Giá trị cao hơn cho phép giao dịch khớp ở giá tệ hơn.",
+      "minReceived": "Nhận tối thiểu",
+      "minReceivedHelp": "Khi bán một số lượng chính xác: hoán đổi thất bại nếu bạn nhận ít hơn.",
+      "maxSent": "Gửi tối đa",
+      "maxSentHelp": "Khi mua một số lượng chính xác: hoán đổi thất bại nếu tốn nhiều hơn.",
+      "impactTitle": "Tác động giá trong pool",
+      "impactIntro": "Một giao dịch cỡ này làm giá trong pool tích hằng số (kiểu Uniswap v2) dịch chuyển bao nhiêu, dựa trên dự trữ của pool.",
+      "reserveIn": "Dự trữ trong pool của token bạn bán",
+      "reserveInHint": "Từ trang pool hoặc trình khám phá.",
+      "reserveOut": "Dự trữ trong pool của token bạn mua",
+      "reserveOutHint": "Cùng pool, token còn lại.",
+      "amountIn": "Số lượng bạn bán",
+      "amountInHint": "Cùng đơn vị với dự trữ của token đó.",
+      "fee": "Phí pool (không bắt buộc)",
+      "feeHint": "Uniswap v2 và PancakeSwap v2 thu 0,3% và 0,25%; để trống = 0,3%.",
+      "amountOut": "Bạn sẽ nhận",
+      "priceImpact": "Tác động giá",
+      "priceImpactHelp": "Giao dịch của bạn làm giá pool dịch chuyển bao nhiêu (chưa tính phí). Trên 1% là đáng kể; trên 5% là tốn kém.",
+      "totalCost": "Tổng chi phí so với giá hiện tại",
+      "totalCostHelp": "Tác động giá cộng với phí pool.",
+      "spotPrice": "Giá trước (mua được trên bán ra)",
+      "executionPrice": "Giá của bạn (mua được trên bán ra)",
+      "priceAfter": "Giá sau giao dịch",
+      "limits": "Mô hình của một pool: giao dịch thực tế có thể đi qua nhiều pool, người khác có thể làm giá thay đổi trước, và pool v3 hoạt động khác. Hãy dùng để so sánh quy mô giao dịch, không phải để dự đoán kết quả chính xác.",
+      "local": "Được tính trong trình duyệt của bạn; không giao dịch, tra cứu hay gửi đi gì.",
+      "empty": "Nhập hai mức dự trữ và số lượng bạn bán.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1000 hoặc 2.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (2.5); dấu phẩy chỉ để ngăn cách hàng nghìn (1,000).",
+        "too-large": "Quá lớn.",
+        "too-precise": "Quá nhiều chữ số thập phân.",
+        "over-100": "Phải nhỏ hơn 100%.",
+        "zero": "Phải lớn hơn 0."
+      }
+    },
+    "signatureDecoder": {
+      "label": "Nội dung ví yêu cầu bạn ký",
+      "placeholder": "Dán yêu cầu: dữ liệu có kiểu (JSON có types, domain, message) hoặc văn bản hay hex của tin nhắn.",
+      "examples": "Ví dụ:",
+      "examplePermit": "Permit token",
+      "examplePermit2": "Permit2",
+      "exampleMessage": "Tin nhắn đăng nhập",
+      "never": "Công cụ này chỉ đọc. Đừng bao giờ dán cụm từ khôi phục hay khóa riêng tư vào bất cứ đâu, và đừng bao giờ ký một yêu cầu bạn không hiểu.",
+      "results": "Kết quả",
+      "findings": "Ký yêu cầu này sẽ làm gì",
+      "severity": {
+        "critical": "Nguy hiểm",
+        "high": "Quan trọng",
+        "medium": "Kiểm tra",
+        "info": "Ghi chú"
+      },
+      "finding": {
+        "permitAllowance": "Ký sẽ cho {spender} quyền chi tiêu các token này từ ví của bạn mà không cần xác nhận lại. Chữ ký không tốn gas, nhưng quyền này thật như một lệnh phê duyệt trên chuỗi.",
+        "permitTransfer": "Ký sẽ cho phép {spender} chuyển các token này ra khỏi ví của bạn một lần mà không cần xác nhận lại.",
+        "unlimited": "Số lượng không giới hạn: toàn bộ token này bạn đang có và sẽ có.",
+        "unknownSpender": "Bên chi tiêu không có trong danh sách ứng dụng đã biết của CRYPY. Điều đó không có nghĩa là xấu, nhưng hãy kiểm tra địa chỉ trên trang chính thức của ứng dụng trước khi ký.",
+        "knownSpender": "Bên chi tiêu là {name}, một hợp đồng phổ biến. Hãy chắc chắn trang đang yêu cầu là trang thật của ứng dụng đó.",
+        "noExpiry": "Quyền này không bao giờ hết hạn.",
+        "longDeadline": "Quyền này kéo dài hơn một năm.",
+        "expired": "Đã quá hạn: yêu cầu này không thể dùng được nữa.",
+        "unknownChain": "CRYPY không hỗ trợ chuỗi {id}, nên không thể hiển thị tên.",
+        "noChain": "Yêu cầu không ghi chuỗi nào, nên có thể bị dùng lại trên chuỗi khác.",
+        "unrecognised": "CRYPY không nhận ra loại yêu cầu này ({type}). Hãy đọc từng trường bên dưới; nếu không hiểu nó làm gì, đừng ký.",
+        "malformed": "Yêu cầu không tuân theo đúng định dạng EIP-712; ví có thể từ chối hoặc hiển thị khác.",
+        "seaportListing": "Đây là lệnh của sàn NFT: ký sẽ rao bán {count} vật phẩm từ ví của bạn.",
+        "seaportNoPayment": "Không khoản thanh toán nào trong lệnh này về tay bạn: người khác sẽ nhận hết. Đây là cách các vụ lừa đảo rút sạch NFT hoạt động.",
+        "blindHash": "Bạn sẽ ký một hash thô 32 byte: không thể thấy nó cho phép điều gì. Ứng dụng hợp pháp hầu như không bao giờ yêu cầu điều này. Đừng ký.",
+        "unreadableBytes": "Các byte này không phải văn bản đọc được, nên bạn không thể biết mình sẽ ký gì. Đừng ký trừ khi bạn biết chính xác nó là gì.",
+        "plainMessage": "Một tin nhắn thông thường: ký chỉ chứng minh ví là của bạn, tự nó không chuyển tiền.",
+        "signInMessage": "Có vẻ là tin nhắn đăng nhập. Hãy kiểm tra trang web được nhắc trong đó chính là trang bạn đang truy cập.",
+        "messageMentionsFunds": "Văn bản nhắc đến phê duyệt, chuyển tiền, nhận thưởng hoặc airdrop. Một tin nhắn tự nó không thể chuyển tiền, nhưng kẻ lừa đảo dùng những từ này để khiến bạn ký thứ khác sau đó."
+      },
+      "patterns": {
+        "permit": "Permit token (ERC-2612): quyền chi tiêu",
+        "dai-permit": "Permit kiểu DAI: quyền chi tiêu",
+        "permit2-single": "Permit2: quyền chi tiêu",
+        "permit2-batch": "Permit2: quyền chi tiêu cho nhiều token",
+        "permit2-transfer": "Permit2: chuyển một lần",
+        "seaport": "Lệnh sàn NFT (Seaport)",
+        "other": "Dữ liệu có kiểu (chưa nhận ra)"
+      },
+      "kindMessage": "Tin nhắn",
+      "kindHash": "Hash thô (ký mù)",
+      "type": "Loại",
+      "chain": "Chuỗi",
+      "unknownChain": "Chuỗi {id}",
+      "contract": "Hợp đồng (verifyingContract)",
+      "spender": "Bên chi tiêu",
+      "tokens": "Token và số lượng",
+      "unlimited": "không giới hạn",
+      "rawAmount": "(đơn vị nhỏ nhất)",
+      "until": "Hiệu lực đến",
+      "noDeadline": "Không có hạn",
+      "gives": "Bạn đưa ra",
+      "receives": "Trả cho {recipient}",
+      "itemTypes": {
+        "native": "Coin gốc",
+        "erc20": "Token",
+        "erc721": "NFT",
+        "erc1155": "NFT (1155)",
+        "erc721-any": "Bất kỳ NFT nào của bộ sưu tập",
+        "erc1155-any": "Bất kỳ NFT nào của bộ sưu tập (1155)",
+        "other": "Vật phẩm"
+      },
+      "message": "Nội dung tin nhắn",
+      "allFields": "Tất cả các trường",
+      "hash": "Hash EIP-712",
+      "hashHelp": "Giá trị mà ví thực sự ký. Hãy so sánh với màn hình ví khi ví hiển thị nó.",
+      "local": "Được giải mã trong trình duyệt của bạn. Không ký, gửi hay tra cứu gì; địa chỉ chỉ được đặt tên theo danh sách riêng của CRYPY.",
+      "errors": {
+        "empty": "",
+        "json": "Đây không phải JSON hợp lệ. Hãy dán toàn bộ yêu cầu, kèm dấu ngoặc nhọn mở và đóng.",
+        "not-typed-data": "JSON này không phải dữ liệu có kiểu EIP-712: cần có types, primaryType và message.",
+        "too-large": "Quá dài để giải mã."
       }
     }
   },

@@ -25,6 +25,10 @@ export const toolIds = [
   "tx-decoder",
   "token-valuation",
   "apy-calculator",
+  "loan-to-value",
+  "impermanent-loss",
+  "slippage-calculator",
+  "signature-decoder",
 ] as const;
 export type ToolId = (typeof toolIds)[number];
 
@@ -46,7 +50,11 @@ export type ToolIconName =
   | "code-xml"
   | "layers"
   | "coins"
-  | "percent";
+  | "percent"
+  | "scale"
+  | "droplets"
+  | "trending-down"
+  | "file-signature";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -117,6 +125,24 @@ export const tools: readonly ToolDefinition[] = [
   { id: "tx-decoder", category: "utilities", icon: "code-xml", status: "live", milestone: "M2.5" },
   { id: "token-valuation", category: "calculators", icon: "coins", status: "live", milestone: "U1", isNew: true },
   { id: "apy-calculator", category: "calculators", icon: "percent", status: "live", milestone: "U1", isNew: true },
+  { id: "loan-to-value", category: "calculators", icon: "scale", status: "live", milestone: "U2", isNew: true },
+  { id: "impermanent-loss", category: "calculators", icon: "droplets", status: "live", milestone: "U2", isNew: true },
+  {
+    id: "slippage-calculator",
+    category: "calculators",
+    icon: "trending-down",
+    status: "live",
+    milestone: "U2",
+    isNew: true,
+  },
+  {
+    id: "signature-decoder",
+    category: "security",
+    icon: "file-signature",
+    status: "live",
+    milestone: "U2",
+    isNew: true,
+  },
 ];
 
 export function getTool(id: string): ToolDefinition | undefined {

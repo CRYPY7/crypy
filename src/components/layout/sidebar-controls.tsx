@@ -14,7 +14,11 @@ export function SidebarActiveMarker() {
     links.forEach((link) => {
       const href = link.dataset.sidebarHref ?? "";
       link.toggleAttribute("aria-current", false);
-      if (pathname === href) link.setAttribute("aria-current", "page");
+      if (pathname === href) {
+        link.setAttribute("aria-current", "page");
+        // A folded group opens when the current page is inside it.
+        link.closest("details")?.setAttribute("open", "");
+      }
     });
   }, [pathname]);
   return null;

@@ -50,7 +50,8 @@ used up before 00:00 UTC on a normal day.
   ABI validator and encoder/decoder, Base58/Base64, JSON/CSV. Designs first; English first, translated per batch
   before deploy; Learn guides only where useful. RPC or server tools from the catalog wait for S6.
   - **U1 built 2026-11-24** (see PROGRESS.md). Owner decision 2026-11-24: new screens are built without design
-    approval first; the owner reviews them on the site. Next: U2.
+    approval first; the owner reviews them on the site.
+  - **U2 built 2026-11-24** (see PROGRESS.md). Next: U3.
 - **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
   cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
   2026-11-24: two build folders, rollback); a tested backup restore. **Done when:** an update, a worker crash and a

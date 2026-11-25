@@ -18,4 +18,8 @@ export const ownRouteTools: readonly ToolId[] = [
   "tx-decoder",
   "token-valuation",
   "apy-calculator",
+  "loan-to-value",
+  "impermanent-loss",
+  "slippage-calculator",
+  "signature-decoder",
 ];

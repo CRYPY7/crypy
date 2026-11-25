@@ -76,3 +76,85 @@ export function LinkButton({ onClick, children }: { onClick: () => void; childre
     </button>
   );
 }
+
+/** A labelled number box with an optional hint, unit and error (calculators). */
+export function NumberField({
+  id,
+  label,
+  value,
+  onChange,
+  hint,
+  error,
+  unit,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  hint?: string;
+  error?: string;
+  unit?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
+        {label}
+      </label>
+      <div className="flex items-center gap-2">
+        <input
+          id={id}
+          inputMode="decimal"
+          autoComplete="off"
+          dir="ltr"
+          value={value}
+          placeholder="0"
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={`${id}-error${hint ? ` ${id}-hint` : ""}`}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${inputClass} technical min-w-0`}
+        />
+        {unit && <span className="shrink-0 text-sm text-muted-foreground">{unit}</span>}
+      </div>
+      {hint && (
+        <p id={`${id}-hint`} className="mt-1.5 text-xs text-muted-foreground">
+          {hint}
+        </p>
+      )}
+      <FieldError id={`${id}-error`}>{error ?? ""}</FieldError>
+    </div>
+  );
+}
+
+/** A big headline figure with its explanation (calculators). */
+export function Figure({
+  label,
+  value,
+  help,
+  tone,
+  copy,
+  common,
+}: {
+  label: string;
+  value: string | null;
+  help?: string;
+  tone?: "low" | "medium" | "critical";
+  copy?: string | null;
+  common: CommonStrings;
+}) {
+  const color =
+    tone === "critical" ? "text-critical" : tone === "medium" ? "text-medium" : tone === "low" ? "text-low" : "";
+  return (
+    <div className="rounded-xl border border-border p-4">
+      <p className="text-sm text-muted-foreground">{label}</p>
+      <div className="mt-1 flex items-center justify-between gap-2">
+        <p
+          className={value ? cn("technical text-2xl font-semibold break-all", color) : "text-lg text-muted-foreground"}
+        >
+          {value ?? "—"}
+        </p>
+        {copy && <CopyButton value={copy} label={`${common.copy}: ${label}`} copiedLabel={common.copied} />}
+      </div>
+      {help && <p className="mt-1 text-xs text-muted-foreground">{help}</p>}
+    </div>
+  );
+}

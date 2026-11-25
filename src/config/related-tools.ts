@@ -18,4 +18,8 @@ export const relatedTools: Record<ToolId, readonly [ToolId, ToolId, ToolId]> = {
   "tx-decoder": ["tx-checker", "hex-converter", "approval-checker"],
   "token-valuation": ["token-security", "apy-calculator", "unit-converter"],
   "apy-calculator": ["token-valuation", "portfolio", "unit-converter"],
+  "loan-to-value": ["apy-calculator", "impermanent-loss", "portfolio"],
+  "impermanent-loss": ["slippage-calculator", "apy-calculator", "token-security"],
+  "slippage-calculator": ["impermanent-loss", "token-security", "tx-checker"],
+  "signature-decoder": ["approval-checker", "tx-decoder", "token-security"],
 };

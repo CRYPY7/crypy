@@ -3,6 +3,7 @@
  * Works for every EVM chain (Ethereum, BNB Chain, Base, Polygon, Arbitrum…), which share one address format.
  */
 import { getAddress } from "viem";
+import { type OtherAddress, checkOtherAddress } from "@/lib/address/other-formats";
 
 export type AddressStatus =
   /** Mixed case and the checksum matches. */
@@ -13,6 +14,10 @@ export type AddressStatus =
   | "bad-checksum"
   /** 40 hex characters without the 0x prefix. */
   | "missing-prefix"
+  /** A Bitcoin or Solana address in a valid format (U2). */
+  | "other"
+  /** Looks like a Bitcoin address, but its checksum or format is wrong. */
+  | "other-invalid"
   | "invalid";
 
 export type InvalidReason = "length" | "characters" | "empty";
@@ -26,6 +31,8 @@ export interface AddressCheck {
   checksummed?: string;
   lowercase?: string;
   isZero?: boolean;
+  /** For "other": which chain family and type. */
+  other?: OtherAddress;
 }
 
 export const MAX_ADDRESSES = 500;
@@ -33,6 +40,8 @@ export const MAX_ADDRESSES = 500;
 export function checkAddress(raw: string): AddressCheck {
   const input = raw.trim();
   if (!input) return { input, status: "invalid", reason: "empty" };
+  const other = checkOtherAddress(input);
+  if (other) return other.ok ? { input, status: "other", other: other.address } : { input, status: "other-invalid" };
 
   const hasPrefix = /^0x/i.test(input);
   const body = hasPrefix ? input.slice(2) : input;

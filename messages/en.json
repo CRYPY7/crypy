@@ -570,14 +570,14 @@
     "address-formatter": {
       "name": "Address Formatter",
       "question": "Is this address written correctly?",
-      "description": "Check that an address is written correctly, get its checksummed form and a QR code. Works for one address or a list.",
+      "description": "Check that an address is written correctly (EVM, Bitcoin or Solana), get its checksummed form and a QR code. Works for one address or a list.",
       "input": "An address",
       "cta": "Check address",
       "features": [
         "Detects typing mistakes using the EIP-55 checksum",
         "Checks up to 500 addresses at once",
         "QR code to share an address, with its network named",
-        "Works for every EVM chain",
+        "EVM chains, plus Bitcoin and Solana address formats",
         "Runs in your browser"
       ],
       "howTo": [
@@ -821,6 +821,174 @@
       "seoTitle": "APY & Compound Interest Calculator (Crypto) | CRYPY",
       "seoDescription": "Convert APR to APY and see how an amount grows with compounding and regular deposits, year by year. An estimate in your browser; nothing is sent.",
       "shortName": "APY Calculator"
+    },
+    "loan-to-value": {
+      "name": "Loan-to-Value & Liquidation Calculator",
+      "question": "How close is this loan to liquidation?",
+      "description": "Work out a crypto loan's LTV, health factor, how much more you can borrow and the price at which it gets liquidated.",
+      "input": "Collateral, price and loan",
+      "cta": "Calculate",
+      "features": [
+        "LTV, health factor and room left to borrow",
+        "Liquidation price and how far the price can fall",
+        "Works for any collateral and lending protocol's numbers"
+      ],
+      "howTo": [
+        "Type how much collateral you deposit and its price.",
+        "Add what you borrowed, and the maximum LTV and liquidation threshold from the protocol's page.",
+        "Read the LTV, health factor and liquidation price, and test other prices."
+      ],
+      "faq": [
+        {
+          "q": "What is LTV?",
+          "a": "Loan-to-value is what you borrowed divided by the value of your collateral. Borrowing $8,000 against $20,000 of ETH is 40% LTV."
+        },
+        {
+          "q": "What is the liquidation threshold?",
+          "a": "The LTV at which a lending protocol may sell part of your collateral to repay the loan, usually with a penalty. It's set per asset, a little above the maximum LTV you may borrow at."
+        },
+        {
+          "q": "What is the health factor?",
+          "a": "Collateral value × liquidation threshold ÷ debt. Above 1 the position is safe from liquidation for now; at 1 or below it can be liquidated. Many people keep it above 1.5."
+        },
+        {
+          "q": "Does this use the protocol's real numbers?",
+          "a": "No. It only uses what you type. Protocols use their own price feeds and settings, and interest keeps adding to the debt, so check the protocol's page before you act."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. Everything is worked out in your browser."
+        }
+      ],
+      "seoTitle": "Crypto LTV & Liquidation Price Calculator | CRYPY",
+      "seoDescription": "Work out LTV, health factor, borrowing room and the liquidation price of a crypto loan from your collateral, price and debt. In your browser; nothing is sent.",
+      "shortName": "LTV & Liquidation"
+    },
+    "impermanent-loss": {
+      "name": "Impermanent Loss Calculator",
+      "question": "How much do I lose to impermanent loss?",
+      "description": "See how much less a 50/50 liquidity pool position is worth than simply holding the two tokens, after their prices change.",
+      "input": "Price changes",
+      "cta": "Calculate",
+      "features": [
+        "Impermanent loss for any price change of either token",
+        "Dollar values if you add your deposit",
+        "Shows the formula and its limits"
+      ],
+      "howTo": [
+        "Type how much token A's price changed since you deposited, e.g. 100 for 2×.",
+        "Add token B's change if it isn't a stablecoin, and your deposit for dollar values.",
+        "Read the loss compared with holding. Fees you earned aren't included."
+      ],
+      "faq": [
+        {
+          "q": "What is impermanent loss?",
+          "a": "In a 50/50 pool, when one token's price moves against the other, the pool rebalances by selling the token that rose. Your share ends up worth less than if you had just held both tokens. It's called impermanent because it shrinks again if prices return."
+        },
+        {
+          "q": "How big does it get?",
+          "a": "For a 2× (or ½×) price change: about 5.7%. For 3×: about 13.4%. For 5×: about 25.5%. Only the ratio between the two prices matters."
+        },
+        {
+          "q": "Do trading fees make up for it?",
+          "a": "Sometimes. Pools pay a share of trading fees, and some pay rewards. This calculator shows the loss before fees so you can compare it with what the pool pays."
+        },
+        {
+          "q": "Does it work for Uniswap v3?",
+          "a": "No. Concentrated liquidity loses more within its price range and stops earning outside it. This calculator models 50/50 pools such as Uniswap v2 and PancakeSwap v2."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. Everything is worked out in your browser."
+        }
+      ],
+      "seoTitle": "Impermanent Loss Calculator (50/50 Pools) | CRYPY",
+      "seoDescription": "Calculate impermanent loss for a 50/50 liquidity pool from the price changes of both tokens, with dollar values. In your browser; nothing is sent.",
+      "shortName": "Impermanent Loss"
+    },
+    "slippage-calculator": {
+      "name": "Slippage & Price Impact Calculator",
+      "question": "What will this swap really cost me?",
+      "description": "Work out the minimum you'll receive with a slippage tolerance, and how much a trade moves the price in a pool.",
+      "input": "Amount, tolerance or pool reserves",
+      "cta": "Calculate",
+      "features": [
+        "Minimum received and maximum sent from a tolerance",
+        "Price impact and total cost in a v2 pool",
+        "Read-only: nothing is traded"
+      ],
+      "howTo": [
+        "Type the quoted amount and your slippage tolerance to see the worst case.",
+        "For a pool, type both reserves and the amount you sell.",
+        "Read the price impact and compare trade sizes."
+      ],
+      "faq": [
+        {
+          "q": "What is slippage tolerance?",
+          "a": "The worst price change you accept between the quote and the trade. With 0.5% on a 1,000-token quote, the swap fails if you'd receive less than 995."
+        },
+        {
+          "q": "What is price impact?",
+          "a": "How much your own trade moves the pool's price. Big trades in small pools get a much worse price than the quote before the trade."
+        },
+        {
+          "q": "Why is a high tolerance risky?",
+          "a": "Bots can see a pending swap and trade around it to push your price to the worst you allowed (a \"sandwich\"). Keep the tolerance as low as the trade allows."
+        },
+        {
+          "q": "Does this place a trade?",
+          "a": "No. CRYPY never trades. This only does the arithmetic on numbers you type."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. Everything is worked out in your browser."
+        }
+      ],
+      "seoTitle": "Slippage & Price Impact Calculator for Swaps | CRYPY",
+      "seoDescription": "Work out the minimum received from a slippage tolerance and the price impact of a swap in a Uniswap v2-style pool. Read-only, in your browser.",
+      "shortName": "Slippage & Price Impact"
+    },
+    "signature-decoder": {
+      "name": "Signature Request Decoder",
+      "question": "What am I being asked to sign?",
+      "description": "Paste what your wallet asks you to sign and see in plain words what it allows: token permits, Permit2, NFT orders and messages.",
+      "input": "A signature request",
+      "cta": "Decode",
+      "features": [
+        "Explains token permits, Permit2 and marketplace orders",
+        "Flags unlimited amounts, unknown spenders and blind signatures",
+        "Decoded in your browser: nothing is signed or sent"
+      ],
+      "howTo": [
+        "Copy the request your wallet or the website shows (the typed data JSON or the message).",
+        "Paste it in the box.",
+        "Read what signing would allow before you decide."
+      ],
+      "faq": [
+        {
+          "q": "Why can a signature be dangerous if it costs no gas?",
+          "a": "Some signatures are permissions. A token permit or a Permit2 signature lets someone spend your tokens later, and a marketplace order can list your NFTs for nothing. Scammers prefer them because they look harmless."
+        },
+        {
+          "q": "Where do I find the request?",
+          "a": "Many wallets show the data of a signature request, or let you copy it. Developers can see it in the page's eth_signTypedData_v4 or personal_sign call. Paste it as it is."
+        },
+        {
+          "q": "Does CRYPY sign or send anything?",
+          "a": "No. It only reads what you paste, in your browser. It can't sign: it has no access to your wallet."
+        },
+        {
+          "q": "Is a request CRYPY doesn't flag safe?",
+          "a": "Not necessarily. CRYPY recognises common request types and checks for known danger signs; it can't know every app. If you don't understand what a request does, don't sign it."
+        },
+        {
+          "q": "What is the EIP-712 hash?",
+          "a": "The value your wallet actually signs. Some wallets show it, so you can check you're looking at the same request."
+        }
+      ],
+      "seoTitle": "Wallet Signature Request Decoder (EIP-712, Permit) | CRYPY",
+      "seoDescription": "Paste a wallet signature request and see what it allows: token permits, Permit2, NFT listings and messages, with danger signs flagged. In your browser.",
+      "shortName": "Signature Decoder"
     }
   },
   "toolPage": {
@@ -2486,21 +2654,39 @@
         "no-checksum": "No checksum",
         "bad-checksum": "Typing mistake",
         "missing-prefix": "Missing 0x",
-        "invalid": "Not an address"
+        "invalid": "Not an address",
+        "other": "Valid format",
+        "other-invalid": "Typing mistake"
       },
       "explain": {
         "valid": "Written correctly, and the checksum matches.",
         "no-checksum": "Valid format, but all one case, so typos can't be detected. Use the checksummed form below.",
         "bad-checksum": "The checksum doesn't match, so a character was changed. Don't use this address: copy it again from its original source.",
         "missing-prefix": "Addresses start with 0x. Here is the full form.",
-        "zero": "This is the zero address. Tokens sent to it are lost forever."
+        "zero": "This is the zero address. Tokens sent to it are lost forever.",
+        "other-invalid": "This looks like a Bitcoin address, but its built-in checksum doesn't match, so a character is wrong. Don't use it: copy it again from its original source."
       },
       "invalid": {
         "length": "Wrong length: {length} characters after 0x instead of 40.",
         "characters": "Contains characters that aren't allowed (only 0–9 and a–f).",
         "empty": "Empty."
       },
-      "secret": "This looks like a recovery phrase or a private key. Never type it into any website: anyone who sees it can take everything in the wallet. Nothing was checked or sent; clear the box."
+      "secret": "This looks like a recovery phrase or a private key. Never type it into any website: anyone who sees it can take everything in the wallet. Nothing was checked or sent; clear the box.",
+      "other": {
+        "bitcoin": "Bitcoin",
+        "solana": "Solana",
+        "testnet": "testnet",
+        "types": {
+          "p2pkh": "Legacy (P2PKH)",
+          "p2sh": "Script (P2SH)",
+          "p2wpkh": "Native SegWit (P2WPKH)",
+          "p2wsh": "SegWit script (P2WSH)",
+          "p2tr": "Taproot (P2TR)",
+          "segwit-other": "SegWit (future version)"
+        },
+        "bitcoinNote": "Written correctly: its built-in checksum matches. Only send Bitcoin to it, on the Bitcoin network. This doesn't show whether it's in use or whose it is.",
+        "solanaNote": "A valid Solana public key: 32 bytes in base58. Solana addresses have no checksum, so a typo can still look valid: compare the first and last characters with the original. Only send Solana assets to it."
+      }
     },
     "tx-decoder": {
       "label": "Transaction input data",
@@ -3264,6 +3450,201 @@
         "rate-too-high": "At most 100,000% a year: check the rate.",
         "whole-number": "Enter a whole number of days.",
         "zero-duration": "Enter a time longer than zero."
+      }
+    },
+    "loanToValue": {
+      "collateral": "Collateral amount",
+      "collateralHint": "How many coins or tokens you deposit, e.g. 10 (ETH).",
+      "price": "Collateral price",
+      "priceHint": "Price per coin in USD. Type the price you want to test; nothing is looked up.",
+      "debt": "Amount borrowed (optional)",
+      "debtHint": "In USD (stablecoins count 1:1).",
+      "maxLtv": "Maximum LTV (optional)",
+      "maxLtvHint": "The most you may borrow against this collateral, from the protocol's page (often 70–80%).",
+      "threshold": "Liquidation threshold (optional)",
+      "thresholdHint": "The LTV at which the position can be liquidated (a little above the maximum LTV).",
+      "results": "Results",
+      "ltv": "Loan-to-value (LTV)",
+      "ltvHelp": "Borrowed ÷ collateral value",
+      "healthFactor": "Health factor",
+      "healthFactorHelp": "Collateral value × liquidation threshold ÷ borrowed. Below 1, the position can be liquidated.",
+      "needsThreshold": "Needs the amount borrowed and the liquidation threshold",
+      "collateralValue": "Collateral value",
+      "available": "Still available to borrow",
+      "availableHelp": "Collateral value × maximum LTV − borrowed",
+      "overLimit": "Negative: you've borrowed more than the maximum LTV allows. Many protocols won't let you borrow more or withdraw.",
+      "liquidationPrice": "Liquidation price",
+      "liquidationPriceHelp": "The collateral price at which the health factor reaches 1.",
+      "drop": "The price can fall {percent} before liquidation.",
+      "states": {
+        "safe": "Health factor above 1.2: room before liquidation, but prices can move fast.",
+        "close": "Health factor between 1 and 1.2: a small price drop can trigger liquidation. Consider repaying or adding collateral.",
+        "liquidatable": "Health factor below 1: at this price the position can be liquidated.",
+        "no-debt": "Nothing borrowed: there is nothing to liquidate."
+      },
+      "note": "Protocols use their own price feeds, thresholds, fees and interest, and debt grows over time: check the protocol's own page before you act.",
+      "local": "Worked out in your browser from what you type; nothing is looked up or sent.",
+      "empty": "Type the collateral amount and its price to see results.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1000 or 2.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (2.5); commas only between thousands (1,000).",
+        "too-large": "Too large.",
+        "too-precise": "Too many decimal places.",
+        "over-100": "At most 100%.",
+        "zero": "The collateral value must be more than zero."
+      }
+    },
+    "impermanentLoss": {
+      "changeA": "Price change of token A",
+      "changeAHint": "Since you deposited, e.g. 100 for +100% (2×) or −50 for half.",
+      "changeB": "Price change of token B (optional)",
+      "changeBHint": "Leave empty for a stablecoin (0%).",
+      "deposit": "Value deposited (optional)",
+      "depositHint": "In USD at the time you deposited, to see dollar values.",
+      "results": "Results",
+      "loss": "Impermanent loss",
+      "lossHelp": "Value in the pool compared with simply holding both tokens.",
+      "held": "If you had held the tokens",
+      "pooled": "In the pool (before fees)",
+      "difference": "Difference",
+      "formula": "Price ratio r = (1 + change A) ÷ (1 + change B). Loss = 2·√r ÷ (1 + r) − 1. Only the ratio between the two prices matters: if both move the same way, there is no loss.",
+      "limits": "For 50/50 pools such as Uniswap v2 or PancakeSwap v2. Trading fees and rewards, which can make up for the loss, aren't included. Concentrated liquidity (v3) loses more within its range, and the loss is locked in only when you withdraw.",
+      "local": "Worked out in your browser; nothing is sent.",
+      "empty": "Type how much token A's price changed to see the loss.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1000 or 2.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (2.5); commas only between thousands (1,000).",
+        "too-large": "Too large.",
+        "too-precise": "Too many decimal places.",
+        "below-minus-100": "A price can fall by less than 100%."
+      }
+    },
+    "slippage": {
+      "toleranceTitle": "Slippage tolerance",
+      "toleranceIntro": "What a swap accepts at worst. Wallets and exchanges call this \"slippage tolerance\".",
+      "amount": "Quoted amount",
+      "amountHint": "The amount the exchange quotes: what you receive (selling) or pay (buying).",
+      "tolerance": "Slippage tolerance",
+      "toleranceHint": "Often 0.5%. Higher values let a trade go through at a worse price.",
+      "minReceived": "Minimum received",
+      "minReceivedHelp": "When you sell an exact amount: the swap fails if you'd get less.",
+      "maxSent": "Maximum sent",
+      "maxSentHelp": "When you buy an exact amount: the swap fails if it would cost more.",
+      "impactTitle": "Price impact in a pool",
+      "impactIntro": "How much a trade of this size moves the price in a constant-product pool (Uniswap v2 style), from the pool's reserves.",
+      "reserveIn": "Pool reserve of the token you sell",
+      "reserveInHint": "From the pool page or an explorer.",
+      "reserveOut": "Pool reserve of the token you buy",
+      "reserveOutHint": "Same pool, the other token.",
+      "amountIn": "Amount you sell",
+      "amountInHint": "In the same unit as the reserve of that token.",
+      "fee": "Pool fee (optional)",
+      "feeHint": "Uniswap v2 and PancakeSwap v2 charge 0.3% and 0.25%; empty = 0.3%.",
+      "amountOut": "You'd receive",
+      "priceImpact": "Price impact",
+      "priceImpactHelp": "How far your trade moves the pool price (fee not included). Above 1% is notable; above 5% is costly.",
+      "totalCost": "Total cost against the current price",
+      "totalCostHelp": "Price impact plus the pool fee.",
+      "spotPrice": "Price before (bought per sold)",
+      "executionPrice": "Your price (bought per sold)",
+      "priceAfter": "Price after the trade",
+      "limits": "A model of one pool: real swaps may route through several pools, other traders can move the price first, and v3 pools behave differently. Use it to compare sizes, not to predict an exact result.",
+      "local": "Worked out in your browser; nothing is traded, looked up or sent.",
+      "empty": "Type the two reserves and the amount you sell.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1000 or 2.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (2.5); commas only between thousands (1,000).",
+        "too-large": "Too large.",
+        "too-precise": "Too many decimal places.",
+        "over-100": "Must be below 100%.",
+        "zero": "Must be more than zero."
+      }
+    },
+    "signatureDecoder": {
+      "label": "What the wallet asks you to sign",
+      "placeholder": "Paste the request: the typed data (JSON with types, domain, message) or the message text or hex.",
+      "examples": "Examples:",
+      "examplePermit": "Token permit",
+      "examplePermit2": "Permit2",
+      "exampleMessage": "Sign-in message",
+      "never": "This tool only reads. Never paste a recovery phrase or private key anywhere, and never sign a request you don't understand.",
+      "results": "Results",
+      "findings": "What signing this would do",
+      "severity": {
+        "critical": "Danger",
+        "high": "Important",
+        "medium": "Check",
+        "info": "Note"
+      },
+      "finding": {
+        "permitAllowance": "Signing gives {spender} permission to spend these tokens from your wallet, without another confirmation. A signature costs no gas, but the permission is as real as an on-chain approval.",
+        "permitTransfer": "Signing lets {spender} move these tokens out of your wallet once, without another confirmation.",
+        "unlimited": "The amount is unlimited: everything you hold of this token now and later.",
+        "unknownSpender": "The spender isn't on CRYPY's list of known apps. That doesn't make it bad, but check the address on the app's official site before signing.",
+        "knownSpender": "The spender is {name}, a well-known contract. Make sure the site asking you is that app's real site.",
+        "noExpiry": "The permission never expires.",
+        "longDeadline": "The permission lasts more than a year.",
+        "expired": "The deadline has passed: this request can no longer be used.",
+        "unknownChain": "Chain {id} isn't one CRYPY supports, so names can't be shown.",
+        "noChain": "The request names no chain, so it could be replayed on another one.",
+        "unrecognised": "CRYPY doesn't recognise this kind of request ({type}). Read every field below; if you can't tell what it does, don't sign.",
+        "malformed": "The request doesn't follow the EIP-712 format exactly; a wallet may reject it or show it differently.",
+        "seaportListing": "This is a marketplace order: signing offers {count} item(s) from your wallet for sale.",
+        "seaportNoPayment": "No payment in this order goes to you: someone else would receive everything. This is how NFT-draining scams work.",
+        "blindHash": "You'd sign a raw 32-byte hash: you can't see what it authorises. Legitimate apps almost never ask for this. Don't sign.",
+        "unreadableBytes": "These bytes aren't readable text, so you can't tell what you'd sign. Don't sign unless you know exactly what it is.",
+        "plainMessage": "A plain message: signing it proves you own the wallet, and moves no funds by itself.",
+        "signInMessage": "It looks like a sign-in message. Check that the website named in it is the site you're on.",
+        "messageMentionsFunds": "The text mentions approvals, transfers, claims or airdrops. A message can't move funds by itself, but scams use such words to make you sign other things next."
+      },
+      "patterns": {
+        "permit": "Token permit (ERC-2612): spending permission",
+        "dai-permit": "DAI-style permit: spending permission",
+        "permit2-single": "Permit2: spending permission",
+        "permit2-batch": "Permit2: spending permission for several tokens",
+        "permit2-transfer": "Permit2: one-time transfer",
+        "seaport": "Marketplace order (Seaport)",
+        "other": "Typed data (not recognised)"
+      },
+      "kindMessage": "Message",
+      "kindHash": "Raw hash (blind signature)",
+      "type": "Type",
+      "chain": "Chain",
+      "unknownChain": "Chain {id}",
+      "contract": "Contract (verifyingContract)",
+      "spender": "Spender",
+      "tokens": "Token and amount",
+      "unlimited": "unlimited",
+      "rawAmount": "(smallest units)",
+      "until": "Valid until",
+      "noDeadline": "No deadline",
+      "gives": "You give",
+      "receives": "Paid to {recipient}",
+      "itemTypes": {
+        "native": "Native coin",
+        "erc20": "Token",
+        "erc721": "NFT",
+        "erc1155": "NFT (1155)",
+        "erc721-any": "Any NFT of the collection",
+        "erc1155-any": "Any NFT of the collection (1155)",
+        "other": "Item"
+      },
+      "message": "Message text",
+      "allFields": "All fields",
+      "hash": "EIP-712 hash",
+      "hashHelp": "What the wallet actually signs. Compare it with your wallet's screen when it shows one.",
+      "local": "Decoded in your browser. Nothing is signed, sent or looked up; addresses are named only from CRYPY's own list.",
+      "errors": {
+        "empty": "",
+        "json": "This isn't valid JSON. Paste the whole request, with its opening and closing braces.",
+        "not-typed-data": "This JSON isn't EIP-712 typed data: it needs types, primaryType and message.",
+        "too-large": "Too long to decode."
       }
     }
   },

@@ -570,14 +570,14 @@
     "address-formatter": {
       "name": "Formatador de endereços",
       "question": "Este endereço está escrito certo?",
-      "description": "Verifique se um endereço está escrito corretamente, obtenha a forma com checksum e um QR code. Funciona com um endereço ou uma lista.",
+      "description": "Verifique se um endereço está escrito corretamente (EVM, Bitcoin ou Solana), obtenha a forma com checksum e um QR code. Funciona com um endereço ou uma lista.",
       "input": "Um endereço",
       "cta": "Verificar endereço",
       "features": [
         "Detecta erros de digitação com o checksum EIP-55",
         "Verifica até 500 endereços de uma vez",
         "QR code para compartilhar um endereço, com a rede indicada",
-        "Funciona em todas as redes EVM",
+        "Redes EVM, além de formatos de endereço Bitcoin e Solana",
         "Funciona no seu navegador"
       ],
       "howTo": [
@@ -821,6 +821,174 @@
       "seoTitle": "Calculadora de APY e juros compostos cripto | CRYPY",
       "seoDescription": "Converta APR em APY e veja como um valor cresce com juros compostos e aportes regulares, ano a ano. Uma estimativa no seu navegador; nada é enviado.",
       "shortName": "Calculadora de APY"
+    },
+    "loan-to-value": {
+      "name": "Calculadora de LTV e liquidação",
+      "shortName": "LTV e liquidação",
+      "question": "Quão perto este empréstimo está da liquidação?",
+      "description": "Calcule o LTV de um empréstimo cripto, o fator de saúde, quanto mais você pode pegar e o preço em que ele é liquidado.",
+      "input": "Garantia, preço e empréstimo",
+      "cta": "Calcular",
+      "features": [
+        "LTV, fator de saúde e margem para pegar mais",
+        "Preço de liquidação e quanto o preço pode cair",
+        "Funciona com os números de qualquer garantia e protocolo"
+      ],
+      "howTo": [
+        "Digite quanta garantia você deposita e o preço dela.",
+        "Adicione o que pegou emprestado, o LTV máximo e o limite de liquidação da página do protocolo.",
+        "Leia o LTV, o fator de saúde e o preço de liquidação, e teste outros preços."
+      ],
+      "faq": [
+        {
+          "q": "O que é LTV?",
+          "a": "Empréstimo sobre valor é o que você pegou dividido pelo valor da garantia. Pegar US$ 8.000 com US$ 20.000 em ETH é 40% de LTV."
+        },
+        {
+          "q": "O que é o limite de liquidação?",
+          "a": "O LTV em que um protocolo de empréstimo pode vender parte da sua garantia para quitar a dívida, geralmente com uma penalidade. É definido por ativo, um pouco acima do LTV máximo permitido."
+        },
+        {
+          "q": "O que é o fator de saúde?",
+          "a": "Valor da garantia × limite de liquidação ÷ dívida. Acima de 1 a posição está livre de liquidação por enquanto; em 1 ou menos pode ser liquidada. Muita gente mantém acima de 1,5."
+        },
+        {
+          "q": "Usa os números reais do protocolo?",
+          "a": "Não. Usa só o que você digita. Os protocolos usam seus próprios preços e parâmetros, e os juros continuam somando à dívida, então confira a página do protocolo antes de agir."
+        },
+        {
+          "q": "Algo que eu digito é enviado a um servidor?",
+          "a": "Não. Tudo é calculado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de LTV e preço de liquidação cripto | CRYPY",
+      "seoDescription": "Calcule LTV, fator de saúde, margem de empréstimo e preço de liquidação de um empréstimo cripto a partir da garantia, preço e dívida. No seu navegador."
+    },
+    "impermanent-loss": {
+      "name": "Calculadora de perda impermanente",
+      "shortName": "Perda impermanente",
+      "question": "Quanto eu perco com a perda impermanente?",
+      "description": "Veja quanto uma posição em um pool de liquidez 50/50 vale a menos do que simplesmente manter os dois tokens, depois que os preços mudam.",
+      "input": "Variações de preço",
+      "cta": "Calcular",
+      "features": [
+        "Perda impermanente para qualquer variação de preço de qualquer token",
+        "Valores em dólares se você informar o depósito",
+        "Mostra a fórmula e seus limites"
+      ],
+      "howTo": [
+        "Digite quanto o preço do token A mudou desde o depósito, ex.: 100 para 2×.",
+        "Adicione a variação do token B se não for stablecoin, e o depósito para valores em dólares.",
+        "Leia a perda em relação a manter. As taxas ganhas não estão incluídas."
+      ],
+      "faq": [
+        {
+          "q": "O que é perda impermanente?",
+          "a": "Em um pool 50/50, quando o preço de um token se move em relação ao outro, o pool se reequilibra vendendo o token que subiu. Sua parte acaba valendo menos do que se tivesse mantido os dois tokens. Chama-se impermanente porque diminui de novo se os preços voltarem."
+        },
+        {
+          "q": "Qual o tamanho?",
+          "a": "Para uma variação de 2× (ou ½×): cerca de 5,7%. Para 3×: cerca de 13,4%. Para 5×: cerca de 25,5%. Só importa a razão entre os dois preços."
+        },
+        {
+          "q": "As taxas de negociação compensam?",
+          "a": "Às vezes. Os pools pagam parte das taxas de negociação, e alguns pagam recompensas. Esta calculadora mostra a perda antes das taxas para você comparar com o que o pool paga."
+        },
+        {
+          "q": "Funciona para Uniswap v3?",
+          "a": "Não. A liquidez concentrada perde mais dentro da faixa de preço e para de render fora dela. Esta calculadora modela pools 50/50 como Uniswap v2 e PancakeSwap v2."
+        },
+        {
+          "q": "Algo que eu digito é enviado a um servidor?",
+          "a": "Não. Tudo é calculado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de perda impermanente (pools 50/50) | CRYPY",
+      "seoDescription": "Calcule a perda impermanente de um pool de liquidez 50/50 a partir das variações de preço dos dois tokens, com valores em dólares. No seu navegador."
+    },
+    "slippage-calculator": {
+      "name": "Calculadora de slippage e impacto no preço",
+      "shortName": "Slippage e impacto",
+      "question": "Quanto este swap vai realmente me custar?",
+      "description": "Calcule o mínimo que você vai receber com uma tolerância de slippage e quanto uma negociação move o preço em um pool.",
+      "input": "Quantidade, tolerância ou reservas do pool",
+      "cta": "Calcular",
+      "features": [
+        "Mínimo recebido e máximo enviado a partir de uma tolerância",
+        "Impacto no preço e custo total em um pool v2",
+        "Somente leitura: nada é negociado"
+      ],
+      "howTo": [
+        "Digite a quantidade cotada e sua tolerância de slippage para ver o pior caso.",
+        "Para um pool, digite as duas reservas e a quantidade que você vende.",
+        "Leia o impacto no preço e compare tamanhos de negociação."
+      ],
+      "faq": [
+        {
+          "q": "O que é tolerância de slippage?",
+          "a": "A pior variação de preço que você aceita entre a cotação e a negociação. Com 0,5% sobre uma cotação de 1.000 tokens, o swap falha se você receberia menos de 995."
+        },
+        {
+          "q": "O que é impacto no preço?",
+          "a": "Quanto sua própria negociação move o preço do pool. Negociações grandes em pools pequenos têm um preço bem pior que a cotação anterior."
+        },
+        {
+          "q": "Por que uma tolerância alta é arriscada?",
+          "a": "Bots podem ver um swap pendente e negociar em volta dele para levar seu preço ao pior que você permitiu (um \"sanduíche\"). Mantenha a tolerância tão baixa quanto a negociação permitir."
+        },
+        {
+          "q": "Isto faz uma negociação?",
+          "a": "Não. O CRYPY nunca negocia. Isto só faz a conta com os números que você digita."
+        },
+        {
+          "q": "Algo que eu digito é enviado a um servidor?",
+          "a": "Não. Tudo é calculado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de slippage e impacto no preço | CRYPY",
+      "seoDescription": "Calcule o mínimo recebido a partir de uma tolerância de slippage e o impacto no preço de um swap em um pool estilo Uniswap v2. Somente leitura, no navegador."
+    },
+    "signature-decoder": {
+      "name": "Decodificador de solicitações de assinatura",
+      "shortName": "Decodificador de assinaturas",
+      "question": "O que estão me pedindo para assinar?",
+      "description": "Cole o que sua carteira pede para assinar e veja em palavras simples o que isso permite: permits de tokens, Permit2, ordens de NFT e mensagens.",
+      "input": "Uma solicitação de assinatura",
+      "cta": "Decodificar",
+      "features": [
+        "Explica permits de tokens, Permit2 e ordens de marketplace",
+        "Sinaliza quantidades ilimitadas, gastadores desconhecidos e assinaturas às cegas",
+        "Decodificado no seu navegador: nada é assinado ou enviado"
+      ],
+      "howTo": [
+        "Copie a solicitação que sua carteira ou o site mostra (o JSON de dados tipados ou a mensagem).",
+        "Cole na caixa.",
+        "Leia o que assinar permitiria antes de decidir."
+      ],
+      "faq": [
+        {
+          "q": "Por que uma assinatura pode ser perigosa se não custa gas?",
+          "a": "Algumas assinaturas são permissões. Um permit de token ou uma assinatura Permit2 deixa alguém gastar seus tokens depois, e uma ordem de marketplace pode colocar seus NFTs à venda por nada. Golpistas preferem esse tipo porque parece inofensivo."
+        },
+        {
+          "q": "Onde encontro a solicitação?",
+          "a": "Muitas carteiras mostram os dados de uma solicitação de assinatura ou permitem copiá-los. Desenvolvedores podem vê-la na chamada eth_signTypedData_v4 ou personal_sign da página. Cole como está."
+        },
+        {
+          "q": "O CRYPY assina ou envia algo?",
+          "a": "Não. Ele só lê o que você cola, no seu navegador. Não pode assinar: não tem acesso à sua carteira."
+        },
+        {
+          "q": "Uma solicitação que o CRYPY não sinaliza é segura?",
+          "a": "Não necessariamente. O CRYPY reconhece tipos comuns de solicitação e procura sinais de perigo conhecidos; não conhece todos os apps. Se você não entende o que uma solicitação faz, não assine."
+        },
+        {
+          "q": "O que é o hash EIP-712?",
+          "a": "O valor que sua carteira realmente assina. Algumas carteiras o mostram, então dá para confirmar que você está vendo a mesma solicitação."
+        }
+      ],
+      "seoTitle": "Decodificador de assinaturas de carteira (EIP-712) | CRYPY",
+      "seoDescription": "Cole uma solicitação de assinatura da carteira e veja o que ela permite: permits de tokens, Permit2, vendas de NFT e mensagens, com sinais de perigo. No navegador."
     }
   },
   "toolPage": {
@@ -2486,21 +2654,39 @@
         "no-checksum": "Sem checksum",
         "bad-checksum": "Erro de digitação",
         "missing-prefix": "Falta 0x",
-        "invalid": "Não é um endereço"
+        "invalid": "Não é um endereço",
+        "other": "Formato válido",
+        "other-invalid": "Erro de digitação"
       },
       "explain": {
         "valid": "Está escrito certo e o checksum confere.",
         "no-checksum": "O formato é válido, mas está todo em minúsculas ou maiúsculas, então erros de digitação não podem ser detectados. Use a forma com checksum abaixo.",
         "bad-checksum": "O checksum não confere, então um caractere foi alterado. Não use este endereço: copie de novo da fonte original.",
         "missing-prefix": "Endereços começam com 0x. Aqui está a forma completa.",
-        "zero": "Este é o endereço zero. Tokens enviados para ele se perdem para sempre."
+        "zero": "Este é o endereço zero. Tokens enviados para ele se perdem para sempre.",
+        "other-invalid": "Parece um endereço de Bitcoin, mas o checksum embutido não confere, então há um caractere errado. Não use: copie novamente da fonte original."
       },
       "invalid": {
         "length": "Tamanho errado: {length} caracteres depois de 0x em vez de 40.",
         "characters": "Contém caracteres não permitidos (só 0–9 e a–f).",
         "empty": "Vazio."
       },
-      "secret": "Isto parece uma frase de recuperação ou uma chave privada. Nunca digite isso em nenhum site: quem vir pode levar tudo o que há na carteira. Nada foi verificado nem enviado; apague a caixa."
+      "secret": "Isto parece uma frase de recuperação ou uma chave privada. Nunca digite isso em nenhum site: quem vir pode levar tudo o que há na carteira. Nada foi verificado nem enviado; apague a caixa.",
+      "other": {
+        "bitcoin": "Bitcoin",
+        "solana": "Solana",
+        "testnet": "testnet",
+        "types": {
+          "p2pkh": "Legado (P2PKH)",
+          "p2sh": "Script (P2SH)",
+          "p2wpkh": "SegWit nativo (P2WPKH)",
+          "p2wsh": "Script SegWit (P2WSH)",
+          "p2tr": "Taproot (P2TR)",
+          "segwit-other": "SegWit (versão futura)"
+        },
+        "bitcoinNote": "Escrito corretamente: o checksum embutido confere. Envie apenas Bitcoin para ele, pela rede Bitcoin. Isto não mostra se está em uso nem de quem é.",
+        "solanaNote": "Uma chave pública Solana válida: 32 bytes em base58. Endereços Solana não têm checksum, então um erro de digitação pode parecer válido: compare o início e o fim com o original. Envie apenas ativos Solana para ele."
+      }
     },
     "tx-decoder": {
       "label": "Dados de entrada da transação",
@@ -3264,6 +3450,201 @@
         "rate-too-high": "No máximo 100.000% ao ano: confira a taxa.",
         "whole-number": "Digite um número inteiro de dias.",
         "zero-duration": "Digite um prazo maior que zero."
+      }
+    },
+    "loanToValue": {
+      "collateral": "Quantidade de garantia",
+      "collateralHint": "Quantas moedas ou tokens você deposita, ex.: 10 (ETH).",
+      "price": "Preço da garantia",
+      "priceHint": "Preço por moeda em USD. Digite o preço que quer testar; nada é consultado.",
+      "debt": "Valor emprestado (opcional)",
+      "debtHint": "Em USD (stablecoins contam 1:1).",
+      "maxLtv": "LTV máximo (opcional)",
+      "maxLtvHint": "O máximo que você pode tomar emprestado com esta garantia, conforme a página do protocolo (geralmente 70–80%).",
+      "threshold": "Limite de liquidação (opcional)",
+      "thresholdHint": "O LTV em que a posição pode ser liquidada (um pouco acima do LTV máximo).",
+      "results": "Resultados",
+      "ltv": "Empréstimo sobre valor (LTV)",
+      "ltvHelp": "Emprestado ÷ valor da garantia",
+      "healthFactor": "Fator de saúde",
+      "healthFactorHelp": "Valor da garantia × limite de liquidação ÷ emprestado. Abaixo de 1, a posição pode ser liquidada.",
+      "needsThreshold": "Precisa do valor emprestado e do limite de liquidação",
+      "collateralValue": "Valor da garantia",
+      "available": "Ainda disponível para empréstimo",
+      "availableHelp": "Valor da garantia × LTV máximo − emprestado",
+      "overLimit": "Negativo: você pegou mais do que o LTV máximo permite. Muitos protocolos não deixam pegar mais nem sacar.",
+      "liquidationPrice": "Preço de liquidação",
+      "liquidationPriceHelp": "O preço da garantia em que o fator de saúde chega a 1.",
+      "drop": "O preço pode cair {percent} antes da liquidação.",
+      "states": {
+        "safe": "Fator de saúde acima de 1,2: há margem antes da liquidação, mas os preços podem mudar rápido.",
+        "close": "Fator de saúde entre 1 e 1,2: uma pequena queda de preço pode causar liquidação. Considere pagar uma parte ou adicionar garantia.",
+        "liquidatable": "Fator de saúde abaixo de 1: a esse preço a posição pode ser liquidada.",
+        "no-debt": "Nada emprestado: não há o que liquidar."
+      },
+      "note": "Os protocolos usam seus próprios preços, limites, taxas e juros, e a dívida cresce com o tempo: confira a página do protocolo antes de agir.",
+      "local": "Calculado no seu navegador a partir do que você digita; nada é consultado ou enviado.",
+      "empty": "Digite a quantidade de garantia e o preço para ver os resultados.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1000 ou 2.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (2.5); vírgulas só entre milhares (1,000).",
+        "too-large": "Grande demais.",
+        "too-precise": "Casas decimais demais.",
+        "over-100": "No máximo 100%.",
+        "zero": "O valor da garantia deve ser maior que zero."
+      }
+    },
+    "impermanentLoss": {
+      "changeA": "Variação de preço do token A",
+      "changeAHint": "Desde o depósito, ex.: 100 para +100% (2×) ou −50 para metade.",
+      "changeB": "Variação de preço do token B (opcional)",
+      "changeBHint": "Deixe vazio para uma stablecoin (0%).",
+      "deposit": "Valor depositado (opcional)",
+      "depositHint": "Em USD no momento do depósito, para ver valores em dólares.",
+      "results": "Resultados",
+      "loss": "Perda impermanente",
+      "lossHelp": "Valor no pool comparado a simplesmente manter os dois tokens.",
+      "held": "Se tivesse mantido os tokens",
+      "pooled": "No pool (antes das taxas)",
+      "difference": "Diferença",
+      "formula": "Razão de preços r = (1 + variação A) ÷ (1 + variação B). Perda = 2·√r ÷ (1 + r) − 1. Só importa a razão entre os dois preços: se os dois se movem igual, não há perda.",
+      "limits": "Para pools 50/50 como Uniswap v2 ou PancakeSwap v2. Taxas de negociação e recompensas, que podem compensar a perda, não estão incluídas. A liquidez concentrada (v3) perde mais dentro da faixa, e a perda só se concretiza quando você saca.",
+      "local": "Calculado no seu navegador; nada é enviado.",
+      "empty": "Digite quanto o preço do token A mudou para ver a perda.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1000 ou 2.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (2.5); vírgulas só entre milhares (1,000).",
+        "too-large": "Grande demais.",
+        "too-precise": "Casas decimais demais.",
+        "below-minus-100": "Um preço só pode cair menos de 100%."
+      }
+    },
+    "slippage": {
+      "toleranceTitle": "Tolerância de slippage",
+      "toleranceIntro": "O pior que um swap aceita. Carteiras e exchanges chamam isso de \"tolerância de slippage\".",
+      "amount": "Quantidade cotada",
+      "amountHint": "A quantidade cotada pela exchange: o que você recebe (vendendo) ou paga (comprando).",
+      "tolerance": "Tolerância de slippage",
+      "toleranceHint": "Geralmente 0,5%. Valores maiores deixam a negociação passar a um preço pior.",
+      "minReceived": "Mínimo recebido",
+      "minReceivedHelp": "Ao vender uma quantidade exata: o swap falha se você receberia menos.",
+      "maxSent": "Máximo enviado",
+      "maxSentHelp": "Ao comprar uma quantidade exata: o swap falha se custaria mais.",
+      "impactTitle": "Impacto no preço de um pool",
+      "impactIntro": "Quanto uma negociação deste tamanho move o preço em um pool de produto constante (estilo Uniswap v2), a partir das reservas.",
+      "reserveIn": "Reserva do pool do token que você vende",
+      "reserveInHint": "Da página do pool ou de um explorador.",
+      "reserveOut": "Reserva do pool do token que você compra",
+      "reserveOutHint": "Mesmo pool, o outro token.",
+      "amountIn": "Quantidade que você vende",
+      "amountInHint": "Na mesma unidade da reserva desse token.",
+      "fee": "Taxa do pool (opcional)",
+      "feeHint": "Uniswap v2 e PancakeSwap v2 cobram 0,3% e 0,25%; vazio = 0,3%.",
+      "amountOut": "Você receberia",
+      "priceImpact": "Impacto no preço",
+      "priceImpactHelp": "Quanto sua negociação move o preço do pool (sem a taxa). Acima de 1% é relevante; acima de 5% é caro.",
+      "totalCost": "Custo total frente ao preço atual",
+      "totalCostHelp": "Impacto no preço mais a taxa do pool.",
+      "spotPrice": "Preço antes (comprado por vendido)",
+      "executionPrice": "Seu preço (comprado por vendido)",
+      "priceAfter": "Preço depois da negociação",
+      "limits": "Um modelo de um pool: swaps reais podem passar por vários pools, outros traders podem mover o preço antes e pools v3 se comportam de outra forma. Use para comparar tamanhos, não para prever um resultado exato.",
+      "local": "Calculado no seu navegador; nada é negociado, consultado ou enviado.",
+      "empty": "Digite as duas reservas e a quantidade que você vende.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1000 ou 2.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (2.5); vírgulas só entre milhares (1,000).",
+        "too-large": "Grande demais.",
+        "too-precise": "Casas decimais demais.",
+        "over-100": "Deve ser menor que 100%.",
+        "zero": "Deve ser maior que zero."
+      }
+    },
+    "signatureDecoder": {
+      "label": "O que a carteira pede para você assinar",
+      "placeholder": "Cole a solicitação: os dados tipados (JSON com types, domain, message) ou o texto ou hex da mensagem.",
+      "examples": "Exemplos:",
+      "examplePermit": "Permit de token",
+      "examplePermit2": "Permit2",
+      "exampleMessage": "Mensagem de login",
+      "never": "Esta ferramenta só lê. Nunca cole uma frase de recuperação ou chave privada em lugar nenhum, e nunca assine uma solicitação que você não entende.",
+      "results": "Resultados",
+      "findings": "O que assinar isto faria",
+      "severity": {
+        "critical": "Perigo",
+        "high": "Importante",
+        "medium": "Confira",
+        "info": "Nota"
+      },
+      "finding": {
+        "permitAllowance": "Assinar dá a {spender} permissão para gastar estes tokens da sua carteira, sem outra confirmação. Uma assinatura não custa gas, mas a permissão é tão real quanto uma aprovação na blockchain.",
+        "permitTransfer": "Assinar permite que {spender} tire estes tokens da sua carteira uma vez, sem outra confirmação.",
+        "unlimited": "A quantidade é ilimitada: tudo o que você tem deste token agora e no futuro.",
+        "unknownSpender": "O gastador não está na lista de apps conhecidos do CRYPY. Isso não o torna ruim, mas confira o endereço no site oficial do app antes de assinar.",
+        "knownSpender": "O gastador é {name}, um contrato conhecido. Verifique se o site que pede é o site real desse app.",
+        "noExpiry": "A permissão nunca expira.",
+        "longDeadline": "A permissão dura mais de um ano.",
+        "expired": "O prazo já passou: esta solicitação não pode mais ser usada.",
+        "unknownChain": "A rede {id} não é suportada pelo CRYPY, então os nomes não podem ser mostrados.",
+        "noChain": "A solicitação não indica nenhuma rede, então poderia ser reutilizada em outra.",
+        "unrecognised": "O CRYPY não reconhece este tipo de solicitação ({type}). Leia cada campo abaixo; se não souber o que faz, não assine.",
+        "malformed": "A solicitação não segue exatamente o formato EIP-712; uma carteira pode rejeitá-la ou mostrá-la de outro jeito.",
+        "seaportListing": "Esta é uma ordem de marketplace: assinar coloca {count} item(ns) da sua carteira à venda.",
+        "seaportNoPayment": "Nenhum pagamento desta ordem vai para você: outra pessoa receberia tudo. É assim que golpes que esvaziam NFTs funcionam.",
+        "blindHash": "Você assinaria um hash bruto de 32 bytes: não dá para ver o que ele autoriza. Apps legítimos quase nunca pedem isso. Não assine.",
+        "unreadableBytes": "Estes bytes não são texto legível, então não dá para saber o que você assinaria. Não assine a menos que saiba exatamente o que é.",
+        "plainMessage": "Uma mensagem simples: assiná-la prova que a carteira é sua e não move fundos por si só.",
+        "signInMessage": "Parece uma mensagem de login. Confira se o site citado é o site em que você está.",
+        "messageMentionsFunds": "O texto menciona aprovações, transferências, resgates ou airdrops. Uma mensagem não move fundos sozinha, mas golpes usam essas palavras para fazer você assinar outras coisas depois."
+      },
+      "patterns": {
+        "permit": "Permit de token (ERC-2612): permissão de gasto",
+        "dai-permit": "Permit estilo DAI: permissão de gasto",
+        "permit2-single": "Permit2: permissão de gasto",
+        "permit2-batch": "Permit2: permissão de gasto para vários tokens",
+        "permit2-transfer": "Permit2: transferência única",
+        "seaport": "Ordem de marketplace (Seaport)",
+        "other": "Dados tipados (não reconhecidos)"
+      },
+      "kindMessage": "Mensagem",
+      "kindHash": "Hash bruto (assinatura às cegas)",
+      "type": "Tipo",
+      "chain": "Rede",
+      "unknownChain": "Rede {id}",
+      "contract": "Contrato (verifyingContract)",
+      "spender": "Gastador",
+      "tokens": "Token e quantidade",
+      "unlimited": "ilimitada",
+      "rawAmount": "(menores unidades)",
+      "until": "Válido até",
+      "noDeadline": "Sem prazo",
+      "gives": "Você entrega",
+      "receives": "Pago a {recipient}",
+      "itemTypes": {
+        "native": "Moeda nativa",
+        "erc20": "Token",
+        "erc721": "NFT",
+        "erc1155": "NFT (1155)",
+        "erc721-any": "Qualquer NFT da coleção",
+        "erc1155-any": "Qualquer NFT da coleção (1155)",
+        "other": "Item"
+      },
+      "message": "Texto da mensagem",
+      "allFields": "Todos os campos",
+      "hash": "Hash EIP-712",
+      "hashHelp": "O que a carteira realmente assina. Compare com a tela da sua carteira quando ela mostrar.",
+      "local": "Decodificado no seu navegador. Nada é assinado, enviado ou consultado; endereços só recebem nomes da lista própria do CRYPY.",
+      "errors": {
+        "empty": "",
+        "json": "Isto não é um JSON válido. Cole a solicitação inteira, com as chaves de abertura e fechamento.",
+        "not-typed-data": "Este JSON não é um dado tipado EIP-712: precisa de types, primaryType e message.",
+        "too-large": "Longo demais para decodificar."
       }
     }
   },
