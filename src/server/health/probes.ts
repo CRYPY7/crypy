@@ -1,10 +1,12 @@
 import "server-only";
-import { statfs } from "node:fs/promises";
+import { readFile, stat, statfs } from "node:fs/promises";
+import { join } from "node:path";
 import { freemem, totalmem } from "node:os";
 import { connect } from "node:tls";
 import { sql } from "drizzle-orm";
 import { type ChainConfig, getChain, liveChains } from "@/config/chains";
 import { siteUrl } from "@/config/env";
+import { backupStatusSchema, judgeBackups, restoreStatusSchema } from "@/lib/health/backup";
 import { allCuratedTokens } from "@/config/seo-pages";
 import { alchemyProvider, budgetExhausted } from "@/server/chains/evm/providers";
 import { registry } from "@/server/chains/registry";
@@ -221,6 +223,37 @@ export const probes: Record<string, Probe> = {
     const detail = `${Math.round(free * 100)}% free`;
     if (free < 0.05) throw new Error(detail);
     return free < 0.15 ? `slow:${detail}` : detail;
+  },
+
+  /**
+   * Database backups (S4): reads what crypy-backup wrote after the last nightly backup and weekly restore test.
+   * Skipped where backups aren't installed (the folder doesn't exist: the PC, browser tests).
+   */
+  async "server:backup"() {
+    const dir = process.env.CRYPY_BACKUP_STATUS_DIR || "/var/lib/crypy-backup";
+    if (!(await stat(dir).catch(() => null))?.isDirectory()) throw new Skip("backups not installed on this server");
+    const read = async <T>(
+      name: string,
+      schema: { safeParse(v: unknown): { success: true; data: T } | { success: false } },
+    ) => {
+      const text = await readFile(join(dir, `${name}.json`), "utf8").catch(() => null);
+      if (text === null) return null;
+      let parsed: { success: true; data: T } | { success: false };
+      try {
+        parsed = schema.safeParse(JSON.parse(text));
+      } catch {
+        parsed = { success: false };
+      }
+      if (!parsed.success) throw new Error(`${name} status file unreadable`);
+      return parsed.data;
+    };
+    const verdict = judgeBackups(
+      await read("backup", backupStatusSchema),
+      await read("restore", restoreStatusSchema),
+      Date.now(),
+    );
+    if (verdict.state === "fail") throw new Error(verdict.detail);
+    return verdict.state === "slow" ? `slow:${verdict.detail}` : verdict.detail;
   },
 
   /** The origin certificate behind Cloudflare (Full strict needs it valid). Skipped where no HTTPS server runs. */

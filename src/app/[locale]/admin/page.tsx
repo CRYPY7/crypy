@@ -520,7 +520,10 @@ async function Dashboard({ locale, address, show }: { locale: Locale; address: s
                 bytes === null ? t("admin.server.unknown") : `${n.format(Math.round(bytes / 1_048_576))} MB`,
               ],
               [t("admin.server.uptime"), t("admin.server.uptimeValue", { hours: Math.floor(health.uptimeHours) })],
-              [t("admin.server.backups"), t("admin.server.backupsValue")],
+              [
+                t("admin.server.backups"),
+                health.checks.find((c) => c.id === "server:backup")?.detail ?? t("admin.server.backupsNotInstalled"),
+              ],
             ].map(([term, value]) => (
               <div key={term} className="flex flex-wrap gap-x-3 gap-y-1 border-t px-4 py-3 text-sm">
                 <dt className="text-muted-foreground">{term}</dt>

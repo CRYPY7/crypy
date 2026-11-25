@@ -53,6 +53,9 @@ export const checkDefinitions: readonly CheckDefinition[] = [
   quick("server:memory", "server"),
   quick("server:disk", "server"),
   { id: "server:certificate", group: "server", everyMs: 6 * 60 * MINUTE, slowMs: 3_000 },
+  // Reads two small files: hourly is plenty (backups run nightly, the restore test weekly); two failing hours in a
+  // row message the owner.
+  { id: "server:backup", group: "server", everyMs: 60 * MINUTE, slowMs: 3_000 },
 ];
 
 export const checkIds = checkDefinitions.map((c) => c.id);

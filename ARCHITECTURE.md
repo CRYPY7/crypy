@@ -947,6 +947,21 @@ DEX decoders, per chain family:                      (one per DEX design)
   `calldata-gas/calldata.ts` (EIP-2028 byte costs, EIP-3860 init-code words, EIP-7623 floor; BigInt only).
 - The calldata tool links to the Transaction Data Decoder with `#data=` (fragment, never the query string).
 
+## 12w. Backups (S4)
+
+- `scripts/server/backup.sh` → `/usr/local/sbin/crypy-backup` (root-owned, installed from git HEAD by
+  `install-backup.sh`, which `update.sh` and `setup.sh` run; cron in `/etc/cron.d/crypy-backup`).
+- Nightly `pg_dump -Fc` (data of `saved_results`, `sign_in_nonces`, `telegram_link_codes` excluded) to
+  `/var/backups/crypy` (14 days); then `age` (X25519 public key; the identity is only in the owner's password manager)
+  and `rclone` to R2 (remote defined by `RCLONE_CONFIG_R2_*` environment variables from `/etc/crypy/backup.env`, root
+  only; `no_check_bucket` so a bucket-scoped token works); upload size checked; R2 copies older than 14 days deleted.
+- Weekly restore test into `<db>_restore_test` (`pg_restore --no-owner --exit-on-error`), row counts of the people's
+  tables compared with live, then dropped; newest R2 copy listed.
+- Status files `/var/lib/crypy-backup/{backup,restore}.json` (world-readable, no secrets), validated with zod and
+  judged by `lib/health/backup.ts`; probe `server:backup` (hourly, `CRYPY_BACKUP_STATUS_DIR` overrides the folder)
+  feeds /admin and the owner's Telegram messages through the usual health-check transitions.
+- Restore: `pg_restore --clean --if-exists --no-owner --role=crypy` (README "Backups").
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

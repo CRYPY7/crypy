@@ -169,4 +169,6 @@ systemctl disable "$LIVE_UNIT" >/dev/null 2>&1 || true
 # The folder from before the two-folder switch is no longer needed.
 if [ "$LIVE" != ".next" ] && [ "$NEW" != ".next" ] && [ -d "$APP_DIR/.next" ]; then rm -rf "$APP_DIR/.next"; fi
 echo "Updated and running ($NEW on port $NEW_PORT, $(( $(date +%s) - started )) s after the code was pulled)."
+# Backups: keep the installed script and schedule in step with the code (never stops the update).
+bash "$APP_DIR/scripts/server/install-backup.sh" || echo "Backup install failed; the site is updated. Run it again: bash $APP_DIR/scripts/server/install-backup.sh"
 bash "$APP_DIR/scripts/server/indexnow.sh" || true

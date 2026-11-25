@@ -59,12 +59,16 @@ used up before 00:00 UTC on a normal day.
     hash checker, Bitcoin fee calculator, local address book. CSS budget 82 KB (owner, 2026-11-25).
   - **U5 built 2026-11-25** (owner chose U5 over backup tests and a separate worker): profit & average cost
     calculator, contract bytecode comparer, NFT token URI & metadata decoder, JSON diff, calldata gas calculator.
-  - **Still open in S4 (recommended next):** a tested backup restore with a copy kept off the droplet (backups sit
-    on the same droplet today); the background worker as its own service.
+  - **Backups built 2026-11-25:** nightly encrypted copy in Cloudflare R2 (owner's choice), weekly restore test,
+    Telegram on failure, restore steps in the README. Owner: run `crypy-backup setup` once.
+  - **Still open in S4:** the background worker as its own service; Redis; staging droplet.
+- **Owner's working rule (2026-11-25):** before building a feature, write a short usefulness check (who needs it, the
+  problem, how often, what they use today, fit with "wallet safety and research"); the owner approves the list first.
 - **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
   cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
   2026-11-24: two build folders, rollback; 2026-11-25: the new version starts beside the old one and nginx switches
-  without a gap, B-023; builds on GitHub Actions, the server downloads them, B-019); a tested backup restore. **Done when:** an update, a worker crash and a
+  without a gap, B-023; builds on GitHub Actions, the server downloads them, B-019); a tested backup restore (built
+  2026-11-25: R2 copies, weekly restore test). **Done when:** an update, a worker crash and a
   restart each leave the site serving.
 - **S5 — Fix everything found**, most harmful first, each with a test that fails without the fix; slow first visits.
 - **S6 — Prove it:** 14 days in a row on target. Then new features resume.

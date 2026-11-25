@@ -1603,7 +1603,7 @@
         "Kết nối ví là tùy chọn. CRYPY chỉ đọc địa chỉ công khai của bạn, và kết nối không bao giờ yêu cầu bạn ký gì. Nếu bạn kết nối qua WalletConnect, kết nối đi qua dịch vụ WalletConnect của Reown.",
         "Đăng nhập bằng ví là tùy chọn và chỉ cần cho danh sách theo dõi và cảnh báo. Đó là một tin nhắn được ký, không bao giờ là giao dịch. Sau đó CRYPY lưu địa chỉ ví, danh sách theo dõi kèm nhãn và tùy chọn cảnh báo, giờ yên lặng và múi giờ, cùng một mã phiên (chỉ lưu dấu vân tay của mã). Nếu bạn chọn giữ danh mục trong tài khoản, địa chỉ và nhãn của danh mục cũng được lưu.",
         "Nếu bạn kết nối Telegram để nhận cảnh báo, CRYPY lưu ID cuộc trò chuyện và tên người dùng Telegram để gửi cảnh báo, và giữ lịch sử cảnh báo 90 ngày. Telegram chuyển tin nhắn theo chính sách quyền riêng tư của họ.",
-        "Khi đã đăng nhập, bạn có thể tải mọi thứ CRYPY có về tài khoản của bạn, hoặc xóa tài khoản để xóa tất cả cùng lúc. Bản sao lưu cơ sở dữ liệu được giữ 14 ngày, nên dữ liệu đã xóa cũng biến mất khỏi bản sao lưu trong thời gian đó.",
+        "Khi đã đăng nhập, bạn có thể tải mọi thứ CRYPY có về tài khoản của bạn, hoặc xóa tài khoản để xóa tất cả cùng lúc. Bản sao lưu cơ sở dữ liệu được giữ 14 ngày, nên dữ liệu đã xóa cũng biến mất khỏi bản sao lưu trong thời gian đó. Một bản sao đã mã hóa của mỗi bản sao lưu được lưu tại Cloudflare; chỉ CRYPY giữ khóa để mở nó.",
         "Như hầu hết các trang web, máy chủ CRYPY và Cloudflare giữ nhật ký kỹ thuật (địa chỉ IP, trang được yêu cầu, thời gian và loại trình duyệt) để giữ trang an toàn và hoạt động, ví dụ để áp giới hạn yêu cầu. Nhật ký của máy chủ CRYPY được giữ khoảng hai tuần.",
         "CRYPY không bán dữ liệu cá nhân và không chia sẻ với nhà quảng cáo."
       ]

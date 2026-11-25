@@ -41,6 +41,49 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## S4: backups that are copied off the server and tested (2026-11-25)
+
+Owner decision 2026-11-25: backups before more tools; off-server copy in Cloudflare R2. Owner's working rule from the
+same day: judge whether a feature really helps people before building it; a short usefulness check per feature goes
+to the owner first.
+
+- **Why:** the daily dump was kept only on the droplet (lost with it), a failed dump told nobody, and a restore had
+  never been tried. Accounts, watchlists, alerts, Telegram links and portfolios live only in that database.
+- **`scripts/server/backup.sh`**, installed by `update.sh` (`install-backup.sh`) as `/usr/local/sbin/crypy-backup`, a
+  root-owned copy taken from git HEAD (the app can't change what root runs). Cron: nightly 03:17 UTC `run`, Sundays
+  04:47 `restore-test`.
+  - `run`: `pg_dump` (data of `saved_results`, sign-in codes and Telegram link codes left out: they rebuild themselves,
+    and looked-up addresses needn't be copied off-site), checked with `pg_restore --list`, kept 14 days; once set up,
+    encrypted with `age` to a public key, copied to R2 with `rclone` (checked size), R2 copies over 14 days deleted
+    (matches the privacy page's 14 days).
+  - `restore-test`: restores the newest dump into a throwaway database, compares users, accounts, watch items,
+    alerts, portfolios and status updates with the live database (a table missing, or empty while live has rows,
+    fails), drops it, and checks that a recent copy exists in R2.
+  - `setup` (owner, once): R2 account, bucket and token; makes the age key pair, does a full round trip (backup →
+    R2 → download → decrypt → read), prints the opening key once for the owner's password manager and deletes it
+    from the server.
+  - Results in `/var/lib/crypy-backup/{backup,restore}.json` (times, sizes, counts, step names; no secrets). R2 keys
+    in `/etc/crypy/backup.env` (root only), passed to rclone through the environment.
+- **App:** new health check `server:backup` (hourly; `lib/health/backup.ts` rules): fails on a failed backup or R2
+  copy, a missed night (> 26 h) or a failed restore test, so the owner gets the usual Telegram message after two
+  failing checks; "slow" (no message) while R2 isn't set up or the restore test is over 8 days old. /admin's
+  "Database backups" row shows the real state. Skipped where backups aren't installed (PC, browser tests).
+- **Privacy page** (7 languages): one sentence added: an encrypted copy of each backup is stored with Cloudflare,
+  and only CRYPY holds the key.
+- **README:** "Backups": the owner's R2 setup and the restore steps for a lost server.
+- New on the server: `rclone` and `age` (Ubuntu packages, installed by `crypy-backup setup`). No new app dependency.
+
+**Checks:** ShellCheck clean (backup.sh, install-backup.sh, update.sh, setup.sh). Typecheck, lint, Prettier,
+translation check clean. Unit: 638 passed, 76 skipped (5 new: the rules, the check reading real status files,
+skipped when not installed, unreadable files). Build passed. Browser: 329 passed, 19 skipped, 0 failed.
+Rehearsed here with a real PostgreSQL 16 database (the real migrations, sample accounts and lookups), real `age`, and
+a stand-in for R2 (downloading rclone into this workspace was refused, so rclone itself and Cloudflare's side run for
+the first time on the server, in `crypy-backup setup`): backup without R2, setup with round trip (key shown once then
+removed, config root-only, nothing secret in the log), restore test passing, a backup missing people's data failing
+with the tables named, no copy in R2 failing, R2 upload and R2 listing failures recorded with their step (the
+server's own copy kept), 14-day pruning here and in "R2", the installer twice (no changes the second time) ignoring a
+tampered working copy, and a real restore onto a freshly set-up database (data back, owned by the app's role).
+
 ## Utilities U5: five more browser-only tools (2026-11-25)
 
 Owner decision 2026-11-25: next work = the U5 utilities batch (chosen over backup tests and a separate worker service).

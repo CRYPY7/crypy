@@ -10,7 +10,7 @@
 #   4. Creates the "crypy" user, the database (random password) and downloads the code to /opt/crypy/app.
 #   5. Creates /opt/crypy/app/.env.local from the template; you paste your keys into it (never into a chat).
 #   6. Builds the site, runs it as a service on 127.0.0.1:3000, and puts nginx in front of it.
-#   7. Daily database backups to /var/backups/crypy (14 days kept).
+#   7. Daily database backups (14 days kept), weekly restore test; R2 copies after `crypy-backup setup`.
 # HTTPS is turned on afterwards with enable-https.sh, once the domain points to this server.
 set -euo pipefail
 
@@ -123,13 +123,8 @@ systemctl restart crypy@3000
 bash "$APP_DIR/scripts/server/nginx-site.sh" "$DOMAIN"
 
 say "7/7 Daily database backup"
-mkdir -p /var/backups/crypy
-chown postgres:postgres /var/backups/crypy
-chmod 700 /var/backups/crypy
-cat > /etc/cron.d/crypy-backup <<'CRON'
-# Daily at 03:17: database dump, kept 14 days.
-17 3 * * * postgres pg_dump -Fc crypy > /var/backups/crypy/crypy-$(date +\%F).dump && find /var/backups/crypy -name '*.dump' -mtime +14 -delete
-CRON
+# Nightly dump kept 14 days, weekly restore test; copies to Cloudflare R2 after `crypy-backup setup` (README).
+bash "$APP_DIR/scripts/server/install-backup.sh"
 
 say "Waiting for the site to answer"
 for _ in $(seq 1 30); do

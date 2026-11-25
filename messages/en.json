@@ -1603,7 +1603,7 @@
         "Connecting a wallet is optional. CRYPY only reads your public address from it, and connecting never asks you to sign anything. If you connect through WalletConnect, the connection runs through Reown's WalletConnect service.",
         "Signing in with your wallet is optional and needed only for the Watchlist and alerts. It is a signed message, never a transaction. CRYPY then stores your wallet address, your watchlist with its labels and alert choices, your quiet hours and time zone, and a session code (only its fingerprint). If you choose to keep your portfolio on your account, its addresses and labels are stored too.",
         "If you connect Telegram for alerts, CRYPY stores your Telegram chat ID and username to send alerts there, and keeps your alert history for 90 days. Telegram delivers the messages under its own privacy policy.",
-        "While signed in, you can download everything CRYPY holds about your account, or delete your account, which removes all of it at once. Database backups are kept for 14 days, so deleted data also disappears from them within that time.",
+        "While signed in, you can download everything CRYPY holds about your account, or delete your account, which removes all of it at once. Database backups are kept for 14 days, so deleted data also disappears from them within that time. An encrypted copy of each backup is stored with Cloudflare; only CRYPY holds the key that opens it.",
         "Like most websites, CRYPY's server and Cloudflare keep technical logs (IP address, page requested, time and browser type) to keep the site secure and working, for example to enforce request limits. CRYPY's server logs are kept for about two weeks.",
         "CRYPY does not sell personal data or share it with advertisers."
       ]
@@ -5167,7 +5167,8 @@
         "database": "Database",
         "server_memory": "Memory",
         "server_disk": "Disk",
-        "server_certificate": "Certificate"
+        "server_certificate": "Certificate",
+        "server_backup": "Database backups"
       }
     },
     "providers": {
@@ -5201,7 +5202,7 @@
       "database": "Database size",
       "uptime": "Server running for",
       "backups": "Database backups",
-      "backupsValue": "Daily at 03:17 UTC, kept 14 days (checked on the server; the folder isn't readable by the app)",
+      "backupsNotInstalled": "Not installed on this server yet (it installs itself with the next update)",
       "unknown": "Not known yet",
       "uptimeValue": "{hours, plural, =0 {less than an hour} one {# hour} other {# hours}}"
     },

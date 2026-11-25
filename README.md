@@ -70,8 +70,8 @@ up by the scripts in `scripts/server/` (see ARCHITECTURE.md §10d for the securi
 
 The web server settings live in `scripts/server/nginx-site.sh` (run by the other scripts; run it again instead of
 editing nginx by hand). Useful on the server: `systemctl status 'crypy@*'`, `journalctl -u 'crypy@*' -n 100 --no-pager` (the app's log; it
-runs as `crypy@3000` or `crypy@3001`, and each update switches to the other without a gap), backups in
-`/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out; removing it
+runs as `crypy@3000` or `crypy@3001`, and each update switches to the other without a gap), backups: see
+"Backups" below. `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out; removing it
 from the server's `.env.local` and running `update.sh` opens the site to search engines (done for crypy.org's public
 beta on 2026-11-22).
 
@@ -80,6 +80,51 @@ sitemap's pages. SEO plan and status: `SEO_ROADMAP.md`.
 
 Behind Cloudflare, `bash /opt/crypy/app/scripts/server/cloudflare-only.sh on` lets only Cloudflare reach the web
 ports (run it again now and then to refresh Cloudflare's address list; `off` undoes it).
+
+### Backups
+
+Every night at 03:17 UTC the server saves the database to `/var/backups/crypy` (kept 14 days) and, once set up below,
+copies it **encrypted** to a Cloudflare R2 bucket (also kept 14 days: the privacy page promises that deleted data leaves
+the backups within 14 days). Every Sunday a **restore test** restores the newest backup into a throwaway database and
+checks that accounts, watchlists, alerts and portfolios came back. Results: `crypy-backup status` on the server, the
+"Database backups" row on /admin, and a Telegram message to you if a backup, its R2 copy or a restore test fails.
+Cached wallet and token lookups (`saved_results`) aren't copied: they rebuild themselves, and visitors' looked-up
+addresses needn't sit in a second company's storage. All of this is installed by `update.sh`
+(`scripts/server/install-backup.sh`; the script runs as `/usr/local/sbin/crypy-backup`, a root-owned copy of
+`scripts/server/backup.sh` taken from git).
+
+**One-time R2 setup (owner):**
+
+1. Cloudflare dashboard → **R2 Object Storage** → enable it (free up to 10 GB; it may ask for a card, nothing is
+   charged at CRYPY's size) → **Create bucket**, e.g. `crypy-backups` (location: Automatic).
+2. R2 → **Manage API tokens** → **Create API token**: permission **Object Read & Write**, **only** the
+   `crypy-backups` bucket. Keep the page open: it shows the **Access Key ID** and **Secret Access Key** once. Your
+   **Account ID** is on the R2 overview page.
+3. On the server: `crypy-backup setup`. Paste the account ID, bucket name and both keys (the secret isn't shown).
+   It makes a backup, copies it to R2, downloads it again, decrypts it and reads it (a full round trip).
+4. It then prints the **backup key** (`AGE-SECRET-KEY-1…`) once. Save it in your password manager as
+   "CRYPY backup key". It is the only way to open the copies in R2, and it is deleted from the server. Never paste it
+   into a chat.
+
+**Restoring (if the server is lost):**
+
+1. Make a new server with `setup.sh` (above). It starts with an empty database.
+2. Cloudflare → R2 → `crypy-backups` → download the newest `crypy-….dump.age`, and copy it to the server
+   (`scp crypy-….dump.age root@<server-ip>:/root/`).
+3. On the server, put the backup key in a file only root can read: `nano /root/backup-key.txt` (paste, save), then:
+   ```bash
+   apt-get install -y age
+   age -d -i /root/backup-key.txt -o /root/crypy.dump /root/crypy-*.dump.age
+   shred -u /root/backup-key.txt
+   systemctl stop 'crypy@*'
+   chown postgres /root/crypy.dump && mv /root/crypy.dump /var/backups/crypy/restore.dump
+   runuser -u postgres -- pg_restore --clean --if-exists --no-owner --role=crypy --exit-on-error -d crypy /var/backups/crypy/restore.dump
+   systemctl start crypy@3000
+   ```
+   (Use `crypy@3001` instead if `cat /opt/crypy/app/.crypy-port` says 3001.) Accounts, watchlists, alerts, Telegram
+   links and portfolios are back; saved lookups refill as people use the site.
+4. If the old server still exists but its database is damaged, step 3 alone works with the newest file in
+   `/var/backups/crypy` (no decryption needed).
 
 Only one running server may use the Telegram bot token: when the live site has it, set `CRYPY_WORKER=off` in your
 PC's `.env.local` (or use a second test bot there).
