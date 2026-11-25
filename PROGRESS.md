@@ -1,6 +1,6 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-24
+Last updated: 2026-11-25
 
 ## Milestones
 
@@ -40,6 +40,34 @@ Last updated: 2026-11-24
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## Utilities U3: developer tools (2026-11-25)
+
+- **New sidebar group "Developer"** (folds like Calculators, opens itself on its pages). The Hex Converter and the
+  Transaction Data Decoder moved into it from Utilities; their pages and links are unchanged.
+- **Keccak-256 Hash & Function Selector** (`/tools/keccak-hash`): Keccak-256 and SHA-256 of text (UTF-8) or hex bytes;
+  when the input is a function, event or error signature (`transfer(address,uint256)` or a full Solidity line with
+  names and `indexed`), shows the canonical form, the 4-byte selector or the event topic. Covers the catalog's
+  Keccak, function selector and event topic calculators.
+- **ABI Encoder & Decoder** (`/tools/abi-encoder`): reads a JSON ABI, a build artifact with `abi`, or human-readable
+  lines; rejects unknown types (e.g. `uint257`); lists functions, events and errors with selectors and topics; encodes
+  a call (addresses checksummed, integers as exact BigInt, arrays and tuples as JSON); decodes call data and event
+  logs (topics + data). Only builds bytes: nothing is signed or sent. The Transaction Data Decoder links unknown or
+  mismatched functions here with the data in the URL fragment (`#data=`), which browsers never send to a server.
+- **Base58 & Base64 Converter** (`/tools/encoding-converter`): text, hex, Base64 (padding optional), Base64URL and
+  Base58 (Bitcoin alphabet, no checksum) both ways, with byte size; says when bytes aren't readable text. Its FAQ warns
+  never to paste a private key.
+- **JSON & CSV Formatter** (`/tools/json-csv`): format, minify and validate JSON with the line and column of an error;
+  JSON list of objects ↔ CSV (RFC 4180 quoting, comma or semicolon). CSV cells starting with `=`, `+`, `-` or `@` get an
+  apostrophe so a spreadsheet can't run them as formulas. Download is made in the browser.
+- No new dependencies (viem and `@scure/base` were already there). Translations of all new texts in the 6 Beta
+  languages; `messages/pending-translation.json` is empty.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 583 passed, 76 skipped (10 new: Keccak/SHA-256
+and selector vectors, ABI read/encode/decode round trip and logs, Base58/Base64 vectors, JSON errors and CSV safety).
+Build passed. Browser, full run: 308 passed, 19 skipped, 1 failed — two new SEO titles were over 60 characters;
+shortened, rebuilt, and the SEO and U3 files re-run: 14 passed, 4 skipped. 6 new U3 browser tests, each checking that
+nothing typed is sent. CSS 80.5 KB (82,430 bytes): still exactly at the 80 KB budget with rounding, 1 byte of room.
 
 ## Utilities U2: three DeFi calculators, Bitcoin and Solana formats, signature decoder (2026-11-24)
 

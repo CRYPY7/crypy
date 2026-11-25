@@ -80,10 +80,10 @@ test("the Calculators group folds in the sidebar and opens on a calculator page"
   test.skip(info.project.name !== "desktop", "sidebar is desktop only");
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/en");
-  const group = page.locator("#tools-sidebar details");
+  const group = page.locator("#tools-sidebar details", { hasText: "Calculators" });
   await expect(group).not.toHaveAttribute("open");
   await group.locator("summary").click();
   await expect(group.getByRole("link", { name: "Impermanent Loss" })).toBeVisible();
   await page.goto("/en/tools/apy-calculator");
-  await expect(page.locator("#tools-sidebar details")).toHaveAttribute("open", "");
+  await expect(page.locator("#tools-sidebar details", { hasText: "Calculators" })).toHaveAttribute("open", "");
 });

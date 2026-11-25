@@ -897,6 +897,18 @@ DEX decoders, per chain family:                      (one per DEX design)
 - Sidebar: categories in `folded` render as a native `<details>` group; `SidebarActiveMarker` opens the group that
   holds the current page.
 
+## 12t. Browser-only utilities U3 (developer tools)
+
+- Category `developer` (folded in the sidebar; `folded` in `sidebar.tsx` maps a category to its summary icon).
+- Hashes: `modules/tools/keccak-hash/hash.ts` (`hashes`, `signatureInfo`; viem `keccak256`, `sha256`, `parseAbiItem`,
+  `toFunctionSelector`, `toEventSelector`).
+- ABI: `modules/tools/abi-encoder/abi.ts` (`readAbi` with type validation, `coerce`, `encodeCall`, `decodeCall`,
+  `decodeLog`; viem `encodeFunctionData` / `decodeFunctionData` / `decodeEventLog`). Prefill from the URL fragment
+  `#data=` only (never the query string, so typed data doesn't reach the server or its logs).
+- Encodings: `modules/tools/encoding-converter/encoding.ts` (`@scure/base` base58 / base64 / base64url).
+- JSON/CSV: `modules/tools/json-csv/json-csv.ts` (formula-safe CSV cells; RFC 4180 reader).
+- Shared: `Choice` (radio row) in `modules/tools/shared/ui.tsx`.
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

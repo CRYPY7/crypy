@@ -3,6 +3,7 @@ import {
   AtSign,
   Bell,
   Binary,
+  Braces,
   Calculator,
   ChartPie,
   Clock,
@@ -10,6 +11,7 @@ import {
   Coins,
   Droplets,
   FileSignature,
+  Hash,
   Fuel,
   KeyRound,
   Layers,
@@ -17,6 +19,8 @@ import {
   Percent,
   Scale,
   Receipt,
+  Repeat,
+  Sheet,
   ShieldAlert,
   TrendingDown,
   Wallet,
@@ -44,6 +48,10 @@ const icons = {
   droplets: Droplets,
   "trending-down": TrendingDown,
   "file-signature": FileSignature,
+  hash: Hash,
+  braces: Braces,
+  repeat: Repeat,
+  sheet: Sheet,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 
 /** Server-rendered tool icon. Decorative: the tool name is always shown as text. */

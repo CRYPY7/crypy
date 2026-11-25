@@ -56,7 +56,8 @@
     "network": "网络",
     "monitoring": "监控",
     "utilities": "实用工具",
-    "calculators": "计算器"
+    "calculators": "计算器",
+    "developer": "开发者"
   },
   "search": {
     "label": "搜索钱包地址、代币合约或交易哈希",
@@ -989,6 +990,170 @@
       ],
       "seoTitle": "钱包签名请求解码器（EIP-712） | CRYPY",
       "seoDescription": "粘贴钱包签名请求，查看它允许做什么：代币 Permit、Permit2、NFT 挂单和消息，并标出危险信号。在你的浏览器中解码，不会签名或发送任何内容。"
+    },
+    "keccak-hash": {
+      "name": "Keccak-256 哈希与函数选择器",
+      "question": "这段内容的哈希或选择器是什么？",
+      "description": "计算任意文本或十六进制数据的 Keccak-256 和 SHA-256 哈希，以及 Solidity 签名的 4 字节选择器或事件 topic。",
+      "input": "文本、十六进制或签名",
+      "cta": "计算哈希",
+      "features": [
+        "以太坊使用的 Keccak-256，另含 SHA-256",
+        "函数和错误选择器、事件 topic（topic 0）",
+        "支持 transfer(address,uint256) 或完整的 Solidity 声明"
+      ],
+      "howTo": [
+        "输入文本、粘贴十六进制，或写出函数、事件或错误的签名。",
+        "选择输入是文本还是十六进制字节。",
+        "复制你需要的哈希、选择器或 topic。"
+      ],
+      "faq": [
+        {
+          "q": "Keccak-256 和 SHA-3 一样吗？",
+          "a": "不一样。以太坊使用的是 SHA-3 定稿之前选定的原始 Keccak-256。正式的 SHA3-256 使用了不同的填充方式，所以结果不同。Solidity 的 keccak256() 与本工具结果一致。"
+        },
+        {
+          "q": "什么是函数选择器？",
+          "a": "函数规范签名（如 transfer(address,uint256)）的 Keccak-256 哈希的前 4 个字节。交易数据以它开头，合约据此知道要执行哪个函数。"
+        },
+        {
+          "q": "什么是事件 topic？",
+          "a": "事件日志的 topic 0 是事件签名（如 Transfer(address,address,uint256)）的完整 Keccak-256 哈希。区块浏览器和索引服务用它来查找事件。"
+        },
+        {
+          "q": "为什么我的选择器对不上？",
+          "a": "选择器取自规范形式：没有空格、没有参数名，并使用完整的类型名（uint256 而不是 uint）。工具会显示它使用的规范形式，方便你对比。"
+        },
+        {
+          "q": "我输入的内容会被发送出去吗？",
+          "a": "不会。所有计算都在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "Keccak-256 哈希、函数选择器与事件 Topic 计算器 | CRYPY",
+      "seoDescription": "在浏览器中计算 Keccak-256 和 SHA-256 哈希、Solidity 函数选择器和事件 topic。粘贴文本、十六进制或签名即可。",
+      "shortName": "Keccak 与选择器"
+    },
+    "abi-encoder": {
+      "name": "ABI 编码器与解码器",
+      "question": "如何用这个 ABI 编码或解码数据？",
+      "description": "粘贴合约 ABI 进行校验，列出其函数、事件和错误，编码一次调用，或解码调用数据和事件日志。",
+      "input": "合约 ABI",
+      "cta": "打开",
+      "features": [
+        "校验 JSON ABI、编译产物和人类可读 ABI",
+        "用精确数值编码函数调用",
+        "用你的 ABI 解码调用数据和事件日志"
+      ],
+      "howTo": [
+        "粘贴 ABI（来自区块浏览器、编译产物或 Solidity 声明）。",
+        "选择编码、解码调用数据或解码事件日志。",
+        "填写参数或粘贴数据，然后复制结果。"
+      ],
+      "faq": [
+        {
+          "q": "在哪里获取 ABI？",
+          "a": "已验证的合约会在 Etherscan、BscScan 等浏览器上显示 ABI（Contract 标签页）。项目方也会公开 ABI，Hardhat 或 Foundry 的编译产物中 \"abi\" 字段也包含它。"
+        },
+        {
+          "q": "编码会发送交易吗？",
+          "a": "不会。它只生成字节数据。不会签名或发送任何内容，本工具也无法访问你的钱包。"
+        },
+        {
+          "q": "如何输入数组和结构体？",
+          "a": "用 JSON 书写：数组写成 [\"0x…\", \"0x…\"]，结构体（tuple）写成 [值, 值] 或 {\"名称\": 值}。大数请写成字符串以保持精确。"
+        },
+        {
+          "q": "为什么我的日志解码不了？",
+          "a": "topic 0 必须是事件的哈希，indexed 参数放在其余的 topic 中。匿名事件没有 topic 0，无法据此匹配。"
+        },
+        {
+          "q": "我输入的内容会被发送出去吗？",
+          "a": "不会。所有操作都在你的浏览器中运行。"
+        }
+      ],
+      "seoTitle": "ABI 编码器与解码器：编码调用、解码调用数据和日志 | CRYPY",
+      "seoDescription": "校验合约 ABI，编码函数调用，并用你自己的 ABI 解码交易调用数据和事件日志。免费，在浏览器中运行。",
+      "shortName": "ABI 编码器"
+    },
+    "encoding-converter": {
+      "name": "Base58 与 Base64 转换器",
+      "question": "如何在 Base58、Base64、十六进制和文本之间转换？",
+      "description": "在文本、十六进制、Base64、Base64URL 和 Base58 之间转换任意值，并查看其字节大小。",
+      "input": "要转换的值",
+      "cta": "转换",
+      "features": [
+        "文本、十六进制、Base64、Base64URL 和 Base58",
+        "提示字节不是可读文本的情况",
+        "支持没有填充的 Base64"
+      ],
+      "howTo": [
+        "粘贴或输入值。",
+        "选择它的书写格式。",
+        "复制你需要的格式。"
+      ],
+      "faq": [
+        {
+          "q": "这是哪种 Base58？",
+          "a": "比特币字母表，不带校验和。Solana 的地址、密钥和签名直接使用它。比特币地址使用 Base58Check，会在末尾附加 4 字节校验和：你会看到它是最后 4 个字节。"
+        },
+        {
+          "q": "什么是 Base64URL？",
+          "a": "用 - 和 _ 代替 + 和 / 的 Base64，可以安全地放在链接中。JSON Web Token 使用它。"
+        },
+        {
+          "q": "为什么没有文本结果？",
+          "a": "这些字节不是有效的 UTF-8 文本，或包含控制字符，以文本显示会造成误导。"
+        },
+        {
+          "q": "我应该在这里粘贴私钥吗？",
+          "a": "不应该。永远不要把私钥或助记词粘贴到任何网站。CRYPY 永远不需要它们。"
+        },
+        {
+          "q": "我输入的内容会被发送出去吗？",
+          "a": "不会。转换在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "Base58、Base64 与十六进制转换器（文本、Base64URL） | CRYPY",
+      "seoDescription": "在浏览器中进行 Base58、Base64、Base64URL、十六进制和文本之间的转换。适用于 Solana 密钥、签名和编码数据。",
+      "shortName": "Base58 与 Base64"
+    },
+    "json-csv": {
+      "name": "JSON 与 CSV 格式化工具",
+      "question": "如何格式化 JSON 或将其转换为 CSV？",
+      "description": "格式化、压缩并校验 JSON，指出错误所在位置，并在 JSON 列表和 CSV 之间转换。",
+      "input": "JSON 或 CSV",
+      "cta": "格式化",
+      "features": [
+        "美化或压缩 JSON",
+        "显示 JSON 错误所在的行和列",
+        "JSON 列表 ↔ CSV，单元格可安全用于电子表格"
+      ],
+      "howTo": [
+        "粘贴 JSON 或 CSV。",
+        "选择格式化、压缩、JSON 转 CSV 或 CSV 转 JSON。",
+        "复制结果或下载为文件。"
+      ],
+      "faq": [
+        {
+          "q": "什么样的 JSON 可以转成 CSV？",
+          "a": "对象列表，例如 [{\"a\": 1}, {\"a\": 2}]。每个键成为一列。嵌套的值以 JSON 形式写入单元格。"
+        },
+        {
+          "q": "为什么有些单元格以撇号开头？",
+          "a": "以 =、+、- 或 @ 开头的单元格在电子表格中打开时可能被当作公式执行。撇号会让它们成为普通文本。"
+        },
+        {
+          "q": "支持哪些 CSV 分隔符？",
+          "a": "逗号；如果第一行的分号比逗号多，则使用分号。支持带引号的单元格以及引号内的 \"\"。"
+        },
+        {
+          "q": "我的数据会被发送出去吗？",
+          "a": "不会。所有操作都在你的浏览器中运行，包括下载。"
+        }
+      ],
+      "seoTitle": "JSON 格式化工具与 JSON 转 CSV 转换器 | CRYPY",
+      "seoDescription": "在浏览器中格式化、压缩和校验 JSON，并在 JSON 列表与 CSV 之间互相转换。导出的 CSV 可安全用于电子表格。",
+      "shortName": "JSON 与 CSV"
     }
   },
   "toolPage": {
@@ -2749,7 +2914,8 @@
         "ownership-transfer": "所有者变更：新所有者将控制合约的所有者专用函数。",
         "ownership-renounce": "放弃所有权：此后任何人都无法使用合约的所有者专用函数。"
       },
-      "heuristic": "警告基于函数和数值，不会检查使用方是谁。"
+      "heuristic": "警告基于函数和数值，不会检查使用方是谁。",
+      "ownAbi": "用合约自己的 ABI 解码"
     },
     "balance-scanner": {
       "label": "钱包地址",
@@ -3646,6 +3812,135 @@
         "not-typed-data": "此 JSON 不是 EIP-712 类型化数据：需要包含 types、primaryType 和 message。",
         "too-large": "内容过长，无法解码。"
       }
+    },
+    "keccakHash": {
+      "label": "文本、十六进制或签名",
+      "placeholder": "transfer(address,uint256)",
+      "readAs": "输入类型",
+      "text": "文本（UTF-8）",
+      "hex": "十六进制字节",
+      "keccak": "Keccak-256",
+      "keccakHelp": "这是你输入内容本身的哈希。上面的选择器使用规范形式 {text}。",
+      "sha": "SHA-256",
+      "size": "大小",
+      "bytes": "{count} 字节",
+      "signature": "Solidity {kind}",
+      "kinds": {
+        "function": "函数",
+        "event": "事件",
+        "error": "错误"
+      },
+      "canonical": "规范签名",
+      "selector": "选择器（4 字节）",
+      "topic": "事件 topic（topic 0）",
+      "signatureHelp": "选择器和 topic 取自规范签名：没有空格、没有名称，使用完整类型名。",
+      "errors": {
+        "empty": "",
+        "hex": "十六进制字节由 0–9 和 a–f 组成，位数为偶数，可带或不带 0x。",
+        "too-large": "太大：上限为 1 MB。"
+      },
+      "local": "在你的浏览器中运行：你输入的内容不会发送到任何地方。"
+    },
+    "abiEncoder": {
+      "abiLabel": "合约 ABI",
+      "abiPlaceholder": "[{\"type\":\"function\",\"name\":\"transfer\",…}]  或  function transfer(address to, uint256 amount)",
+      "abiHelp": "JSON ABI、带 \"abi\" 字段的编译产物，或每行一个 Solidity 签名。",
+      "contents": "此 ABI 包含的内容",
+      "counts": "{functions} 个函数，{events} 个事件，{errors} 个错误",
+      "kinds": {
+        "function": "函数",
+        "event": "事件",
+        "error": "错误",
+        "constructor": "构造函数",
+        "other": "其他"
+      },
+      "anonymous": "匿名事件：没有 topic 0。",
+      "mode": "我想要",
+      "modes": {
+        "encode": "编码调用",
+        "decode-call": "解码调用数据",
+        "decode-log": "解码事件日志"
+      },
+      "noFunctions": "此 ABI 中没有可编码的函数。",
+      "function": "函数",
+      "argPlaceholder": "值",
+      "argJson": "JSON，例如 [\"0x…\", \"0x…\"]",
+      "callData": "调用数据",
+      "callDataPlaceholder": "0xa9059cbb…",
+      "encodedHelp": "只是字节数据：不会签名或发送任何内容。",
+      "topics": "Topic（每行一个）",
+      "topicsPlaceholder": "0xddf252ad…\n0x000000000000000000000000…",
+      "logData": "日志数据",
+      "decodedAs": "解码为",
+      "abiErrors": {
+        "empty": "",
+        "json": "这不是有效的 JSON。请检查括号、引号和逗号。",
+        "not-abi": "这个 JSON 不是 ABI：ABI 是一个列表，其中每一项都有 \"type\"。",
+        "invalid-item": "此 ABI 中有一项无效。",
+        "too-large": "太大：上限为 500 KB。"
+      },
+      "argErrors": {
+        "empty": "",
+        "address": "请输入带 40 位十六进制数字的 0x 地址。",
+        "number": "请输入整数（十进制或 0x 十六进制），不能带小数点。",
+        "bool": "请输入 true 或 false。",
+        "bytes": "请输入以 0x 开头的十六进制字节。",
+        "json": "请为此列表或结构体输入有效的 JSON。",
+        "encode": "这些值无法按此函数进行编码。"
+      },
+      "decodeErrors": {
+        "empty": "",
+        "hex": "请使用十六进制：0x 后接 0–9 和 a–f。每个 topic 为 32 字节（66 个字符）。",
+        "no-match": "此 ABI 中没有与这些数据匹配的项。请确认合约是否正确。",
+        "failed": "数据与此 ABI 中对应的项不符。"
+      },
+      "local": "在你的浏览器中运行：你输入的内容不会发送到任何地方。"
+    },
+    "encodingConverter": {
+      "label": "值",
+      "placeholder": "Hello，或 0x48656c6c6f、SGVsbG8=、9Ajdvzr",
+      "readAs": "书写格式",
+      "formats": {
+        "text": "文本（UTF-8）",
+        "hex": "十六进制",
+        "base64": "Base64",
+        "base64url": "Base64URL",
+        "base58": "Base58"
+      },
+      "size": "大小",
+      "bytes": "{count} 字节",
+      "notText": "不是可读文本。",
+      "base58Note": "比特币字母表，不带校验和（Solana 的用法）。",
+      "errors": {
+        "empty": "",
+        "invalid": "这不是有效的 {format}。",
+        "too-large": "太大：上限为 1 MB。"
+      },
+      "local": "在你的浏览器中运行：你输入的内容不会发送到任何地方。"
+    },
+    "jsonCsv": {
+      "label": "JSON 或 CSV",
+      "placeholder": "{\"a\": 1}  或  name,amount",
+      "action": "操作",
+      "actions": {
+        "format": "格式化 JSON",
+        "minify": "压缩 JSON",
+        "to-csv": "JSON 转 CSV",
+        "to-json": "CSV 转 JSON"
+      },
+      "result": "结果",
+      "rows": "{count} 行",
+      "download": "下载",
+      "errorAt": "（第 {line} 行，第 {column} 列）",
+      "errors": {
+        "empty": "",
+        "json": "这不是有效的 JSON。",
+        "csv": "无法读取此 CSV：有一个带引号的单元格没有闭合。",
+        "not-list": "要生成 CSV，JSON 必须是对象列表，例如 [{\"a\": 1}]。",
+        "too-large": "太大：上限为 2 MB。"
+      },
+      "formulaNote": "以 = + - 或 @ 开头的单元格会加上撇号，这样电子表格不会把它们当作公式执行。",
+      "local": "在你的浏览器中运行：你输入的内容不会发送到任何地方。"
     }
   },
   "seo": {

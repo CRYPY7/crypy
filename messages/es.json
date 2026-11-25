@@ -56,7 +56,8 @@
     "network": "Red",
     "monitoring": "Monitoreo",
     "utilities": "Utilidades",
-    "calculators": "Calculadoras"
+    "calculators": "Calculadoras",
+    "developer": "Desarrolladores"
   },
   "search": {
     "label": "Busca una dirección de billetera, un contrato de token o un hash de transacción",
@@ -989,6 +990,170 @@
       ],
       "seoTitle": "Decodificador de firmas de billetera (EIP-712) | CRYPY",
       "seoDescription": "Pega una solicitud de firma de tu billetera y mira qué permite: permits de tokens, Permit2, ventas de NFT y mensajes, con señales de peligro. En tu navegador."
+    },
+    "keccak-hash": {
+      "name": "Hash Keccak-256 y selector de función",
+      "question": "¿Cuál es el hash o el selector de esto?",
+      "description": "Obtén el hash Keccak-256 y SHA-256 de cualquier texto o hex, y el selector de 4 bytes o el topic de evento de una firma de Solidity.",
+      "input": "Texto, hex o una firma",
+      "cta": "Calcular hash",
+      "features": [
+        "Keccak-256 tal como lo usa Ethereum, más SHA-256",
+        "Selectores de funciones y errores, topics de eventos (topic 0)",
+        "Acepta transfer(address,uint256) o una línea completa de Solidity"
+      ],
+      "howTo": [
+        "Escribe texto, pega hex o escribe la firma de una función, evento o error.",
+        "Elige si la entrada es texto o bytes en hex.",
+        "Copia el hash, el selector o el topic que necesites."
+      ],
+      "faq": [
+        {
+          "q": "¿Keccak-256 es lo mismo que SHA-3?",
+          "a": "No. Ethereum usa el Keccak-256 original, elegido antes de que se finalizara SHA-3. El SHA3-256 oficial añade un relleno distinto, así que los resultados difieren. keccak256() de Solidity coincide con esta herramienta."
+        },
+        {
+          "q": "¿Qué es un selector de función?",
+          "a": "Los primeros 4 bytes del hash Keccak-256 de la firma canónica de una función, como transfer(address,uint256). Los datos de una transacción empiezan por él para que el contrato sepa qué función ejecutar."
+        },
+        {
+          "q": "¿Qué es el topic de un evento?",
+          "a": "El topic 0 del log de un evento es el hash Keccak-256 completo de la firma del evento, como Transfer(address,address,uint256). Los exploradores y los indexadores lo usan para encontrar eventos."
+        },
+        {
+          "q": "¿Por qué no coincide mi selector?",
+          "a": "El selector se calcula a partir de la forma canónica: sin espacios, sin nombres de parámetros y con los nombres de tipo completos (uint256, no uint). La herramienta muestra la forma canónica que usó para que puedas compararla."
+        },
+        {
+          "q": "¿Se envía lo que escribo a algún sitio?",
+          "a": "No. Todo se calcula en tu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de hash Keccak-256, selector de función y topic de evento | CRYPY",
+      "seoDescription": "Calcula hashes Keccak-256 y SHA-256, selectores de funciones de Solidity y topics de eventos en tu navegador. Pega texto, hex o una firma.",
+      "shortName": "Keccak y selectores"
+    },
+    "abi-encoder": {
+      "name": "Codificador y decodificador ABI",
+      "question": "¿Cómo codifico o decodifico datos con esta ABI?",
+      "description": "Pega la ABI de un contrato para comprobarla, ver sus funciones, eventos y errores, codificar una llamada o decodificar datos de llamada y logs de eventos.",
+      "input": "La ABI de un contrato",
+      "cta": "Abrir",
+      "features": [
+        "Valida ABIs JSON, artefactos de compilación y ABIs legibles",
+        "Codifica llamadas a funciones con números exactos",
+        "Decodifica datos de llamada y logs de eventos con tu ABI"
+      ],
+      "howTo": [
+        "Pega la ABI (de un explorador, un artefacto de compilación o líneas de Solidity).",
+        "Elige codificar, decodificar datos de llamada o decodificar un log de evento.",
+        "Rellena los valores o pega los datos y copia el resultado."
+      ],
+      "faq": [
+        {
+          "q": "¿Dónde consigo una ABI?",
+          "a": "Los contratos verificados muestran su ABI en exploradores como Etherscan y BscScan (pestaña Contract). Los proyectos también la publican, y los artefactos de compilación de Hardhat o Foundry la incluyen en \"abi\"."
+        },
+        {
+          "q": "¿Codificar envía una transacción?",
+          "a": "No. Solo genera los bytes. No se firma ni se envía nada, y la herramienta no tiene acceso a tu wallet."
+        },
+        {
+          "q": "¿Cómo introduzco arrays y structs?",
+          "a": "Escríbelos como JSON: [\"0x…\", \"0x…\"] para un array, y [valor, valor] o {\"nombre\": valor} para un struct (tupla). Escribe los números grandes como texto para que sigan siendo exactos."
+        },
+        {
+          "q": "¿Por qué no se decodifica mi log?",
+          "a": "El topic 0 debe ser el hash del evento, y los valores indexados van en los demás topics. Los eventos anónimos no tienen topic 0 y no se pueden identificar con él."
+        },
+        {
+          "q": "¿Se envía lo que escribo a algún sitio?",
+          "a": "No. Todo funciona en tu navegador."
+        }
+      ],
+      "seoTitle": "Codificador y decodificador ABI: codifica llamadas y decodifica datos y logs | CRYPY",
+      "seoDescription": "Valida la ABI de un contrato, codifica llamadas a funciones y decodifica datos de transacciones y logs de eventos con tu propia ABI. Gratis, en tu navegador.",
+      "shortName": "Codificador ABI"
+    },
+    "encoding-converter": {
+      "name": "Conversor Base58 y Base64",
+      "question": "¿Cómo convierto entre Base58, Base64, hex y texto?",
+      "description": "Convierte cualquier valor entre texto, hex, Base64, Base64URL y Base58, y mira su tamaño en bytes.",
+      "input": "Un valor para convertir",
+      "cta": "Convertir",
+      "features": [
+        "Texto, hex, Base64, Base64URL y Base58",
+        "Indica cuándo los bytes no son texto legible",
+        "Acepta Base64 sin relleno"
+      ],
+      "howTo": [
+        "Pega o escribe el valor.",
+        "Elige el formato en el que está escrito.",
+        "Copia el formato que necesites."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué Base58 es este?",
+          "a": "El alfabeto de Bitcoin, sin checksum. Las direcciones, claves y firmas de Solana lo usan tal cual. Las direcciones de Bitcoin usan Base58Check, que añade un checksum de 4 bytes al final: lo verás como los últimos 4 bytes."
+        },
+        {
+          "q": "¿Qué es Base64URL?",
+          "a": "Base64 con - y _ en lugar de + y /, para que sea seguro en enlaces. Los JSON Web Tokens lo usan."
+        },
+        {
+          "q": "¿Por qué no hay resultado en texto?",
+          "a": "Los bytes no son texto UTF-8 válido o contienen caracteres de control, así que mostrarlos como texto sería engañoso."
+        },
+        {
+          "q": "¿Debo pegar aquí una clave privada?",
+          "a": "No. Nunca pegues una clave privada ni una frase de recuperación en ningún sitio web. CRYPY nunca las necesita."
+        },
+        {
+          "q": "¿Se envía lo que escribo a algún sitio?",
+          "a": "No. La conversión se hace en tu navegador."
+        }
+      ],
+      "seoTitle": "Conversor Base58, Base64 y hex (texto, Base64URL) | CRYPY",
+      "seoDescription": "Convierte entre Base58, Base64, Base64URL, hex y texto en tu navegador. Útil para claves, firmas y datos codificados de Solana.",
+      "shortName": "Base58 y Base64"
+    },
+    "json-csv": {
+      "name": "Formateador JSON y CSV",
+      "question": "¿Cómo formateo JSON o lo convierto a CSV?",
+      "description": "Formatea, minimiza y valida JSON con la posición de cualquier error, y convierte entre listas JSON y CSV.",
+      "input": "JSON o CSV",
+      "cta": "Formatear",
+      "features": [
+        "Formatea o minimiza JSON",
+        "Muestra la línea y la columna de un error de JSON",
+        "Lista JSON ↔ CSV, con celdas seguras para hojas de cálculo"
+      ],
+      "howTo": [
+        "Pega JSON o CSV.",
+        "Elige formatear, minimizar, JSON a CSV o CSV a JSON.",
+        "Copia el resultado o descárgalo como archivo."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué JSON se puede convertir en CSV?",
+          "a": "Una lista de objetos, como [{\"a\": 1}, {\"a\": 2}]. Cada clave se convierte en una columna. Los valores anidados se escriben como JSON dentro de la celda."
+        },
+        {
+          "q": "¿Por qué algunas celdas empiezan con un apóstrofo?",
+          "a": "Las celdas que empiezan por =, +, - o @ podrían ejecutarse como fórmula al abrir el archivo en una hoja de cálculo. El apóstrofo las convierte en texto normal."
+        },
+        {
+          "q": "¿Qué separadores de CSV funcionan?",
+          "a": "Comas, o punto y coma cuando la primera línea tiene más puntos y coma que comas. Se admiten celdas entre comillas y \"\" dentro de las comillas."
+        },
+        {
+          "q": "¿Se envían mis datos a algún sitio?",
+          "a": "No. Todo funciona en tu navegador, incluida la descarga."
+        }
+      ],
+      "seoTitle": "Formateador JSON y conversor de JSON a CSV | CRYPY",
+      "seoDescription": "Formatea, minimiza y valida JSON, y convierte listas JSON a CSV y viceversa en tu navegador. Exportación CSV segura para hojas de cálculo.",
+      "shortName": "JSON y CSV"
     }
   },
   "toolPage": {
@@ -2749,7 +2914,8 @@
         "ownership-transfer": "Cambio de dueño: el nuevo dueño obtiene el control de las funciones exclusivas del dueño del contrato.",
         "ownership-renounce": "Renuncia: después, nadie podrá usar las funciones exclusivas del dueño del contrato."
       },
-      "heuristic": "Los avisos se basan en la función y sus valores. No revisan quién es el gastador."
+      "heuristic": "Los avisos se basan en la función y sus valores. No revisan quién es el gastador.",
+      "ownAbi": "Decodificarlo con la ABI del propio contrato"
     },
     "balance-scanner": {
       "label": "Dirección de billetera",
@@ -3646,6 +3812,135 @@
         "not-typed-data": "Este JSON no son datos tipados EIP-712: necesita types, primaryType y message.",
         "too-large": "Demasiado largo para decodificar."
       }
+    },
+    "keccakHash": {
+      "label": "Texto, hex o una firma",
+      "placeholder": "transfer(address,uint256)",
+      "readAs": "La entrada es",
+      "text": "Texto (UTF-8)",
+      "hex": "Bytes en hex",
+      "keccak": "Keccak-256",
+      "keccakHelp": "El hash exacto de lo que escribiste. El selector de arriba usa la forma canónica {text}.",
+      "sha": "SHA-256",
+      "size": "Tamaño",
+      "bytes": "{count} bytes",
+      "signature": "{kind} de Solidity",
+      "kinds": {
+        "function": "Función",
+        "event": "Evento",
+        "error": "Error"
+      },
+      "canonical": "Firma canónica",
+      "selector": "Selector (4 bytes)",
+      "topic": "Topic del evento (topic 0)",
+      "signatureHelp": "Los selectores y topics se calculan a partir de la firma canónica: sin espacios, sin nombres y con los nombres de tipo completos.",
+      "errors": {
+        "empty": "",
+        "hex": "Los bytes en hex son 0–9 y a–f, con un número par de dígitos, con o sin 0x.",
+        "too-large": "Demasiado grande: el límite es 1 MB."
+      },
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "abiEncoder": {
+      "abiLabel": "ABI del contrato",
+      "abiPlaceholder": "[{\"type\":\"function\",\"name\":\"transfer\",…}]  o  function transfer(address to, uint256 amount)",
+      "abiHelp": "Una ABI JSON, un artefacto de compilación con un campo \"abi\", o una firma de Solidity por línea.",
+      "contents": "Qué contiene esta ABI",
+      "counts": "{functions} funciones, {events} eventos, {errors} errores",
+      "kinds": {
+        "function": "Función",
+        "event": "Evento",
+        "error": "Error",
+        "constructor": "Constructor",
+        "other": "Otro"
+      },
+      "anonymous": "Evento anónimo: no tiene topic 0.",
+      "mode": "Quiero",
+      "modes": {
+        "encode": "Codificar una llamada",
+        "decode-call": "Decodificar datos de llamada",
+        "decode-log": "Decodificar un log de evento"
+      },
+      "noFunctions": "Esta ABI no tiene funciones para codificar.",
+      "function": "Función",
+      "argPlaceholder": "Valor",
+      "argJson": "JSON, por ejemplo [\"0x…\", \"0x…\"]",
+      "callData": "Datos de llamada",
+      "callDataPlaceholder": "0xa9059cbb…",
+      "encodedHelp": "Solo los bytes: no se firma ni se envía nada.",
+      "topics": "Topics (uno por línea)",
+      "topicsPlaceholder": "0xddf252ad…\n0x000000000000000000000000…",
+      "logData": "Datos del log",
+      "decodedAs": "Decodificado como",
+      "abiErrors": {
+        "empty": "",
+        "json": "No es JSON válido. Revisa corchetes, comillas y comas.",
+        "not-abi": "Este JSON no es una ABI: una ABI es una lista de elementos que tienen cada uno un \"type\".",
+        "invalid-item": "Un elemento de esta ABI no es válido.",
+        "too-large": "Demasiado grande: el límite es 500 KB."
+      },
+      "argErrors": {
+        "empty": "",
+        "address": "Introduce una dirección 0x con 40 dígitos hex.",
+        "number": "Introduce un número entero (decimal o hex 0x), sin punto decimal.",
+        "bool": "Introduce true o false.",
+        "bytes": "Introduce bytes en hex que empiecen por 0x.",
+        "json": "Introduce JSON válido para esta lista o struct.",
+        "encode": "Estos valores no se pueden codificar para esta función."
+      },
+      "decodeErrors": {
+        "empty": "",
+        "hex": "Usa hex: 0x seguido de 0–9 y a–f. Cada topic tiene 32 bytes (66 caracteres).",
+        "no-match": "Nada en esta ABI coincide con estos datos. Comprueba que sea el contrato correcto.",
+        "failed": "Los datos no encajan con el elemento correspondiente de esta ABI."
+      },
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "encodingConverter": {
+      "label": "Valor",
+      "placeholder": "Hello, o 0x48656c6c6f, SGVsbG8=, 9Ajdvzr",
+      "readAs": "Está escrito en",
+      "formats": {
+        "text": "Texto (UTF-8)",
+        "hex": "Hex",
+        "base64": "Base64",
+        "base64url": "Base64URL",
+        "base58": "Base58"
+      },
+      "size": "Tamaño",
+      "bytes": "{count} bytes",
+      "notText": "No es texto legible.",
+      "base58Note": "Alfabeto de Bitcoin, sin checksum (como lo usa Solana).",
+      "errors": {
+        "empty": "",
+        "invalid": "No es {format} válido.",
+        "too-large": "Demasiado grande: el límite es 1 MB."
+      },
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "jsonCsv": {
+      "label": "JSON o CSV",
+      "placeholder": "{\"a\": 1}  o  name,amount",
+      "action": "Acción",
+      "actions": {
+        "format": "Formatear JSON",
+        "minify": "Minimizar JSON",
+        "to-csv": "JSON a CSV",
+        "to-json": "CSV a JSON"
+      },
+      "result": "Resultado",
+      "rows": "{count} filas",
+      "download": "Descargar",
+      "errorAt": "(línea {line}, columna {column})",
+      "errors": {
+        "empty": "",
+        "json": "No es JSON válido.",
+        "csv": "No se puede leer este CSV: una celda entre comillas no está cerrada.",
+        "not-list": "Para crear CSV, el JSON debe ser una lista de objetos, como [{\"a\": 1}].",
+        "too-large": "Demasiado grande: el límite es 2 MB."
+      },
+      "formulaNote": "Las celdas que empiezan por = + - o @ llevan un apóstrofo para que una hoja de cálculo no las ejecute como fórmulas.",
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
     }
   },
   "seo": {

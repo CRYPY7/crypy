@@ -9,9 +9,9 @@ test.describe("desktop tools sidebar", () => {
     await expect(sidebar).toBeVisible();
     await expect(sidebar.getByRole("link", { name: "Unit Converter" })).toHaveAttribute("aria-current", "page");
     await expect(sidebar.getByRole("link", { name: /Watchlist/ })).toBeVisible();
-    await sidebar.getByRole("link", { name: "Hex Converter" }).click();
-    await expect(page).toHaveURL(/\/en\/tools\/hex-converter$/);
-    await expect(sidebar.getByRole("link", { name: "Hex Converter" })).toHaveAttribute("aria-current", "page");
+    await sidebar.getByRole("link", { name: "Address Formatter" }).click();
+    await expect(page).toHaveURL(/\/en\/tools\/address-formatter$/);
+    await expect(sidebar.getByRole("link", { name: "Address Formatter" })).toHaveAttribute("aria-current", "page");
   });
 
   test("collapses to icons and remembers it on the next page load", async ({ page }) => {

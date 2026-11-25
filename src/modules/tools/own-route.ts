@@ -22,4 +22,8 @@ export const ownRouteTools: readonly ToolId[] = [
   "impermanent-loss",
   "slippage-calculator",
   "signature-decoder",
+  "keccak-hash",
+  "abi-encoder",
+  "encoding-converter",
+  "json-csv",
 ];

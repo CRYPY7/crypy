@@ -12,6 +12,7 @@ const categoryColor: Record<ToolCategory, string> = {
   network: "text-low",
   monitoring: "text-high",
   calculators: "text-medium",
+  developer: "text-primary",
   utilities: "text-muted-foreground",
 };
 

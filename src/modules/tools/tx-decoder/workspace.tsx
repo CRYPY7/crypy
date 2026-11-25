@@ -1,7 +1,7 @@
 import "server-only";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/locales";
-import { localePath } from "@/lib/routes";
+import { localePath, toolPath } from "@/lib/routes";
 import type { CommonStrings } from "../shared/ui";
 import { knownSignatureCount } from "./decode";
 import { TxDecoder, type TxDecoderStrings } from "./widget";
@@ -17,6 +17,7 @@ export async function TxDecoderWorkspace({ locale }: { locale: Locale }) {
       locale={locale}
       addressPathPrefix={`${localePath(locale, "/address")}/`}
       searchPath={localePath(locale, "/search")}
+      abiPath={toolPath(locale, "abi-encoder")}
       knownCount={knownSignatureCount}
     />
   );

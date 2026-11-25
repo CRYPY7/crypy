@@ -34,6 +34,7 @@ export interface TxDecoderStrings {
   native: string;
   unknownTitle: string;
   unknownText: string;
+  ownAbi: string;
   mismatch: string;
   moreWords: string;
   extraBytes: string;
@@ -48,6 +49,8 @@ interface Context {
   strings: TxDecoderStrings;
   locale: string;
   addressPathPrefix: string;
+  abiPath: string;
+  data: string;
 }
 
 const EXAMPLE =
@@ -59,6 +62,7 @@ export function TxDecoder({
   locale,
   addressPathPrefix,
   searchPath,
+  abiPath,
   knownCount,
 }: {
   strings: TxDecoderStrings;
@@ -66,13 +70,14 @@ export function TxDecoder({
   locale: string;
   addressPathPrefix: string;
   searchPath: string;
+  abiPath: string;
   knownCount: number;
 }) {
   const id = useId();
   const [text, setText] = useState("");
   const deferred = useDeferredValue(text);
   const result = deferred.trim() ? decodeCallData(deferred) : null;
-  const context: Context = { strings, locale, addressPathPrefix };
+  const context: Context = { strings, locale, addressPathPrefix, abiPath, data: normaliseHex(deferred) };
 
   return (
     <Panel>
@@ -122,6 +127,20 @@ export function TxDecoder({
   );
 }
 
+/** Unknown functions can be decoded with the contract's own ABI. The data goes in the fragment, never to a server. */
+function OwnAbi({ context }: { context: Context }) {
+  const href = context.data.length <= 16_000 ? `${context.abiPath}#data=${context.data}` : context.abiPath;
+  return (
+    <Link
+      href={href}
+      prefetch={false}
+      className="mt-2 block text-sm font-medium text-primary underline-offset-4 hover:underline"
+    >
+      {context.strings.ownAbi}
+    </Link>
+  );
+}
+
 function Result({ result, context }: { result: Exclude<DecodeResult, { status: "invalid" }>; context: Context }) {
   const { strings } = context;
   if (result.status === "native-transfer") return <p className="text-sm">{strings.native}</p>;
@@ -130,6 +149,7 @@ function Result({ result, context }: { result: Exclude<DecodeResult, { status: "
       <p className="text-sm text-high">
         {strings.mismatch}
         <span className="technical ms-1 break-all">{result.signature}</span>
+        <OwnAbi context={context} />
       </p>
     );
   }
@@ -139,6 +159,7 @@ function Result({ result, context }: { result: Exclude<DecodeResult, { status: "
       <div>
         <h3 className="font-semibold">{strings.unknownTitle}</h3>
         <p className="mt-1 text-sm text-muted-foreground">{strings.unknownText}</p>
+        <OwnAbi context={context} />
         <Facts rows={[[strings.selector, result.selector]]} />
         <ol className="mt-3 flex flex-col gap-1">
           {result.words.map((word, index) => (

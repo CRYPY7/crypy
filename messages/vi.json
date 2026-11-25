@@ -56,7 +56,8 @@
     "network": "Mạng",
     "monitoring": "Giám sát",
     "utilities": "Tiện ích",
-    "calculators": "Máy tính"
+    "calculators": "Máy tính",
+    "developer": "Nhà phát triển"
   },
   "search": {
     "label": "Tìm địa chỉ ví, hợp đồng token hoặc mã hash giao dịch",
@@ -989,6 +990,170 @@
       ],
       "seoTitle": "Trình giải mã yêu cầu ký của ví (EIP-712) | CRYPY",
       "seoDescription": "Dán yêu cầu ký từ ví và xem nó cho phép điều gì: permit token, Permit2, rao bán NFT và tin nhắn, kèm dấu hiệu nguy hiểm. Trong trình duyệt của bạn."
+    },
+    "keccak-hash": {
+      "name": "Hash Keccak-256 và bộ chọn hàm",
+      "question": "Hash hoặc bộ chọn của nội dung này là gì?",
+      "description": "Tính hash Keccak-256 và SHA-256 của bất kỳ văn bản hoặc hex nào, cùng bộ chọn 4 byte hoặc topic sự kiện của một chữ ký Solidity.",
+      "input": "Văn bản, hex hoặc một chữ ký",
+      "cta": "Tính hash",
+      "features": [
+        "Keccak-256 như Ethereum sử dụng, kèm SHA-256",
+        "Bộ chọn hàm và lỗi, topic sự kiện (topic 0)",
+        "Chấp nhận transfer(address,uint256) hoặc một dòng Solidity đầy đủ"
+      ],
+      "howTo": [
+        "Nhập văn bản, dán hex hoặc viết chữ ký của một hàm, sự kiện hay lỗi.",
+        "Chọn đầu vào là văn bản hay byte hex.",
+        "Sao chép hash, bộ chọn hoặc topic bạn cần."
+      ],
+      "faq": [
+        {
+          "q": "Keccak-256 có giống SHA-3 không?",
+          "a": "Không. Ethereum dùng Keccak-256 nguyên bản, được chọn trước khi SHA-3 hoàn tất. SHA3-256 chính thức thêm cách đệm khác nên kết quả khác nhau. keccak256() của Solidity khớp với công cụ này."
+        },
+        {
+          "q": "Bộ chọn hàm là gì?",
+          "a": "4 byte đầu của hash Keccak-256 từ chữ ký chuẩn của một hàm, ví dụ transfer(address,uint256). Dữ liệu giao dịch bắt đầu bằng nó để hợp đồng biết cần chạy hàm nào."
+        },
+        {
+          "q": "Topic sự kiện là gì?",
+          "a": "Topic 0 của nhật ký sự kiện là toàn bộ hash Keccak-256 của chữ ký sự kiện, ví dụ Transfer(address,address,uint256). Trình khám phá và bộ lập chỉ mục dùng nó để tìm sự kiện."
+        },
+        {
+          "q": "Vì sao bộ chọn của tôi không khớp?",
+          "a": "Bộ chọn được tính từ dạng chuẩn: không khoảng trắng, không tên tham số và dùng tên kiểu đầy đủ (uint256, không phải uint). Công cụ hiển thị dạng chuẩn đã dùng để bạn so sánh."
+        },
+        {
+          "q": "Nội dung tôi nhập có bị gửi đi không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Công cụ tính hash Keccak-256, bộ chọn hàm và topic sự kiện | CRYPY",
+      "seoDescription": "Tính hash Keccak-256 và SHA-256, bộ chọn hàm Solidity và topic sự kiện ngay trong trình duyệt. Dán văn bản, hex hoặc chữ ký.",
+      "shortName": "Keccak và bộ chọn"
+    },
+    "abi-encoder": {
+      "name": "Bộ mã hóa và giải mã ABI",
+      "question": "Làm sao mã hóa hoặc giải mã dữ liệu với ABI này?",
+      "description": "Dán ABI của hợp đồng để kiểm tra, liệt kê các hàm, sự kiện và lỗi, mã hóa một lệnh gọi, hoặc giải mã dữ liệu lệnh gọi và nhật ký sự kiện.",
+      "input": "ABI của hợp đồng",
+      "cta": "Mở",
+      "features": [
+        "Kiểm tra ABI JSON, tệp build và ABI dạng dễ đọc",
+        "Mã hóa lệnh gọi hàm với số chính xác",
+        "Giải mã dữ liệu lệnh gọi và nhật ký sự kiện bằng ABI của bạn"
+      ],
+      "howTo": [
+        "Dán ABI (từ trình khám phá, tệp build hoặc các dòng Solidity).",
+        "Chọn mã hóa, giải mã dữ liệu lệnh gọi hoặc giải mã nhật ký sự kiện.",
+        "Điền giá trị hoặc dán dữ liệu, rồi sao chép kết quả."
+      ],
+      "faq": [
+        {
+          "q": "Lấy ABI ở đâu?",
+          "a": "Hợp đồng đã xác minh hiển thị ABI trên các trình khám phá như Etherscan và BscScan (tab Contract). Các dự án cũng công bố ABI, và tệp build của Hardhat hoặc Foundry chứa nó trong trường \"abi\"."
+        },
+        {
+          "q": "Mã hóa có gửi giao dịch không?",
+          "a": "Không. Nó chỉ tạo ra các byte. Không có gì được ký hay gửi đi, và công cụ không có quyền truy cập ví của bạn."
+        },
+        {
+          "q": "Nhập mảng và struct thế nào?",
+          "a": "Viết dưới dạng JSON: [\"0x…\", \"0x…\"] cho mảng, và [giá trị, giá trị] hoặc {\"tên\": giá trị} cho struct (tuple). Viết số lớn dưới dạng chuỗi để giữ chính xác."
+        },
+        {
+          "q": "Vì sao nhật ký của tôi không giải mã được?",
+          "a": "Topic 0 phải là hash của sự kiện, còn các giá trị indexed nằm ở các topic khác. Sự kiện ẩn danh không có topic 0 nên không thể khớp theo nó."
+        },
+        {
+          "q": "Nội dung tôi nhập có bị gửi đi không?",
+          "a": "Không. Mọi thứ chạy trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Bộ mã hóa và giải mã ABI: mã hóa lệnh gọi, giải mã dữ liệu và nhật ký | CRYPY",
+      "seoDescription": "Kiểm tra ABI hợp đồng, mã hóa lệnh gọi hàm, giải mã dữ liệu giao dịch và nhật ký sự kiện bằng ABI của chính bạn. Miễn phí, trong trình duyệt.",
+      "shortName": "Mã hóa ABI"
+    },
+    "encoding-converter": {
+      "name": "Chuyển đổi Base58 và Base64",
+      "question": "Làm sao chuyển đổi giữa Base58, Base64, hex và văn bản?",
+      "description": "Chuyển bất kỳ giá trị nào giữa văn bản, hex, Base64, Base64URL và Base58, và xem kích thước theo byte.",
+      "input": "Giá trị cần chuyển đổi",
+      "cta": "Chuyển đổi",
+      "features": [
+        "Văn bản, hex, Base64, Base64URL và Base58",
+        "Cho biết khi các byte không phải văn bản đọc được",
+        "Chấp nhận Base64 không có phần đệm"
+      ],
+      "howTo": [
+        "Dán hoặc nhập giá trị.",
+        "Chọn định dạng mà nó được viết.",
+        "Sao chép định dạng bạn cần."
+      ],
+      "faq": [
+        {
+          "q": "Đây là Base58 nào?",
+          "a": "Bảng chữ cái của Bitcoin, không có mã kiểm tra. Địa chỉ, khóa và chữ ký Solana dùng nguyên dạng này. Địa chỉ Bitcoin dùng Base58Check, thêm mã kiểm tra 4 byte ở cuối: bạn sẽ thấy nó là 4 byte cuối cùng."
+        },
+        {
+          "q": "Base64URL là gì?",
+          "a": "Base64 dùng - và _ thay cho + và / để an toàn khi đặt trong liên kết. JSON Web Token dùng định dạng này."
+        },
+        {
+          "q": "Vì sao không có kết quả văn bản?",
+          "a": "Các byte không phải văn bản UTF-8 hợp lệ hoặc chứa ký tự điều khiển, nên hiển thị dưới dạng văn bản sẽ gây hiểu lầm."
+        },
+        {
+          "q": "Tôi có nên dán khóa riêng vào đây không?",
+          "a": "Không. Đừng bao giờ dán khóa riêng hay cụm từ khôi phục vào bất kỳ trang web nào. CRYPY không bao giờ cần chúng."
+        },
+        {
+          "q": "Nội dung tôi nhập có bị gửi đi không?",
+          "a": "Không. Việc chuyển đổi diễn ra trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Chuyển đổi Base58, Base64 và hex (văn bản, Base64URL) | CRYPY",
+      "seoDescription": "Chuyển đổi giữa Base58, Base64, Base64URL, hex và văn bản ngay trong trình duyệt. Hữu ích cho khóa, chữ ký và dữ liệu mã hóa của Solana.",
+      "shortName": "Base58 và Base64"
+    },
+    "json-csv": {
+      "name": "Định dạng JSON và CSV",
+      "question": "Làm sao định dạng JSON hoặc chuyển sang CSV?",
+      "description": "Định dạng, rút gọn và kiểm tra JSON kèm vị trí lỗi, và chuyển đổi giữa danh sách JSON và CSV.",
+      "input": "JSON hoặc CSV",
+      "cta": "Định dạng",
+      "features": [
+        "Định dạng đẹp hoặc rút gọn JSON",
+        "Hiển thị dòng và cột của lỗi JSON",
+        "Danh sách JSON ↔ CSV, ô an toàn cho bảng tính"
+      ],
+      "howTo": [
+        "Dán JSON hoặc CSV.",
+        "Chọn định dạng, rút gọn, JSON sang CSV hoặc CSV sang JSON.",
+        "Sao chép kết quả hoặc tải về dưới dạng tệp."
+      ],
+      "faq": [
+        {
+          "q": "JSON nào có thể chuyển thành CSV?",
+          "a": "Một danh sách đối tượng, như [{\"a\": 1}, {\"a\": 2}]. Mỗi khóa trở thành một cột. Giá trị lồng nhau được ghi dưới dạng JSON trong ô."
+        },
+        {
+          "q": "Vì sao một số ô bắt đầu bằng dấu nháy đơn?",
+          "a": "Các ô bắt đầu bằng =, +, - hoặc @ có thể bị chạy như công thức khi mở tệp trong bảng tính. Dấu nháy đơn biến chúng thành văn bản thường."
+        },
+        {
+          "q": "Hỗ trợ dấu phân cách CSV nào?",
+          "a": "Dấu phẩy, hoặc dấu chấm phẩy khi dòng đầu có nhiều dấu chấm phẩy hơn dấu phẩy. Hỗ trợ ô có dấu ngoặc kép và \"\" bên trong."
+        },
+        {
+          "q": "Dữ liệu của tôi có bị gửi đi không?",
+          "a": "Không. Mọi thứ chạy trong trình duyệt của bạn, kể cả việc tải về."
+        }
+      ],
+      "seoTitle": "Định dạng JSON và chuyển đổi JSON sang CSV | CRYPY",
+      "seoDescription": "Định dạng, rút gọn và kiểm tra JSON, chuyển danh sách JSON sang CSV và ngược lại ngay trong trình duyệt. Xuất CSV an toàn cho bảng tính.",
+      "shortName": "JSON và CSV"
     }
   },
   "toolPage": {
@@ -2749,7 +2914,8 @@
         "ownership-transfer": "Đổi chủ sở hữu: chủ sở hữu mới sẽ kiểm soát các hàm chỉ dành cho chủ của hợp đồng.",
         "ownership-renounce": "Từ bỏ: sau đó không ai có thể dùng các hàm chỉ dành cho chủ của hợp đồng."
       },
-      "heuristic": "Cảnh báo dựa trên hàm và giá trị. Chúng không kiểm tra bên chi tiêu là ai."
+      "heuristic": "Cảnh báo dựa trên hàm và giá trị. Chúng không kiểm tra bên chi tiêu là ai.",
+      "ownAbi": "Giải mã bằng ABI của chính hợp đồng"
     },
     "balance-scanner": {
       "label": "Địa chỉ ví",
@@ -3646,6 +3812,135 @@
         "not-typed-data": "JSON này không phải dữ liệu có kiểu EIP-712: cần có types, primaryType và message.",
         "too-large": "Quá dài để giải mã."
       }
+    },
+    "keccakHash": {
+      "label": "Văn bản, hex hoặc một chữ ký",
+      "placeholder": "transfer(address,uint256)",
+      "readAs": "Đầu vào là",
+      "text": "Văn bản (UTF-8)",
+      "hex": "Byte hex",
+      "keccak": "Keccak-256",
+      "keccakHelp": "Hash của chính xác những gì bạn nhập. Bộ chọn ở trên dùng dạng chuẩn {text}.",
+      "sha": "SHA-256",
+      "size": "Kích thước",
+      "bytes": "{count} byte",
+      "signature": "{kind} Solidity",
+      "kinds": {
+        "function": "Hàm",
+        "event": "Sự kiện",
+        "error": "Lỗi"
+      },
+      "canonical": "Chữ ký chuẩn",
+      "selector": "Bộ chọn (4 byte)",
+      "topic": "Topic sự kiện (topic 0)",
+      "signatureHelp": "Bộ chọn và topic được tính từ chữ ký chuẩn: không khoảng trắng, không tên, dùng tên kiểu đầy đủ.",
+      "errors": {
+        "empty": "",
+        "hex": "Byte hex gồm 0–9 và a–f, số chữ số chẵn, có hoặc không có 0x.",
+        "too-large": "Quá lớn: giới hạn là 1 MB."
+      },
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "abiEncoder": {
+      "abiLabel": "ABI của hợp đồng",
+      "abiPlaceholder": "[{\"type\":\"function\",\"name\":\"transfer\",…}]  hoặc  function transfer(address to, uint256 amount)",
+      "abiHelp": "Một ABI JSON, một tệp build có trường \"abi\", hoặc mỗi dòng một chữ ký Solidity.",
+      "contents": "Nội dung của ABI này",
+      "counts": "{functions} hàm, {events} sự kiện, {errors} lỗi",
+      "kinds": {
+        "function": "Hàm",
+        "event": "Sự kiện",
+        "error": "Lỗi",
+        "constructor": "Hàm khởi tạo",
+        "other": "Khác"
+      },
+      "anonymous": "Sự kiện ẩn danh: không có topic 0.",
+      "mode": "Tôi muốn",
+      "modes": {
+        "encode": "Mã hóa lệnh gọi",
+        "decode-call": "Giải mã dữ liệu lệnh gọi",
+        "decode-log": "Giải mã nhật ký sự kiện"
+      },
+      "noFunctions": "ABI này không có hàm nào để mã hóa.",
+      "function": "Hàm",
+      "argPlaceholder": "Giá trị",
+      "argJson": "JSON, ví dụ [\"0x…\", \"0x…\"]",
+      "callData": "Dữ liệu lệnh gọi",
+      "callDataPlaceholder": "0xa9059cbb…",
+      "encodedHelp": "Chỉ là các byte: không có gì được ký hay gửi đi.",
+      "topics": "Topic (mỗi dòng một topic)",
+      "topicsPlaceholder": "0xddf252ad…\n0x000000000000000000000000…",
+      "logData": "Dữ liệu nhật ký",
+      "decodedAs": "Giải mã thành",
+      "abiErrors": {
+        "empty": "",
+        "json": "Đây không phải JSON hợp lệ. Hãy kiểm tra dấu ngoặc, dấu nháy và dấu phẩy.",
+        "not-abi": "JSON này không phải ABI: ABI là danh sách các mục, mỗi mục có một \"type\".",
+        "invalid-item": "Một mục trong ABI này không hợp lệ.",
+        "too-large": "Quá lớn: giới hạn là 500 KB."
+      },
+      "argErrors": {
+        "empty": "",
+        "address": "Nhập địa chỉ 0x gồm 40 chữ số hex.",
+        "number": "Nhập số nguyên (thập phân hoặc hex 0x), không có dấu thập phân.",
+        "bool": "Nhập true hoặc false.",
+        "bytes": "Nhập byte hex bắt đầu bằng 0x.",
+        "json": "Nhập JSON hợp lệ cho danh sách hoặc struct này.",
+        "encode": "Không thể mã hóa các giá trị này cho hàm này."
+      },
+      "decodeErrors": {
+        "empty": "",
+        "hex": "Dùng hex: 0x theo sau là 0–9 và a–f. Mỗi topic dài 32 byte (66 ký tự).",
+        "no-match": "Không có gì trong ABI này khớp với dữ liệu. Hãy kiểm tra đúng hợp đồng chưa.",
+        "failed": "Dữ liệu không khớp với mục tương ứng trong ABI này."
+      },
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "encodingConverter": {
+      "label": "Giá trị",
+      "placeholder": "Hello, hoặc 0x48656c6c6f, SGVsbG8=, 9Ajdvzr",
+      "readAs": "Được viết bằng",
+      "formats": {
+        "text": "Văn bản (UTF-8)",
+        "hex": "Hex",
+        "base64": "Base64",
+        "base64url": "Base64URL",
+        "base58": "Base58"
+      },
+      "size": "Kích thước",
+      "bytes": "{count} byte",
+      "notText": "Không phải văn bản đọc được.",
+      "base58Note": "Bảng chữ cái Bitcoin, không có mã kiểm tra (như Solana dùng).",
+      "errors": {
+        "empty": "",
+        "invalid": "Đây không phải {format} hợp lệ.",
+        "too-large": "Quá lớn: giới hạn là 1 MB."
+      },
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "jsonCsv": {
+      "label": "JSON hoặc CSV",
+      "placeholder": "{\"a\": 1}  hoặc  name,amount",
+      "action": "Thao tác",
+      "actions": {
+        "format": "Định dạng JSON",
+        "minify": "Rút gọn JSON",
+        "to-csv": "JSON sang CSV",
+        "to-json": "CSV sang JSON"
+      },
+      "result": "Kết quả",
+      "rows": "{count} dòng",
+      "download": "Tải về",
+      "errorAt": "(dòng {line}, cột {column})",
+      "errors": {
+        "empty": "",
+        "json": "Đây không phải JSON hợp lệ.",
+        "csv": "Không đọc được CSV này: có một ô trong dấu ngoặc kép chưa được đóng.",
+        "not-list": "Để tạo CSV, JSON phải là danh sách đối tượng, như [{\"a\": 1}].",
+        "too-large": "Quá lớn: giới hạn là 2 MB."
+      },
+      "formulaNote": "Các ô bắt đầu bằng = + - hoặc @ được thêm dấu nháy đơn để bảng tính không chạy chúng như công thức.",
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
     }
   },
   "seo": {

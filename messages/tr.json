@@ -56,7 +56,8 @@
     "network": "Ağ",
     "monitoring": "İzleme",
     "utilities": "Yardımcı araçlar",
-    "calculators": "Hesaplayıcılar"
+    "calculators": "Hesaplayıcılar",
+    "developer": "Geliştirici"
   },
   "search": {
     "label": "Bir cüzdan adresi, token kontratı veya işlem hash'i arayın",
@@ -989,6 +990,170 @@
       ],
       "seoTitle": "Cüzdan imza isteği çözücü (EIP-712) | CRYPY",
       "seoDescription": "Bir cüzdan imza isteğini yapıştırın ve neye izin verdiğini görün: token permit'leri, Permit2, NFT satışları ve mesajlar, tehlike işaretleriyle. Tarayıcınızda."
+    },
+    "keccak-hash": {
+      "name": "Keccak-256 Hash ve Fonksiyon Seçici",
+      "question": "Bunun hash'i veya seçicisi nedir?",
+      "description": "Herhangi bir metin veya hex için Keccak-256 ve SHA-256 hash'ini, bir Solidity imzası için 4 baytlık seçiciyi veya olay topic'ini alın.",
+      "input": "Metin, hex veya bir imza",
+      "cta": "Hash hesapla",
+      "features": [
+        "Ethereum'un kullandığı Keccak-256, ayrıca SHA-256",
+        "Fonksiyon ve hata seçicileri, olay topic'leri (topic 0)",
+        "transfer(address,uint256) veya tam bir Solidity satırını kabul eder"
+      ],
+      "howTo": [
+        "Metin yazın, hex yapıştırın veya bir fonksiyon, olay ya da hata imzası yazın.",
+        "Girdinin metin mi yoksa hex bayt mı olduğunu seçin.",
+        "İhtiyacınız olan hash'i, seçiciyi veya topic'i kopyalayın."
+      ],
+      "faq": [
+        {
+          "q": "Keccak-256, SHA-3 ile aynı mı?",
+          "a": "Hayır. Ethereum, SHA-3 kesinleşmeden önce seçilen orijinal Keccak-256'yı kullanır. Resmî SHA3-256 farklı bir dolgu ekler, bu yüzden sonuçlar farklıdır. Solidity'deki keccak256() bu araçla aynı sonucu verir."
+        },
+        {
+          "q": "Fonksiyon seçici nedir?",
+          "a": "Bir fonksiyonun kanonik imzasının (ör. transfer(address,uint256)) Keccak-256 hash'inin ilk 4 baytı. İşlem verisi bununla başlar, böylece sözleşme hangi fonksiyonu çalıştıracağını bilir."
+        },
+        {
+          "q": "Olay topic'i nedir?",
+          "a": "Bir olay kaydının topic 0'ı, olay imzasının (ör. Transfer(address,address,uint256)) tam Keccak-256 hash'idir. Gezginler ve indeksleyiciler olayları bununla bulur."
+        },
+        {
+          "q": "Seçicim neden eşleşmiyor?",
+          "a": "Seçici kanonik biçimden alınır: boşluk yok, parametre adı yok ve tam tür adları var (uint değil uint256). Araç, karşılaştırabilmeniz için kullandığı kanonik biçimi gösterir."
+        },
+        {
+          "q": "Yazdıklarım bir yere gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Keccak-256 Hash, Fonksiyon Seçici ve Olay Topic Hesaplayıcı | CRYPY",
+      "seoDescription": "Keccak-256 ve SHA-256 hash'lerini, Solidity fonksiyon seçicilerini ve olay topic'lerini tarayıcınızda hesaplayın. Metin, hex veya imza yapıştırın.",
+      "shortName": "Keccak ve Seçiciler"
+    },
+    "abi-encoder": {
+      "name": "ABI Kodlayıcı ve Çözücü",
+      "question": "Bu ABI ile veriyi nasıl kodlar veya çözerim?",
+      "description": "Bir sözleşme ABI'sini yapıştırarak doğrulayın, fonksiyonlarını, olaylarını ve hatalarını listeleyin, bir çağrıyı kodlayın ya da çağrı verisini ve olay kayıtlarını çözün.",
+      "input": "Bir sözleşme ABI'si",
+      "cta": "Aç",
+      "features": [
+        "JSON ABI'leri, derleme çıktılarını ve okunabilir ABI'leri doğrular",
+        "Fonksiyon çağrılarını kesin sayılarla kodlar",
+        "Çağrı verisini ve olay kayıtlarını kendi ABI'nizle çözer"
+      ],
+      "howTo": [
+        "ABI'yi yapıştırın (bir gezginden, derleme çıktısından veya Solidity satırlarından).",
+        "Kodlamayı, çağrı verisini çözmeyi veya bir olay kaydını çözmeyi seçin.",
+        "Değerleri doldurun veya veriyi yapıştırın, sonra sonucu kopyalayın."
+      ],
+      "faq": [
+        {
+          "q": "ABI'yi nereden bulurum?",
+          "a": "Doğrulanmış sözleşmeler ABI'lerini Etherscan ve BscScan gibi gezginlerde gösterir (Contract sekmesi). Projeler de yayınlar; Hardhat veya Foundry derleme çıktılarında \"abi\" alanında bulunur."
+        },
+        {
+          "q": "Kodlamak bir işlem gönderir mi?",
+          "a": "Hayır. Yalnızca baytları oluşturur. Hiçbir şey imzalanmaz veya gönderilmez ve aracın cüzdanınıza erişimi yoktur."
+        },
+        {
+          "q": "Diziler ve struct'lar nasıl girilir?",
+          "a": "JSON olarak yazın: dizi için [\"0x…\", \"0x…\"], struct (tuple) için [değer, değer] veya {\"ad\": değer}. Büyük sayıları kesin kalmaları için metin olarak yazın."
+        },
+        {
+          "q": "Kaydım neden çözülmüyor?",
+          "a": "Topic 0, olayın hash'i olmalıdır; indekslenen değerler diğer topic'lerde yer alır. Anonim olayların topic 0'ı yoktur, bu yüzden onunla eşleştirilemezler."
+        },
+        {
+          "q": "Yazdıklarım bir yere gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda çalışır."
+        }
+      ],
+      "seoTitle": "ABI Kodlayıcı ve Çözücü: Çağrıları Kodlayın, Veriyi ve Kayıtları Çözün | CRYPY",
+      "seoDescription": "Bir sözleşme ABI'sini doğrulayın, fonksiyon çağrılarını kodlayın, işlem çağrı verisini ve olay kayıtlarını kendi ABI'nizle çözün. Ücretsiz, tarayıcınızda.",
+      "shortName": "ABI Kodlayıcı"
+    },
+    "encoding-converter": {
+      "name": "Base58 ve Base64 Dönüştürücü",
+      "question": "Base58, Base64, hex ve metin arasında nasıl dönüştürürüm?",
+      "description": "Herhangi bir değeri metin, hex, Base64, Base64URL ve Base58 arasında dönüştürün ve bayt cinsinden boyutunu görün.",
+      "input": "Dönüştürülecek değer",
+      "cta": "Dönüştür",
+      "features": [
+        "Metin, hex, Base64, Base64URL ve Base58",
+        "Baytlar okunabilir metin değilse belirtir",
+        "Dolgusuz Base64 kabul edilir"
+      ],
+      "howTo": [
+        "Değeri yapıştırın veya yazın.",
+        "Hangi biçimde yazıldığını seçin.",
+        "İhtiyacınız olan biçimi kopyalayın."
+      ],
+      "faq": [
+        {
+          "q": "Bu hangi Base58?",
+          "a": "Sağlama toplamı olmadan Bitcoin alfabesi. Solana adresleri, anahtarları ve imzaları onu olduğu gibi kullanır. Bitcoin adresleri, sona 4 baytlık bir sağlama toplamı ekleyen Base58Check kullanır: bunu son 4 bayt olarak görürsünüz."
+        },
+        {
+          "q": "Base64URL nedir?",
+          "a": "Bağlantılarda güvenli olması için + ve / yerine - ve _ kullanan Base64. JSON Web Token'lar bunu kullanır."
+        },
+        {
+          "q": "Neden metin sonucu yok?",
+          "a": "Baytlar geçerli UTF-8 metin değil ya da kontrol karakterleri içeriyor; bunları metin olarak göstermek yanıltıcı olur."
+        },
+        {
+          "q": "Buraya özel anahtar yapıştırmalı mıyım?",
+          "a": "Hayır. Özel anahtarınızı veya kurtarma ifadenizi hiçbir web sitesine yapıştırmayın. CRYPY'nin bunlara asla ihtiyacı yoktur."
+        },
+        {
+          "q": "Yazdıklarım bir yere gönderiliyor mu?",
+          "a": "Hayır. Dönüştürme tarayıcınızda yapılır."
+        }
+      ],
+      "seoTitle": "Base58, Base64 ve Hex Dönüştürücü (Metin, Base64URL) | CRYPY",
+      "seoDescription": "Base58, Base64, Base64URL, hex ve metin arasında tarayıcınızda dönüştürün. Solana anahtarları, imzaları ve kodlanmış veriler için kullanışlı.",
+      "shortName": "Base58 ve Base64"
+    },
+    "json-csv": {
+      "name": "JSON ve CSV Biçimlendirici",
+      "question": "JSON'u nasıl biçimlendirir veya CSV'ye dönüştürürüm?",
+      "description": "JSON'u biçimlendirin, küçültün ve hatanın yerini göstererek doğrulayın; JSON listeleri ile CSV arasında dönüştürün.",
+      "input": "JSON veya CSV",
+      "cta": "Biçimlendir",
+      "features": [
+        "JSON'u düzenli biçimlendirir veya küçültür",
+        "JSON hatasının satırını ve sütununu gösterir",
+        "JSON listesi ↔ CSV, tablolar için güvenli hücrelerle"
+      ],
+      "howTo": [
+        "JSON veya CSV yapıştırın.",
+        "Biçimlendir, küçült, JSON'dan CSV'ye veya CSV'den JSON'a seçin.",
+        "Sonucu kopyalayın veya dosya olarak indirin."
+      ],
+      "faq": [
+        {
+          "q": "Hangi JSON CSV'ye dönüşebilir?",
+          "a": "[{\"a\": 1}, {\"a\": 2}] gibi bir nesne listesi. Her anahtar bir sütun olur. İç içe değerler hücreye JSON olarak yazılır."
+        },
+        {
+          "q": "Bazı hücreler neden kesme işaretiyle başlıyor?",
+          "a": "=, +, - veya @ ile başlayan hücreler, dosya bir tabloda açıldığında formül olarak çalışabilir. Kesme işareti onları düz metin yapar."
+        },
+        {
+          "q": "Hangi CSV ayırıcıları çalışır?",
+          "a": "Virgül; ilk satırda virgülden çok noktalı virgül varsa noktalı virgül. Tırnaklı hücreler ve tırnak içinde \"\" desteklenir."
+        },
+        {
+          "q": "Verilerim bir yere gönderiliyor mu?",
+          "a": "Hayır. İndirme dahil her şey tarayıcınızda çalışır."
+        }
+      ],
+      "seoTitle": "JSON Biçimlendirici ve JSON'dan CSV'ye Dönüştürücü | CRYPY",
+      "seoDescription": "JSON'u tarayıcınızda biçimlendirin, küçültün ve doğrulayın; JSON listelerini CSV'ye ve geri dönüştürün. Tablolar için güvenli CSV dışa aktarımı.",
+      "shortName": "JSON ve CSV"
     }
   },
   "toolPage": {
@@ -2749,7 +2914,8 @@
         "ownership-transfer": "Sahiplik değişikliği: yeni sahip kontratın yalnızca sahibe açık fonksiyonlarını kontrol eder.",
         "ownership-renounce": "Vazgeçme: bundan sonra kimse kontratın yalnızca sahibe açık fonksiyonlarını kullanamaz."
       },
-      "heuristic": "Uyarılar fonksiyona ve değerlere dayanır. Harcayıcının kim olduğunu kontrol etmez."
+      "heuristic": "Uyarılar fonksiyona ve değerlere dayanır. Harcayıcının kim olduğunu kontrol etmez.",
+      "ownAbi": "Sözleşmenin kendi ABI'siyle çöz"
     },
     "balance-scanner": {
       "label": "Cüzdan adresi",
@@ -3646,6 +3812,135 @@
         "not-typed-data": "Bu JSON EIP-712 türlendirilmiş veri değil: types, primaryType ve message gerekir.",
         "too-large": "Çözmek için çok uzun."
       }
+    },
+    "keccakHash": {
+      "label": "Metin, hex veya bir imza",
+      "placeholder": "transfer(address,uint256)",
+      "readAs": "Girdi türü",
+      "text": "Metin (UTF-8)",
+      "hex": "Hex baytlar",
+      "keccak": "Keccak-256",
+      "keccakHelp": "Tam olarak yazdığınızın hash'i. Yukarıdaki seçici {text} kanonik biçimini kullanır.",
+      "sha": "SHA-256",
+      "size": "Boyut",
+      "bytes": "{count} bayt",
+      "signature": "Solidity {kind}",
+      "kinds": {
+        "function": "fonksiyonu",
+        "event": "olayı",
+        "error": "hatası"
+      },
+      "canonical": "Kanonik imza",
+      "selector": "Seçici (4 bayt)",
+      "topic": "Olay topic'i (topic 0)",
+      "signatureHelp": "Seçiciler ve topic'ler kanonik imzadan alınır: boşluk yok, ad yok, tam tür adları.",
+      "errors": {
+        "empty": "",
+        "hex": "Hex baytlar 0–9 ve a–f'dir; basamak sayısı çift olmalı, 0x ile veya olmadan.",
+        "too-large": "Çok büyük: sınır 1 MB."
+      },
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "abiEncoder": {
+      "abiLabel": "Sözleşme ABI'si",
+      "abiPlaceholder": "[{\"type\":\"function\",\"name\":\"transfer\",…}]  veya  function transfer(address to, uint256 amount)",
+      "abiHelp": "Bir JSON ABI, \"abi\" alanı olan bir derleme çıktısı veya her satırda bir Solidity imzası.",
+      "contents": "Bu ABI'nin içeriği",
+      "counts": "{functions} fonksiyon, {events} olay, {errors} hata",
+      "kinds": {
+        "function": "Fonksiyon",
+        "event": "Olay",
+        "error": "Hata",
+        "constructor": "Yapıcı",
+        "other": "Diğer"
+      },
+      "anonymous": "Anonim olay: topic 0'ı yoktur.",
+      "mode": "Yapmak istediğim",
+      "modes": {
+        "encode": "Bir çağrıyı kodla",
+        "decode-call": "Çağrı verisini çöz",
+        "decode-log": "Bir olay kaydını çöz"
+      },
+      "noFunctions": "Bu ABI'de kodlanacak fonksiyon yok.",
+      "function": "Fonksiyon",
+      "argPlaceholder": "Değer",
+      "argJson": "JSON, örneğin [\"0x…\", \"0x…\"]",
+      "callData": "Çağrı verisi",
+      "callDataPlaceholder": "0xa9059cbb…",
+      "encodedHelp": "Yalnızca baytlar: hiçbir şey imzalanmaz veya gönderilmez.",
+      "topics": "Topic'ler (her satıra bir tane)",
+      "topicsPlaceholder": "0xddf252ad…\n0x000000000000000000000000…",
+      "logData": "Kayıt verisi",
+      "decodedAs": "Çözüldü:",
+      "abiErrors": {
+        "empty": "",
+        "json": "Bu geçerli bir JSON değil. Parantezleri, tırnakları ve virgülleri kontrol edin.",
+        "not-abi": "Bu JSON bir ABI değil: ABI, her birinde \"type\" olan öğelerden oluşan bir listedir.",
+        "invalid-item": "Bu ABI'deki bir öğe geçerli değil.",
+        "too-large": "Çok büyük: sınır 500 KB."
+      },
+      "argErrors": {
+        "empty": "",
+        "address": "40 hex basamaklı bir 0x adresi girin.",
+        "number": "Ondalık noktası olmadan bir tam sayı girin (ondalık veya 0x hex).",
+        "bool": "true veya false girin.",
+        "bytes": "0x ile başlayan hex baytlar girin.",
+        "json": "Bu liste veya struct için geçerli JSON girin.",
+        "encode": "Bu değerler bu fonksiyon için kodlanamıyor."
+      },
+      "decodeErrors": {
+        "empty": "",
+        "hex": "Hex kullanın: 0x ve ardından 0–9 ve a–f. Her topic 32 bayttır (66 karakter).",
+        "no-match": "Bu ABI'de bu veriyle eşleşen bir şey yok. Doğru sözleşme olduğunu kontrol edin.",
+        "failed": "Veri, bu ABI'deki eşleşen öğeye uymuyor."
+      },
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "encodingConverter": {
+      "label": "Değer",
+      "placeholder": "Hello veya 0x48656c6c6f, SGVsbG8=, 9Ajdvzr",
+      "readAs": "Yazıldığı biçim",
+      "formats": {
+        "text": "Metin (UTF-8)",
+        "hex": "Hex",
+        "base64": "Base64",
+        "base64url": "Base64URL",
+        "base58": "Base58"
+      },
+      "size": "Boyut",
+      "bytes": "{count} bayt",
+      "notText": "Okunabilir metin değil.",
+      "base58Note": "Bitcoin alfabesi, sağlama toplamı yok (Solana'nın kullandığı gibi).",
+      "errors": {
+        "empty": "",
+        "invalid": "Bu geçerli bir {format} değil.",
+        "too-large": "Çok büyük: sınır 1 MB."
+      },
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "jsonCsv": {
+      "label": "JSON veya CSV",
+      "placeholder": "{\"a\": 1}  veya  name,amount",
+      "action": "İşlem",
+      "actions": {
+        "format": "JSON'u biçimlendir",
+        "minify": "JSON'u küçült",
+        "to-csv": "JSON'dan CSV'ye",
+        "to-json": "CSV'den JSON'a"
+      },
+      "result": "Sonuç",
+      "rows": "{count} satır",
+      "download": "İndir",
+      "errorAt": "(satır {line}, sütun {column})",
+      "errors": {
+        "empty": "",
+        "json": "Bu geçerli bir JSON değil.",
+        "csv": "Bu CSV okunamıyor: tırnaklı bir hücre kapatılmamış.",
+        "not-list": "CSV oluşturmak için JSON, [{\"a\": 1}] gibi bir nesne listesi olmalıdır.",
+        "too-large": "Çok büyük: sınır 2 MB."
+      },
+      "formulaNote": "= + - veya @ ile başlayan hücrelere, tablo programı onları formül olarak çalıştırmasın diye kesme işareti eklenir.",
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
     }
   },
   "seo": {

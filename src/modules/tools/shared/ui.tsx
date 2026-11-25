@@ -158,3 +158,39 @@ export function Figure({
     </div>
   );
 }
+
+/** A row of radio buttons (same look as the hex converter's "Read as"). */
+export function Choice<T extends string>({
+  name,
+  legend,
+  options,
+  value,
+  onChange,
+}: {
+  name: string;
+  legend: string;
+  options: readonly { value: T; label: string }[];
+  value: T;
+  onChange: (value: T) => void;
+}) {
+  return (
+    <fieldset className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+      <legend className="sr-only">{legend}</legend>
+      <span aria-hidden="true" className="text-muted-foreground">
+        {legend}
+      </span>
+      {options.map((option) => (
+        <label key={option.value} className="flex min-h-11 items-center gap-2">
+          <input
+            type="radio"
+            name={name}
+            checked={value === option.value}
+            onChange={() => onChange(option.value)}
+            className="size-4 accent-primary"
+          />
+          {option.label}
+        </label>
+      ))}
+    </fieldset>
+  );
+}

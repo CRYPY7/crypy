@@ -5,7 +5,15 @@
  * Adding a tool = one entry here + its texts in `messages/en.json` under `tools.<id>`.
  * `status` must stay "soon" until the tool works with real data and has been verified.
  */
-export const toolCategories = ["security", "wallet", "network", "monitoring", "calculators", "utilities"] as const;
+export const toolCategories = [
+  "security",
+  "wallet",
+  "network",
+  "monitoring",
+  "calculators",
+  "developer",
+  "utilities",
+] as const;
 export type ToolCategory = (typeof toolCategories)[number];
 
 export const toolIds = [
@@ -29,6 +37,10 @@ export const toolIds = [
   "impermanent-loss",
   "slippage-calculator",
   "signature-decoder",
+  "keccak-hash",
+  "abi-encoder",
+  "encoding-converter",
+  "json-csv",
 ] as const;
 export type ToolId = (typeof toolIds)[number];
 
@@ -54,7 +66,11 @@ export type ToolIconName =
   | "scale"
   | "droplets"
   | "trending-down"
-  | "file-signature";
+  | "file-signature"
+  | "hash"
+  | "braces"
+  | "repeat"
+  | "sheet";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -112,7 +128,7 @@ export const tools: readonly ToolDefinition[] = [
   },
   { id: "watchlist", category: "monitoring", icon: "bell", status: "live", milestone: "M8", requiresAccount: true },
   { id: "unit-converter", category: "utilities", icon: "calculator", status: "live", milestone: "M2.5" },
-  { id: "hex-converter", category: "utilities", icon: "binary", status: "live", milestone: "M2.5" },
+  { id: "hex-converter", category: "developer", icon: "binary", status: "live", milestone: "M2.5" },
   { id: "address-formatter", category: "utilities", icon: "at-sign", status: "live", milestone: "M2.5" },
   {
     id: "timestamp-block",
@@ -122,7 +138,7 @@ export const tools: readonly ToolDefinition[] = [
     milestone: "M7",
     isNew: true,
   },
-  { id: "tx-decoder", category: "utilities", icon: "code-xml", status: "live", milestone: "M2.5" },
+  { id: "tx-decoder", category: "developer", icon: "code-xml", status: "live", milestone: "M2.5" },
   { id: "token-valuation", category: "calculators", icon: "coins", status: "live", milestone: "U1", isNew: true },
   { id: "apy-calculator", category: "calculators", icon: "percent", status: "live", milestone: "U1", isNew: true },
   { id: "loan-to-value", category: "calculators", icon: "scale", status: "live", milestone: "U2", isNew: true },
@@ -143,6 +159,10 @@ export const tools: readonly ToolDefinition[] = [
     milestone: "U2",
     isNew: true,
   },
+  { id: "keccak-hash", category: "developer", icon: "hash", status: "live", milestone: "U3", isNew: true },
+  { id: "abi-encoder", category: "developer", icon: "braces", status: "live", milestone: "U3", isNew: true },
+  { id: "encoding-converter", category: "developer", icon: "repeat", status: "live", milestone: "U3", isNew: true },
+  { id: "json-csv", category: "developer", icon: "sheet", status: "live", milestone: "U3", isNew: true },
 ];
 
 export function getTool(id: string): ToolDefinition | undefined {

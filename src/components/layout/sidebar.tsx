@@ -3,13 +3,13 @@ import { getTranslations } from "next-intl/server";
 import { BookOpen, ChevronDown, House } from "lucide-react";
 import { Suspense } from "react";
 import { ToolIcon } from "@/components/tool-icon";
-import { type ToolCategory, tools } from "@/config/tools";
+import { type ToolCategory, type ToolIconName, tools } from "@/config/tools";
 import type { Locale } from "@/i18n/locales";
 import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { SidebarActiveMarker, SidebarCollapseButton } from "./sidebar-controls";
 
-const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "calculators", "utilities"];
-const folded: ToolCategory[] = ["calculators"];
+const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "calculators", "developer", "utilities"];
+const folded: Partial<Record<ToolCategory, ToolIconName>> = { calculators: "calculator", developer: "code-xml" };
 
 /**
  * Desktop tools sidebar (lg and up). Plain server-rendered links: the only browser code is the
@@ -91,12 +91,13 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
             </p>
           );
           // Groups that grow with many small tools fold, so the sidebar keeps fitting on one screen.
-          if (folded.includes(category)) {
+          const foldIcon = folded[category];
+          if (foldIcon) {
             const count = tools.filter((tool) => tool.category === category).length;
             return (
               <details key={category} className="sidebar-group group mt-2">
                 <summary className={`${item} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}>
-                  <ToolIcon name="calculator" className="size-[18px] shrink-0 text-primary" />
+                  <ToolIcon name={foldIcon} className="size-[18px] shrink-0 text-primary" />
                   <span className="sidebar-label min-w-0 flex-1">
                     {t(`categories.${category}`)} <span className="text-muted-foreground">({count})</span>
                   </span>
