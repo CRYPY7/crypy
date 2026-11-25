@@ -19,6 +19,12 @@
 /.next-b/
 /.crypy-dist
 /.crypy-dist.tmp
+/.crypy-port
+/.crypy-port.tmp
+/.crypy-worker
+/.crypy-worker.tmp
+/.crypy-instance-*.env
+/.crypy-instance-*.env.tmp
 /.static/
 /out/
 

@@ -114,32 +114,11 @@ sed -i '/^# ---- Set by setup.sh/d' "$ENV_FILE"
 
 say "6/7 Build and start the site"
 sudo -u "$APP_USER" bash -c "cd '$APP_DIR' && pnpm install --frozen-lockfile && pnpm build"
-cat > /etc/systemd/system/crypy.service <<UNIT
-[Unit]
-Description=CRYPY web app
-After=network-online.target postgresql.service
-Wants=network-online.target
-
-[Service]
-User=${APP_USER}
-WorkingDirectory=${APP_DIR}
-Environment=NODE_ENV=production
-ExecStart=/usr/bin/node ${APP_DIR}/node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3000
-Restart=always
-RestartSec=5
-# Hardening: the app can only write to its own folder.
-NoNewPrivileges=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=${APP_DIR}
-PrivateTmp=true
-
-[Install]
-WantedBy=multi-user.target
-UNIT
-systemctl daemon-reload
-systemctl enable crypy
-systemctl restart crypy
+# The site runs as crypy@3000; updates start the next version on 3001 beside it (update.sh), so there is no gap.
+sudo -u "$APP_USER" bash -c "cd '$APP_DIR' && printf '3000\\n' > .crypy-port && printf '3000\\n' > .crypy-worker && printf 'CRYPY_DIST_DIR=.next\\n' > .crypy-instance-3000.env"
+bash "$APP_DIR/scripts/server/app-unit.sh"
+systemctl enable crypy@3000
+systemctl restart crypy@3000
 
 bash "$APP_DIR/scripts/server/nginx-site.sh" "$DOMAIN"
 
@@ -165,5 +144,5 @@ if curl -fsS -o /dev/null http://127.0.0.1:3000/en; then
   echo "  1. Point ${DOMAIN} and www.${DOMAIN} to ${IP} (DNS A records at your domain registrar)."
   echo "  2. When they point here, run: bash ${APP_DIR}/scripts/server/enable-https.sh ${DOMAIN}"
 else
-  echo "The site didn't answer yet. See what it says with: journalctl -u crypy -n 80 --no-pager"
+  echo "The site didn't answer yet. See what it says with: journalctl -u 'crypy@*' -n 80 --no-pager"
 fi

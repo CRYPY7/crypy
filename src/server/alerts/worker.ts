@@ -1,4 +1,5 @@
 import "server-only";
+import { isWorkerOwner } from "@/server/worker-owner";
 import { getDb } from "@/server/db/client";
 import { serverEnv } from "@/server/env";
 import { redactKeys } from "@/server/redact";
@@ -39,12 +40,13 @@ const store = globalThis as typeof globalThis & { [startedKey]?: boolean };
 const busyStore = globalThis as typeof globalThis & { __crypyWorkerBusy?: Set<string> };
 const busy = (busyStore.__crypyWorkerBusy ??= new Set<string>());
 
-function every(ms: number, task: () => Promise<unknown>, label: string, firstDelay = ms) {
+function every(ms: number, task: () => Promise<unknown>, label: string, firstDelay = ms, ownerOnly = true) {
   let running = false;
   let lastError = "";
   registerJob(label, ms);
   const tick = async () => {
-    if (running) return;
+    // During an update's switch two processes run: only the owner does the background work (worker-owner.ts).
+    if (running || (ownerOnly && !isWorkerOwner())) return;
     running = true;
     busy.add(label);
     try {
@@ -117,7 +119,8 @@ export function startAlertsWorker(): void {
     "housekeeping",
   );
   // Free-plan counters saved every minute, so restarts keep the day's count and Alchemy's limit follows the month.
-  every(USAGE_MS, () => saveProviderUsage(), "usage", 5_000);
+  // Every process saves its own counts (they are added up), so this runs in both during a switch.
+  every(USAGE_MS, () => saveProviderUsage(), "usage", 5_000, false);
   // What visitors got from each tool (stabilization S0): saved every minute; the owner hears when a tool fails for them.
   every(USAGE_MS, () => watchVisitorOutcomes(), "outcomes", 30_000);
   // Daily security checks for the curated token pages (SEO Phase 3): a few every 10 minutes, oldest first.

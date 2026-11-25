@@ -1,4 +1,5 @@
 import "server-only";
+import { isWorkerOwner } from "@/server/worker-owner";
 import { and, eq } from "drizzle-orm";
 import { siteUrl } from "@/config/env";
 import { alertLink, escapeHtml } from "@/lib/alerts/format";
@@ -148,6 +149,11 @@ export function startTelegramBot(): void {
       console.warn(`[crypy] Telegram bot couldn't start: ${redactKeys((error as Error).message)}`);
     }
     for (;;) {
+      // During an update's switch, only the process that owns the background work reads the bot (worker-owner.ts).
+      if (!isWorkerOwner()) {
+        await new Promise((resolve) => setTimeout(resolve, 5_000));
+        continue;
+      }
       try {
         const updates = await telegramCall<TelegramUpdate[]>(
           "getUpdates",

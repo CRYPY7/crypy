@@ -41,6 +41,29 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## S4/S5: updates without a gap (B-023, 2026-11-25)
+
+- Cloudflare saw 502s, 500s and 503s around updates: each update restarted the app, and for those seconds nginx had
+  nothing to pass visitors to. Updates are frequent now, so this added up.
+- Now `update.sh` builds the new version (as before), **starts it beside the live one on the other port**
+  (`crypy@3000` / `crypy@3001`, systemd template written by `scripts/server/app-unit.sh`), waits until it answers,
+  moves nginx to it with a graceful reload (open connections finish on the old process), gives the old process 20 s
+  to finish streaming pages and stops it. If the new version doesn't answer, it is stopped and the live site is never
+  touched; if nginx refuses the new settings, everything stays as it was. The first update with this script moves
+  the site from the old single service (`crypy`) to `crypy@3001` by itself.
+- The background worker (alerts, Telegram bot, health and token checks, housekeeping) runs in one process only: the
+  file `.crypy-worker` names the port of the process that runs it, and update.sh hands it over at the switch
+  (`server/worker-owner.ts`, read every 5 s). Free-plan counters are saved by both. On the PC nothing changes.
+- For about a minute per update two app processes run; the 2 GB server has room for that once the build is done.
+- New server files (not in git): `.crypy-port`, `.crypy-worker`, `.crypy-instance-<port>.env`. The app's log is now
+  `journalctl -u 'crypy@*'`. `setup.sh` starts new servers as `crypy@3000`.
+
+**Checks:** typecheck, lint, Prettier clean; ShellCheck clean on update.sh, app-unit.sh, nginx-site.sh, setup.sh.
+Unit: 600 passed, 76 skipped (3 new: owner without a port, without the file, hand-over). Build passed. Browser: 309
+passed, 19 skipped, 0 failed. `update.sh` run here with stand-ins for git, pnpm, systemd, curl and nginx: from the old
+single service, a normal second switch, a new version that doesn't answer (live untouched) and nginx refusing (stays).
+Two real production instances side by side here: both answered pages, only the owner ran background work.
+
 ## S3: health score per node provider on /admin (2026-11-25)
 
 - New table on /admin, "Node providers (last hour)": every live chain's providers (host name and type: Alchemy, your

@@ -65,7 +65,8 @@ up by the scripts in `scripts/server/` (see ARCHITECTURE.md §10d for the securi
    `bash /opt/crypy/app/scripts/server/update.sh`.
 
 The web server settings live in `scripts/server/nginx-site.sh` (run by the other scripts; run it again instead of
-editing nginx by hand). Useful on the server: `systemctl status crypy`, `journalctl -u crypy -n 100 --no-pager` (the app's log), backups in
+editing nginx by hand). Useful on the server: `systemctl status 'crypy@*'`, `journalctl -u 'crypy@*' -n 100 --no-pager` (the app's log; it
+runs as `crypy@3000` or `crypy@3001`, and each update switches to the other without a gap), backups in
 `/var/backups/crypy` (daily, 14 days). `CRYPY_PREVIEW=1` (set by `setup.sh`) keeps search engines out; removing it
 from the server's `.env.local` and running `update.sh` opens the site to search engines (done for crypy.org's public
 beta on 2026-11-22).

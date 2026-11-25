@@ -422,6 +422,11 @@ Accepted (documented):
 - Rate limits and the Alchemy/GoPlus pacing are kept in memory: right for one server; a shared store is needed with
   several.
 
+Updates without a gap (B-023): the app runs as `crypy@<port>` (template from `app-unit.sh`, ports 3000 / 3001, build
+folder per instance in `.crypy-instance-<port>.env`); `update.sh` starts the new build on the other port, switches the
+nginx upstream (`.crypy-port`) with a graceful reload once it answers, then stops the old one. Only the process named
+in `.crypy-worker` runs the background worker (`server/worker-owner.ts`).
+
 Implemented by `scripts/server/setup.sh` and `nginx-site.sh` (M9 Part 3: HTTP/2, `/_next/static` served by nginx from
 disk with year-long immutable caching, upstream keep-alive, https and apex redirects; behind Cloudflare the visitor
 address comes from `CF-Connecting-IP` only for Cloudflare's ranges; certificates by webroot); `CRYPY_PREVIEW=1` adds `X-Robots-Tag: noindex, nofollow` and a

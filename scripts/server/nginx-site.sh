@@ -52,6 +52,10 @@ if [ -d "$STATIC_DIR" ]; then
   find "$STATIC_DIR" -type f -exec chmod o+r {} +
 fi
 
+# The port of the live instance (update.sh switches between 3000 and 3001).
+APP_PORT="$(cat "$APP_DIR/.crypy-port" 2>/dev/null || echo 3000)"
+case "$APP_PORT" in 3000 | 3001) ;; *) APP_PORT=3000 ;; esac
+
 # shellcheck disable=SC2016 # nginx variables, written literally
 PROXY='
         proxy_pass http://crypy_app;
@@ -86,7 +90,7 @@ COMMON="
 {
   echo "# CRYPY (written by scripts/server/nginx-site.sh; see ARCHITECTURE.md §10d). Run it again instead of editing."
   echo "upstream crypy_app {"
-  echo "    server 127.0.0.1:3000;"
+  echo "    server 127.0.0.1:${APP_PORT};"
   echo "    keepalive 32;"
   echo "}"
   if [ -f "${CERT_DIR}/fullchain.pem" ]; then

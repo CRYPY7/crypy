@@ -48,7 +48,10 @@ const securityHeaders = [
   ...(process.env.CRYPY_PREVIEW === "1" ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] : []),
 ];
 
-/** CRYPY_DIST_DIR while building on the server, else the live folder named in .crypy-dist, else .next. */
+/**
+ * CRYPY_DIST_DIR (while building on the server, and for each running instance: .crypy-instance-<port>.env), else the
+ * folder named in .crypy-dist, else .next.
+ */
 function buildFolder(): string {
   const fromEnv = process.env.CRYPY_DIST_DIR?.trim();
   if (fromEnv) return checkedFolder(fromEnv);
@@ -67,7 +70,7 @@ function checkedFolder(name: string): string {
 
 const nextConfig: NextConfig = {
   // The server builds into the folder that isn't live (.next-a or .next-b) while the site keeps serving, then records
-  // the new one in .crypy-dist and restarts (scripts/server/update.sh). Everywhere else this is the usual .next.
+  // starts it beside the live one (scripts/server/update.sh). Everywhere else this is the usual .next.
   distDir: buildFolder(),
   // On the server only (CRYPY_SKIP_TYPECHECK=1 in update.sh): the type check already ran before the push (pnpm
   // typecheck, the PC's full check), and on a 1-CPU server it costs about 80 seconds per update.

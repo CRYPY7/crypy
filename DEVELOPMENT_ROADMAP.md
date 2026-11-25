@@ -58,7 +58,8 @@ used up before 00:00 UTC on a normal day.
     the registry, and room in the CSS budget.
 - **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
   cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
-  2026-11-24: two build folders, rollback); a tested backup restore. **Done when:** an update, a worker crash and a
+  2026-11-24: two build folders, rollback; 2026-11-25: the new version starts beside the old one and nginx switches
+  without a gap, B-023); a tested backup restore. **Done when:** an update, a worker crash and a
   restart each leave the site serving.
 - **S5 — Fix everything found**, most harmful first, each with a test that fails without the fix; slow first visits.
 - **S6 — Prove it:** 14 days in a row on target. Then new features resume.
