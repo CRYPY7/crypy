@@ -5,6 +5,7 @@ import { type ChainKey, liveChains } from "@/config/chains";
 import { type ApprovalsSummary, type RatedApproval, rateApprovals, summarize } from "@/lib/approvals/evaluate";
 import type { ApprovalsFacts } from "@/lib/approvals/types";
 import { registry } from "@/server/chains/registry";
+import { runHeavy } from "@/server/heavy/queue";
 import { freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { readSavedOne, saveResults } from "@/server/saved/store";
 import { cachedAddressOverview } from "./overview";
@@ -69,7 +70,9 @@ export async function cachedApprovals(
               h.kind === "token" && h.address ? [h.address] : [],
             );
           });
-          const facts = await adapter.getApprovals(chain, owner, held, priority);
+          const getApprovals = adapter.getApprovals.bind(adapter);
+          // S3: heavy checks share one line (server/heavy/queue.ts): pages first, background work behind.
+          const facts = await runHeavy(() => getApprovals(chain, owner, held, priority), priority);
           return {
             chain: facts.chain as ChainKey,
             block: facts.block,

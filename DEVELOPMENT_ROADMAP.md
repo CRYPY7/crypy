@@ -41,8 +41,8 @@ used up before 00:00 UTC on a normal day.
   - **Built 2026-11-25:** GoPlus answers saved (reuse 1 h for tokens, 5 min for approvals; 24 h fallback); per-method
     provider rest; crawlers get no lookups on result pages; `pnpm providers:map` (what each provider supports; first map
     of the public nodes in PROGRESS.md). GoPlus queue with priorities (pages first, background behind, short waits
-    instead of refusals).
-  - **Still to do in S3:** more free providers per chain and a map of what each supports; a queue for heavy checks; a measured health score shown on the admin page; the "done when" day.
+    instead of refusals). One line for heavy checks (token reports, approval scans): 6 at a time, pages first.
+  - **Still to do in S3:** more free providers per chain and a map of what each supports; a measured health score shown on the admin page; the "done when" day.
 - **Utilities track U1–U3 (owner decision 2026-11-24), alongside S3–S5:** browser-only tools only, one batch at a
   time; backlog and statuses in FEATURE_REGISTRY.md and the "CRYPY — Feature registry" Sheet (291 catalog tools).
   U1: token decimals, manual gas fee, supply & valuation, APR/APY, address QR. U2: loan-to-value, impermanent loss,

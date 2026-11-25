@@ -1,4 +1,5 @@
 import "server-only";
+import { runHeavy } from "@/server/heavy/queue";
 import { chainDrill } from "@/server/fault";
 import { freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { MAX_AGE_MS, type Saved, readSavedOne, saveResults } from "@/server/saved/store";
@@ -154,6 +155,8 @@ export async function tokenSecurityReport(
   const parsed = found.adapter.parseAddress(address);
   if (!parsed || parsed.checksumValid === false) return null;
   await chainDrill(found.chain.key, parsed.normalized);
-  const facts = await found.adapter.getTokenSecurity(found.chain, parsed.normalized, priority);
+  const getTokenSecurity = found.adapter.getTokenSecurity.bind(found.adapter);
+  // S3: heavy checks share one line (server/heavy/queue.ts): pages first, background work behind.
+  const facts = await runHeavy(() => getTokenSecurity(found.chain, parsed.normalized, priority), priority);
   return facts ? evaluate(facts) : null;
 }

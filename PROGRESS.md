@@ -41,6 +41,22 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## S3: one line for heavy checks (2026-11-25)
+
+- Token security reports and approval scans (one per chain) are the heaviest work: several node rounds, GoPlus and
+  simulations each. Before, any number ran at once, so a burst of visitors or bots together with the daily token
+  checks, health checks and Portfolio badges could overload the 1-CPU server and the free nodes and slow every page.
+- Now (`server/heavy/queue.ts`) they share one line per server: at most 6 run at a time, of which at most 2 are
+  background work; waiting checks start pages first. More than 60 waiting: a new check is refused like a failed
+  check (the page shows its saved reading, or says it couldn't check right now). Background checks give up after
+  2 minutes in line. Pages already show the saved reading after 2.5 s while their fresh check keeps its place.
+  A server log line each minute when anything waited or was refused. Limits are settings (`HEAVY_MAX_RUNNING`,
+  `HEAVY_MAX_BACKGROUND`, `HEAVY_MAX_QUEUED`); defaults chosen for the 1-CPU droplet, to be adjusted from the logs.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 592 passed, 76 skipped (6 new: running limit, background share and
+pages first, background inside `runInBackground`, full line refused, background giving up, failures freeing their
+place). Build passed. Browser: 309 passed, 19 skipped, 0 failed.
+
 ## S3: GoPlus calls wait in line instead of failing (2026-11-25)
 
 - Before, GoPlus calls had a fixed allowance per minute (30, of which background checks could take 8 at the start of

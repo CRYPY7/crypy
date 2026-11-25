@@ -493,6 +493,10 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   `scripts/providers/map.mjs` (`pnpm providers:map`) measures each provider's capabilities (batch size, old blocks,
   event ranges, wallet-wide searches); host names only. With several server processes, each has its
   own bucket: lower `ALCHEMY_CU_PER_SECOND` accordingly or move it to the shared Redis store.
+- Heavy checks (`server/heavy/queue.ts`, S3): `runHeavy(task, priority)` wraps the adapter's `getTokenSecurity` (in
+  `tokenSecurityReport`) and `getApprovals` (per chain, in `cachedApprovals`): `HEAVY_MAX_RUNNING` (6) at once, at
+  most `HEAVY_MAX_BACKGROUND` (2) background (default inside `runInBackground`), pages started first,
+  `HeavyBusyError` past `HEAVY_MAX_QUEUED` (60) waiting or after 2 minutes for background. In memory per process.
 - Alchemy daily limit (`alchemy-budget.ts`, pure): (90% of `ALCHEMY_MONTHLY_CU` − units spent earlier this month)
   ÷ days left, at most 2× a normal day; `ALCHEMY_DAILY_CU` fixes it instead. Tiers inside the day: ordinary
   reads in a rotation use Alchemy up to 30%, background work (`server/background.ts`, AsyncLocalStorage: worker
