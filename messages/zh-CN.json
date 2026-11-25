@@ -1344,6 +1344,212 @@
       "seoTitle": "加密货币地址簿：识别地址投毒 | CRYPY",
       "seoDescription": "在浏览器中保存可信的加密货币地址，用它们核对任何地址，识别相似地址投毒骗局。所有内容都不会离开你的设备。",
       "shortName": "地址簿"
+    },
+    "profit-calculator": {
+      "name": "加密货币盈亏与平均成本计算器",
+      "question": "我现在是盈利吗？保本价是多少？",
+      "description": "输入你对同一币种的每笔买入，得到平均成本、任意价格下的盈亏，以及扣除手续费后的保本价。",
+      "input": "你的买入记录和卖出价格",
+      "cta": "计算",
+      "features": [
+        "最多 10 笔买入的平均成本，含手续费",
+        "以美元和百分比显示盈亏",
+        "扣除卖出手续费后的保本价"
+      ],
+      "howTo": [
+        "输入每笔买入的数量和价格（每笔买入加一行）。",
+        "填写你支付的手续费，以及想卖出的价格或今天的价格。",
+        "查看平均成本、盈亏和保本价。"
+      ],
+      "faq": [
+        {
+          "q": "平均成本怎么算？",
+          "a": "你支付的全部金额（含买入手续费）除以买入的币数。以 2,000 美元买 1 个 ETH、以 3,000 美元再买 1 个，手续费 10 美元，平均成本为 2,505 美元。"
+        },
+        {
+          "q": "什么是保本价？",
+          "a": "扣除卖出手续费后，正好收回你所付金额的卖出价格。高于它就是盈利，低于它就是亏损。"
+        },
+        {
+          "q": "它会查询今天的价格吗？",
+          "a": "不会。请输入你想测试的价格。不会查询或发送任何数据，所以你可以试任何价格。"
+        },
+        {
+          "q": "这是我的报税数字吗？",
+          "a": "不是。各国税务规则不同（例如先进先出或平均成本），还可能把转账和兑换算作卖出。请把它当作估算，报税请咨询税务顾问。"
+        },
+        {
+          "q": "我输入的内容会发送到服务器吗？",
+          "a": "不会。所有计算都在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "加密货币盈亏与平均成本计算器 | CRYPY",
+      "seoDescription": "根据你的买入记录、手续费和卖出价格，计算任意币种的平均买入价、盈亏和保本价。在浏览器中计算，不发送任何数据。",
+      "shortName": "盈亏与平均成本"
+    },
+    "bytecode-compare": {
+      "name": "合约字节码比较器",
+      "question": "这个合约和那个合约的代码相同吗？",
+      "description": "比较两段 EVM 字节码：完全相同、代码相同但编译器元数据不同，还是代码不同。查看代码哈希、编译器版本和代理。",
+      "input": "两段字节码",
+      "cta": "比较",
+      "features": [
+        "把 Solidity 元数据与程序本身分开",
+        "代码哈希、编译器版本和源码的 IPFS 哈希",
+        "识别最小代理、EIP-7702 委托和创建代码"
+      ],
+      "howTo": [
+        "复制每个合约的字节码（浏览器的 Contract 标签页，或 eth_getCode）。",
+        "每个输入框粘贴一段。",
+        "查看它们是完全相同、代码相同还是不同，以及第一处差异的位置。"
+      ],
+      "faq": [
+        {
+          "q": "为什么同一个合约的两次编译结果不同？",
+          "a": "Solidity 编译器会在代码末尾附加元数据：源文件和设置的哈希，以及编译器版本。改一句注释或文件路径就会改变这个哈希，但程序不变。本工具会分别比较含与不含元数据的代码。"
+        },
+        {
+          "q": "什么是代码哈希？",
+          "a": "合约已部署（运行时）代码的 Keccak-256 哈希，即 EXTCODEHASH 返回的值。代码哈希相同的两个合约运行的代码完全相同。"
+        },
+        {
+          "q": "代码长度相同，但有几个字节不同，为什么？",
+          "a": "这通常是部署时写入代码的不可变值（immutable），例如所有者、代币或路由器地址。它们可能改变合约的行为，请核实它们是什么。"
+        },
+        {
+          "q": "代码相同就说明合约安全吗？",
+          "a": "不是。它只说明代码一致。知名合约的副本仍可能有不同的所有者、设置，或指向别处的代理。请同时用 CRYPY 的安全工具检查该代币或合约。"
+        },
+        {
+          "q": "字节码会被发送到任何地方吗？",
+          "a": "不会。所有比较都在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "合约字节码比较器与代码哈希 | CRYPY",
+      "seoDescription": "比较两个 EVM 合约的字节码，忽略 Solidity 元数据。查看代码哈希、编译器版本、代理和第一处差异。在浏览器中完成。",
+      "shortName": "字节码比较"
+    },
+    "nft-uri-decoder": {
+      "name": "NFT Token URI 与元数据解码器",
+      "question": "这个 NFT 的 token URI 里有什么？",
+      "description": "解码 NFT 的 tokenURI 或元数据：链上 base64 JSON 和 SVG 图片、IPFS 与 Arweave 链接、属性，以及关于脚本或可被修改的托管的提醒。",
+      "input": "Token URI 或元数据 JSON",
+      "cta": "解码",
+      "features": [
+        "解码 data: URI（base64 或纯文本）并显示链上 SVG 图片",
+        "IPFS 和 Arweave 网关地址；自动填入 ERC-1155 的 {id}",
+        "标出脚本、HTML 以及托管在可修改服务器上的元数据"
+      ],
+      "howTo": [
+        "从区块浏览器复制合约 tokenURI()（ERC-1155 为 uri()）的结果，或粘贴元数据 JSON。",
+        "如果是含 {id} 的 ERC-1155 地址，请输入代币 id。",
+        "查看名称、图片、属性，以及关于数据存放位置的说明。"
+      ],
+      "faq": [
+        {
+          "q": "什么是 token URI？",
+          "a": "NFT 元数据的地址：一个包含名称、描述、图片和属性的 JSON 文件。合约通过 tokenURI(id)（ERC-721）或 uri(id)（ERC-1155）返回它。"
+        },
+        {
+          "q": "这里的“链上”是什么意思？",
+          "a": "元数据就在 URI 本身里（data: URI），由合约保存，因此不依赖任何服务器。IPFS 和 Arweave 地址与内容绑定，该地址上的文件无法更改。普通网址则可能被服务器管理者修改或删除。"
+        },
+        {
+          "q": "为什么 SVG 里有脚本要提醒？",
+          "a": "SVG 图片可以包含代码。作为图片显示时无法运行，但直接把 SVG 嵌入页面时可能会运行。CRYPY 只以图片形式显示，并且从不打开链接。"
+        },
+        {
+          "q": "工具会从 IPFS 加载图片吗？",
+          "a": "不会。不会下载任何内容。它只显示你可以自己打开的网关地址，并且只预览存放在 URI 内部的图片。"
+        },
+        {
+          "q": "我粘贴的内容会被发送到任何地方吗？",
+          "a": "不会。所有解码都在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "NFT Token URI 与元数据解码器 | CRYPY",
+      "seoDescription": "解码 NFT 的 tokenURI 数据：base64 JSON、链上 SVG、IPFS 与 Arweave 链接和属性，并提醒脚本和可修改的托管。在浏览器中完成。",
+      "shortName": "NFT URI 解码"
+    },
+    "json-diff": {
+      "name": "JSON 对比（Diff）",
+      "question": "这两个 JSON 文件之间改了什么？",
+      "description": "比较两个 JSON 文档，列出每个新增、删除或修改的值及其路径。大数字保持精确，重复的键会被标出。",
+      "input": "两个 JSON 文档",
+      "cta": "比较",
+      "features": [
+        "每处改动都带路径，例如 $.fees.sell",
+        "精确比较大数字（以 wei 为单位的代币数量不会失真）",
+        "显示重复的键和语法错误的行号与列号"
+      ],
+      "howTo": [
+        "在左边粘贴旧 JSON，右边粘贴新 JSON。",
+        "查看新增、删除和修改的值列表。",
+        "如需分享，可将列表复制为文本。"
+      ],
+      "faq": [
+        {
+          "q": "键的顺序重要吗？",
+          "a": "不重要。在 JSON 中，对象的键没有顺序，所以调整顺序不算改动。数组元素按位置比较。"
+        },
+        {
+          "q": "为什么要保持数字精确？",
+          "a": "大多数 JSON 解析器会对很大的整数取近似值，因此两个不同的 wei 数量可能看起来相等。本工具按书写原样比较数字；1.0 和 1 视为同一个值。"
+        },
+        {
+          "q": "为什么重复的键要提醒？",
+          "a": "同一个键出现两次时，不同程序会采用不同的那一个。这曾被用来给人看一个值、在代码里用另一个值。本工具像大多数程序一样，比较最后一个。"
+        },
+        {
+          "q": "我的 JSON 会被发送到任何地方吗？",
+          "a": "不会。所有比较都在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "JSON 在线对比：比较两个 JSON 文件 | CRYPY",
+      "seoDescription": "比较两个 JSON 文档，查看每个新增、删除和修改的值及其路径。大数字精确比较，并提醒重复的键。在浏览器中完成。",
+      "shortName": "JSON 对比"
+    },
+    "calldata-gas": {
+      "name": "Calldata Gas 计算器",
+      "question": "这笔交易的数据要花多少 Gas？",
+      "description": "统计交易数据中的零字节和非零字节，计算固有 Gas、EIP-7623 的 calldata 下限，以及按你的 Gas 价格计算的费用。",
+      "input": "交易数据（hex）",
+      "cta": "计算",
+      "features": [
+        "固有 Gas：21,000 加上每字节 4 或 16 Gas",
+        "以太坊 Pectra 升级新增的 calldata 下限（EIP-7623）",
+        "合约创建费用，以及以币和美元计的费用"
+      ],
+      "howTo": [
+        "粘贴交易的输入数据（以 0x 开头）。",
+        "如果数据用于部署合约，请勾选“合约创建”。",
+        "查看数据所需的 Gas，并填入 Gas 价格查看费用。"
+      ],
+      "faq": [
+        {
+          "q": "什么是固有 Gas？",
+          "a": "交易在任何代码运行之前就要支付的 Gas：交易本身 21,000，每个零字节数据 4，其他每个字节 16；创建合约另加 32,000，以及每 32 字节一个字 2 Gas。"
+        },
+        {
+          "q": "什么是 calldata 下限？",
+          "a": "自以太坊 Pectra 升级（2025 年 5 月，EIP-7623）起，一笔交易至少按 21,000 加每个数据 token 10 Gas 收费（零字节为 1 个 token，其他字节为 4 个）。只对数据多、计算少的交易有影响。"
+        },
+        {
+          "q": "这是我交易的总 Gas 吗？",
+          "a": "不是。运行的合约代码还会另外消耗 Gas。可用它查看数据部分的费用，并确认 Gas 上限不低于最低要求。"
+        },
+        {
+          "q": "所有链都适用吗？",
+          "a": "每字节 4 和 16 Gas 一般适用于 EVM 链。下限适用于以太坊以及采用了 EIP-7623 的链。二层网络还会另收一笔把数据发布到以太坊的费用，这里不包含。"
+        },
+        {
+          "q": "我粘贴的内容会被发送到任何地方吗？",
+          "a": "不会。所有统计都在你的浏览器中完成。"
+        }
+      ],
+      "seoTitle": "Calldata Gas 计算器（EIP-7623 下限）| CRYPY",
+      "seoDescription": "计算交易数据的固有 Gas：零字节与非零字节、合约创建和 Pectra 的 calldata 下限，并按你的 Gas 价格计算费用。",
+      "shortName": "Calldata Gas"
     }
   },
   "toolPage": {
@@ -4314,6 +4520,273 @@
       },
       "storage": "只保存在本设备的这个浏览器中，绝不会发送给 CRYPY。清除浏览器数据会删除它：请导出一份副本保存。",
       "local": "在你的浏览器中运行：你输入的内容不会发送到任何地方。"
+    },
+    "profitCalculator": {
+      "buysTitle": "你的买入",
+      "buyAmount": "买入数量（第 {n} 笔）",
+      "buyPrice": "每枚买入价格（第 {n} 笔）",
+      "buyLabel": "删除第 {n} 笔买入",
+      "addBuy": "再加一笔买入",
+      "removeBuy": "删除",
+      "buyFees": "买入手续费（可选）",
+      "buyFeesHint": "这些买入共支付的全部手续费，单位 USD。",
+      "sellPrice": "卖出价格",
+      "sellPriceHint": "你想测试的价格，或今天的价格。不会查询任何数据。",
+      "sellFee": "卖出手续费（可选）",
+      "sellFeeHint": "交易所按卖出金额收取的百分比，例如 0.1。",
+      "results": "结果",
+      "empty": "至少输入一笔买入和一个卖出价格即可查看结果。",
+      "profit": "盈亏",
+      "profitPercent": "相对你的投入 {percent}",
+      "averageCost": "每枚平均成本",
+      "averageCostHelp": "全部支付金额（含手续费）÷ 买入的币数。",
+      "breakEven": "保本价",
+      "breakEvenHelp": "扣除卖出手续费后，正好收回投入的卖出价格。",
+      "amount": "持有数量",
+      "cost": "总投入（含手续费）",
+      "saleValue": "按卖出价计算的价值",
+      "sellFeeUsd": "卖出手续费",
+      "priceChange": "卖出价相对平均成本 {percent}。",
+      "note": "根据你输入的数字估算。交易所会对数量和手续费取整，税务规则也有各自的成本算法。",
+      "local": "根据你输入的内容在浏览器中计算；不会查询或发送任何数据。",
+      "errors": {
+        "empty": "",
+        "format": "请输入数字，例如 1000 或 2.5。",
+        "negative": "不能为负数。",
+        "comma": "小数请用点（2.5）；逗号只用于千位分隔（1,000）。",
+        "too-large": "数值过大。",
+        "too-precise": "小数位数过多。",
+        "over-100": "必须小于 100%。",
+        "no-buys": "请至少添加一笔数量大于零的买入。",
+        "half-row": "请同时填写这笔买入的数量和价格。"
+      }
+    },
+    "bytecodeCompare": {
+      "first": "第一段字节码",
+      "second": "第二段字节码",
+      "placeholder": "0x6080604052…",
+      "hint": "两边都粘贴运行时代码（浏览器中显示为 Deployed Bytecode），或两边都粘贴创建代码。",
+      "verdicts": {
+        "identical": {
+          "title": "字节码完全相同",
+          "body": "每个字节都一致，因此两者的代码哈希相同。"
+        },
+        "same-code": {
+          "title": "代码相同，元数据不同",
+          "body": "程序完全相同；只有末尾的 Solidity 元数据不同（源文件哈希或编译器设置）。两者执行相同的指令。"
+        },
+        "same-length": {
+          "title": "长度相同但代码不同",
+          "body": "程序不同，但长度一样。"
+        },
+        "different": {
+          "title": "代码不同",
+          "body": "两个程序的长度和内容都不同。"
+        }
+      },
+      "immutables": "差异出现在 {regions} 处，每处不超过 32 字节。这些通常是部署时设定的不可变值，例如所有者或代币地址：请核实它们是什么。",
+      "firstDifference": "第一处差异在第 {offset} 字节。",
+      "sideTitle": "字节码",
+      "size": "大小",
+      "sizeValue": "{bytes} 字节",
+      "overLimit": "超过以太坊已部署代码 24,576 字节的上限（EIP-170）：可能是创建代码，或其他链的代码。",
+      "hash": "代码哈希（Keccak-256）",
+      "hashHelp": "对已部署代码而言，这就是合约的代码哈希（EXTCODEHASH）。",
+      "hashWithoutMetadata": "不含元数据的哈希",
+      "metadataTitle": "编译器元数据",
+      "compiler": "编译器",
+      "ipfs": "IPFS 上的源码元数据",
+      "swarm": "Swarm 上的源码元数据",
+      "experimental": "使用了实验性功能编译。",
+      "noMetadata": "未找到 Solidity 元数据（可能被关闭了，或代码来自其他编译器）。",
+      "kinds": {
+        "empty": "没有代码：一个空账户（普通钱包或已销毁的合约）。",
+        "minimal-proxy": "最小代理（EIP-1167）：它把每次调用转发给下方的合约。请检查那个合约。",
+        "delegation": "EIP-7702 委托：这个钱包运行下方合约的代码。",
+        "creation": "这看起来是创建（部署）代码。要与线上合约比较，请使用它的已部署代码。"
+      },
+      "implementation": "转发到",
+      "target": "委托给",
+      "oneSide": "粘贴第二段字节码即可比较。第一段的详情：",
+      "note": "代码一致并不代表合约安全：所有者、设置以及代理指向的目标同样重要。",
+      "local": "在你的浏览器中比较；不会查询或发送任何数据。",
+      "errors": {
+        "format": "只能输入 hex 字符（0–9、a–f）。",
+        "odd": "hex 字符数必须为偶数（每字节 2 个）。",
+        "too-large": "太长：字节码最多 128 KB。"
+      }
+    },
+    "nftUriDecoder": {
+      "label": "Token URI 或元数据 JSON",
+      "placeholder": "data:application/json;base64,… 或 ipfs://… 或 {\"name\": …}",
+      "hint": "tokenURI() 或 uri() 返回的值，或元数据 JSON 本身。",
+      "tokenId": "代币 id（可选）",
+      "tokenIdHint": "用于含 {id} 的 ERC-1155 地址：十进制或 0x 开头的代币 id。",
+      "findingsTitle": "说明",
+      "fields": {
+        "uri": "Token URI",
+        "image": "图片",
+        "animation": "动画",
+        "external": "外部链接"
+      },
+      "findings": {
+        "script-scheme": {
+          "title": "javascript: 链接",
+          "body": "打开时会运行代码，而不是跳转到网页。正规的 NFT 不需要这种链接。请不要打开。"
+        },
+        "svg-script": {
+          "title": "SVG 中含有代码",
+          "body": "图片包含脚本、事件处理器或嵌入的 HTML。作为图片显示时无法运行，但在直接嵌入 SVG 的页面中可能会运行。"
+        },
+        "html": {
+          "title": "HTML 页面",
+          "body": "HTML 打开时可以运行代码。生成艺术常用这种方式；请只在会隔离它的市场中打开。"
+        },
+        "web-hosted": {
+          "title": "存放在普通网页服务器上",
+          "body": "服务器管理者可以随时修改或删除这个文件。"
+        },
+        "insecure-http": {
+          "title": "未加密（http://）",
+          "body": "文件在传输给查看者的途中可能被篡改。"
+        },
+        "svg-external": {
+          "title": "SVG 加载外部内容",
+          "body": "图片引用了其他服务器上的文件，这些文件可能被更改，或用来追踪查看者。市场可能不会显示它们。"
+        },
+        "bad-json": {
+          "title": "元数据不是有效的 JSON",
+          "body": "钱包和市场可能无法显示这个代币。"
+        },
+        "content-addressed": {
+          "title": "按内容存储（IPFS 或 Arweave）",
+          "body": "这个地址上的文件无法更改。但合约仍可能允许所有者把代币指向另一个地址。"
+        },
+        "on-chain": {
+          "title": "存储在链上",
+          "body": "数据就在 URI 本身里，因此不依赖任何服务器。"
+        },
+        "id-template": {
+          "title": "含有 {id}",
+          "body": "ERC-1155 地址模板。输入代币 id 即可填入。"
+        },
+        "gateway-url": {
+          "title": "IPFS 网关地址",
+          "body": "内容使用 IPFS 寻址，但这个链接依赖该网关保持在线。"
+        }
+      },
+      "sourceTitle": "Token URI",
+      "storage": "存放位置",
+      "schemes": {
+        "data": "链上（data: URI）",
+        "ipfs": "IPFS",
+        "arweave": "Arweave",
+        "https": "网页服务器（https）",
+        "http": "网页服务器（http，未加密）",
+        "script": "javascript: 链接",
+        "other": "未知的地址类型"
+      },
+      "mediaType": "媒体类型",
+      "decodedSize": "解码后大小",
+      "bytes": "{bytes} 字节",
+      "gateway": "网关地址 {n}",
+      "gatewayHelp": "供你自己打开；CRYPY 从不下载它。",
+      "decodedText": "显示解码后的文本",
+      "metadataTitle": "元数据",
+      "name": "名称",
+      "description": "描述",
+      "externalUrl": "外部网址",
+      "image": "图片",
+      "imagePreview": "{name} 的图片",
+      "imagePreviewHelp": "只预览存放在 URI 内部的图片；不会下载任何内容。",
+      "noPreview": "无预览：图片存放在别处。",
+      "animation": "动画",
+      "traitsTitle": "属性",
+      "trait": "属性",
+      "value": "值",
+      "noTraits": "该元数据中没有属性（attributes）。",
+      "otherKeys": "其他字段",
+      "rawJson": "显示元数据 JSON",
+      "note": "这里显示的是 URI 目前的内容。合约所有者之后可能可以修改 URI；区块浏览器上的代币页面会显示合约信息。",
+      "local": "在你的浏览器中解码；不会下载或发送任何数据。",
+      "errors": {
+        "empty": "",
+        "too-large": "太长：最多 200 万个字符。",
+        "bad-json": "这不是有效的元数据 JSON（应为包含 name、image 等字段的对象）。",
+        "bad-data": "无法解码这个 data: URI（base64 或文本已损坏）。",
+        "token-id": "请输入整数或 0x 开头的 hex 数字。"
+      }
+    },
+    "jsonDiff": {
+      "before": "旧 JSON",
+      "after": "新 JSON",
+      "placeholder": "{\"key\": \"value\"}",
+      "same": "没有差异",
+      "sameBody": "两个文档的值完全相同（不计键的顺序和数字的写法）。",
+      "summary": "新增 {added} · 删除 {removed} · 修改 {changed}",
+      "kinds": {
+        "added": "新增",
+        "removed": "删除",
+        "changed": "修改",
+        "type": "类型改变"
+      },
+      "path": "路径",
+      "change": "改动",
+      "truncated": "仅显示前 {shown} 处改动。",
+      "copyReport": "将改动复制为文本",
+      "duplicates": "重复的键",
+      "duplicatesBody": "有些键出现了不止一次。不同程序对采用哪一个看法不一；本次比较使用最后一个。",
+      "note": "对象比较时不考虑键的顺序；数组逐项比较。",
+      "local": "在你的浏览器中比较；不会发送任何数据。",
+      "errors": {
+        "syntax": "不是有效的 JSON：第 {line} 行，第 {column} 列。",
+        "too-large": "太长：最多 200 万个字符。",
+        "too-deep": "嵌套太深（超过 200 层）。"
+      }
+    },
+    "calldataGas": {
+      "label": "交易数据",
+      "placeholder": "0xa9059cbb…",
+      "create": "合约创建",
+      "createHint": "如果数据用于部署合约（没有接收方的交易），请勾选。",
+      "bytes": "数据大小",
+      "bytesValue": "{bytes} 字节：{zero} 个零字节，{nonZero} 个非零字节",
+      "tokens": "数据 token",
+      "tokensHelp": "零字节数 + 4 × 非零字节数（EIP-7623）。",
+      "dataGas": "数据 Gas",
+      "dataGasHelp": "每个零字节 4，每个非零字节 16。",
+      "createGas": "创建合约的 Gas",
+      "intrinsic": "固有 Gas",
+      "intrinsicHelp": "21,000 + 数据（+ 创建）：在任何代码运行前消耗。",
+      "floor": "Calldata 下限",
+      "floorHelp": "21,000 + 每个数据 token 10（以太坊 Pectra 之后）。",
+      "floorApplies": "如果合约代码消耗少于 {gas} Gas，这笔交易将按下限收费。Gas 上限必须覆盖两者中较大的那个。",
+      "floorNever": "下限不高于固有 Gas，因此不会改变收费。",
+      "selector": "函数选择器",
+      "decode": "解码这段数据",
+      "gas": "{gas} Gas",
+      "costTitle": "费用（可选）",
+      "gwei": "Gas 价格",
+      "gweiHint": "基础费 + 优先费。Gas 追踪器显示当前价格。",
+      "coinPrice": "币价",
+      "coinPriceHint": "ETH、BNB 或 POL 的 USD 价格，用于换算美元。",
+      "costIntrinsic": "固有 Gas 的费用",
+      "costFloor": "下限的费用",
+      "costNative": "以该链的原生币计（ETH、BNB…）。",
+      "note": "仅包含数据和交易本身的费用。运行的合约代码会另外收费，二层网络还会加收把数据发布到以太坊的费用。",
+      "local": "在你的浏览器中统计；不会发送任何数据。",
+      "errors": {
+        "format": "只能输入 hex 字符（0–9、a–f）。",
+        "odd": "hex 字符数必须为偶数（每字节 2 个）。",
+        "too-large": "太长：数据最多 1 MB。"
+      },
+      "priceErrors": {
+        "format": "请输入数字，例如 2 或 0.5。",
+        "negative": "不能为负数。",
+        "comma": "小数请用点（2.5）。",
+        "too-large": "数值过大。",
+        "too-precise": "小数位数过多。"
+      }
     }
   },
   "seo": {

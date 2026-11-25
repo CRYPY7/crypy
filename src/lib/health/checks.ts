@@ -120,6 +120,11 @@ export const statusComponents: readonly StatusComponent[] = [
   toolComponent("file-hash", []),
   toolComponent("bitcoin-fee", []),
   toolComponent("address-book", []),
+  toolComponent("profit-calculator", []),
+  toolComponent("bytecode-compare", []),
+  toolComponent("nft-uri-decoder", []),
+  toolComponent("json-diff", []),
+  toolComponent("calldata-gas", []),
   ...liveChains.map((c) => ({
     id: `chain:${c.key}`,
     group: "chains" as const,

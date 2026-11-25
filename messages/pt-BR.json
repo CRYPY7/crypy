@@ -1344,6 +1344,212 @@
       "seoTitle": "Agenda de endereços cripto: detecte envenenamento | CRYPY",
       "seoDescription": "Guarde endereços cripto confiáveis no seu navegador e confira qualquer endereço com eles para detectar golpes de endereços parecidos. Nada sai do seu dispositivo.",
       "shortName": "Agenda de endereços"
+    },
+    "profit-calculator": {
+      "name": "Calculadora de lucro e preço médio cripto",
+      "question": "Estou no lucro e qual é o meu ponto de equilíbrio?",
+      "description": "Adicione suas compras de uma moeda para ver seu preço médio, o lucro ou prejuízo em qualquer preço e o preço de equilíbrio depois das taxas.",
+      "input": "Suas compras e um preço de venda",
+      "cta": "Calcular",
+      "features": [
+        "Preço médio de até 10 compras, com taxas",
+        "Lucro ou prejuízo em dólares e em porcentagem",
+        "Preço de equilíbrio depois da taxa de venda"
+      ],
+      "howTo": [
+        "Digite a quantidade e o preço de cada compra (adicione uma linha por compra).",
+        "Adicione as taxas que você pagou e o preço pelo qual quer vender, ou o preço de hoje.",
+        "Veja seu preço médio, o lucro ou prejuízo e o preço de equilíbrio."
+      ],
+      "faq": [
+        {
+          "q": "Como o preço médio é calculado?",
+          "a": "Tudo o que você pagou, incluindo as taxas de compra, dividido pelo número de moedas compradas. Comprar 1 ETH a US$ 2.000 e 1 a US$ 3.000 com US$ 10 de taxas dá um preço médio de US$ 2.505."
+        },
+        {
+          "q": "O que é o preço de equilíbrio?",
+          "a": "O preço de venda em que você recupera exatamente o que pagou, depois da taxa de venda. Acima dele você está no lucro; abaixo, no prejuízo."
+        },
+        {
+          "q": "Ela consulta o preço de hoje?",
+          "a": "Não. Digite o preço que quer testar. Nada é consultado nem enviado, então você pode testar qualquer preço."
+        },
+        {
+          "q": "Este é o valor para o meu imposto?",
+          "a": "Não. As regras fiscais variam por país (por exemplo, PEPS ou custo médio) e podem contar transferências e swaps como vendas. Use como estimativa e consulte um contador para sua declaração."
+        },
+        {
+          "q": "Algo que eu digito é enviado a um servidor?",
+          "a": "Não. Tudo é calculado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de lucro e preço médio cripto | CRYPY",
+      "seoDescription": "Calcule seu preço médio de compra, lucro ou prejuízo e preço de equilíbrio a partir das compras, taxas e de um preço de venda. No seu navegador.",
+      "shortName": "Lucro e preço médio"
+    },
+    "bytecode-compare": {
+      "name": "Comparador de bytecode de contratos",
+      "question": "Este contrato tem o mesmo código que aquele?",
+      "description": "Compare dois bytecodes EVM: idênticos, o mesmo código com metadados do compilador diferentes ou código diferente. Veja hashes de código, versão do compilador e proxies.",
+      "input": "Dois bytecodes",
+      "cta": "Comparar",
+      "features": [
+        "Separa os metadados do Solidity do programa em si",
+        "Hashes de código, versão do compilador e hash IPFS do código-fonte",
+        "Identifica proxies mínimos, delegações EIP-7702 e código de criação"
+      ],
+      "howTo": [
+        "Copie o bytecode de cada contrato (aba Contract de um explorador, ou eth_getCode).",
+        "Cole um em cada caixa.",
+        "Veja se são idênticos, o mesmo código ou diferentes, e onde está a primeira diferença."
+      ],
+      "faq": [
+        {
+          "q": "Por que duas compilações do mesmo contrato são diferentes?",
+          "a": "O compilador Solidity adiciona metadados ao código: um hash dos arquivos-fonte e das configurações, e a versão do compilador. Um comentário ou caminho de arquivo diferente muda esse hash, mas não o programa. Esta ferramenta compara o código com e sem eles."
+        },
+        {
+          "q": "O que é o hash de código?",
+          "a": "O hash Keccak-256 do código implantado (runtime) de um contrato, o que EXTCODEHASH retorna. Dois contratos com o mesmo hash de código executam exatamente o mesmo código."
+        },
+        {
+          "q": "O código tem o mesmo tamanho, mas alguns bytes diferem. Por quê?",
+          "a": "Muitas vezes são valores imutáveis gravados no código na implantação, como o endereço de um dono, de um token ou de um roteador. Eles podem mudar o que o contrato faz, então verifique quais são."
+        },
+        {
+          "q": "O mesmo código quer dizer que o contrato é seguro?",
+          "a": "Não. Só mostra que o código é igual. Uma cópia de um contrato conhecido pode ter outro dono, outras configurações ou um proxy apontando para outro lugar. Verifique também o token ou contrato com as ferramentas de segurança da CRYPY."
+        },
+        {
+          "q": "O bytecode é enviado para algum lugar?",
+          "a": "Não. Tudo é comparado no seu navegador."
+        }
+      ],
+      "seoTitle": "Comparador de bytecode e hash de código | CRYPY",
+      "seoDescription": "Compare o bytecode de dois contratos EVM sem os metadados do Solidity. Hashes de código, versão do compilador, proxies e a primeira diferença.",
+      "shortName": "Comparador de bytecode"
+    },
+    "nft-uri-decoder": {
+      "name": "Decodificador de token URI e metadados de NFT",
+      "question": "O que há dentro do token URI deste NFT?",
+      "description": "Decodifique o tokenURI ou os metadados de um NFT: JSON base64 e imagens SVG on-chain, links IPFS e Arweave, atributos e alertas sobre scripts ou hospedagem alterável.",
+      "input": "Um token URI ou JSON de metadados",
+      "cta": "Decodificar",
+      "features": [
+        "Decodifica URIs data: (base64 ou texto) e mostra imagens SVG on-chain",
+        "Endereços de gateway IPFS e Arweave; {id} do ERC-1155 preenchido",
+        "Sinaliza scripts, HTML e metadados hospedados em servidores alteráveis"
+      ],
+      "howTo": [
+        "Copie o resultado de tokenURI() do contrato (ou uri() no ERC-1155) em um explorador, ou cole o JSON de metadados.",
+        "Para um endereço ERC-1155 com {id}, digite o id do token.",
+        "Veja o nome, a imagem, os atributos e as notas sobre onde os dados ficam guardados."
+      ],
+      "faq": [
+        {
+          "q": "O que é um token URI?",
+          "a": "O endereço dos metadados de um NFT: um arquivo JSON com nome, descrição, imagem e atributos. Os contratos o retornam com tokenURI(id) (ERC-721) ou uri(id) (ERC-1155)."
+        },
+        {
+          "q": "O que quer dizer on-chain aqui?",
+          "a": "Os metadados estão dentro do próprio URI (um URI data:) e ficam guardados pelo contrato, então não dependem de nenhum servidor. Endereços IPFS e Arweave são ligados ao conteúdo, então o arquivo nesse endereço não pode mudar. Um endereço web comum pode ser alterado ou removido por quem administra o servidor."
+        },
+        {
+          "q": "Por que um script em um SVG é um alerta?",
+          "a": "Uma imagem SVG pode conter código. Exibida como imagem, ela não pode ser executada, mas uma página que insere o SVG diretamente poderia executá-lo. A CRYPY só exibe imagens como imagens e nunca abre links."
+        },
+        {
+          "q": "A ferramenta carrega a imagem do IPFS?",
+          "a": "Não. Nada é baixado. Ela mostra endereços de gateway que você pode abrir e só pré-visualiza imagens guardadas dentro do URI."
+        },
+        {
+          "q": "O que eu colo é enviado para algum lugar?",
+          "a": "Não. Tudo é decodificado no seu navegador."
+        }
+      ],
+      "seoTitle": "Decodificador de token URI e metadados NFT | CRYPY",
+      "seoDescription": "Decodifique dados de tokenURI de NFT: JSON base64, SVG on-chain, links IPFS e Arweave e atributos, com alertas de scripts e hospedagem alterável.",
+      "shortName": "Decodificador URI NFT"
+    },
+    "json-diff": {
+      "name": "Comparador de JSON (diff)",
+      "question": "O que mudou entre estes dois arquivos JSON?",
+      "description": "Compare dois documentos JSON e liste cada valor adicionado, removido ou alterado, com o caminho. Números grandes ficam exatos e chaves repetidas são sinalizadas.",
+      "input": "Dois documentos JSON",
+      "cta": "Comparar",
+      "features": [
+        "Cada mudança com o caminho, como $.fees.sell",
+        "Números grandes comparados com exatidão (valores em wei não se alteram)",
+        "Chaves repetidas e erros de sintaxe com linha e coluna"
+      ],
+      "howTo": [
+        "Cole o JSON antigo à esquerda e o novo à direita.",
+        "Veja a lista de valores adicionados, removidos e alterados.",
+        "Copie a lista como texto se quiser compartilhar."
+      ],
+      "faq": [
+        {
+          "q": "A ordem das chaves importa?",
+          "a": "Não. Em JSON, as chaves de um objeto não têm ordem, então reordená-las não é uma mudança. Os itens de listas são comparados pela posição."
+        },
+        {
+          "q": "Por que ela mantém os números exatos?",
+          "a": "A maioria dos leitores de JSON arredonda inteiros muito grandes, então dois valores de tokens em wei diferentes poderiam parecer iguais. Esta ferramenta compara os números como estão escritos; 1.0 e 1 contam como o mesmo valor."
+        },
+        {
+          "q": "Por que chaves repetidas são um alerta?",
+          "a": "Quando uma chave aparece duas vezes, cada programa fica com uma cópia diferente. Isso já foi usado para mostrar um valor a uma pessoa e usar outro no código. A ferramenta compara a última cópia, como faz a maioria dos programas."
+        },
+        {
+          "q": "Meu JSON é enviado para algum lugar?",
+          "a": "Não. Tudo é comparado no seu navegador."
+        }
+      ],
+      "seoTitle": "Comparar JSON online: diff de dois arquivos | CRYPY",
+      "seoDescription": "Compare dois documentos JSON e veja cada valor adicionado, removido ou alterado com o caminho. Números grandes exatos e alertas de chaves repetidas.",
+      "shortName": "Comparador JSON"
+    },
+    "calldata-gas": {
+      "name": "Calculadora de gás de calldata",
+      "question": "Quanto gás custam os dados desta transação?",
+      "description": "Conte os bytes zero e não zero dos dados de uma transação e calcule o gás intrínseco, o piso de calldata da EIP-7623 e o custo ao seu preço de gás.",
+      "input": "Dados da transação (hex)",
+      "cta": "Calcular",
+      "features": [
+        "Gás intrínseco: 21.000 mais 4 ou 16 de gás por byte",
+        "O piso de calldata adicionado na atualização Pectra do Ethereum (EIP-7623)",
+        "Custos de criação de contrato e o custo em moeda e em dólares"
+      ],
+      "howTo": [
+        "Cole os dados de entrada da transação (começam com 0x).",
+        "Marque “Criação de contrato” se os dados implantam um contrato.",
+        "Veja o gás que os dados precisam e adicione um preço de gás para ver o custo."
+      ],
+      "faq": [
+        {
+          "q": "O que é gás intrínseco?",
+          "a": "O gás que uma transação paga antes de qualquer código ser executado: 21.000 pela transação, 4 por byte zero de dados e 16 por qualquer outro byte, mais 32.000 e 2 por palavra de 32 bytes para criar um contrato."
+        },
+        {
+          "q": "O que é o piso de calldata?",
+          "a": "Desde a atualização Pectra do Ethereum (maio de 2025, EIP-7623), uma transação é cobrada em pelo menos 21.000 mais 10 de gás por token de dados (um byte zero é 1 token, qualquer outro byte 4). Só faz diferença em transações com muitos dados e pouco processamento."
+        },
+        {
+          "q": "Este é o gás total da minha transação?",
+          "a": "Não. O código do contrato que é executado custa mais. Use para ver a parte que os dados custam e conferir se um limite de gás não está abaixo do mínimo."
+        },
+        {
+          "q": "Vale para todas as redes?",
+          "a": "Os 4 e 16 de gás por byte valem em geral nas redes EVM. O piso vale no Ethereum e nas redes que adotaram a EIP-7623. Redes de camada 2 também cobram uma taxa separada para publicar dados no Ethereum, que não está incluída."
+        },
+        {
+          "q": "O que eu colo é enviado para algum lugar?",
+          "a": "Não. Tudo é contado no seu navegador."
+        }
+      ],
+      "seoTitle": "Calculadora de gás de calldata (piso EIP-7623) | CRYPY",
+      "seoDescription": "Calcule o gás intrínseco dos dados de uma transação: bytes zero e não zero, criação de contrato e o piso da Pectra, com o custo ao seu preço de gás.",
+      "shortName": "Gás de calldata"
     }
   },
   "toolPage": {
@@ -4314,6 +4520,273 @@
       },
       "storage": "Guardada só neste navegador, neste dispositivo, nunca enviada à CRYPY. Limpar os dados do navegador a apaga: exporte uma cópia para guardar.",
       "local": "Funciona no seu navegador: o que você digita não é enviado a lugar nenhum."
+    },
+    "profitCalculator": {
+      "buysTitle": "Suas compras",
+      "buyAmount": "Quantidade comprada (compra {n})",
+      "buyPrice": "Preço pago por moeda (compra {n})",
+      "buyLabel": "Remover a compra {n}",
+      "addBuy": "Adicionar outra compra",
+      "removeBuy": "Remover",
+      "buyFees": "Taxas de compra (opcional)",
+      "buyFeesHint": "Todas as taxas pagas nessas compras juntas, em USD.",
+      "sellPrice": "Preço de venda",
+      "sellPriceHint": "O preço que quer testar, ou o de hoje. Nada é consultado.",
+      "sellFee": "Taxa de venda (opcional)",
+      "sellFeeHint": "A taxa da corretora em % da venda, ex.: 0.1.",
+      "results": "Resultados",
+      "empty": "Digite pelo menos uma compra e um preço de venda para ver os resultados.",
+      "profit": "Lucro ou prejuízo",
+      "profitPercent": "{percent} sobre o que você pagou",
+      "averageCost": "Preço médio por moeda",
+      "averageCostHelp": "Tudo o que foi pago, com taxas, ÷ moedas compradas.",
+      "breakEven": "Preço de equilíbrio",
+      "breakEvenHelp": "O preço de venda em que você recupera o que pagou, depois da taxa de venda.",
+      "amount": "Moedas que você tem",
+      "cost": "Total pago (com taxas)",
+      "saleValue": "Valor no preço de venda",
+      "sellFeeUsd": "Taxa de venda",
+      "priceChange": "O preço de venda está {percent} em relação a ele.",
+      "note": "Uma estimativa a partir dos números que você digita. As corretoras arredondam quantidades e taxas, e as regras fiscais contam custos do seu próprio jeito.",
+      "local": "Calculado no seu navegador com o que você digita; nada é consultado nem enviado.",
+      "errors": {
+        "empty": "",
+        "format": "Digite um número, como 1000 ou 2.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (2.5); vírgulas só entre milhares (1,000).",
+        "too-large": "Grande demais.",
+        "too-precise": "Casas decimais demais.",
+        "over-100": "Deve ser menor que 100%.",
+        "no-buys": "Adicione pelo menos uma compra com quantidade acima de zero.",
+        "half-row": "Digite a quantidade e o preço desta compra."
+      }
+    },
+    "bytecodeCompare": {
+      "first": "Primeiro bytecode",
+      "second": "Segundo bytecode",
+      "placeholder": "0x6080604052…",
+      "hint": "Cole código runtime (o que um explorador mostra como Deployed Bytecode) dos dois lados, ou código de criação dos dois lados.",
+      "verdicts": {
+        "identical": {
+          "title": "Bytecode idêntico",
+          "body": "Todos os bytes coincidem, então os dois têm o mesmo hash de código."
+        },
+        "same-code": {
+          "title": "Mesmo código, metadados diferentes",
+          "body": "O programa é idêntico; só os metadados do Solidity no final diferem (hash dos arquivos-fonte ou configurações do compilador). Os dois executam as mesmas instruções."
+        },
+        "same-length": {
+          "title": "Código diferente com o mesmo tamanho",
+          "body": "O programa é diferente, mas o tamanho é o mesmo."
+        },
+        "different": {
+          "title": "Código diferente",
+          "body": "Os programas diferem em tamanho e conteúdo."
+        }
+      },
+      "immutables": "As diferenças estão em {regions} lugares de no máximo 32 bytes cada. Muitas vezes são valores imutáveis definidos na implantação, como o endereço de um dono ou token: verifique quais são.",
+      "firstDifference": "Primeira diferença no byte {offset}.",
+      "sideTitle": "Bytecode",
+      "size": "Tamanho",
+      "sizeValue": "{bytes} bytes",
+      "overLimit": "Maior que o limite de 24.576 bytes do Ethereum para código implantado (EIP-170): pode ser código de criação, ou código de outra rede.",
+      "hash": "Hash de código (Keccak-256)",
+      "hashHelp": "Para código implantado, é o hash de código do contrato (EXTCODEHASH).",
+      "hashWithoutMetadata": "Hash sem metadados",
+      "metadataTitle": "Metadados do compilador",
+      "compiler": "Compilador",
+      "ipfs": "Metadados do código-fonte no IPFS",
+      "swarm": "Metadados do código-fonte no Swarm",
+      "experimental": "Compilado com recursos experimentais.",
+      "noMetadata": "Nenhum metadado do Solidity encontrado (pode ter sido desativado, ou o código vem de outro compilador).",
+      "kinds": {
+        "empty": "Sem código: uma conta vazia (uma carteira comum ou um contrato destruído).",
+        "minimal-proxy": "Um proxy mínimo (EIP-1167): ele encaminha cada chamada ao contrato abaixo. Verifique esse.",
+        "delegation": "Uma delegação EIP-7702: esta carteira executa o código do contrato abaixo.",
+        "creation": "Parece código de criação (implantação). Para comparar com um contrato ativo, use o código implantado dele."
+      },
+      "implementation": "Encaminha para",
+      "target": "Delega para",
+      "oneSide": "Cole um segundo bytecode para comparar. Detalhes do primeiro:",
+      "note": "Código igual não torna um contrato seguro: o dono, as configurações e o destino de qualquer proxy também importam.",
+      "local": "Comparado no seu navegador; nada é consultado nem enviado.",
+      "errors": {
+        "format": "Só são permitidos caracteres hex (0–9, a–f).",
+        "odd": "O hex deve ter um número par de caracteres (2 por byte).",
+        "too-large": "Longo demais: no máximo 128 KB de bytecode."
+      }
+    },
+    "nftUriDecoder": {
+      "label": "Token URI ou JSON de metadados",
+      "placeholder": "data:application/json;base64,… ou ipfs://… ou {\"name\": …}",
+      "hint": "O valor retornado por tokenURI() ou uri(), ou o próprio JSON de metadados.",
+      "tokenId": "Id do token (opcional)",
+      "tokenIdHint": "Para endereços ERC-1155 que contêm {id}: o id do token em decimal ou 0x.",
+      "findingsTitle": "Notas",
+      "fields": {
+        "uri": "Token URI",
+        "image": "Imagem",
+        "animation": "Animação",
+        "external": "Link externo"
+      },
+      "findings": {
+        "script-scheme": {
+          "title": "Um link javascript:",
+          "body": "Ele executa código ao ser aberto em vez de ir para uma página. NFTs legítimos não precisam disso. Não abra."
+        },
+        "svg-script": {
+          "title": "Código dentro do SVG",
+          "body": "A imagem contém um script, um manipulador de eventos ou HTML embutido. Exibida como imagem, não pode ser executada, mas pode em páginas que inserem o SVG diretamente."
+        },
+        "html": {
+          "title": "Uma página HTML",
+          "body": "HTML pode executar código ao ser aberto. Arte generativa costuma usar isso; abra só em um marketplace que o isole."
+        },
+        "web-hosted": {
+          "title": "Guardado em um servidor web comum",
+          "body": "Quem administra o servidor pode alterar ou remover este arquivo a qualquer momento."
+        },
+        "insecure-http": {
+          "title": "Sem criptografia (http://)",
+          "body": "O arquivo pode ser alterado no caminho até quem o vê."
+        },
+        "svg-external": {
+          "title": "O SVG carrega conteúdo externo",
+          "body": "A imagem faz referência a arquivos em outros servidores, que podem mudar ou rastrear quem a vê. Marketplaces podem não exibi-los."
+        },
+        "bad-json": {
+          "title": "Os metadados não são um JSON válido",
+          "body": "Carteiras e marketplaces podem não conseguir exibir este token."
+        },
+        "content-addressed": {
+          "title": "Guardado por conteúdo (IPFS ou Arweave)",
+          "body": "O arquivo neste endereço não pode mudar. O contrato ainda pode permitir que o dono aponte o token para outro endereço."
+        },
+        "on-chain": {
+          "title": "Guardado on-chain",
+          "body": "Os dados estão dentro do próprio URI, então não dependem de nenhum servidor."
+        },
+        "id-template": {
+          "title": "Contém {id}",
+          "body": "Um modelo de endereço ERC-1155. Digite o id do token para preenchê-lo."
+        },
+        "gateway-url": {
+          "title": "Um endereço de gateway IPFS",
+          "body": "O conteúdo tem endereço IPFS, mas este link depende de esse gateway continuar no ar."
+        }
+      },
+      "sourceTitle": "Token URI",
+      "storage": "Onde fica guardado",
+      "schemes": {
+        "data": "On-chain (URI data:)",
+        "ipfs": "IPFS",
+        "arweave": "Arweave",
+        "https": "Servidor web (https)",
+        "http": "Servidor web (http, sem criptografia)",
+        "script": "Um link javascript:",
+        "other": "Tipo de endereço desconhecido"
+      },
+      "mediaType": "Tipo de mídia",
+      "decodedSize": "Tamanho decodificado",
+      "bytes": "{bytes} bytes",
+      "gateway": "Endereço de gateway {n}",
+      "gatewayHelp": "Para você abrir; a CRYPY nunca o baixa.",
+      "decodedText": "Mostrar o texto decodificado",
+      "metadataTitle": "Metadados",
+      "name": "Nome",
+      "description": "Descrição",
+      "externalUrl": "URL externa",
+      "image": "Imagem",
+      "imagePreview": "Imagem de {name}",
+      "imagePreviewHelp": "Só imagens guardadas dentro do URI são pré-visualizadas; nada é baixado.",
+      "noPreview": "Sem pré-visualização: a imagem fica guardada em outro lugar.",
+      "animation": "Animação",
+      "traitsTitle": "Atributos",
+      "trait": "Atributo",
+      "value": "Valor",
+      "noTraits": "Não há atributos (attributes) nestes metadados.",
+      "otherKeys": "Outros campos",
+      "rawJson": "Mostrar o JSON de metadados",
+      "note": "Isto mostra o que o URI contém hoje. O dono do contrato pode conseguir mudar o URI depois; a página do token em um explorador mostra o contrato.",
+      "local": "Decodificado no seu navegador; nada é baixado nem enviado.",
+      "errors": {
+        "empty": "",
+        "too-large": "Longo demais: no máximo 2 milhões de caracteres.",
+        "bad-json": "Isto não é um JSON de metadados válido (um objeto com campos como name e image).",
+        "bad-data": "Este URI data: não pode ser decodificado (o base64 ou o texto está corrompido).",
+        "token-id": "Digite um número inteiro ou um número hex com 0x."
+      }
+    },
+    "jsonDiff": {
+      "before": "JSON antigo",
+      "after": "JSON novo",
+      "placeholder": "{\"key\": \"value\"}",
+      "same": "Sem diferenças",
+      "sameBody": "Os dois documentos têm os mesmos valores (sem contar a ordem das chaves e o formato dos números).",
+      "summary": "{added} adicionados · {removed} removidos · {changed} alterados",
+      "kinds": {
+        "added": "Adicionado",
+        "removed": "Removido",
+        "changed": "Alterado",
+        "type": "Tipo alterado"
+      },
+      "path": "Caminho",
+      "change": "Mudança",
+      "truncated": "Mostrando as primeiras {shown} mudanças.",
+      "copyReport": "Copiar as mudanças como texto",
+      "duplicates": "Chaves repetidas",
+      "duplicatesBody": "Algumas chaves aparecem mais de uma vez. Os programas discordam sobre qual cópia vale; esta comparação usa a última.",
+      "note": "Objetos são comparados sem considerar a ordem das chaves; listas, item por item.",
+      "local": "Comparado no seu navegador; nada é enviado.",
+      "errors": {
+        "syntax": "JSON inválido: linha {line}, coluna {column}.",
+        "too-large": "Longo demais: no máximo 2 milhões de caracteres.",
+        "too-deep": "Aninhado demais (mais de 200 níveis)."
+      }
+    },
+    "calldataGas": {
+      "label": "Dados da transação",
+      "placeholder": "0xa9059cbb…",
+      "create": "Criação de contrato",
+      "createHint": "Marque se os dados implantam um contrato (uma transação sem destinatário).",
+      "bytes": "Tamanho dos dados",
+      "bytesValue": "{bytes} bytes: {zero} zero, {nonZero} não zero",
+      "tokens": "Tokens de dados",
+      "tokensHelp": "Bytes zero + 4 × bytes não zero (EIP-7623).",
+      "dataGas": "Gás dos dados",
+      "dataGasHelp": "4 por byte zero + 16 por byte não zero.",
+      "createGas": "Gás para criar um contrato",
+      "intrinsic": "Gás intrínseco",
+      "intrinsicHelp": "21.000 + os dados (+ criação): usado antes de qualquer código ser executado.",
+      "floor": "Piso de calldata",
+      "floorHelp": "21.000 + 10 por token de dados (Ethereum desde a Pectra).",
+      "floorApplies": "Se o código do contrato usar menos de {gas} de gás, a transação é cobrada pelo piso. O limite de gás precisa cobrir o maior dos dois.",
+      "floorNever": "O piso não passa do gás intrínseco, então não muda a cobrança.",
+      "selector": "Seletor de função",
+      "decode": "Decodificar estes dados",
+      "gas": "{gas} de gás",
+      "costTitle": "Custo (opcional)",
+      "gwei": "Preço do gás",
+      "gweiHint": "Taxa base + taxa de prioridade. O Gas Tracker mostra os preços atuais.",
+      "coinPrice": "Preço da moeda",
+      "coinPriceHint": "Preço de ETH, BNB ou POL em USD, para ver dólares.",
+      "costIntrinsic": "Custo do gás intrínseco",
+      "costFloor": "Custo do piso",
+      "costNative": "Na moeda da rede (ETH, BNB…).",
+      "note": "Só o custo dos dados e da transação em si. O código do contrato que é executado custa mais, e redes de camada 2 somam uma taxa para publicar dados no Ethereum.",
+      "local": "Contado no seu navegador; nada é enviado.",
+      "errors": {
+        "format": "Só são permitidos caracteres hex (0–9, a–f).",
+        "odd": "O hex deve ter um número par de caracteres (2 por byte).",
+        "too-large": "Longo demais: no máximo 1 MB de dados."
+      },
+      "priceErrors": {
+        "format": "Digite um número, como 2 ou 0.5.",
+        "negative": "Não pode ser negativo.",
+        "comma": "Use ponto para decimais (2.5).",
+        "too-large": "Grande demais.",
+        "too-precise": "Casas decimais demais."
+      }
     }
   },
   "seo": {

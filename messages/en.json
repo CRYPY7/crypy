@@ -1344,6 +1344,212 @@
       "seoTitle": "Crypto Address Book: Catch Address Poisoning | CRYPY",
       "seoDescription": "Save trusted crypto addresses in your browser and check any address against them to catch look-alike address poisoning scams. Nothing leaves your device.",
       "shortName": "Address Book"
+    },
+    "profit-calculator": {
+      "name": "Crypto Profit & Average Cost Calculator",
+      "question": "Am I in profit, and where do I break even?",
+      "description": "Add your buys of one coin to get your average cost, profit or loss at any price, and the break-even price after fees.",
+      "input": "Your buys and a selling price",
+      "cta": "Calculate",
+      "features": [
+        "Average cost across up to 10 buys, fees included",
+        "Profit or loss in dollars and percent",
+        "Break-even price after the selling fee"
+      ],
+      "howTo": [
+        "Type the amount and price of each buy (add a row for every buy).",
+        "Add the fees you paid, and the price you want to sell at or today's price.",
+        "Read your average cost, profit or loss and the break-even price."
+      ],
+      "faq": [
+        {
+          "q": "How is the average cost worked out?",
+          "a": "Everything you paid, including the buy fees, divided by the number of coins you bought. Buying 1 ETH at $2,000 and 1 at $3,000 with $10 in fees gives an average cost of $2,505."
+        },
+        {
+          "q": "What is the break-even price?",
+          "a": "The selling price at which you get back exactly what you paid, after the selling fee. Above it you're in profit; below it, at a loss."
+        },
+        {
+          "q": "Does it look up today's price?",
+          "a": "No. Type the price you want to test. Nothing is looked up or sent, so you can try any price."
+        },
+        {
+          "q": "Is this my tax figure?",
+          "a": "No. Tax rules differ by country (for example first-in-first-out or average cost) and can count transfers and swaps as sales. Use it as an estimate and ask a tax adviser for your return."
+        },
+        {
+          "q": "Is anything I type sent to a server?",
+          "a": "No. Everything is worked out in your browser."
+        }
+      ],
+      "seoTitle": "Crypto Profit & Average Cost Calculator | CRYPY",
+      "seoDescription": "Work out your average buy price, profit or loss and break-even price for any coin from your buys, fees and a selling price. In your browser; nothing is sent.",
+      "shortName": "Profit & Average Cost"
+    },
+    "bytecode-compare": {
+      "name": "Contract Bytecode Comparer",
+      "question": "Is this contract the same code as that one?",
+      "description": "Compare two pieces of EVM bytecode: identical, the same code with different compiler metadata, or different code. See code hashes, compiler version and proxies.",
+      "input": "Two bytecodes",
+      "cta": "Compare",
+      "features": [
+        "Separates the Solidity metadata from the program itself",
+        "Code hashes, compiler version and IPFS hash of the source",
+        "Spots minimal proxies, EIP-7702 delegations and creation code"
+      ],
+      "howTo": [
+        "Copy the bytecode of each contract (an explorer's Contract tab, or eth_getCode).",
+        "Paste one in each box.",
+        "Read whether they are identical, the same code, or different, and where the first difference is."
+      ],
+      "faq": [
+        {
+          "q": "Why do two builds of the same contract differ?",
+          "a": "The Solidity compiler appends metadata to the code: a hash of the source files and settings, and the compiler version. A changed comment or file path changes that hash but not the program. This tool compares the code with and without it."
+        },
+        {
+          "q": "What is the code hash?",
+          "a": "The Keccak-256 hash of a contract's deployed (runtime) code, as returned by EXTCODEHASH. Two contracts with the same code hash run exactly the same code."
+        },
+        {
+          "q": "The code is the same length but a few bytes differ. Why?",
+          "a": "Often these are immutable values written into the code at deployment, such as an owner, token or router address. They can change what the contract does, so check what they are."
+        },
+        {
+          "q": "Does the same code mean the contract is safe?",
+          "a": "No. It only shows the code matches. A copy of a well-known contract can still have a different owner, settings or a proxy pointing elsewhere. Check the token or contract with CRYPY's security tools too."
+        },
+        {
+          "q": "Is the bytecode sent anywhere?",
+          "a": "No. Everything is compared in your browser."
+        }
+      ],
+      "seoTitle": "Contract Bytecode Comparer & Code Hash | CRYPY",
+      "seoDescription": "Compare two EVM contracts' bytecode, ignoring Solidity metadata. See code hashes, compiler version, proxies and the first difference. In your browser.",
+      "shortName": "Bytecode Comparer"
+    },
+    "nft-uri-decoder": {
+      "name": "NFT Token URI & Metadata Decoder",
+      "question": "What is inside this NFT's token URI?",
+      "description": "Decode an NFT's tokenURI or metadata: on-chain base64 JSON and SVG images, IPFS and Arweave links, traits, and warnings about scripts or changeable hosting.",
+      "input": "A token URI or metadata JSON",
+      "cta": "Decode",
+      "features": [
+        "Decodes data: URIs (base64 or plain) and shows on-chain SVG images",
+        "IPFS and Arweave gateway addresses; ERC-1155 {id} filled in",
+        "Flags scripts, HTML and metadata hosted on changeable servers"
+      ],
+      "howTo": [
+        "Copy the result of the contract's tokenURI() (or uri() for ERC-1155) from an explorer, or paste the metadata JSON.",
+        "For an ERC-1155 address with {id}, type the token id.",
+        "Read the name, image, traits and the notes on where the data is stored."
+      ],
+      "faq": [
+        {
+          "q": "What is a token URI?",
+          "a": "The address of an NFT's metadata: a JSON file with its name, description, image and traits. Contracts return it from tokenURI(id) (ERC-721) or uri(id) (ERC-1155)."
+        },
+        {
+          "q": "What does on-chain mean here?",
+          "a": "The metadata is inside the URI itself (a data: URI) and stored by the contract, so it doesn't depend on any server. IPFS and Arweave addresses are tied to the content, so the file at that address can't change. A normal web address can be changed or taken down by whoever runs the server."
+        },
+        {
+          "q": "Why is a script in an SVG a warning?",
+          "a": "An SVG image can contain code. Shown as a picture it can't run, but a page that inserts the SVG directly could run it. CRYPY only shows images as pictures and never opens links."
+        },
+        {
+          "q": "Does the tool load the image from IPFS?",
+          "a": "No. Nothing is fetched. It shows gateway addresses you can open yourself, and previews only images stored inside the URI."
+        },
+        {
+          "q": "Is what I paste sent anywhere?",
+          "a": "No. Everything is decoded in your browser."
+        }
+      ],
+      "seoTitle": "NFT Token URI & Metadata Decoder | CRYPY",
+      "seoDescription": "Decode NFT tokenURI data: base64 JSON, on-chain SVG, IPFS and Arweave links and traits, with warnings about scripts and changeable hosting. In your browser.",
+      "shortName": "NFT URI Decoder"
+    },
+    "json-diff": {
+      "name": "JSON Diff & Compare",
+      "question": "What changed between these two JSON files?",
+      "description": "Compare two JSON documents and list every value added, removed or changed, with its path. Big numbers stay exact and repeated keys are flagged.",
+      "input": "Two JSON documents",
+      "cta": "Compare",
+      "features": [
+        "Every change with its path, like $.fees.sell",
+        "Big numbers compared exactly (token amounts in wei stay intact)",
+        "Repeated keys and syntax errors shown with line and column"
+      ],
+      "howTo": [
+        "Paste the old JSON on the left and the new JSON on the right.",
+        "Read the list of added, removed and changed values.",
+        "Copy the list as text if you want to share it."
+      ],
+      "faq": [
+        {
+          "q": "Does the order of keys matter?",
+          "a": "No. In JSON, an object's keys have no order, so reordered keys are not a change. Array items are compared by position."
+        },
+        {
+          "q": "Why does it keep numbers exact?",
+          "a": "Most JSON readers round very large integers, so two different token amounts in wei could look equal. This tool compares numbers as written; 1.0 and 1 count as the same value."
+        },
+        {
+          "q": "Why are repeated keys a warning?",
+          "a": "When a key appears twice, different programs keep different copies. That has been used to show one value to a person and use another in code. The tool compares the last copy, as most programs do."
+        },
+        {
+          "q": "Is my JSON sent anywhere?",
+          "a": "No. Everything is compared in your browser."
+        }
+      ],
+      "seoTitle": "JSON Diff: Compare Two JSON Files Online | CRYPY",
+      "seoDescription": "Compare two JSON documents and see every added, removed and changed value with its path. Exact big numbers, repeated-key warnings. In your browser.",
+      "shortName": "JSON Diff"
+    },
+    "calldata-gas": {
+      "name": "Calldata Gas Calculator",
+      "question": "How much gas does this transaction's data cost?",
+      "description": "Count a transaction's zero and non-zero data bytes and work out its intrinsic gas, the EIP-7623 calldata floor and the cost at your gas price.",
+      "input": "Transaction data (hex)",
+      "cta": "Calculate",
+      "features": [
+        "Intrinsic gas: 21,000 plus 4 or 16 gas per byte",
+        "The calldata floor added in Ethereum's Pectra upgrade (EIP-7623)",
+        "Contract creation costs and the cost in coin and dollars"
+      ],
+      "howTo": [
+        "Paste the transaction's input data (it starts with 0x).",
+        "Tick “Contract creation” if the data deploys a contract.",
+        "Read the gas the data needs, and add a gas price to see the cost."
+      ],
+      "faq": [
+        {
+          "q": "What is intrinsic gas?",
+          "a": "The gas a transaction pays before any contract code runs: 21,000 for the transaction, 4 for each zero byte of data and 16 for each other byte, plus 32,000 and 2 per 32-byte word to create a contract."
+        },
+        {
+          "q": "What is the calldata floor?",
+          "a": "Since Ethereum's Pectra upgrade (May 2025, EIP-7623), a transaction is charged at least 21,000 plus 10 gas per data token (a zero byte is 1 token, any other byte 4). It only matters for transactions with a lot of data and little computation."
+        },
+        {
+          "q": "Is this the total gas of my transaction?",
+          "a": "No. The contract code that runs costs more on top. Use it to see the part the data costs, and to check that a gas limit isn't below the minimum."
+        },
+        {
+          "q": "Does it apply on every chain?",
+          "a": "The 4 and 16 gas per byte apply on EVM chains generally. The floor applies on Ethereum and chains that adopted EIP-7623. Layer 2 networks also charge a separate fee for posting data to Ethereum, which isn't included."
+        },
+        {
+          "q": "Is anything I paste sent anywhere?",
+          "a": "No. Everything is counted in your browser."
+        }
+      ],
+      "seoTitle": "Calldata Gas Calculator (EIP-7623 Floor) | CRYPY",
+      "seoDescription": "Work out the intrinsic gas of transaction data: zero and non-zero bytes, contract creation and the Pectra calldata floor, with the cost at your gas price.",
+      "shortName": "Calldata Gas"
     }
   },
   "toolPage": {
@@ -4314,6 +4520,273 @@
       },
       "storage": "Saved only in this browser on this device, never sent to CRYPY. Clearing browser data deletes it: export a copy to keep it.",
       "local": "Runs in your browser: what you type isn't sent anywhere."
+    },
+    "profitCalculator": {
+      "buysTitle": "Your buys",
+      "buyAmount": "Amount bought (buy {n})",
+      "buyPrice": "Price paid per coin (buy {n})",
+      "buyLabel": "Remove buy {n}",
+      "addBuy": "Add another buy",
+      "removeBuy": "Remove",
+      "buyFees": "Buy fees (optional)",
+      "buyFeesHint": "All fees paid on these buys together, in USD.",
+      "sellPrice": "Selling price",
+      "sellPriceHint": "The price you want to test, or today's price. Nothing is looked up.",
+      "sellFee": "Selling fee (optional)",
+      "sellFeeHint": "The exchange's fee as a % of the sale, e.g. 0.1.",
+      "results": "Results",
+      "empty": "Type at least one buy and a selling price to see results.",
+      "profit": "Profit or loss",
+      "profitPercent": "{percent} on what you paid",
+      "averageCost": "Average cost per coin",
+      "averageCostHelp": "Everything paid, fees included, ÷ coins bought.",
+      "breakEven": "Break-even price",
+      "breakEvenHelp": "The selling price at which you get back what you paid, after the selling fee.",
+      "amount": "Coins held",
+      "cost": "Total paid (with fees)",
+      "saleValue": "Value at the selling price",
+      "sellFeeUsd": "Selling fee",
+      "priceChange": "The selling price is {percent} from it.",
+      "note": "An estimate from the numbers you type. Exchanges round amounts and fees, and tax rules count costs in their own ways.",
+      "local": "Worked out in your browser from what you type; nothing is looked up or sent.",
+      "errors": {
+        "empty": "",
+        "format": "Enter a number, like 1000 or 2.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (2.5); commas only between thousands (1,000).",
+        "too-large": "Too large.",
+        "too-precise": "Too many decimal places.",
+        "over-100": "Must be under 100%.",
+        "no-buys": "Add at least one buy with an amount above zero.",
+        "half-row": "Type both the amount and the price for this buy."
+      }
+    },
+    "bytecodeCompare": {
+      "first": "First bytecode",
+      "second": "Second bytecode",
+      "placeholder": "0x6080604052…",
+      "hint": "Paste runtime code (what an explorer shows as Deployed Bytecode) on both sides, or creation code on both sides.",
+      "verdicts": {
+        "identical": {
+          "title": "Identical bytecode",
+          "body": "Every byte matches, so both have the same code hash."
+        },
+        "same-code": {
+          "title": "Same code, different metadata",
+          "body": "The program is identical; only the Solidity metadata at the end differs (source file hash or compiler settings). Both run the same instructions."
+        },
+        "same-length": {
+          "title": "Different code of the same length",
+          "body": "The program differs, but the length is the same."
+        },
+        "different": {
+          "title": "Different code",
+          "body": "The programs differ in length and content."
+        }
+      },
+      "immutables": "The differences are in {regions} places of at most 32 bytes each. These are often immutable values set at deployment, such as an owner or token address: check what they are.",
+      "firstDifference": "First difference at byte {offset}.",
+      "sideTitle": "Bytecode",
+      "size": "Size",
+      "sizeValue": "{bytes} bytes",
+      "overLimit": "Larger than Ethereum's 24,576-byte limit for deployed code (EIP-170): this may be creation code, or code for another chain.",
+      "hash": "Code hash (Keccak-256)",
+      "hashHelp": "For deployed code, this is the contract's code hash (EXTCODEHASH).",
+      "hashWithoutMetadata": "Hash without metadata",
+      "metadataTitle": "Compiler metadata",
+      "compiler": "Compiler",
+      "ipfs": "Source metadata on IPFS",
+      "swarm": "Source metadata on Swarm",
+      "experimental": "Compiled with experimental features.",
+      "noMetadata": "No Solidity metadata found (it may have been turned off, or the code comes from another compiler).",
+      "kinds": {
+        "empty": "No code: an empty account (an ordinary wallet or a destroyed contract).",
+        "minimal-proxy": "A minimal proxy (EIP-1167): it forwards every call to the contract below. Check that one.",
+        "delegation": "An EIP-7702 delegation: this wallet runs the code of the contract below.",
+        "creation": "This looks like creation (deployment) code. To compare with a live contract, use its deployed code."
+      },
+      "implementation": "Forwards to",
+      "target": "Delegates to",
+      "oneSide": "Paste a second bytecode to compare. Details of the first:",
+      "note": "Matching code doesn't make a contract safe: the owner, settings and any proxy target matter too.",
+      "local": "Compared in your browser; nothing is looked up or sent.",
+      "errors": {
+        "format": "Only hex characters (0–9, a–f) are allowed.",
+        "odd": "Hex must have an even number of characters (2 per byte).",
+        "too-large": "Too long: at most 128 KB of bytecode."
+      }
+    },
+    "nftUriDecoder": {
+      "label": "Token URI or metadata JSON",
+      "placeholder": "data:application/json;base64,… or ipfs://… or {\"name\": …}",
+      "hint": "The value returned by tokenURI() or uri(), or the metadata JSON itself.",
+      "tokenId": "Token id (optional)",
+      "tokenIdHint": "For ERC-1155 addresses that contain {id}: the decimal or 0x token id.",
+      "findingsTitle": "Notes",
+      "fields": {
+        "uri": "Token URI",
+        "image": "Image",
+        "animation": "Animation",
+        "external": "External link"
+      },
+      "findings": {
+        "script-scheme": {
+          "title": "A javascript: link",
+          "body": "This runs code when opened instead of going to a page. Legitimate NFTs don't need it. Don't open it."
+        },
+        "svg-script": {
+          "title": "Code inside the SVG",
+          "body": "The image contains a script, an event handler or embedded HTML. Shown as a picture it can't run, but it can on pages that insert the SVG directly."
+        },
+        "html": {
+          "title": "An HTML page",
+          "body": "HTML can run code when opened. Generative art often uses it; open it only in a marketplace that sandboxes it."
+        },
+        "web-hosted": {
+          "title": "Stored on an ordinary web server",
+          "body": "Whoever runs the server can change or remove this file at any time."
+        },
+        "insecure-http": {
+          "title": "Not encrypted (http://)",
+          "body": "The file can be changed on the way to the viewer."
+        },
+        "svg-external": {
+          "title": "The SVG loads outside content",
+          "body": "The image refers to files on other servers, which can change or track who views it. Marketplaces may not show them."
+        },
+        "bad-json": {
+          "title": "The metadata isn't valid JSON",
+          "body": "Wallets and marketplaces may not be able to show this token."
+        },
+        "content-addressed": {
+          "title": "Stored by content (IPFS or Arweave)",
+          "body": "The file at this address can't change. The contract may still let its owner point the token to a different address."
+        },
+        "on-chain": {
+          "title": "Stored on-chain",
+          "body": "The data is inside the URI itself, so it doesn't depend on any server."
+        },
+        "id-template": {
+          "title": "Contains {id}",
+          "body": "An ERC-1155 address template. Type the token id to fill it in."
+        },
+        "gateway-url": {
+          "title": "An IPFS gateway address",
+          "body": "The content is addressed by IPFS, but this link depends on that one gateway staying online."
+        }
+      },
+      "sourceTitle": "Token URI",
+      "storage": "Where it's stored",
+      "schemes": {
+        "data": "On-chain (data: URI)",
+        "ipfs": "IPFS",
+        "arweave": "Arweave",
+        "https": "Web server (https)",
+        "http": "Web server (http, not encrypted)",
+        "script": "A javascript: link",
+        "other": "Unknown address type"
+      },
+      "mediaType": "Media type",
+      "decodedSize": "Decoded size",
+      "bytes": "{bytes} bytes",
+      "gateway": "Gateway address {n}",
+      "gatewayHelp": "To open yourself; CRYPY never fetches it.",
+      "decodedText": "Show decoded text",
+      "metadataTitle": "Metadata",
+      "name": "Name",
+      "description": "Description",
+      "externalUrl": "External URL",
+      "image": "Image",
+      "imagePreview": "Image of {name}",
+      "imagePreviewHelp": "Only images stored inside the URI are previewed; nothing is fetched.",
+      "noPreview": "No preview: the image is stored elsewhere.",
+      "animation": "Animation",
+      "traitsTitle": "Traits",
+      "trait": "Trait",
+      "value": "Value",
+      "noTraits": "No traits (attributes) in this metadata.",
+      "otherKeys": "Other fields",
+      "rawJson": "Show the metadata JSON",
+      "note": "This shows what the URI contains today. The contract's owner may be able to change the URI later; the token's page on an explorer shows the contract.",
+      "local": "Decoded in your browser; nothing is fetched or sent.",
+      "errors": {
+        "empty": "",
+        "too-large": "Too long: at most 2 million characters.",
+        "bad-json": "This isn't valid metadata JSON (an object with fields like name and image).",
+        "bad-data": "This data: URI can't be decoded (the base64 or text is broken).",
+        "token-id": "Enter a whole number or a 0x hex number."
+      }
+    },
+    "jsonDiff": {
+      "before": "Old JSON",
+      "after": "New JSON",
+      "placeholder": "{\"key\": \"value\"}",
+      "same": "No differences",
+      "sameBody": "Both documents hold the same values (key order and number formatting aside).",
+      "summary": "{added} added · {removed} removed · {changed} changed",
+      "kinds": {
+        "added": "Added",
+        "removed": "Removed",
+        "changed": "Changed",
+        "type": "Type changed"
+      },
+      "path": "Path",
+      "change": "Change",
+      "truncated": "Showing the first {shown} changes.",
+      "copyReport": "Copy the changes as text",
+      "duplicates": "Repeated keys",
+      "duplicatesBody": "Some keys appear more than once. Programs disagree on which copy counts; this comparison uses the last one.",
+      "note": "Objects are compared without regard to key order; arrays item by item.",
+      "local": "Compared in your browser; nothing is sent.",
+      "errors": {
+        "syntax": "Not valid JSON: line {line}, column {column}.",
+        "too-large": "Too long: at most 2 million characters.",
+        "too-deep": "Nested too deeply (over 200 levels)."
+      }
+    },
+    "calldataGas": {
+      "label": "Transaction data",
+      "placeholder": "0xa9059cbb…",
+      "create": "Contract creation",
+      "createHint": "Tick if the data deploys a contract (a transaction with no recipient).",
+      "bytes": "Data size",
+      "bytesValue": "{bytes} bytes: {zero} zero, {nonZero} non-zero",
+      "tokens": "Data tokens",
+      "tokensHelp": "Zero bytes + 4 × non-zero bytes (EIP-7623).",
+      "dataGas": "Gas for the data",
+      "dataGasHelp": "4 per zero byte + 16 per non-zero byte.",
+      "createGas": "Gas to create a contract",
+      "intrinsic": "Intrinsic gas",
+      "intrinsicHelp": "21,000 + the data (+ creation): used before any code runs.",
+      "floor": "Calldata floor",
+      "floorHelp": "21,000 + 10 per data token (Ethereum since Pectra).",
+      "floorApplies": "If the contract code uses less than {gas} gas, the transaction is charged the floor instead. The gas limit must cover the larger of the two.",
+      "floorNever": "The floor is no higher than the intrinsic gas, so it doesn't change the charge.",
+      "selector": "Function selector",
+      "decode": "Decode this data",
+      "gas": "{gas} gas",
+      "costTitle": "Cost (optional)",
+      "gwei": "Gas price",
+      "gweiHint": "Base fee + priority fee. The Gas Tracker shows current prices.",
+      "coinPrice": "Coin price",
+      "coinPriceHint": "ETH, BNB or POL price in USD, to see dollars.",
+      "costIntrinsic": "Intrinsic gas costs",
+      "costFloor": "The floor costs",
+      "costNative": "In the chain's coin (ETH, BNB…).",
+      "note": "Only the cost of the data and the transaction itself. The contract code that runs costs more, and layer 2 networks add a fee for posting data to Ethereum.",
+      "local": "Counted in your browser; nothing is sent.",
+      "errors": {
+        "format": "Only hex characters (0–9, a–f) are allowed.",
+        "odd": "Hex must have an even number of characters (2 per byte).",
+        "too-large": "Too long: at most 1 MB of data."
+      },
+      "priceErrors": {
+        "format": "Enter a number, like 2 or 0.5.",
+        "negative": "Can't be negative.",
+        "comma": "Use a dot for decimals (2.5).",
+        "too-large": "Too large.",
+        "too-precise": "Too many decimal places."
+      }
     }
   },
   "seo": {

@@ -936,6 +936,17 @@ DEX decoders, per chain family:                      (one per DEX design)
   `checkOtherAddress`).
 - Shared `Notice` in `modules/tools/shared/ui.tsx`. Sidebar: `utilities` joins the folded categories.
 
+## 12v. Browser-only utilities U5
+
+- `modules/tools/profit-calculator/profit.ts` (exact `Dec` maths: average cost, profit, break-even after the selling
+  fee); `bytecode-compare/bytecode.ts` (a small CBOR reader for the Solidity metadata tail, viem `keccak256`, EIP-1167
+  and EIP-7702 patterns, run-length of differing bytes); `nft-uri-decoder/nft-uri.ts` (`data:` URI decoding with
+  `@scure/base`, ERC-1155 `{id}` fill, gateway addresses that are never fetched, findings with tones; image previews
+  only from `data:image/*` in an `<img>`, allowed by the existing `img-src data:`); `json-diff/diff.ts` (own JSON
+  parser keeping number text exact, duplicate-key paths, line/column errors, diff capped at 2,000 changes);
+  `calldata-gas/calldata.ts` (EIP-2028 byte costs, EIP-3860 init-code words, EIP-7623 floor; BigInt only).
+- The calldata tool links to the Transaction Data Decoder with `#data=` (fragment, never the query string).
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

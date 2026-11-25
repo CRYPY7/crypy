@@ -15,6 +15,10 @@ import {
   Droplets,
   FileCheck,
   FileCode,
+  FileDiff,
+  Gauge,
+  GitCompare,
+  Image,
   FileSignature,
   Hash,
   Fuel,
@@ -28,6 +32,7 @@ import {
   Sheet,
   ShieldAlert,
   TrendingDown,
+  TrendingUp,
   Wallet,
   Wrench,
 } from "lucide-react";
@@ -64,6 +69,11 @@ const icons = {
   bitcoin: Bitcoin,
   "book-user": BookUser,
   wrench: Wrench,
+  "trending-up": TrendingUp,
+  "git-compare": GitCompare,
+  image: Image,
+  "file-diff": FileDiff,
+  gauge: Gauge,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 
 /** Server-rendered tool icon. Decorative: the tool name is always shown as text. */

@@ -41,6 +41,42 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Utilities U5: five more browser-only tools (2026-11-25)
+
+Owner decision 2026-11-25: next work = the U5 utilities batch (chosen over backup tests and a separate worker service).
+The liquidation calculator first considered is already part of Loan-to-Value (U2), so a profit calculator took
+its place. Registry: 6 rows now Existing / Verified (F-060, F-096, F-155, F-161, F-209, F-212).
+
+- **Profit & Average Cost Calculator** (`/tools/profit-calculator`, Calculators): up to 10 buys of one coin, buy
+  fees, a typed selling price and selling fee: average cost (fees included), profit or loss in dollars and percent,
+  break-even price after the selling fee. Exact decimals; nothing is looked up; labelled as not a tax figure.
+- **Contract Bytecode Comparer** (`/tools/bytecode-compare`, Developer): two bytecodes → identical / same code with
+  different Solidity metadata / different code (same length: the differing places, and a note when they fit 32-byte
+  immutables) and the first differing byte. Each side: size (EIP-170 limit), code hash (EXTCODEHASH), hash without
+  metadata, compiler version and IPFS/Swarm source hash read from the CBOR metadata, EIP-1167 minimal proxies (with
+  the implementation address), EIP-7702 delegations and creation code. Says matching code doesn't make a contract safe.
+- **NFT Token URI & Metadata Decoder** (`/tools/nft-uri-decoder`, Developer): a tokenURI/uri() value or metadata
+  JSON; decodes `data:` URIs (base64 or plain), fills ERC-1155 `{id}`, gives IPFS and Arweave gateway addresses (shown
+  to copy, never opened or fetched), lists name, description and traits, previews only images stored inside the URI
+  (as an `<img>`, so SVG scripts can't run). Notes: `javascript:` links and scripts inside SVGs (critical), HTML,
+  ordinary web hosting, http, SVGs loading outside files (medium), on-chain and IPFS/Arweave storage (information).
+- **JSON Diff** (`/tools/json-diff`, Developer): its own JSON reader keeps every number exactly as written (wei
+  amounts aren't rounded; 1.0 = 1), reports syntax errors with line and column and repeated keys; lists added,
+  removed, changed and type-changed values with paths like `$.fees.sell` (first 2,000), copyable as text.
+- **Calldata Gas Calculator** (`/tools/calldata-gas`, Developer): zero and non-zero bytes, data tokens, intrinsic
+  gas (21,000 + 4/16 per byte, + 32,000 and 2 per word for contract creation, EIP-3860), the EIP-7623 floor (21,000 +
+  10 per token) and below how much execution gas the floor applies; optional gas price and coin price for the cost;
+  the selector links to the Transaction Data Decoder (in the URL fragment). Says L2 data fees aren't included.
+- All five sit in the folded Calculators and Developer groups, so the sidebar doesn't grow. Translations in the 6
+  Beta languages; `messages/pending-translation.json` is empty. No new dependencies. CSS 82,829 bytes (budget 82 KB).
+
+**Checks:** typecheck, lint, Prettier and the translation check clean. Unit: 633 passed, 76 skipped (18 new: profit
+maths, break-even, row errors; Solidity metadata, identical / same code / different, proxies and delegations; data:
+URIs, SVG scripts, javascript: links, web hosting, `{id}`, gateways; exact big numbers, paths, repeated keys, error
+line and column; an ERC-20 transfer's bytes, intrinsic gas and floor, creation costs, exact prices). Build passed.
+Browser, full run: 329 passed, 19 skipped, 0 failed; 5 new U5 tests (desktop and mobile), each checking that nothing
+typed is sent.
+
 ## Utilities U4: five security and developer tools (2026-11-25)
 
 Owner decision 2026-11-25: U4 = the batch recommended from the registry.

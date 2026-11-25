@@ -1344,6 +1344,212 @@
       "seoTitle": "Sổ địa chỉ tiền mã hóa: phát hiện đầu độc địa chỉ | CRYPY",
       "seoDescription": "Lưu các địa chỉ tiền mã hóa tin cậy trong trình duyệt và đối chiếu bất kỳ địa chỉ nào để phát hiện lừa đảo địa chỉ trông giống. Không gì rời khỏi thiết bị.",
       "shortName": "Sổ địa chỉ"
+    },
+    "profit-calculator": {
+      "name": "Máy tính lãi lỗ và giá vốn trung bình crypto",
+      "question": "Tôi đang lãi không, và điểm hòa vốn ở đâu?",
+      "description": "Nhập các lần mua một đồng coin để biết giá vốn trung bình, lãi hoặc lỗ ở bất kỳ mức giá nào và giá hòa vốn sau phí.",
+      "input": "Các lần mua và một giá bán",
+      "cta": "Tính",
+      "features": [
+        "Giá vốn trung bình của tối đa 10 lần mua, đã gồm phí",
+        "Lãi hoặc lỗ theo đô la và phần trăm",
+        "Giá hòa vốn sau phí bán"
+      ],
+      "howTo": [
+        "Nhập số lượng và giá của từng lần mua (mỗi lần mua một dòng).",
+        "Thêm phí bạn đã trả và giá bạn muốn bán, hoặc giá hôm nay.",
+        "Xem giá vốn trung bình, lãi hoặc lỗ và giá hòa vốn."
+      ],
+      "faq": [
+        {
+          "q": "Giá vốn trung bình được tính thế nào?",
+          "a": "Tổng số tiền bạn đã trả, gồm cả phí mua, chia cho số coin đã mua. Mua 1 ETH giá 2.000 $ và 1 ETH giá 3.000 $ với 10 $ phí cho giá vốn trung bình 2.505 $."
+        },
+        {
+          "q": "Giá hòa vốn là gì?",
+          "a": "Mức giá bán mà sau phí bán bạn thu về đúng số tiền đã trả. Cao hơn là lãi; thấp hơn là lỗ."
+        },
+        {
+          "q": "Công cụ có tra giá hôm nay không?",
+          "a": "Không. Hãy nhập giá bạn muốn thử. Không tra cứu hay gửi đi bất cứ thứ gì, nên bạn có thể thử bất kỳ mức giá nào."
+        },
+        {
+          "q": "Đây có phải con số để khai thuế không?",
+          "a": "Không. Quy định thuế khác nhau theo quốc gia (ví dụ nhập trước xuất trước hoặc giá vốn trung bình) và có thể tính chuyển khoản, hoán đổi là bán. Hãy dùng nó như ước tính và hỏi chuyên gia thuế khi khai thuế."
+        },
+        {
+          "q": "Những gì tôi nhập có được gửi lên máy chủ không?",
+          "a": "Không. Mọi thứ được tính trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính lãi lỗ và giá vốn trung bình crypto | CRYPY",
+      "seoDescription": "Tính giá mua trung bình, lãi hoặc lỗ và giá hòa vốn của bất kỳ coin nào từ các lần mua, phí và giá bán. Trong trình duyệt của bạn; không gửi đi gì.",
+      "shortName": "Lãi lỗ và giá vốn"
+    },
+    "bytecode-compare": {
+      "name": "Công cụ so sánh bytecode hợp đồng",
+      "question": "Hợp đồng này có cùng mã với hợp đồng kia không?",
+      "description": "So sánh hai bytecode EVM: giống hệt, cùng mã nhưng khác metadata trình biên dịch, hay khác mã. Xem hash mã, phiên bản trình biên dịch và proxy.",
+      "input": "Hai bytecode",
+      "cta": "So sánh",
+      "features": [
+        "Tách metadata Solidity khỏi chương trình",
+        "Hash mã, phiên bản trình biên dịch và hash IPFS của mã nguồn",
+        "Nhận diện minimal proxy, ủy quyền EIP-7702 và mã khởi tạo"
+      ],
+      "howTo": [
+        "Sao chép bytecode của từng hợp đồng (thẻ Contract trên trình khám phá, hoặc eth_getCode).",
+        "Dán mỗi bytecode vào một ô.",
+        "Xem chúng giống hệt, cùng mã hay khác nhau, và khác biệt đầu tiên nằm ở đâu."
+      ],
+      "faq": [
+        {
+          "q": "Vì sao hai lần biên dịch cùng một hợp đồng lại khác nhau?",
+          "a": "Trình biên dịch Solidity gắn metadata vào cuối mã: hash của các tệp nguồn và thiết lập, cùng phiên bản trình biên dịch. Đổi một dòng chú thích hay đường dẫn tệp sẽ đổi hash này nhưng không đổi chương trình. Công cụ so sánh mã cả khi có và không có metadata."
+        },
+        {
+          "q": "Hash mã là gì?",
+          "a": "Hash Keccak-256 của mã đã triển khai (runtime) của hợp đồng, chính là giá trị EXTCODEHASH trả về. Hai hợp đồng có cùng hash mã chạy đúng cùng một mã."
+        },
+        {
+          "q": "Mã dài bằng nhau nhưng vài byte khác nhau. Vì sao?",
+          "a": "Thường đó là các giá trị bất biến (immutable) được ghi vào mã khi triển khai, như địa chỉ chủ sở hữu, token hay router. Chúng có thể thay đổi cách hợp đồng hoạt động, nên hãy kiểm tra đó là gì."
+        },
+        {
+          "q": "Cùng mã có nghĩa là hợp đồng an toàn không?",
+          "a": "Không. Nó chỉ cho thấy mã trùng khớp. Bản sao của một hợp đồng nổi tiếng vẫn có thể có chủ sở hữu, thiết lập khác hoặc proxy trỏ đến nơi khác. Hãy kiểm tra thêm token hay hợp đồng bằng các công cụ bảo mật của CRYPY."
+        },
+        {
+          "q": "Bytecode có bị gửi đi đâu không?",
+          "a": "Không. Mọi thứ được so sánh trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "So sánh bytecode hợp đồng và hash mã | CRYPY",
+      "seoDescription": "So sánh bytecode của hai hợp đồng EVM, bỏ qua metadata Solidity. Xem hash mã, phiên bản trình biên dịch, proxy và khác biệt đầu tiên.",
+      "shortName": "So sánh bytecode"
+    },
+    "nft-uri-decoder": {
+      "name": "Công cụ giải mã token URI và metadata NFT",
+      "question": "Bên trong token URI của NFT này có gì?",
+      "description": "Giải mã tokenURI hoặc metadata của NFT: JSON base64 và ảnh SVG on-chain, liên kết IPFS và Arweave, thuộc tính, cùng cảnh báo về script hoặc nơi lưu trữ có thể bị thay đổi.",
+      "input": "Một token URI hoặc JSON metadata",
+      "cta": "Giải mã",
+      "features": [
+        "Giải mã URI data: (base64 hoặc văn bản thường) và hiển thị ảnh SVG on-chain",
+        "Địa chỉ gateway IPFS và Arweave; tự điền {id} của ERC-1155",
+        "Đánh dấu script, HTML và metadata lưu trên máy chủ có thể thay đổi"
+      ],
+      "howTo": [
+        "Sao chép kết quả tokenURI() của hợp đồng (hoặc uri() với ERC-1155) từ trình khám phá, hoặc dán JSON metadata.",
+        "Với địa chỉ ERC-1155 có {id}, hãy nhập id của token.",
+        "Xem tên, ảnh, thuộc tính và ghi chú về nơi lưu dữ liệu."
+      ],
+      "faq": [
+        {
+          "q": "Token URI là gì?",
+          "a": "Địa chỉ metadata của một NFT: tệp JSON chứa tên, mô tả, ảnh và thuộc tính. Hợp đồng trả về nó qua tokenURI(id) (ERC-721) hoặc uri(id) (ERC-1155)."
+        },
+        {
+          "q": "On-chain ở đây nghĩa là gì?",
+          "a": "Metadata nằm ngay trong URI (URI data:) và được hợp đồng lưu giữ, nên không phụ thuộc máy chủ nào. Địa chỉ IPFS và Arweave gắn với nội dung, nên tệp tại địa chỉ đó không thể thay đổi. Địa chỉ web thông thường có thể bị người quản lý máy chủ sửa hoặc xóa."
+        },
+        {
+          "q": "Vì sao script trong SVG là một cảnh báo?",
+          "a": "Ảnh SVG có thể chứa mã. Khi hiển thị dưới dạng ảnh thì nó không chạy được, nhưng trang nào chèn SVG trực tiếp có thể chạy nó. CRYPY chỉ hiển thị ảnh dưới dạng ảnh và không bao giờ mở liên kết."
+        },
+        {
+          "q": "Công cụ có tải ảnh từ IPFS không?",
+          "a": "Không. Không tải gì về cả. Công cụ hiển thị địa chỉ gateway để bạn tự mở và chỉ xem trước ảnh được lưu bên trong URI."
+        },
+        {
+          "q": "Những gì tôi dán có bị gửi đi đâu không?",
+          "a": "Không. Mọi thứ được giải mã trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Giải mã token URI và metadata NFT | CRYPY",
+      "seoDescription": "Giải mã dữ liệu tokenURI của NFT: JSON base64, SVG on-chain, liên kết IPFS và Arweave và thuộc tính, kèm cảnh báo script và nơi lưu trữ có thể đổi.",
+      "shortName": "Giải mã URI NFT"
+    },
+    "json-diff": {
+      "name": "So sánh JSON (Diff)",
+      "question": "Hai tệp JSON này khác nhau ở đâu?",
+      "description": "So sánh hai tài liệu JSON và liệt kê mọi giá trị được thêm, xóa hoặc thay đổi kèm đường dẫn. Số lớn được giữ chính xác và khóa lặp lại được đánh dấu.",
+      "input": "Hai tài liệu JSON",
+      "cta": "So sánh",
+      "features": [
+        "Mỗi thay đổi kèm đường dẫn, như $.fees.sell",
+        "So sánh số lớn chính xác (số lượng token tính bằng wei không bị sai lệch)",
+        "Khóa lặp lại và lỗi cú pháp kèm dòng và cột"
+      ],
+      "howTo": [
+        "Dán JSON cũ bên trái và JSON mới bên phải.",
+        "Xem danh sách các giá trị được thêm, xóa và thay đổi.",
+        "Sao chép danh sách dạng văn bản nếu muốn chia sẻ."
+      ],
+      "faq": [
+        {
+          "q": "Thứ tự các khóa có quan trọng không?",
+          "a": "Không. Trong JSON, các khóa của một đối tượng không có thứ tự, nên sắp xếp lại khóa không phải là thay đổi. Phần tử mảng được so sánh theo vị trí."
+        },
+        {
+          "q": "Vì sao công cụ giữ số chính xác?",
+          "a": "Phần lớn trình đọc JSON làm tròn số nguyên rất lớn, nên hai số lượng token khác nhau tính bằng wei có thể trông như bằng nhau. Công cụ so sánh số đúng như được viết; 1.0 và 1 được coi là cùng một giá trị."
+        },
+        {
+          "q": "Vì sao khóa lặp lại là một cảnh báo?",
+          "a": "Khi một khóa xuất hiện hai lần, mỗi chương trình lấy một bản khác nhau. Điều này từng bị lợi dụng để cho người xem thấy một giá trị nhưng mã lại dùng giá trị khác. Công cụ so sánh bản cuối cùng, như phần lớn chương trình."
+        },
+        {
+          "q": "JSON của tôi có bị gửi đi đâu không?",
+          "a": "Không. Mọi thứ được so sánh trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "So sánh JSON trực tuyến: diff hai tệp JSON | CRYPY",
+      "seoDescription": "So sánh hai tài liệu JSON và xem mọi giá trị được thêm, xóa, thay đổi kèm đường dẫn. Số lớn chính xác, cảnh báo khóa lặp lại. Trong trình duyệt.",
+      "shortName": "So sánh JSON"
+    },
+    "calldata-gas": {
+      "name": "Máy tính gas calldata",
+      "question": "Dữ liệu của giao dịch này tốn bao nhiêu gas?",
+      "description": "Đếm byte 0 và byte khác 0 trong dữ liệu giao dịch, tính gas nội tại, mức sàn calldata của EIP-7623 và chi phí theo giá gas của bạn.",
+      "input": "Dữ liệu giao dịch (hex)",
+      "cta": "Tính",
+      "features": [
+        "Gas nội tại: 21.000 cộng 4 hoặc 16 gas mỗi byte",
+        "Mức sàn calldata thêm vào trong nâng cấp Pectra của Ethereum (EIP-7623)",
+        "Chi phí tạo hợp đồng và chi phí theo coin và đô la"
+      ],
+      "howTo": [
+        "Dán dữ liệu đầu vào của giao dịch (bắt đầu bằng 0x).",
+        "Đánh dấu “Tạo hợp đồng” nếu dữ liệu dùng để triển khai hợp đồng.",
+        "Xem lượng gas dữ liệu cần và thêm giá gas để xem chi phí."
+      ],
+      "faq": [
+        {
+          "q": "Gas nội tại là gì?",
+          "a": "Lượng gas giao dịch phải trả trước khi chạy bất kỳ mã nào: 21.000 cho giao dịch, 4 cho mỗi byte 0 của dữ liệu và 16 cho mỗi byte khác, cộng 32.000 và 2 cho mỗi từ 32 byte khi tạo hợp đồng."
+        },
+        {
+          "q": "Mức sàn calldata là gì?",
+          "a": "Từ nâng cấp Pectra của Ethereum (tháng 5/2025, EIP-7623), giao dịch bị tính ít nhất 21.000 cộng 10 gas cho mỗi token dữ liệu (byte 0 là 1 token, byte khác là 4). Nó chỉ ảnh hưởng đến giao dịch có nhiều dữ liệu và ít tính toán."
+        },
+        {
+          "q": "Đây có phải tổng gas của giao dịch không?",
+          "a": "Không. Mã hợp đồng được chạy còn tốn thêm. Hãy dùng nó để xem phần chi phí của dữ liệu và kiểm tra giới hạn gas không thấp hơn mức tối thiểu."
+        },
+        {
+          "q": "Có áp dụng trên mọi chuỗi không?",
+          "a": "Mức 4 và 16 gas mỗi byte áp dụng chung trên các chuỗi EVM. Mức sàn áp dụng trên Ethereum và các chuỗi đã áp dụng EIP-7623. Mạng lớp 2 còn thu riêng một khoản phí để đăng dữ liệu lên Ethereum, khoản này không được tính ở đây."
+        },
+        {
+          "q": "Những gì tôi dán có bị gửi đi đâu không?",
+          "a": "Không. Mọi thứ được đếm trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Máy tính gas calldata (mức sàn EIP-7623) | CRYPY",
+      "seoDescription": "Tính gas nội tại của dữ liệu giao dịch: byte 0 và khác 0, tạo hợp đồng và mức sàn calldata của Pectra, kèm chi phí theo giá gas của bạn.",
+      "shortName": "Gas calldata"
     }
   },
   "toolPage": {
@@ -4314,6 +4520,273 @@
       },
       "storage": "Chỉ lưu trong trình duyệt này trên thiết bị này, không bao giờ gửi đến CRYPY. Xóa dữ liệu trình duyệt sẽ xóa nó: hãy xuất một bản sao để giữ lại.",
       "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "profitCalculator": {
+      "buysTitle": "Các lần mua của bạn",
+      "buyAmount": "Số lượng mua (lần {n})",
+      "buyPrice": "Giá trả cho mỗi coin (lần {n})",
+      "buyLabel": "Xóa lần mua {n}",
+      "addBuy": "Thêm một lần mua",
+      "removeBuy": "Xóa",
+      "buyFees": "Phí mua (không bắt buộc)",
+      "buyFeesHint": "Tổng tất cả phí đã trả cho các lần mua này, bằng USD.",
+      "sellPrice": "Giá bán",
+      "sellPriceHint": "Mức giá bạn muốn thử, hoặc giá hôm nay. Không tra cứu gì cả.",
+      "sellFee": "Phí bán (không bắt buộc)",
+      "sellFeeHint": "Phí của sàn tính theo % giá trị bán, ví dụ 0.1.",
+      "results": "Kết quả",
+      "empty": "Nhập ít nhất một lần mua và một giá bán để xem kết quả.",
+      "profit": "Lãi hoặc lỗ",
+      "profitPercent": "{percent} trên số tiền đã trả",
+      "averageCost": "Giá vốn trung bình mỗi coin",
+      "averageCostHelp": "Tổng số tiền đã trả, gồm phí, ÷ số coin đã mua.",
+      "breakEven": "Giá hòa vốn",
+      "breakEvenHelp": "Mức giá bán mà sau phí bán bạn thu về đúng số tiền đã trả.",
+      "amount": "Số coin đang giữ",
+      "cost": "Tổng đã trả (gồm phí)",
+      "saleValue": "Giá trị theo giá bán",
+      "sellFeeUsd": "Phí bán",
+      "priceChange": "Giá bán chênh {percent} so với mức này.",
+      "note": "Ước tính từ các con số bạn nhập. Sàn giao dịch làm tròn số lượng và phí, và quy định thuế tính chi phí theo cách riêng.",
+      "local": "Được tính trong trình duyệt của bạn từ những gì bạn nhập; không tra cứu hay gửi đi bất cứ thứ gì.",
+      "errors": {
+        "empty": "",
+        "format": "Nhập một số, như 1000 hoặc 2.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (2.5); dấu phẩy chỉ để ngăn hàng nghìn (1,000).",
+        "too-large": "Quá lớn.",
+        "too-precise": "Quá nhiều chữ số thập phân.",
+        "over-100": "Phải nhỏ hơn 100%.",
+        "no-buys": "Thêm ít nhất một lần mua có số lượng lớn hơn 0.",
+        "half-row": "Nhập cả số lượng và giá của lần mua này."
+      }
+    },
+    "bytecodeCompare": {
+      "first": "Bytecode thứ nhất",
+      "second": "Bytecode thứ hai",
+      "placeholder": "0x6080604052…",
+      "hint": "Dán mã runtime (trình khám phá hiển thị là Deployed Bytecode) ở cả hai bên, hoặc mã khởi tạo ở cả hai bên.",
+      "verdicts": {
+        "identical": {
+          "title": "Bytecode giống hệt",
+          "body": "Mọi byte đều khớp, nên cả hai có cùng hash mã."
+        },
+        "same-code": {
+          "title": "Cùng mã, khác metadata",
+          "body": "Chương trình giống hệt; chỉ metadata Solidity ở cuối là khác (hash tệp nguồn hoặc thiết lập trình biên dịch). Cả hai chạy cùng các lệnh."
+        },
+        "same-length": {
+          "title": "Mã khác nhau nhưng cùng độ dài",
+          "body": "Chương trình khác nhau, nhưng độ dài như nhau."
+        },
+        "different": {
+          "title": "Mã khác nhau",
+          "body": "Hai chương trình khác nhau cả về độ dài lẫn nội dung."
+        }
+      },
+      "immutables": "Khác biệt nằm ở {regions} chỗ, mỗi chỗ tối đa 32 byte. Đây thường là các giá trị bất biến đặt khi triển khai, như địa chỉ chủ sở hữu hoặc token: hãy kiểm tra đó là gì.",
+      "firstDifference": "Khác biệt đầu tiên ở byte {offset}.",
+      "sideTitle": "Bytecode",
+      "size": "Kích thước",
+      "sizeValue": "{bytes} byte",
+      "overLimit": "Lớn hơn giới hạn 24.576 byte của Ethereum cho mã đã triển khai (EIP-170): có thể đây là mã khởi tạo, hoặc mã của chuỗi khác.",
+      "hash": "Hash mã (Keccak-256)",
+      "hashHelp": "Với mã đã triển khai, đây là hash mã của hợp đồng (EXTCODEHASH).",
+      "hashWithoutMetadata": "Hash không gồm metadata",
+      "metadataTitle": "Metadata trình biên dịch",
+      "compiler": "Trình biên dịch",
+      "ipfs": "Metadata mã nguồn trên IPFS",
+      "swarm": "Metadata mã nguồn trên Swarm",
+      "experimental": "Được biên dịch với tính năng thử nghiệm.",
+      "noMetadata": "Không tìm thấy metadata Solidity (có thể đã bị tắt, hoặc mã đến từ trình biên dịch khác).",
+      "kinds": {
+        "empty": "Không có mã: một tài khoản trống (ví thông thường hoặc hợp đồng đã bị hủy).",
+        "minimal-proxy": "Một minimal proxy (EIP-1167): chuyển mọi lệnh gọi đến hợp đồng bên dưới. Hãy kiểm tra hợp đồng đó.",
+        "delegation": "Một ủy quyền EIP-7702: ví này chạy mã của hợp đồng bên dưới.",
+        "creation": "Đây có vẻ là mã khởi tạo (triển khai). Để so với hợp đồng đang hoạt động, hãy dùng mã đã triển khai của nó."
+      },
+      "implementation": "Chuyển đến",
+      "target": "Ủy quyền cho",
+      "oneSide": "Dán bytecode thứ hai để so sánh. Chi tiết của bytecode thứ nhất:",
+      "note": "Mã trùng khớp không làm hợp đồng an toàn: chủ sở hữu, thiết lập và đích của proxy (nếu có) cũng quan trọng.",
+      "local": "Được so sánh trong trình duyệt của bạn; không tra cứu hay gửi đi bất cứ thứ gì.",
+      "errors": {
+        "format": "Chỉ cho phép ký tự hex (0–9, a–f).",
+        "odd": "Hex phải có số ký tự chẵn (2 ký tự mỗi byte).",
+        "too-large": "Quá dài: tối đa 128 KB bytecode."
+      }
+    },
+    "nftUriDecoder": {
+      "label": "Token URI hoặc JSON metadata",
+      "placeholder": "data:application/json;base64,… hoặc ipfs://… hoặc {\"name\": …}",
+      "hint": "Giá trị do tokenURI() hoặc uri() trả về, hoặc chính JSON metadata.",
+      "tokenId": "Id token (không bắt buộc)",
+      "tokenIdHint": "Với địa chỉ ERC-1155 chứa {id}: id token dạng thập phân hoặc 0x.",
+      "findingsTitle": "Ghi chú",
+      "fields": {
+        "uri": "Token URI",
+        "image": "Ảnh",
+        "animation": "Hoạt ảnh",
+        "external": "Liên kết ngoài"
+      },
+      "findings": {
+        "script-scheme": {
+          "title": "Một liên kết javascript:",
+          "body": "Liên kết này chạy mã khi mở thay vì đi đến một trang. NFT hợp lệ không cần đến nó. Đừng mở."
+        },
+        "svg-script": {
+          "title": "Có mã bên trong SVG",
+          "body": "Ảnh chứa script, trình xử lý sự kiện hoặc HTML nhúng. Hiển thị dạng ảnh thì không chạy được, nhưng có thể chạy trên trang chèn SVG trực tiếp."
+        },
+        "html": {
+          "title": "Một trang HTML",
+          "body": "HTML có thể chạy mã khi mở. Nghệ thuật tạo sinh thường dùng nó; chỉ mở trên marketplace có cô lập nó."
+        },
+        "web-hosted": {
+          "title": "Lưu trên máy chủ web thông thường",
+          "body": "Người quản lý máy chủ có thể sửa hoặc xóa tệp này bất cứ lúc nào."
+        },
+        "insecure-http": {
+          "title": "Không mã hóa (http://)",
+          "body": "Tệp có thể bị sửa trên đường đến người xem."
+        },
+        "svg-external": {
+          "title": "SVG tải nội dung bên ngoài",
+          "body": "Ảnh tham chiếu đến tệp trên máy chủ khác, có thể thay đổi hoặc theo dõi người xem. Marketplace có thể không hiển thị chúng."
+        },
+        "bad-json": {
+          "title": "Metadata không phải JSON hợp lệ",
+          "body": "Ví và marketplace có thể không hiển thị được token này."
+        },
+        "content-addressed": {
+          "title": "Lưu theo nội dung (IPFS hoặc Arweave)",
+          "body": "Tệp tại địa chỉ này không thể thay đổi. Hợp đồng vẫn có thể cho phép chủ sở hữu trỏ token sang địa chỉ khác."
+        },
+        "on-chain": {
+          "title": "Lưu on-chain",
+          "body": "Dữ liệu nằm ngay trong URI, nên không phụ thuộc máy chủ nào."
+        },
+        "id-template": {
+          "title": "Có chứa {id}",
+          "body": "Một mẫu địa chỉ ERC-1155. Nhập id token để điền vào."
+        },
+        "gateway-url": {
+          "title": "Một địa chỉ gateway IPFS",
+          "body": "Nội dung được định địa chỉ qua IPFS, nhưng liên kết này phụ thuộc vào việc gateway đó còn hoạt động."
+        }
+      },
+      "sourceTitle": "Token URI",
+      "storage": "Nơi lưu trữ",
+      "schemes": {
+        "data": "On-chain (URI data:)",
+        "ipfs": "IPFS",
+        "arweave": "Arweave",
+        "https": "Máy chủ web (https)",
+        "http": "Máy chủ web (http, không mã hóa)",
+        "script": "Một liên kết javascript:",
+        "other": "Loại địa chỉ không xác định"
+      },
+      "mediaType": "Loại media",
+      "decodedSize": "Kích thước sau giải mã",
+      "bytes": "{bytes} byte",
+      "gateway": "Địa chỉ gateway {n}",
+      "gatewayHelp": "Để bạn tự mở; CRYPY không bao giờ tải nó.",
+      "decodedText": "Hiện văn bản đã giải mã",
+      "metadataTitle": "Metadata",
+      "name": "Tên",
+      "description": "Mô tả",
+      "externalUrl": "URL ngoài",
+      "image": "Ảnh",
+      "imagePreview": "Ảnh của {name}",
+      "imagePreviewHelp": "Chỉ xem trước ảnh lưu bên trong URI; không tải gì về.",
+      "noPreview": "Không có bản xem trước: ảnh được lưu ở nơi khác.",
+      "animation": "Hoạt ảnh",
+      "traitsTitle": "Thuộc tính",
+      "trait": "Thuộc tính",
+      "value": "Giá trị",
+      "noTraits": "Metadata này không có thuộc tính (attributes).",
+      "otherKeys": "Các trường khác",
+      "rawJson": "Hiện JSON metadata",
+      "note": "Đây là nội dung URI hiện có. Chủ sở hữu hợp đồng có thể đổi URI sau này; trang token trên trình khám phá cho biết về hợp đồng.",
+      "local": "Được giải mã trong trình duyệt của bạn; không tải về hay gửi đi bất cứ thứ gì.",
+      "errors": {
+        "empty": "",
+        "too-large": "Quá dài: tối đa 2 triệu ký tự.",
+        "bad-json": "Đây không phải JSON metadata hợp lệ (một đối tượng có các trường như name và image).",
+        "bad-data": "Không thể giải mã URI data: này (base64 hoặc văn bản bị hỏng).",
+        "token-id": "Nhập một số nguyên hoặc số hex có 0x."
+      }
+    },
+    "jsonDiff": {
+      "before": "JSON cũ",
+      "after": "JSON mới",
+      "placeholder": "{\"key\": \"value\"}",
+      "same": "Không có khác biệt",
+      "sameBody": "Hai tài liệu có cùng giá trị (không tính thứ tự khóa và cách viết số).",
+      "summary": "{added} thêm · {removed} xóa · {changed} thay đổi",
+      "kinds": {
+        "added": "Đã thêm",
+        "removed": "Đã xóa",
+        "changed": "Đã thay đổi",
+        "type": "Đổi kiểu"
+      },
+      "path": "Đường dẫn",
+      "change": "Thay đổi",
+      "truncated": "Đang hiển thị {shown} thay đổi đầu tiên.",
+      "copyReport": "Sao chép các thay đổi dạng văn bản",
+      "duplicates": "Khóa lặp lại",
+      "duplicatesBody": "Một số khóa xuất hiện nhiều hơn một lần. Các chương trình không thống nhất bản nào được tính; lần so sánh này dùng bản cuối cùng.",
+      "note": "Đối tượng được so sánh không tính thứ tự khóa; mảng được so sánh từng phần tử.",
+      "local": "Được so sánh trong trình duyệt của bạn; không gửi đi bất cứ thứ gì.",
+      "errors": {
+        "syntax": "JSON không hợp lệ: dòng {line}, cột {column}.",
+        "too-large": "Quá dài: tối đa 2 triệu ký tự.",
+        "too-deep": "Lồng nhau quá sâu (hơn 200 cấp)."
+      }
+    },
+    "calldataGas": {
+      "label": "Dữ liệu giao dịch",
+      "placeholder": "0xa9059cbb…",
+      "create": "Tạo hợp đồng",
+      "createHint": "Đánh dấu nếu dữ liệu dùng để triển khai hợp đồng (giao dịch không có người nhận).",
+      "bytes": "Kích thước dữ liệu",
+      "bytesValue": "{bytes} byte: {zero} byte 0, {nonZero} byte khác 0",
+      "tokens": "Token dữ liệu",
+      "tokensHelp": "Số byte 0 + 4 × số byte khác 0 (EIP-7623).",
+      "dataGas": "Gas cho dữ liệu",
+      "dataGasHelp": "4 cho mỗi byte 0 + 16 cho mỗi byte khác 0.",
+      "createGas": "Gas để tạo hợp đồng",
+      "intrinsic": "Gas nội tại",
+      "intrinsicHelp": "21.000 + dữ liệu (+ tạo hợp đồng): dùng trước khi chạy bất kỳ mã nào.",
+      "floor": "Mức sàn calldata",
+      "floorHelp": "21.000 + 10 cho mỗi token dữ liệu (Ethereum từ Pectra).",
+      "floorApplies": "Nếu mã hợp đồng dùng ít hơn {gas} gas, giao dịch sẽ bị tính theo mức sàn. Giới hạn gas phải đủ cho giá trị lớn hơn trong hai giá trị.",
+      "floorNever": "Mức sàn không cao hơn gas nội tại, nên không làm thay đổi phí.",
+      "selector": "Bộ chọn hàm",
+      "decode": "Giải mã dữ liệu này",
+      "gas": "{gas} gas",
+      "costTitle": "Chi phí (không bắt buộc)",
+      "gwei": "Giá gas",
+      "gweiHint": "Phí cơ bản + phí ưu tiên. Gas Tracker hiển thị giá hiện tại.",
+      "coinPrice": "Giá coin",
+      "coinPriceHint": "Giá ETH, BNB hoặc POL theo USD, để xem số đô la.",
+      "costIntrinsic": "Chi phí gas nội tại",
+      "costFloor": "Chi phí mức sàn",
+      "costNative": "Tính bằng coin của chuỗi (ETH, BNB…).",
+      "note": "Chỉ gồm chi phí của dữ liệu và bản thân giao dịch. Mã hợp đồng được chạy tốn thêm, và mạng lớp 2 cộng thêm phí đăng dữ liệu lên Ethereum.",
+      "local": "Được đếm trong trình duyệt của bạn; không gửi đi bất cứ thứ gì.",
+      "errors": {
+        "format": "Chỉ cho phép ký tự hex (0–9, a–f).",
+        "odd": "Hex phải có số ký tự chẵn (2 ký tự mỗi byte).",
+        "too-large": "Quá dài: tối đa 1 MB dữ liệu."
+      },
+      "priceErrors": {
+        "format": "Nhập một số, như 2 hoặc 0.5.",
+        "negative": "Không được là số âm.",
+        "comma": "Dùng dấu chấm cho phần thập phân (2.5).",
+        "too-large": "Quá lớn.",
+        "too-precise": "Quá nhiều chữ số thập phân."
+      }
     }
   },
   "seo": {

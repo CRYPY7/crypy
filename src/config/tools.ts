@@ -46,6 +46,11 @@ export const toolIds = [
   "file-hash",
   "bitcoin-fee",
   "address-book",
+  "profit-calculator",
+  "bytecode-compare",
+  "nft-uri-decoder",
+  "json-diff",
+  "calldata-gas",
 ] as const;
 export type ToolId = (typeof toolIds)[number];
 
@@ -81,7 +86,12 @@ export type ToolIconName =
   | "file-check"
   | "bitcoin"
   | "book-user"
-  | "wrench";
+  | "wrench"
+  | "trending-up"
+  | "git-compare"
+  | "image"
+  | "file-diff"
+  | "gauge";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -179,6 +189,18 @@ export const tools: readonly ToolDefinition[] = [
   { id: "file-hash", category: "security", icon: "file-check", status: "live", milestone: "U4", isNew: true },
   { id: "bitcoin-fee", category: "calculators", icon: "bitcoin", status: "live", milestone: "U4", isNew: true },
   { id: "address-book", category: "wallet", icon: "book-user", status: "live", milestone: "U4", isNew: true },
+  {
+    id: "profit-calculator",
+    category: "calculators",
+    icon: "trending-up",
+    status: "live",
+    milestone: "U5",
+    isNew: true,
+  },
+  { id: "bytecode-compare", category: "developer", icon: "git-compare", status: "live", milestone: "U5", isNew: true },
+  { id: "nft-uri-decoder", category: "developer", icon: "image", status: "live", milestone: "U5", isNew: true },
+  { id: "json-diff", category: "developer", icon: "file-diff", status: "live", milestone: "U5", isNew: true },
+  { id: "calldata-gas", category: "developer", icon: "gauge", status: "live", milestone: "U5", isNew: true },
 ];
 
 export function getTool(id: string): ToolDefinition | undefined {

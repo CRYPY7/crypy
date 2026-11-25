@@ -31,4 +31,9 @@ export const ownRouteTools: readonly ToolId[] = [
   "file-hash",
   "bitcoin-fee",
   "address-book",
+  "profit-calculator",
+  "bytecode-compare",
+  "nft-uri-decoder",
+  "json-diff",
+  "calldata-gas",
 ];

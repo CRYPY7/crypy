@@ -1344,6 +1344,212 @@
       "seoTitle": "Kripto Adres Defteri: Adres Zehirlemeyi Yakalayın | CRYPY",
       "seoDescription": "Güvendiğiniz kripto adreslerini tarayıcınızda saklayın ve benzer adres zehirleme dolandırıcılıklarını yakalamak için herhangi bir adresi onlarla karşılaştırın.",
       "shortName": "Adres Defteri"
+    },
+    "profit-calculator": {
+      "name": "Kripto Kâr ve Ortalama Maliyet Hesaplayıcı",
+      "question": "Kârda mıyım, başa baş noktam nerede?",
+      "description": "Bir coin için yaptığınız alımları ekleyin; ortalama maliyetinizi, her fiyatta kâr veya zararınızı ve ücretler sonrası başa baş fiyatını görün.",
+      "input": "Alımlarınız ve bir satış fiyatı",
+      "cta": "Hesapla",
+      "features": [
+        "En fazla 10 alımın ücretler dahil ortalama maliyeti",
+        "Dolar ve yüzde olarak kâr veya zarar",
+        "Satış ücreti sonrası başa baş fiyatı"
+      ],
+      "howTo": [
+        "Her alımın miktarını ve fiyatını yazın (her alım için bir satır ekleyin).",
+        "Ödediğiniz ücretleri ve satmak istediğiniz fiyatı ya da bugünkü fiyatı ekleyin.",
+        "Ortalama maliyetinizi, kâr veya zararınızı ve başa baş fiyatını okuyun."
+      ],
+      "faq": [
+        {
+          "q": "Ortalama maliyet nasıl hesaplanır?",
+          "a": "Alım ücretleri dahil ödediğiniz her şey, aldığınız coin sayısına bölünür. 1 ETH'yi 2.000 $'dan, 1 tanesini 3.000 $'dan 10 $ ücretle almak 2.505 $ ortalama maliyet verir."
+        },
+        {
+          "q": "Başa baş fiyatı nedir?",
+          "a": "Satış ücretinden sonra ödediğinizi tam olarak geri aldığınız satış fiyatı. Üstünde kârdasınız, altında zarardasınız."
+        },
+        {
+          "q": "Bugünkü fiyatı sorguluyor mu?",
+          "a": "Hayır. Denemek istediğiniz fiyatı yazın. Hiçbir şey sorgulanmaz veya gönderilmez, bu yüzden istediğiniz fiyatı deneyebilirsiniz."
+        },
+        {
+          "q": "Bu benim vergi rakamım mı?",
+          "a": "Hayır. Vergi kuralları ülkeye göre değişir (örneğin FIFO veya ortalama maliyet) ve transferleri, takasları satış sayabilir. Bunu tahmin olarak kullanın ve beyannameniz için bir vergi danışmanına sorun."
+        },
+        {
+          "q": "Yazdıklarım bir sunucuya gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "Kripto Kâr ve Ortalama Maliyet Hesaplayıcı | CRYPY",
+      "seoDescription": "Alımlarınız, ücretleriniz ve bir satış fiyatıyla herhangi bir coin için ortalama alış fiyatınızı, kâr veya zararınızı ve başa baş fiyatını hesaplayın.",
+      "shortName": "Kâr ve Ortalama Maliyet"
+    },
+    "bytecode-compare": {
+      "name": "Kontrat Bytecode Karşılaştırıcı",
+      "question": "Bu kontrat, şununla aynı kod mu?",
+      "description": "İki EVM bytecode'unu karşılaştırın: aynı mı, derleyici meta verisi farklı ama kod aynı mı, yoksa kod farklı mı. Kod hash'lerini, derleyici sürümünü ve proxy'leri görün.",
+      "input": "İki bytecode",
+      "cta": "Karşılaştır",
+      "features": [
+        "Solidity meta verisini programın kendisinden ayırır",
+        "Kod hash'leri, derleyici sürümü ve kaynağın IPFS hash'i",
+        "Minimal proxy'leri, EIP-7702 delegasyonlarını ve oluşturma kodunu tanır"
+      ],
+      "howTo": [
+        "Her kontratın bytecode'unu kopyalayın (bir gezginin Contract sekmesi veya eth_getCode).",
+        "Her kutuya birini yapıştırın.",
+        "Aynı mı, aynı kod mu, farklı mı olduklarını ve ilk farkın nerede olduğunu okuyun."
+      ],
+      "faq": [
+        {
+          "q": "Aynı kontratın iki derlemesi neden farklı?",
+          "a": "Solidity derleyicisi koda meta veri ekler: kaynak dosyaların ve ayarların hash'i ile derleyici sürümü. Değişen bir yorum veya dosya yolu bu hash'i değiştirir ama programı değiştirmez. Bu araç kodu meta veriyle ve meta verisiz karşılaştırır."
+        },
+        {
+          "q": "Kod hash'i nedir?",
+          "a": "Bir kontratın dağıtılmış (runtime) kodunun Keccak-256 hash'i; EXTCODEHASH'in döndürdüğü değer. Kod hash'i aynı olan iki kontrat tamamen aynı kodu çalıştırır."
+        },
+        {
+          "q": "Kodun uzunluğu aynı ama birkaç bayt farklı. Neden?",
+          "a": "Çoğu zaman bunlar dağıtım sırasında koda yazılan değişmez (immutable) değerlerdir; örneğin sahip, token veya router adresi. Kontratın ne yaptığını değiştirebilirler, bu yüzden ne olduklarını kontrol edin."
+        },
+        {
+          "q": "Aynı kod, kontratın güvenli olduğu anlamına mı gelir?",
+          "a": "Hayır. Yalnızca kodun eşleştiğini gösterir. Bilinen bir kontratın kopyasının sahibi, ayarları farklı olabilir veya başka yeri gösteren bir proxy'si olabilir. Token'ı veya kontratı CRYPY'nin güvenlik araçlarıyla da kontrol edin."
+        },
+        {
+          "q": "Bytecode bir yere gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda karşılaştırılır."
+        }
+      ],
+      "seoTitle": "Kontrat Bytecode Karşılaştırıcı ve Kod Hash'i | CRYPY",
+      "seoDescription": "İki EVM kontratının bytecode'unu Solidity meta verisi olmadan karşılaştırın. Kod hash'leri, derleyici sürümü, proxy'ler ve ilk fark.",
+      "shortName": "Bytecode Karşılaştırıcı"
+    },
+    "nft-uri-decoder": {
+      "name": "NFT Token URI ve Meta Veri Çözücü",
+      "question": "Bu NFT'nin token URI'sinin içinde ne var?",
+      "description": "Bir NFT'nin tokenURI'sini veya meta verisini çözün: zincir üstü base64 JSON ve SVG görseller, IPFS ve Arweave bağlantıları, özellikler ve betikler ya da değiştirilebilir barındırma uyarıları.",
+      "input": "Bir token URI veya meta veri JSON'u",
+      "cta": "Çöz",
+      "features": [
+        "data: URI'leri çözer (base64 veya düz) ve zincir üstü SVG görselleri gösterir",
+        "IPFS ve Arweave ağ geçidi adresleri; ERC-1155 {id} doldurulur",
+        "Betikleri, HTML'i ve değiştirilebilir sunuculardaki meta verileri işaretler"
+      ],
+      "howTo": [
+        "Kontratın tokenURI() (ERC-1155 için uri()) sonucunu bir gezginden kopyalayın veya meta veri JSON'unu yapıştırın.",
+        "{id} içeren bir ERC-1155 adresi için token id'sini yazın.",
+        "Adı, görseli, özellikleri ve verinin nerede saklandığına dair notları okuyun."
+      ],
+      "faq": [
+        {
+          "q": "Token URI nedir?",
+          "a": "Bir NFT'nin meta verisinin adresi: adını, açıklamasını, görselini ve özelliklerini içeren bir JSON dosyası. Kontratlar bunu tokenURI(id) (ERC-721) veya uri(id) (ERC-1155) ile döndürür."
+        },
+        {
+          "q": "Burada zincir üstü ne demek?",
+          "a": "Meta veri URI'nin kendi içindedir (bir data: URI) ve kontrat tarafından saklanır, bu yüzden hiçbir sunucuya bağlı değildir. IPFS ve Arweave adresleri içeriğe bağlıdır, bu yüzden o adresteki dosya değişemez. Normal bir web adresini ise sunucuyu yöneten kişi değiştirebilir veya kaldırabilir."
+        },
+        {
+          "q": "SVG'deki bir betik neden uyarı?",
+          "a": "Bir SVG görseli kod içerebilir. Resim olarak gösterildiğinde çalışamaz, ancak SVG'yi doğrudan sayfaya ekleyen bir site onu çalıştırabilir. CRYPY görselleri yalnızca resim olarak gösterir ve asla bağlantı açmaz."
+        },
+        {
+          "q": "Araç görseli IPFS'ten yüklüyor mu?",
+          "a": "Hayır. Hiçbir şey indirilmez. Kendiniz açabileceğiniz ağ geçidi adreslerini gösterir ve yalnızca URI içinde saklanan görsellerin önizlemesini yapar."
+        },
+        {
+          "q": "Yapıştırdıklarım bir yere gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda çözülür."
+        }
+      ],
+      "seoTitle": "NFT Token URI ve Meta Veri Çözücü | CRYPY",
+      "seoDescription": "NFT tokenURI verisini çözün: base64 JSON, zincir üstü SVG, IPFS ve Arweave bağlantıları ve özellikler; betik ve değiştirilebilir barındırma uyarılarıyla.",
+      "shortName": "NFT URI Çözücü"
+    },
+    "json-diff": {
+      "name": "JSON Fark Karşılaştırma",
+      "question": "Bu iki JSON dosyası arasında ne değişti?",
+      "description": "İki JSON belgesini karşılaştırın ve eklenen, silinen veya değişen her değeri yoluyla birlikte listeleyin. Büyük sayılar tam kalır, tekrarlanan anahtarlar işaretlenir.",
+      "input": "İki JSON belgesi",
+      "cta": "Karşılaştır",
+      "features": [
+        "Her değişiklik yoluyla birlikte, örneğin $.fees.sell",
+        "Büyük sayılar tam olarak karşılaştırılır (wei cinsinden tutarlar bozulmaz)",
+        "Tekrarlanan anahtarlar ve sözdizimi hataları satır ve sütunla gösterilir"
+      ],
+      "howTo": [
+        "Eski JSON'u sola, yenisini sağa yapıştırın.",
+        "Eklenen, silinen ve değişen değerlerin listesini okuyun.",
+        "Paylaşmak isterseniz listeyi metin olarak kopyalayın."
+      ],
+      "faq": [
+        {
+          "q": "Anahtarların sırası önemli mi?",
+          "a": "Hayır. JSON'da bir nesnenin anahtarlarının sırası yoktur, bu yüzden yeniden sıralanmış anahtarlar değişiklik sayılmaz. Dizi öğeleri konumlarına göre karşılaştırılır."
+        },
+        {
+          "q": "Sayıları neden tam tutuyor?",
+          "a": "Çoğu JSON okuyucu çok büyük tamsayıları yuvarlar, bu yüzden wei cinsinden iki farklı token tutarı eşit görünebilir. Bu araç sayıları yazıldığı gibi karşılaştırır; 1.0 ve 1 aynı değer sayılır."
+        },
+        {
+          "q": "Tekrarlanan anahtarlar neden uyarı?",
+          "a": "Bir anahtar iki kez geçtiğinde farklı programlar farklı kopyayı alır. Bu, bir kişiye bir değer gösterip kodda başka bir değer kullanmak için kullanılmıştır. Araç, çoğu programın yaptığı gibi son kopyayı karşılaştırır."
+        },
+        {
+          "q": "JSON'um bir yere gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda karşılaştırılır."
+        }
+      ],
+      "seoTitle": "JSON Karşılaştırma: İki JSON Dosyası Farkı | CRYPY",
+      "seoDescription": "İki JSON belgesini karşılaştırın; eklenen, silinen ve değişen her değeri yoluyla görün. Büyük sayılar tam, tekrarlanan anahtar uyarıları. Tarayıcınızda.",
+      "shortName": "JSON Karşılaştırma"
+    },
+    "calldata-gas": {
+      "name": "Calldata Gas Hesaplayıcı",
+      "question": "Bu işlemin verisi ne kadar gas tutar?",
+      "description": "Bir işlemin verisindeki sıfır ve sıfır olmayan baytları sayın; içsel gas'ı, EIP-7623 calldata tabanını ve gas fiyatınızdaki maliyeti hesaplayın.",
+      "input": "İşlem verisi (hex)",
+      "cta": "Hesapla",
+      "features": [
+        "İçsel gas: 21.000 artı bayt başına 4 veya 16 gas",
+        "Ethereum'un Pectra güncellemesiyle gelen calldata tabanı (EIP-7623)",
+        "Kontrat oluşturma maliyetleri ve coin ile dolar cinsinden maliyet"
+      ],
+      "howTo": [
+        "İşlemin girdi verisini yapıştırın (0x ile başlar).",
+        "Veri bir kontrat dağıtıyorsa “Kontrat oluşturma”yı işaretleyin.",
+        "Verinin gerektirdiği gas'ı okuyun ve maliyeti görmek için bir gas fiyatı ekleyin."
+      ],
+      "faq": [
+        {
+          "q": "İçsel gas nedir?",
+          "a": "Bir işlemin herhangi bir kod çalışmadan önce ödediği gas: işlem için 21.000, verinin her sıfır baytı için 4 ve diğer her bayt için 16; kontrat oluştururken buna 32.000 ve 32 baytlık her kelime için 2 eklenir."
+        },
+        {
+          "q": "Calldata tabanı nedir?",
+          "a": "Ethereum'un Pectra güncellemesinden beri (Mayıs 2025, EIP-7623) bir işlemden en az 21.000 artı veri token'ı başına 10 gas alınır (sıfır bayt 1 token, diğer baytlar 4). Yalnızca çok veri taşıyan ve az hesaplama yapan işlemlerde fark yaratır."
+        },
+        {
+          "q": "Bu, işlemimin toplam gas'ı mı?",
+          "a": "Hayır. Çalışan kontrat kodu ayrıca maliyet ekler. Verinin maliyetini görmek ve gas limitinin minimumun altında olmadığını kontrol etmek için kullanın."
+        },
+        {
+          "q": "Her zincirde geçerli mi?",
+          "a": "Bayt başına 4 ve 16 gas genel olarak EVM zincirlerinde geçerlidir. Taban, Ethereum'da ve EIP-7623'ü benimseyen zincirlerde geçerlidir. Katman 2 ağları ayrıca Ethereum'a veri yayınlamak için ayrı bir ücret alır; bu dahil değildir."
+        },
+        {
+          "q": "Yapıştırdıklarım bir yere gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda sayılır."
+        }
+      ],
+      "seoTitle": "Calldata Gas Hesaplayıcı (EIP-7623 Tabanı) | CRYPY",
+      "seoDescription": "İşlem verisinin içsel gas'ını hesaplayın: sıfır ve sıfır olmayan baytlar, kontrat oluşturma ve Pectra calldata tabanı; gas fiyatınızdaki maliyetle.",
+      "shortName": "Calldata Gas"
     }
   },
   "toolPage": {
@@ -4314,6 +4520,273 @@
       },
       "storage": "Yalnızca bu cihazdaki bu tarayıcıda saklanır, CRYPY'ye asla gönderilmez. Tarayıcı verilerini temizlemek onu siler: saklamak için bir kopyasını dışa aktarın.",
       "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "profitCalculator": {
+      "buysTitle": "Alımlarınız",
+      "buyAmount": "Alınan miktar ({n}. alım)",
+      "buyPrice": "Coin başına ödenen fiyat ({n}. alım)",
+      "buyLabel": "{n}. alımı kaldır",
+      "addBuy": "Bir alım daha ekle",
+      "removeBuy": "Kaldır",
+      "buyFees": "Alım ücretleri (isteğe bağlı)",
+      "buyFeesHint": "Bu alımlarda ödenen tüm ücretlerin toplamı, USD.",
+      "sellPrice": "Satış fiyatı",
+      "sellPriceHint": "Denemek istediğiniz fiyat veya bugünkü fiyat. Hiçbir şey sorgulanmaz.",
+      "sellFee": "Satış ücreti (isteğe bağlı)",
+      "sellFeeHint": "Borsanın satış üzerinden aldığı yüzde, ör. 0.1.",
+      "results": "Sonuçlar",
+      "empty": "Sonuçları görmek için en az bir alım ve bir satış fiyatı yazın.",
+      "profit": "Kâr veya zarar",
+      "profitPercent": "Ödediğinize göre {percent}",
+      "averageCost": "Coin başına ortalama maliyet",
+      "averageCostHelp": "Ücretler dahil ödenen her şey ÷ alınan coin sayısı.",
+      "breakEven": "Başa baş fiyatı",
+      "breakEvenHelp": "Satış ücretinden sonra ödediğinizi geri aldığınız satış fiyatı.",
+      "amount": "Elinizdeki coin",
+      "cost": "Toplam ödenen (ücretlerle)",
+      "saleValue": "Satış fiyatındaki değer",
+      "sellFeeUsd": "Satış ücreti",
+      "priceChange": "Satış fiyatı buna göre {percent}.",
+      "note": "Yazdığınız rakamlardan bir tahmin. Borsalar miktarları ve ücretleri yuvarlar, vergi kuralları da maliyetleri kendi yöntemleriyle hesaplar.",
+      "local": "Yazdıklarınızdan tarayıcınızda hesaplanır; hiçbir şey sorgulanmaz veya gönderilmez.",
+      "errors": {
+        "empty": "",
+        "format": "1000 veya 2.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (2.5); virgül yalnızca binlik ayırıcı olarak (1,000).",
+        "too-large": "Çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak.",
+        "over-100": "%100'den küçük olmalı.",
+        "no-buys": "Miktarı sıfırdan büyük en az bir alım ekleyin.",
+        "half-row": "Bu alımın hem miktarını hem fiyatını yazın."
+      }
+    },
+    "bytecodeCompare": {
+      "first": "Birinci bytecode",
+      "second": "İkinci bytecode",
+      "placeholder": "0x6080604052…",
+      "hint": "Her iki tarafa da runtime kodu (gezginlerde Deployed Bytecode) ya da her iki tarafa da oluşturma kodu yapıştırın.",
+      "verdicts": {
+        "identical": {
+          "title": "Bytecode'lar aynı",
+          "body": "Her bayt eşleşiyor, bu yüzden ikisinin kod hash'i aynı."
+        },
+        "same-code": {
+          "title": "Kod aynı, meta veri farklı",
+          "body": "Program aynı; yalnızca sondaki Solidity meta verisi farklı (kaynak dosya hash'i veya derleyici ayarları). İkisi de aynı komutları çalıştırır."
+        },
+        "same-length": {
+          "title": "Aynı uzunlukta farklı kod",
+          "body": "Program farklı, ancak uzunluk aynı."
+        },
+        "different": {
+          "title": "Farklı kod",
+          "body": "Programlar uzunluk ve içerik bakımından farklı."
+        }
+      },
+      "immutables": "Farklar her biri en fazla 32 bayt olan {regions} yerde. Bunlar çoğu zaman dağıtımda belirlenen değişmez değerlerdir, örneğin sahip veya token adresi: ne olduklarını kontrol edin.",
+      "firstDifference": "İlk fark {offset}. baytta.",
+      "sideTitle": "Bytecode",
+      "size": "Boyut",
+      "sizeValue": "{bytes} bayt",
+      "overLimit": "Ethereum'un dağıtılmış kod için 24.576 baytlık sınırından büyük (EIP-170): oluşturma kodu veya başka bir zincirin kodu olabilir.",
+      "hash": "Kod hash'i (Keccak-256)",
+      "hashHelp": "Dağıtılmış kod için bu, kontratın kod hash'idir (EXTCODEHASH).",
+      "hashWithoutMetadata": "Meta verisiz hash",
+      "metadataTitle": "Derleyici meta verisi",
+      "compiler": "Derleyici",
+      "ipfs": "IPFS'teki kaynak meta verisi",
+      "swarm": "Swarm'daki kaynak meta verisi",
+      "experimental": "Deneysel özelliklerle derlenmiş.",
+      "noMetadata": "Solidity meta verisi bulunamadı (kapatılmış olabilir veya kod başka bir derleyiciden geliyor).",
+      "kinds": {
+        "empty": "Kod yok: boş bir hesap (normal bir cüzdan veya yok edilmiş bir kontrat).",
+        "minimal-proxy": "Bir minimal proxy (EIP-1167): her çağrıyı aşağıdaki kontrata iletir. Onu kontrol edin.",
+        "delegation": "Bir EIP-7702 delegasyonu: bu cüzdan aşağıdaki kontratın kodunu çalıştırır.",
+        "creation": "Bu, oluşturma (dağıtım) koduna benziyor. Canlı bir kontratla karşılaştırmak için onun dağıtılmış kodunu kullanın."
+      },
+      "implementation": "İlettiği yer",
+      "target": "Delege ettiği yer",
+      "oneSide": "Karşılaştırmak için ikinci bir bytecode yapıştırın. Birincinin ayrıntıları:",
+      "note": "Kodun eşleşmesi bir kontratı güvenli yapmaz: sahibi, ayarları ve varsa proxy hedefi de önemlidir.",
+      "local": "Tarayıcınızda karşılaştırılır; hiçbir şey sorgulanmaz veya gönderilmez.",
+      "errors": {
+        "format": "Yalnızca hex karakterlere (0–9, a–f) izin verilir.",
+        "odd": "Hex'in karakter sayısı çift olmalı (bayt başına 2).",
+        "too-large": "Çok uzun: en fazla 128 KB bytecode."
+      }
+    },
+    "nftUriDecoder": {
+      "label": "Token URI veya meta veri JSON'u",
+      "placeholder": "data:application/json;base64,… veya ipfs://… veya {\"name\": …}",
+      "hint": "tokenURI() veya uri()'nin döndürdüğü değer ya da meta veri JSON'unun kendisi.",
+      "tokenId": "Token id (isteğe bağlı)",
+      "tokenIdHint": "{id} içeren ERC-1155 adresleri için: ondalık veya 0x token id.",
+      "findingsTitle": "Notlar",
+      "fields": {
+        "uri": "Token URI",
+        "image": "Görsel",
+        "animation": "Animasyon",
+        "external": "Dış bağlantı"
+      },
+      "findings": {
+        "script-scheme": {
+          "title": "Bir javascript: bağlantısı",
+          "body": "Açıldığında bir sayfaya gitmek yerine kod çalıştırır. Meşru NFT'lerin buna ihtiyacı yoktur. Açmayın."
+        },
+        "svg-script": {
+          "title": "SVG'nin içinde kod",
+          "body": "Görsel bir betik, olay işleyici veya gömülü HTML içeriyor. Resim olarak gösterildiğinde çalışamaz, ancak SVG'yi doğrudan ekleyen sayfalarda çalışabilir."
+        },
+        "html": {
+          "title": "Bir HTML sayfası",
+          "body": "HTML açıldığında kod çalıştırabilir. Üretken sanat sık kullanır; yalnızca onu yalıtan bir pazar yerinde açın."
+        },
+        "web-hosted": {
+          "title": "Sıradan bir web sunucusunda saklanıyor",
+          "body": "Sunucuyu yöneten kişi bu dosyayı istediği zaman değiştirebilir veya kaldırabilir."
+        },
+        "insecure-http": {
+          "title": "Şifrelenmemiş (http://)",
+          "body": "Dosya görüntüleyene giderken yolda değiştirilebilir."
+        },
+        "svg-external": {
+          "title": "SVG dış içerik yüklüyor",
+          "body": "Görsel başka sunuculardaki dosyalara başvuruyor; bunlar değişebilir veya görüntüleyenleri izleyebilir. Pazar yerleri bunları göstermeyebilir."
+        },
+        "bad-json": {
+          "title": "Meta veri geçerli JSON değil",
+          "body": "Cüzdanlar ve pazar yerleri bu token'ı gösteremeyebilir."
+        },
+        "content-addressed": {
+          "title": "İçeriğe göre saklanıyor (IPFS veya Arweave)",
+          "body": "Bu adresteki dosya değişemez. Kontrat yine de sahibinin token'ı başka bir adrese yönlendirmesine izin verebilir."
+        },
+        "on-chain": {
+          "title": "Zincir üstünde saklanıyor",
+          "body": "Veri URI'nin kendi içinde, bu yüzden hiçbir sunucuya bağlı değil."
+        },
+        "id-template": {
+          "title": "{id} içeriyor",
+          "body": "Bir ERC-1155 adres şablonu. Doldurmak için token id'sini yazın."
+        },
+        "gateway-url": {
+          "title": "Bir IPFS ağ geçidi adresi",
+          "body": "İçerik IPFS ile adresleniyor, ancak bu bağlantı o ağ geçidinin çevrimiçi kalmasına bağlı."
+        }
+      },
+      "sourceTitle": "Token URI",
+      "storage": "Nerede saklandığı",
+      "schemes": {
+        "data": "Zincir üstü (data: URI)",
+        "ipfs": "IPFS",
+        "arweave": "Arweave",
+        "https": "Web sunucusu (https)",
+        "http": "Web sunucusu (http, şifrelenmemiş)",
+        "script": "Bir javascript: bağlantısı",
+        "other": "Bilinmeyen adres türü"
+      },
+      "mediaType": "Medya türü",
+      "decodedSize": "Çözülmüş boyut",
+      "bytes": "{bytes} bayt",
+      "gateway": "Ağ geçidi adresi {n}",
+      "gatewayHelp": "Kendiniz açmanız için; CRYPY onu asla indirmez.",
+      "decodedText": "Çözülmüş metni göster",
+      "metadataTitle": "Meta veri",
+      "name": "Ad",
+      "description": "Açıklama",
+      "externalUrl": "Dış URL",
+      "image": "Görsel",
+      "imagePreview": "{name} görseli",
+      "imagePreviewHelp": "Yalnızca URI içinde saklanan görsellerin önizlemesi yapılır; hiçbir şey indirilmez.",
+      "noPreview": "Önizleme yok: görsel başka bir yerde saklanıyor.",
+      "animation": "Animasyon",
+      "traitsTitle": "Özellikler",
+      "trait": "Özellik",
+      "value": "Değer",
+      "noTraits": "Bu meta veride özellik (attributes) yok.",
+      "otherKeys": "Diğer alanlar",
+      "rawJson": "Meta veri JSON'unu göster",
+      "note": "Bu, URI'nin bugün ne içerdiğini gösterir. Kontratın sahibi URI'yi daha sonra değiştirebilir; token'ın gezgindeki sayfası kontratı gösterir.",
+      "local": "Tarayıcınızda çözülür; hiçbir şey indirilmez veya gönderilmez.",
+      "errors": {
+        "empty": "",
+        "too-large": "Çok uzun: en fazla 2 milyon karakter.",
+        "bad-json": "Bu geçerli bir meta veri JSON'u değil (name ve image gibi alanları olan bir nesne).",
+        "bad-data": "Bu data: URI çözülemiyor (base64 veya metin bozuk).",
+        "token-id": "Bir tamsayı veya 0x'li bir hex sayı girin."
+      }
+    },
+    "jsonDiff": {
+      "before": "Eski JSON",
+      "after": "Yeni JSON",
+      "placeholder": "{\"key\": \"value\"}",
+      "same": "Fark yok",
+      "sameBody": "İki belge aynı değerleri içeriyor (anahtar sırası ve sayı yazımı hariç).",
+      "summary": "{added} eklendi · {removed} silindi · {changed} değişti",
+      "kinds": {
+        "added": "Eklendi",
+        "removed": "Silindi",
+        "changed": "Değişti",
+        "type": "Tür değişti"
+      },
+      "path": "Yol",
+      "change": "Değişiklik",
+      "truncated": "İlk {shown} değişiklik gösteriliyor.",
+      "copyReport": "Değişiklikleri metin olarak kopyala",
+      "duplicates": "Tekrarlanan anahtarlar",
+      "duplicatesBody": "Bazı anahtarlar birden fazla kez geçiyor. Programlar hangi kopyanın geçerli olduğunda anlaşamaz; bu karşılaştırma sonuncuyu kullanır.",
+      "note": "Nesneler anahtar sırasına bakılmadan; diziler öğe öğe karşılaştırılır.",
+      "local": "Tarayıcınızda karşılaştırılır; hiçbir şey gönderilmez.",
+      "errors": {
+        "syntax": "Geçerli JSON değil: satır {line}, sütun {column}.",
+        "too-large": "Çok uzun: en fazla 2 milyon karakter.",
+        "too-deep": "Çok derin iç içe (200 düzeyden fazla)."
+      }
+    },
+    "calldataGas": {
+      "label": "İşlem verisi",
+      "placeholder": "0xa9059cbb…",
+      "create": "Kontrat oluşturma",
+      "createHint": "Veri bir kontrat dağıtıyorsa işaretleyin (alıcısı olmayan bir işlem).",
+      "bytes": "Veri boyutu",
+      "bytesValue": "{bytes} bayt: {zero} sıfır, {nonZero} sıfır olmayan",
+      "tokens": "Veri token'ları",
+      "tokensHelp": "Sıfır baytlar + 4 × sıfır olmayan baytlar (EIP-7623).",
+      "dataGas": "Verinin gas'ı",
+      "dataGasHelp": "Sıfır bayt başına 4 + sıfır olmayan bayt başına 16.",
+      "createGas": "Kontrat oluşturma gas'ı",
+      "intrinsic": "İçsel gas",
+      "intrinsicHelp": "21.000 + veri (+ oluşturma): herhangi bir kod çalışmadan önce harcanır.",
+      "floor": "Calldata tabanı",
+      "floorHelp": "21.000 + veri token'ı başına 10 (Pectra'dan beri Ethereum).",
+      "floorApplies": "Kontrat kodu {gas} gas'tan az kullanırsa işlemden bunun yerine taban ücret alınır. Gas limiti ikisinden büyük olanı karşılamalıdır.",
+      "floorNever": "Taban içsel gas'tan yüksek değil, bu yüzden ücreti değiştirmez.",
+      "selector": "Fonksiyon seçici",
+      "decode": "Bu veriyi çöz",
+      "gas": "{gas} gas",
+      "costTitle": "Maliyet (isteğe bağlı)",
+      "gwei": "Gas fiyatı",
+      "gweiHint": "Taban ücret + öncelik ücreti. Gas Tracker güncel fiyatları gösterir.",
+      "coinPrice": "Coin fiyatı",
+      "coinPriceHint": "Dolar görmek için ETH, BNB veya POL'ün USD fiyatı.",
+      "costIntrinsic": "İçsel gas'ın maliyeti",
+      "costFloor": "Tabanın maliyeti",
+      "costNative": "Zincirin coin'i cinsinden (ETH, BNB…).",
+      "note": "Yalnızca verinin ve işlemin kendisinin maliyeti. Çalışan kontrat kodu ayrıca maliyet ekler, katman 2 ağları da Ethereum'a veri yayınlamak için ücret ekler.",
+      "local": "Tarayıcınızda sayılır; hiçbir şey gönderilmez.",
+      "errors": {
+        "format": "Yalnızca hex karakterlere (0–9, a–f) izin verilir.",
+        "odd": "Hex'in karakter sayısı çift olmalı (bayt başına 2).",
+        "too-large": "Çok uzun: en fazla 1 MB veri."
+      },
+      "priceErrors": {
+        "format": "2 veya 0.5 gibi bir sayı girin.",
+        "negative": "Negatif olamaz.",
+        "comma": "Ondalık için nokta kullanın (2.5).",
+        "too-large": "Çok büyük.",
+        "too-precise": "Çok fazla ondalık basamak."
+      }
     }
   },
   "seo": {
