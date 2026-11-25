@@ -13,10 +13,13 @@ for file in "$APP_DIR"/public/*.txt; do
 done
 [ -n "$KEY_FILE" ] || { echo "IndexNow: no key file in public/, skipped."; exit 0; }
 KEY="$(basename "$KEY_FILE" .txt)"
-if curl -fsS http://127.0.0.1:3000/robots.txt | grep -qx 'Disallow: /'; then
+# The live instance's port (update.sh switches between 3000 and 3001).
+PORT="$(cat "$APP_DIR/.crypy-port" 2>/dev/null || echo 3000)"
+case "$PORT" in 3000 | 3001) ;; *) PORT=3000 ;; esac
+if curl -fsS "http://127.0.0.1:$PORT/robots.txt" | grep -qx 'Disallow: /'; then
   echo "IndexNow: the site is hidden from search engines (preview), skipped."; exit 0
 fi
-URLS="$(curl -fsS http://127.0.0.1:3000/sitemap.xml | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g' | sort -u)"
+URLS="$(curl -fsS "http://127.0.0.1:$PORT/sitemap.xml" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g' | sort -u)"
 [ -n "$URLS" ] || { echo "IndexNow: sitemap empty, skipped."; exit 0; }
 HOST="${SITE#https://}"
 LIST="$(printf '%s\n' "$URLS" | sed 's/.*/"&"/' | paste -sd, -)"
