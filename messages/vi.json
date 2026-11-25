@@ -1154,6 +1154,196 @@
       "seoTitle": "Định dạng JSON và chuyển đổi JSON sang CSV | CRYPY",
       "seoDescription": "Định dạng, rút gọn và kiểm tra JSON, chuyển danh sách JSON sang CSV và ngược lại ngay trong trình duyệt. Xuất CSV an toàn cho bảng tính.",
       "shortName": "JSON và CSV"
+    },
+    "signature-verifier": {
+      "name": "Xác minh chữ ký",
+      "question": "Ai thực sự đã ký tin nhắn này?",
+      "description": "Dán một tin nhắn đã ký hoặc yêu cầu EIP-712 cùng chữ ký để xem địa chỉ nào đã ký và đó có phải địa chỉ bạn mong đợi không.",
+      "input": "Một tin nhắn và chữ ký của nó",
+      "cta": "Xác minh",
+      "features": [
+        "Dùng được cho tin nhắn personal_sign (văn bản hoặc hex) và dữ liệu có kiểu EIP-712",
+        "Hiển thị người ký và chính xác hash đã được ký",
+        "So sánh với địa chỉ bạn mong đợi"
+      ],
+      "howTo": [
+        "Dán tin nhắn đúng y như lúc được ký, hoặc JSON của dữ liệu có kiểu.",
+        "Dán chữ ký (0x… dài 130 ký tự).",
+        "Có thể thêm địa chỉ lẽ ra đã ký, rồi đọc kết quả."
+      ],
+      "faq": [
+        {
+          "q": "Một chữ ký khớp chứng minh điều gì?",
+          "a": "Rằng người giữ khóa của địa chỉ đó đã ký chính xác tin nhắn này. Nó không chứng minh tin nhắn là thật hay an toàn, cũng không chứng minh khóa chưa bị đánh cắp."
+        },
+        {
+          "q": "Vì sao hiện một địa chỉ khác với địa chỉ tôi mong đợi?",
+          "a": "Tin nhắn hoặc chữ ký đã bị sửa (chỉ một ký tự hay khoảng trắng cũng cho ra người ký khác), dán nhầm, hoặc một ví khác đã ký. Ví hợp đồng thông minh như Safe ký theo cách khác (ERC-1271), nên không thể kiểm tra chữ ký của chúng theo cách này."
+        },
+        {
+          "q": "Tôi có nên dán khóa riêng hoặc cụm từ khôi phục không?",
+          "a": "Không bao giờ. Kiểm tra chữ ký chỉ cần tin nhắn và chữ ký. Không trang web nào cần khóa hay cụm từ khôi phục của bạn."
+        },
+        {
+          "q": "Có gì được gửi đến máy chủ không?",
+          "a": "Không. Người ký được tính trong trình duyệt của bạn từ chính chữ ký."
+        }
+      ],
+      "seoTitle": "Xác minh chữ ký: Ai đã ký tin nhắn này? | CRYPY",
+      "seoDescription": "Xác minh tin nhắn đã ký trên Ethereum hoặc chữ ký EIP-712 ngay trong trình duyệt: xem địa chỉ nào đã ký và có khớp với địa chỉ bạn mong đợi không.",
+      "shortName": "Xác minh chữ ký"
+    },
+    "raw-tx-decoder": {
+      "name": "Giải mã giao dịch thô và RLP",
+      "question": "Giao dịch thô này làm gì?",
+      "description": "Dán một giao dịch thô đã ký (0x02…, 0xf8…) để xem từng trường, ai đã ký và hash mà nó sẽ có. Dữ liệu RLP khác được hiển thị dạng cây.",
+      "input": "Một giao dịch thô hoặc hex RLP",
+      "cta": "Giải mã",
+      "features": [
+        "Giao dịch legacy, EIP-2930, EIP-1559, blob và EIP-7702",
+        "Khôi phục người gửi và hash giao dịch",
+        "Liên kết dữ liệu lệnh gọi với Bộ giải mã dữ liệu giao dịch"
+      ],
+      "howTo": [
+        "Dán hex của giao dịch thô, có hoặc không có 0x.",
+        "Xem mạng, người gửi, người nhận, giá trị và phí.",
+        "Mở dữ liệu lệnh gọi trong Bộ giải mã dữ liệu giao dịch để xem hàm."
+      ],
+      "faq": [
+        {
+          "q": "Giao dịch thô từ đâu ra?",
+          "a": "Ví và script gửi chúng đến nút bằng eth_sendRawTransaction. Bạn có thể thấy một giao dịch như vậy trong bản xuất của ví, nhật ký của bot hoặc công cụ dành cho nhà phát triển."
+        },
+        {
+          "q": "Giải mã có gửi giao dịch không?",
+          "a": "Không. Công cụ này chỉ đọc các byte. Bất kỳ ai có giao dịch thô đã ký đều có thể phát nó lên mạng, nên đừng chia sẻ cho đến khi bạn thực sự muốn gửi."
+        },
+        {
+          "q": "RLP là gì?",
+          "a": "Recursive Length Prefix, cách Ethereum đóng gói danh sách byte. Giao dịch, khối và một số bằng chứng là RLP; công cụ hiển thị mọi RLP dưới dạng danh sách lồng nhau."
+        },
+        {
+          "q": "Có gì được gửi đến máy chủ không?",
+          "a": "Không. Mọi thứ được giải mã trong trình duyệt của bạn."
+        }
+      ],
+      "seoTitle": "Giải mã giao dịch thô (RLP, EIP-1559, người gửi) | CRYPY",
+      "seoDescription": "Giải mã giao dịch Ethereum thô đã ký ngay trong trình duyệt: các trường, phí, người gửi và hash giao dịch. Cũng giải mã mọi dữ liệu RLP. Không phát gì lên mạng.",
+      "shortName": "Giao dịch thô"
+    },
+    "file-hash": {
+      "name": "Kiểm tra hash tệp",
+      "question": "Tệp tải về này có phải tệp thật không?",
+      "description": "Đối chiếu ứng dụng ví hoặc tệp đã tải với mã kiểm tra do nhà phát triển công bố. Tệp được tính hash trong trình duyệt và không bao giờ được tải lên.",
+      "input": "Một tệp và mã kiểm tra đã công bố",
+      "cta": "Kiểm tra tệp",
+      "features": [
+        "SHA-256, SHA-512 và SHA-1, tính trong trình duyệt của bạn",
+        "Đọc mã kiểm tra theo các dạng dự án thường công bố",
+        "Kết quả khớp hoặc không khớp rõ ràng, kèm việc cần làm"
+      ],
+      "howTo": [
+        "Tải ứng dụng ví hoặc tệp từ trang web chính thức.",
+        "Sao chép mã kiểm tra dự án công bố (thường là SHA-256) và dán vào đây.",
+        "Chọn tệp. Nếu khớp, bạn có đúng tệp mà họ đã phát hành."
+      ],
+      "faq": [
+        {
+          "q": "Vì sao nên kiểm tra tệp ví tải về?",
+          "a": "Ứng dụng ví giả là cách phổ biến để đánh cắp tiền mã hóa. Nếu hash khớp với hash trên trang chính thức của dự án hoặc bản phát hành trên GitHub, bạn có đúng tệp họ đã phát hành."
+        },
+        {
+          "q": "Tìm mã kiểm tra chính thức ở đâu?",
+          "a": "Trên trang tải xuống của chính dự án hoặc ghi chú phát hành trên GitHub, thường trong tệp tên SHA256SUMS. Hãy lấy từ nguồn chính thức, không phải từ đường link ai đó gửi bạn."
+        },
+        {
+          "q": "Nếu không khớp thì sao?",
+          "a": "Đừng cài đặt hay mở tệp. Xóa nó và tải lại từ trang chính thức; nếu vẫn không khớp, hãy liên hệ dự án."
+        },
+        {
+          "q": "Tệp của tôi có bị tải lên không?",
+          "a": "Không. Tệp được đọc và tính hash ngay trong thẻ trình duyệt này và không bao giờ rời khỏi máy tính của bạn. Tệp tối đa 1 GB."
+        }
+      ],
+      "seoTitle": "Kiểm tra hash tệp: xác minh SHA-256 của tệp tải về | CRYPY",
+      "seoDescription": "Đối chiếu ứng dụng ví hoặc tệp tải về với mã SHA-256 đã công bố, ngay trong trình duyệt. Tệp không bao giờ được tải lên. Có cả SHA-512 và SHA-1.",
+      "shortName": "Hash tệp"
+    },
+    "bitcoin-fee": {
+      "name": "Máy tính phí Bitcoin",
+      "question": "Giao dịch Bitcoin này tốn bao nhiêu phí?",
+      "description": "Ước tính kích thước giao dịch Bitcoin theo byte ảo từ các đầu vào và đầu ra, và phí theo mức phí bạn chọn.",
+      "input": "Đầu vào, đầu ra và mức phí",
+      "cta": "Tính",
+      "features": [
+        "Legacy, SegWit lồng, SegWit gốc và Taproot",
+        "Phí theo sat và BTC, chính xác",
+        "Phí theo đô la chỉ khi bạn nhập giá"
+      ],
+      "howTo": [
+        "Nhập số đầu vào (coin bạn chi) của từng loại địa chỉ.",
+        "Nhập các đầu ra: người nhận và thường có tiền thối của bạn.",
+        "Nhập mức phí sat/vB từ ví của bạn hoặc trang web phí."
+      ],
+      "faq": [
+        {
+          "q": "Đầu vào và đầu ra là gì?",
+          "a": "Đầu vào là các coin (UTXO) ví của bạn chi; đầu ra là nơi bitcoin đi đến, thường là người nhận và tiền thối. Chi nhiều coin nhỏ làm giao dịch lớn và đắt hơn."
+        },
+        {
+          "q": "Vì sao SegWit và Taproot rẻ hơn?",
+          "a": "Chữ ký của chúng được tính ít hơn vào kích thước giao dịch (byte ảo), nên cùng một giao dịch cần mức phí thấp hơn."
+        },
+        {
+          "q": "Kết quả chính xác đến đâu?",
+          "a": "Kích thước là ước tính thông dụng cho chi tiêu một chữ ký; chữ ký thật có thể chênh một byte, còn đầu vào đa chữ ký thì lớn hơn. Ví của bạn hiển thị phí chính xác trước khi gửi."
+        },
+        {
+          "q": "Mức phí lấy từ đâu?",
+          "a": "Bạn tự chọn. Ví và các trang mempool gợi ý mức phí tùy tốc độ xác nhận bạn muốn. CRYPY không lấy dữ liệu này."
+        }
+      ],
+      "seoTitle": "Máy tính phí Bitcoin: vBytes và sat/vB | CRYPY",
+      "seoDescription": "Ước tính kích thước giao dịch Bitcoin theo vBytes và phí theo sat, BTC từ đầu vào, đầu ra và mức phí. SegWit và Taproot. Ngay trong trình duyệt.",
+      "shortName": "Phí Bitcoin"
+    },
+    "address-book": {
+      "name": "Sổ địa chỉ",
+      "question": "Đây có phải địa chỉ tôi định dùng không?",
+      "description": "Lưu các địa chỉ bạn tin tưởng trên thiết bị này, rồi đối chiếu bất kỳ địa chỉ nào với chúng để phát hiện địa chỉ trông giống dùng trong lừa đảo đầu độc địa chỉ.",
+      "input": "Các địa chỉ bạn tin tưởng",
+      "cta": "Mở",
+      "features": [
+        "Phát hiện địa chỉ giống: cùng đầu và cuối, khác phần giữa",
+        "Địa chỉ EVM, Bitcoin và Solana",
+        "Chỉ lưu trong trình duyệt này, có xuất và nhập"
+      ],
+      "howTo": [
+        "Thêm các địa chỉ bạn hay gửi đến, mỗi địa chỉ một tên.",
+        "Trước khi gửi, dán địa chỉ bạn vừa sao chép vào ô kiểm tra.",
+        "Chỉ gửi khi nó báo có trong sổ; đừng bao giờ sao chép địa chỉ từ lịch sử giao dịch."
+      ],
+      "faq": [
+        {
+          "q": "Đầu độc địa chỉ là gì?",
+          "a": "Kẻ lừa đảo gửi những khoản rất nhỏ từ một địa chỉ có đầu và cuối giống địa chỉ bạn dùng, để nó hiện trong lịch sử của bạn. Nếu bạn sao chép từ đó, tiền của bạn sẽ đến tay họ."
+        },
+        {
+          "q": "Việc kiểm tra hoạt động thế nào?",
+          "a": "Nó so sánh toàn bộ địa chỉ với các địa chỉ đã lưu. Nếu không phải một trong số đó nhưng có đầu và cuối giống một địa chỉ đã lưu, bạn sẽ được cảnh báo: đó chính là kiểu đầu độc."
+        },
+        {
+          "q": "Sổ địa chỉ của tôi được lưu ở đâu?",
+          "a": "Chỉ trong trình duyệt này trên thiết bị này. Nó không được gửi đến CRYPY. Xóa dữ liệu trình duyệt sẽ xóa nó, nên hãy dùng Xuất để giữ một bản sao."
+        },
+        {
+          "q": "Tôi có nên lưu cụm từ khôi phục ở đây không?",
+          "a": "Không, không bao giờ. Sổ địa chỉ chỉ nhận địa chỉ công khai và từ chối mọi thứ trông giống cụm từ khôi phục hay khóa riêng."
+        }
+      ],
+      "seoTitle": "Sổ địa chỉ tiền mã hóa: phát hiện đầu độc địa chỉ | CRYPY",
+      "seoDescription": "Lưu các địa chỉ tiền mã hóa tin cậy trong trình duyệt và đối chiếu bất kỳ địa chỉ nào để phát hiện lừa đảo địa chỉ trông giống. Không gì rời khỏi thiết bị.",
+      "shortName": "Sổ địa chỉ"
     }
   },
   "toolPage": {
@@ -3940,6 +4130,189 @@
         "too-large": "Quá lớn: giới hạn là 2 MB."
       },
       "formulaNote": "Các ô bắt đầu bằng = + - hoặc @ được thêm dấu nháy đơn để bảng tính không chạy chúng như công thức.",
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "signatureVerifier": {
+      "messageLabel": "Tin nhắn hoặc dữ liệu có kiểu",
+      "messagePlaceholder": "Đúng văn bản đã được ký, hoặc JSON EIP-712",
+      "messageHelp": "Dán đúng nguyên văn: sửa một ký tự hay khoảng trắng sẽ cho ra người ký khác.",
+      "readAs": "Đọc tin nhắn dưới dạng",
+      "text": "Văn bản",
+      "hex": "Byte hex",
+      "signatureLabel": "Chữ ký",
+      "signaturePlaceholder": "0x… (130 ký tự hex)",
+      "expectedLabel": "Người ký mong đợi (không bắt buộc)",
+      "expectedPlaceholder": "0x…",
+      "signer": "Được ký bởi",
+      "signedHash": "Hash đã được ký",
+      "kindMessage": "Một tin nhắn personal_sign (EIP-191).",
+      "kindTyped": "Dữ liệu có kiểu EIP-712 ({type}).",
+      "match": "Địa chỉ mong đợi đã ký",
+      "matchText": "Khóa của địa chỉ này đã ký chính xác tin nhắn này. Điều đó không chứng minh tin nhắn là thật hay an toàn.",
+      "noMatch": "Không phải địa chỉ mong đợi đã ký",
+      "noMatchText": "Một khóa khác đã ký, hoặc tin nhắn hay chữ ký đã bị sửa. Ví hợp đồng thông minh (như Safe) ký theo cách khác và không thể kiểm tra ở đây.",
+      "recovered": "Đã tìm thấy người ký",
+      "recoveredText": "Thêm địa chỉ bạn mong đợi để so sánh. Ví hợp đồng thông minh (như Safe) ký theo cách khác và không thể kiểm tra ở đây.",
+      "errors": {
+        "empty-message": "Dán tin nhắn đã được ký (byte hex bắt đầu bằng 0x).",
+        "empty-signature": "Dán chữ ký.",
+        "signature": "Đây không phải chữ ký hợp lệ: 0x và 130 (hoặc 128) ký tự hex.",
+        "json": "Dữ liệu có kiểu không phải JSON hợp lệ.",
+        "not-typed-data": "JSON này không phải dữ liệu có kiểu EIP-712 (types, primaryType, domain, message).",
+        "expected": "Địa chỉ mong đợi không phải địa chỉ 0x hợp lệ.",
+        "too-large": "Quá lớn: giới hạn là 200 KB."
+      },
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "rawTxDecoder": {
+      "label": "Giao dịch thô hoặc RLP",
+      "placeholder": "0x02f8…",
+      "help": "Hex, có hoặc không có 0x. Không phát gì lên mạng.",
+      "transaction": "Giao dịch {type}",
+      "types": {
+        "legacy": "legacy",
+        "eip2930": "EIP-2930",
+        "eip1559": "EIP-1559",
+        "eip4844": "blob (EIP-4844)",
+        "eip7702": "EIP-7702"
+      },
+      "chain": "Mạng",
+      "chainUnknown": "Chain ID {id} (không phải mạng CRYPY hỗ trợ)",
+      "chainNone": "Không đặt (legacy không có chain ID: hợp lệ trên mọi mạng)",
+      "signedBy": "Được ký bởi (người gửi)",
+      "unsigned": "Chưa ký",
+      "unsignedText": "Giao dịch này chưa có chữ ký, nên không thể gửi và không có người gửi.",
+      "hash": "Hash giao dịch",
+      "hashNote": "Hash mà giao dịch này sẽ có khi được gửi.",
+      "to": "Đến",
+      "toNone": "Không có: giao dịch này tạo hợp đồng",
+      "data": "Dữ liệu lệnh gọi",
+      "decodeData": "Giải mã dữ liệu lệnh gọi này",
+      "fields": {
+        "nonce": "Nonce",
+        "value": "Giá trị (wei)",
+        "gas": "Giới hạn gas",
+        "gasPrice": "Giá gas (wei)",
+        "maxFeePerGas": "Phí tối đa mỗi gas (wei)",
+        "maxPriorityFeePerGas": "Phí ưu tiên tối đa (wei)",
+        "maxFeePerBlobGas": "Phí tối đa mỗi blob gas (wei)",
+        "accessList": "Danh sách truy cập",
+        "blobVersionedHashes": "Hash của blob",
+        "authorizationList": "Ủy quyền (EIP-7702)",
+        "v": "v / yParity",
+        "r": "r",
+        "s": "s"
+      },
+      "rlpTitle": "Dữ liệu RLP",
+      "rlpText": "Không phải giao dịch: hiển thị theo cấu trúc RLP.",
+      "list": "Danh sách {count} mục",
+      "errors": {
+        "empty": "",
+        "hex": "Dùng hex: 0–9 và a–f, số chữ số chẵn.",
+        "rlp": "Đây không phải giao dịch hay dữ liệu RLP hợp lệ.",
+        "too-large": "Quá lớn: giới hạn là 200 KB."
+      },
+      "notSent": "Chỉ giải mã: không có gì được gửi. Bất kỳ ai có giao dịch thô đã ký đều có thể phát nó lên mạng, nên chỉ chia sẻ khi bạn thực sự muốn.",
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "fileHash": {
+      "fileLabel": "Tệp cần kiểm tra",
+      "fileHelp": "Được đọc trong thẻ trình duyệt này và không bao giờ tải lên. Tối đa 1 GB.",
+      "expectedLabel": "Mã kiểm tra đã công bố",
+      "expectedPlaceholder": "ví dụ 3f5a… hoặc sha256:3f5a…",
+      "expectedHelp": "Sao chép từ trang tải xuống hoặc bản phát hành chính thức của dự án. SHA-256, SHA-512 hoặc SHA-1.",
+      "reading": "Đang đọc {name} …",
+      "file": "{name} · {size} byte",
+      "match": "Mã kiểm tra khớp",
+      "matchText": "{algorithm} của tệp trùng khớp hoàn toàn với mã đã công bố: bạn có đúng tệp dự án đã phát hành.",
+      "noMatch": "Mã kiểm tra không khớp",
+      "noMatchText": "{algorithm} của tệp khác với mã đã công bố. Đừng cài đặt hay mở: hãy tải lại từ trang chính thức.",
+      "noExpected": "Đã tính xong hash",
+      "noExpectedText": "Dán mã kiểm tra đã công bố ở trên để so sánh.",
+      "errors": {
+        "format": "Đây không phải mã kiểm tra SHA-256, SHA-512 hay SHA-1.",
+        "tooLarge": "Tệp này lớn hơn 1 GB, quá lớn để đọc trong trình duyệt.",
+        "read": "Không đọc được tệp."
+      },
+      "local": "Chạy trong trình duyệt của bạn: tệp của bạn không bao giờ được tải lên."
+    },
+    "bitcoinFee": {
+      "inputsTitle": "Đầu vào (coin bạn chi)",
+      "outputsTitle": "Đầu ra (người nhận và tiền thối)",
+      "inputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh-p2wpkh": "SegWit lồng (3…)",
+        "p2wpkh": "SegWit gốc (bc1q…)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "outputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh": "Script (3…)",
+        "p2wpkh": "SegWit gốc (bc1q…)",
+        "p2wsh": "Script SegWit (bc1q…, dài)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "rate": "Mức phí",
+      "rateHint": "Từ ví của bạn hoặc trang mempool.",
+      "price": "Giá BTC (không bắt buộc)",
+      "priceHint": "Giá của riêng bạn, để tính phí theo đô la.",
+      "size": "Kích thước",
+      "sizeValue": "{vbytes} vB",
+      "sizeHelp": "Byte ảo: đơn vị tính mức phí.",
+      "fee": "Phí",
+      "feeBtc": "Phí theo BTC",
+      "feeUsd": "Phí theo đô la",
+      "feeUsdHelp": "Theo giá bạn đã nhập.",
+      "sats": "{sats} sat",
+      "errors": {
+        "no-inputs": "Nhập ít nhất một đầu vào.",
+        "no-outputs": "Nhập ít nhất một đầu ra.",
+        "count": "Dùng số nguyên cho đầu vào và đầu ra.",
+        "rate": "Nhập mức phí lớn hơn 0 (tối đa 3 chữ số thập phân).",
+        "price": "Nhập giá dưới dạng số, ví dụ 60000."
+      },
+      "estimate": "Ước tính cho chi tiêu một chữ ký thông thường; ví của bạn hiển thị phí chính xác trước khi gửi.",
+      "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
+    },
+    "addressBook": {
+      "checkTitle": "Kiểm tra một địa chỉ",
+      "checkLabel": "Địa chỉ bạn sắp dùng",
+      "checkPlaceholder": "Dán địa chỉ bạn đã sao chép",
+      "saved": "Có trong sổ địa chỉ: {label}",
+      "savedText": "Đây chính xác là địa chỉ bạn đã lưu.",
+      "lookalike": "Địa chỉ trông giống: không có trong sổ",
+      "lookalikeText": "Nó có đầu và cuối giống một địa chỉ đã lưu nhưng phần giữa khác. Đây là cách lừa đảo đầu độc địa chỉ hoạt động: đừng gửi đến địa chỉ này.",
+      "lookalikeEntry": "Trông giống {label}:",
+      "unknown": "Không có trong sổ địa chỉ",
+      "unknownText": "Không địa chỉ đã lưu nào trùng hoặc trông giống nó. Hãy kiểm tra bạn lấy nó từ đâu trước khi gửi.",
+      "addTitle": "Thêm địa chỉ",
+      "address": "Địa chỉ",
+      "label": "Tên",
+      "labelPlaceholder": "ví dụ: Địa chỉ nạp sàn của tôi",
+      "add": "Thêm vào sổ địa chỉ",
+      "added": "Đã lưu: {label}",
+      "listTitle": "Địa chỉ của bạn",
+      "count": "{count} / {max}",
+      "empty": "Chưa lưu địa chỉ nào.",
+      "families": {
+        "evm": "EVM (Ethereum, BNB Chain, Base, Arbitrum, Polygon…)",
+        "bitcoin": "Bitcoin",
+        "solana": "Solana"
+      },
+      "remove": "Xóa {label}",
+      "export": "Xuất",
+      "import": "Nhập",
+      "imported": "Đã nhập: {count} địa chỉ mới.",
+      "errors": {
+        "invalid": "Nhập địa chỉ EVM (0x…), Bitcoin hoặc Solana.",
+        "checksum": "Địa chỉ này bị gõ sai: mã kiểm tra không đúng.",
+        "secret": "Đó trông giống cụm từ khôi phục hoặc khóa riêng. Đừng bao giờ dán chúng ở bất cứ đâu: chưa được lưu.",
+        "duplicate": "Địa chỉ này đã được lưu.",
+        "full": "Sổ địa chỉ đã đầy ({max} địa chỉ).",
+        "label": "Hãy đặt tên cho địa chỉ.",
+        "importFile": "Tệp đó không phải sổ địa chỉ của CRYPY."
+      },
+      "storage": "Chỉ lưu trong trình duyệt này trên thiết bị này, không bao giờ gửi đến CRYPY. Xóa dữ liệu trình duyệt sẽ xóa nó: hãy xuất một bản sao để giữ lại.",
       "local": "Chạy trong trình duyệt của bạn: những gì bạn nhập không được gửi đi đâu cả."
     }
   },

@@ -5,14 +5,14 @@ the 291 tools of the owner's "Web3 Tool Decision Catalog" (2026-11-24), each wit
 CRYPY, what already covers it, priority and the owner's decision. The catalog is the long-term backlog, not
 permission to build everything: only rows marked **Approved for development** are built, one batch at a time.
 
-## Statuses (2026-11-25, after U3)
+## Statuses (2026-11-25, after U4)
 
 | Status                       | Count | Meaning                                                                                  |
 | ---------------------------- | ----- | ---------------------------------------------------------------------------------------- |
-| Existing / Verified          | 86    | Live in CRYPY and covered by automated tests                                             |
+| Existing / Verified          | 93    | Live in CRYPY and covered by automated tests                                             |
 | Existing / Needs improvement | 35    | Partly there (e.g. EVM only, known ABIs only, no standalone tool)                        |
 | Approved for development     | 0     | U1–U3 all built; the next batch waits for the owner's choice                             |
-| Planned                      | 45    | Worth doing; not scheduled                                                               |
+| Planned                      | 38    | Worth doing; not scheduled                                                               |
 | Deferred                     | 120   | Needs the indexer (M5.5 Stage 2), always-on workers or a new chain family                |
 | Rejected                     | 5     | Tax classification, address risk context, wallet clusters, cross-chain flows, NFT floors |
 
@@ -29,6 +29,9 @@ visitor's device and touch no provider, server or stored data. Anything that nee
 - **U3 (Batch 3), built 2026-11-25:** Keccak-256, function selector and event topic; ABI JSON validator and ABI
   encoder/decoder (linked from the Transaction Data Decoder); Base58/Base64; JSON/CSV formatter. New sidebar group
   "Developer" (Hex Converter and Transaction Data Decoder moved into it).
+- **U4 (Batch 4), built 2026-11-25:** signature verifier (who signed a message or EIP-712 request); raw transaction &
+  RLP decoder; file hash checker (wallet downloads); Bitcoin fee calculator; local address book with a look-alike
+  (address poisoning) check.
 
 Rules for each batch: built directly without design approval first (owner decision 2026-11-24); English first; the batch's new texts are translated into the
 Beta languages in one pass before it is deployed (missing ones show in English meanwhile and the check counts them);

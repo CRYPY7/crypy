@@ -1154,6 +1154,196 @@
       "seoTitle": "JSON Biçimlendirici ve JSON'dan CSV'ye Dönüştürücü | CRYPY",
       "seoDescription": "JSON'u tarayıcınızda biçimlendirin, küçültün ve doğrulayın; JSON listelerini CSV'ye ve geri dönüştürün. Tablolar için güvenli CSV dışa aktarımı.",
       "shortName": "JSON ve CSV"
+    },
+    "signature-verifier": {
+      "name": "İmza Doğrulayıcı",
+      "question": "Bu mesajı gerçekte kim imzaladı?",
+      "description": "İmzalı bir mesajı veya EIP-712 isteğini ve imzasını yapıştırarak hangi adresin imzaladığını ve beklediğiniz adres olup olmadığını görün.",
+      "input": "Bir mesaj ve imzası",
+      "cta": "Doğrula",
+      "features": [
+        "personal_sign mesajları (metin veya hex) ve EIP-712 tipli verilerle çalışır",
+        "İmzalayanı ve imzalanan hash'in tam değerini gösterir",
+        "Beklediğiniz adresle karşılaştırır"
+      ],
+      "howTo": [
+        "Mesajı imzalandığı haliyle aynen veya tipli verinin JSON'unu yapıştırın.",
+        "İmzayı yapıştırın (0x… 130 karakter).",
+        "İsterseniz imzalaması gereken adresi ekleyin ve sonucu okuyun."
+      ],
+      "faq": [
+        {
+          "q": "Eşleşen bir imza neyi kanıtlar?",
+          "a": "O adresin anahtarının sahibinin tam olarak bu mesajı imzaladığını. Mesajın doğru ya da güvenli olduğunu veya anahtarın çalınmadığını kanıtlamaz."
+        },
+        {
+          "q": "Neden beklediğimden farklı bir adres gösteriyor?",
+          "a": "Mesaj veya imza değiştirilmiş (tek bir karakter ya da boşluk farklı bir imzalayan verir), yanlış olan yapıştırılmış ya da başka bir cüzdan imzalamış. Safe gibi akıllı sözleşme cüzdanları farklı imzalar (ERC-1271), bu yüzden imzaları bu şekilde kontrol edilemez."
+        },
+        {
+          "q": "Özel anahtar veya kurtarma ifadesi yapıştırmalı mıyım?",
+          "a": "Asla. İmza kontrolü için yalnızca mesaj ve imza gerekir. Hiçbir web sitesinin anahtarınıza veya kurtarma ifadenize ihtiyacı yoktur."
+        },
+        {
+          "q": "Bir sunucuya bir şey gönderiliyor mu?",
+          "a": "Hayır. İmzalayan, imzanın kendisinden tarayıcınızda hesaplanır."
+        }
+      ],
+      "seoTitle": "İmza Doğrulayıcı: Bu Mesajı Kim İmzaladı? | CRYPY",
+      "seoDescription": "İmzalı bir Ethereum mesajını veya EIP-712 imzasını tarayıcınızda doğrulayın: hangi adresin imzaladığını ve beklediğinizle eşleşip eşleşmediğini görün.",
+      "shortName": "İmza Doğrulayıcı"
+    },
+    "raw-tx-decoder": {
+      "name": "Ham İşlem ve RLP Çözücü",
+      "question": "Bu ham işlem ne yapıyor?",
+      "description": "İmzalı bir ham işlemi (0x02…, 0xf8…) yapıştırarak her alanı, kimin imzaladığını ve alacağı hash'i görün. Diğer RLP verileri ağaç olarak gösterilir.",
+      "input": "Bir ham işlem veya RLP hex",
+      "cta": "Çöz",
+      "features": [
+        "Legacy, EIP-2930, EIP-1559, blob ve EIP-7702 işlemleri",
+        "Göndereni ve işlem hash'ini bulur",
+        "Çağrı verisini İşlem Verisi Çözücü'ye bağlar"
+      ],
+      "howTo": [
+        "Ham işlemin hex'ini 0x ile veya olmadan yapıştırın.",
+        "Ağı, göndereni, alıcıyı, tutarı ve ücretleri okuyun.",
+        "Fonksiyonu görmek için çağrı verisini İşlem Verisi Çözücü'de açın."
+      ],
+      "faq": [
+        {
+          "q": "Ham işlemler nereden gelir?",
+          "a": "Cüzdanlar ve betikler bunları eth_sendRawTransaction ile bir düğüme gönderir. Bir cüzdan dışa aktarımında, bir botun kaydında veya bir geliştirici aracında görebilirsiniz."
+        },
+        {
+          "q": "Çözmek işlemi gönderir mi?",
+          "a": "Hayır. Bu araç yalnızca baytları okur. İmzalı bir ham işleme sahip olan herkes onu yayınlayabilir, bu yüzden niyetiniz olana kadar paylaşmayın."
+        },
+        {
+          "q": "RLP nedir?",
+          "a": "Recursive Length Prefix, Ethereum'un bayt listelerini paketleme yöntemi. İşlemler, bloklar ve bazı kanıtlar RLP'dir; araç her RLP'yi iç içe liste olarak gösterir."
+        },
+        {
+          "q": "Bir sunucuya bir şey gönderiliyor mu?",
+          "a": "Hayır. Her şey tarayıcınızda çözülür."
+        }
+      ],
+      "seoTitle": "Ham İşlem Çözücü (RLP, EIP-1559, Gönderen) | CRYPY",
+      "seoDescription": "İmzalı bir Ethereum ham işlemini tarayıcınızda çözün: alanlar, ücretler, gönderen ve işlem hash'i. Her türlü RLP verisini de çözer. Hiçbir şey yayınlanmaz.",
+      "shortName": "Ham İşlem Çözücü"
+    },
+    "file-hash": {
+      "name": "Dosya Hash Kontrolü",
+      "question": "Bu indirme gerçek dosya mı?",
+      "description": "İndirdiğiniz cüzdan uygulamasını veya dosyayı, yapımcılarının yayınladığı sağlama toplamıyla karşılaştırın. Dosya tarayıcınızda işlenir, asla yüklenmez.",
+      "input": "Bir dosya ve yayınlanan sağlama toplamı",
+      "cta": "Dosya kontrol et",
+      "features": [
+        "SHA-256, SHA-512 ve SHA-1, tarayıcınızda hesaplanır",
+        "Sağlama toplamlarını projelerin yayınladığı biçimlerde okur",
+        "Net eşleşir ya da eşleşmez sonucu ve yapılacaklar"
+      ],
+      "howTo": [
+        "Cüzdan uygulamasını veya dosyayı resmî web sitesinden indirin.",
+        "Projenin yayınladığı sağlama toplamını (genelde SHA-256) kopyalayıp buraya yapıştırın.",
+        "Dosyayı seçin. Eşleşirse, yayınladıkları dosyanın aynısına sahipsiniz."
+      ],
+      "faq": [
+        {
+          "q": "Cüzdan indirmesini neden kontrol etmeli?",
+          "a": "Sahte cüzdan uygulamaları kripto çalmanın yaygın bir yoludur. Hash, projenin resmî sitesindeki veya GitHub sürümündekiyle eşleşiyorsa yayınladıkları dosyanın aynısına sahipsiniz."
+        },
+        {
+          "q": "Resmî sağlama toplamını nerede bulurum?",
+          "a": "Projenin kendi indirme sayfasında veya GitHub sürüm notlarında, çoğu zaman SHA256SUMS adlı bir dosyada. Birinin size gönderdiği bir bağlantıdan değil, resmî kaynaktan alın."
+        },
+        {
+          "q": "Eşleşmezse ne olur?",
+          "a": "Dosyayı kurmayın ve açmayın. Silip resmî siteden yeniden indirin; yine eşleşmezse projeyle iletişime geçin."
+        },
+        {
+          "q": "Dosyam yükleniyor mu?",
+          "a": "Hayır. Bu tarayıcı sekmesinde okunur ve hash'i hesaplanır, bilgisayarınızdan asla çıkmaz. 1 GB'a kadar dosyalar."
+        }
+      ],
+      "seoTitle": "Dosya Hash Kontrolü: İndirmenin SHA-256'sını Doğrulayın | CRYPY",
+      "seoDescription": "Bir cüzdan uygulamasını veya indirmeyi yayınlanan SHA-256 sağlama toplamıyla tarayıcınızda karşılaştırın. Dosya asla yüklenmez. SHA-512 ve SHA-1 de.",
+      "shortName": "Dosya Hash"
+    },
+    "bitcoin-fee": {
+      "name": "Bitcoin Ücret Hesaplayıcı",
+      "question": "Bu Bitcoin işleminin ücreti ne kadar?",
+      "description": "Bir Bitcoin işleminin girdi ve çıktılarından sanal bayt cinsinden boyutunu ve seçtiğiniz ücret oranıyla ücretini tahmin edin.",
+      "input": "Girdiler, çıktılar ve bir ücret oranı",
+      "cta": "Hesapla",
+      "features": [
+        "Legacy, iç içe SegWit, yerel SegWit ve Taproot",
+        "Satoshi ve BTC cinsinden kesin ücret",
+        "Dolar ücreti yalnızca girdiğiniz fiyattan"
+      ],
+      "howTo": [
+        "Her adres türünden kaç girdi (harcadığınız coin) olduğunu girin.",
+        "Çıktıları girin: alıcı ve genellikle para üstünüz.",
+        "Cüzdanınızdan veya bir ücret sitesinden sat/vB cinsinden bir ücret oranı girin."
+      ],
+      "faq": [
+        {
+          "q": "Girdi ve çıktı nedir?",
+          "a": "Girdiler cüzdanınızın harcadığı coin'lerdir (UTXO); çıktılar bitcoin'in gittiği yerlerdir, genellikle alıcı ve para üstünüz. Çok sayıda küçük coin harcamak işlemi büyütür ve pahalılaştırır."
+        },
+        {
+          "q": "SegWit ve Taproot neden daha ucuz?",
+          "a": "İmzaları işlem boyutunda (sanal bayt) daha az sayılır, bu yüzden aynı işlem daha düşük ücret gerektirir."
+        },
+        {
+          "q": "Ne kadar kesin?",
+          "a": "Boyutlar tek imzalı harcamalar için yaygın tahminlerdir; gerçek imzalar bir bayt farklı olabilir, çoklu imza girdileri daha büyüktür. Cüzdanınız göndermeden önce kesin ücreti gösterir."
+        },
+        {
+          "q": "Ücret oranı nereden geliyor?",
+          "a": "Siz seçersiniz. Cüzdanlar ve mempool siteleri, ne kadar hızlı onay istediğinize göre oranlar önerir. CRYPY bunu çekmez."
+        }
+      ],
+      "seoTitle": "Bitcoin Ücret Hesaplayıcı: vBytes ve sat/vB | CRYPY",
+      "seoDescription": "Girdi, çıktı ve ücret oranından bir Bitcoin işleminin vBytes boyutunu ve satoshi ile BTC cinsinden ücretini tahmin edin. SegWit ve Taproot. Tarayıcınızda.",
+      "shortName": "Bitcoin Ücreti"
+    },
+    "address-book": {
+      "name": "Adres Defteri",
+      "question": "Bu, kastettiğim adres mi?",
+      "description": "Güvendiğiniz adresleri bu cihaza kaydedin ve adres zehirleme dolandırıcılığında kullanılan benzer adresleri yakalamak için herhangi bir adresi onlarla karşılaştırın.",
+      "input": "Güvendiğiniz adresler",
+      "cta": "Aç",
+      "features": [
+        "Benzerleri yakalar: aynı başlangıç ve son, farklı orta kısım",
+        "EVM, Bitcoin ve Solana adresleri",
+        "Yalnızca bu tarayıcıda saklanır; dışa ve içe aktarma"
+      ],
+      "howTo": [
+        "Sık gönderdiğiniz adresleri, her birine bir ad vererek ekleyin.",
+        "Göndermeden önce kopyaladığınız adresi kontrol kutusuna yapıştırın.",
+        "Yalnızca defterinizde olduğunu söylüyorsa gönderin; adresleri asla işlem geçmişinizden kopyalamayın."
+      ],
+      "faq": [
+        {
+          "q": "Adres zehirleme nedir?",
+          "a": "Dolandırıcılar, kullandığınız bir adresle aynı şekilde başlayıp biten bir adresten çok küçük transferler gönderir ki geçmişinizde görünsün. Oradan kopyalarsanız paranız onlara gider."
+        },
+        {
+          "q": "Kontrol nasıl çalışır?",
+          "a": "Adresin tamamını kayıtlı olanlarla karşılaştırır. Kayıtlılardan biri değilse ama biriyle aynı karakterlerle başlayıp bitiyorsa uyarılırsınız: bu zehirlemenin kalıbıdır."
+        },
+        {
+          "q": "Adres defterim nerede saklanıyor?",
+          "a": "Yalnızca bu cihazdaki bu tarayıcıda. CRYPY'ye gönderilmez. Tarayıcı verilerini temizlemek onu siler, bu yüzden bir kopya için Dışa aktar'ı kullanın."
+        },
+        {
+          "q": "Kurtarma ifademi buraya kaydetmeli miyim?",
+          "a": "Hayır, asla. Adres defteri yalnızca açık adresleri kabul eder ve kurtarma ifadesine veya özel anahtara benzeyen her şeyi reddeder."
+        }
+      ],
+      "seoTitle": "Kripto Adres Defteri: Adres Zehirlemeyi Yakalayın | CRYPY",
+      "seoDescription": "Güvendiğiniz kripto adreslerini tarayıcınızda saklayın ve benzer adres zehirleme dolandırıcılıklarını yakalamak için herhangi bir adresi onlarla karşılaştırın.",
+      "shortName": "Adres Defteri"
     }
   },
   "toolPage": {
@@ -3940,6 +4130,189 @@
         "too-large": "Çok büyük: sınır 2 MB."
       },
       "formulaNote": "= + - veya @ ile başlayan hücrelere, tablo programı onları formül olarak çalıştırmasın diye kesme işareti eklenir.",
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "signatureVerifier": {
+      "messageLabel": "Mesaj veya tipli veri",
+      "messagePlaceholder": "İmzalanan metnin aynısı veya EIP-712 JSON",
+      "messageHelp": "Aynen yapıştırın: tek bir karakter veya boşluk değişikliği farklı bir imzalayan verir.",
+      "readAs": "Mesajı şöyle oku",
+      "text": "Metin",
+      "hex": "Hex baytlar",
+      "signatureLabel": "İmza",
+      "signaturePlaceholder": "0x… (130 hex karakter)",
+      "expectedLabel": "Beklenen imzalayan (isteğe bağlı)",
+      "expectedPlaceholder": "0x…",
+      "signer": "İmzalayan",
+      "signedHash": "İmzalanan hash",
+      "kindMessage": "Bir personal_sign mesajı (EIP-191).",
+      "kindTyped": "EIP-712 tipli veri ({type}).",
+      "match": "Bunu beklenen adres imzaladı",
+      "matchText": "Bu adresin anahtarı tam olarak bu mesajı imzaladı. Bu, mesajın doğru veya güvenli olduğunu kanıtlamaz.",
+      "noMatch": "Beklenen adres imzalamadı",
+      "noMatchText": "Başka bir anahtar imzalamış ya da mesaj veya imza değiştirilmiş. Akıllı sözleşme cüzdanları (Safe gibi) farklı imzalar ve burada kontrol edilemez.",
+      "recovered": "İmzalayan bulundu",
+      "recoveredText": "Karşılaştırmak için beklediğiniz adresi ekleyin. Akıllı sözleşme cüzdanları (Safe gibi) farklı imzalar ve burada kontrol edilemez.",
+      "errors": {
+        "empty-message": "İmzalanan mesajı yapıştırın (hex baytlar 0x ile başlar).",
+        "empty-signature": "İmzayı yapıştırın.",
+        "signature": "Bu geçerli bir imza değil: 0x ve 130 (veya 128) hex karakter olmalı.",
+        "json": "Tipli veri geçerli bir JSON değil.",
+        "not-typed-data": "Bu JSON, EIP-712 tipli verisi değil (types, primaryType, domain, message).",
+        "expected": "Beklenen adres geçerli bir 0x adresi değil.",
+        "too-large": "Çok büyük: sınır 200 KB."
+      },
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "rawTxDecoder": {
+      "label": "Ham işlem veya RLP",
+      "placeholder": "0x02f8…",
+      "help": "Hex, 0x ile veya olmadan. Hiçbir şey yayınlanmaz.",
+      "transaction": "{type} işlemi",
+      "types": {
+        "legacy": "Legacy",
+        "eip2930": "EIP-2930",
+        "eip1559": "EIP-1559",
+        "eip4844": "Blob (EIP-4844)",
+        "eip7702": "EIP-7702"
+      },
+      "chain": "Ağ",
+      "chainUnknown": "Chain ID {id} (CRYPY'nin desteklediği bir ağ değil)",
+      "chainNone": "Belirtilmemiş (chain ID'siz legacy: her ağda geçerli)",
+      "signedBy": "İmzalayan (gönderen)",
+      "unsigned": "İmzasız",
+      "unsignedText": "Bu işlemin henüz imzası yok, bu yüzden gönderilemez ve göndereni yoktur.",
+      "hash": "İşlem hash'i",
+      "hashNote": "Bu işlemin gönderildiğinde alacağı hash.",
+      "to": "Alıcı",
+      "toNone": "Yok: bu bir sözleşme oluşturur",
+      "data": "Çağrı verisi",
+      "decodeData": "Bu çağrı verisini çöz",
+      "fields": {
+        "nonce": "Nonce",
+        "value": "Tutar (wei)",
+        "gas": "Gas limiti",
+        "gasPrice": "Gas fiyatı (wei)",
+        "maxFeePerGas": "Gas başına maks. ücret (wei)",
+        "maxPriorityFeePerGas": "Maks. öncelik ücreti (wei)",
+        "maxFeePerBlobGas": "Blob gas başına maks. ücret (wei)",
+        "accessList": "Erişim listesi",
+        "blobVersionedHashes": "Blob hash'leri",
+        "authorizationList": "Yetkilendirmeler (EIP-7702)",
+        "v": "v / yParity",
+        "r": "r",
+        "s": "s"
+      },
+      "rlpTitle": "RLP verisi",
+      "rlpText": "İşlem değil: RLP yapısı olarak gösteriliyor.",
+      "list": "{count} öğeli liste",
+      "errors": {
+        "empty": "",
+        "hex": "Hex kullanın: 0–9 ve a–f, çift sayıda basamak.",
+        "rlp": "Bu bir işlem veya geçerli RLP verisi değil.",
+        "too-large": "Çok büyük: sınır 200 KB."
+      },
+      "notSent": "Yalnızca çözüldü: hiçbir şey gönderilmedi. İmzalı bir ham işleme sahip olan herkes onu yayınlayabilir, bu yüzden yalnızca niyetiniz olduğunda paylaşın.",
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "fileHash": {
+      "fileLabel": "Kontrol edilecek dosya",
+      "fileHelp": "Bu tarayıcı sekmesinde okunur, asla yüklenmez. En fazla 1 GB.",
+      "expectedLabel": "Yayınlanan sağlama toplamı",
+      "expectedPlaceholder": "örn. 3f5a… veya sha256:3f5a…",
+      "expectedHelp": "Projenin resmî indirme sayfasından veya sürümünden kopyalayın. SHA-256, SHA-512 veya SHA-1.",
+      "reading": "{name} okunuyor …",
+      "file": "{name} · {size} bayt",
+      "match": "Sağlama toplamı eşleşiyor",
+      "matchText": "Dosyanın {algorithm} değeri yayınlananla birebir aynı: projenin yayınladığı dosyaya sahipsiniz.",
+      "noMatch": "Sağlama toplamı eşleşmiyor",
+      "noMatchText": "Dosyanın {algorithm} değeri yayınlanandan farklı. Kurmayın ve açmayın: resmî siteden yeniden indirin.",
+      "noExpected": "Hash'ler hazır",
+      "noExpectedText": "Karşılaştırmak için yayınlanan sağlama toplamını yukarıya yapıştırın.",
+      "errors": {
+        "format": "Bu bir SHA-256, SHA-512 veya SHA-1 sağlama toplamı değil.",
+        "tooLarge": "Bu dosya 1 GB'tan büyük, tarayıcıda okumak için fazla büyük.",
+        "read": "Dosya okunamadı."
+      },
+      "local": "Tarayıcınızda çalışır: dosyanız asla yüklenmez."
+    },
+    "bitcoinFee": {
+      "inputsTitle": "Girdiler (harcadığınız coin'ler)",
+      "outputsTitle": "Çıktılar (alıcı ve para üstü)",
+      "inputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh-p2wpkh": "İç içe SegWit (3…)",
+        "p2wpkh": "Yerel SegWit (bc1q…)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "outputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh": "Script (3…)",
+        "p2wpkh": "Yerel SegWit (bc1q…)",
+        "p2wsh": "SegWit script (bc1q…, uzun)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "rate": "Ücret oranı",
+      "rateHint": "Cüzdanınızdan veya bir mempool sitesinden.",
+      "price": "BTC fiyatı (isteğe bağlı)",
+      "priceHint": "Dolar cinsinden ücret için kendi fiyatınız.",
+      "size": "Boyut",
+      "sizeValue": "{vbytes} vB",
+      "sizeHelp": "Sanal bayt: ücret oranının uygulandığı birim.",
+      "fee": "Ücret",
+      "feeBtc": "BTC cinsinden ücret",
+      "feeUsd": "Dolar cinsinden ücret",
+      "feeUsdHelp": "Girdiğiniz fiyattan.",
+      "sats": "{sats} sat",
+      "errors": {
+        "no-inputs": "En az bir girdi girin.",
+        "no-outputs": "En az bir çıktı girin.",
+        "count": "Girdi ve çıktılar için tam sayı kullanın.",
+        "rate": "0'dan büyük bir ücret oranı girin (en fazla 3 ondalık).",
+        "price": "Fiyatı sayı olarak girin, örneğin 60000."
+      },
+      "estimate": "Standart tek imzalı harcamalar için bir tahmindir; cüzdanınız göndermeden önce kesin ücreti gösterir.",
+      "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
+    },
+    "addressBook": {
+      "checkTitle": "Bir adres kontrol et",
+      "checkLabel": "Kullanmak üzere olduğunuz adres",
+      "checkPlaceholder": "Kopyaladığınız adresi yapıştırın",
+      "saved": "Adres defterinizde: {label}",
+      "savedText": "Bu, kaydettiğiniz adresin tıpatıp aynısı.",
+      "lookalike": "Benzer adres: defterinizde yok",
+      "lookalikeText": "Kayıtlı bir adres gibi başlayıp bitiyor ama ortası farklı. Adres zehirleme dolandırıcılıkları böyle işler: bu adrese göndermeyin.",
+      "lookalikeEntry": "{label} adresine benziyor:",
+      "unknown": "Adres defterinizde yok",
+      "unknownText": "Kayıtlı hiçbir adres bununla aynı veya benzer değil. Göndermeden önce nereden aldığınızı kontrol edin.",
+      "addTitle": "Adres ekle",
+      "address": "Adres",
+      "label": "Ad",
+      "labelPlaceholder": "örn. Borsa yatırma adresim",
+      "add": "Adres defterine ekle",
+      "added": "Kaydedildi: {label}",
+      "listTitle": "Adresleriniz",
+      "count": "{count} / {max}",
+      "empty": "Henüz kayıtlı adres yok.",
+      "families": {
+        "evm": "EVM (Ethereum, BNB Chain, Base, Arbitrum, Polygon…)",
+        "bitcoin": "Bitcoin",
+        "solana": "Solana"
+      },
+      "remove": "{label} adresini kaldır",
+      "export": "Dışa aktar",
+      "import": "İçe aktar",
+      "imported": "İçe aktarıldı: {count} yeni adres.",
+      "errors": {
+        "invalid": "Bir EVM (0x…), Bitcoin veya Solana adresi girin.",
+        "checksum": "Bu adreste yazım hatası var: sağlama toplamı yanlış.",
+        "secret": "Bu bir kurtarma ifadesine veya özel anahtara benziyor. Bunları asla hiçbir yere yapıştırmayın: kaydedilmedi.",
+        "duplicate": "Bu adres zaten kayıtlı.",
+        "full": "Adres defteri dolu ({max} adres).",
+        "label": "Adrese bir ad verin.",
+        "importFile": "Bu dosya bir CRYPY adres defteri değil."
+      },
+      "storage": "Yalnızca bu cihazdaki bu tarayıcıda saklanır, CRYPY'ye asla gönderilmez. Tarayıcı verilerini temizlemek onu siler: saklamak için bir kopyasını dışa aktarın.",
       "local": "Tarayıcınızda çalışır: yazdıklarınız hiçbir yere gönderilmez."
     }
   },

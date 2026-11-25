@@ -41,6 +41,11 @@ export const toolIds = [
   "abi-encoder",
   "encoding-converter",
   "json-csv",
+  "signature-verifier",
+  "raw-tx-decoder",
+  "file-hash",
+  "bitcoin-fee",
+  "address-book",
 ] as const;
 export type ToolId = (typeof toolIds)[number];
 
@@ -70,7 +75,13 @@ export type ToolIconName =
   | "hash"
   | "braces"
   | "repeat"
-  | "sheet";
+  | "sheet"
+  | "badge-check"
+  | "file-code"
+  | "file-check"
+  | "bitcoin"
+  | "book-user"
+  | "wrench";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -163,6 +174,11 @@ export const tools: readonly ToolDefinition[] = [
   { id: "abi-encoder", category: "developer", icon: "braces", status: "live", milestone: "U3", isNew: true },
   { id: "encoding-converter", category: "developer", icon: "repeat", status: "live", milestone: "U3", isNew: true },
   { id: "json-csv", category: "developer", icon: "sheet", status: "live", milestone: "U3", isNew: true },
+  { id: "signature-verifier", category: "security", icon: "badge-check", status: "live", milestone: "U4", isNew: true },
+  { id: "raw-tx-decoder", category: "developer", icon: "file-code", status: "live", milestone: "U4", isNew: true },
+  { id: "file-hash", category: "security", icon: "file-check", status: "live", milestone: "U4", isNew: true },
+  { id: "bitcoin-fee", category: "calculators", icon: "bitcoin", status: "live", milestone: "U4", isNew: true },
+  { id: "address-book", category: "wallet", icon: "book-user", status: "live", milestone: "U4", isNew: true },
 ];
 
 export function getTool(id: string): ToolDefinition | undefined {

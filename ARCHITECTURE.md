@@ -926,6 +926,16 @@ DEX decoders, per chain family:                      (one per DEX design)
 - JSON/CSV: `modules/tools/json-csv/json-csv.ts` (formula-safe CSV cells; RFC 4180 reader).
 - Shared: `Choice` (radio row) in `modules/tools/shared/ui.tsx`.
 
+## 12u. Browser-only utilities U4
+
+- `modules/tools/signature-verifier/verify.ts` (viem `recoverMessageAddress`, `recoverTypedDataAddress`, `hashMessage`,
+  `hashTypedData`); `raw-tx-decoder/raw-tx.ts` (`parseTransaction`, `recoverTransactionAddress`, `fromRlp`);
+  `file-hash/checksum.ts` (Web Crypto `crypto.subtle.digest`, published-checksum parser); `bitcoin-fee/fee.ts` (vbyte
+  table, exact BigInt sats); `address-book/book.ts` (localStorage `crypy.addressBook`, look-alike rule: same first and
+  last 4 characters of the address body, different middle; EVM via `checkWalletInput`, Bitcoin/Solana via
+  `checkOtherAddress`).
+- Shared `Notice` in `modules/tools/shared/ui.tsx`. Sidebar: `utilities` joins the folded categories.
+
 ## 13. Performance budget
 
 Rules added in M9 (accessibility and speed):

@@ -26,4 +26,9 @@ export const relatedTools: Record<ToolId, readonly [ToolId, ToolId, ToolId]> = {
   "abi-encoder": ["tx-decoder", "keccak-hash", "tx-checker"],
   "encoding-converter": ["hex-converter", "address-formatter", "keccak-hash"],
   "json-csv": ["batch-balance", "abi-encoder", "encoding-converter"],
+  "signature-verifier": ["signature-decoder", "approval-checker", "address-book"],
+  "raw-tx-decoder": ["tx-decoder", "tx-checker", "abi-encoder"],
+  "file-hash": ["address-book", "signature-verifier", "approval-checker"],
+  "bitcoin-fee": ["gas-tracker", "address-formatter", "unit-converter"],
+  "address-book": ["address-analyzer", "address-formatter", "approval-checker"],
 };

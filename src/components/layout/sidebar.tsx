@@ -9,7 +9,11 @@ import { learnPath, localePath, toolPath } from "@/lib/routes";
 import { SidebarActiveMarker, SidebarCollapseButton } from "./sidebar-controls";
 
 const order: ToolCategory[] = ["security", "wallet", "network", "monitoring", "calculators", "developer", "utilities"];
-const folded: Partial<Record<ToolCategory, ToolIconName>> = { calculators: "calculator", developer: "code-xml" };
+const folded: Partial<Record<ToolCategory, ToolIconName>> = {
+  calculators: "calculator",
+  developer: "code-xml",
+  utilities: "wrench",
+};
 
 /**
  * Desktop tools sidebar (lg and up). Plain server-rendered links: the only browser code is the

@@ -2,7 +2,10 @@ import {
   Activity,
   AtSign,
   Bell,
+  BadgeCheck,
   Binary,
+  Bitcoin,
+  BookUser,
   Braces,
   Calculator,
   ChartPie,
@@ -10,6 +13,8 @@ import {
   CodeXml,
   Coins,
   Droplets,
+  FileCheck,
+  FileCode,
   FileSignature,
   Hash,
   Fuel,
@@ -24,6 +29,7 @@ import {
   ShieldAlert,
   TrendingDown,
   Wallet,
+  Wrench,
 } from "lucide-react";
 import type { ToolIconName } from "@/config/tools";
 
@@ -52,6 +58,12 @@ const icons = {
   braces: Braces,
   repeat: Repeat,
   sheet: Sheet,
+  "badge-check": BadgeCheck,
+  "file-code": FileCode,
+  "file-check": FileCheck,
+  bitcoin: Bitcoin,
+  "book-user": BookUser,
+  wrench: Wrench,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 
 /** Server-rendered tool icon. Decorative: the tool name is always shown as text. */

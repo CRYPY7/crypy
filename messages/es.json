@@ -1154,6 +1154,196 @@
       "seoTitle": "Formateador JSON y conversor de JSON a CSV | CRYPY",
       "seoDescription": "Formatea, minimiza y valida JSON, y convierte listas JSON a CSV y viceversa en tu navegador. Exportación CSV segura para hojas de cálculo.",
       "shortName": "JSON y CSV"
+    },
+    "signature-verifier": {
+      "name": "Verificador de firmas",
+      "question": "¿Quién firmó realmente este mensaje?",
+      "description": "Pega un mensaje firmado o una solicitud EIP-712 y su firma para ver qué dirección la firmó y si es la dirección que esperabas.",
+      "input": "Un mensaje y su firma",
+      "cta": "Verificar",
+      "features": [
+        "Funciona con mensajes personal_sign (texto o hex) y datos tipados EIP-712",
+        "Muestra el firmante y el hash exacto que se firmó",
+        "Compara con la dirección que esperas"
+      ],
+      "howTo": [
+        "Pega el mensaje exactamente como se firmó, o el JSON de los datos tipados.",
+        "Pega la firma (0x… de 130 caracteres).",
+        "Opcionalmente añade la dirección que debería haberlo firmado y lee el resultado."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué demuestra una firma que coincide?",
+          "a": "Que el dueño de la clave de esa dirección firmó exactamente este mensaje. No demuestra que el mensaje sea verdadero o seguro, ni que la clave no haya sido robada."
+        },
+        {
+          "q": "¿Por qué muestra una dirección distinta de la que esperaba?",
+          "a": "El mensaje o la firma se cambiaron (un solo carácter o espacio da otro firmante), se pegó el equivocado, o lo firmó otra wallet. Las wallets de contrato inteligente como Safe firman de otra forma (ERC-1271), así que sus firmas no se pueden comprobar así."
+        },
+        {
+          "q": "¿Debo pegar una clave privada o una frase de recuperación?",
+          "a": "Nunca. Para comprobar una firma solo hacen falta el mensaje y la firma. Ningún sitio web necesita tu clave ni tu frase de recuperación."
+        },
+        {
+          "q": "¿Se envía algo a un servidor?",
+          "a": "No. El firmante se calcula en tu navegador a partir de la propia firma."
+        }
+      ],
+      "seoTitle": "Verificador de firmas: ¿quién firmó este mensaje? | CRYPY",
+      "seoDescription": "Verifica en tu navegador un mensaje firmado de Ethereum o una firma EIP-712: mira qué dirección lo firmó y si coincide con la que esperas.",
+      "shortName": "Verificar firma"
+    },
+    "raw-tx-decoder": {
+      "name": "Decodificador de transacciones en bruto y RLP",
+      "question": "¿Qué hace esta transacción en bruto?",
+      "description": "Pega una transacción firmada en bruto (0x02…, 0xf8…) para ver cada campo, quién la firmó y el hash que tendrá. Cualquier otro dato RLP se muestra como árbol.",
+      "input": "Una transacción en bruto o hex RLP",
+      "cta": "Decodificar",
+      "features": [
+        "Transacciones legacy, EIP-2930, EIP-1559, blob y EIP-7702",
+        "Recupera el remitente y el hash de la transacción",
+        "Enlaza los datos de llamada con el Decodificador de datos de transacción"
+      ],
+      "howTo": [
+        "Pega el hex de la transacción en bruto, con o sin 0x.",
+        "Lee la red, el remitente, el destinatario, el valor y las comisiones.",
+        "Abre los datos de llamada en el Decodificador de datos de transacción para ver la función."
+      ],
+      "faq": [
+        {
+          "q": "¿De dónde salen las transacciones en bruto?",
+          "a": "Las wallets y los scripts las envían a un nodo con eth_sendRawTransaction. Puedes ver una en una exportación de wallet, el registro de un bot o una herramienta de desarrollo."
+        },
+        {
+          "q": "¿Decodificarla envía la transacción?",
+          "a": "No. Esta herramienta solo lee los bytes. Cualquiera que tenga una transacción firmada en bruto puede difundirla, así que no la compartas hasta que quieras hacerlo."
+        },
+        {
+          "q": "¿Qué es RLP?",
+          "a": "Recursive Length Prefix, la forma en que Ethereum empaqueta listas de bytes. Transacciones, bloques y algunas pruebas son RLP; la herramienta muestra cualquier RLP como lista anidada."
+        },
+        {
+          "q": "¿Se envía algo a un servidor?",
+          "a": "No. Todo se decodifica en tu navegador."
+        }
+      ],
+      "seoTitle": "Decodificador de transacciones en bruto (RLP, EIP-1559) | CRYPY",
+      "seoDescription": "Decodifica en tu navegador una transacción firmada de Ethereum: campos, comisiones, remitente y hash. También decodifica cualquier RLP. No se difunde nada.",
+      "shortName": "Transacción en bruto"
+    },
+    "file-hash": {
+      "name": "Comprobador de hash de archivos",
+      "question": "¿Es esta descarga el archivo real?",
+      "description": "Comprueba una app de wallet o un archivo descargado con el checksum que publican sus creadores. El archivo se procesa en tu navegador y nunca se sube.",
+      "input": "Un archivo y su checksum publicado",
+      "cta": "Comprobar un archivo",
+      "features": [
+        "SHA-256, SHA-512 y SHA-1, calculados en tu navegador",
+        "Lee los checksums tal como los publican los proyectos",
+        "Coincide o no coincide, con qué hacer"
+      ],
+      "howTo": [
+        "Descarga la app de wallet o el archivo desde la web oficial.",
+        "Copia el checksum que publica el proyecto (normalmente SHA-256) y pégalo aquí.",
+        "Elige el archivo. Si coincide, tienes exactamente el archivo que publicaron."
+      ],
+      "faq": [
+        {
+          "q": "¿Por qué comprobar una descarga de wallet?",
+          "a": "Las apps de wallet falsas son una forma común de robar criptomonedas. Si el hash coincide con el de la web oficial del proyecto o su release en GitHub, tienes el archivo exacto que publicaron."
+        },
+        {
+          "q": "¿Dónde encuentro el checksum oficial?",
+          "a": "En la página de descarga del propio proyecto o en las notas de la release de GitHub, a menudo en un archivo llamado SHA256SUMS. Tómalo de la fuente oficial, no de un enlace que te haya enviado alguien."
+        },
+        {
+          "q": "¿Y si no coincide?",
+          "a": "No instales ni abras el archivo. Bórralo y descárgalo de nuevo desde la web oficial; si sigue sin coincidir, contacta con el proyecto."
+        },
+        {
+          "q": "¿Se sube mi archivo?",
+          "a": "No. Se lee y se procesa dentro de esta pestaña del navegador y nunca sale de tu ordenador. Archivos de hasta 1 GB."
+        }
+      ],
+      "seoTitle": "Comprobador de hash: verifica el SHA-256 de una descarga | CRYPY",
+      "seoDescription": "Comprueba una app de wallet o una descarga con su checksum SHA-256 publicado, en tu navegador. El archivo nunca se sube. También SHA-512 y SHA-1.",
+      "shortName": "Hash de archivo"
+    },
+    "bitcoin-fee": {
+      "name": "Calculadora de comisiones de Bitcoin",
+      "question": "¿Cuánto costará esta transacción de Bitcoin?",
+      "description": "Estima el tamaño de una transacción de Bitcoin en bytes virtuales a partir de sus entradas y salidas, y su comisión con la tasa que elijas.",
+      "input": "Entradas, salidas y una tasa de comisión",
+      "cta": "Calcular",
+      "features": [
+        "Legacy, SegWit anidado, SegWit nativo y Taproot",
+        "Comisión en sats y BTC, exacta",
+        "Comisión en dólares solo con un precio que escribas"
+      ],
+      "howTo": [
+        "Indica cuántas entradas (monedas que gastas) hay de cada tipo de dirección.",
+        "Indica las salidas: el destinatario y normalmente tu cambio.",
+        "Introduce una tasa en sat/vB de tu wallet o de una web de comisiones."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué son las entradas y las salidas?",
+          "a": "Las entradas son las monedas (UTXO) que gasta tu wallet; las salidas son adonde va el bitcoin, normalmente el destinatario y tu cambio. Gastar muchas monedas pequeñas hace la transacción más grande y más cara."
+        },
+        {
+          "q": "¿Por qué SegWit y Taproot son más baratos?",
+          "a": "Sus firmas cuentan menos en el tamaño de la transacción (bytes virtuales), así que la misma transacción necesita una comisión menor."
+        },
+        {
+          "q": "¿Qué tan exacto es?",
+          "a": "Los tamaños son las estimaciones habituales para gastos con una sola firma; las firmas reales pueden variar un byte y las entradas multifirma son más grandes. Tu wallet muestra la comisión exacta antes de enviar."
+        },
+        {
+          "q": "¿De dónde sale la tasa de comisión?",
+          "a": "La eliges tú. Las wallets y las webs de mempool sugieren tasas según la rapidez con que quieras la confirmación. CRYPY no la consulta."
+        }
+      ],
+      "seoTitle": "Calculadora de comisiones de Bitcoin: vBytes y sat/vB | CRYPY",
+      "seoDescription": "Estima el tamaño en vBytes de una transacción de Bitcoin y su comisión en sats y BTC a partir de entradas, salidas y tasa. SegWit y Taproot. En tu navegador.",
+      "shortName": "Comisión Bitcoin"
+    },
+    "address-book": {
+      "name": "Libreta de direcciones",
+      "question": "¿Es esta la dirección que quería?",
+      "description": "Guarda en este dispositivo las direcciones en las que confías y comprueba cualquier dirección con ellas para detectar direcciones parecidas usadas en estafas de envenenamiento de direcciones.",
+      "input": "Direcciones en las que confías",
+      "cta": "Abrir",
+      "features": [
+        "Detecta parecidas: mismo inicio y final, distinto centro",
+        "Direcciones EVM, Bitcoin y Solana",
+        "Guardada solo en este navegador, con exportar e importar"
+      ],
+      "howTo": [
+        "Añade las direcciones a las que envías a menudo, cada una con un nombre.",
+        "Antes de enviar, pega la dirección que copiaste en la casilla de comprobación.",
+        "Envía solo si dice que está en tu libreta; nunca copies direcciones de tu historial de transacciones."
+      ],
+      "faq": [
+        {
+          "q": "¿Qué es el envenenamiento de direcciones?",
+          "a": "Los estafadores envían transferencias diminutas desde una dirección que empieza y termina como una que usas, para que aparezca en tu historial. Si la copias desde ahí, tu dinero va a ellos."
+        },
+        {
+          "q": "¿Cómo funciona la comprobación?",
+          "a": "Compara la dirección completa con las guardadas. Si no es una de ellas pero empieza y termina con los mismos caracteres que una, se te avisa: ese es el patrón del envenenamiento."
+        },
+        {
+          "q": "¿Dónde se guarda mi libreta?",
+          "a": "Solo en este navegador de este dispositivo. No se envía a CRYPY. Borrar los datos del navegador la elimina, así que usa Exportar para guardar una copia."
+        },
+        {
+          "q": "¿Debo guardar aquí mi frase de recuperación?",
+          "a": "No, nunca. La libreta solo acepta direcciones públicas y rechaza todo lo que parezca una frase de recuperación o una clave privada."
+        }
+      ],
+      "seoTitle": "Libreta de direcciones cripto: detecta el envenenamiento | CRYPY",
+      "seoDescription": "Guarda direcciones cripto de confianza en tu navegador y comprueba cualquier dirección con ellas para detectar estafas de direcciones parecidas. Nada sale de tu dispositivo.",
+      "shortName": "Libreta de direcciones"
     }
   },
   "toolPage": {
@@ -3940,6 +4130,189 @@
         "too-large": "Demasiado grande: el límite es 2 MB."
       },
       "formulaNote": "Las celdas que empiezan por = + - o @ llevan un apóstrofo para que una hoja de cálculo no las ejecute como fórmulas.",
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "signatureVerifier": {
+      "messageLabel": "Mensaje o datos tipados",
+      "messagePlaceholder": "El texto exacto que se firmó, o el JSON EIP-712",
+      "messageHelp": "Pégalo exactamente: un solo carácter o espacio cambiado da otro firmante.",
+      "readAs": "Leer el mensaje como",
+      "text": "Texto",
+      "hex": "Bytes en hex",
+      "signatureLabel": "Firma",
+      "signaturePlaceholder": "0x… (130 caracteres hex)",
+      "expectedLabel": "Firmante esperado (opcional)",
+      "expectedPlaceholder": "0x…",
+      "signer": "Firmado por",
+      "signedHash": "Hash que se firmó",
+      "kindMessage": "Un mensaje personal_sign (EIP-191).",
+      "kindTyped": "Datos tipados EIP-712 ({type}).",
+      "match": "La dirección esperada firmó esto",
+      "matchText": "La clave de esta dirección firmó exactamente este mensaje. No demuestra que el mensaje sea verdadero o seguro.",
+      "noMatch": "No lo firmó la dirección esperada",
+      "noMatchText": "Lo firmó otra clave, o el mensaje o la firma se cambiaron. Las wallets de contrato inteligente (como Safe) firman de otra forma y no se pueden comprobar aquí.",
+      "recovered": "Firmante encontrado",
+      "recoveredText": "Añade la dirección que esperas para comparar. Las wallets de contrato inteligente (como Safe) firman de otra forma y no se pueden comprobar aquí.",
+      "errors": {
+        "empty-message": "Pega el mensaje que se firmó (los bytes en hex empiezan por 0x).",
+        "empty-signature": "Pega la firma.",
+        "signature": "No es una firma válida: 0x y 130 (o 128) caracteres hex.",
+        "json": "Los datos tipados no son JSON válido.",
+        "not-typed-data": "Este JSON no son datos tipados EIP-712 (types, primaryType, domain, message).",
+        "expected": "La dirección esperada no es una dirección 0x válida.",
+        "too-large": "Demasiado grande: el límite es 200 KB."
+      },
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "rawTxDecoder": {
+      "label": "Transacción en bruto o RLP",
+      "placeholder": "0x02f8…",
+      "help": "Hex, con o sin 0x. No se difunde nada.",
+      "transaction": "Transacción {type}",
+      "types": {
+        "legacy": "legacy",
+        "eip2930": "EIP-2930",
+        "eip1559": "EIP-1559",
+        "eip4844": "blob (EIP-4844)",
+        "eip7702": "EIP-7702"
+      },
+      "chain": "Red",
+      "chainUnknown": "Chain ID {id} (no es una red compatible con CRYPY)",
+      "chainNone": "Sin indicar (legacy sin chain ID: válida en todas las redes)",
+      "signedBy": "Firmada por (remitente)",
+      "unsigned": "Sin firmar",
+      "unsignedText": "Esta transacción aún no tiene firma, así que no se puede enviar y no tiene remitente.",
+      "hash": "Hash de la transacción",
+      "hashNote": "El hash que tendrá esta transacción cuando se envíe.",
+      "to": "Para",
+      "toNone": "Ninguno: esto crea un contrato",
+      "data": "Datos de llamada",
+      "decodeData": "Decodificar estos datos de llamada",
+      "fields": {
+        "nonce": "Nonce",
+        "value": "Valor (wei)",
+        "gas": "Límite de gas",
+        "gasPrice": "Precio del gas (wei)",
+        "maxFeePerGas": "Comisión máx. por gas (wei)",
+        "maxPriorityFeePerGas": "Comisión de prioridad máx. (wei)",
+        "maxFeePerBlobGas": "Comisión máx. por gas de blob (wei)",
+        "accessList": "Lista de acceso",
+        "blobVersionedHashes": "Hashes de blobs",
+        "authorizationList": "Autorizaciones (EIP-7702)",
+        "v": "v / yParity",
+        "r": "r",
+        "s": "s"
+      },
+      "rlpTitle": "Datos RLP",
+      "rlpText": "No es una transacción: se muestra como su estructura RLP.",
+      "list": "Lista de {count}",
+      "errors": {
+        "empty": "",
+        "hex": "Usa hex: 0–9 y a–f, con un número par de dígitos.",
+        "rlp": "Esto no es una transacción ni datos RLP válidos.",
+        "too-large": "Demasiado grande: el límite es 200 KB."
+      },
+      "notSent": "Solo decodificada: no se envió nada. Cualquiera con una transacción firmada en bruto puede difundirla, así que compártela solo cuando quieras.",
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "fileHash": {
+      "fileLabel": "Archivo a comprobar",
+      "fileHelp": "Se lee en esta pestaña del navegador y nunca se sube. Hasta 1 GB.",
+      "expectedLabel": "Checksum publicado",
+      "expectedPlaceholder": "p. ej. 3f5a… o sha256:3f5a…",
+      "expectedHelp": "Cópialo de la página de descarga o la release oficial del proyecto. SHA-256, SHA-512 o SHA-1.",
+      "reading": "Leyendo {name} …",
+      "file": "{name} · {size} bytes",
+      "match": "El checksum coincide",
+      "matchText": "El {algorithm} del archivo es exactamente el publicado: tienes el archivo que publicó el proyecto.",
+      "noMatch": "El checksum no coincide",
+      "noMatchText": "El {algorithm} del archivo es distinto del publicado. No lo instales ni lo abras: descárgalo de nuevo desde la web oficial.",
+      "noExpected": "Hashes listos",
+      "noExpectedText": "Pega arriba el checksum publicado para comparar.",
+      "errors": {
+        "format": "No es un checksum SHA-256, SHA-512 o SHA-1.",
+        "tooLarge": "Este archivo supera 1 GB, demasiado grande para leerlo en el navegador.",
+        "read": "No se pudo leer el archivo."
+      },
+      "local": "Funciona en tu navegador: tu archivo nunca se sube."
+    },
+    "bitcoinFee": {
+      "inputsTitle": "Entradas (monedas que gastas)",
+      "outputsTitle": "Salidas (destinatario y cambio)",
+      "inputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh-p2wpkh": "SegWit anidado (3…)",
+        "p2wpkh": "SegWit nativo (bc1q…)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "outputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh": "Script (3…)",
+        "p2wpkh": "SegWit nativo (bc1q…)",
+        "p2wsh": "Script SegWit (bc1q…, larga)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "rate": "Tasa de comisión",
+      "rateHint": "De tu wallet o de una web de mempool.",
+      "price": "Precio de BTC (opcional)",
+      "priceHint": "Tu propio precio, para la comisión en dólares.",
+      "size": "Tamaño",
+      "sizeValue": "{vbytes} vB",
+      "sizeHelp": "Bytes virtuales: sobre lo que se cobra la tasa.",
+      "fee": "Comisión",
+      "feeBtc": "Comisión en BTC",
+      "feeUsd": "Comisión en dólares",
+      "feeUsdHelp": "Al precio que escribiste.",
+      "sats": "{sats} sats",
+      "errors": {
+        "no-inputs": "Indica al menos una entrada.",
+        "no-outputs": "Indica al menos una salida.",
+        "count": "Usa números enteros para entradas y salidas.",
+        "rate": "Introduce una tasa mayor que 0 (hasta 3 decimales).",
+        "price": "Introduce el precio como número, por ejemplo 60000."
+      },
+      "estimate": "Una estimación para gastos estándar con una sola firma; tu wallet muestra la comisión exacta antes de enviar.",
+      "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
+    },
+    "addressBook": {
+      "checkTitle": "Comprobar una dirección",
+      "checkLabel": "Dirección que vas a usar",
+      "checkPlaceholder": "Pega la dirección que copiaste",
+      "saved": "En tu libreta: {label}",
+      "savedText": "Es exactamente la dirección que guardaste.",
+      "lookalike": "Dirección parecida: no está en tu libreta",
+      "lookalikeText": "Empieza y termina como una dirección guardada, pero el centro es distinto. Así funcionan las estafas de envenenamiento de direcciones: no envíes a ella.",
+      "lookalikeEntry": "Se parece a {label}:",
+      "unknown": "No está en tu libreta",
+      "unknownText": "Ninguna dirección guardada coincide ni se le parece. Comprueba de dónde la sacaste antes de enviar.",
+      "addTitle": "Añadir una dirección",
+      "address": "Dirección",
+      "label": "Nombre",
+      "labelPlaceholder": "p. ej. Mi depósito del exchange",
+      "add": "Añadir a la libreta",
+      "added": "Guardada: {label}",
+      "listTitle": "Tus direcciones",
+      "count": "{count} de {max}",
+      "empty": "Aún no hay direcciones guardadas.",
+      "families": {
+        "evm": "EVM (Ethereum, BNB Chain, Base, Arbitrum, Polygon…)",
+        "bitcoin": "Bitcoin",
+        "solana": "Solana"
+      },
+      "remove": "Quitar {label}",
+      "export": "Exportar",
+      "import": "Importar",
+      "imported": "Importadas: {count} direcciones nuevas.",
+      "errors": {
+        "invalid": "Introduce una dirección EVM (0x…), Bitcoin o Solana.",
+        "checksum": "Esta dirección tiene un error: su checksum no es correcto.",
+        "secret": "Eso parece una frase de recuperación o una clave privada. Nunca las pegues en ningún sitio: no se guardó.",
+        "duplicate": "Esta dirección ya está guardada.",
+        "full": "La libreta está llena ({max} direcciones).",
+        "label": "Ponle un nombre a la dirección.",
+        "importFile": "Ese archivo no es una libreta de direcciones de CRYPY."
+      },
+      "storage": "Guardada solo en este navegador de este dispositivo, nunca se envía a CRYPY. Borrar los datos del navegador la elimina: exporta una copia para conservarla.",
       "local": "Funciona en tu navegador: lo que escribes no se envía a ningún sitio."
     }
   },

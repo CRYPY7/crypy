@@ -1154,6 +1154,196 @@
       "seoTitle": "JSON Formatter & JSON to CSV Converter | CRYPY",
       "seoDescription": "Format, minify and validate JSON, and convert JSON lists to CSV and back, in your browser. Spreadsheet-safe CSV export.",
       "shortName": "JSON & CSV"
+    },
+    "signature-verifier": {
+      "name": "Signature Verifier",
+      "question": "Who really signed this message?",
+      "description": "Paste a signed message or EIP-712 request and its signature to see which address signed it, and whether that's the address you expected.",
+      "input": "A message and its signature",
+      "cta": "Verify",
+      "features": [
+        "Works for personal_sign messages (text or hex) and EIP-712 typed data",
+        "Shows the signer and the exact hash that was signed",
+        "Compares with the address you expect"
+      ],
+      "howTo": [
+        "Paste the message exactly as it was signed, or the typed data JSON.",
+        "Paste the signature (0x… 130 characters).",
+        "Optionally add the address that should have signed it, and read the result."
+      ],
+      "faq": [
+        {
+          "q": "What does a matching signature prove?",
+          "a": "That the owner of that address's key signed exactly this message. It doesn't prove the message is true or safe, or that the key wasn't stolen."
+        },
+        {
+          "q": "Why does it show a different address than I expected?",
+          "a": "Either the message or signature was changed (even one character or space gives a different signer), the wrong one was pasted, or it was signed by a different wallet. Smart-contract wallets such as Safe sign differently (ERC-1271), so their signatures can't be checked this way."
+        },
+        {
+          "q": "Should I paste a private key or recovery phrase?",
+          "a": "Never. Checking a signature only needs the message and the signature. No website ever needs your key or recovery phrase."
+        },
+        {
+          "q": "Is anything sent to a server?",
+          "a": "No. The signer is worked out in your browser from the signature itself."
+        }
+      ],
+      "seoTitle": "Signature Verifier: Who Signed This Message? | CRYPY",
+      "seoDescription": "Verify an Ethereum signed message or EIP-712 signature in your browser: see which address signed it and whether it matches the address you expect.",
+      "shortName": "Signature Verifier"
+    },
+    "raw-tx-decoder": {
+      "name": "Raw Transaction & RLP Decoder",
+      "question": "What does this raw transaction do?",
+      "description": "Paste a raw signed transaction (0x02…, 0xf8…) to see every field, who signed it and the hash it will have. Any other RLP data is shown as a tree.",
+      "input": "A raw transaction or RLP hex",
+      "cta": "Decode",
+      "features": [
+        "Legacy, EIP-2930, EIP-1559, blob and EIP-7702 transactions",
+        "Recovers the sender and the transaction hash",
+        "Links the call data to the Transaction Data Decoder"
+      ],
+      "howTo": [
+        "Paste the raw transaction hex, with or without 0x.",
+        "Read the network, sender, recipient, value and fees.",
+        "Open the call data in the Transaction Data Decoder to see the function."
+      ],
+      "faq": [
+        {
+          "q": "Where do raw transactions come from?",
+          "a": "Wallets and scripts send them to a node with eth_sendRawTransaction. You may see one in a wallet's export, a bot's log or a developer tool."
+        },
+        {
+          "q": "Does decoding send the transaction?",
+          "a": "No. This tool only reads the bytes. Anyone who has a signed raw transaction can broadcast it, so don't share it until you mean to."
+        },
+        {
+          "q": "What is RLP?",
+          "a": "Recursive Length Prefix, the way Ethereum packs lists of bytes. Transactions, blocks and some proofs are RLP; the tool shows any RLP as a nested list."
+        },
+        {
+          "q": "Is anything sent to a server?",
+          "a": "No. Everything is decoded in your browser."
+        }
+      ],
+      "seoTitle": "Raw Transaction Decoder (RLP, EIP-1559, Sender) | CRYPY",
+      "seoDescription": "Decode a raw signed Ethereum transaction in your browser: fields, fees, sender and transaction hash. Also decodes any RLP data. Nothing is broadcast.",
+      "shortName": "Raw TX Decoder"
+    },
+    "file-hash": {
+      "name": "File Hash Checker",
+      "question": "Is this download the real file?",
+      "description": "Check a downloaded wallet app or file against the checksum its makers publish. The file is hashed in your browser and never uploaded.",
+      "input": "A file and its published checksum",
+      "cta": "Check a file",
+      "features": [
+        "SHA-256, SHA-512 and SHA-1, computed in your browser",
+        "Reads checksums as projects publish them",
+        "Clear match or mismatch, with what to do"
+      ],
+      "howTo": [
+        "Download the wallet app or file from the official website.",
+        "Copy the checksum the project publishes (SHA-256 usually) and paste it here.",
+        "Choose the file. A match means you have exactly the file they published."
+      ],
+      "faq": [
+        {
+          "q": "Why check a wallet download?",
+          "a": "Fake wallet apps are a common way to steal crypto. If the hash matches the one on the project's official site or GitHub release, you have the exact file they published."
+        },
+        {
+          "q": "Where do I find the official checksum?",
+          "a": "On the project's own download page or GitHub release notes, often in a file named SHA256SUMS. Take it from the official source, not from a link someone sent you."
+        },
+        {
+          "q": "What if it doesn't match?",
+          "a": "Don't install or open the file. Delete it and download again from the official site; if it still doesn't match, contact the project."
+        },
+        {
+          "q": "Is my file uploaded?",
+          "a": "No. It is read and hashed inside this browser tab and never leaves your computer. Files up to 1 GB."
+        }
+      ],
+      "seoTitle": "File Hash Checker: Verify a Download's SHA-256 | CRYPY",
+      "seoDescription": "Check a wallet app or download against its published SHA-256 checksum, in your browser. The file is never uploaded. SHA-512 and SHA-1 too.",
+      "shortName": "File Hash Checker"
+    },
+    "bitcoin-fee": {
+      "name": "Bitcoin Fee Calculator",
+      "question": "How much will this Bitcoin transaction cost?",
+      "description": "Estimate a Bitcoin transaction's size in virtual bytes from its inputs and outputs, and its fee at the fee rate you choose.",
+      "input": "Inputs, outputs and a fee rate",
+      "cta": "Calculate",
+      "features": [
+        "Legacy, nested SegWit, native SegWit and Taproot",
+        "Fee in sats and BTC, exact",
+        "Dollar fee only from a price you type"
+      ],
+      "howTo": [
+        "Enter how many inputs (coins you spend) of each address type.",
+        "Enter the outputs: the recipient and usually your change.",
+        "Enter a fee rate in sat/vB from your wallet or a fee site."
+      ],
+      "faq": [
+        {
+          "q": "What are inputs and outputs?",
+          "a": "Inputs are the coins (UTXOs) your wallet spends; outputs are where the bitcoin goes, usually the recipient plus your change. Spending many small coins makes a transaction bigger and more expensive."
+        },
+        {
+          "q": "Why are SegWit and Taproot cheaper?",
+          "a": "Their signatures count less towards a transaction's size (virtual bytes), so the same transaction needs a smaller fee."
+        },
+        {
+          "q": "How exact is it?",
+          "a": "Sizes are the usual estimates for single-signature spends; real signatures can differ by a byte, and multisig inputs are bigger. Your wallet shows the exact fee before you send."
+        },
+        {
+          "q": "Where does the fee rate come from?",
+          "a": "You choose it. Wallets and mempool sites suggest rates depending on how fast you want it confirmed. CRYPY doesn't fetch it."
+        }
+      ],
+      "seoTitle": "Bitcoin Fee Calculator: vBytes and sat/vB | CRYPY",
+      "seoDescription": "Estimate a Bitcoin transaction's size in vBytes and its fee in sats and BTC from inputs, outputs and a fee rate. SegWit and Taproot. In your browser.",
+      "shortName": "Bitcoin Fee"
+    },
+    "address-book": {
+      "name": "Address Book",
+      "question": "Is this the address I meant?",
+      "description": "Save the addresses you trust on this device, then check any address against them to catch look-alike addresses used in address poisoning scams.",
+      "input": "Addresses you trust",
+      "cta": "Open",
+      "features": [
+        "Catches look-alikes: same start and end, different middle",
+        "EVM, Bitcoin and Solana addresses",
+        "Saved in this browser only, with export and import"
+      ],
+      "howTo": [
+        "Add the addresses you send to often, each with a name.",
+        "Before sending, paste the address you copied into the check box.",
+        "Send only if it says it's in your book; never copy addresses from your transaction history."
+      ],
+      "faq": [
+        {
+          "q": "What is address poisoning?",
+          "a": "Scammers send tiny transfers from an address that starts and ends like one you use, so it shows up in your history. If you copy it from there, your money goes to them."
+        },
+        {
+          "q": "How does the check work?",
+          "a": "It compares the whole address with your saved ones. If it isn't one of them but starts and ends with the same characters as one, you're warned: that's the poisoning pattern."
+        },
+        {
+          "q": "Where is my address book kept?",
+          "a": "Only in this browser on this device. It isn't sent to CRYPY. Clearing your browser data deletes it, so use Export to keep a copy."
+        },
+        {
+          "q": "Should I save my recovery phrase here?",
+          "a": "No, never. The address book only accepts public addresses and refuses anything that looks like a recovery phrase or private key."
+        }
+      ],
+      "seoTitle": "Crypto Address Book: Catch Address Poisoning | CRYPY",
+      "seoDescription": "Save trusted crypto addresses in your browser and check any address against them to catch look-alike address poisoning scams. Nothing leaves your device.",
+      "shortName": "Address Book"
     }
   },
   "toolPage": {
@@ -3940,6 +4130,189 @@
         "too-large": "Too large: the limit is 2 MB."
       },
       "formulaNote": "Cells starting with = + - or @ get an apostrophe so a spreadsheet won't run them as formulas.",
+      "local": "Runs in your browser: what you type isn't sent anywhere."
+    },
+    "signatureVerifier": {
+      "messageLabel": "Message or typed data",
+      "messagePlaceholder": "The exact text that was signed, or EIP-712 JSON",
+      "messageHelp": "Paste it exactly: one changed character or space gives a different signer.",
+      "readAs": "Read the message as",
+      "text": "Text",
+      "hex": "Hex bytes",
+      "signatureLabel": "Signature",
+      "signaturePlaceholder": "0x… (130 hex characters)",
+      "expectedLabel": "Expected signer (optional)",
+      "expectedPlaceholder": "0x…",
+      "signer": "Signed by",
+      "signedHash": "Hash that was signed",
+      "kindMessage": "A personal_sign message (EIP-191).",
+      "kindTyped": "EIP-712 typed data ({type}).",
+      "match": "The expected address signed this",
+      "matchText": "The key of this address signed exactly this message. It doesn't prove the message is true or safe.",
+      "noMatch": "Not signed by the expected address",
+      "noMatchText": "Another key signed this, or the message or signature was changed. Smart-contract wallets (such as Safe) sign differently and can't be checked here.",
+      "recovered": "Signer found",
+      "recoveredText": "Add the address you expect to compare. Smart-contract wallets (such as Safe) sign differently and can't be checked here.",
+      "errors": {
+        "empty-message": "Paste the message that was signed (hex bytes start with 0x).",
+        "empty-signature": "Paste the signature.",
+        "signature": "This isn't a valid signature: 0x and 130 (or 128) hex characters.",
+        "json": "The typed data isn't valid JSON.",
+        "not-typed-data": "This JSON isn't EIP-712 typed data (types, primaryType, domain, message).",
+        "expected": "The expected address isn't a valid 0x address.",
+        "too-large": "Too large: the limit is 200 KB."
+      },
+      "local": "Runs in your browser: what you type isn't sent anywhere."
+    },
+    "rawTxDecoder": {
+      "label": "Raw transaction or RLP",
+      "placeholder": "0x02f8…",
+      "help": "Hex, with or without 0x. Nothing is broadcast.",
+      "transaction": "{type} transaction",
+      "types": {
+        "legacy": "Legacy",
+        "eip2930": "EIP-2930",
+        "eip1559": "EIP-1559",
+        "eip4844": "Blob (EIP-4844)",
+        "eip7702": "EIP-7702"
+      },
+      "chain": "Network",
+      "chainUnknown": "Chain ID {id} (not a network CRYPY supports)",
+      "chainNone": "Not set (legacy without a chain ID: valid on every network)",
+      "signedBy": "Signed by (sender)",
+      "unsigned": "Not signed",
+      "unsignedText": "This transaction has no signature yet, so it can't be sent and has no sender.",
+      "hash": "Transaction hash",
+      "hashNote": "The hash this transaction gets once it's sent.",
+      "to": "To",
+      "toNone": "None: this creates a contract",
+      "data": "Call data",
+      "decodeData": "Decode this call data",
+      "fields": {
+        "nonce": "Nonce",
+        "value": "Value (wei)",
+        "gas": "Gas limit",
+        "gasPrice": "Gas price (wei)",
+        "maxFeePerGas": "Max fee per gas (wei)",
+        "maxPriorityFeePerGas": "Max priority fee (wei)",
+        "maxFeePerBlobGas": "Max fee per blob gas (wei)",
+        "accessList": "Access list",
+        "blobVersionedHashes": "Blob hashes",
+        "authorizationList": "Authorizations (EIP-7702)",
+        "v": "v / yParity",
+        "r": "r",
+        "s": "s"
+      },
+      "rlpTitle": "RLP data",
+      "rlpText": "Not a transaction: shown as its RLP structure.",
+      "list": "List of {count}",
+      "errors": {
+        "empty": "",
+        "hex": "Use hex: 0–9 and a–f, an even number of digits.",
+        "rlp": "This isn't a transaction or valid RLP data.",
+        "too-large": "Too large: the limit is 200 KB."
+      },
+      "notSent": "Only decoded: nothing was sent. Anyone with a signed raw transaction can broadcast it, so share it only when you mean to.",
+      "local": "Runs in your browser: what you type isn't sent anywhere."
+    },
+    "fileHash": {
+      "fileLabel": "File to check",
+      "fileHelp": "Read in this browser tab and never uploaded. Up to 1 GB.",
+      "expectedLabel": "Published checksum",
+      "expectedPlaceholder": "e.g. 3f5a… or sha256:3f5a…",
+      "expectedHelp": "Copy it from the project's official download page or release. SHA-256, SHA-512 or SHA-1.",
+      "reading": "Reading {name} …",
+      "file": "{name} · {size} bytes",
+      "match": "Checksum matches",
+      "matchText": "The file's {algorithm} is exactly the published one: you have the file the project published.",
+      "noMatch": "Checksum doesn't match",
+      "noMatchText": "The file's {algorithm} differs from the published one. Don't install or open it: download it again from the official site.",
+      "noExpected": "Hashes ready",
+      "noExpectedText": "Paste the published checksum above to compare.",
+      "errors": {
+        "format": "This isn't a SHA-256, SHA-512 or SHA-1 checksum.",
+        "tooLarge": "This file is over 1 GB, too big to read in the browser.",
+        "read": "The file couldn't be read."
+      },
+      "local": "Runs in your browser: your file is never uploaded."
+    },
+    "bitcoinFee": {
+      "inputsTitle": "Inputs (coins you spend)",
+      "outputsTitle": "Outputs (recipient and change)",
+      "inputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh-p2wpkh": "Nested SegWit (3…)",
+        "p2wpkh": "Native SegWit (bc1q…)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "outputs": {
+        "p2pkh": "Legacy (1…)",
+        "p2sh": "Script (3…)",
+        "p2wpkh": "Native SegWit (bc1q…)",
+        "p2wsh": "SegWit script (bc1q…, long)",
+        "p2tr": "Taproot (bc1p…)"
+      },
+      "rate": "Fee rate",
+      "rateHint": "From your wallet or a mempool site.",
+      "price": "BTC price (optional)",
+      "priceHint": "Your own price, for the fee in dollars.",
+      "size": "Size",
+      "sizeValue": "{vbytes} vB",
+      "sizeHelp": "Virtual bytes: what the fee rate is charged on.",
+      "fee": "Fee",
+      "feeBtc": "Fee in BTC",
+      "feeUsd": "Fee in dollars",
+      "feeUsdHelp": "At the price you typed.",
+      "sats": "{sats} sats",
+      "errors": {
+        "no-inputs": "Enter at least one input.",
+        "no-outputs": "Enter at least one output.",
+        "count": "Use whole numbers for inputs and outputs.",
+        "rate": "Enter a fee rate above 0 (up to 3 decimals).",
+        "price": "Enter the price as a number, for example 60000."
+      },
+      "estimate": "An estimate for standard single-signature spends; your wallet shows the exact fee before sending.",
+      "local": "Runs in your browser: what you type isn't sent anywhere."
+    },
+    "addressBook": {
+      "checkTitle": "Check an address",
+      "checkLabel": "Address you're about to use",
+      "checkPlaceholder": "Paste the address you copied",
+      "saved": "In your address book: {label}",
+      "savedText": "This is exactly the address you saved.",
+      "lookalike": "Look-alike address: not in your book",
+      "lookalikeText": "It starts and ends like a saved address but the middle is different. This is how address poisoning scams work: don't send to it.",
+      "lookalikeEntry": "Looks like {label}:",
+      "unknown": "Not in your address book",
+      "unknownText": "No saved address matches, or looks like it. Check where you got it before sending.",
+      "addTitle": "Add an address",
+      "address": "Address",
+      "label": "Name",
+      "labelPlaceholder": "e.g. My exchange deposit",
+      "add": "Add to address book",
+      "added": "Saved: {label}",
+      "listTitle": "Your addresses",
+      "count": "{count} of {max}",
+      "empty": "No addresses saved yet.",
+      "families": {
+        "evm": "EVM (Ethereum, BNB Chain, Base, Arbitrum, Polygon…)",
+        "bitcoin": "Bitcoin",
+        "solana": "Solana"
+      },
+      "remove": "Remove {label}",
+      "export": "Export",
+      "import": "Import",
+      "imported": "Imported: {count} new addresses.",
+      "errors": {
+        "invalid": "Enter an EVM (0x…), Bitcoin or Solana address.",
+        "checksum": "This address has a typo: its checksum is wrong.",
+        "secret": "That looks like a recovery phrase or private key. Never paste those anywhere: it wasn't saved.",
+        "duplicate": "This address is already saved.",
+        "full": "The address book is full ({max} addresses).",
+        "label": "Give the address a name.",
+        "importFile": "That file isn't a CRYPY address book."
+      },
+      "storage": "Saved only in this browser on this device, never sent to CRYPY. Clearing browser data deletes it: export a copy to keep it.",
       "local": "Runs in your browser: what you type isn't sent anywhere."
     }
   },

@@ -41,6 +41,41 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Utilities U4: five security and developer tools (2026-11-25)
+
+Owner decision 2026-11-25: U4 = the batch recommended from the registry.
+
+- **Signature Verifier** (`/tools/signature-verifier`, Security): paste a message (text or hex bytes) or EIP-712
+  typed data (also a wallet's `[address, data]` params) and its signature: shows the signer, the exact hash that was
+  signed and, with an expected address, whether it matches. Smart-contract wallets (ERC-1271) are explained, never
+  called forgeries; a match is never called "safe".
+- **Raw Transaction & RLP Decoder** (`/tools/raw-tx-decoder`, Developer): legacy, EIP-2930, EIP-1559, blob and
+  EIP-7702 raw transactions: network, sender (recovered), transaction hash, recipient, value, gas and fees (with gwei
+  and coin readings), signature parts; call data links to the Transaction Data Decoder (in the URL fragment). Any
+  other RLP is shown as a tree. Decoding never broadcasts, and the page says that anyone holding a signed raw
+  transaction can.
+- **File Hash Checker** (`/tools/file-hash`, Security): SHA-256, SHA-512 and SHA-1 of a chosen file with the
+  browser's Web Crypto (files up to 1 GB, never uploaded); reads published checksums as projects write them
+  (`sha256sum` lines, BSD style, `sha256:` prefix, Base64); clear match / mismatch with what to do.
+- **Bitcoin Fee Calculator** (`/tools/bitcoin-fee`, Calculators): virtual bytes from inputs (legacy, nested SegWit,
+  native SegWit, Taproot) and outputs (five types), fee in sats and BTC exactly (rounded up), dollars only from a
+  typed price; labelled as an estimate for single-signature spends.
+- **Address Book** (`/tools/address-book`, Wallet): trusted EVM, Bitcoin and Solana addresses with names, saved only
+  in this browser (all tabs in step; export / import JSON, up to 200); any pasted address is checked: saved, a
+  **look-alike** (same first and last 4 characters, different middle: the address-poisoning pattern) or unknown.
+  Recovery phrases and private keys are refused and never stored.
+- **Sidebar:** the Utilities group folds too (like Calculators and Developer) so every tool still fits on a 1440×900
+  screen; it opens itself on its pages. New shared `Notice` box (existing colours only).
+- Translations of all new texts in the 6 Beta languages; `messages/pending-translation.json` is empty. No new
+  dependencies. CSS 82,468 bytes (budget 82 KB).
+
+**Checks:** typecheck, lint, Prettier and the translation check clean. Unit: 615 passed, 76 skipped (15 new: real
+signatures from Anvil's public test key (message, hex, EIP-712, wallet params, mismatch), signed EIP-1559 and legacy
+transactions (sender, hash, fields), RLP trees, Bitcoin sizes and rounding, SHA vectors and checksum formats,
+address-book matching, look-alikes, Bitcoin case, round trip). Build passed. Browser, full run: 318 passed, 19
+skipped, 1 failed: the page-change spinner test, timing under the full load; passed 3 of 3 alone (unchanged by this
+batch). 5 new U4 browser tests, each checking that nothing is sent (the file test too).
+
 ## S4: the site is built on GitHub, the server only downloads it (B-019, 2026-11-25)
 
 - Building on the 1-CPU server took about 3 minutes per update and slowed the live site meanwhile (B-019); with

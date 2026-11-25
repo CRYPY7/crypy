@@ -54,8 +54,9 @@ used up before 00:00 UTC on a normal day.
   - **U1 built 2026-11-24** (see PROGRESS.md). Owner decision 2026-11-24: new screens are built without design
     approval first; the owner reviews them on the site.
   - **U2 built 2026-11-24** (see PROGRESS.md).
-  - **U3 built 2026-11-25** (see PROGRESS.md). U1–U3 done; the next utilities batch needs the owner's choice from
-    the registry, and room in the CSS budget.
+  - **U3 built 2026-11-25** (see PROGRESS.md).
+  - **U4 built 2026-11-25** (owner: the recommended batch): signature verifier, raw transaction & RLP decoder, file
+    hash checker, Bitcoin fee calculator, local address book. CSS budget 82 KB (owner, 2026-11-25).
 - **S4 — A server that doesn't fall over.** Background worker as its own service; Redis for limits, pacers and the
   cache; staging droplet; builds on GitHub Actions; smoke test after every update with automatic rollback (started
   2026-11-24: two build folders, rollback; 2026-11-25: the new version starts beside the old one and nginx switches

@@ -26,4 +26,9 @@ export const ownRouteTools: readonly ToolId[] = [
   "abi-encoder",
   "encoding-converter",
   "json-csv",
+  "signature-verifier",
+  "raw-tx-decoder",
+  "file-hash",
+  "bitcoin-fee",
+  "address-book",
 ];

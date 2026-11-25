@@ -194,3 +194,30 @@ export function Choice<T extends string>({
     </fieldset>
   );
 }
+
+const noticeTone = {
+  low: "border-low/40 bg-low/14 text-low",
+  medium: "border-medium/40 bg-medium/14 text-medium",
+  critical: "border-critical/40 bg-critical/14 text-critical",
+  info: "border-border bg-muted text-foreground",
+} as const;
+
+/** A coloured statement box (a verdict, a warning). Uses the same tones as the signature decoder's findings. */
+export function Notice({
+  tone,
+  title,
+  children,
+  testId,
+}: {
+  tone: keyof typeof noticeTone;
+  title: string;
+  children?: ReactNode;
+  testId?: string;
+}) {
+  return (
+    <div className={cn("rounded-xl border px-3 py-2 text-sm", noticeTone[tone])} role="status" data-testid={testId}>
+      <p className="font-semibold">{title}</p>
+      {children && <div className="mt-1 text-foreground">{children}</div>}
+    </div>
+  );
+}

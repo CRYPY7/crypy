@@ -115,6 +115,11 @@ export const statusComponents: readonly StatusComponent[] = [
   toolComponent("abi-encoder", []),
   toolComponent("encoding-converter", []),
   toolComponent("json-csv", []),
+  toolComponent("signature-verifier", []),
+  toolComponent("raw-tx-decoder", []),
+  toolComponent("file-hash", []),
+  toolComponent("bitcoin-fee", []),
+  toolComponent("address-book", []),
   ...liveChains.map((c) => ({
     id: `chain:${c.key}`,
     group: "chains" as const,
