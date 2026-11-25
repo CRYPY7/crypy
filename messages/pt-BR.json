@@ -2288,7 +2288,15 @@
       "checkAgain": "Verificar de novo",
       "notCheckedTitle": "{chain}: não verificado",
       "notCheckedBody": "{chain} não respondeu e não há leitura anterior. Nada é presumido: isto não significa \"vazio\".",
-      "totalIncludes": "Inclui {chains} de uma leitura anterior."
+      "totalIncludes": "Inclui {chains} de uma leitura anterior.",
+      "checkingTitle": "{chain}: exibido de {ago} · verificando mudanças…",
+      "checkingPending": "{chain}: exibido de uma leitura anterior · verificando mudanças…",
+      "checkingBody": "A nova leitura está a caminho. Esta página se atualiza sozinha.",
+      "approvalsCheckingBody": "A nova verificação está a caminho. Esta página se atualiza sozinha. A revogação sempre lê a rede de novo antes.",
+      "tokenCheckingTitle": "Relatório de {ago} ({time}) · verificando mudanças…",
+      "tokenCheckingPending": "Relatório de uma verificação anterior · verificando mudanças…",
+      "tokenCheckingBody": "Uma nova verificação está em andamento e esta página se atualiza sozinha. O dono pode ter mudado configurações desde então: espere o resultado antes de comprar.",
+      "savedTx": "{chain} não respondeu agora. Uma transação confirmada não muda: só o número de confirmações e os valores em dólar de hoje podem ter mudado."
     }
   },
   "wallet": {

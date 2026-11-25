@@ -31,9 +31,10 @@ used up before 00:00 UTC on a normal day.
   - **Built 2026-11-24 (boards 60–61, see PROGRESS.md):** saved results for balances, activity (first page),
     approvals, token security and gas; one shared notice (fresh / saved with its age / not checked); wallet results
     deleted 7 days after the last lookup. The outage drill (`CRYPY_FAULT_CHAINS`) is ready for the staging check.
-  - **Still to do in S2:** the staging check itself (S4 creates staging); the transaction page and search have no
-    saved results yet (a search that fails on every chain still shows an error); slow first visits (B-006, B-013,
-    B-018).
+  - **Built 2026-11-25:** saved readings shown at once when a fresh read takes over 2.5 s (state 2, page updates
+    itself); confirmed transactions saved; an address opens its page from saved readings when no chain answers.
+  - **Still to do in S2:** the staging check itself (S4 creates staging); measure first visits on the live server
+    (B-006, B-013, B-018, B-025): a wallet or token nobody looked up yet is still as slow as before.
 - **S3 — Sources that don't fall over.** Health score per provider and method (bench failing providers until they
   recover); more free providers per chain and a map of what each supports; GoPlus queue with priorities and saved
   results; a queue for heavy checks. **Done when:** a day with one provider down and GoPlus at its limit stays on target.

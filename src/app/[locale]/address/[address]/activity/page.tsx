@@ -18,7 +18,7 @@ import { localePath } from "@/lib/routes";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedActivity, formatCursor } from "@/server/services/activity";
 import { chainScopeFor } from "@/server/services/chain-scope";
-import { cachedResolve, explorerLink } from "@/server/services/lookups";
+import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
 import { observe } from "@/server/outcomes/record";
 import { classifyActivity } from "@/lib/outcomes/classify";
 
@@ -52,7 +52,7 @@ async function ActivityContent({
   const t = await getTranslations();
   if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
 
-  const result = await cachedResolve(address);
+  const result = await resolveAddressPage(address);
   if (result.status === "bad-checksum") {
     return (
       <Notice tone="danger">
@@ -127,6 +127,7 @@ async function ActivityContent({
           next: formatCursor(report.chains),
           checkedAt: report.checkedAt,
           saved: report.saved,
+          refreshing: report.refreshing,
         }}
         fresh={t.raw("entity.freshness") as Record<string, string>}
         hiddenTokens={report.hiddenTokens}

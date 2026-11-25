@@ -2,7 +2,7 @@
 
 import { CircleMinus, Clock3, RotateCw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useSyncExternalStore, useTransition } from "react";
+import { useEffect, useSyncExternalStore, useTransition } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -67,7 +67,7 @@ function RetryButton({ label, busyLabel, primary }: { label: string; busyLabel: 
       disabled={busy}
       onClick={() => start(() => router.refresh())}
       className={cn(
-        "inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold disabled:opacity-60 max-sm:w-full",
+        "inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold disabled:opacity-60 w-full sm:w-auto",
         primary ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border text-primary hover:border-primary",
       )}
     >
@@ -141,7 +141,7 @@ export function SavedNotice({
       role="status"
       data-freshness="saved"
       className={cn(
-        "flex items-center gap-3 rounded-xl border border-medium/40 bg-medium/8 text-sm max-sm:flex-col max-sm:items-stretch",
+        "flex flex-col items-stretch gap-3 rounded-xl border border-medium/40 bg-medium/8 text-sm sm:flex-row sm:items-center",
         compact ? "px-3 py-2.5" : "px-4 py-3",
       )}
     >
@@ -163,7 +163,7 @@ export function NotCheckedNotice({ title, body, labels }: { title: string; body:
     <div
       role="status"
       data-freshness="not-checked"
-      className="flex items-center gap-3 rounded-xl border border-dashed px-4 py-3 text-sm max-sm:flex-col max-sm:items-stretch"
+      className="flex flex-col items-stretch gap-3 rounded-xl border border-dashed px-4 py-3 text-sm sm:flex-row sm:items-center"
     >
       <div className="flex flex-1 items-start gap-3">
         <CircleMinus aria-hidden className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
@@ -182,3 +182,56 @@ export function SavedTag({ at, locale, text, pending }: { at: string; locale: st
   const label = useText(text, pending, at, locale, {});
   return <span className="text-xs font-medium text-medium">{label}</span>;
 }
+
+/** One reload at a time, however many "checking" notices a page shows. */
+let reloadPending = false;
+
+/**
+ * State 2: shown from an earlier reading while a slow fresh read finishes on the server. The page reloads itself a
+ * few seconds later and then shows the new reading (the server keeps it ready for a minute).
+ */
+export function CheckingNotice({
+  at,
+  locale,
+  title,
+  pending,
+  body,
+  chain = "",
+}: {
+  at: string;
+  locale: string;
+  title: string;
+  pending: string;
+  body: string;
+  chain?: string;
+}) {
+  const heading = useText(title, pending, at, locale, { chain });
+  const router = useRouter();
+  useEffect(() => {
+    if (reloadPending) return;
+    reloadPending = true;
+    const id = setTimeout(() => {
+      reloadPending = false;
+      router.refresh();
+    }, RELOAD_MS);
+    return () => {
+      clearTimeout(id);
+      reloadPending = false;
+    };
+  }, [router]);
+  return (
+    <div
+      role="status"
+      data-freshness="checking"
+      className="flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/8 px-4 py-3 text-sm"
+    >
+      <RotateCw aria-hidden className="mt-0.5 size-5 shrink-0 animate-spin text-primary" />
+      <div>
+        <p className="font-semibold">{heading}</p>
+        <p className="mt-0.5 text-muted-foreground">{fillText(body, { chain })}</p>
+      </div>
+    </div>
+  );
+}
+
+const RELOAD_MS = 5_000;

@@ -1,11 +1,12 @@
 import "server-only";
-import { assertChainUp } from "@/server/fault";
+import { chainDrill } from "@/server/fault";
 import { cacheLife } from "next/cache";
 import { type ChainKey, liveChains } from "@/config/chains";
 import { type ApprovalsSummary, type RatedApproval, rateApprovals, summarize } from "@/lib/approvals/evaluate";
 import type { ApprovalsFacts } from "@/lib/approvals/types";
 import { registry } from "@/server/chains/registry";
-import { readSaved, saveResults } from "@/server/saved/store";
+import { freshOrSaved } from "@/server/saved/fresh-or-saved";
+import { readSavedOne, saveResults } from "@/server/saved/store";
 import { cachedAddressOverview } from "./overview";
 
 export interface ChainApprovals {
@@ -24,6 +25,8 @@ export interface ApprovalsReport {
   summary: ApprovalsSummary;
   /** Chains shown from their last full check (at most 6 hours old) because a fresh one failed now: ISO time. */
   saved?: Partial<Record<ChainKey, string>>;
+  /** Chains shown from their last complete check while a slow fresh check finishes in the background. */
+  refreshing?: Partial<Record<ChainKey, string>>;
 }
 
 /**
@@ -40,61 +43,70 @@ export async function cachedApprovals(
   // Not awaited here: each chain starts its outside lookups while the balances load.
   const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
   const targets = liveChains.filter((chain) => chain.capabilities.approvals && (!only || only.includes(chain.key)));
-  const settled = await Promise.allSettled(
-    targets.map(async (chain) => {
-      const adapter = registry.adapters.find((a) => a.family === chain.family);
-      if (!adapter?.getApprovals) throw new Error("Approvals not supported");
-      assertChainUp(chain.key, owner);
-      const held = overviewRequest.then((overview) => {
-        const holdings = overview?.chains.find((c) => c.chain === chain.key);
-        return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
-          h.kind === "token" && h.address ? [h.address] : [],
-        );
-      });
-      return adapter.getApprovals(chain, owner, held, priority);
-    }),
-  );
-  const overview = await overviewRequest;
   // Tokens the balance view hides as likely spam: approvals on them never need attention.
-  const spam = new Set(
-    (overview?.chains ?? []).flatMap((c) =>
-      c.hidden.flatMap((h) => (h.kind === "token" && h.address ? [h.address.toLowerCase()] : [])),
+  const spamTokens = overviewRequest.then(
+    (overview) =>
+      new Set(
+        (overview?.chains ?? []).flatMap((c) =>
+          c.hidden.flatMap((h) => (h.kind === "token" && h.address ? [h.address.toLowerCase()] : [])),
+        ),
+      ),
+  );
+  // Stabilization S2: each chain is checked fresh; one that fails, or takes longer than a moment, shows its last
+  // complete check (at most 6 hours old) while the fresh one finishes in the background. Only complete checks are
+  // saved (isFullCheck).
+  const results = await Promise.all(
+    targets.map((chain) =>
+      freshOrSaved<ChainApprovals>(
+        `approvals|${owner.toLowerCase()}|${chain.key}`,
+        async () => {
+          const adapter = registry.adapters.find((a) => a.family === chain.family);
+          if (!adapter?.getApprovals) throw new Error("Approvals not supported");
+          await chainDrill(chain.key, owner);
+          const held = overviewRequest.then((overview) => {
+            const holdings = overview?.chains.find((c) => c.chain === chain.key);
+            return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
+              h.kind === "token" && h.address ? [h.address] : [],
+            );
+          });
+          const facts = await adapter.getApprovals(chain, owner, held, priority);
+          return {
+            chain: facts.chain as ChainKey,
+            block: facts.block,
+            approvals: rateApprovals(facts.approvals, await spamTokens),
+            sources: facts.sources,
+          };
+        },
+        () => readSavedOne<ChainApprovals>("approvals", owner, chain.key),
+        (checked) => {
+          if (isFullCheck(checked)) void saveResults("approvals", owner, [{ chain: checked.chain, data: checked }]);
+        },
+      ),
     ),
   );
-  const chains: ChainApprovals[] = settled.flatMap((r) =>
-    r.status === "fulfilled"
-      ? [
-          {
-            chain: r.value.chain as ChainKey,
-            block: r.value.block,
-            approvals: rateApprovals(r.value.approvals, spam),
-            sources: r.value.sources,
-          },
-        ]
-      : [],
-  );
-  const failed = targets.filter((_, i) => settled[i]?.status === "rejected").map((c) => c.key);
-  // Stabilization S2: save each chain checked in full; a chain that failed now shows its last full check (≤ 6 h).
-  void saveResults(
-    "approvals",
-    owner,
-    chains.filter(isFullCheck).map((c) => ({ chain: c.chain, data: c })),
-  );
-  const saved = failed.length ? await readSaved<ChainApprovals>("approvals", owner, failed) : new Map();
-  const all = [...chains, ...[...saved.values()].map((s) => s.data)];
-  const unavailable = failed.filter((c) => !saved.has(c));
+  const chains: ChainApprovals[] = [];
+  const unavailable: ChainKey[] = [];
+  const saved: Partial<Record<ChainKey, string>> = {};
+  const refreshing: Partial<Record<ChainKey, string>> = {};
+  results.forEach((result, i) => {
+    const key = targets[i]!.key;
+    if (result.kind === "failed") return unavailable.push(key);
+    chains.push(result.value);
+    if (result.kind === "saved") (result.refreshing ? refreshing : saved)[key] = result.savedAt;
+  });
   cacheLife(
-    unavailable.length || saved.size
+    unavailable.length || Object.keys(saved).length || Object.keys(refreshing).length
       ? { stale: 0, revalidate: 1, expire: 1 }
       : { stale: 15, revalidate: 20, expire: 120 },
   );
   return {
     owner,
     checkedAt: Date.now(),
-    chains: all,
+    chains,
     unavailable,
-    summary: summarize(all.flatMap((c) => c.approvals)),
-    ...(saved.size ? { saved: Object.fromEntries([...saved].map(([chain, s]) => [chain, s.savedAt])) } : {}),
+    summary: summarize(chains.flatMap((c) => c.approvals)),
+    ...(Object.keys(saved).length ? { saved } : {}),
+    ...(Object.keys(refreshing).length ? { refreshing } : {}),
   };
 }
 

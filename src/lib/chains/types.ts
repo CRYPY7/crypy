@@ -179,6 +179,8 @@ export interface TxDetails extends TxLookup {
   timestamp: number | null;
   confirmations: number | null;
   /** The node's "finalized" block includes this transaction; null when the node couldn't say. */
+  /** Shown from the last saved reading because the chain couldn't be read now (stabilization S2): its time. */
+  savedAt?: string;
   finalized: boolean | null;
   nonce: number;
   /** "legacy" | "eip2930" | "eip1559" | "eip4844" | "eip7702" or the raw type. */

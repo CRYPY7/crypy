@@ -130,6 +130,13 @@ export function UniversalSearch({
     try {
       const response = await fetch(`/api/v1/search/resolve?q=${encodeURIComponent(local.value)}`);
       const body = (await response.json()) as ResolveResponse;
+      // No chain answered: an address still opens its page, which shows saved readings (stabilization S2).
+      const offline = (!body.ok && body.error?.code === "UPSTREAM_UNAVAILABLE") || body.data?.status === "unavailable";
+      if (offline && local.kind === "evm-address") {
+        router.push(localePath(locale, `/address/${local.value}`));
+        setState({ kind: "idle" });
+        return;
+      }
       if (!body.ok || !body.data) {
         const code = body.error?.code;
         setState({

@@ -2288,7 +2288,15 @@
       "checkAgain": "Kiểm tra lại",
       "notCheckedTitle": "{chain}: chưa kiểm tra",
       "notCheckedBody": "{chain} không phản hồi và không có lần đọc nào trước đó. Không giả định gì cả: điều này không có nghĩa là \"trống\".",
-      "totalIncludes": "Bao gồm {chains} từ lần đọc trước."
+      "totalIncludes": "Bao gồm {chains} từ lần đọc trước.",
+      "checkingTitle": "{chain}: hiển thị kết quả từ {ago} · đang kiểm tra thay đổi…",
+      "checkingPending": "{chain}: hiển thị kết quả đọc trước đó · đang kiểm tra thay đổi…",
+      "checkingBody": "Kết quả mới đang đến. Trang này sẽ tự cập nhật.",
+      "approvalsCheckingBody": "Kết quả kiểm tra mới đang đến. Trang này sẽ tự cập nhật. Thu hồi luôn đọc lại chuỗi trước.",
+      "tokenCheckingTitle": "Báo cáo từ {ago} ({time}) · đang kiểm tra thay đổi…",
+      "tokenCheckingPending": "Báo cáo từ lần kiểm tra trước · đang kiểm tra thay đổi…",
+      "tokenCheckingBody": "Đang chạy lần kiểm tra mới và trang này sẽ tự cập nhật. Chủ sở hữu có thể đã thay đổi cài đặt kể từ đó: hãy chờ kết quả trước khi mua.",
+      "savedTx": "{chain} vừa không phản hồi. Giao dịch đã xác nhận không thay đổi: chỉ số lần xác nhận và giá trị đô la hôm nay có thể đã khác."
     }
   },
   "wallet": {

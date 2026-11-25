@@ -55,11 +55,11 @@ export async function TotalValue({
           ))}
         </ul>
       )}
-      {overview.saved && overview.chains.some((c) => overview.saved?.[c.chain]) && (
+      {overview.chains.some((c) => overview.saved?.[c.chain] || overview.refreshing?.[c.chain]) && (
         <p className="mt-3 text-sm font-medium text-medium">
           {t("entity.freshness.totalIncludes", {
             chains: overview.chains
-              .filter((c) => overview.saved?.[c.chain])
+              .filter((c) => overview.saved?.[c.chain] || overview.refreshing?.[c.chain])
               .map((c) => t(`chains.${c.chain}`))
               .join(", "),
           })}

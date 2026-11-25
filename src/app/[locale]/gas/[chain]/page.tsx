@@ -103,7 +103,12 @@ export default async function GasChainPage({ params }: PageProps<"/[locale]/gas/
                 {paragraph}
               </p>
             ))}
-            <Link href={learnPath(locale, "gas-fees")} className="font-semibold text-primary hover:underline">
+            <Link
+              prefetch={false}
+              data-intent-prefetch=""
+              href={learnPath(locale, "gas-fees")}
+              className="font-semibold text-primary hover:underline"
+            >
               {t("gasChain.guideLink")} <span aria-hidden="true">→</span>
             </Link>
           </section>
@@ -127,6 +132,8 @@ export default async function GasChainPage({ params }: PageProps<"/[locale]/gas/
             {others.map((other) => (
               <li key={other.key}>
                 <Link
+                  prefetch={false}
+                  data-intent-prefetch=""
                   href={localePath(locale, `/gas/${chainSlugs[other.key]}`)}
                   className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3 hover:border-border-strong"
                 >
@@ -140,6 +147,8 @@ export default async function GasChainPage({ params }: PageProps<"/[locale]/gas/
             ))}
           </ul>
           <Link
+            prefetch={false}
+            data-intent-prefetch=""
             href={toolPath(locale, "gas-tracker")}
             className="mt-2 rounded-xl border px-4 py-3 text-center font-semibold hover:border-border-strong"
           >

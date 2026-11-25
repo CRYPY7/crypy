@@ -7,8 +7,8 @@ import { serverEnv } from "@/server/env";
  * Outage drill (stabilization S2): makes reading a chain fail as if every provider were down, to check that pages
  * still show a result. Two operator-only switches, both off unless set in the server's own settings:
  * - CRYPY_FAULT_CHAINS (staging): these chains are down for everyone;
- * - CRYPY_FAULT_FILE (browser tests): lines "chain" or "chain:address" in that file, so one test can take a chain
- *   down for one address without touching the others running at the same time.
+ * - CRYPY_FAULT_FILE (browser tests): lines "chain" or "chain:address" in that file (down), or
+ *   "slow:chain:address" (4 s late), so one test can change one address without touching others running at once.
  */
 export class ChainFaultError extends Error {
   constructor(chain: string) {
@@ -46,6 +46,16 @@ export function assertChainUp(chain: string, subject?: string): void {
   if (faults.has(chain) || (subject && faults.has(`${chain}:${subject.toLowerCase()}`)))
     throw new ChainFaultError(chain);
 }
+
+/** As `assertChainUp`, plus file lines "slow:chain:address": that read waits 4 s first (a slow provider). */
+export async function chainDrill(chain: string, subject?: string): Promise<void> {
+  assertChainUp(chain, subject);
+  const faults = fileFaults();
+  if (subject && faults.has(`slow:${chain}:${subject.toLowerCase()}`))
+    await new Promise((resolve) => setTimeout(resolve, SLOW_MS));
+}
+
+const SLOW_MS = 4_000;
 
 if (serverEnv.CRYPY_FAULT_CHAINS.length > 0)
   console.warn(

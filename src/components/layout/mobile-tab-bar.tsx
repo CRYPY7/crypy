@@ -52,7 +52,14 @@ function TabBarView({
       className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
       <div className="grid grid-cols-5 px-1 pt-1">
-        <Link href={hrefs.home} aria-current={current(hrefs.home)} className={itemClass} data-tab-item="">
+        <Link
+          href={hrefs.home}
+          aria-current={current(hrefs.home)}
+          className={itemClass}
+          data-tab-item=""
+          prefetch={false}
+          data-intent-prefetch=""
+        >
           <House className="size-5" aria-hidden="true" />
           {strings.home}
         </Link>
@@ -60,15 +67,36 @@ function TabBarView({
           <LayoutGrid className="size-5" aria-hidden="true" />
           {strings.tools}
         </button>
-        <Link href={hrefs.learn} aria-current={current(hrefs.learn)} className={itemClass} data-tab-item="">
+        <Link
+          href={hrefs.learn}
+          aria-current={current(hrefs.learn)}
+          className={itemClass}
+          data-tab-item=""
+          prefetch={false}
+          data-intent-prefetch=""
+        >
           <BookOpen className="size-5" aria-hidden="true" />
           {strings.learn}
         </Link>
-        <Link href={hrefs.portfolio} aria-current={current(hrefs.portfolio)} className={itemClass} data-tab-item="">
+        <Link
+          href={hrefs.portfolio}
+          aria-current={current(hrefs.portfolio)}
+          className={itemClass}
+          data-tab-item=""
+          prefetch={false}
+          data-intent-prefetch=""
+        >
           <ChartPie className="size-5" aria-hidden="true" />
           {strings.portfolio}
         </Link>
-        <Link href={hrefs.alerts} aria-current={current(hrefs.alerts)} className={itemClass} data-tab-item="">
+        <Link
+          href={hrefs.alerts}
+          aria-current={current(hrefs.alerts)}
+          className={itemClass}
+          data-tab-item=""
+          prefetch={false}
+          data-intent-prefetch=""
+        >
           <Bell className="size-5" aria-hidden="true" />
           {strings.alerts}
         </Link>

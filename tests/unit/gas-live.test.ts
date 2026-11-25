@@ -16,14 +16,20 @@ describe.skipIf(!live)("gas and block times (live)", () => {
       expect(s.low).toBeLessThanOrEqual(s.average);
       expect(s.average).toBeLessThanOrEqual(s.high);
     }, 60_000);
-    it(`${key}: the block found for a date is the first at or after it`, async () => {
+  }
+  // B-014: reads go out in parallel rounds; the answer must stay exact on every chain, for an old and a recent date.
+  for (const key of ["ethereum", "bsc", "base", "arbitrum", "polygon"] as const) {
+    it(`${key}: the block found for a date is the first at or after it (old and recent dates)`, async () => {
       const chain = getChain(key)!;
-      const target = 1700000000;
-      const found = await evmBlockAtTime(chain, target);
-      expect(found.estimate).toBe(false);
-      expect(found.time).toBeGreaterThanOrEqual(target);
-      const before = await evmBlockTime(chain, found.block - 1);
-      expect(before!.time).toBeLessThan(target);
+      for (const target of [1700000000, Math.floor(Date.now() / 1000) - 3_600]) {
+        const started = Date.now();
+        const found = await evmBlockAtTime(chain, target);
+        expect(Date.now() - started).toBeLessThan(5_000);
+        expect(found.estimate).toBe(false);
+        expect(found.time).toBeGreaterThanOrEqual(target);
+        const before = await evmBlockTime(chain, found.block - 1);
+        expect(before!.time).toBeLessThan(target);
+      }
     }, 90_000);
   }
 });

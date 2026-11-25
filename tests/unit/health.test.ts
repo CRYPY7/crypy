@@ -193,6 +193,16 @@ describe("running checks", () => {
     await expect(probes["job:checker"]!()).rejects.toThrow("provider refused");
     jobs.resetJobHeartbeats();
   });
+
+  it("daily token checks: right after a restart (first round still running) it says so instead of failing (B-016)", async () => {
+    jobs.resetJobHeartbeats();
+    jobs.registerJob("token-checks", 10 * MIN);
+    // Empty database: every curated token's check is missing.
+    await expect(probes["job:token-checks"]!()).resolves.toMatch(/^slow:.*first round after a restart/);
+    jobs.noteJobRun("token-checks", null);
+    await expect(probes["job:token-checks"]!()).rejects.toThrow(/token checks are old or missing/);
+    jobs.resetJobHeartbeats();
+  });
 });
 
 describe("saved results", () => {

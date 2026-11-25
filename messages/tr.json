@@ -2288,7 +2288,15 @@
       "checkAgain": "Tekrar kontrol et",
       "notCheckedTitle": "{chain}: kontrol edilmedi",
       "notCheckedBody": "{chain} yanıt vermedi ve daha önceki bir okuma yok. Hiçbir şey varsayılmaz: bu \"boş\" anlamına gelmez.",
-      "totalIncludes": "Daha önceki bir okumadan {chains} dahildir."
+      "totalIncludes": "Daha önceki bir okumadan {chains} dahildir.",
+      "checkingTitle": "{chain}: {ago} okunan sonuç gösteriliyor · değişiklikler kontrol ediliyor…",
+      "checkingPending": "{chain}: daha önceki bir okuma gösteriliyor · değişiklikler kontrol ediliyor…",
+      "checkingBody": "Yeni okuma yolda. Bu sayfa kendiliğinden güncellenir.",
+      "approvalsCheckingBody": "Yeni kontrol yolda. Bu sayfa kendiliğinden güncellenir. İptal işlemi her zaman önce zinciri yeniden okur.",
+      "tokenCheckingTitle": "{ago} tarihli rapor ({time}) · değişiklikler kontrol ediliyor…",
+      "tokenCheckingPending": "Daha önceki bir kontrolün raporu · değişiklikler kontrol ediliyor…",
+      "tokenCheckingBody": "Yeni bir kontrol yapılıyor ve bu sayfa kendiliğinden güncellenir. Sahip o zamandan beri ayarları değiştirmiş olabilir: satın almadan önce sonucu bekleyin.",
+      "savedTx": "{chain} şu anda yanıt vermedi. Onaylanmış bir işlem değişmez: yalnızca onay sayısı ve bugünkü dolar değerleri değişmiş olabilir."
     }
   },
   "wallet": {

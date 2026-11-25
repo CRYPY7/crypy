@@ -10,7 +10,7 @@ import { Suspense } from "react";
 import { AddressTabs } from "@/components/entity/address-tabs";
 import { ChainScopeBar } from "@/components/entity/chain-scope";
 import { EntityHeader, EntitySkeleton, Notice } from "@/components/entity/entity-parts";
-import { FreshLine, NotCheckedNotice, SavedNotice, SavedTag } from "@/components/entity/freshness";
+import { CheckingNotice, FreshLine, NotCheckedNotice, SavedNotice, SavedTag } from "@/components/entity/freshness";
 import { ChainHoldingsSection, TotalValue } from "@/components/entity/holdings";
 import { type ChainKey, getChain } from "@/config/chains";
 import { type Locale, isLocale } from "@/i18n/locales";
@@ -22,7 +22,7 @@ import { localePath } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { chainScopeFor } from "@/server/services/chain-scope";
-import { cachedResolve, explorerLink } from "@/server/services/lookups";
+import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
 import { type AddressOverview, cachedAddressOverview } from "@/server/services/overview";
 import { observe } from "@/server/outcomes/record";
 import { classifyOverview } from "@/lib/outcomes/classify";
@@ -80,7 +80,7 @@ async function AddressContent({
 
   if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
 
-  const result = await cachedResolve(address);
+  const result = await resolveAddressPage(address);
   if (result.status === "bad-checksum") {
     return (
       <Notice tone="danger">
@@ -112,6 +112,7 @@ async function AddressContent({
     (c) => scope.scan.includes(c) && !overview.chains.some((h) => h.chain === c),
   );
   const savedChains = Object.entries(overview.saved ?? {}).filter(([c]) => scope.scan.includes(c));
+  const checkingChains = Object.entries(overview.refreshing ?? {}).filter(([c]) => scope.scan.includes(c));
   const f = t.raw("entity.freshness") as Record<string, string>;
   const retry = { retry: f.retry!, retrying: f.retrying! };
   const total = scope.chains.length;
@@ -191,7 +192,7 @@ async function AddressContent({
                     locale={locale}
                     selected={focused === view.chain}
                     pricesAvailable={overview.pricesAvailable}
-                    savedAt={overview.saved?.[view.chain as ChainKey]}
+                    savedAt={overview.saved?.[view.chain as ChainKey] ?? overview.refreshing?.[view.chain as ChainKey]}
                     notChecked={unavailable.includes(view.chain)}
                     savedTag={{ text: f.savedTag!, pending: f.savedTagPending! }}
                     t={t}
@@ -207,6 +208,17 @@ async function AddressContent({
               })}
             </p>
           )}
+          {checkingChains.map(([chain, at]) => (
+            <CheckingNotice
+              key={chain}
+              at={at}
+              locale={locale}
+              chain={t(`chains.${chain}`)}
+              title={f.checkingTitle!}
+              pending={f.checkingPending!}
+              body={f.checkingBody!}
+            />
+          ))}
           {savedChains.map(([chain, at]) => (
             <SavedNotice
               key={chain}
@@ -364,7 +376,7 @@ function IdentityCard({
       aria-current={selected ? "true" : undefined}
       className={cn(
         "flex h-full flex-col gap-2 rounded-xl border bg-card p-4 transition-colors hover:border-primary",
-        savedAt && "border-medium/50",
+        savedAt && "border-medium/40",
         selected && "border-2 border-primary",
       )}
     >

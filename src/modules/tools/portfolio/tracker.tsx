@@ -51,6 +51,7 @@ interface WalletReport {
     pricesAvailable: boolean;
     /** Chains shown from an earlier reading (stabilization S2). */
     saved?: Record<string, string>;
+    refreshing?: Record<string, string>;
   };
   approvals: { attention: number; chains: string[]; partial: boolean } | null;
   flagged: { tokens: FlaggedToken[]; checked: number; skipped: number } | null;
@@ -213,7 +214,9 @@ export default function PortfolioTracker({
     // A chain left out, or shown from an earlier reading, would make the comparison wrong.
     if (
       Object.values(loads).some(
-        (l) => l?.status === "ok" && (l.report.overview.unavailable.length > 0 || l.report.overview.saved),
+        (l) =>
+          l?.status === "ok" &&
+          (l.report.overview.unavailable.length > 0 || l.report.overview.saved || l.report.overview.refreshing),
       )
     )
       return;
@@ -237,7 +240,14 @@ export default function PortfolioTracker({
   const someUnchecked = reports.some((r) => !fullyChecked(r.report));
   const unavailableChains = [...new Set(reports.flatMap((r) => r.report.overview.unavailable))];
   const pricesMissing = reports.some((r) => !r.report.overview.pricesAvailable);
-  const savedChains = [...new Set(reports.flatMap((r) => Object.keys(r.report.overview.saved ?? {})))];
+  const savedChains = [
+    ...new Set(
+      reports.flatMap((r) => [
+        ...Object.keys(r.report.overview.saved ?? {}),
+        ...Object.keys(r.report.overview.refreshing ?? {}),
+      ]),
+    ),
+  ];
 
   const refresh = () => {
     if (!data) return;

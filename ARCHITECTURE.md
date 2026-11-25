@@ -847,8 +847,23 @@ DEX decoders, per chain family:                      (one per DEX design)
   text). Strings in `entity.freshness`. Used on the address overview (cards, notices, total), approvals, activity,
   token security; gas shows "From N min ago" on the chain card; the Portfolio lists saved chains and skips "since you
   last looked" while any chain is missing or saved.
+- Fresh or saved (`server/saved/fresh-or-saved.ts`, 2026-11-25): per key (tool, subject, chain) one fresh read at a
+  time, shared; not back within `WAIT_MS` (2.5 s) and a saved reading exists → the saved one with `refreshing: true`
+  (UI `CheckingNotice`, page reloads after 5 s); the fresh result is kept 60 s only when a page was shown a saved
+  reading; failures are never kept. Used by `pageOverview` (per chain), `cachedApprovals`, `cachedActivity` (first
+  page) and `cachedTokenSecurity` (CRYPY's saved report or the curated daily check ≤ 6 h). `readChainHoldings` is the
+  shared one-chain read; `addressOverview` (health checks, alerts) never uses saved readings.
+- Transactions: kind `transaction`, saved only when final or 64+ confirmations; shown with `savedAt` when the read
+  throws. `resolveAddressPage`: when no chain answers the lookup, a valid address still opens its page (header search
+  and `/search` route there too).
 - Outage drill (`server/fault.ts`): `CRYPY_FAULT_CHAINS` (staging: chains down for everyone) and `CRYPY_FAULT_FILE`
-  (browser tests: lines `chain` or `chain:address`), both operator-only settings; never set in production.
+  (browser tests: lines `chain` or `chain:address` = down, `slow:chain:address` = 4 s late), both operator-only
+  settings; never set in production.
+- Date → block (`server/chains/evm/block-time.ts`, B-014): header reads in parallel rounds (newest; block 1 and
+  decades back; then the interpolated block ±1, ±8, ±64 steps of 1/256 of the bracket) until two neighbouring
+  blocks remain; about 5 rounds.
+- Prefetch policy (B-027): links on every page (logo, header, bottom tabs, footer) and related-link lists use
+  `prefetch={false}` plus `data-intent-prefetch`: `NavigationProgress` prefetches them on touch, hover or focus.
 
 ## 13. Performance budget
 

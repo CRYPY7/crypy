@@ -141,7 +141,12 @@ async function ChecksTables({ locale }: { locale: Locale }) {
                   return (
                     <tr key={token.slug} className="border-t">
                       <td className="px-4 py-3">
-                        <Link href={href} className="flex flex-col hover:text-primary">
+                        <Link
+                          prefetch={false}
+                          data-intent-prefetch=""
+                          href={href}
+                          className="flex flex-col hover:text-primary"
+                        >
                           <span className="font-semibold">{token.symbol}</span>
                           {check && (
                             <span className="text-xs text-muted-foreground">{check.report.facts.token.name}</span>

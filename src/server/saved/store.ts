@@ -11,7 +11,7 @@ import { savedResults } from "@/server/db/schema";
  * Privacy (owner decision 2026-11-24): wallet results are deleted 7 days after the wallet was last looked up. Only the
  * public subject (address or token), the chain and the result are stored: never an IP address or visitor id.
  */
-export type SavedKind = "balances" | "activity" | "approvals" | "token-security" | "gas";
+export type SavedKind = "balances" | "activity" | "approvals" | "token-security" | "gas" | "transaction";
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -23,6 +23,8 @@ export const MAX_AGE_MS: Record<SavedKind, number> = {
   approvals: 6 * HOUR,
   "token-security": 6 * HOUR,
   gas: 10 * 60_000,
+  /** Only confirmed transactions are saved, and those don't change (only the confirmation count grows). */
+  transaction: 7 * DAY,
 };
 
 /** Deleted this long after the subject was last looked up. */
@@ -138,6 +140,16 @@ export async function readSaved<T>(
     })();
   }
   return out;
+}
+
+/** One chain's saved result, or undefined. */
+export async function readSavedOne<T>(
+  kind: SavedKind,
+  subject: string,
+  chain: string,
+  now = Date.now(),
+): Promise<Saved<T> | undefined> {
+  return (await readSaved<T>(kind, subject, [chain], now)).get(chain);
 }
 
 /** Deletes results not looked up for 7 days; run with the hourly housekeeping. */

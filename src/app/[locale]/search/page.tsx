@@ -12,6 +12,7 @@ import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedResolve } from "@/server/services/lookups";
 import { observe } from "@/server/outcomes/record";
 import { classifySearch } from "@/lib/outcomes/classify";
+import { classifySearch as classifyInput } from "@/lib/search/classify";
 
 /**
  * /en/search?q=… — works without JavaScript and is the target of the search-engine
@@ -39,8 +40,11 @@ async function SearchResult({ searchParams }: PageProps<"/[locale]/search">) {
   if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("search.result.rate-limited")}</Notice>;
 
   const result = await observe("search", () => cachedResolve(q), classifySearch).catch(() => null);
-  if (!result || result.status === "unavailable")
+  if (!result || result.status === "unavailable") {
+    // No chain answered: an address still opens its page, which shows saved readings (stabilization S2).
+    if (classifyInput(q).kind === "evm-address") redirect(localePath(locale, `/address/${q}`));
     return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
+  }
   if (result.status === "invalid") return <Notice tone="warning">{t("search.result.invalid")}</Notice>;
   if (result.status === "bad-checksum") {
     return (

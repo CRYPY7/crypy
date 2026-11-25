@@ -2288,7 +2288,15 @@
       "checkAgain": "再次检查",
       "notCheckedTitle": "{chain}：未检查",
       "notCheckedBody": "{chain} 没有响应，也没有较早的读取结果。我们不做任何假设：这并不表示\"为空\"。",
-      "totalIncludes": "包含来自较早读取的 {chains}。"
+      "totalIncludes": "包含来自较早读取的 {chains}。",
+      "checkingTitle": "{chain}：显示的是{ago}的结果 · 正在检查变化…",
+      "checkingPending": "{chain}：显示的是较早的读取结果 · 正在检查变化…",
+      "checkingBody": "新的读取结果即将到达。本页面会自动更新。",
+      "approvalsCheckingBody": "新的检查结果即将到达。本页面会自动更新。撤销前总会重新读取链上数据。",
+      "tokenCheckingTitle": "{ago}的报告（{time}）· 正在检查变化…",
+      "tokenCheckingPending": "较早检查的报告 · 正在检查变化…",
+      "tokenCheckingBody": "新的检查正在进行，本页面会自动更新。所有者此后可能更改了设置：请等待结果后再购买。",
+      "savedTx": "{chain} 刚才没有响应。已确认的交易不会改变：只有确认数和当前的美元价值可能有变化。"
     }
   },
   "wallet": {

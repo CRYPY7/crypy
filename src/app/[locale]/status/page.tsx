@@ -191,7 +191,12 @@ async function LiveStatus({ locale }: { locale: Locale }) {
                       <span className="flex min-w-0 items-center gap-2">
                         {c.chain && <ChainIcon chain={c.chain} size={20} />}
                         {c.tool ? (
-                          <Link href={toolPath(locale, c.tool as ToolId)} className="hover:text-primary">
+                          <Link
+                            prefetch={false}
+                            data-intent-prefetch=""
+                            href={toolPath(locale, c.tool as ToolId)}
+                            className="hover:text-primary"
+                          >
                             {label}
                           </Link>
                         ) : (

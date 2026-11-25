@@ -253,4 +253,6 @@ export interface SecurityReport {
   comparison: Comparison | null;
   /** Shown from the last full check (at most 6 hours old) because a fresh check failed now: its time (ISO). */
   savedAt?: string;
+  /** With `savedAt`: a slow fresh check is still running (true) or it failed now (false/absent). */
+  refreshing?: boolean;
 }

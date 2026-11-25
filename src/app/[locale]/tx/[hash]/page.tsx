@@ -35,6 +35,7 @@ import { isLocale } from "@/i18n/locales";
 import { shortenId } from "@/lib/format/amount";
 import { localePath } from "@/lib/routes";
 import { pageRequestAllowed } from "@/server/page-guard";
+import { SavedNotice } from "@/components/entity/freshness";
 import { cachedResolve, cachedTxDetails, explorerLink } from "@/server/services/lookups";
 import { observe } from "@/server/outcomes/record";
 import { classifyTransaction } from "@/lib/outcomes/classify";
@@ -120,6 +121,17 @@ async function TxContent({ params, searchParams }: Props) {
       <script dangerouslySetInnerHTML={{ __html: txViewInitScript }} />
       <RecordVisit path={`/tx/${tx.hash}?chain=${chain.key}`} kind="tx" value={tx.hash} chain={chain.key} />
       {tx.status === "pending" && <AutoRefresh />}
+      {tx.savedAt && (
+        <SavedNotice
+          at={tx.savedAt}
+          locale={locale}
+          chain={chainName}
+          title={t.raw("entity.freshness.savedTitle") as string}
+          pending={t.raw("entity.freshness.savedPending") as string}
+          body={t.raw("entity.freshness.savedTx") as string}
+          labels={{ retry: t("entity.freshness.retry"), retrying: t("entity.freshness.retrying") }}
+        />
+      )}
 
       <div className="flex flex-wrap items-center gap-3">
         <Breadcrumbs

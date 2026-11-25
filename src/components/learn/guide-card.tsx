@@ -32,6 +32,8 @@ export function TopicTag({ topic, label }: { topic: string; label: string }) {
 export function GuideCard({ guide, large = false }: { guide: GuideCardData; large?: boolean }) {
   return (
     <Link
+      prefetch={false}
+      data-intent-prefetch=""
       href={guide.href}
       className="flex h-full flex-col gap-2.5 rounded-2xl border bg-card p-5 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >

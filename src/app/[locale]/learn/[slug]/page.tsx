@@ -185,7 +185,7 @@ export default async function GuidePage({ params }: PageProps<"/[locale]/learn/[
                 {guide.tool ? t(`tools.${guide.tool}.description`) : t("learn.ctaAllText")}
               </p>
             </div>
-            <Link href={toolHref} className={buttonVariants({ size: "xl" })}>
+            <Link prefetch={false} data-intent-prefetch="" href={toolHref} className={buttonVariants({ size: "xl" })}>
               {toolName ? t("learn.ctaButton", { tool: toolName }) : t("learn.ctaAllButton")}
             </Link>
           </section>
@@ -219,7 +219,7 @@ export default async function GuidePage({ params }: PageProps<"/[locale]/learn/[
               <p className="text-sm text-muted-foreground">
                 {guide.tool ? t(`tools.${guide.tool}.description`) : t("learn.ctaAllText")}
               </p>
-              <Link href={toolHref} className={buttonVariants({ size: "md" })}>
+              <Link prefetch={false} data-intent-prefetch="" href={toolHref} className={buttonVariants({ size: "md" })}>
                 {toolName ? t("learn.ctaButton", { tool: toolName }) : t("learn.ctaAllButton")}
               </Link>
             </div>

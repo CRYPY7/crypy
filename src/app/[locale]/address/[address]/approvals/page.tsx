@@ -18,7 +18,7 @@ import { localePath } from "@/lib/routes";
 import { pageRequestAllowed } from "@/server/page-guard";
 import { cachedApprovals } from "@/server/services/approvals";
 import { chainScopeFor } from "@/server/services/chain-scope";
-import { cachedResolve, explorerLink } from "@/server/services/lookups";
+import { explorerLink, resolveAddressPage } from "@/server/services/lookups";
 import { observe } from "@/server/outcomes/record";
 import { classifyApprovals } from "@/lib/outcomes/classify";
 
@@ -52,7 +52,7 @@ async function ApprovalsContent({
   const t = await getTranslations();
   if (!(await pageRequestAllowed())) return <Notice tone="warning">{t("entity.rateLimited")}</Notice>;
 
-  const result = await cachedResolve(address);
+  const result = await resolveAddressPage(address);
   if (result.status === "bad-checksum") {
     return (
       <Notice tone="danger">

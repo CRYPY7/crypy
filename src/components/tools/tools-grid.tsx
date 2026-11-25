@@ -52,6 +52,8 @@ export function ToolsGrid({
         {visible.map((tool) => (
           <li key={tool.id}>
             <Link
+              prefetch={false}
+              data-intent-prefetch=""
               href={tool.href}
               className="flex h-full flex-col gap-2.5 rounded-xl border bg-card p-5 transition-colors hover:border-border-strong"
             >

@@ -22,7 +22,7 @@ import type { CheckClass, SecurityCheck, SecurityReport } from "@/lib/security/t
 import { cn } from "@/lib/utils";
 import { dexDeployments } from "@/server/chains/evm/security/dex-registry";
 import { cachedTokenSecurity } from "@/server/services/lookups";
-import { NotCheckedNotice, SavedNotice } from "./freshness";
+import { CheckingNotice, NotCheckedNotice, SavedNotice } from "./freshness";
 import { Notice } from "./entity-parts";
 import { LiquidityHoldersCard } from "./token-liquidity";
 import { CopyText } from "./tx-client";
@@ -203,7 +203,16 @@ export async function TokenSecuritySection({
     );
   return (
     <div className="flex flex-col gap-4">
-      {report.savedAt && (
+      {report.savedAt && report.refreshing && (
+        <CheckingNotice
+          at={report.savedAt}
+          locale={locale}
+          title={f.tokenCheckingTitle!}
+          pending={f.tokenCheckingPending!}
+          body={f.tokenCheckingBody!}
+        />
+      )}
+      {report.savedAt && !report.refreshing && (
         <SavedNotice
           at={report.savedAt}
           locale={locale}

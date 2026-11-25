@@ -22,6 +22,8 @@ export function InlineText({ text, locale, guides }: { text: string; locale: Loc
     } else if (kind === "tool" && (toolIds as readonly string[]).includes(target)) {
       out.push(
         <Link
+          prefetch={false}
+          data-intent-prefetch=""
           key={index}
           href={toolPath(locale, target as ToolId)}
           className="font-medium text-primary underline-offset-4 hover:underline"
@@ -32,6 +34,8 @@ export function InlineText({ text, locale, guides }: { text: string; locale: Loc
     } else if (kind === "guide" && guides.includes(target)) {
       out.push(
         <Link
+          prefetch={false}
+          data-intent-prefetch=""
           key={index}
           href={learnPath(locale, target)}
           className="font-medium text-primary underline-offset-4 hover:underline"

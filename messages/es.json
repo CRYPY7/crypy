@@ -2288,7 +2288,15 @@
       "checkAgain": "Comprobar de nuevo",
       "notCheckedTitle": "{chain}: sin comprobar",
       "notCheckedBody": "{chain} no respondió y no hay ninguna lectura anterior. No se supone nada: esto no significa \"vacío\".",
-      "totalIncludes": "Incluye {chains} de una lectura anterior."
+      "totalIncludes": "Incluye {chains} de una lectura anterior.",
+      "checkingTitle": "{chain}: mostrado desde {ago} · buscando cambios…",
+      "checkingPending": "{chain}: mostrado de una lectura anterior · buscando cambios…",
+      "checkingBody": "La nueva lectura está en camino. Esta página se actualiza sola.",
+      "approvalsCheckingBody": "La nueva comprobación está en camino. Esta página se actualiza sola. Revocar siempre vuelve a leer la cadena primero.",
+      "tokenCheckingTitle": "Informe de {ago} ({time}) · buscando cambios…",
+      "tokenCheckingPending": "Informe de una comprobación anterior · buscando cambios…",
+      "tokenCheckingBody": "Se está haciendo una comprobación nueva y esta página se actualiza sola. El propietario puede haber cambiado la configuración desde entonces: espera el resultado antes de comprar.",
+      "savedTx": "{chain} no respondió ahora. Una transacción confirmada no cambia: solo pueden haber cambiado su número de confirmaciones y los valores en dólares de hoy."
     }
   },
   "wallet": {

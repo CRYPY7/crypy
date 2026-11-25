@@ -187,13 +187,17 @@ export const probes: Record<string, Probe> = {
 
   /** Saved daily checks for the token pages are fresh: due checks are older than a day, stale ones older than 2. */
   async "job:token-checks"() {
-    if (!jobHeartbeat("token-checks")) throw new Skip("not running on this server");
+    const beat = jobHeartbeat("token-checks");
+    if (!beat) throw new Skip("not running on this server");
     const db = await getDb();
     const rows = await db.select({ checkedAt: tokenChecks.checkedAt }).from(tokenChecks);
     const expected = allCuratedTokens().length;
     const now = Date.now();
     const stale = rows.filter((r) => now - r.checkedAt.getTime() > CHECK_EVERY_MS * 2).length;
     const missing = Math.max(0, expected - rows.length);
+    // B-016: right after a restart the first round is still catching up; until it has run, say so instead of failing.
+    if (stale + missing > expected / 2 && beat.lastRunAt === null)
+      return `slow:${stale + missing} of ${expected} token checks are old or missing; the first round after a restart is still running`;
     if (stale + missing > expected / 2)
       throw new Error(`${stale + missing} of ${expected} token checks are old or missing`);
     if (stale + missing > 0) return `slow:${stale + missing} of ${expected} token checks are old or missing`;

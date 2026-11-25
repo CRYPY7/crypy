@@ -109,7 +109,12 @@ export async function ToolPage({
             : []),
         ]}
       />
-      <Link href={localePath(locale, "/tools")} className="text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        prefetch={false}
+        data-intent-prefetch=""
+        href={localePath(locale, "/tools")}
+        className="text-sm text-muted-foreground hover:text-foreground"
+      >
         <span aria-hidden="true" className="inline-block rtl:-scale-x-100">
           ←
         </span>{" "}
@@ -212,6 +217,8 @@ export async function ToolPage({
             {guides.map((guide) => (
               <li key={guide.slug}>
                 <Link
+                  prefetch={false}
+                  data-intent-prefetch=""
                   href={learnPath(locale, guide.slug)}
                   className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3 hover:border-border-strong"
                 >
@@ -242,6 +249,8 @@ export async function ToolPage({
             return (
               <li key={id}>
                 <Link
+                  prefetch={false}
+                  data-intent-prefetch=""
                   href={toolPath(locale, id)}
                   className="flex h-full flex-col gap-2 rounded-xl border bg-card p-4 hover:border-border-strong"
                 >

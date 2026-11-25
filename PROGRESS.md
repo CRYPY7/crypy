@@ -4,42 +4,99 @@ Last updated: 2026-11-24
 
 ## Milestones
 
-| Milestone                                              | Status                                                                                        |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| M0 Setup and design approval                           | ✅ Done                                                                                       |
-| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                          |
-| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                          |
-| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                          |
-| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                       |
-| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                         |
-| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                          |
-| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                         |
-| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                |
-| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                        |
-| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                         |
-| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses  |
-| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)             |
-| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                 |
-| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)             |
-| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test |
-| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                |
-| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                           |
-| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred  |
-| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3       |
-| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                   |
-| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                            |
-| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)          |
-| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)      |
-| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap) |
-| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified        |
-| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)         |
-| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending               |
-| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                           |
-| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server         |
-| M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server  |
-| Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
-| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 saved results built 2026-11-24; features paused until S6   |
-| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+| Milestone                                              | Status                                                                                         |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| M0 Setup and design approval                           | ✅ Done                                                                                        |
+| M1 Foundation                                          | ✅ Done (2026-11-19)                                                                           |
+| M2 Multi-chain core, search routing, wallet connection | ✅ Done (2026-11-20)                                                                           |
+| M2.5 Free utilities                                    | ✅ Done (2026-11-20)                                                                           |
+| M3 Address overview (Balance Scanner)                  | ✅ Built (2026-11-20); owner check with Alchemy pending                                        |
+| Desktop sidebar layout, chain icons, recently viewed   | ✅ Done (2026-11-20, design approved)                                                          |
+| M4 Transaction page                                    | ✅ Done (2026-11-20)                                                                           |
+| M4.1 Transaction Intelligence                          | ✅ Done (2026-11-20, design approved)                                                          |
+| M4.2 Transaction Intelligence V2, Part 1               | ✅ Built (2026-11-20, design approved with owner's conditions)                                 |
+| M4.5 Batch Balance Scanner                             | ✅ Built (2026-11-20, design approved)                                                         |
+| M5 Token Security                                      | 🟡 Built, not complete: parts deferred (see roadmap "Deferred parts")                          |
+| M5.2 Token Security: finishing parts                   | 🟡 Built 2026-11-20; explorer source check needs owner decision; 3 lockers pending addresses   |
+| M5.1 Liquidity holders ("Who holds the liquidity")     | 🟡 Built 2026-11-20 (design approved, boards 21–23); parts deferred (see roadmap)              |
+| M5.5 Token Market & Charts (own on-chain data)         | Planned (approved 2026-11-20)                                                                  |
+| M6 Approvals and safe revoke                           | 🟡 Built 2026-11-21 (design approved, boards 24–27); parts deferred (see roadmap)              |
+| M7 Activity tab (Address Analyzer)                     | 🟡 Built 2026-11-21 (design approved, boards 28–30); Alchemy path needs the owner's live test  |
+| M7 Gas Tracker, Timestamp & Block Converter            | ✅ Built 2026-11-21 (designs approved, boards 31–33); owner live checks passed                 |
+| M7 Chain picker (address tools)                        | ✅ Built 2026-11-21 (design approved, boards 34–35)                                            |
+| M7 Base, Arbitrum, Polygon                             | 🟡 Built 2026-11-21: every tool incl. Token Security; some lockers and pool designs deferred   |
+| M8 Part 1 Portfolio (Tool 7)                           | 🟡 Built 2026-11-21 (design approved, boards 36–38); sync and alerts added in Parts 2–3        |
+| Alchemy per-second pacing                              | ✅ Built 2026-11-22; owner PC check pending                                                    |
+| M8 Part 2 Wallet sign-in, database, Watchlist (Tool 8) | 🟡 Built 2026-11-22 (boards 39–41)                                                             |
+| M8 Part 3 Alerts and Telegram                          | 🟡 Built 2026-11-22; owner's real Telegram test passed; parts deferred (see roadmap)           |
+| M9 Part 1 Security review                              | ✅ Done 2026-11-22: 6 findings fixed, launch requirements written (ARCHITECTURE.md §10d)       |
+| M9 Part 2 Accessibility and speed                      | 🟡 Built 2026-11-22: 0 axe violations, CLS 0; data pages below 90 in simulation (see roadmap)  |
+| M9 Part 3 Online (friends preview)                     | ✅ Live 2026-11-22 on crypy.org (DigitalOcean + Cloudflare), abuse protection verified         |
+| M9 Part 4 Public beta                                  | 🟡 Built 2026-11-22: open to search engines; legal pages await a lawyer (see roadmap)          |
+| SEO Phase 1 Technical and on-page                      | ✅ Built 2026-11-22 (SEO_ROADMAP.md); Search Console setup by the owner pending                |
+| SEO Phase 2 Learn hub (12 guides)                      | ✅ Built 2026-11-22 (design approved, boards 42–45)                                            |
+| SEO Phase 3 Gas by chain, token checks                 | ✅ Built 2026-11-22 (design approved, boards 46–50); daily checks start on the server          |
+| M9 Part 5 Monitoring: health checks, status, admin     | ✅ Built 2026-11-23 (designs approved, boards 51–54); owner sets ADMIN_WALLETS on the server   |
+| Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each         |
+| Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 saved results built 2026-11-24/25; features paused until S6 |
+| M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                           |
+
+## Morning 2026-11-25: B-014 faster, B-007 measured, B-015
+
+Unattended (owner asleep); nothing deployed, committed or pushed.
+
+- **B-014 fixed (date → block):** block headers are read in rounds of several at once (newest; block 1 and blocks
+  10, 100, 1,000 … back; then the interpolated block with ±1, ±8, ±64 steps around it) instead of one after another.
+  Measured here on public nodes, all 5 chains together: recent date 3.3 s → 1.3 s, old date 2.6 s → 0.55 s, same
+  blocks as before. Tests: `tests/unit/block-time.test.ts` (offline: uneven block times, several blocks in one second,
+  block 0 at time 0, future estimate), and the live test now checks the exact first block on all 5 chains for an old
+  and a recent date.
+- **B-007 measured, decision for the owner:** a 271 KB address page is 41 KB as sent (Cloudflare compresses it), the
+  USDT token page 321 KB → 46 KB. About two thirds is Next.js's page data, sent a second time so the browser can take
+  over the page and navigate without full reloads; that is how Next.js works. The biggest repeat is the sidebar's
+  styling (~8 KB before compression), which could only shrink by adding CSS (at its budget). Recommendation: won't fix.
+- **B-015:** not reproducible here (the slow part is Alchemy's history; no Alchemy key in this workspace). Repeat
+  visits open at once from saved readings now; measure the first visit live.
+- **Test made robust:** the S2 outage test failed once in the full run: after the drill ended, Ethereum's free public
+  nodes really failed for a while under the test load, so the page rightly kept showing the saved reading. The test
+  now presses "Try again" as a visitor would, for up to 90 s.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 527 passed, 76 skipped (live tests). Live block test: 7 passed.
+Build passed. Browser: 274 passed, 16 skipped, 0 failed (the earlier run: 1 failed, the outage test above).
+
+## Overnight 2026-11-25: saved readings at once, transactions, search, B-016, B-027
+
+Unattended work (owner asleep); nothing deployed, committed or pushed; no new screens (board 60's state 2, approved).
+
+- **Saved readings shown at once while a slow read finishes** (B-006, B-013, B-018, B-025; board 60 state 2):
+  `server/saved/fresh-or-saved.ts`. Each chain (balances, approvals, activity first page) and each token report
+  starts a fresh read; when it isn't back within 2.5 s and a saved reading is young enough, the saved one is shown at
+  once with a blue "… shown from 12 minutes ago · checking for changes…" notice. The read finishes in the background
+  and is saved; the page reloads itself 5 s later and gets it at once (kept 1 minute for that reload). At most one
+  fresh read per chain and subject runs at a time, shared by every visitor. Token reports also use a curated token's
+  daily check (at most 6 h old). A token, wallet or chain nobody has looked up yet is still as slow as before: the
+  live numbers after the update will tell how much this helps.
+- **Transactions:** a confirmed transaction (final, or 64+ confirmations) is saved; when the chain can't be read, the
+  page shows it with its age ("a confirmed transaction doesn't change: only its confirmation count and today's dollar
+  values may have"). Pending transactions are never saved.
+- **Search when no chain answers:** the address pages, the header search and the no-JavaScript search page now open a
+  valid address's page anyway, so its saved readings show (before: "couldn't reach the networks").
+- **B-016 fixed:** right after a restart, "Daily token checks" says "slow: first round still running" instead of failing.
+- **B-027 cause found and fixed:** on phones every page view prefetched about 4 pages (bottom tabs); every page also
+  prefetched the logo's home link, and tool, guide and gas pages their related links. The long lists suspected in the
+  bug list were not the cause (checked: Next.js didn't prefetch them). These links now prefetch only on touch, hover
+  or focus, so the B-029 spinner and quick opening stay. Measured here: 48 automatic prefetches over 5 page views on a
+  phone before, 0 after; 19 on desktop before, 0 after.
+- **Outage drill:** the test file also takes `slow:chain:address` (that read waits 4 s).
+- **CSS:** the new notice first pushed the stylesheet to 80.6 KB (over the 80 KB budget); it reuses existing styles
+  now: 80.3 KB.
+
+**Checks:** typecheck, lint, Prettier and the i18n check are clean. Unit: 525 passed, 73 skipped (new: the
+fresh-or-saved helper 5, slow and failed chains on the overview 2, saved transactions, the offline address page,
+B-016). Build passed. Browser: 274 passed, 16 skipped, 0 failed (new: a slow chain shows "checking for changes" and the
+page updates itself; no automatic prefetches on 6 main pages, desktop and phone, and hovering still prefetches).
+Found while testing: a fresh reading kept for a minute even when no page waited for it hid the outage drill; it is now
+kept only when a page was shown a saved reading.
 
 ## Spinner too fast with "reduce motion" on (owner report 2026-11-24)
 

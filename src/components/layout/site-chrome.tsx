@@ -46,30 +46,38 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   return (
     <header className="z-40 border-b bg-background lg:sticky lg:top-0 lg:h-16">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6 lg:h-full lg:max-w-none lg:flex-nowrap lg:px-5 lg:py-0">
-        <Link href={localePath(locale)} className="rounded-md">
+        <Link prefetch={false} data-intent-prefetch="" href={localePath(locale)} className="rounded-md">
           <Logo label={t("nav.homeLink")} beta={{ text: t("common.beta"), label: t("common.betaSiteLabel") }} />
         </Link>
         <nav aria-label={t("nav.main")} className="hidden items-center gap-1 md:flex md:ms-2 lg:hidden">
           <AllToolsButton label={t("nav.allTools")} />
           <Link
+            prefetch={false}
+            data-intent-prefetch=""
             href={toolPath(locale, "portfolio")}
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             {t("nav.portfolio")}
           </Link>
           <Link
+            prefetch={false}
+            data-intent-prefetch=""
             href={toolPath(locale, "watchlist")}
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             {t("nav.watchlist")}
           </Link>
           <Link
+            prefetch={false}
+            data-intent-prefetch=""
             href={toolPath(locale, "gas-tracker")}
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             {t("nav.gas")}
           </Link>
           <Link
+            prefetch={false}
+            data-intent-prefetch=""
             href={learnPath(locale)}
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
@@ -109,25 +117,55 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-x-8 gap-y-4 px-4 py-8 text-sm text-muted-foreground sm:px-6">
         <p className="max-w-md">{t("footer.disclaimer")}</p>
         <nav aria-label={t("nav.footer")} className="flex flex-wrap gap-x-5 gap-y-2">
-          <Link href={learnPath(locale)} className="hover:text-foreground">
+          <Link prefetch={false} data-intent-prefetch="" href={learnPath(locale)} className="hover:text-foreground">
             {t("nav.learn")}
           </Link>
-          <Link href={localePath(locale, "/tokens")} className="hover:text-foreground">
+          <Link
+            prefetch={false}
+            data-intent-prefetch=""
+            href={localePath(locale, "/tokens")}
+            className="hover:text-foreground"
+          >
             {t("tokenChecks.nav")}
           </Link>
-          <Link href={localePath(locale, "/status")} className="hover:text-foreground">
+          <Link
+            prefetch={false}
+            data-intent-prefetch=""
+            href={localePath(locale, "/status")}
+            className="hover:text-foreground"
+          >
             {t("nav.status")}
           </Link>
-          <Link href={localePath(locale, "/legal/privacy")} className="hover:text-foreground">
+          <Link
+            prefetch={false}
+            data-intent-prefetch=""
+            href={localePath(locale, "/legal/privacy")}
+            className="hover:text-foreground"
+          >
             {t("footer.privacy")}
           </Link>
-          <Link href={localePath(locale, "/legal/terms")} className="hover:text-foreground">
+          <Link
+            prefetch={false}
+            data-intent-prefetch=""
+            href={localePath(locale, "/legal/terms")}
+            className="hover:text-foreground"
+          >
             {t("footer.terms")}
           </Link>
-          <Link href={localePath(locale, "/legal/risk")} className="hover:text-foreground">
+          <Link
+            prefetch={false}
+            data-intent-prefetch=""
+            href={localePath(locale, "/legal/risk")}
+            className="hover:text-foreground"
+          >
             {t("footer.risk")}
           </Link>
-          <Link href={localePath(locale, "/settings")} className="hover:text-foreground">
+          <Link
+            prefetch={false}
+            data-intent-prefetch=""
+            href={localePath(locale, "/settings")}
+            className="hover:text-foreground"
+          >
             {t("nav.settings")}
           </Link>
         </nav>
@@ -136,7 +174,13 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           {selectableLocales.map((config, index) => (
             <span key={config.code} lang={config.code}>
               {index > 0 && " · "}
-              <Link href={localePath(config.code)} hrefLang={config.code} className="hover:text-foreground">
+              <Link
+                prefetch={false}
+                data-intent-prefetch=""
+                href={localePath(config.code)}
+                hrefLang={config.code}
+                className="hover:text-foreground"
+              >
                 {config.nativeName}
               </Link>
             </span>

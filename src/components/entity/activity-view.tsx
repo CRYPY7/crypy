@@ -25,7 +25,7 @@ import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import { formatAmount, shortenId } from "@/lib/format/amount";
 import { formatUsd } from "@/lib/format/money";
 import { cn } from "@/lib/utils";
-import { NotCheckedNotice, SavedNotice } from "./freshness";
+import { CheckingNotice, NotCheckedNotice, SavedNotice } from "./freshness";
 import { type ApprovalsChainInfo as ChainInfo, fill } from "./approvals-shared";
 
 export type ActivityStrings = Record<string, string>;
@@ -39,6 +39,8 @@ interface Props {
     checkedAt: number;
     /** Chains shown from their last full history because reading failed now: ISO time (stabilization S2). */
     saved?: Record<string, string>;
+    /** Chains shown from their last first page while a slow fresh read finishes. */
+    refreshing?: Record<string, string>;
   };
   /** entity.freshness strings. */
   fresh: Record<string, string>;
@@ -197,6 +199,17 @@ export function ActivityView({ owner, initial, hiddenTokens, names, strings: s, 
           {fill(s.recentOnly!, { chains: recent.join(", ") })}
         </p>
       )}
+      {Object.entries(initial.refreshing ?? {}).map(([chain, at]) => (
+        <CheckingNotice
+          key={chain}
+          at={at}
+          locale={locale}
+          chain={chainInfo(chain)?.name ?? chain}
+          title={fresh.checkingTitle!}
+          pending={fresh.checkingPending!}
+          body={fresh.checkingBody!}
+        />
+      ))}
       {Object.entries(initial.saved ?? {}).map(([chain, at]) => (
         <SavedNotice
           key={chain}

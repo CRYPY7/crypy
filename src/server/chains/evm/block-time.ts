@@ -5,8 +5,15 @@ import { getEvmClient } from "./providers";
 
 /**
  * Block ↔ time on an EVM chain, read from real block headers (block times aren't regular, so nothing is assumed).
- * Date → block: the first block at or after the time, found by interpolation then bisection (about 15–30 header
- * reads, each block read once). A future time gives an estimate from the recent average block time, labelled so.
+ * Date → block: the first block at or after the time. B-014: the reads go out in rounds of a few blocks at once
+ * instead of one after another (one round ≈ one network round trip):
+ * 1. the newest block;
+ * 2. block 1 and blocks 10, 100, 1,000 … back from the newest, which bracket the time within a factor of ten and give
+ *    the local block time;
+ * 3. then, each round, the block the bracket's times point to plus blocks spread around it (±1, ±8, ±64 steps), until
+ *    the bracket is two neighbouring blocks.
+ * About 5 rounds and 30–40 header reads per chain. A future time gives an estimate from the recent average block
+ * time, labelled so.
  */
 export interface BlockAtTime {
   chain: string;
@@ -16,50 +23,59 @@ export interface BlockAtTime {
   estimate: boolean;
 }
 
-const MAX_PROBES = 48;
+const MAX_ROUNDS = 24;
 
-async function header(client: PublicClient, cache: Map<number, number>, n: number): Promise<number> {
-  const hit = cache.get(n);
-  if (hit !== undefined) return hit;
-  const block = await client.getBlock({ blockNumber: BigInt(n) });
-  const time = Number(block.timestamp);
-  cache.set(n, time);
-  return time;
+async function headers(client: PublicClient, cache: Map<number, number>, blocks: number[]): Promise<void> {
+  const wanted = [...new Set(blocks)].filter((n) => !cache.has(n));
+  const times = await Promise.all(
+    wanted.map((n) => client.getBlock({ blockNumber: BigInt(n) }).then((b) => Number(b.timestamp))),
+  );
+  wanted.forEach((n, i) => cache.set(n, times[i]!));
+}
+
+/** The tightest bracket the known headers give: the last block before the time and the first at or after it. */
+function bracket(cache: Map<number, number>, time: number): { lo: number; hi: number } {
+  let lo = -Infinity;
+  let hi = Infinity;
+  for (const [n, t] of cache) {
+    if (t < time && n > lo) lo = n;
+    if (t >= time && n < hi) hi = n;
+  }
+  return { lo, hi };
 }
 
 export async function evmBlockAtTime(chain: ChainConfig, time: number): Promise<BlockAtTime> {
   const client = getEvmClient(chain);
   const cache = new Map<number, number>();
   const latest = await client.getBlock({ blockTag: "latest" });
-  let hi = Number(latest.number);
-  let hiTime = Number(latest.timestamp);
-  cache.set(hi, hiTime);
-  if (time > hiTime) {
-    const back = Math.min(hi - 1, 10_000);
-    const pastTime = await header(client, cache, hi - back);
-    const avg = (hiTime - pastTime) / back;
-    return { chain: chain.key, block: hi + Math.ceil((time - hiTime) / avg), time, estimate: true };
+  const newest = Number(latest.number);
+  const newestTime = Number(latest.timestamp);
+  cache.set(newest, newestTime);
+  if (time > newestTime) {
+    const back = Math.min(newest - 1, 10_000);
+    await headers(client, cache, [newest - back]);
+    const avg = (newestTime - cache.get(newest - back)!) / back;
+    return { chain: chain.key, block: newest + Math.ceil((time - newestTime) / avg), time, estimate: true };
   }
   // Block 0 of some chains has timestamp 0; start from block 1.
-  let lo = 1;
-  let loTime = await header(client, cache, lo);
-  if (time <= loTime) return { chain: chain.key, block: lo, time: loTime, estimate: false };
-  // Invariant: time(lo) < target <= time(hi).
-  for (let probes = 0; hi - lo > 1 && probes < MAX_PROBES; probes++) {
-    const span = hiTime - loTime;
-    const guess = span > 0 ? lo + Math.round(((time - loTime) / span) * (hi - lo)) : lo + 1;
-    // Interpolate first, bisect when it stops narrowing fast.
-    const mid = probes < 8 ? Math.min(hi - 1, Math.max(lo + 1, guess)) : Math.floor((lo + hi) / 2);
-    const midTime = await header(client, cache, mid);
-    if (midTime < time) {
-      lo = mid;
-      loTime = midTime;
-    } else {
-      hi = mid;
-      hiTime = midTime;
-    }
+  const decades: number[] = [1];
+  for (let back = 10; back < newest - 1; back *= 10) decades.push(newest - back);
+  await headers(client, cache, decades);
+  if (time <= cache.get(1)!) return { chain: chain.key, block: 1, time: cache.get(1)!, estimate: false };
+  // Invariant from here: time(lo) < target <= time(hi).
+  for (let round = 0; round < MAX_ROUNDS; round++) {
+    const { lo, hi } = bracket(cache, time);
+    if (hi - lo <= 1) break;
+    const loTime = cache.get(lo)!;
+    const hiTime = cache.get(hi)!;
+    const guess = lo + Math.round(((time - loTime) / Math.max(1, hiTime - loTime)) * (hi - lo));
+    const step = Math.max(1, Math.round((hi - lo) / 256));
+    const probes = [0, -1, 1, -8, 8, -64, 64].map((k) => guess + k * step).filter((n) => n > lo && n < hi);
+    // Never stuck: when every probe falls outside, bisect.
+    await headers(client, cache, probes.length ? probes : [Math.floor((lo + hi) / 2)]);
   }
-  return { chain: chain.key, block: hi, time: hiTime, estimate: false };
+  const { hi } = bracket(cache, time);
+  return { chain: chain.key, block: hi, time: cache.get(hi)!, estimate: false };
 }
 
 export async function evmBlockTime(

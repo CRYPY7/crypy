@@ -2288,7 +2288,15 @@
       "checkAgain": "Check again",
       "notCheckedTitle": "{chain}: not checked",
       "notCheckedBody": "{chain} didn't answer and there's no earlier reading. Nothing is assumed: this isn't \"empty\".",
-      "totalIncludes": "Includes {chains} from an earlier reading."
+      "totalIncludes": "Includes {chains} from an earlier reading.",
+      "checkingTitle": "{chain}: shown from {ago} · checking for changes…",
+      "checkingPending": "{chain}: shown from an earlier reading · checking for changes…",
+      "checkingBody": "The new reading is on its way. This page updates by itself.",
+      "approvalsCheckingBody": "The new check is on its way. This page updates by itself. Revoke always reads the chain again first.",
+      "tokenCheckingTitle": "Report from {ago} ({time}) · checking for changes…",
+      "tokenCheckingPending": "Report from an earlier check · checking for changes…",
+      "tokenCheckingBody": "A fresh check is running and this page updates by itself. The owner may have changed settings since: wait for it before you buy.",
+      "savedTx": "{chain} didn't answer just now. A confirmed transaction doesn't change: only its confirmation count and today's dollar values may have."
     }
   },
   "wallet": {

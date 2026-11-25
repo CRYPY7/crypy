@@ -37,6 +37,8 @@ export default async function Page() {
           .filter((chain) => chain.capabilities.fees && chainSlugs[chain.key])
           .map((chain) => (
             <Link
+              prefetch={false}
+              data-intent-prefetch=""
               key={chain.key}
               href={localePath(locale, `/gas/${chainSlugs[chain.key]}`)}
               className="font-medium text-primary hover:underline"

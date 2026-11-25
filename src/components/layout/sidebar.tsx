@@ -29,7 +29,13 @@ export async function ToolsSidebar({ locale }: { locale: Locale }) {
         aria-label={t("nav.toolsSidebar")}
         className="sidebar-scroll flex-1 overflow-y-auto overscroll-contain px-2 py-2"
       >
-        <Link href={localePath(locale)} data-sidebar-href={localePath(locale)} className={item} title={t("nav.home")}>
+        <Link
+          href={localePath(locale)}
+          prefetch={false}
+          data-sidebar-href={localePath(locale)}
+          className={item}
+          title={t("nav.home")}
+        >
           <House className="size-[18px] shrink-0" aria-hidden="true" />
           <span className="sidebar-label truncate">{t("nav.home")}</span>
         </Link>

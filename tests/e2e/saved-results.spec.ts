@@ -14,6 +14,7 @@ function setFaults(lines: string[]) {
   writeFileSync(FAULTS, lines.join("\n"));
 }
 
+test.describe.configure({ mode: "serial" });
 test.afterEach(() => setFaults([]));
 // One drill file for the whole server: the desktop run only, so two runs never change it at the same time.
 test.skip(({ isMobile }) => isMobile, "desktop only (shared drill file)");
@@ -21,7 +22,7 @@ test.skip(({ isMobile }) => isMobile, "desktop only (shared drill file)");
 test("a chain that fails now shows its last reading with its age, and one never read says 'not checked'", async ({
   page,
 }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(180_000);
   setFaults([]);
   // 1. A normal visit reads Ethereum and saves it.
   await page.goto(`/en/address/${ADDRESS}?chains=ethereum`);
@@ -56,9 +57,36 @@ test("a chain that fails now shows its last reading with its age, and one never 
   // 3. The chains are back: "Try again" reads them fresh.
   setFaults([]);
   await page.waitForTimeout(700);
-  await saved.getByRole("button", { name: "Try again" }).click();
-  await expect(page.locator('[data-freshness="saved"]').filter({ visible: true })).toHaveCount(0, {
-    timeout: 60_000,
-  });
-  await expect(page.locator('[data-freshness="not-checked"]').filter({ visible: true })).toHaveCount(0);
+  // Free public nodes can also fail for real under the full test run: press "Try again" as a visitor would until
+  // the fresh reading arrives (a real failure correctly keeps showing the saved one).
+  await expect(async () => {
+    const notices = page.locator('[data-freshness="saved"], [data-freshness="not-checked"]').filter({ visible: true });
+    const button = notices.getByRole("button", { name: "Try again" });
+    if (await button.count()) await button.first().click();
+    await expect(notices).toHaveCount(0, { timeout: 10_000 });
+  }).toPass({ timeout: 90_000 });
+});
+
+test("a slow chain shows its last reading at once, marked 'checking for changes', and the page updates itself", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  const address = "0x267be1C1D684F78cb4F6a176C4911b741E4Ffdc0";
+  setFaults([]);
+  await page.goto(`/en/address/${address}?chains=ethereum`);
+  await expect(page.getByRole("heading", { name: /Total value/ })).toBeVisible({ timeout: 60_000 });
+
+  // Ethereum now answers 4 s late for this address: the saved reading is shown at once instead of waiting.
+  setFaults([`slow:ethereum:${address.toLowerCase()}`]);
+  await page.waitForTimeout(700);
+  await page.goto(`/en/address/${address}?chains=ethereum,bsc`);
+  const checking = page.locator('[data-freshness="checking"]').filter({ visible: true });
+  await expect(checking).toHaveCount(1, { timeout: 30_000 });
+  await expect(checking).toContainText(/Ethereum: shown from \d+ minutes? ago · checking for changes…/);
+  await expect(checking).toContainText("This page updates by itself.");
+  await expect(page.locator('[data-freshness="saved"]').filter({ visible: true })).toHaveCount(0);
+
+  // The page reloads itself and shows the fresh reading.
+  await expect(checking).toHaveCount(0, { timeout: 30_000 });
+  await expect(page.getByText("Includes Ethereum from an earlier reading.").filter({ visible: true })).toHaveCount(0);
 });

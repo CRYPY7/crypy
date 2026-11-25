@@ -13,7 +13,7 @@ import type { ApprovalsReport } from "@/server/services/approvals";
 import type { RevokeRequest } from "@/wallets/types";
 import { useWallet } from "@/wallets/wallet-root";
 import { type ApprovalsChainInfo, type ApprovalsStrings, fill } from "./approvals-shared";
-import { NotCheckedNotice, SavedNotice } from "./freshness";
+import { CheckingNotice, NotCheckedNotice, SavedNotice } from "./freshness";
 import { RevokeDialog, type RevokeTarget } from "./revoke-dialog";
 
 type Row = RatedApproval & { chain: string; id: string };
@@ -147,6 +147,17 @@ export function ApprovalsView({
         </div>
       )}
 
+      {Object.entries(report.refreshing ?? {}).map(([chain, at]) => (
+        <CheckingNotice
+          key={chain}
+          at={at}
+          locale={locale}
+          chain={chainInfo(chain)?.name ?? chain}
+          title={fresh.checkingTitle!}
+          pending={fresh.checkingPending!}
+          body={fresh.approvalsCheckingBody!}
+        />
+      ))}
       {Object.entries(report.saved ?? {}).map(([chain, at]) => (
         <SavedNotice
           key={chain}

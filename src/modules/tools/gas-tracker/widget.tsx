@@ -88,7 +88,7 @@ export function GasTracker({
             <section
               key={c.chain}
               aria-labelledby={`gas-${c.chain}`}
-              className={cn("flex flex-col gap-4 rounded-xl border bg-card p-5", c.saved && "border-medium/50")}
+              className={cn("flex flex-col gap-4 rounded-xl border bg-card p-5", c.saved && "border-medium/40")}
             >
               <div className="flex flex-wrap items-center gap-3">
                 <ChainIcon chain={c.chain} size={26} />
