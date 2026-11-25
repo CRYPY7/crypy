@@ -62,7 +62,11 @@ up by the scripts in `scripts/server/` (see ARCHITECTURE.md §10d for the securi
 2. **Domain:** at your registrar, point `crypy.org` and `www.crypy.org` to the server's IP (two DNS `A` records).
 3. **HTTPS:** once the domain points to the server: `bash /opt/crypy/app/scripts/server/enable-https.sh crypy.org`.
 4. **Updates later:** commit and push from your PC, then on the server:
-   `bash /opt/crypy/app/scripts/server/update.sh`.
+   `bash /opt/crypy/app/scripts/server/update.sh`. GitHub builds the site after each push (Actions tab, about 5–8
+   minutes) and the server downloads that build; started earlier, the script waits for it. If GitHub's build isn't
+   usable, the server builds it itself (`CRYPY_BUILD_HERE=1` forces that). One-time setup on GitHub: Settings →
+   Secrets and variables → Actions → Variables: `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`,
+   the same values as in the server's `.env.local`.
 
 The web server settings live in `scripts/server/nginx-site.sh` (run by the other scripts; run it again instead of
 editing nginx by hand). Useful on the server: `systemctl status 'crypy@*'`, `journalctl -u 'crypy@*' -n 100 --no-pager` (the app's log; it

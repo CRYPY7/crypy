@@ -41,6 +41,28 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## S4: the site is built on GitHub, the server only downloads it (B-019, 2026-11-25)
+
+- Building on the 1-CPU server took about 3 minutes per update and slowed the live site meanwhile (B-019); with
+  frequent updates that was the server's heaviest work.
+- New workflow `.github/workflows/server-build.yml`: on every push to `main`, GitHub builds both server folders
+  (`.next-a` and `.next-b`, in parallel: the folder name is part of the build) in `/opt/crypy/app`, the same path as
+  on the server, and publishes them as a pre-release `build-<commit>` (about 85 MB each, without the build cache; the
+  last 5 are kept). Free for public repositories; no secrets: only the two public `NEXT_PUBLIC_` values, as repository
+  variables.
+- `update.sh` now downloads GitHub's build of the exact commit it pulled (waits while GitHub is still building; falls
+  back at once if GitHub's run failed or none started within 3 minutes, or after 20 minutes), checks its SHA-256, the
+  commit inside it and that it was built with the same `NEXT_PUBLIC_` values as the server's `.env.local`; any doubt →
+  it builds on the server as before, and says why. `CRYPY_BUILD_HERE=1` always builds on the server. Then the no-gap
+  switch as before.
+- CSS budget raised from 80 to 82 KB (owner decision 2026-11-25; compressed about 0.3 KB more per visitor).
+
+**Checks:** typecheck, lint, Prettier, ShellCheck clean; the workflow file parses. Unit: 600 passed, 76 skipped. Build
+passed; a build packed without its cache, as GitHub ships it, unpacked and served every page type. Browser: 309 passed,
+19 skipped, 0 failed. `update.sh` rehearsed with stand-ins: GitHub build used (cache kept, static files collected),
+none appearing, a failed run, no run started, GitHub's API unreachable, different site address, corrupted download,
+build for another commit, forced build on the server. GitHub's own run can only be tested by the first real push.
+
 ## S4/S5: updates without a gap (B-023, 2026-11-25)
 
 - Cloudflare saw 502s, 500s and 503s around updates: each update restarted the app, and for those seconds nginx had

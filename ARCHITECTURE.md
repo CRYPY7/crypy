@@ -427,6 +427,10 @@ folder per instance in `.crypy-instance-<port>.env`); `update.sh` starts the new
 nginx upstream (`.crypy-port`) with a graceful reload once it answers, then stops the old one. Only the process named
 in `.crypy-worker` runs the background worker (`server/worker-owner.ts`).
 
+Builds (B-019): `.github/workflows/server-build.yml` builds `.next-a` and `.next-b` in `/opt/crypy/app` on GitHub and
+publishes them as pre-release `build-<commit>` with SHA-256 files and `crypy-build-env` (commit and `NEXT_PUBLIC_`
+values); `update.sh` downloads and checks them, and builds on the server only as a fallback (`CRYPY_BUILD_HERE=1`).
+
 Implemented by `scripts/server/setup.sh` and `nginx-site.sh` (M9 Part 3: HTTP/2, `/_next/static` served by nginx from
 disk with year-long immutable caching, upstream keep-alive, https and apex redirects; behind Cloudflare the visitor
 address comes from `CF-Connecting-IP` only for Cloudflare's ranges; certificates by webroot); `CRYPY_PREVIEW=1` adds `X-Robots-Tag: noindex, nofollow` and a
@@ -939,5 +943,5 @@ Rules added in M9 (accessibility and speed):
 Checked automatically in `tests/e2e/foundation.spec.ts` on `/en`, `/en/tools`, a tool page and settings:
 
 - JavaScript ≤ 650 KB uncompressed per page (M2.5: home ≈ 510 KB uncompressed / 157 KB gzipped, heaviest tool page ≈ 580 KB / 178 KB; most of it is the React/Next.js runtime. An earlier "≈ 120 KB gzipped" M1 figure was a measuring error).
-- CSS ≤ 80 KB uncompressed, one shared cached file (M1: ≈ 9 KB gzipped; M4: 62 KB raw ≈ 11 KB gzipped; raised from 60 KB at M4 and to 80 KB at M7).
+- CSS ≤ 82 KB uncompressed, one shared cached file (M1: ≈ 9 KB gzipped; M4: 62 KB raw ≈ 11 KB gzipped; raised from 60 KB at M4, to 80 KB at M7 and to 82 KB on 2026-11-25).
   Rules: no new always-loaded client library without a measured reason; wallet SDKs load only when the user opens the connect dialog (verified by `tests/e2e/wallet.spec.ts`); charts and heavy widgets are lazy-loaded.

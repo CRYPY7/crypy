@@ -25,6 +25,7 @@
 /.crypy-worker.tmp
 /.crypy-instance-*.env
 /.crypy-instance-*.env.tmp
+/.incoming.*/
 /.static/
 /out/
 

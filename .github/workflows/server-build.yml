@@ -1,0 +1,84 @@
+# CRYPY — build the site for the server on GitHub (stabilization S4, bugs B-019 / B-012).
+# On every push to main, GitHub builds both server folders (.next-a and .next-b: the folder name is part of the build)
+# in /opt/crypy/app, the same path as on the server, and publishes them as a pre-release "build-<commit>". The server's
+# update.sh downloads the folder it needs instead of building on its single CPU (it builds there only as a fallback).
+# Free for public repositories. No secrets are used: the build needs only the two public NEXT_PUBLIC_ values, set as
+# repository variables (Settings → Secrets and variables → Actions → Variables).
+name: Server build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: server-build-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        dist: [.next-a, .next-b]
+    env:
+      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: ${{ vars.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID }}
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+      - name: Install pnpm (the version in package.json)
+        run: npm install -g "pnpm@$(node -p "require('./package.json').packageManager.split('@')[1]")"
+      - name: Build in the server's folder
+        run: |
+          sudo mkdir -p /opt/crypy
+          sudo cp -a "$GITHUB_WORKSPACE" /opt/crypy/app
+          sudo chown -R "$(id -u):$(id -g)" /opt/crypy
+          cd /opt/crypy/app
+          test -n "$NEXT_PUBLIC_SITE_URL" || { echo "Set the repository variable NEXT_PUBLIC_SITE_URL (https://crypy.org)"; exit 1; }
+          pnpm install --frozen-lockfile
+          CRYPY_DIST_DIR='${{ matrix.dist }}' pnpm build
+          # What the build was made with, so the server can refuse a build that doesn't match its own settings.
+          {
+            echo "commit=${GITHUB_SHA}"
+            echo "NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}"
+            echo "NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=${NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID}"
+          } > '${{ matrix.dist }}/crypy-build-env'
+          name="crypy${{ matrix.dist }}.tar.gz"
+          tar --exclude='${{ matrix.dist }}/cache' -czf "$GITHUB_WORKSPACE/$name" '${{ matrix.dist }}'
+          cd "$GITHUB_WORKSPACE" && sha256sum "$name" > "$name.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build${{ matrix.dist }}
+          path: |
+            crypy${{ matrix.dist }}.tar.gz
+            crypy${{ matrix.dist }}.tar.gz.sha256
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Publish as a pre-release, keep the last 5
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag="build-${GITHUB_SHA}"
+          gh release create "$tag" out/* --prerelease --target "$GITHUB_SHA" \
+            --title "Server build ${GITHUB_SHA::7}" --notes "Built by GitHub for the server (update.sh). Not a product release."
+          gh release list --limit 100 --json tagName,createdAt --jq '[.[] | select(.tagName | startswith("build-"))] | sort_by(.createdAt) | reverse | .[5:] | .[].tagName' |
+            while read -r old; do gh release delete "$old" --yes --cleanup-tag; done

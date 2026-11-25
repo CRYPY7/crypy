@@ -26,15 +26,90 @@ LIVE="$(cat "$APP_DIR/.crypy-dist" 2>/dev/null || echo .next)"
 case "$LIVE" in .next | .next-a | .next-b) ;; *) LIVE=".next" ;; esac
 if [ "$LIVE" = ".next-a" ]; then NEW=".next-b"; else NEW=".next-a"; fi
 
-echo "Building the new version into $NEW while the site keeps running from $LIVE ..."
-# Each build folder keeps its own build cache (a folder's own cache makes compiling much faster; a copied one doesn't
-# help). The very first build into a folder therefore takes longer.
-# The type check already ran before the push (and on the PC); it costs about 80 s on this server.
-# Lowest CPU and disk priority: on a 1-CPU server the live site must keep answering while this builds (health checks
-# timed out during an earlier build).
-LOW="nice -n 19"
-if command -v ionice >/dev/null 2>&1; then LOW="$LOW ionice -c 2 -n 7"; fi
-sudo -u crypy bash -c "cd '$APP_DIR' && pnpm install --frozen-lockfile && CRYPY_DIST_DIR='$NEW' CRYPY_SKIP_TYPECHECK=1 $LOW pnpm build"
+# The new build: downloaded from GitHub when it has built this exact commit (.github/workflows/server-build.yml),
+# otherwise built here. CRYPY_BUILD_HERE=1 always builds here.
+COMMIT="$(sudo -u crypy git -C "$APP_DIR" rev-parse HEAD)"
+ORIGIN="$(sudo -u crypy git -C "$APP_DIR" remote get-url origin)"
+REPO="$(printf '%s' "$ORIGIN" | sed -E 's#^(https://([^@/]+@)?github\.com/|git@github\.com:)##; s#\.git$##')"
+ASSET="crypy${NEW}.tar.gz"
+
+env_value() { grep -E "^$1=" "$APP_DIR/.env.local" 2>/dev/null | tail -1 | cut -d= -f2- | tr -d '"' || true; }
+
+# The state of GitHub's "Server build" run for this commit: running, failed, done, none or unknown (public API,
+# no key needed; unknown when GitHub can't be asked, in which case the wait simply continues).
+github_run_state() {
+  sudo -u crypy curl -fsS -H "Accept: application/vnd.github+json" \
+    "https://api.github.com/repos/$REPO/actions/workflows/server-build.yml/runs?head_sha=$COMMIT&per_page=5" 2>/dev/null |
+    node -e '
+      let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
+        try {
+          const runs = JSON.parse(s).workflow_runs ?? [];
+          if (!runs.length) return console.log("none");
+          const r = runs[0];
+          if (r.status !== "completed") return console.log("running");
+          console.log(r.conclusion === "success" ? "done" : "failed");
+        } catch { console.log("unknown"); }
+      });' 2>/dev/null || echo unknown
+}
+
+download_build() {
+  case "$REPO" in */*) ;; *) echo "Not a GitHub repository ($ORIGIN): building here."; return 1 ;; esac
+  local base="https://github.com/$REPO/releases/download/build-$COMMIT" dir
+  dir="$(sudo -u crypy mktemp -d "$APP_DIR/.incoming.XXXXXX")"
+  echo "Getting GitHub's build of ${COMMIT:0:7} ($NEW) ..."
+  # GitHub needs a few minutes after the push; wait up to 20 minutes.
+  local waited=0
+  until sudo -u crypy curl -fsSL -o "$dir/$ASSET" "$base/$ASSET" 2>/dev/null; do
+    if [ "$waited" -ge 1200 ]; then
+      echo "GitHub's build didn't appear within 20 minutes (Actions tab on GitHub): building here instead."
+      rm -rf "$dir"; return 1
+    fi
+    [ "$waited" -eq 0 ] && echo "Waiting for GitHub to finish building (checking every 20 s) ..."
+    # A failed or cancelled build on GitHub, or none started 3 minutes after the push: don't wait for nothing.
+    case "$(github_run_state)" in
+      failed) echo "GitHub's build failed (Actions tab on GitHub): building here instead."; rm -rf "$dir"; return 1 ;;
+      none) if [ "$waited" -ge 180 ]; then
+          echo "GitHub hasn't started a build for this commit: building here instead."; rm -rf "$dir"; return 1
+        fi ;;
+    esac
+    sleep 20; waited=$((waited + 20))
+  done
+  if ! sudo -u crypy curl -fsSL -o "$dir/$ASSET.sha256" "$base/$ASSET.sha256" ||
+    ! (cd "$dir" && sha256sum -c --quiet "$ASSET.sha256"); then
+    echo "GitHub's build didn't download intact: building here instead."
+    rm -rf "$dir"; return 1
+  fi
+  sudo -u crypy tar -xzf "$dir/$ASSET" -C "$dir"
+  local made="$dir/$NEW/crypy-build-env" key
+  if [ "$(grep -E '^commit=' "$made" | cut -d= -f2-)" != "$COMMIT" ]; then
+    echo "GitHub's build is for another commit: building here instead."
+    rm -rf "$dir"; return 1
+  fi
+  for key in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID; do
+    if [ "$(grep -E "^$key=" "$made" | cut -d= -f2-)" != "$(env_value "$key")" ]; then
+      echo "GitHub built with a different $key than this server's .env.local (repository variables on GitHub):"
+      echo "building here instead. Set the same value on GitHub to use its builds."
+      rm -rf "$dir"; return 1
+    fi
+  done
+  # Replace the folder's contents but keep its build cache (used when a later update builds here).
+  sudo -u crypy bash -c "mkdir -p '$APP_DIR/$NEW' && find '$APP_DIR/$NEW' -mindepth 1 -maxdepth 1 ! -name cache -exec rm -rf {} + && cp -a '$dir/$NEW/.' '$APP_DIR/$NEW/'"
+  rm -rf "$dir"
+  echo "Using GitHub's build."
+}
+
+sudo -u crypy bash -c "cd '$APP_DIR' && pnpm install --frozen-lockfile"
+if [ "${CRYPY_BUILD_HERE:-}" = "1" ] || ! download_build; then
+  echo "Building the new version into $NEW while the site keeps running from $LIVE ..."
+  # Each build folder keeps its own build cache (a folder's own cache makes compiling much faster; a copied one doesn't
+  # help). The very first build into a folder therefore takes longer.
+  # The type check already ran before the push (and on the PC); it costs about 80 s on this server.
+  # Lowest CPU and disk priority: on a 1-CPU server the live site must keep answering while this builds (health checks
+  # timed out during an earlier build).
+  LOW="nice -n 19"
+  if command -v ionice >/dev/null 2>&1; then LOW="$LOW ionice -c 2 -n 7"; fi
+  sudo -u crypy bash -c "cd '$APP_DIR' && CRYPY_DIST_DIR='$NEW' CRYPY_SKIP_TYPECHECK=1 $LOW pnpm build"
+fi
 
 # Static files of every recent version, side by side (names carry content hashes, so they never clash).
 sudo -u crypy bash -c "cd '$APP_DIR' && mkdir -p '$APP_DIR/.static' && cp -r '$APP_DIR/$NEW/static/.' '$APP_DIR/.static/' && find '$APP_DIR/.static' -type f -mtime +30 -delete && find '$APP_DIR/.static' -type d -empty -delete"
