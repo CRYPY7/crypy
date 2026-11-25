@@ -103,12 +103,17 @@ test("admin: dashboard after sign-in; a published update shows on the status pag
   for (const section of [
     "All checks",
     "What visitors got (last 24 hours)",
+    "Node providers (last hour)",
     "Free plans used today",
     "Server",
     "Failed checks (last 24 hours)",
     "Status updates on the public page",
   ])
     await expect(page.getByRole("heading", { level: 2, name: section })).toBeVisible();
+  // Every live chain's providers are listed (host names only, never a URL).
+  for (const chain of ["ethereum", "bsc", "base", "arbitrum", "polygon"])
+    expect(await page.locator(`[data-testid^="provider-health-${chain}-"]`).count()).toBeGreaterThan(0);
+  await expect(page.locator('[data-testid^="provider-health-"]').first()).not.toContainText("https://");
   // Health checks are off on the test server: nothing has run, so nothing is shown as working.
   await expect(page.getByTestId("check-website")).toContainText("Not checked yet");
   await page.getByRole("link", { name: "Chains", exact: true }).click();

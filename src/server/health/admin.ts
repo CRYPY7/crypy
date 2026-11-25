@@ -2,7 +2,9 @@ import "server-only";
 import { sql } from "drizzle-orm";
 import { type CheckGroup, checkDefinitions } from "@/lib/health/checks";
 import { type CheckStatus, type HealthState, checkState, groupByCheck } from "@/lib/health/status";
-import { usageSnapshot } from "@/server/chains/evm/providers";
+import { providersFor, restingNow, usageSnapshot } from "@/server/chains/evm/providers";
+import { type ProviderHealth, providerHealth } from "@/server/chains/evm/provider-health";
+import { type ChainKey, liveChains } from "@/config/chains";
 import { getDb } from "@/server/db/client";
 import { serverEnv } from "@/server/env";
 import { telegramConfigured } from "@/server/telegram/api";
@@ -39,6 +41,14 @@ export interface AdminHealth {
   passed24h: number | null;
   failures: AdminFailure[];
   providers: ReturnType<typeof usageSnapshot>;
+  /** S3: each chain's providers over the last hour (names only), worst first within a chain. */
+  providerHealth: ({
+    chain: ChainKey;
+    provider: string;
+    kind: "alchemy" | "extra" | "public";
+    restingUntil: string | null;
+    restingMethods: string[];
+  } & ProviderHealth)[];
   alchemyConfigured: boolean;
   counters: ReturnType<typeof todayCounts>;
   databaseBytes: number | null;
@@ -115,10 +125,34 @@ export async function adminHealth(now = Date.now()): Promise<AdminHealth> {
     passed24h: day.length ? day.filter((r) => r.status !== "fail").length / day.length : null,
     failures: groupFailures(day).slice(0, 20),
     providers: usageSnapshot(),
+    providerHealth: providerHealthTable(now),
     alchemyConfigured: Boolean(serverEnv.ALCHEMY_API_KEY),
     counters: todayCounts(now),
     databaseBytes: dbBytes,
     uptimeHours: process.uptime() / 3_600,
     telegram: { bot: telegramConfigured(), chats: chats.length },
   };
+}
+
+const STATE_ORDER: Record<ProviderHealth["state"], number> = { poor: 0, uneven: 1, good: 2, idle: 3 };
+
+/** Every live EVM chain's providers with their last-hour health and what is resting now. */
+export function providerHealthTable(now = Date.now()): AdminHealth["providerHealth"] {
+  return liveChains
+    .filter((chain) => chain.family === "evm")
+    .flatMap((chain) =>
+      providersFor(chain)
+        .map((p) => {
+          const rest = restingNow(p, now);
+          return {
+            chain: chain.key,
+            provider: p.name,
+            kind: p.kind,
+            restingUntil: rest.until ? new Date(rest.until).toISOString() : null,
+            restingMethods: rest.methods,
+            ...providerHealth(p.url, now),
+          };
+        })
+        .sort((a, b) => STATE_ORDER[a.state] - STATE_ORDER[b.state] || b.requests - a.requests),
+    );
 }

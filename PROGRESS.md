@@ -41,6 +41,21 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## S3: health score per node provider on /admin (2026-11-25)
+
+- New table on /admin, "Node providers (last hour)": every live chain's providers (host name and type: Alchemy, your
+  key, public) with the requests CRYPY really sent in the last hour, the share answered, failed, "too many requests",
+  refused (a plan that doesn't serve that kind of request, such as old data: not counted against the provider),
+  average answer time, whether it is resting now (whole provider or which kinds of request), and which kinds of
+  request went wrong most. Failing providers come first within each chain. No URLs or keys.
+- Measured in the node transport (`server/chains/evm/provider-health.ts`, 5-minute buckets in memory, kept one hour):
+  "good" from 98% answered, "uneven" from 90%, "poor" below. Built with the existing admin table styles: the
+  stylesheet stays at 82,430 bytes.
+
+**Checks:** typecheck, lint, Prettier, i18n check clean. Unit: 597 passed, 76 skipped (5 new: idle, score without
+refusals, uneven and poor, one-hour memory, providers kept apart). Build passed. Browser: 309 passed, 19 skipped,
+0 failed (the admin test now checks the table lists all 5 chains' providers and shows no URLs).
+
 ## S3: one line for heavy checks (2026-11-25)
 
 - Token security reports and approval scans (one per chain) are the heaviest work: several node rounds, GoPlus and

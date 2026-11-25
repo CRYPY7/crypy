@@ -330,6 +330,85 @@ async function Dashboard({ locale, address, show }: { locale: Locale; address: s
         </div>
       </section>
 
+      <section aria-labelledby="provider-health-title" className={cn(card, "overflow-hidden")}>
+        <div className="px-4 py-4">
+          <h2 id="provider-health-title" className="text-lg font-semibold">
+            {t("admin.providerHealth.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground">{t("admin.providerHealth.sub")}</p>
+        </div>
+        <div className="overflow-x-auto" tabIndex={0} role="group" aria-labelledby="provider-health-title">
+          <table className="w-full min-w-[52rem] text-sm">
+            <thead>
+              <tr className="text-start text-xs tracking-wide text-muted-foreground uppercase">
+                {(
+                  [
+                    "provider",
+                    "requests",
+                    "answered",
+                    "failed",
+                    "limited",
+                    "refused",
+                    "average",
+                    "now",
+                    "worst",
+                  ] as const
+                ).map((col) => (
+                  <th key={col} scope="col" className="px-4 py-2 text-start font-semibold">
+                    {t(`admin.providerHealth.cols.${col}`)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {health.providerHealth.map((p) => (
+                <tr
+                  key={`${p.chain}-${p.provider}`}
+                  className="border-t align-top"
+                  data-testid={`provider-health-${p.chain}-${p.provider}`}
+                >
+                  <th scope="row" className="px-4 py-2 text-start font-medium">
+                    {t("admin.providerHealth.name", {
+                      chain: t(`chains.${p.chain}`),
+                      provider: p.provider,
+                      kind: t(`admin.providerHealth.kinds.${p.kind}`),
+                    })}
+                  </th>
+                  <td className="px-4 py-2 tabular-nums">{n.format(p.requests)}</td>
+                  <td
+                    className={cn(
+                      "px-4 py-2 tabular-nums",
+                      p.state === "poor" && "font-semibold text-critical",
+                      p.state === "uneven" && "text-medium",
+                    )}
+                  >
+                    {p.score === null ? "\u2014" : percent.format(p.score)}
+                  </td>
+                  <td className="px-4 py-2 tabular-nums">{n.format(p.counts.failed)}</td>
+                  <td className="px-4 py-2 tabular-nums">{n.format(p.counts.limited)}</td>
+                  <td className="px-4 py-2 tabular-nums">{n.format(p.counts.refused)}</td>
+                  <td className="px-4 py-2 tabular-nums">
+                    {p.averageMs === null ? "\u2014" : t("admin.outcomes.ms", { ms: n.format(p.averageMs) })}
+                  </td>
+                  <td className={cn("px-4 py-2", (p.restingUntil || p.restingMethods.length > 0) && "text-medium")}>
+                    {p.restingUntil
+                      ? t("admin.providerHealth.restingAll")
+                      : p.restingMethods.length
+                        ? t("admin.providerHealth.restingSome", { methods: p.restingMethods.join(", ") })
+                        : t("admin.providerHealth.inUse")}
+                  </td>
+                  <td className="px-4 py-2 text-xs text-muted-foreground">
+                    {p.worstMethods.length
+                      ? p.worstMethods.map((m) => `${m.method} \u00d7${n.format(m.count)}`).join(" \u00b7 ")
+                      : "\u2014"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-start">
         <section id="providers" aria-labelledby="providers-title" className={cn(card, "overflow-hidden")}>
           <div className="px-4 py-4">

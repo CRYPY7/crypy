@@ -3,6 +3,7 @@ import { AlchemyBusyError, noteAlchemyLimited, takeAlchemyNow, waitForAlchemy } 
 import { limitedFetch } from "@/server/http/limit";
 import { isBackground } from "@/server/background";
 import { alchemyDailyLimit } from "./alchemy-budget";
+import { recordOutcome } from "./provider-health";
 import {
   type Chain,
   type EIP1193RequestFn,
@@ -401,6 +402,16 @@ export function wakeOneIfAllResting(providers: Provider[], now = Date.now(), met
   wake(soonest, method);
 }
 
+/** What is resting now, for the admin page: the whole provider (until when) and single methods. */
+export function restingNow(provider: Provider, now = Date.now()): { until: number | null; methods: string[] } {
+  const whole = coolDown.get(provider.url) ?? 0;
+  const prefix = `${provider.url}|`;
+  const methods = [...methodCoolDown]
+    .filter(([slot, until]) => until > now && slot.startsWith(prefix))
+    .map(([slot]) => slot.slice(prefix.length));
+  return { until: whole > now ? whole : null, methods };
+}
+
 /** Test helper. */
 export function coolDownFor(provider: Provider, ms: number): void {
   coolDown.set(provider.url, Date.now() + ms);
@@ -649,13 +660,22 @@ export function meteredHttp(provider: Provider, timeout = 5_000, pace: AlchemyPa
             throw new MalformedAnswerError(provider.name, args.method);
           }
           recordLatency(provider, Date.now() - started);
+          recordOutcome(provider.url, args.method, "ok", Date.now() - started);
           return result;
         } catch (error) {
+          const ms = Date.now() - started;
           // Alchemy's "too many requests" is about this second, not an outage: pause it briefly instead of a minute.
-          if (provider.kind === "alchemy" && isTooManyRequests(error)) noteAlchemyLimited();
-          else if (isUnreachable(error)) restAfterFailure(provider, args.method, error);
-          // A node's own error answer still tells us how fast it is.
-          else recordLatency(provider, Date.now() - started);
+          if (provider.kind === "alchemy" && isTooManyRequests(error)) {
+            noteAlchemyLimited();
+            recordOutcome(provider.url, args.method, "limited", ms);
+          } else if (isUnreachable(error)) {
+            restAfterFailure(provider, args.method, error);
+            recordOutcome(provider.url, args.method, isTooManyRequests(error) ? "limited" : "failed", ms);
+          } else {
+            // A node's own error answer still tells us how fast it is.
+            recordLatency(provider, ms);
+            recordOutcome(provider.url, args.method, isRefusal(error) ? "refused" : "ok", ms);
+          }
           throw error;
         }
       },

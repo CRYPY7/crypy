@@ -4433,6 +4433,30 @@
         "account": "Sign-in, watchlist and alerts",
         "pages": "Server errors (any page)"
       }
+    },
+    "providerHealth": {
+      "title": "Node providers (last hour)",
+      "sub": "Every request CRYPY sent to each node provider in the last hour. \"Answered\" leaves out refusals (a plan that doesn't serve that kind of request, such as old data). Providers that are failing come first within each chain.",
+      "cols": {
+        "provider": "Provider",
+        "requests": "Requests",
+        "answered": "Answered",
+        "failed": "Failed",
+        "limited": "Too many",
+        "refused": "Refused",
+        "average": "Average",
+        "now": "Now",
+        "worst": "Problems by request"
+      },
+      "name": "{chain} · {provider} ({kind})",
+      "kinds": {
+        "alchemy": "Alchemy",
+        "extra": "your key",
+        "public": "public"
+      },
+      "restingAll": "Resting (whole provider)",
+      "restingSome": "Resting for: {methods}",
+      "inUse": "In use"
     }
   }
 }
