@@ -6,6 +6,7 @@ import { type ApprovalsSummary, type RatedApproval, rateApprovals, summarize } f
 import type { ApprovalsFacts } from "@/lib/approvals/types";
 import { registry } from "@/server/chains/registry";
 import { runHeavy } from "@/server/heavy/queue";
+import type { GoPlusPriority } from "@/server/security/goplus-budget";
 import { freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { readSavedOne, saveResults } from "@/server/saved/store";
 import { cachedAddressOverview } from "./overview";
@@ -31,14 +32,14 @@ export interface ApprovalsReport {
 }
 
 /**
- * Approvals on every live chain with the `approvals` capability. `priority` "background" (Portfolio badges) lets
- * page reports go first for GoPlus's free capacity. Held tokens come from the (cached) balance overview
+ * Approvals on every live chain with the `approvals` capability. `priority` "portfolio" (Portfolio badges) or
+ * "background" lets page reports go first for GoPlus's free capacity. Held tokens come from the (cached) balance overview
  * so common spenders are checked for each. Cached briefly: approvals change when the user revokes.
  */
 export async function cachedApprovals(
   owner: string,
   only?: readonly string[],
-  priority: "page" | "background" = "page",
+  priority: GoPlusPriority = "page",
 ): Promise<ApprovalsReport> {
   "use cache";
   // Not awaited here: each chain starts its outside lookups while the balances load.

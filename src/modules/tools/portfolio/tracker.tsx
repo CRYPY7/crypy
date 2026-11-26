@@ -35,14 +35,16 @@ import { Panel, fill, inputClass } from "@/modules/tools/shared/ui";
 import { useWallet } from "@/wallets/wallet-root";
 
 import type { PortfolioProps, PortfolioStrings } from "./widget";
-
-interface FlaggedToken {
-  chain: string;
-  address: string;
-  symbol: string;
-  reason: "honeypot" | "sell-tax";
-  sellTax: number | null;
-}
+import {
+  SAFETY_KEY,
+  type SafetyCache,
+  type SafetyReport,
+  forgetSafety,
+  freshEntry,
+  parseSafetyCache,
+  rememberSafety,
+  serializeSafetyCache,
+} from "@/lib/portfolio/safety-cache";
 
 interface WalletReport {
   overview: {
@@ -53,11 +55,30 @@ interface WalletReport {
     saved?: Record<string, string>;
     refreshing?: Record<string, string>;
   };
-  approvals: { attention: number; chains: string[]; partial: boolean } | null;
-  flagged: { tokens: FlaggedToken[]; checked: number; skipped: number } | null;
 }
 
 type LoadState = { status: "loading" } | { status: "ok"; report: WalletReport } | { status: "error"; limited: boolean };
+/**
+ * B-034: read after the balances, in its own request, so balances never wait for it; remembered in this browser for
+ * 6 hours (safety-cache.ts). No entry: not asked yet (balances still loading) or checking.
+ */
+type SafetyState = { status: "ok"; report: SafetyReport; at: number } | { status: "error" };
+
+function readSafetyCache(): SafetyCache {
+  try {
+    return parseSafetyCache(localStorage.getItem(SAFETY_KEY));
+  } catch {
+    return {};
+  }
+}
+
+function writeSafetyCache(cache: SafetyCache) {
+  try {
+    localStorage.setItem(SAFETY_KEY, serializeSafetyCache(cache));
+  } catch {
+    // Storage blocked or full: the result is still shown for this visit.
+  }
+}
 
 /** Chain colours for the by-chain bar (brand-like hues that read in both themes). */
 const chainColor: Record<string, string> = {
@@ -67,7 +88,9 @@ const chainColor: Record<string, string> = {
   arbitrum: "#2a9fd6",
   polygon: "#8247e5",
 };
-const PARALLEL = 3;
+const PARALLEL = 4;
+/** Safety checks are heavier (GoPlus and on-chain scans per chain): fewer at once, behind the balances. */
+const SAFETY_PARALLEL = 2;
 const HOLDINGS_PAGE = 25;
 
 const short = (a: string) => `${a.slice(0, 6)}…${a.slice(-4)}`;
@@ -134,50 +157,105 @@ export default function PortfolioTracker({
   const raw = useSyncExternalStore(subscribeSaved, readSaved, () => undefined);
   const data = useMemo(() => (raw === undefined ? null : parsePortfolio(raw)), [raw]);
   const [loads, setLoads] = useState<Record<string, LoadState>>({});
+  const [safety, setSafety] = useState<Record<string, SafetyState>>({});
+  /** For "Checked 2 hours ago": updated once a minute. */
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setClock(Date.now()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
   const [comparison, setComparison] = useState<{ snapshot: Snapshot; now: number } | null>(null);
   const [dialog, setDialog] = useState<{ edit?: SavedWallet } | null>(null);
   const [showAll, setShowAll] = useState(false);
   /** Latest request per address: an older answer never overwrites a newer one. */
   const requests = useRef(new Map<string, number>());
+  /** Safety checks waiting for a free slot, and how many run (B-034). */
+  const safetyQueue = useRef<{ address: string; id: number }[]>([]);
+  const safetyRunning = useRef(0);
+
+  /** Reads queued safety checks, SAFETY_PARALLEL at a time. */
+  const pumpSafety = useCallback(() => {
+    const worker = async () => {
+      for (let next = safetyQueue.current.shift(); next; next = safetyQueue.current.shift()) {
+        const { address, id } = next;
+        if (requests.current.get(address) !== id) continue; // refreshed or removed meanwhile
+        let result: SafetyState;
+        try {
+          const response = await fetch(`/api/v1/address/${address}/portfolio?part=safety`, {
+            headers: { accept: "application/json" },
+          });
+          const body = (await response.json()) as { ok: boolean; data?: SafetyReport };
+          const at = Date.now();
+          result = body.ok && body.data ? { status: "ok", report: body.data, at } : { status: "error" };
+          if (result.status === "ok") writeSafetyCache(rememberSafety(readSafetyCache(), address, result.report, at));
+        } catch {
+          result = { status: "error" };
+        }
+        if (requests.current.get(address) === id) setSafety((prev) => ({ ...prev, [address]: result }));
+      }
+      safetyRunning.current -= 1;
+    };
+    while (safetyRunning.current < SAFETY_PARALLEL && safetyQueue.current.length) {
+      safetyRunning.current += 1;
+      void worker();
+    }
+  }, []);
   const chainName = useCallback((key: string) => chainNames[key] ?? key, [chainNames]);
 
   /** Reads the wallets, a few at a time. A wallet without an entry in `loads` shows as loading. */
-  const fetchWallets = useCallback(async (addresses: string[]) => {
-    const queue = addresses.map((address) => {
-      const id = (requests.current.get(address) ?? 0) + 1;
-      requests.current.set(address, id);
-      return { address, id };
-    });
-    const worker = async () => {
-      for (let next = queue.shift(); next; next = queue.shift()) {
-        const { address, id } = next;
-        let result: LoadState;
-        try {
-          const response = await fetch(`/api/v1/address/${address}/portfolio`, {
-            headers: { accept: "application/json" },
-          });
-          const body = (await response.json()) as { ok: boolean; data?: WalletReport };
-          result =
-            body.ok && body.data
-              ? { status: "ok", report: body.data }
-              : { status: "error", limited: response.status === 429 };
-        } catch {
-          result = { status: "error", limited: false };
+  const fetchWallets = useCallback(
+    async (addresses: string[]) => {
+      const queue = addresses.map((address) => {
+        const id = (requests.current.get(address) ?? 0) + 1;
+        requests.current.set(address, id);
+        return { address, id };
+      });
+      const worker = async () => {
+        for (let next = queue.shift(); next; next = queue.shift()) {
+          const { address, id } = next;
+          let result: LoadState;
+          try {
+            const response = await fetch(`/api/v1/address/${address}/portfolio`, {
+              headers: { accept: "application/json" },
+            });
+            const body = (await response.json()) as { ok: boolean; data?: WalletReport };
+            result =
+              body.ok && body.data
+                ? { status: "ok", report: body.data }
+                : { status: "error", limited: response.status === 429 };
+          } catch {
+            result = { status: "error", limited: false };
+          }
+          if (requests.current.get(address) !== id) continue;
+          setLoads((prev) => ({ ...prev, [address]: result }));
+          // Balances are shown; the safety badges come from this browser's result of the last 6 hours, else from their
+          // own request.
+          if (result.status === "ok") {
+            const remembered = freshEntry(readSafetyCache(), address, Date.now());
+            if (remembered) {
+              const state: SafetyState = { status: "ok", report: remembered.report, at: remembered.at };
+              setSafety((prev) => ({ ...prev, [address]: state }));
+            } else {
+              safetyQueue.current.push({ address, id });
+              pumpSafety();
+            }
+          }
         }
-        if (requests.current.get(address) !== id) continue;
-        setLoads((prev) => ({ ...prev, [address]: result }));
-      }
-    };
-    await Promise.all(Array.from({ length: PARALLEL }, worker));
-  }, []);
+      };
+      await Promise.all(Array.from({ length: PARALLEL }, worker));
+    },
+    [pumpSafety],
+  );
 
   /** Shows wallets as loading again, then reads them (refresh and retry). */
   const reload = (addresses: string[]) => {
-    setLoads((prev) => {
+    const forget = <T,>(prev: Record<string, T>) => {
       const next = { ...prev };
       for (const a of addresses) delete next[a];
       return next;
-    });
+    };
+    setLoads(forget);
+    setSafety(forget);
     void fetchWallets(addresses);
   };
 
@@ -230,21 +308,29 @@ export default function PortfolioTracker({
 
   const reports = (data?.wallets ?? []).flatMap((w) => {
     const load = loads[w.address];
-    return load?.status === "ok" ? [{ wallet: w, report: load.report }] : [];
+    const check = safety[w.address];
+    return load?.status === "ok" && check?.status === "ok" ? [{ wallet: w, report: check.report }] : [];
   });
+  /** Wallets whose balances are shown and whose safety checks are still running. */
+  const checking = (data?.wallets ?? []).some((w) => loads[w.address]?.status === "ok" && !safety[w.address]);
+  const safetyFailed = (data?.wallets ?? []).some((w) => safety[w.address]?.status === "error");
   const approvalWallets = reports.filter((r) => (r.report.approvals?.attention ?? 0) > 0);
   const approvalCount = approvalWallets.reduce((n, r) => n + r.report.approvals!.attention, 0);
   const flagged = reports.flatMap((r) => (r.report.flagged?.tokens ?? []).map((t) => ({ ...t, wallet: r.wallet })));
-  const fullyChecked = (r: WalletReport) =>
+  const fullyChecked = (r: SafetyReport) =>
     r.approvals !== null && !r.approvals.partial && r.flagged !== null && r.flagged.skipped === 0;
-  const someUnchecked = reports.some((r) => !fullyChecked(r.report));
-  const unavailableChains = [...new Set(reports.flatMap((r) => r.report.overview.unavailable))];
-  const pricesMissing = reports.some((r) => !r.report.overview.pricesAvailable);
+  const someUnchecked = safetyFailed || reports.some((r) => !fullyChecked(r.report));
+  const balanceReports = (data?.wallets ?? []).flatMap((w) => {
+    const load = loads[w.address];
+    return load?.status === "ok" ? [load.report] : [];
+  });
+  const unavailableChains = [...new Set(balanceReports.flatMap((r) => r.overview.unavailable))];
+  const pricesMissing = balanceReports.some((r) => !r.overview.pricesAvailable);
   const savedChains = [
     ...new Set(
-      reports.flatMap((r) => [
-        ...Object.keys(r.report.overview.saved ?? {}),
-        ...Object.keys(r.report.overview.refreshing ?? {}),
+      balanceReports.flatMap((r) => [
+        ...Object.keys(r.overview.saved ?? {}),
+        ...Object.keys(r.overview.refreshing ?? {}),
       ]),
     ),
   ];
@@ -259,11 +345,28 @@ export default function PortfolioTracker({
     if (!data) return;
     writeSaved({ ...data, wallets: data.wallets.filter((w) => w.address !== address) });
     requests.current.delete(address);
-    setLoads((prev) => {
+    const forget = <T,>(prev: Record<string, T>) => {
+      const next = { ...prev };
+      delete next[address];
+      return next;
+    };
+    setLoads(forget);
+    setSafety(forget);
+    writeSafetyCache(forgetSafety(readSafetyCache(), address));
+  };
+
+  /** "Check again": forgets this wallet's remembered result and runs its safety checks now. */
+  const checkAgain = (address: string) => {
+    const id = requests.current.get(address);
+    if (id === undefined) return;
+    writeSafetyCache(forgetSafety(readSafetyCache(), address));
+    setSafety((prev) => {
       const next = { ...prev };
       delete next[address];
       return next;
     });
+    safetyQueue.current.push({ address, id });
+    pumpSafety();
   };
 
   const saveWallet = (address: string, label: string, editing?: SavedWallet) => {
@@ -404,15 +507,21 @@ export default function PortfolioTracker({
             note={summary.unpricedTokens ? fill(s.statTokensNote!, { count: summary.unpricedTokens }) : undefined}
           />
           <Stat
-            value={String(approvalCount)}
+            value={approvalCount || !checking ? String(approvalCount) : "…"}
             label={s.statApprovals!}
-            note={approvalCount ? fill(s.inWallets!, { count: approvalWallets.length }) : s.noneFound}
+            note={
+              approvalCount
+                ? fill(s.inWallets!, { count: approvalWallets.length })
+                : checking
+                  ? s.checking
+                  : s.noneFound
+            }
             tone={approvalCount ? "warn" : undefined}
           />
           <Stat
-            value={String(flagged.length)}
+            value={flagged.length || !checking ? String(flagged.length) : "…"}
             label={s.statFlagged!}
-            note={flagged.length ? s.flaggedBy : s.noneFound}
+            note={flagged.length ? s.flaggedBy : checking ? s.checking : s.noneFound}
             tone={flagged.length ? "bad" : undefined}
           />
         </dl>
@@ -494,7 +603,9 @@ export default function PortfolioTracker({
           {summary.wallets.map((w, i) => {
             const saved = data.wallets[i]!;
             const load = loads[w.address];
-            const report = load?.status === "ok" ? load.report : null;
+            const check = safety[w.address];
+            const report = load?.status === "ok" && check?.status === "ok" ? check.report : null;
+            const checkingThis = load?.status === "ok" && !check;
             const attention = report?.approvals?.attention ?? 0;
             const risky = report?.flagged?.tokens.length ?? 0;
             const share = summary.totalUsd > 0 ? Math.round((w.totalUsd / summary.totalUsd) * 100) : 0;
@@ -527,6 +638,21 @@ export default function PortfolioTracker({
                   {attention > 0 && <Badge tone="warn">{fill(s.badgeApprovals!, { count: attention })}</Badge>}
                   {risky > 0 && <Badge tone="bad">{fill(s.badgeFlagged!, { count: risky })}</Badge>}
                   {report && !attention && !risky && fullyChecked(report) && <Badge>{s.badgeNothing}</Badge>}
+                  {checkingThis && <Badge>{s.checking}</Badge>}
+                  {check?.status === "ok" && (
+                    <span className="w-full text-end text-xs text-muted-foreground">
+                      {fill(s.checkedAgo!, { when: since(check.at, Math.max(clock, check.at), locale) })}
+                      {" · "}
+                      <button
+                        type="button"
+                        className="text-primary hover:underline"
+                        onClick={() => checkAgain(w.address)}
+                        aria-label={fill(s.checkAgainLabel!, { name: w.label || short(w.address) })}
+                      >
+                        {s.checkAgain}
+                      </button>
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-1">
                   <a

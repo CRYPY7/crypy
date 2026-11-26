@@ -41,6 +41,36 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## B-034 fixed: Portfolio shows balances at once; safety checks finish and are remembered (2026-11-26)
+
+- **Measured:** one wallet's lookup = chains 0.2–0.3 s, balances 0.4–0.7 s (here, no Alchemy key), approvals 4.6 s
+  alone, but every safety check ran out of time (20 s approvals, 8 s flags) as soon as a few wallets were read
+  together, and the whole wallet waited for it. Cause: Portfolio's GoPlus calls were "background", allowed 8 a minute
+  (shared with the daily token checks), while one wallet needs up to 13 (an approval list per chain + up to 8 token
+  checks). The server's log confirmed it: up to 26 background GoPlus calls held back a minute. B-033 confirmed on
+  the server after the update: 308, 308, no proxy errors.
+- **Fix (owner approved 2026-11-26):**
+  - Each wallet is read in two requests: balances (`/portfolio`) show at once; the approvals and flagged-token
+    badges say "Checking…" (counters "…") until `/portfolio?part=safety` answers. 4 balance reads and 2 safety reads
+    at a time.
+  - New priority "portfolio" for GoPlus (≤ 15 a minute, never the last 2 slots, behind page reports, ahead of
+    background, waits up to 30 s) and for the heavy-check line (at most 3 at once), so a big portfolio can't slow the
+    Token Security or Approvals pages. Safety timeouts 45 s (approvals) and 35 s (flags).
+  - Owner decision: automatic but remembered. A complete safety result is kept in the browser for 6 hours
+    ("Checked 2 hours ago · Check again"); opening the Portfolio again within that time costs no GoPlus calls. An
+    incomplete result isn't kept, so it is tried again on the next visit. Refresh reloads balances and keeps
+    remembered results. Privacy page (7 languages) says so.
+  - Visitor outcomes: `portfolio` now counts the balances request, `portfolio-safety` the safety request.
+  - Timing log (`CRYPY_DEBUG_TIMING=1`): "portfolio balances …" and "portfolio safety …" lines per wallet.
+- **Measured after (here, 3 wallets, cold server):** balances 1.0–1.1 s each, all 3 in parallel; safety 1.8 s and
+  6.4 s, both complete (before: none complete); a third wallet right after waited 38 s for GoPlus's free capacity
+  (complete approvals, 2 token checks skipped) — the 6-hour memory keeps that from repeating on every visit.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 651 passed, 76 skipped (new: GoPlus Portfolio
+share and order, heavy-line Portfolio share, safety outcome rules, the 6-hour memory incl. defensive reading). Build
+passed. Browser: 329 passed, 19 skipped, 0 failed (new: balances shown while safety is held back, "Checking…",
+remembered on reload with no new request, "Check again" asks again). Screenshots checked on desktop and phone.
+
 ## B-033 fixed: a backslash in the address no longer answers 500 (2026-11-26)
 
 - **Cause:** a scanner asked for every tool page with an encoded backslash on the end (`/en/tools/<id>%5C`). On the

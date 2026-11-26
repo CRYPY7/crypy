@@ -43,6 +43,7 @@ const MAX_SOURCE_CHECKS = 8;
 const OPTIONAL_MS = 7_000;
 /** GoPlus needs 3–6 s for busy wallets; it has its own 15 s limit per request. */
 const GOPLUS_MS = 16_000;
+const GOPLUS_PORTFOLIO_MS = 40_000;
 /** Recent Approval events: 0.1–2.5 s on most public nodes; some BNB Chain nodes take 5 s or more for big wallets. */
 const RECENT_MS = 4_000;
 
@@ -79,7 +80,9 @@ export async function getEvmApprovals(
   const wallet = getAddress(owner);
   const chainId = Number(chain.caip2.split(":")[1]);
   // Outside lists don't need the block or the held tokens: start them first (they are the slowest part).
-  const goplusRequest = withTimeout(goPlusApprovals(chainId, wallet, priority), GOPLUS_MS, {
+  // Portfolio calls may wait their turn in GoPlus's line first (goplus-budget.ts), so they get longer.
+  const goplusMs = priority === "portfolio" ? GOPLUS_PORTFOLIO_MS : GOPLUS_MS;
+  const goplusRequest = withTimeout(goPlusApprovals(chainId, wallet, priority), goplusMs, {
     status: "unavailable" as const,
   });
   const [block, heldTokens] = await Promise.all([

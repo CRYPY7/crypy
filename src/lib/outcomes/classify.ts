@@ -20,6 +20,7 @@ export type OutcomeTool =
   | "gas"
   | "batch-balance"
   | "portfolio"
+  | "portfolio-safety"
   | "timestamp-block"
   | "token-info"
   | "account"
@@ -36,6 +37,7 @@ export const OUTCOME_TOOLS: readonly OutcomeTool[] = [
   "gas",
   "batch-balance",
   "portfolio",
+  "portfolio-safety",
   "timestamp-block",
   "token-info",
   "account",
@@ -155,17 +157,18 @@ export function toolForRoute(routePath: string): OutcomeTool | null {
   return rules.find(([pattern]) => pattern.test(p))?.[1] ?? null;
 }
 
-export function classifyPortfolio(r: {
-  overview: Parameters<typeof classifyOverview>[0];
+/** Portfolio, part 1: one wallet's balances (B-034). */
+export function classifyPortfolioBalances(r: { overview: Parameters<typeof classifyOverview>[0] }): Classified {
+  return classifyOverview(r.overview);
+}
+
+/** Portfolio, part 2: the wallet's approvals and GoPlus-flagged tokens. */
+export function classifyPortfolioSafety(r: {
   approvals: { partial: boolean } | null;
   flagged: { skipped: number } | null;
 }): Classified {
-  const base = classifyOverview(r.overview);
-  if (base.outcome === "error") return base;
-  const reasons = [
-    ...base.reasons,
+  return partialOrFull([
     ...(r.approvals === null ? ["approvals not checked"] : r.approvals.partial ? ["approvals partial"] : []),
     ...(r.flagged === null ? ["token flags not checked"] : r.flagged.skipped > 0 ? ["token flags partly skipped"] : []),
-  ];
-  return partialOrFull(reasons);
+  ]);
 }

@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   BACKGROUND_PER_MINUTE,
   BURST,
+  PORTFOLIO_PER_MINUTE,
+  PORTFOLIO_RESERVE,
   RESERVE,
   isLimitMessage,
   pauseGoPlus,
@@ -91,5 +93,36 @@ describe("GoPlus pace", () => {
     expect(isLimitMessage("Too many requests")).toBe(true);
     expect(isLimitMessage("OK")).toBe(false);
     expect(isLimitMessage(undefined)).toBe(false);
+  });
+
+  it("Portfolio calls have their own share and never take the last slots (B-034)", () => {
+    let taken = 0;
+    while (takeGoPlusSlot("portfolio", T0)) taken++;
+    expect(taken).toBe(BURST - PORTFOLIO_RESERVE);
+    for (let i = 0; i < PORTFOLIO_RESERVE; i++) expect(takeGoPlusSlot("page", T0)).toBe(true);
+    let later = taken;
+    for (let t = T0; t < T0 + 59_000; t += 500) if (takeGoPlusSlot("portfolio", t)) later++;
+    expect(later).toBe(PORTFOLIO_PER_MINUTE);
+    // Background keeps its own (smaller) share; Portfolio's use doesn't count against it.
+    expect(PORTFOLIO_PER_MINUTE).toBeGreaterThan(BACKGROUND_PER_MINUTE);
+  });
+
+  it("serves page, then Portfolio, then background calls", async () => {
+    for (let i = 0; i < BURST; i++) takeGoPlusSlot("page", T0);
+    const order: string[] = [];
+    const bg = waitForGoPlusSlot("background").then((ok) => order.push(`background:${ok}`));
+    const pf = waitForGoPlusSlot("portfolio").then((ok) => order.push(`portfolio:${ok}`));
+    const page = waitForGoPlusSlot("page").then((ok) => order.push(`page:${ok}`));
+    await vi.advanceTimersByTimeAsync(30_000);
+    await Promise.all([bg, pf, page]);
+    expect(order).toEqual(["page:true", "portfolio:true", "background:true"]);
+  });
+
+  it("a Portfolio call waits up to 30 s for its turn", async () => {
+    for (let i = 0; i < BURST; i++) takeGoPlusSlot("page", T0);
+    const waiting = waitForGoPlusSlot("portfolio");
+    // Needs PORTFOLIO_RESERVE + 1 slots saved up: 6 s.
+    await vi.advanceTimersByTimeAsync(7_000);
+    await expect(waiting).resolves.toBe(true);
   });
 });

@@ -331,7 +331,7 @@ export interface ChainFamilyAdapter {
     chain: ChainConfig,
     owner: string,
     heldTokens: string[] | Promise<string[]>,
-    priority?: "page" | "background",
+    priority?: "page" | "portfolio" | "background",
   ): Promise<ApprovalsFacts>;
   /**
    * The wallet's transfers on this chain, newest first (M7). `before`: continue from this block (inclusive), or null
@@ -359,6 +359,6 @@ export interface ChainFamilyAdapter {
   getTokenSecurity?(
     chain: ChainConfig,
     address: string,
-    priority?: "page" | "background",
+    priority?: "page" | "portfolio" | "background",
   ): Promise<TokenSecurityFacts | null>;
 }

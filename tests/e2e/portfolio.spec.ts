@@ -74,3 +74,50 @@ test("two wallets: combined total, wallet rows, holdings, kept after reload, rem
   await expect(main.getByTestId("portfolio-wallet")).toHaveCount(1);
   await expect(main.getByText("Main", { exact: true })).toBeVisible();
 });
+
+test("B-034: balances show at once; safety badges say 'Checking…' until their own request answers", async ({
+  page,
+}) => {
+  test.setTimeout(150_000);
+  let release!: () => void;
+  const held = new Promise<void>((r) => (release = r));
+  const safetyAsked: string[] = [];
+  await page.route("**/api/v1/address/*/portfolio?part=safety", async (route) => {
+    safetyAsked.push(route.request().url());
+    await held;
+    await route.continue();
+  });
+  await page.goto("/en/tools/portfolio");
+  await page.evaluate(
+    (a) =>
+      localStorage.setItem(
+        "crypy.portfolio",
+        JSON.stringify({ v: 1, wallets: [{ address: a, label: "Main", addedAt: 1 }], snapshot: null }),
+      ),
+    VITALIK,
+  );
+  await page.reload();
+  const main = page.locator("#main");
+  const row = main.getByTestId("portfolio-wallet");
+  // The total is there while the safety check is still held back.
+  await expect(row.getByText(/^\$[\d,]+\.\d{2}$/)).toBeVisible({ timeout: 120_000 });
+  await expect(row.getByText("Checking…")).toBeVisible();
+  await expect(main.getByText("Nothing flagged")).toHaveCount(0);
+  expect(safetyAsked).toHaveLength(1);
+  release();
+  await expect(row.getByText("Checking…")).toHaveCount(0, { timeout: 120_000 });
+  await expect(main.getByText(/^Safe$/)).toHaveCount(0);
+  // A complete result is remembered in this browser for 6 hours: reopening asks nothing; "Check again" does.
+  const complete = await page.evaluate(() => localStorage.getItem("crypy.portfolio.safety"));
+  if (complete && complete.includes("0xd8da6bf26964af9d7eed9e03e53415d37aa96045")) {
+    await page.reload();
+    await expect(row.getByText(/^Checked /)).toBeVisible({ timeout: 120_000 });
+    expect(safetyAsked).toHaveLength(1);
+    await row.getByRole("button", { name: "Check Main again" }).click();
+    await expect.poll(() => safetyAsked.length).toBe(2);
+  } else {
+    // GoPlus didn't answer every check (free plan busy): nothing is remembered, so the next visit checks again.
+    await page.reload();
+    await expect.poll(() => safetyAsked.length, { timeout: 120_000 }).toBe(2);
+  }
+});

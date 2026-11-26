@@ -4,7 +4,8 @@ import {
   classifyApprovals,
   classifyGas,
   classifyOverview,
-  classifyPortfolio,
+  classifyPortfolioBalances,
+  classifyPortfolioSafety,
   classifySearch,
   classifyTokenSecurity,
   cleanReason,
@@ -68,10 +69,12 @@ describe("classifying what a visitor got", () => {
     expect(classifySearch({ status: "address", unavailable: ["polygon"] }).outcome).toBe("partial");
     expect(classifySearch({ status: "not-found", unavailable: [] }).outcome).toBe("full");
     const overview = { chains: [{ chain: "ethereum", coverage: "full" }], unavailable: [], pricesAvailable: true };
-    expect(classifyPortfolio({ overview, approvals: null, flagged: { skipped: 2 } }).reasons).toEqual([
+    expect(classifyPortfolioBalances({ overview }).outcome).toBe("full");
+    expect(classifyPortfolioSafety({ approvals: null, flagged: { skipped: 2 } }).reasons).toEqual([
       "approvals not checked",
       "token flags partly skipped",
     ]);
+    expect(classifyPortfolioSafety({ approvals: { partial: false }, flagged: { skipped: 0 } }).outcome).toBe("full");
   });
 
   it("reasons never carry addresses, hashes, URLs or long numbers", () => {

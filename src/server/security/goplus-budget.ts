@@ -8,19 +8,25 @@ import { countToday } from "@/server/health/counters";
  * A smooth pace (S3): slots come back at PER_MINUTE a minute (one every 2 s), at most BURST saved up. A call that
  * finds no slot waits in a short line instead of being refused at once:
  *  - "page": a visitor opened a token or approvals report. Always first in line; waits up to PAGE_WAIT_MS.
- *  - "background": nice-to-have checks (the Portfolio's badges, daily token checks). They never take one of the last
- *    RESERVE slots, use at most BACKGROUND_PER_MINUTE a minute, wait behind every page call, up to BACKGROUND_WAIT_MS.
+ *  - "portfolio" (B-034): a visitor's Portfolio safety badges. Someone is waiting, but they come in bursts (several
+ *    calls per wallet), so they get their own share: at most PORTFOLIO_PER_MINUTE a minute, never one of the last
+ *    PORTFOLIO_RESERVE slots, behind every page call and ahead of background, waiting up to PORTFOLIO_WAIT_MS.
+ *  - "background": nice-to-have checks (daily token checks, alerts). They never take one of the last RESERVE slots,
+ *    use at most BACKGROUND_PER_MINUTE a minute, wait behind every other call, up to BACKGROUND_WAIT_MS.
  *
  * When GoPlus says "too many requests", every call pauses for PAUSE_MS; calls whose wait would end before the pause
  * does are refused at once. A refused call returns "unavailable" (or a saved answer), which pages show as such.
  * In memory per server process; a shared store replaces it if CRYPY runs on several servers.
  */
-export type GoPlusPriority = "page" | "background";
+export type GoPlusPriority = "page" | "portfolio" | "background";
 
 export const PER_MINUTE = 30;
 export const BURST = 10;
 export const RESERVE = 4;
 export const BACKGROUND_PER_MINUTE = 8;
+export const PORTFOLIO_PER_MINUTE = 15;
+export const PORTFOLIO_RESERVE = 2;
+export const PORTFOLIO_WAIT_MS = 30_000;
 export const PAGE_WAIT_MS = 4_000;
 export const BACKGROUND_WAIT_MS = 20_000;
 const RATE_PER_MS = PER_MINUTE / 60_000;
@@ -37,11 +43,16 @@ interface Pace {
   refilledAt: number;
   pausedUntil: number;
   background: number[];
+  portfolio: number[];
   queue: Waiter[];
   timer: ReturnType<typeof setTimeout> | null;
   /** Counts for the once-a-minute log line (nothing about what was asked). */
-  stats: { since: number; sent: number; waited: number; refused: { page: number; background: number }; failed: number };
+  stats: { since: number; sent: number; waited: number; refused: Record<GoPlusPriority, number>; failed: number };
 }
+
+/** Lower goes first. */
+const RANK: Record<GoPlusPriority, number> = { page: 0, portfolio: 1, background: 2 };
+const noRefusals = (): Record<GoPlusPriority, number> => ({ page: 0, portfolio: 0, background: 0 });
 
 const state = globalThis as typeof globalThis & { __crypyGoPlusPace?: Pace };
 const fresh = (): Pace => ({
@@ -49,9 +60,10 @@ const fresh = (): Pace => ({
   refilledAt: -1,
   pausedUntil: 0,
   background: [],
+  portfolio: [],
   queue: [],
   timer: null,
-  stats: { since: -1, sent: 0, waited: 0, refused: { page: 0, background: 0 }, failed: 0 },
+  stats: { since: -1, sent: 0, waited: 0, refused: noRefusals(), failed: 0 },
 });
 const pace = () => (state.__crypyGoPlusPace ??= fresh());
 
@@ -60,30 +72,33 @@ function refill(p: Pace, now: number) {
   p.tokens = Math.min(BURST, p.tokens + Math.max(0, now - p.refilledAt) * RATE_PER_MS);
   p.refilledAt = now;
   while (p.background.length && now - p.background[0]! >= 60_000) p.background.shift();
+  while (p.portfolio.length && now - p.portfolio[0]! >= 60_000) p.portfolio.shift();
 }
 
 function logMinute(p: Pace, now: number) {
   if (p.stats.since < 0) p.stats.since = now;
   if (now - p.stats.since < 60_000) return;
   const s = p.stats;
-  if (s.refused.page || s.refused.background || s.failed || s.waited)
+  if (s.refused.page || s.refused.portfolio || s.refused.background || s.failed || s.waited)
     console.warn(
       `[crypy] GoPlus last minute: ${s.sent} sent (${s.waited} after waiting), ${s.failed} failed, ` +
-        `${s.refused.page} page and ${s.refused.background} background calls held back`,
+        `${s.refused.page} page, ${s.refused.portfolio} portfolio and ${s.refused.background} background calls held back`,
     );
-  p.stats = { since: now, sent: 0, waited: 0, refused: { page: 0, background: 0 }, failed: 0 };
+  p.stats = { since: now, sent: 0, waited: 0, refused: noRefusals(), failed: 0 };
 }
 
 function canTake(p: Pace, priority: GoPlusPriority, now: number): boolean {
   if (now < p.pausedUntil) return false;
   refill(p, now);
   if (priority === "page") return p.tokens >= 1;
+  if (priority === "portfolio") return p.tokens >= 1 + PORTFOLIO_RESERVE && p.portfolio.length < PORTFOLIO_PER_MINUTE;
   return p.tokens >= 1 + RESERVE && p.background.length < BACKGROUND_PER_MINUTE;
 }
 
 function take(p: Pace, priority: GoPlusPriority, now: number) {
   p.tokens -= 1;
   if (priority === "background") p.background.push(now);
+  if (priority === "portfolio") p.portfolio.push(now);
   p.stats.sent += 1;
   countToday("goplus.sent", now);
 }
@@ -97,7 +112,7 @@ function refuse(p: Pace, priority: GoPlusPriority, now: number) {
 export function takeGoPlusSlot(priority: GoPlusPriority, now = Date.now()): boolean {
   const p = pace();
   logMinute(p, now);
-  const ahead = p.queue.some((w) => w.priority === "page" || priority === "background");
+  const ahead = p.queue.some((w) => RANK[w.priority] <= RANK[priority]);
   if (!ahead && canTake(p, priority, now)) {
     take(p, priority, now);
     return true;
@@ -107,19 +122,21 @@ export function takeGoPlusSlot(priority: GoPlusPriority, now = Date.now()): bool
 }
 
 /**
- * Takes a slot, waiting in line when none is free: pages up to PAGE_WAIT_MS, background up to BACKGROUND_WAIT_MS.
+ * Takes a slot, waiting in line when none is free: pages up to PAGE_WAIT_MS, Portfolio up to PORTFOLIO_WAIT_MS,
+ * background up to BACKGROUND_WAIT_MS.
  * Resolves false when the wait would be too long (the caller then reports "unavailable").
  */
 export function waitForGoPlusSlot(priority: GoPlusPriority, maxWaitMs?: number): Promise<boolean> {
   const p = pace();
   const now = Date.now();
   logMinute(p, now);
-  const ahead = p.queue.some((w) => w.priority === "page" || priority === "background");
+  const ahead = p.queue.some((w) => RANK[w.priority] <= RANK[priority]);
   if (!ahead && canTake(p, priority, now)) {
     take(p, priority, now);
     return Promise.resolve(true);
   }
-  const deadline = now + (maxWaitMs ?? (priority === "page" ? PAGE_WAIT_MS : BACKGROUND_WAIT_MS));
+  const wait = { page: PAGE_WAIT_MS, portfolio: PORTFOLIO_WAIT_MS, background: BACKGROUND_WAIT_MS }[priority];
+  const deadline = now + (maxWaitMs ?? wait);
   if (p.pausedUntil > deadline) {
     refuse(p, priority, now);
     return Promise.resolve(false);
@@ -130,18 +147,17 @@ export function waitForGoPlusSlot(priority: GoPlusPriority, maxWaitMs?: number):
   });
 }
 
-/** Serves the line: pages first, then background, each in arrival order; drops waiters whose time is up. */
+/** Serves the line: pages, then Portfolio, then background, each in arrival order; drops waiters whose time is up. */
 function drain() {
   const p = pace();
   p.timer = null;
   const now = Date.now();
   logMinute(p, now);
-  const order = [...p.queue.filter((w) => w.priority === "page"), ...p.queue.filter((w) => w.priority !== "page")];
+  const order = [...p.queue].sort((a, b) => RANK[a.priority] - RANK[b.priority]); // stable: arrival order kept
   const served = new Set<Waiter>();
   for (const w of order) {
-    // A background call never overtakes a page call still waiting.
-    if (w.priority === "background" && order.some((o) => o.priority === "page" && !served.has(o) && o.deadline > now))
-      break;
+    // A call never overtakes a better-placed call still waiting.
+    if (order.some((o) => RANK[o.priority] < RANK[w.priority] && !served.has(o) && o.deadline > now)) break;
     if (!canTake(p, w.priority, now)) {
       if (w.priority === "page") break;
       continue;

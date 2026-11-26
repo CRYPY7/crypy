@@ -507,7 +507,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   in memory); `providerHealthTable` (`server/health/admin.ts`) adds `restingNow` and feeds the /admin table.
 - Heavy checks (`server/heavy/queue.ts`, S3): `runHeavy(task, priority)` wraps the adapter's `getTokenSecurity` (in
   `tokenSecurityReport`) and `getApprovals` (per chain, in `cachedApprovals`): `HEAVY_MAX_RUNNING` (6) at once, at
-  most `HEAVY_MAX_BACKGROUND` (2) background (default inside `runInBackground`), pages started first,
+  most `HEAVY_MAX_PORTFOLIO` (3) Portfolio safety checks and `HEAVY_MAX_BACKGROUND` (2) background (default inside
+  `runInBackground`), pages started first, then Portfolio,
   `HeavyBusyError` past `HEAVY_MAX_QUEUED` (60) waiting or after 2 minutes for background. In memory per process.
 - Alchemy daily limit (`alchemy-budget.ts`, pure): (90% of `ALCHEMY_MONTHLY_CU` − units spent earlier this month)
   ÷ days left, at most 2× a normal day; `ALCHEMY_DAILY_CU` fixes it instead. Tiers inside the day: ordinary
@@ -729,11 +730,15 @@ DEX decoders, per chain family:                      (one per DEX design)
 - Maths: `lib/portfolio/combine.ts` (pure, unit-tested). Cross-chain merging only for each chain's coin and tokens in
   `config/batch-assets.ts`; everything else is keyed by chain + contract.
 - Server: `server/services/portfolio.ts` → `GET /api/v1/address/{address}/portfolio` = cached overview on the
-  wallet's used chains + approvals summary (timeout 20 s) + GoPlus flags on the top 8 non-listed tokens (timeout 8 s).
-  `portfolioLimiter` 60/min. The browser fetches 3 wallets at a time; an older answer never replaces a newer one.
+  wallet's used chains; `?part=safety` (B-034, its own request) = approvals summary (timeout 45 s) + GoPlus flags on
+  the top 8 non-listed tokens (timeout 35 s), both at GoPlus and heavy-line priority "portfolio". Counted as
+  `portfolio` and `portfolio-safety` in visitor outcomes. `portfolioLimiter` 60/min. The browser reads balances 4
+  wallets at a time and safety 2 at a time, after each wallet's balances; an older answer never replaces a newer one.
+  Complete safety results are kept in the browser for 6 hours (`lib/portfolio/safety-cache.ts`, key
+  `crypy.portfolio.safety`, owner decision 2026-11-26), with "Checked … · Check again" per wallet.
 - GoPlus pace (`server/security/goplus-budget.ts`, S3): a token bucket of 30 calls a minute, burst 10;
-  `waitForGoPlusSlot(priority)` waits in a line (pages first up to 4 s; "background" behind them up to 20 s, never
-  the last 4 slots, ≤ 8 a minute); 60 s pause on a limit answer refuses waits that can't outlast it; one log line
+  `waitForGoPlusSlot(priority)` waits in a line (pages first up to 4 s; "portfolio" next up to 30 s, never the last
+  2 slots, ≤ 15 a minute; "background" behind them up to 20 s, never the last 4 slots, ≤ 8 a minute); 60 s pause on a limit answer refuses waits that can't outlast it; one log line
   per minute with counts. `goPlusToken`, `goPlusApprovals`, `cachedApprovals` and the adapter's `getApprovals` take
   the priority. In memory per process (a shared store is needed with several servers).
 - `modules/tools/portfolio/widget.tsx` is a thin client shell that lazy-loads `tracker.tsx`, so route prefetches
