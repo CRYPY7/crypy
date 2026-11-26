@@ -41,6 +41,18 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## JSON Diff removed; backups live (2026-11-26)
+
+- **Backups live:** the owner ran `crypy-backup setup` on the server: first R2 copy (205 KB) uploaded and checked,
+  round trip (download, decrypt, read) passed, the opening key is in the owner's password manager and gone from the
+  server, and the first restore test passed with every table's counts equal to live (2 users, 2 accounts, 1
+  portfolio, 1 status update).
+- **JSON Diff removed** (owner decision, after the first usefulness review of U5: a generic developer tool with many
+  free alternatives and little to do with wallet safety). Page, sidebar entry, texts in 7 languages and tests removed;
+  `/tools/json-diff` now answers 404 and is out of the sitemap. Registry: F-212 Rejected.
+- **Checks:** typecheck, lint, Prettier, translation check clean. Unit: 635 passed, 76 skipped. Build passed.
+  Browser: 327 passed, 19 skipped, 0 failed.
+
 ## S4: backups that are copied off the server and tested (2026-11-25)
 
 Owner decision 2026-11-25: backups before more tools; off-server copy in Cloudflare R2. Owner's working rule from the

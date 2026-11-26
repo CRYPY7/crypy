@@ -33,7 +33,6 @@ export const relatedTools: Record<ToolId, readonly [ToolId, ToolId, ToolId]> = {
   "address-book": ["address-analyzer", "address-formatter", "approval-checker"],
   "profit-calculator": ["apy-calculator", "portfolio", "token-valuation"],
   "bytecode-compare": ["token-security", "keccak-hash", "raw-tx-decoder"],
-  "nft-uri-decoder": ["encoding-converter", "json-diff", "approval-checker"],
-  "json-diff": ["json-csv", "abi-encoder", "encoding-converter"],
+  "nft-uri-decoder": ["approval-checker", "encoding-converter", "tx-decoder"],
   "calldata-gas": ["gas-tracker", "tx-decoder", "abi-encoder"],
 };

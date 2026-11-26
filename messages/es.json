@@ -1471,44 +1471,6 @@
       "seoDescription": "Decodifica datos de tokenURI de NFT: JSON base64, SVG on-chain, enlaces IPFS y Arweave y rasgos, con avisos de scripts y alojamiento modificable.",
       "shortName": "Decodificador URI NFT"
     },
-    "json-diff": {
-      "name": "Comparador JSON (diff)",
-      "question": "¿Qué cambió entre estos dos archivos JSON?",
-      "description": "Compara dos documentos JSON y lista cada valor añadido, eliminado o cambiado, con su ruta. Los números grandes se mantienen exactos y las claves repetidas se señalan.",
-      "input": "Dos documentos JSON",
-      "cta": "Comparar",
-      "features": [
-        "Cada cambio con su ruta, como $.fees.sell",
-        "Números grandes comparados con exactitud (las cantidades en wei no se alteran)",
-        "Claves repetidas y errores de sintaxis con línea y columna"
-      ],
-      "howTo": [
-        "Pega el JSON antiguo a la izquierda y el nuevo a la derecha.",
-        "Lee la lista de valores añadidos, eliminados y cambiados.",
-        "Copia la lista como texto si quieres compartirla."
-      ],
-      "faq": [
-        {
-          "q": "¿Importa el orden de las claves?",
-          "a": "No. En JSON, las claves de un objeto no tienen orden, así que reordenarlas no es un cambio. Los elementos de las listas se comparan por posición."
-        },
-        {
-          "q": "¿Por qué mantiene los números exactos?",
-          "a": "La mayoría de los lectores de JSON redondean enteros muy grandes, así que dos cantidades de tokens en wei distintas podrían parecer iguales. Esta herramienta compara los números tal como están escritos; 1.0 y 1 cuentan como el mismo valor."
-        },
-        {
-          "q": "¿Por qué las claves repetidas son un aviso?",
-          "a": "Cuando una clave aparece dos veces, cada programa se queda con una copia distinta. Se ha usado para mostrar un valor a una persona y usar otro en el código. La herramienta compara la última copia, como hace la mayoría de los programas."
-        },
-        {
-          "q": "¿Se envía mi JSON a algún sitio?",
-          "a": "No. Todo se compara en tu navegador."
-        }
-      ],
-      "seoTitle": "Comparar JSON online: diff de dos archivos | CRYPY",
-      "seoDescription": "Compara dos documentos JSON y mira cada valor añadido, eliminado o cambiado con su ruta. Números grandes exactos y avisos de claves repetidas.",
-      "shortName": "Comparador JSON"
-    },
     "calldata-gas": {
       "name": "Calculadora de gas de calldata",
       "question": "¿Cuánto gas cuestan los datos de esta transacción?",
@@ -4715,33 +4677,6 @@
         "bad-json": "No es un JSON de metadatos válido (un objeto con campos como name e image).",
         "bad-data": "Este URI data: no se puede decodificar (el base64 o el texto está dañado).",
         "token-id": "Escribe un número entero o un número hex con 0x."
-      }
-    },
-    "jsonDiff": {
-      "before": "JSON antiguo",
-      "after": "JSON nuevo",
-      "placeholder": "{\"key\": \"value\"}",
-      "same": "Sin diferencias",
-      "sameBody": "Ambos documentos tienen los mismos valores (sin contar el orden de las claves ni el formato de los números).",
-      "summary": "{added} añadidos · {removed} eliminados · {changed} cambiados",
-      "kinds": {
-        "added": "Añadido",
-        "removed": "Eliminado",
-        "changed": "Cambiado",
-        "type": "Tipo cambiado"
-      },
-      "path": "Ruta",
-      "change": "Cambio",
-      "truncated": "Se muestran los primeros {shown} cambios.",
-      "copyReport": "Copiar los cambios como texto",
-      "duplicates": "Claves repetidas",
-      "duplicatesBody": "Algunas claves aparecen más de una vez. Los programas no coinciden en qué copia cuenta; esta comparación usa la última.",
-      "note": "Los objetos se comparan sin tener en cuenta el orden de las claves; las listas, elemento por elemento.",
-      "local": "Comparado en tu navegador; no se envía nada.",
-      "errors": {
-        "syntax": "JSON no válido: línea {line}, columna {column}.",
-        "too-large": "Demasiado largo: como máximo 2 millones de caracteres.",
-        "too-deep": "Anidado en exceso (más de 200 niveles)."
       }
     },
     "calldataGas": {

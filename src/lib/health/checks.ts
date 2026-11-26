@@ -126,7 +126,6 @@ export const statusComponents: readonly StatusComponent[] = [
   toolComponent("profit-calculator", []),
   toolComponent("bytecode-compare", []),
   toolComponent("nft-uri-decoder", []),
-  toolComponent("json-diff", []),
   toolComponent("calldata-gas", []),
   ...liveChains.map((c) => ({
     id: `chain:${c.key}`,

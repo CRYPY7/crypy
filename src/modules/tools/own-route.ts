@@ -34,6 +34,5 @@ export const ownRouteTools: readonly ToolId[] = [
   "profit-calculator",
   "bytecode-compare",
   "nft-uri-decoder",
-  "json-diff",
   "calldata-gas",
 ];

@@ -1471,44 +1471,6 @@
       "seoDescription": "Giải mã dữ liệu tokenURI của NFT: JSON base64, SVG on-chain, liên kết IPFS và Arweave và thuộc tính, kèm cảnh báo script và nơi lưu trữ có thể đổi.",
       "shortName": "Giải mã URI NFT"
     },
-    "json-diff": {
-      "name": "So sánh JSON (Diff)",
-      "question": "Hai tệp JSON này khác nhau ở đâu?",
-      "description": "So sánh hai tài liệu JSON và liệt kê mọi giá trị được thêm, xóa hoặc thay đổi kèm đường dẫn. Số lớn được giữ chính xác và khóa lặp lại được đánh dấu.",
-      "input": "Hai tài liệu JSON",
-      "cta": "So sánh",
-      "features": [
-        "Mỗi thay đổi kèm đường dẫn, như $.fees.sell",
-        "So sánh số lớn chính xác (số lượng token tính bằng wei không bị sai lệch)",
-        "Khóa lặp lại và lỗi cú pháp kèm dòng và cột"
-      ],
-      "howTo": [
-        "Dán JSON cũ bên trái và JSON mới bên phải.",
-        "Xem danh sách các giá trị được thêm, xóa và thay đổi.",
-        "Sao chép danh sách dạng văn bản nếu muốn chia sẻ."
-      ],
-      "faq": [
-        {
-          "q": "Thứ tự các khóa có quan trọng không?",
-          "a": "Không. Trong JSON, các khóa của một đối tượng không có thứ tự, nên sắp xếp lại khóa không phải là thay đổi. Phần tử mảng được so sánh theo vị trí."
-        },
-        {
-          "q": "Vì sao công cụ giữ số chính xác?",
-          "a": "Phần lớn trình đọc JSON làm tròn số nguyên rất lớn, nên hai số lượng token khác nhau tính bằng wei có thể trông như bằng nhau. Công cụ so sánh số đúng như được viết; 1.0 và 1 được coi là cùng một giá trị."
-        },
-        {
-          "q": "Vì sao khóa lặp lại là một cảnh báo?",
-          "a": "Khi một khóa xuất hiện hai lần, mỗi chương trình lấy một bản khác nhau. Điều này từng bị lợi dụng để cho người xem thấy một giá trị nhưng mã lại dùng giá trị khác. Công cụ so sánh bản cuối cùng, như phần lớn chương trình."
-        },
-        {
-          "q": "JSON của tôi có bị gửi đi đâu không?",
-          "a": "Không. Mọi thứ được so sánh trong trình duyệt của bạn."
-        }
-      ],
-      "seoTitle": "So sánh JSON trực tuyến: diff hai tệp JSON | CRYPY",
-      "seoDescription": "So sánh hai tài liệu JSON và xem mọi giá trị được thêm, xóa, thay đổi kèm đường dẫn. Số lớn chính xác, cảnh báo khóa lặp lại. Trong trình duyệt.",
-      "shortName": "So sánh JSON"
-    },
     "calldata-gas": {
       "name": "Máy tính gas calldata",
       "question": "Dữ liệu của giao dịch này tốn bao nhiêu gas?",
@@ -4715,33 +4677,6 @@
         "bad-json": "Đây không phải JSON metadata hợp lệ (một đối tượng có các trường như name và image).",
         "bad-data": "Không thể giải mã URI data: này (base64 hoặc văn bản bị hỏng).",
         "token-id": "Nhập một số nguyên hoặc số hex có 0x."
-      }
-    },
-    "jsonDiff": {
-      "before": "JSON cũ",
-      "after": "JSON mới",
-      "placeholder": "{\"key\": \"value\"}",
-      "same": "Không có khác biệt",
-      "sameBody": "Hai tài liệu có cùng giá trị (không tính thứ tự khóa và cách viết số).",
-      "summary": "{added} thêm · {removed} xóa · {changed} thay đổi",
-      "kinds": {
-        "added": "Đã thêm",
-        "removed": "Đã xóa",
-        "changed": "Đã thay đổi",
-        "type": "Đổi kiểu"
-      },
-      "path": "Đường dẫn",
-      "change": "Thay đổi",
-      "truncated": "Đang hiển thị {shown} thay đổi đầu tiên.",
-      "copyReport": "Sao chép các thay đổi dạng văn bản",
-      "duplicates": "Khóa lặp lại",
-      "duplicatesBody": "Một số khóa xuất hiện nhiều hơn một lần. Các chương trình không thống nhất bản nào được tính; lần so sánh này dùng bản cuối cùng.",
-      "note": "Đối tượng được so sánh không tính thứ tự khóa; mảng được so sánh từng phần tử.",
-      "local": "Được so sánh trong trình duyệt của bạn; không gửi đi bất cứ thứ gì.",
-      "errors": {
-        "syntax": "JSON không hợp lệ: dòng {line}, cột {column}.",
-        "too-large": "Quá dài: tối đa 2 triệu ký tự.",
-        "too-deep": "Lồng nhau quá sâu (hơn 200 cấp)."
       }
     },
     "calldataGas": {

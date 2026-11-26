@@ -942,9 +942,7 @@ DEX decoders, per chain family:                      (one per DEX design)
   fee); `bytecode-compare/bytecode.ts` (a small CBOR reader for the Solidity metadata tail, viem `keccak256`, EIP-1167
   and EIP-7702 patterns, run-length of differing bytes); `nft-uri-decoder/nft-uri.ts` (`data:` URI decoding with
   `@scure/base`, ERC-1155 `{id}` fill, gateway addresses that are never fetched, findings with tones; image previews
-  only from `data:image/*` in an `<img>`, allowed by the existing `img-src data:`); `json-diff/diff.ts` (own JSON
-  parser keeping number text exact, duplicate-key paths, line/column errors, diff capped at 2,000 changes);
-  `calldata-gas/calldata.ts` (EIP-2028 byte costs, EIP-3860 init-code words, EIP-7623 floor; BigInt only).
+  only from `data:image/*` in an `<img>`, allowed by the existing `img-src data:`); `calldata-gas/calldata.ts` (EIP-2028 byte costs, EIP-3860 init-code words, EIP-7623 floor; BigInt only).
 - The calldata tool links to the Transaction Data Decoder with `#data=` (fragment, never the query string).
 
 ## 12w. Backups (S4)

@@ -1471,44 +1471,6 @@
       "seoDescription": "Decodifique dados de tokenURI de NFT: JSON base64, SVG on-chain, links IPFS e Arweave e atributos, com alertas de scripts e hospedagem alterável.",
       "shortName": "Decodificador URI NFT"
     },
-    "json-diff": {
-      "name": "Comparador de JSON (diff)",
-      "question": "O que mudou entre estes dois arquivos JSON?",
-      "description": "Compare dois documentos JSON e liste cada valor adicionado, removido ou alterado, com o caminho. Números grandes ficam exatos e chaves repetidas são sinalizadas.",
-      "input": "Dois documentos JSON",
-      "cta": "Comparar",
-      "features": [
-        "Cada mudança com o caminho, como $.fees.sell",
-        "Números grandes comparados com exatidão (valores em wei não se alteram)",
-        "Chaves repetidas e erros de sintaxe com linha e coluna"
-      ],
-      "howTo": [
-        "Cole o JSON antigo à esquerda e o novo à direita.",
-        "Veja a lista de valores adicionados, removidos e alterados.",
-        "Copie a lista como texto se quiser compartilhar."
-      ],
-      "faq": [
-        {
-          "q": "A ordem das chaves importa?",
-          "a": "Não. Em JSON, as chaves de um objeto não têm ordem, então reordená-las não é uma mudança. Os itens de listas são comparados pela posição."
-        },
-        {
-          "q": "Por que ela mantém os números exatos?",
-          "a": "A maioria dos leitores de JSON arredonda inteiros muito grandes, então dois valores de tokens em wei diferentes poderiam parecer iguais. Esta ferramenta compara os números como estão escritos; 1.0 e 1 contam como o mesmo valor."
-        },
-        {
-          "q": "Por que chaves repetidas são um alerta?",
-          "a": "Quando uma chave aparece duas vezes, cada programa fica com uma cópia diferente. Isso já foi usado para mostrar um valor a uma pessoa e usar outro no código. A ferramenta compara a última cópia, como faz a maioria dos programas."
-        },
-        {
-          "q": "Meu JSON é enviado para algum lugar?",
-          "a": "Não. Tudo é comparado no seu navegador."
-        }
-      ],
-      "seoTitle": "Comparar JSON online: diff de dois arquivos | CRYPY",
-      "seoDescription": "Compare dois documentos JSON e veja cada valor adicionado, removido ou alterado com o caminho. Números grandes exatos e alertas de chaves repetidas.",
-      "shortName": "Comparador JSON"
-    },
     "calldata-gas": {
       "name": "Calculadora de gás de calldata",
       "question": "Quanto gás custam os dados desta transação?",
@@ -4715,33 +4677,6 @@
         "bad-json": "Isto não é um JSON de metadados válido (um objeto com campos como name e image).",
         "bad-data": "Este URI data: não pode ser decodificado (o base64 ou o texto está corrompido).",
         "token-id": "Digite um número inteiro ou um número hex com 0x."
-      }
-    },
-    "jsonDiff": {
-      "before": "JSON antigo",
-      "after": "JSON novo",
-      "placeholder": "{\"key\": \"value\"}",
-      "same": "Sem diferenças",
-      "sameBody": "Os dois documentos têm os mesmos valores (sem contar a ordem das chaves e o formato dos números).",
-      "summary": "{added} adicionados · {removed} removidos · {changed} alterados",
-      "kinds": {
-        "added": "Adicionado",
-        "removed": "Removido",
-        "changed": "Alterado",
-        "type": "Tipo alterado"
-      },
-      "path": "Caminho",
-      "change": "Mudança",
-      "truncated": "Mostrando as primeiras {shown} mudanças.",
-      "copyReport": "Copiar as mudanças como texto",
-      "duplicates": "Chaves repetidas",
-      "duplicatesBody": "Algumas chaves aparecem mais de uma vez. Os programas discordam sobre qual cópia vale; esta comparação usa a última.",
-      "note": "Objetos são comparados sem considerar a ordem das chaves; listas, item por item.",
-      "local": "Comparado no seu navegador; nada é enviado.",
-      "errors": {
-        "syntax": "JSON inválido: linha {line}, coluna {column}.",
-        "too-large": "Longo demais: no máximo 2 milhões de caracteres.",
-        "too-deep": "Aninhado demais (mais de 200 níveis)."
       }
     },
     "calldataGas": {

@@ -49,7 +49,6 @@ export const toolIds = [
   "profit-calculator",
   "bytecode-compare",
   "nft-uri-decoder",
-  "json-diff",
   "calldata-gas",
 ] as const;
 export type ToolId = (typeof toolIds)[number];
@@ -90,7 +89,6 @@ export type ToolIconName =
   | "trending-up"
   | "git-compare"
   | "image"
-  | "file-diff"
   | "gauge";
 
 export interface ToolDefinition {
@@ -199,7 +197,6 @@ export const tools: readonly ToolDefinition[] = [
   },
   { id: "bytecode-compare", category: "developer", icon: "git-compare", status: "live", milestone: "U5", isNew: true },
   { id: "nft-uri-decoder", category: "developer", icon: "image", status: "live", milestone: "U5", isNew: true },
-  { id: "json-diff", category: "developer", icon: "file-diff", status: "live", milestone: "U5", isNew: true },
   { id: "calldata-gas", category: "developer", icon: "gauge", status: "live", milestone: "U5", isNew: true },
 ];
 

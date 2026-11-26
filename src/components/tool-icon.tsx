@@ -15,7 +15,6 @@ import {
   Droplets,
   FileCheck,
   FileCode,
-  FileDiff,
   Gauge,
   GitCompare,
   Image,
@@ -72,7 +71,6 @@ const icons = {
   "trending-up": TrendingUp,
   "git-compare": GitCompare,
   image: Image,
-  "file-diff": FileDiff,
   gauge: Gauge,
 } satisfies Record<ToolIconName, React.ComponentType<LucideProps>>;
 

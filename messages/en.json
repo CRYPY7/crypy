@@ -1471,44 +1471,6 @@
       "seoDescription": "Decode NFT tokenURI data: base64 JSON, on-chain SVG, IPFS and Arweave links and traits, with warnings about scripts and changeable hosting. In your browser.",
       "shortName": "NFT URI Decoder"
     },
-    "json-diff": {
-      "name": "JSON Diff & Compare",
-      "question": "What changed between these two JSON files?",
-      "description": "Compare two JSON documents and list every value added, removed or changed, with its path. Big numbers stay exact and repeated keys are flagged.",
-      "input": "Two JSON documents",
-      "cta": "Compare",
-      "features": [
-        "Every change with its path, like $.fees.sell",
-        "Big numbers compared exactly (token amounts in wei stay intact)",
-        "Repeated keys and syntax errors shown with line and column"
-      ],
-      "howTo": [
-        "Paste the old JSON on the left and the new JSON on the right.",
-        "Read the list of added, removed and changed values.",
-        "Copy the list as text if you want to share it."
-      ],
-      "faq": [
-        {
-          "q": "Does the order of keys matter?",
-          "a": "No. In JSON, an object's keys have no order, so reordered keys are not a change. Array items are compared by position."
-        },
-        {
-          "q": "Why does it keep numbers exact?",
-          "a": "Most JSON readers round very large integers, so two different token amounts in wei could look equal. This tool compares numbers as written; 1.0 and 1 count as the same value."
-        },
-        {
-          "q": "Why are repeated keys a warning?",
-          "a": "When a key appears twice, different programs keep different copies. That has been used to show one value to a person and use another in code. The tool compares the last copy, as most programs do."
-        },
-        {
-          "q": "Is my JSON sent anywhere?",
-          "a": "No. Everything is compared in your browser."
-        }
-      ],
-      "seoTitle": "JSON Diff: Compare Two JSON Files Online | CRYPY",
-      "seoDescription": "Compare two JSON documents and see every added, removed and changed value with its path. Exact big numbers, repeated-key warnings. In your browser.",
-      "shortName": "JSON Diff"
-    },
     "calldata-gas": {
       "name": "Calldata Gas Calculator",
       "question": "How much gas does this transaction's data cost?",
@@ -4715,33 +4677,6 @@
         "bad-json": "This isn't valid metadata JSON (an object with fields like name and image).",
         "bad-data": "This data: URI can't be decoded (the base64 or text is broken).",
         "token-id": "Enter a whole number or a 0x hex number."
-      }
-    },
-    "jsonDiff": {
-      "before": "Old JSON",
-      "after": "New JSON",
-      "placeholder": "{\"key\": \"value\"}",
-      "same": "No differences",
-      "sameBody": "Both documents hold the same values (key order and number formatting aside).",
-      "summary": "{added} added · {removed} removed · {changed} changed",
-      "kinds": {
-        "added": "Added",
-        "removed": "Removed",
-        "changed": "Changed",
-        "type": "Type changed"
-      },
-      "path": "Path",
-      "change": "Change",
-      "truncated": "Showing the first {shown} changes.",
-      "copyReport": "Copy the changes as text",
-      "duplicates": "Repeated keys",
-      "duplicatesBody": "Some keys appear more than once. Programs disagree on which copy counts; this comparison uses the last one.",
-      "note": "Objects are compared without regard to key order; arrays item by item.",
-      "local": "Compared in your browser; nothing is sent.",
-      "errors": {
-        "syntax": "Not valid JSON: line {line}, column {column}.",
-        "too-large": "Too long: at most 2 million characters.",
-        "too-deep": "Nested too deeply (over 200 levels)."
       }
     },
     "calldataGas": {

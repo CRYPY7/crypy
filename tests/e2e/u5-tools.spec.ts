@@ -62,18 +62,6 @@ test("NFT URI decoder: on-chain example shows traits and an image; a script is f
   expect(requests).toEqual([]);
 });
 
-test("JSON diff: the example lists the changed owner, fee and added feature", async ({ page }) => {
-  await page.goto("/en/tools/json-diff", { waitUntil: "networkidle" });
-  const requests = trackRequests(page);
-  await page.getByRole("button", { name: "Try an example" }).click();
-  await expect(page.getByTestId("json-diff-summary")).toHaveText("1 added · 0 removed · 2 changed");
-  await expect(page.getByText("$.fees.sell", { exact: true })).toBeVisible();
-  await expect(page.getByText("$.features[2]", { exact: true })).toBeVisible();
-  await page.getByRole("textbox", { name: "New JSON" }).fill('{\n  "a": }');
-  await expect(page.getByText("Not valid JSON: line 2, column 8.")).toBeVisible();
-  expect(requests).toEqual([]);
-});
-
 test("calldata gas: an ERC-20 transfer's intrinsic gas and floor", async ({ page }) => {
   await page.goto("/en/tools/calldata-gas", { waitUntil: "networkidle" });
   const requests = trackRequests(page);

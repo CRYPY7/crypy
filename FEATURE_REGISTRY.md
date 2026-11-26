@@ -5,16 +5,16 @@ the 291 tools of the owner's "Web3 Tool Decision Catalog" (2026-11-24), each wit
 CRYPY, what already covers it, priority and the owner's decision. The catalog is the long-term backlog, not
 permission to build everything: only rows marked **Approved for development** are built, one batch at a time.
 
-## Statuses (2026-11-25, after U5)
+## Statuses (2026-11-26, after U5 and the JSON Diff removal)
 
-| Status                       | Count | Meaning                                                                                  |
-| ---------------------------- | ----- | ---------------------------------------------------------------------------------------- |
-| Existing / Verified          | 99    | Live in CRYPY and covered by automated tests                                             |
-| Existing / Needs improvement | 35    | Partly there (e.g. EVM only, known ABIs only, no standalone tool)                        |
-| Approved for development     | 0     | U1–U5 all built; the next batch waits for the owner's choice                             |
-| Planned                      | 32    | Worth doing; not scheduled                                                               |
-| Deferred                     | 120   | Needs the indexer (M5.5 Stage 2), always-on workers or a new chain family                |
-| Rejected                     | 5     | Tax classification, address risk context, wallet clusters, cross-chain flows, NFT floors |
+| Status                       | Count | Meaning                                                                                             |
+| ---------------------------- | ----- | --------------------------------------------------------------------------------------------------- |
+| Existing / Verified          | 98    | Live in CRYPY and covered by automated tests                                                        |
+| Existing / Needs improvement | 35    | Partly there (e.g. EVM only, known ABIs only, no standalone tool)                                   |
+| Approved for development     | 0     | U1–U5 all built; the next batch waits for the owner's choice                                        |
+| Planned                      | 32    | Worth doing; not scheduled                                                                          |
+| Deferred                     | 120   | Needs the indexer (M5.5 Stage 2), always-on workers or a new chain family                           |
+| Rejected                     | 6     | Tax classification, address risk context, wallet clusters, cross-chain flows, NFT floors, JSON diff |
 
 ## Utilities track (owner decision 2026-11-24)
 
@@ -33,7 +33,8 @@ visitor's device and touch no provider, server or stored data. Anything that nee
   RLP decoder; file hash checker (wallet downloads); Bitcoin fee calculator; local address book with a look-alike
   (address poisoning) check.
 - **U5 (Batch 5), built 2026-11-25:** profit & average cost calculator (covers manual cost basis, F-096); contract
-  bytecode comparer (F-060); NFT token URI & metadata decoder with traits (F-155, F-161); JSON diff (F-212); calldata
+  bytecode comparer (F-060); NFT token URI & metadata decoder with traits (F-155, F-161); JSON diff (F-212, removed
+  2026-11-26 by owner decision: generic, many free alternatives, little to do with wallet safety); calldata
   gas calculator (data-size and gas units, F-209).
 
 Rules for each batch: built directly without design approval first (owner decision 2026-11-24); English first; the batch's new texts are translated into the

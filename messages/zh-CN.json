@@ -1471,44 +1471,6 @@
       "seoDescription": "解码 NFT 的 tokenURI 数据：base64 JSON、链上 SVG、IPFS 与 Arweave 链接和属性，并提醒脚本和可修改的托管。在浏览器中完成。",
       "shortName": "NFT URI 解码"
     },
-    "json-diff": {
-      "name": "JSON 对比（Diff）",
-      "question": "这两个 JSON 文件之间改了什么？",
-      "description": "比较两个 JSON 文档，列出每个新增、删除或修改的值及其路径。大数字保持精确，重复的键会被标出。",
-      "input": "两个 JSON 文档",
-      "cta": "比较",
-      "features": [
-        "每处改动都带路径，例如 $.fees.sell",
-        "精确比较大数字（以 wei 为单位的代币数量不会失真）",
-        "显示重复的键和语法错误的行号与列号"
-      ],
-      "howTo": [
-        "在左边粘贴旧 JSON，右边粘贴新 JSON。",
-        "查看新增、删除和修改的值列表。",
-        "如需分享，可将列表复制为文本。"
-      ],
-      "faq": [
-        {
-          "q": "键的顺序重要吗？",
-          "a": "不重要。在 JSON 中，对象的键没有顺序，所以调整顺序不算改动。数组元素按位置比较。"
-        },
-        {
-          "q": "为什么要保持数字精确？",
-          "a": "大多数 JSON 解析器会对很大的整数取近似值，因此两个不同的 wei 数量可能看起来相等。本工具按书写原样比较数字；1.0 和 1 视为同一个值。"
-        },
-        {
-          "q": "为什么重复的键要提醒？",
-          "a": "同一个键出现两次时，不同程序会采用不同的那一个。这曾被用来给人看一个值、在代码里用另一个值。本工具像大多数程序一样，比较最后一个。"
-        },
-        {
-          "q": "我的 JSON 会被发送到任何地方吗？",
-          "a": "不会。所有比较都在你的浏览器中完成。"
-        }
-      ],
-      "seoTitle": "JSON 在线对比：比较两个 JSON 文件 | CRYPY",
-      "seoDescription": "比较两个 JSON 文档，查看每个新增、删除和修改的值及其路径。大数字精确比较，并提醒重复的键。在浏览器中完成。",
-      "shortName": "JSON 对比"
-    },
     "calldata-gas": {
       "name": "Calldata Gas 计算器",
       "question": "这笔交易的数据要花多少 Gas？",
@@ -4715,33 +4677,6 @@
         "bad-json": "这不是有效的元数据 JSON（应为包含 name、image 等字段的对象）。",
         "bad-data": "无法解码这个 data: URI（base64 或文本已损坏）。",
         "token-id": "请输入整数或 0x 开头的 hex 数字。"
-      }
-    },
-    "jsonDiff": {
-      "before": "旧 JSON",
-      "after": "新 JSON",
-      "placeholder": "{\"key\": \"value\"}",
-      "same": "没有差异",
-      "sameBody": "两个文档的值完全相同（不计键的顺序和数字的写法）。",
-      "summary": "新增 {added} · 删除 {removed} · 修改 {changed}",
-      "kinds": {
-        "added": "新增",
-        "removed": "删除",
-        "changed": "修改",
-        "type": "类型改变"
-      },
-      "path": "路径",
-      "change": "改动",
-      "truncated": "仅显示前 {shown} 处改动。",
-      "copyReport": "将改动复制为文本",
-      "duplicates": "重复的键",
-      "duplicatesBody": "有些键出现了不止一次。不同程序对采用哪一个看法不一；本次比较使用最后一个。",
-      "note": "对象比较时不考虑键的顺序；数组逐项比较。",
-      "local": "在你的浏览器中比较；不会发送任何数据。",
-      "errors": {
-        "syntax": "不是有效的 JSON：第 {line} 行，第 {column} 列。",
-        "too-large": "太长：最多 200 万个字符。",
-        "too-deep": "嵌套太深（超过 200 层）。"
       }
     },
     "calldataGas": {

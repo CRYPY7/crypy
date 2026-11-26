@@ -1471,44 +1471,6 @@
       "seoDescription": "NFT tokenURI verisini çözün: base64 JSON, zincir üstü SVG, IPFS ve Arweave bağlantıları ve özellikler; betik ve değiştirilebilir barındırma uyarılarıyla.",
       "shortName": "NFT URI Çözücü"
     },
-    "json-diff": {
-      "name": "JSON Fark Karşılaştırma",
-      "question": "Bu iki JSON dosyası arasında ne değişti?",
-      "description": "İki JSON belgesini karşılaştırın ve eklenen, silinen veya değişen her değeri yoluyla birlikte listeleyin. Büyük sayılar tam kalır, tekrarlanan anahtarlar işaretlenir.",
-      "input": "İki JSON belgesi",
-      "cta": "Karşılaştır",
-      "features": [
-        "Her değişiklik yoluyla birlikte, örneğin $.fees.sell",
-        "Büyük sayılar tam olarak karşılaştırılır (wei cinsinden tutarlar bozulmaz)",
-        "Tekrarlanan anahtarlar ve sözdizimi hataları satır ve sütunla gösterilir"
-      ],
-      "howTo": [
-        "Eski JSON'u sola, yenisini sağa yapıştırın.",
-        "Eklenen, silinen ve değişen değerlerin listesini okuyun.",
-        "Paylaşmak isterseniz listeyi metin olarak kopyalayın."
-      ],
-      "faq": [
-        {
-          "q": "Anahtarların sırası önemli mi?",
-          "a": "Hayır. JSON'da bir nesnenin anahtarlarının sırası yoktur, bu yüzden yeniden sıralanmış anahtarlar değişiklik sayılmaz. Dizi öğeleri konumlarına göre karşılaştırılır."
-        },
-        {
-          "q": "Sayıları neden tam tutuyor?",
-          "a": "Çoğu JSON okuyucu çok büyük tamsayıları yuvarlar, bu yüzden wei cinsinden iki farklı token tutarı eşit görünebilir. Bu araç sayıları yazıldığı gibi karşılaştırır; 1.0 ve 1 aynı değer sayılır."
-        },
-        {
-          "q": "Tekrarlanan anahtarlar neden uyarı?",
-          "a": "Bir anahtar iki kez geçtiğinde farklı programlar farklı kopyayı alır. Bu, bir kişiye bir değer gösterip kodda başka bir değer kullanmak için kullanılmıştır. Araç, çoğu programın yaptığı gibi son kopyayı karşılaştırır."
-        },
-        {
-          "q": "JSON'um bir yere gönderiliyor mu?",
-          "a": "Hayır. Her şey tarayıcınızda karşılaştırılır."
-        }
-      ],
-      "seoTitle": "JSON Karşılaştırma: İki JSON Dosyası Farkı | CRYPY",
-      "seoDescription": "İki JSON belgesini karşılaştırın; eklenen, silinen ve değişen her değeri yoluyla görün. Büyük sayılar tam, tekrarlanan anahtar uyarıları. Tarayıcınızda.",
-      "shortName": "JSON Karşılaştırma"
-    },
     "calldata-gas": {
       "name": "Calldata Gas Hesaplayıcı",
       "question": "Bu işlemin verisi ne kadar gas tutar?",
@@ -4715,33 +4677,6 @@
         "bad-json": "Bu geçerli bir meta veri JSON'u değil (name ve image gibi alanları olan bir nesne).",
         "bad-data": "Bu data: URI çözülemiyor (base64 veya metin bozuk).",
         "token-id": "Bir tamsayı veya 0x'li bir hex sayı girin."
-      }
-    },
-    "jsonDiff": {
-      "before": "Eski JSON",
-      "after": "Yeni JSON",
-      "placeholder": "{\"key\": \"value\"}",
-      "same": "Fark yok",
-      "sameBody": "İki belge aynı değerleri içeriyor (anahtar sırası ve sayı yazımı hariç).",
-      "summary": "{added} eklendi · {removed} silindi · {changed} değişti",
-      "kinds": {
-        "added": "Eklendi",
-        "removed": "Silindi",
-        "changed": "Değişti",
-        "type": "Tür değişti"
-      },
-      "path": "Yol",
-      "change": "Değişiklik",
-      "truncated": "İlk {shown} değişiklik gösteriliyor.",
-      "copyReport": "Değişiklikleri metin olarak kopyala",
-      "duplicates": "Tekrarlanan anahtarlar",
-      "duplicatesBody": "Bazı anahtarlar birden fazla kez geçiyor. Programlar hangi kopyanın geçerli olduğunda anlaşamaz; bu karşılaştırma sonuncuyu kullanır.",
-      "note": "Nesneler anahtar sırasına bakılmadan; diziler öğe öğe karşılaştırılır.",
-      "local": "Tarayıcınızda karşılaştırılır; hiçbir şey gönderilmez.",
-      "errors": {
-        "syntax": "Geçerli JSON değil: satır {line}, sütun {column}.",
-        "too-large": "Çok uzun: en fazla 2 milyon karakter.",
-        "too-deep": "Çok derin iç içe (200 düzeyden fazla)."
       }
     },
     "calldataGas": {

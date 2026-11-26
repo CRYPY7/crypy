@@ -4,7 +4,6 @@ import { toPlain } from "@/lib/math/decimal";
 import { profitCalc } from "@/modules/tools/profit-calculator/profit";
 import { codeInfo, compareCode, findMetadata, readCode } from "@/modules/tools/bytecode-compare/bytecode";
 import { decodeNft, fillId, readUri } from "@/modules/tools/nft-uri-decoder/nft-uri";
-import { diffJson, parseJson, report } from "@/modules/tools/json-diff/diff";
 import { calldataGas, gasCost, readCalldata } from "@/modules/tools/calldata-gas/calldata";
 
 describe("profit calculator", () => {
@@ -150,39 +149,6 @@ describe("NFT token URI decoder", () => {
   it("reports broken input", () => {
     expect(decodeNft("{ bad")).toEqual({ ok: false, error: "bad-json" });
     expect(decodeNft("data:application/json;base64,@@@")).toEqual({ ok: false, error: "bad-data" });
-  });
-});
-
-describe("JSON diff", () => {
-  it("keeps big numbers exact and treats 1.0 and 1 as equal", () => {
-    const a = parseJson('{"amount": 123456789012345678901234567890, "x": 1.0}');
-    const b = parseJson('{"amount": 123456789012345678901234567891, "x": 1}');
-    if (!a.ok || !b.ok) throw new Error("parse");
-    const d = diffJson(a.value, b.value);
-    expect(d.changes).toEqual([
-      {
-        path: "$.amount",
-        kind: "changed",
-        before: "123456789012345678901234567890",
-        after: "123456789012345678901234567891",
-      },
-    ]);
-  });
-
-  it("lists added, removed, changed and type changes with paths", () => {
-    const a = parseJson('{"a":1,"list":[1,2,3],"o":{"k":"v"},"t":"1","my key":true}');
-    const b = parseJson('{"a":2,"list":[1,2],"o":{"k":"v","n":null},"t":1,"my key":true}');
-    if (!a.ok || !b.ok) throw new Error("parse");
-    const d = diffJson(a.value, b.value);
-    expect(d.counts).toEqual({ added: 1, removed: 1, changed: 1, type: 1 });
-    expect(report(d).split("\n")).toEqual(["~ $.a: 1 → 2", "- $.list[2]: 3", "+ $.o.n: null", '~ $.t: "1" → 1']);
-  });
-
-  it("finds repeated keys and says where a syntax error is", () => {
-    const dup = parseJson('{"to":"0x1","to":"0x2"}');
-    expect(dup.ok && dup.duplicates).toEqual(["$.to"]);
-    const bad = parseJson('{\n  "a": 1,\n  "b": }');
-    expect(bad).toEqual({ ok: false, error: "syntax", line: 3, column: 8 });
   });
 });
 
