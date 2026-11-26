@@ -62,6 +62,14 @@ test.describe("search engine readiness", () => {
 
   test("unknown tool addresses answer 404, and settings aren't indexed", async ({ request }) => {
     expect((await request.get("/en/tools/not-a-real-tool")).status()).toBe(404);
+    // B-033: a stray backslash used to answer 500 on the server; now it goes once to the clean address.
+    for (const path of ["/en/tools/token-security%5C", "/en/tools/token-security%5c", "/en/tools%5C/gas-tracker"]) {
+      const answer = await request.get(path, { maxRedirects: 0 });
+      expect(answer.status(), path).toBe(308);
+      expect(new URL(answer.headers()["location"]!, "http://x").pathname, path).toBe(
+        path.startsWith("/en/tools%5C") ? "/en/tools/gas-tracker" : "/en/tools/token-security",
+      );
+    }
     const settings = await (await request.get("/en/settings")).text();
     expect(settings).toMatch(/<meta name="robots" content="noindex, follow"/);
   });

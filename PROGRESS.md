@@ -41,6 +41,20 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## B-033 fixed: a backslash in the address no longer answers 500 (2026-11-26)
+
+- **Cause:** a scanner asked for every tool page with an encoded backslash on the end (`/en/tools/<id>%5C`). On the
+  server (Node 26) the 404 rewrite for these failed ("Failed to proxy … EPROTO") and the visitor got 500. The owner
+  reproduced it on the server: app 500, public 500. With Node 22 here the same address answered 404.
+- **Fix:** `src/proxy.ts` now sends any address containing a raw or encoded backslash (any case) once, with a 308, to the
+  same address without it; the query string is kept. No real page has a backslash, so nothing a visitor uses changes.
+- **Tests:** `tests/unit/proxy-backslash.test.ts` (cleaning rules, redirect, unknown tools still 404) and a check in
+  `tests/e2e/seo.spec.ts`.
+- **To confirm after deploy:** the same three server commands should print 308, 308 and 0.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 643 passed, 76 skipped. Build passed (no warnings). Browser: 327
+passed, 19 skipped, 0 failed.
+
 ## First look at real usage; two log errors fixed (2026-11-26)
 
 - **Usage (Cloudflare and /admin, last 24 h):** about 35% of requests were the owner's own; search engines crawl a lot
@@ -54,7 +68,8 @@ Last updated: 2026-11-25
 - **Build warning removed:** the backup health check read its folder in a way that made the build trace the whole
   project; marked `turbopackIgnore` like the other file reads.
 - **B-033 investigating:** the 500s seen at Cloudflare were one burst on 2026-11-25 13:29 UTC (the 404 rewrite for an
-  unknown page proxied as an outside https request); not reproducible with today's build, none since.
+  unknown page proxied as an outside https request); not reproducible with today's build, none since. (Reproduced on
+  the server later the same day and fixed; see below.)
 
 **Checks:** typecheck, lint, Prettier clean. Unit: 639 passed, 76 skipped. Build passed (no warnings). Browser: 327
 passed, 19 skipped, 0 failed.

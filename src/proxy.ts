@@ -11,6 +11,16 @@ import { chainKeyFromSlug, chainSlugs, findCuratedToken } from "@/config/seo-pag
  */
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+
+  // A backslash in the path ("/en/tools/x%5C") is never a real page. On the server (Node 26) the 404 rewrite below fails
+  // for these and answers 500, so send them once to the same path without it (Next already does this for a raw "\").
+  const cleaned = stripBackslashes(pathname);
+  if (cleaned !== pathname) {
+    const url = request.nextUrl.clone();
+    url.pathname = cleaned;
+    return NextResponse.redirect(url, 308);
+  }
+
   const firstSegment = pathname.split("/")[1];
 
   if (isLocale(firstSegment)) {
@@ -61,4 +71,12 @@ export const config = {
 function isCuratedPage(chainSlug: string, rest: string[]): boolean {
   const chain = chainKeyFromSlug(chainSlug);
   return rest.length === 1 && chain !== undefined && findCuratedToken(chain, rest[0]!) !== undefined;
+}
+
+/** Removes raw and percent-encoded backslashes and the empty segments they leave behind. */
+export function stripBackslashes(pathname: string): string {
+  if (!/\\|%5c/i.test(pathname)) return pathname;
+  const cleaned = pathname.replace(/\\|%5c/gi, "").replace(/\/{2,}/g, "/");
+  const trimmed = cleaned.length > 1 ? cleaned.replace(/\/+$/, "") : cleaned;
+  return trimmed === "" ? "/" : trimmed;
 }
