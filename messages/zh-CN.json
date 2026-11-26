@@ -3071,6 +3071,8 @@
       "checkingTitle": "{chain}：显示的是{ago}的结果 · 正在检查变化…",
       "checkingPending": "{chain}：显示的是较早的读取结果 · 正在检查变化…",
       "checkingBody": "新的读取结果即将到达。本页面会自动更新。",
+      "completingTitle": "{chain}：仍在读取该钱包的完整代币列表…",
+      "completingBody": "该钱包持有数千个代币，大多是未经请求的空投。知名代币已检查完毕；本页面会自动更新。",
       "approvalsCheckingBody": "新的检查结果即将到达。本页面会自动更新。撤销前总会重新读取链上数据。",
       "tokenCheckingTitle": "{ago}的报告（{time}）· 正在检查变化…",
       "tokenCheckingPending": "较早检查的报告 · 正在检查变化…",

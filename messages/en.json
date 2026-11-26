@@ -3071,6 +3071,8 @@
       "checkingTitle": "{chain}: shown from {ago} · checking for changes…",
       "checkingPending": "{chain}: shown from an earlier reading · checking for changes…",
       "checkingBody": "The new reading is on its way. This page updates by itself.",
+      "completingTitle": "{chain}: still reading this wallet's full token list…",
+      "completingBody": "It holds thousands of tokens, mostly unsolicited airdrops. Well-known tokens are already checked; this page updates by itself.",
       "approvalsCheckingBody": "The new check is on its way. This page updates by itself. Revoke always reads the chain again first.",
       "tokenCheckingTitle": "Report from {ago} ({time}) · checking for changes…",
       "tokenCheckingPending": "Report from an earlier check · checking for changes…",

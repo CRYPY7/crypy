@@ -110,7 +110,8 @@ export async function ChainHoldingsSection({
         )}
       </div>
 
-      {holdings.coverage !== "full" && (
+      {/* While the list is still being read (B-035), the page's "still reading" notice says so instead. */}
+      {holdings.coverage !== "full" && !holdings.completing && (
         <Notice tone="warning">
           {t(`entity.address.balances.coverage.${holdings.coverage}`, {
             chain: chainName,

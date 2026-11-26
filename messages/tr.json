@@ -3071,6 +3071,8 @@
       "checkingTitle": "{chain}: {ago} okunan sonuç gösteriliyor · değişiklikler kontrol ediliyor…",
       "checkingPending": "{chain}: daha önceki bir okuma gösteriliyor · değişiklikler kontrol ediliyor…",
       "checkingBody": "Yeni okuma yolda. Bu sayfa kendiliğinden güncellenir.",
+      "completingTitle": "{chain}: bu cüzdanın tam token listesi hâlâ okunuyor…",
+      "completingBody": "Binlerce token tutuyor, çoğu istenmeden gönderilmiş airdrop'lar. Bilinen tokenlar zaten kontrol edildi; bu sayfa kendiliğinden güncellenir.",
       "approvalsCheckingBody": "Yeni kontrol yolda. Bu sayfa kendiliğinden güncellenir. İptal işlemi her zaman önce zinciri yeniden okur.",
       "tokenCheckingTitle": "{ago} tarihli rapor ({time}) · değişiklikler kontrol ediliyor…",
       "tokenCheckingPending": "Daha önceki bir kontrolün raporu · değişiklikler kontrol ediliyor…",

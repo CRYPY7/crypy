@@ -41,6 +41,35 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## B-035: balances read all chains at once with Alchemy's Portfolio API (2026-11-26)
+
+- **Measured on the server (owner):** first visits took 6.9 s (test wallet), 8.0 s (vitalik.eth) and 2.9 s (an
+  exchange wallet, shown from an earlier reading because the fresh read took too long); token lists were cut off
+  on 4 of 5 chains. Repeat visits were already fast (0.03 s). Cause: the per-chain token list (100 per page, one
+  page after another, every token ever held) plus CRYPY's own name/decimals reads, under a 5 s limit per chain. All
+  three test wallets hold 2,400–2,900 tokens with a balance, nearly all airdropped spam.
+- **Tested on the server:** Alchemy's "Tokens By Wallet" answered all 5 chains (BNB Chain included) in 0.33 s per
+  page of 100 with names and decimals; 30 pages in 7.8–8.0 s. 200 compute units per page (20 for the old list).
+- **Built (owner approved):**
+  - `server/chains/evm/wallet-tokens.ts`: one shared reading per wallet across all chains, up to 30 pages; a page
+    shows after at most 1.5 s past the first page, with the well-known tokens always read directly; the reading
+    continues and is kept 2 minutes, so the page's reload gets the full list at once.
+  - Address pages: a "{chain}: still reading this wallet's full token list…" notice that updates the page by itself
+    (7 languages) instead of the "checked the first N entries" note while reading continues.
+  - Portfolio: a wallet whose list is still being read is read again quietly every 4 s (at most 6 times).
+  - The old per-chain list stays as the fallback (first page failing, daily budget used, `CRYPY_WALLET_TOKENS=off`)
+    and for background work (alerts checks: nobody waits, a tenth of the cost). The balances health check reads one
+    page only (200 units instead of up to 6,000).
+- **Not verified here:** this workspace has no Alchemy key, so the new path runs for real only on the server; unit
+  tests cover parsing, sharing, the first view, completion, the 30-page cut-off, failures and the fallback.
+- **Owner's server:** `.env.local` has two `ALCHEMY_API_KEY` lines (line 12 empty, line 54 the key in use);
+  harmless, to be tidied.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 662 passed, 76 skipped (new: page parsing incl.
+Polygon's "matic-mainnet" name and unsafe text, one shared reading, first view and completion, 30-page cut-off,
+failures, the health check's one page, balances built from the list, fallback). Build passed. Browser: 329 passed,
+19 skipped, 0 failed.
+
 ## B-034 fixed: Portfolio shows balances at once; safety checks finish and are remembered (2026-11-26)
 
 - **Measured:** one wallet's lookup = chains 0.2–0.3 s, balances 0.4–0.7 s (here, no Alchemy key), approvals 4.6 s

@@ -278,6 +278,8 @@ export interface ChainBalances {
   coverage: BalanceCoverage;
   /** How many token-list entries were read (including zero balances), when a token index was used. */
   checkedEntries?: number;
+  /** B-035: the token list is still being read in the background; looking again in a few seconds shows more. */
+  completing?: boolean;
 }
 
 /** Provider label: "alchemy", a host name such as "ankr.com", or "public:<host>". */

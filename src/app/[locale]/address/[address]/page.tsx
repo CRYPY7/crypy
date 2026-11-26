@@ -117,6 +117,7 @@ async function AddressContent({
   );
   const savedChains = Object.entries(overview.saved ?? {}).filter(([c]) => scope.scan.includes(c));
   const checkingChains = Object.entries(overview.refreshing ?? {}).filter(([c]) => scope.scan.includes(c));
+  const completingChains = (overview.completing ?? []).filter((c) => scope.scan.includes(c));
   const f = t.raw("entity.freshness") as Record<string, string>;
   const retry = { retry: f.retry!, retrying: f.retrying! };
   const total = scope.chains.length;
@@ -225,6 +226,16 @@ async function AddressContent({
               body={f.checkingBody!}
             />
           ))}
+          {completingChains.length > 0 && (
+            <CheckingNotice
+              at={overview.fetchedAt}
+              locale={locale}
+              chain={completingChains.map((c) => t(`chains.${c}`)).join(", ")}
+              title={f.completingTitle!}
+              pending={f.completingTitle!}
+              body={f.completingBody!}
+            />
+          )}
           {savedChains.map(([chain, at]) => (
             <SavedNotice
               key={chain}

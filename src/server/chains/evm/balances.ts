@@ -15,7 +15,10 @@ import {
   recordUsage,
 } from "./providers";
 import { logTiming } from "@/server/diagnostics";
+import { serverEnv } from "@/server/env";
+import { isBackground } from "@/server/background";
 import { discardBody } from "@/server/http/discard";
+import { walletTokens } from "./wallet-tokens";
 
 /**
  * Alchemy lists every token an address has EVER held (including ones now at zero), 100 per page.
@@ -255,33 +258,71 @@ export async function getEvmBalances(
   let tokensPromise: Promise<RawTokenBalance[]>;
   let coverage: BalanceCoverage;
   let checkedEntries: number | undefined;
-  try {
-    if (!alchemy) throw new Error("No token index configured");
-    // Each page's token details are read while the next page is listed.
-    const pages: Promise<RawTokenBalance[]>[] = [];
-    const result = await listTokensFromAlchemy(alchemy, owner, (page) => {
-      const read = readMetadata(client, chain.key, page);
-      read.catch(() => {}); // If listing fails later, these reads are dropped: never an unhandled rejection.
-      pages.push(read);
-    });
-    if (result.truncated) {
-      // A cut-off list must never miss the well-known tokens: check them directly (one multicall) and add any the
-      // list didn't reach.
-      const seen = new Set(result.tokens.map((t) => t.address.toLowerCase()));
-      const extra = listCommonTokens(client, chain, owner)
-        .then((common) => common.filter((t) => !seen.has(t.address.toLowerCase())))
-        .then((missing) => (missing.length ? readMetadata(client, chain.key, missing) : []))
-        .catch(() => [] as RawTokenBalance[]);
-      pages.push(extra);
+  let completing = false;
+  // B-035: every chain's tokens in one shared reading (Alchemy Portfolio API); the per-chain list below is the
+  // fallback when it isn't available. Background work (the hourly alerts checks) keeps the per-chain list: nobody
+  // is waiting, and it costs a tenth per page.
+  const directory =
+    alchemy && chain.alchemyNetwork && serverEnv.CRYPY_WALLET_TOKENS !== "off" && !isBackground()
+      ? await walletTokens(alchemy, owner, chain.alchemyNetwork).catch(() => null)
+      : null;
+  if (directory) {
+    const known: RawTokenBalance[] = [];
+    const unknown: ListedToken[] = [];
+    for (const token of directory.tokens) {
+      if (token.info)
+        known.push({
+          address: token.address,
+          balance: { raw: token.raw.toString(), decimals: token.info.decimals },
+          info: token.info,
+        });
+      else unknown.push({ address: token.address, raw: token.raw });
     }
-    tokensPromise = Promise.all(pages).then((parts) => parts.flat());
-    coverage = result.truncated ? "truncated" : "full";
-    checkedEntries = result.entries;
-  } catch {
-    // Honest fallback: only well-known tokens, and the page says so.
-    const listed = await listCommonTokens(client, chain, owner);
-    tokensPromise = readMetadata(client, chain.key, listed);
-    coverage = "common-only";
+    const parts: Promise<RawTokenBalance[]>[] = [Promise.resolve(known)];
+    if (unknown.length) parts.push(readMetadata(client, chain.key, unknown).catch(() => unknown.map(unread)));
+    if (!directory.complete) {
+      // A list still being read, or cut off, must never miss the well-known tokens: read them directly.
+      const seen = new Set(directory.tokens.map((t) => t.address.toLowerCase()));
+      parts.push(
+        listCommonTokens(client, chain, owner)
+          .then((common) => common.filter((t) => !seen.has(t.address.toLowerCase())))
+          .then((missing) => (missing.length ? readMetadata(client, chain.key, missing) : []))
+          .catch(() => [] as RawTokenBalance[]),
+      );
+    }
+    tokensPromise = Promise.all(parts).then((p) => p.flat());
+    coverage = directory.complete ? "full" : "truncated";
+    checkedEntries = directory.entries;
+    completing = directory.completing;
+  } else {
+    try {
+      if (!alchemy) throw new Error("No token index configured");
+      // Each page's token details are read while the next page is listed.
+      const pages: Promise<RawTokenBalance[]>[] = [];
+      const result = await listTokensFromAlchemy(alchemy, owner, (page) => {
+        const read = readMetadata(client, chain.key, page);
+        read.catch(() => {}); // If listing fails later, these reads are dropped: never an unhandled rejection.
+        pages.push(read);
+      });
+      if (result.truncated) {
+        // A cut-off list must never miss the well-known tokens: check them directly (one multicall) and add any the
+        // list didn't reach.
+        const seen = new Set(result.tokens.map((t) => t.address.toLowerCase()));
+        const extra = listCommonTokens(client, chain, owner)
+          .then((common) => common.filter((t) => !seen.has(t.address.toLowerCase())))
+          .then((missing) => (missing.length ? readMetadata(client, chain.key, missing) : []))
+          .catch(() => [] as RawTokenBalance[]);
+        pages.push(extra);
+      }
+      tokensPromise = Promise.all(pages).then((parts) => parts.flat());
+      coverage = result.truncated ? "truncated" : "full";
+      checkedEntries = result.entries;
+    } catch {
+      // Honest fallback: only well-known tokens, and the page says so.
+      const listed = await listCommonTokens(client, chain, owner);
+      tokensPromise = readMetadata(client, chain.key, listed);
+      coverage = "common-only";
+    }
   }
 
   const [native, tokens] = await Promise.all([nativePromise, tokensPromise]);
@@ -291,5 +332,13 @@ export async function getEvmBalances(
     tokens,
     coverage,
     ...(checkedEntries !== undefined ? { checkedEntries } : {}),
+    ...(completing ? { completing } : {}),
   };
 }
+
+/** A token whose details couldn't be read: kept raw and flagged, as readMetadata does. */
+const unread = (token: ListedToken): RawTokenBalance => ({
+  address: token.address,
+  balance: { raw: token.raw.toString(), decimals: 0 },
+  info: null,
+});

@@ -46,6 +46,8 @@ const ALCHEMY_CU: Record<string, number> = {
   eth_getLogs: 60,
   alchemy_getTokenBalances: 20,
   alchemy_getAssetTransfers: 120,
+  // Portfolio API "Tokens By Wallet" (wallet-tokens.ts), per page of 100 tokens across every chain.
+  portfolio_tokensByAddress: 200,
 };
 const DEFAULT_CU = 20;
 

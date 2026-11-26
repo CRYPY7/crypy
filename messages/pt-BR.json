@@ -3071,6 +3071,8 @@
       "checkingTitle": "{chain}: exibido de {ago} · verificando mudanças…",
       "checkingPending": "{chain}: exibido de uma leitura anterior · verificando mudanças…",
       "checkingBody": "A nova leitura está a caminho. Esta página se atualiza sozinha.",
+      "completingTitle": "{chain}: ainda lendo a lista completa de tokens desta carteira…",
+      "completingBody": "Ela tem milhares de tokens, a maioria airdrops não solicitados. Os tokens conhecidos já foram verificados; esta página se atualiza sozinha.",
       "approvalsCheckingBody": "A nova verificação está a caminho. Esta página se atualiza sozinha. A revogação sempre lê a rede de novo antes.",
       "tokenCheckingTitle": "Relatório de {ago} ({time}) · verificando mudanças…",
       "tokenCheckingPending": "Relatório de uma verificação anterior · verificando mudanças…",

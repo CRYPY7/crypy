@@ -3071,6 +3071,8 @@
       "checkingTitle": "{chain}: hiển thị kết quả từ {ago} · đang kiểm tra thay đổi…",
       "checkingPending": "{chain}: hiển thị kết quả đọc trước đó · đang kiểm tra thay đổi…",
       "checkingBody": "Kết quả mới đang đến. Trang này sẽ tự cập nhật.",
+      "completingTitle": "{chain}: vẫn đang đọc toàn bộ danh sách token của ví này…",
+      "completingBody": "Ví này có hàng nghìn token, phần lớn là airdrop không mong muốn. Các token phổ biến đã được kiểm tra; trang sẽ tự cập nhật.",
       "approvalsCheckingBody": "Kết quả kiểm tra mới đang đến. Trang này sẽ tự cập nhật. Thu hồi luôn đọc lại chuỗi trước.",
       "tokenCheckingTitle": "Báo cáo từ {ago} ({time}) · đang kiểm tra thay đổi…",
       "tokenCheckingPending": "Báo cáo từ lần kiểm tra trước · đang kiểm tra thay đổi…",

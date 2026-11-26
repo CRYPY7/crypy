@@ -54,6 +54,7 @@ interface WalletReport {
     /** Chains shown from an earlier reading (stabilization S2). */
     saved?: Record<string, string>;
     refreshing?: Record<string, string>;
+    completing?: string[];
   };
 }
 
@@ -91,6 +92,9 @@ const chainColor: Record<string, string> = {
 const PARALLEL = 4;
 /** Safety checks are heavier (GoPlus and on-chain scans per chain): fewer at once, behind the balances. */
 const SAFETY_PARALLEL = 2;
+/** B-035: how often, and how long apart, a wallet whose token list is still being read is read again. */
+const COMPLETING_TRIES = 6;
+const COMPLETING_DELAY_MS = 4_000;
 const HOLDINGS_PAGE = 25;
 
 const short = (a: string) => `${a.slice(0, 6)}…${a.slice(-4)}`;
@@ -173,6 +177,31 @@ export default function PortfolioTracker({
   const safetyQueue = useRef<{ address: string; id: number }[]>([]);
   const safetyRunning = useRef(0);
 
+  /**
+   * B-035: a wallet with thousands of tokens is shown after its first part; its full list is still being read on the
+   * server. Its balances are read again quietly (no loading state, safety untouched) a few seconds later.
+   */
+  const followCompleting = useCallback((address: string, id: number) => {
+    void (async () => {
+      for (let attempt = 1; attempt <= COMPLETING_TRIES; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, COMPLETING_DELAY_MS));
+        if (requests.current.get(address) !== id) return; // refreshed or removed meanwhile
+        try {
+          const response = await fetch(`/api/v1/address/${address}/portfolio`, {
+            headers: { accept: "application/json" },
+          });
+          const body = (await response.json()) as { ok: boolean; data?: WalletReport };
+          if (!body.ok || !body.data || requests.current.get(address) !== id) return;
+          const report = body.data;
+          setLoads((prev) => ({ ...prev, [address]: { status: "ok", report } }));
+          if (!report.overview.completing?.length) return;
+        } catch {
+          return; // The balances already shown stay; the next refresh reads again.
+        }
+      }
+    })();
+  }, []);
+
   /** Reads queued safety checks, SAFETY_PARALLEL at a time. */
   const pumpSafety = useCallback(() => {
     const worker = async () => {
@@ -231,6 +260,7 @@ export default function PortfolioTracker({
           // Balances are shown; the safety badges come from this browser's result of the last 6 hours, else from their
           // own request.
           if (result.status === "ok") {
+            if (result.report.overview.completing?.length) followCompleting(address, id);
             const remembered = freshEntry(readSafetyCache(), address, Date.now());
             if (remembered) {
               const state: SafetyState = { status: "ok", report: remembered.report, at: remembered.at };
@@ -244,7 +274,7 @@ export default function PortfolioTracker({
       };
       await Promise.all(Array.from({ length: PARALLEL }, worker));
     },
-    [pumpSafety],
+    [pumpSafety, followCompleting],
   );
 
   /** Shows wallets as loading again, then reads them (refresh and retry). */

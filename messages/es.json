@@ -3071,6 +3071,8 @@
       "checkingTitle": "{chain}: mostrado desde {ago} · buscando cambios…",
       "checkingPending": "{chain}: mostrado de una lectura anterior · buscando cambios…",
       "checkingBody": "La nueva lectura está en camino. Esta página se actualiza sola.",
+      "completingTitle": "{chain}: todavía leyendo la lista completa de tokens de esta billetera…",
+      "completingBody": "Tiene miles de tokens, la mayoría airdrops no solicitados. Los tokens conocidos ya están comprobados; esta página se actualiza sola.",
       "approvalsCheckingBody": "La nueva comprobación está en camino. Esta página se actualiza sola. Revocar siempre vuelve a leer la cadena primero.",
       "tokenCheckingTitle": "Informe de {ago} ({time}) · buscando cambios…",
       "tokenCheckingPending": "Informe de una comprobación anterior · buscando cambios…",

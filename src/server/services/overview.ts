@@ -23,6 +23,8 @@ export interface AddressOverview {
   saved?: Partial<Record<ChainKey, string>>;
   /** Chains shown from their last reading while a slow fresh read finishes in the background (ISO time). */
   refreshing?: Partial<Record<ChainKey, string>>;
+  /** B-035: chains whose token list is still being read in the background (the page looks again shortly). */
+  completing?: ChainKey[];
 }
 
 const nativeNames: Record<ChainKey, string> = {
@@ -43,7 +45,7 @@ export async function cachedAddressOverview(address: string, only?: readonly str
   const overview = await pageOverview(address, only);
   // A full, fresh answer is kept 30 minutes (refreshed in the background); one with a chain missing or shown from a
   // saved reading only for a second, so "Try again" and the page's own reload read again.
-  if (overview.unavailable.length > 0 || overview.saved || overview.refreshing)
+  if (overview.unavailable.length > 0 || overview.saved || overview.refreshing || overview.completing)
     cacheLife({ stale: 0, revalidate: 1, expire: 1 });
   else cacheLife({ stale: 30, revalidate: 60, expire: 1800 });
   return overview;
@@ -77,11 +79,13 @@ export async function pageOverview(address: string, only?: readonly string[]): P
   const unavailable: ChainKey[] = [];
   const saved: Partial<Record<ChainKey, string>> = {};
   const refreshing: Partial<Record<ChainKey, string>> = {};
+  const completing: ChainKey[] = [];
   results.forEach((result, i) => {
     const key = targets[i]!.key;
     if (result.kind === "failed") return unavailable.push(key);
     chains.push(result.value);
     if (result.kind === "saved") (result.refreshing ? refreshing : saved)[key] = result.savedAt;
+    else if (result.value.completing) completing.push(key);
   });
   return {
     chains,
@@ -91,6 +95,7 @@ export async function pageOverview(address: string, only?: readonly string[]): P
     fetchedAt: new Date().toISOString(),
     ...(Object.keys(saved).length ? { saved } : {}),
     ...(Object.keys(refreshing).length ? { refreshing } : {}),
+    ...(completing.length ? { completing } : {}),
   };
 }
 
