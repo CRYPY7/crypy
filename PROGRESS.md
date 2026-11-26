@@ -41,6 +41,22 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Infrastructure redesign approved; R0 (measure) started (2026-11-26)
+
+- **Owner decisions:** features frozen until the data layer is rebuilt (INFRASTRUCTURE_DESIGN.md, steps R0–R7); zero
+  paid APIs (one account per provider, never several free accounts); EVM chains first, then every chain family;
+  automatic chain detection by default and manual chain choice as an option, both free; stored results with automatic
+  deletion; pages open at once and fill in; the design's speed targets (§2) decide when a tool is done.
+- **R0 tools built:**
+  - `pnpm perf:server` (`scripts/perf/server.mjs`, read-only): search, address page (time to first bytes and to the
+    end), balances, approvals, activity, Portfolio safety, token security, transaction and gas, each asked twice, for
+    fixed public wallets, a new random address every run and optional `--wallet` addresses; prints the times against
+    §2 and the Alchemy units CRYPY counted during the run (from /api/v1/health); writes perf-report.md/.json.
+  - `scripts/perf/alchemy-cost.mjs`: 20 requests per Alchemy wallet-endpoint variant (balances 1 network, balances 5
+    networks, tokens with names 5 networks), 2 minutes apart, printing each time window for the dashboard comparison.
+- Tried here against a local build (no Alchemy key, so only the script itself was checked): 20 cases ran, report
+  written. Real numbers come from the server.
+
 ## B-035: balances read all chains at once with Alchemy's Portfolio API (2026-11-26)
 
 - **Measured on the server (owner):** first visits took 6.9 s (test wallet), 8.0 s (vitalik.eth) and 2.9 s (an

@@ -15,6 +15,7 @@
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build",
     "env:check": "node scripts/check-env.mjs",
     "providers:map": "node scripts/providers/map.mjs",
+    "perf:server": "node scripts/perf/server.mjs",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
