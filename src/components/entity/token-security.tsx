@@ -108,7 +108,7 @@ function checkValues(check: SecurityCheck, t: T): Record<string, string | number
 }
 
 /** Title and detail for a check, including the special cases (clones, empty pools, burned proxy admin). */
-function checkText(check: SecurityCheck, t: T): { title: string; detail: string } {
+export function checkText(check: SecurityCheck, t: T): { title: string; detail: string } {
   const values = checkValues(check, t);
   const base = `${K}.checks.${check.id}.${check.status}`;
   if (check.id === "proxy" && values.kind === "minimal") {
@@ -120,15 +120,20 @@ function checkText(check: SecurityCheck, t: T): { title: string; detail: string 
       detail: t(`${K}.checks.liquidityState.${values.state}.detail`, values),
     };
   }
-  let detail = t(`${base}.detail`, values);
-  if (check.id === "lp" && values.state === "owner") detail = t(`${K}.lpStates.owner`, values);
-  if (check.id === "proxy" && values.admin === "burned") detail = t(`${K}.lpStates.proxyBurned`);
-  if (check.id.startsWith("power.") && values.access === "open")
-    return { title: t(`${K}.checks.powerOpen.title`, values), detail: t(`${K}.checks.powerOpen.detail`) };
-  if (check.id.startsWith("power.") && (values.access === "role" || values.access === "restricted"))
-    detail = `${detail} ${t(`${K}.checks.powerOthers`)}`;
   if (check.id === "sell" && values.state === "feeRejected")
     return { title: t(`${K}.checks.sell.feeRejected.title`), detail: t(`${K}.checks.sell.feeRejected.detail`, values) };
+  if (check.id.startsWith("power.") && values.access === "open")
+    return { title: t(`${K}.checks.powerOpen.title`, values), detail: t(`${K}.checks.powerOpen.detail`) };
+  // Pick the one sentence that fits before formatting it: the general sentence may need values a special case
+  // doesn't have (each missing value logs a formatting error on the server).
+  let detail =
+    check.id === "lp" && values.state === "owner"
+      ? t(`${K}.lpStates.owner`, values)
+      : check.id === "proxy" && values.admin === "burned"
+        ? t(`${K}.lpStates.proxyBurned`)
+        : t(`${base}.detail`, values);
+  if (check.id.startsWith("power.") && (values.access === "role" || values.access === "restricted"))
+    detail = `${detail} ${t(`${K}.checks.powerOthers`)}`;
   return { title: t(`${base}.title`, values), detail };
 }
 

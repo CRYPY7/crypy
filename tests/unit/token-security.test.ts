@@ -231,3 +231,101 @@ describe("contract code", () => {
     expect(createHash("sha256").update(source).digest("hex")).toBe(SOURCE_SHA256);
   });
 });
+
+describe("every check text formats", () => {
+  // A translator that throws on a missing value (the site only logs it), run over every check the rules produce
+  // for a wide set of tokens: each outcome of the trade test, taxes, powers and who can call them, proxies,
+  // liquidity holders, names, source and second opinion.
+  it("has every value its sentence needs", async () => {
+    const { createTranslator } = await import("next-intl");
+    const messages = (await import("../../messages/en.json")).default;
+    const { checkText } = await import("@/components/entity/token-security");
+    const t = createTranslator({
+      locale: "en",
+      messages,
+      onError: (e) => {
+        throw e;
+      },
+    }) as unknown as Parameters<typeof checkText>[1];
+
+    const trade = facts().trade;
+    const pool = facts().pools[0]!;
+    const outcomes = [
+      "ok",
+      "no-pool",
+      "unsupported-pool",
+      "no-liquidity",
+      "quote-failed",
+      "buy-failed",
+      "buy-nothing",
+      "transfer-failed",
+      "approve-failed",
+      "sell-failed",
+      "error",
+    ] as const;
+    const access = ["owner", "role", "restricted", "open", "unknown"] as const;
+    const scenarios: TokenSecurityFacts[] = [
+      ...outcomes.flatMap((outcome) => [
+        facts({ trade: { ...trade, outcome, reason: "Trading not enabled", sellTax: null } }),
+        facts({ trade: { ...trade, outcome, reason: null, sellTax: null } }),
+      ]),
+      facts({ trade: { ...trade, outcome: "sell-failed", feeRejected: 0.05, sellTax: null } }),
+      facts({ trade: { ...trade, outcome: "ok", venue: { ...trade.venue!, via: "USDT" } } }),
+      ...[0.003, 0.06, 0.12, 0.6].map((tax) =>
+        facts({ trade: { ...trade, buyTax: tax, sellTax: tax, transferTax: tax } }),
+      ),
+      ...(["mint", "fees", "blacklist", "pause", "limits", "cooldown", "upgrade", "selfdestruct"] as const).flatMap(
+        (power) =>
+          [false, true].flatMap((renounced) =>
+            access.map((a) =>
+              facts({
+                powers: [
+                  {
+                    power,
+                    functions: [`${power}()`],
+                    basis: "source",
+                    details: [{ signature: `${power}()`, access: a, limits: ["amount <= 1000"] }],
+                  },
+                ],
+                owner: { owner: OWNER, renounced, ownerIsContract: false, roleBased: a === "role" },
+              }),
+            ),
+          ),
+      ),
+      ...(["eip1967", "eip1822", "beacon", "minimal", "zeppelinos"] as const).flatMap((kind) =>
+        [OWNER, "0x000000000000000000000000000000000000dEaD", null].map((admin) =>
+          facts({ proxy: { kind, implementation: OWNER, admin } }),
+        ),
+      ),
+      ...[
+        { owner: 0.92, wallet: 0.08 },
+        { burn: 0.1, wallet: 0.9 },
+        { burn: 0.5, lockedFor: [0.45, 400] as [number, number], wallet: 0.05 },
+        { lockedFor: [0.9, 10] as [number, number], wallet: 0.1 },
+        { lockedFor: [0.9, -10] as [number, number], wallet: 0.1 },
+        { wallet: 0.2 },
+      ].flatMap((shares) =>
+        [500_000, 20_000].map((usd) => facts({ pools: [{ ...pool, liquidityUsd: usd, holders: lpHolders(shares) }] })),
+      ),
+      facts({ pools: [] }),
+      facts({ pools: [{ ...pool, liquidityUsd: 0 }], trade: { ...trade, outcome: "no-liquidity" } }),
+      facts({ pools: [{ ...pool, holders: null }] }),
+      facts({ token: { ...facts().token, name: "visit claim-usdt.com" } }),
+      facts({ token: { ...facts().token, name: "Free Airdrop" } }),
+      ...(["verified", "unverified", "unknown"] as const).map((status) =>
+        facts({ source: { status, provider: "Sourcify" } } as Partial<TokenSecurityFacts>),
+      ),
+      facts({
+        external: parseGoPlus(Object.values(goplus.result)[0] as Record<string, unknown>, NOW),
+        externalStatus: "ok",
+      } as Partial<TokenSecurityFacts>),
+    ];
+    let formatted = 0;
+    for (const f of scenarios)
+      for (const c of evaluate(f).checks) {
+        expect(() => checkText(c, t), `${c.id} ${c.status} ${JSON.stringify(c.values)}`).not.toThrow();
+        formatted += 1;
+      }
+    expect(formatted).toBeGreaterThan(300);
+  });
+});

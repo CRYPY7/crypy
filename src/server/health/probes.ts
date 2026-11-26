@@ -231,12 +231,13 @@ export const probes: Record<string, Probe> = {
    */
   async "server:backup"() {
     const dir = process.env.CRYPY_BACKUP_STATUS_DIR || "/var/lib/crypy-backup";
-    if (!(await stat(dir).catch(() => null))?.isDirectory()) throw new Skip("backups not installed on this server");
+    if (!(await stat(/* turbopackIgnore: true */ dir).catch(() => null))?.isDirectory())
+      throw new Skip("backups not installed on this server");
     const read = async <T>(
       name: string,
       schema: { safeParse(v: unknown): { success: true; data: T } | { success: false } },
     ) => {
-      const text = await readFile(join(dir, `${name}.json`), "utf8").catch(() => null);
+      const text = await readFile(join(/* turbopackIgnore: true */ dir, `${name}.json`), "utf8").catch(() => null);
       if (text === null) return null;
       let parsed: { success: true; data: T } | { success: false };
       try {

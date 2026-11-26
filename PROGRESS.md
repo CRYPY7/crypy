@@ -41,6 +41,24 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## First look at real usage; two log errors fixed (2026-11-26)
+
+- **Usage (Cloudflare and /admin, last 24 h):** about 35% of requests were the owner's own; search engines crawl a lot
+  (Googlebot 264, Bingbot 73, YandexBot 163 requests); 424 scanner requests blocked; real people used the data tools
+  only a few times (balances 5, portfolio 10, approvals 3). Owner: the site is new and will be promoted once it is
+  complete. Decision: no new tools for now; fix what the data shows in the tools people open (bug list B-032–B-036).
+- **B-032 fixed:** token reports where the pool rejects a sale for the token's fee logged a formatting error on the
+  server (and the owner-holds-liquidity case had the same hidden problem); the page chose the right sentence only after
+  formatting the general one. Now the right sentence is chosen first. Tests: `token-security-text.test.ts` and a test
+  that formats every check the rules produce (300+ variants) with a translator that throws on a missing value.
+- **Build warning removed:** the backup health check read its folder in a way that made the build trace the whole
+  project; marked `turbopackIgnore` like the other file reads.
+- **B-033 investigating:** the 500s seen at Cloudflare were one burst on 2026-11-25 13:29 UTC (the 404 rewrite for an
+  unknown page proxied as an outside https request); not reproducible with today's build, none since.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 639 passed, 76 skipped. Build passed (no warnings). Browser: 327
+passed, 19 skipped, 0 failed.
+
 ## JSON Diff removed; backups live (2026-11-26)
 
 - **Backups live:** the owner ran `crypy-backup setup` on the server: first R2 copy (205 KB) uploaded and checked,
