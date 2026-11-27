@@ -46,8 +46,10 @@ const ALCHEMY_CU: Record<string, number> = {
   eth_getLogs: 60,
   alchemy_getTokenBalances: 20,
   alchemy_getAssetTransfers: 120,
-  // Portfolio API "Tokens By Wallet" (wallet-tokens.ts), per page of 100 tokens across every chain.
-  portfolio_tokensByAddress: 200,
+  // Portfolio API "Tokens By Wallet" (wallet-tokens.ts), per page of 100 tokens across 5 chains. Alchemy lists 360 and
+  // says the cost grows with the networks asked; the owner's dashboard (2026-11-26) put it between 360 and ~920 per
+  // request, so it is counted high until step R2 measures it exactly.
+  portfolio_tokensByAddress: 1_000,
 };
 const DEFAULT_CU = 20;
 

@@ -37,6 +37,7 @@ import type { SecurityReport } from "@/lib/security/types";
 import type { AddressRules, TokenRules } from "@/lib/watchlist/rules";
 import { coinTransfersInRange } from "@/server/chains/evm/activity";
 import { getOnchainPrices } from "@/server/chains/evm/prices";
+import { evmTokenDetails } from "@/server/chains/evm/token-details";
 import { getEvmClient, logsClient } from "@/server/chains/evm/providers";
 import { getDb, type Db } from "@/server/db/client";
 import { checkerCursors, users, watchItems } from "@/server/db/schema";
@@ -193,42 +194,19 @@ export async function loadWatched(db: Db): Promise<Watched> {
 
 // ---- Token details -----------------------------------------------------------------------------------------------
 
-const tokenInfoCache = new Map<string, { symbol: string; decimals: number } | null>();
-
+/** Symbols and decimals from the shared token registry (R1): each token is read from the chain once. */
 async function tokenInfo(
   client: PublicClient,
   chain: string,
   tokens: string[],
 ): Promise<Map<string, { symbol: string; decimals: number } | null>> {
+  const details = await evmTokenDetails(client, chain, tokens).catch(() => null);
   const out = new Map<string, { symbol: string; decimals: number } | null>();
-  const missing = tokens.filter((t) => {
-    const key = `${chain}:${t}`;
-    if (tokenInfoCache.has(key)) out.set(t, tokenInfoCache.get(key)!);
-    return !tokenInfoCache.has(key);
-  });
-  if (missing.length) {
-    const results = await client
-      .multicall({
-        contracts: missing.flatMap((address) => [
-          { address: address as `0x${string}`, abi: erc20Abi, functionName: "symbol" },
-          { address: address as `0x${string}`, abi: erc20Abi, functionName: "decimals" },
-        ]),
-        allowFailure: true,
-      })
-      .catch(() => null);
-    missing.forEach((address, i) => {
-      const symbol = results?.[i * 2]?.status === "success" ? String(results[i * 2]!.result) : null;
-      const decimals = results?.[i * 2 + 1]?.status === "success" ? Number(results[i * 2 + 1]!.result) : null;
-      const info =
-        symbol !== null
-          ? {
-              symbol: sanitizeTokenText(symbol, 16) || "?",
-              decimals: decimals !== null && decimals <= 36 ? decimals : 0,
-            }
-          : null;
-      if (results) tokenInfoCache.set(`${chain}:${address}`, info);
-      out.set(address, info);
-    });
+  for (const address of tokens) {
+    const d = details?.get(address.toLowerCase());
+    // A failed read (details null) is not "not a token": it stays unknown for this round.
+    if (!details) continue;
+    out.set(address, d && d.decimals <= 36 ? { symbol: d.symbol.slice(0, 16) || "?", decimals: d.decimals } : null);
   }
   return out;
 }

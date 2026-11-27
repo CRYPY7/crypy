@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PublicClient } from "viem";
 
+// Token details now go through the shared registry (database): keep it in memory for tests.
+process.env.PGLITE_DIR = "memory";
+
 // A plain function, not vi.fn(): the mock tracker reports a rejected promise as unhandled even when the code catches it.
 let answer: () => Promise<unknown> = async () => null;
 let asked = 0;

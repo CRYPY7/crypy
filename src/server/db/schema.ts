@@ -261,6 +261,34 @@ export const savedResults = pgTable(
   ],
 );
 
+/**
+ * Shared token registry (INFRASTRUCTURE_DESIGN.md §5.3, step R1): each token's details read once and reused by every
+ * visitor and tool. `unreadable` marks a contract whose name/symbol/decimals couldn't be read (usually spam); it is
+ * asked again after a day. Spam verdicts and prices are filled by later steps. Rows unused for 90 days are deleted.
+ */
+export const tokens = pgTable(
+  "tokens",
+  {
+    chain: text("chain").notNull(),
+    /** Lower-case contract address. */
+    address: text("address").notNull(),
+    name: text("name"),
+    symbol: text("symbol"),
+    decimals: smallint("decimals"),
+    unreadable: boolean("unreadable").notNull().default(false),
+    /** Where the details came from: "contract" (read on-chain) or "alchemy" (its token metadata). */
+    source: text("source").notNull(),
+    detailsAt: timestamp("details_at", { withTimezone: true }).notNull(),
+    spam: boolean("spam"),
+    spamReason: text("spam_reason"),
+    spamAt: timestamp("spam_at", { withTimezone: true }),
+    priceUsd: text("price_usd"),
+    priceAt: timestamp("price_at", { withTimezone: true }),
+    usedAt: timestamp("used_at", { withTimezone: true }).notNull(),
+  },
+  (table) => [uniqueIndex("tokens_key_idx").on(table.chain, table.address), index("tokens_used_idx").on(table.usedAt)],
+);
+
 export const schema = {
   users,
   accounts,
@@ -277,4 +305,5 @@ export const schema = {
   providerUsage,
   visitorOutcomes,
   savedResults,
+  tokens,
 };

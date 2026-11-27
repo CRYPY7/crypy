@@ -531,6 +531,16 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   without usable details are read from the contract. The per-chain `alchemy_getTokenBalances` list stays as the
   fallback (first page failing, budget used, `CRYPY_WALLET_TOKENS=off`) and for background work (alerts checks);
   the balances health check reads one page (`withWalletTokenPages(1, …)`).
+- **Token registry (R1, 2026-11-27):** table `tokens` (migration `0008_tokens`; chain, lower-case address, name,
+  symbol, decimals, `unreadable`, source, spam and price columns for later steps, `used_at`). `server/tokens/registry.ts`
+  `tokenDetails(chain, addresses, reader, given?)`: memory (50,000 entries) → database (0.8 s limit) → the chain
+  reader for what neither knows; Alchemy's metadata (`given`) is stored as it is; unreadable contracts are asked
+  again after 24 h; readable details are never overwritten by "unreadable"; `used_at` written at most daily;
+  `pruneTokens` (hourly) deletes tokens unused for 90 days. EVM tools go through
+  `server/chains/evm/token-details.ts` `evmTokenDetails` (batched multicalls, 4 at once): balances, transaction
+  page, activity (recent-only fallback) and the alerts checker. Not through it: the token page's "is this a token"
+  check (needs total supply live), the batch scanner's per-chain token check, the price engine's decimals (moves with
+  the price job). Backups leave out the table's data (it refills itself).
 - `lib/portfolio/holdings.ts` (pure): values holdings, sorts them, hides likely spam (`link-in-name`, `bait-words` without price, `unreadable`) and excludes unpriced and spam tokens from totals.
 - `server/services/overview.ts`: all chains in parallel (`allSettled`), on-chain prices per chain (up to 300 tokens), cached 60 s per address.
 - Address page renders it on the server; no client JavaScript.

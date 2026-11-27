@@ -3,7 +3,6 @@ import { limitedFetch } from "@/server/http/limit";
 import { type Hex, type PublicClient, erc20Abi, getAddress } from "viem";
 import { z } from "zod";
 import type { ChainConfig } from "@/config/chains";
-import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { BalanceCoverage, ChainBalances, RawTokenBalance } from "@/lib/chains/types";
 import { noteAlchemyLimited, waitForAlchemy } from "./alchemy-pace";
 import {
@@ -19,6 +18,8 @@ import { serverEnv } from "@/server/env";
 import { isBackground } from "@/server/background";
 import { discardBody } from "@/server/http/discard";
 import { walletTokens } from "./wallet-tokens";
+import type { TokenDetails } from "@/server/tokens/registry";
+import { evmTokenDetails } from "./token-details";
 
 /**
  * Alchemy lists every token an address has EVER held (including ones now at zero), 100 per page.
@@ -33,10 +34,6 @@ export const MAX_TOKEN_PAGES = 10;
  */
 export const TOKEN_LIST_BUDGET_MS = 5_000;
 const PAGE_SIZE = 100;
-/** Metadata reads per multicall batch (3 calls per token). */
-const METADATA_BATCH = 100;
-/** Metadata batches read at the same time (each is one multicall). */
-const METADATA_PARALLEL = 4;
 
 const tokenBalancesSchema = z.object({
   result: z
@@ -158,91 +155,31 @@ export async function holdsCommonToken(chain: ChainConfig, owner: string): Promi
   return held.length > 0;
 }
 
-type TokenInfo = NonNullable<RawTokenBalance["info"]>;
-
 /**
- * Name, symbol and decimals never change for a deployed token, so readable ones are kept in memory (per chain,
- * bounded). Unreadable tokens are not kept: the read may have failed for a passing reason.
+ * Name, symbol and decimals for many tokens, through the shared token registry (R1): memory, then the database, then
+ * batched multicalls (several batches at once) for tokens nobody has read yet. `given`: details already known from
+ * Alchemy's list. Contract text is sanitized. Output keeps the input order.
  */
-const METADATA_CACHE_MAX = 50_000;
-const metadataCache: Map<string, TokenInfo> = ((
-  globalThis as { __crypyTokenMeta?: Map<string, TokenInfo> }
-).__crypyTokenMeta ??= new Map());
-
-function rememberMetadata(key: string, info: TokenInfo) {
-  if (metadataCache.size >= METADATA_CACHE_MAX) {
-    // Drop the oldest tenth (Map keeps insertion order).
-    let n = METADATA_CACHE_MAX / 10;
-    for (const k of metadataCache.keys()) {
-      metadataCache.delete(k);
-      if (--n <= 0) break;
-    }
-  }
-  metadataCache.set(key, info);
-}
-
-/**
- * Name, symbol and decimals for many tokens: known ones from memory, the rest with batched multicalls, several
- * batches at once. Contract text is sanitized. Output keeps the input order.
- */
-async function readMetadata(client: PublicClient, chainKey: string, tokens: ListedToken[]): Promise<RawTokenBalance[]> {
-  const key = (address: string) => `${chainKey}:${address.toLowerCase()}`;
-  const known = new Map<string, TokenInfo | null>();
-  const missing = tokens.filter((token) => {
-    const hit = metadataCache.get(key(token.address));
-    if (hit) known.set(token.address, hit);
-    return !hit;
-  });
-  const batches: ListedToken[][] = [];
-  for (let i = 0; i < missing.length; i += METADATA_BATCH) batches.push(missing.slice(i, i + METADATA_BATCH));
-  let next = 0;
-  const worker = async () => {
-    while (next < batches.length) {
-      const batch = batches[next++]!;
-      await readMetadataBatch(client, batch, (address, info) => {
-        known.set(address, info);
-        if (info) rememberMetadata(key(address), info);
-      });
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(METADATA_PARALLEL, batches.length) }, worker));
+async function readMetadata(
+  client: PublicClient,
+  chainKey: string,
+  tokens: ListedToken[],
+  given?: ReadonlyMap<string, TokenDetails>,
+): Promise<RawTokenBalance[]> {
+  const details = await evmTokenDetails(
+    client,
+    chainKey,
+    tokens.map((t) => t.address),
+    given,
+  );
   return tokens.map((token) => {
-    const info = known.get(token.address) ?? null;
+    const info = details.get(token.address.toLowerCase()) ?? null;
     return {
       address: token.address,
       // Without readable decimals the amount can't be shown correctly; it is kept raw and flagged.
       balance: { raw: token.raw.toString(), decimals: info?.decimals ?? 0 },
       info,
     };
-  });
-}
-
-async function readMetadataBatch(
-  client: PublicClient,
-  batch: ListedToken[],
-  found: (address: string, info: TokenInfo | null) => void,
-): Promise<void> {
-  const results = await client.multicall({
-    allowFailure: true,
-    contracts: batch.flatMap((token) => [
-      { address: token.address, abi: erc20Abi, functionName: "name" as const },
-      { address: token.address, abi: erc20Abi, functionName: "symbol" as const },
-      { address: token.address, abi: erc20Abi, functionName: "decimals" as const },
-    ]),
-  });
-  batch.forEach((token, j) => {
-    const [name, symbol, decimals] = [results[j * 3], results[j * 3 + 1], results[j * 3 + 2]];
-    const dec = decimals?.status === "success" ? Number(decimals.result) : NaN;
-    const validDecimals = Number.isInteger(dec) && dec >= 0 && dec <= 255;
-    const info =
-      validDecimals && symbol?.status === "success"
-        ? {
-            name: sanitizeTokenText(name?.status === "success" ? name.result : "", 64),
-            symbol: sanitizeTokenText(symbol.result, 32),
-            decimals: dec,
-          }
-        : null;
-    found(token.address, info);
   });
 }
 
@@ -267,19 +204,13 @@ export async function getEvmBalances(
       ? await walletTokens(alchemy, owner, chain.alchemyNetwork).catch(() => null)
       : null;
   if (directory) {
-    const known: RawTokenBalance[] = [];
-    const unknown: ListedToken[] = [];
-    for (const token of directory.tokens) {
-      if (token.info)
-        known.push({
-          address: token.address,
-          balance: { raw: token.raw.toString(), decimals: token.info.decimals },
-          info: token.info,
-        });
-      else unknown.push({ address: token.address, raw: token.raw });
-    }
-    const parts: Promise<RawTokenBalance[]>[] = [Promise.resolve(known)];
-    if (unknown.length) parts.push(readMetadata(client, chain.key, unknown).catch(() => unknown.map(unread)));
+    const given = new Map(
+      directory.tokens.flatMap((t) => (t.info ? [[t.address.toLowerCase(), t.info] as const] : [])),
+    );
+    const listed: ListedToken[] = directory.tokens.map((t) => ({ address: t.address, raw: t.raw }));
+    const parts: Promise<RawTokenBalance[]>[] = [
+      readMetadata(client, chain.key, listed, given).catch(() => listed.map(unread)),
+    ];
     if (!directory.complete) {
       // A list still being read, or cut off, must never miss the well-known tokens: read them directly.
       const seen = new Set(directory.tokens.map((t) => t.address.toLowerCase()));

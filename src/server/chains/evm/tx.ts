@@ -1,5 +1,5 @@
 import "server-only";
-import { type Hex, type PublicClient, decodeErrorResult, erc20Abi, getAddress, parseAbi } from "viem";
+import { type Hex, type PublicClient, decodeErrorResult, getAddress, parseAbi } from "viem";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import type { TxDetails, TxToken } from "@/lib/chains/types";
@@ -8,6 +8,7 @@ import { chainDex } from "./dex";
 import { getOnchainPrices } from "./prices";
 import { knownContract } from "@/config/known-contracts";
 import { archiveClient } from "./providers";
+import { evmTokenDetails } from "./token-details";
 import { parseTxLogs } from "./tx-logs";
 import { readAllowances, readCodes, readNativeBalance, readPools } from "./tx-reads";
 
@@ -40,30 +41,25 @@ const typeNames: Record<string, string> = {
   eip7702: "eip7702",
 };
 
-async function readTokens(client: PublicClient, addresses: string[]): Promise<Record<string, TxToken>> {
+/** Token details from the shared registry (R1): read from the chain only for tokens nobody has looked up yet. */
+async function readTokens(
+  client: PublicClient,
+  chainKey: string,
+  addresses: string[],
+): Promise<Record<string, TxToken>> {
   const list = addresses.slice(0, MAX_TOKENS).map((a) => getAddress(a));
   if (list.length === 0) return {};
-  const results = await client
-    .multicall({
-      allowFailure: true,
-      contracts: list.flatMap((address) => [
-        { address, abi: erc20Abi, functionName: "name" as const },
-        { address, abi: erc20Abi, functionName: "symbol" as const },
-        { address, abi: erc20Abi, functionName: "decimals" as const },
-      ]),
-    })
-    .catch(() => null);
+  const details = await evmTokenDetails(client, chainKey, list).catch(() => new Map<string, null>());
   const out: Record<string, TxToken> = {};
-  list.forEach((address, i) => {
-    const [name, symbol, decimals] = results ? [results[i * 3], results[i * 3 + 1], results[i * 3 + 2]] : [];
-    const dec = decimals?.status === "success" ? Number(decimals.result) : NaN;
+  for (const address of list) {
+    const info = details.get(address.toLowerCase()) ?? null;
     out[address.toLowerCase()] = {
       address,
-      name: sanitizeTokenText(name?.status === "success" ? name.result : "", 64),
-      symbol: sanitizeTokenText(symbol?.status === "success" ? symbol.result : "", 32),
-      decimals: Number.isInteger(dec) && dec >= 0 && dec <= 255 ? dec : null,
+      name: info?.name ?? "",
+      symbol: info?.symbol ?? "",
+      decimals: info?.decimals ?? null,
     };
-  });
+  }
   return out;
 }
 
@@ -241,7 +237,7 @@ export async function getEvmTxDetails(client: PublicClient, chain: ChainConfig, 
     // Pending only: has the sender already used this nonce elsewhere? (evidence of replacement / cancellation)
     pending ? client.getTransactionCount({ address: tx.from, blockTag: "latest" }).catch(() => null) : null,
     // The called contract is read too, so the page can say "called transfer on USDC".
-    readTokens(client, [...new Set([...(tx.to ? [tx.to.toLowerCase()] : []), ...logTokens])]),
+    readTokens(client, chain.key, [...new Set([...(tx.to ? [tx.to.toLowerCase()] : []), ...logTokens])]),
     status === "reverted" && pastClient
       ? withTimeout(readRevertReason(pastClient, { ...tx, input: tx.input }, tx.blockNumber!), OPTIONAL_MS)
       : null,

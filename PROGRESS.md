@@ -41,6 +41,25 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## R1 part 1: shared token registry (2026-11-27)
+
+- **Alchemy costs measured (R0):** the owner's dashboard showed 186,100 units for `data/assets/tokens/by-address` on
+  2026-11-26, for at least 202 requests that day: 360 to ~920 units per request, not the 200 CRYPY counted. The budget
+  meter now counts it at 1,000 until R2 measures it exactly. On 2026-11-24 (old method) the day used 1.6M units, mostly
+  `eth_call` (738,600).
+- **Token registry:** a token's name, symbol and decimals are read from the chain once and kept in the database
+  (`tokens`, migration `0008_tokens`, applied on the next start), shared by every visitor and tool; memory in front;
+  unreadable contracts (spam) asked again after a day; deleted after 90 days unused (hourly cleanup); left out of
+  backups. Balances, the transaction page, activity and the alerts checker use it (one shared reader,
+  `evmTokenDetails`), replacing four separate readers and a memory-only cache that was lost on every restart.
+- **Expected effect on the server:** wallets full of spam tokens no longer have their tokens' details read again on
+  each fresh visit or after a restart; measured with `perf:server` after the deploy.
+
+**Checks:** typecheck, lint, Prettier, translation check clean; ShellCheck clean (backup.sh). Unit: 666 passed, 76
+skipped (new: registry read once then memory and database, chains kept apart, unreadable remembered a day and asked
+again, failed reads not stored, Alchemy details stored, readable never overwritten, 90-day cleanup with the real
+migration). Build passed. Browser: 329 passed, 19 skipped, 0 failed.
+
 ## Infrastructure redesign approved; R0 (measure) started (2026-11-26)
 
 - **Owner decisions:** features frozen until the data layer is rebuilt (INFRASTRUCTURE_DESIGN.md, steps R0–R7); zero
@@ -56,6 +75,14 @@ Last updated: 2026-11-25
     networks, tokens with names 5 networks), 2 minutes apart, printing each time window for the dashboard comparison.
 - Tried here against a local build (no Alchemy key, so only the script itself was checked): 20 cases ran, report
   written. Real numbers come from the server.
+- **Baseline on the server (owner, 2026-11-26 22:1x UTC), 20 of 31 targets met:** search 0.13–0.59 s (again 0.02);
+  address page frame 0.05–0.72 s, full page 6.3–7.8 s (again 0.4–2.0); balances 3.0–4.5 s with stored readings shown
+  because fresh reads passed 2.5 s (again 1.4–2.1); approvals 6.5–7.0 s, activity 5.5–5.7 s, token security 8.5–9.8 s
+  (again 0.01–0.02); transaction 0.43 s; gas 0.95 s. Alchemy units counted by CRYPY for the run: 28,680, of which
+  18,200 for the all-chains token list (91 pages for three spam-heavy wallets). Alchemy dashboard: 5M of 30M units
+  used this month; peak throughput 275.7 of 300 units/s in the last 7 days.
+- Alchemy cost test (`alchemy-cost.mjs`) ran: 20 requests each, 0.14–0.18 s per request, all answered; the
+  dashboard shows usage per day only, so the per-request cost is read from the day's per-method totals.
 
 ## B-035: balances read all chains at once with Alchemy's Portfolio API (2026-11-26)
 

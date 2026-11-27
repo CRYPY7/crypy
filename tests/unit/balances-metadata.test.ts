@@ -1,7 +1,10 @@
 import type { PublicClient } from "viem";
 import { describe, expect, it } from "vitest";
-import { getChain } from "@/config/chains";
-import { getEvmBalances } from "@/server/chains/evm/balances";
+
+// Token details go through the shared registry (database): set before the modules load, so it stays in memory.
+process.env.PGLITE_DIR = "memory";
+const { getChain } = await import("@/config/chains");
+const { getEvmBalances } = await import("@/server/chains/evm/balances");
 
 /** A fake node: every common token has a balance and readable details; counts multicalls. */
 function fakeClient() {

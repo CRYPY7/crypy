@@ -25,8 +25,9 @@ LOG="${CRYPY_BACKUP_LOG:-/var/log/crypy-backup.log}"
 KEEP_DAYS=14
 TEST_DB="${DB}_restore_test"
 # Rebuilt by themselves, so not copied: saved wallet and token lookups (they also hold looked-up addresses, which
-# needn't sit in a second company's storage) and short-lived sign-in and Telegram link codes.
-EXCLUDE_DATA=(saved_results sign_in_nonces telegram_link_codes)
+# needn't sit in a second company's storage), the shared token registry (re-read from the chains) and short-lived
+# sign-in and Telegram link codes.
+EXCLUDE_DATA=(saved_results tokens sign_in_nonces telegram_link_codes)
 # What a restore must bring back: people's accounts and what they set up.
 IMPORTANT=(users accounts watch_items alerts portfolios status_updates)
 

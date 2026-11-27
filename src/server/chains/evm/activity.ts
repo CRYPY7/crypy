@@ -1,11 +1,12 @@
 import "server-only";
 import { limitedFetch } from "@/server/http/limit";
-import { type PublicClient, getAddress, pad, parseAbiItem } from "viem";
+import { type PublicClient, getAddress, pad } from "viem";
 import type { ChainConfig } from "@/config/chains";
 import { sanitizeTokenText } from "@/lib/chains/sanitize";
 import { completeAbove } from "@/lib/activity/evaluate";
 import type { ChainActivity, Transfer } from "@/lib/activity/types";
 import { getOnchainPrices } from "./prices";
+import { evmTokenDetails } from "./token-details";
 import { discardBody } from "@/server/http/discard";
 import { noteAlchemyLimited, waitForAlchemy } from "./alchemy-pace";
 import {
@@ -306,29 +307,14 @@ async function recentPage(
       ),
     ),
   );
-  const meta = await client.multicall({
-    allowFailure: true,
-    contracts: heldTokens.slice(0, 60).flatMap((t) => [
-      {
-        address: getAddress(t),
-        abi: [parseAbiItem("function symbol() view returns (string)")],
-        functionName: "symbol" as const,
-      },
-      {
-        address: getAddress(t),
-        abi: [parseAbiItem("function decimals() view returns (uint8)")],
-        functionName: "decimals" as const,
-      },
-    ]),
-  });
+  // Symbols and decimals from the shared token registry (R1): read from the chain only for tokens nobody looked up.
+  const details = await evmTokenDetails(client, chain.key, heldTokens.slice(0, 60)).catch(
+    () => new Map<string, null>(),
+  );
   const info = new Map<string, { symbol: string; decimals: number | null }>();
-  heldTokens.slice(0, 60).forEach((t, i) => {
-    const s = meta[i * 2];
-    const d = meta[i * 2 + 1];
-    info.set(t.toLowerCase(), {
-      symbol: sanitizeTokenText(s?.status === "success" ? String(s.result) : "", 24) || "?",
-      decimals: d?.status === "success" ? Number(d.result) : null,
-    });
+  heldTokens.slice(0, 60).forEach((t) => {
+    const d = details.get(t.toLowerCase()) ?? null;
+    info.set(t.toLowerCase(), { symbol: (d?.symbol ?? "").slice(0, 24) || "?", decimals: d?.decimals ?? null });
   });
   const seen = new Set<string>();
   return reads.flat().flatMap((log) => {
