@@ -17,6 +17,7 @@ import { pruneProviderUsage, saveProviderUsage } from "@/server/chains/evm/usage
 import { pruneOutcomes } from "@/server/outcomes/store";
 import { pruneSaved } from "@/server/saved/store";
 import { pruneTokens } from "@/server/tokens/registry";
+import { PRICE_JOB_MS, runPriceJob } from "@/server/tokens/price-job";
 import { watchVisitorOutcomes } from "@/server/outcomes/watch";
 
 /**
@@ -137,6 +138,8 @@ export function startAlertsWorker(): void {
       "token-checks",
       60_000,
     );
+  // Prices of tokens people looked at in the last week, kept fresh so pages rarely price live (R1 part 2).
+  if (!skip.has("prices")) every(PRICE_JOB_MS, () => runPriceJob(), "prices", 45_000);
   // Health checks for the status page and admin dashboard (M9 Part 5): quick checks every round, real tool runs
   // about every 30 minutes, 2 at most per round. Results are saved; the pages only read them.
   if (!skip.has("health"))

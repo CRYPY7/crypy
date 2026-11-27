@@ -49,6 +49,7 @@ export const checkDefinitions: readonly CheckDefinition[] = [
   quick("job:delivery", "alerts"),
   quick("bot", "alerts"),
   quick("job:token-checks", "data"),
+  quick("job:prices", "data"),
   quick("database", "data", 1_000),
   quick("server:memory", "server"),
   quick("server:disk", "server"),

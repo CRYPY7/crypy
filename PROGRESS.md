@@ -41,6 +41,25 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## R1 part 2: stored prices, price job, step times (2026-11-27)
+
+- **Measured after R1 part 1 (owner's server, 08:46 UTC):** 20 of 31 targets; balances 2.8–3.2 s; one run cost
+  105,478 Alchemy units, 91,000 of them the all-chains token list (B-035) reading up to 30 pages per spam-heavy
+  wallet in the background. The owner switched it off (`CRYPY_WALLET_TOKENS=off`, site restarted 08:50:49 UTC);
+  discovery in R2 replaces it.
+- **Why balances stay slow:** pricing searches every exchange, pair and fee tier for each of up to 300 tokens per
+  chain (dozens of on-chain reads per token), on every fresh read, and spam tokens never have a pool.
+- **Built:** stored prices on the token registry (a price under 3 minutes is reused; "no reliable price" remembered
+  6 hours, never for well-known tokens; older stored prices used if live pricing fails; the native coin's price
+  shared for a minute) and a background price job every 3 minutes for tokens viewed in the last week (health check
+  "Token price refresh"). Each fresh chain reading now carries its step times (`readMs`), which `pnpm perf:server`
+  prints as "slowest steps".
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 670 passed, 76 skipped (new: price reused,
+"no price" remembered and asked again after 6 hours, well-known tokens never marked, fallback to older prices and
+"nothing priced", the price job's list). Build passed. Browser: 329 passed, 19 skipped, 0 failed. Local speed script
+run: step times shown (approvals per chain, activity per chain).
+
 ## R1 part 1: shared token registry (2026-11-27)
 
 - **Alchemy costs measured (R0):** the owner's dashboard showed 186,100 units for `data/assets/tokens/by-address` on

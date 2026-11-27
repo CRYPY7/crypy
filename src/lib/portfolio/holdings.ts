@@ -29,6 +29,8 @@ export interface ChainHoldings {
   checkedEntries?: number;
   /** B-035: the token list is still being read; the page looks again in a few seconds. */
   completing?: boolean;
+  /** How long the fresh read took, in ms (R1 part 2: read by the speed script). */
+  readMs?: { balances: number; prices: number };
   /** Native coin first, then tokens by value (highest first), then unpriced tokens by name. */
   visible: Holding[];
   /** Likely spam, hidden by default. */

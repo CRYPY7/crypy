@@ -5105,6 +5105,7 @@
         "job_delivery": "Alert delivery",
         "bot": "Telegram bot",
         "job_token-checks": "Daily token checks",
+        "job_prices": "Token price refresh",
         "database": "Database",
         "server_memory": "Memory",
         "server_disk": "Disk",

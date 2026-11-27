@@ -16,6 +16,8 @@ export interface ChainApprovals {
   block: string;
   approvals: RatedApproval[];
   sources: ApprovalsFacts["sources"];
+  /** How long this chain's check took, in ms (R1 part 2: read by the speed script). */
+  readMs?: number;
 }
 
 export interface ApprovalsReport {
@@ -73,12 +75,14 @@ export async function cachedApprovals(
           });
           const getApprovals = adapter.getApprovals.bind(adapter);
           // S3: heavy checks share one line (server/heavy/queue.ts): pages first, background work behind.
+          const started = Date.now();
           const facts = await runHeavy(() => getApprovals(chain, owner, held, priority), priority);
           return {
             chain: facts.chain as ChainKey,
             block: facts.block,
             approvals: rateApprovals(facts.approvals, await spamTokens),
             sources: facts.sources,
+            readMs: Date.now() - started,
           };
         },
         () => readSavedOne<ChainApprovals>("approvals", owner, chain.key),

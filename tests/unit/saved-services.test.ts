@@ -22,6 +22,8 @@ const { cachedActivity } = await import("@/server/services/activity");
 const { cachedTokenSecurity, cachedTxDetails, resolveAddressPage } = await import("@/server/services/lookups");
 const { pageOverview } = await import("@/server/services/overview");
 const { resetFreshOrSaved } = await import("@/server/saved/fresh-or-saved");
+// The native coin's price is shared for a minute (R1 part 2); these tests change it between steps.
+const { resetNativePrices } = await import("@/server/tokens/prices");
 import type { TokenSecurityFacts } from "@/lib/security/types";
 
 /**
@@ -164,6 +166,7 @@ describe("saved results in the services", () => {
     // BNB Chain fails: its saved reading fills in (value at the old price), marked as saved.
     mode = "down";
     price = 3;
+    resetNativePrices();
     const down = await pageOverview(ADDRESS, ["ethereum", "bsc"]);
     expect(down.unavailable).toEqual([]);
     expect(Object.keys(down.saved ?? {})).toEqual(["bsc"]);

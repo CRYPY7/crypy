@@ -180,6 +180,7 @@ export const probes: Record<string, Probe> = {
 
   "job:checker": jobProbe("checker"),
   "job:delivery": jobProbe("delivery"),
+  "job:prices": jobProbe("prices"),
 
   async bot() {
     const bot = botHealth();

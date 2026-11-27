@@ -64,7 +64,10 @@ export async function cachedActivity(
         h.kind === "token" && h.address ? [h.address] : [],
       );
     });
-    return adapter.getActivity(chain, owner, cursors.get(chain.key) ?? null, held);
+    const started = Date.now();
+    const page = await adapter.getActivity(chain, owner, cursors.get(chain.key) ?? null, held);
+    // How long this chain took, in ms (R1 part 2: read by the speed script).
+    return { ...page, chain: { ...page.chain, readMs: Date.now() - started } };
   };
   // Stabilization S2, first page only: each chain is read fresh; one that fails, or takes longer than a moment, shows
   // its last first page (up to 7 days old) while the fresh read finishes in the background. Full history is saved as

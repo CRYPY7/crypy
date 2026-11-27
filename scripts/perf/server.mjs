@@ -125,12 +125,17 @@ async function measure(kind, path) {
       if (kind === "api") chunks.push(value);
     }
     const total = (performance.now() - started) / 1000;
-    const result = { status: response.status, total, ...(kind === "page" ? { frame: first } : {}) };
+    const result = {
+      status: response.status,
+      total,
+      ...(kind === "page" ? { frame: first } : {}),
+    };
     if (kind === "api") {
       try {
         const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
         result.ok = body.ok;
         const d = body.data ?? {};
+        result.steps = slowSteps(d);
         const overview = d.overview ?? d;
         if (Array.isArray(overview.chains)) {
           result.notes = [
@@ -154,6 +159,27 @@ async function measure(kind, path) {
     }
     return result;
   }
+}
+
+/**
+ * The answer's slowest steps, from the per-chain read times tools include (R1 part 2): balances and prices per chain
+ * (`readMs: {balances, prices}`), approvals and activity per chain (`readMs`). Only steps of 0.3 s or more.
+ */
+function slowSteps(data) {
+  const steps = [];
+  for (const c of data?.overview?.chains ?? data?.chains ?? []) {
+    const chain = c.chain?.chain ?? c.chain;
+    const ms = c.readMs ?? c.chain?.readMs;
+    if (typeof ms === "number") steps.push({ name: String(chain), dur: ms });
+    else if (ms && typeof ms === "object")
+      for (const [step, dur] of Object.entries(ms)) steps.push({ name: `${step}-${chain}`, dur });
+  }
+  return steps
+    .filter((s) => Number.isFinite(s.dur) && s.dur >= 300)
+    .sort((a, b) => b.dur - a.dur)
+    .slice(0, 4)
+    .map((s) => `${s.name} ${(s.dur / 1000).toFixed(1)} s`)
+    .join(", ");
 }
 
 async function alchemyUsage() {
@@ -191,7 +217,9 @@ for (const [group, label, kind, pathOrFn, targets] of cases) {
     } ${verdict(value, kind === "page" ? targets.frame : targets.first)}  again ${fmt(again?.total).padStart(8)} ${verdict(
       again?.total,
       targets.again,
-    )}  ${first.status !== 200 ? `HTTP ${first.status}` : ""} ${first.notes ?? ""}`,
+    )}  ${first.status !== 200 ? `HTTP ${first.status}` : ""} ${first.notes ?? ""}${
+      first.steps ? `\n${" ".repeat(18)}slowest steps: ${first.steps}` : ""
+    }`,
   );
   await sleep(300);
 }
@@ -230,8 +258,8 @@ const lines = [
   "",
   `Measured ${new Date().toISOString()} against ${BASE}. Targets: INFRASTRUCTURE_DESIGN.md §2.`,
   "",
-  "| Tool | Case | First | Target | Again | Target | Notes |",
-  "| --- | --- | --- | --- | --- | --- | --- |",
+  "| Tool | Case | First | Target | Again | Target | Notes | Slowest steps (first) |",
+  "| --- | --- | --- | --- | --- | --- | --- | --- |",
   ...rows.map((r) => {
     const firstValue = r.kind === "page" ? r.first.frame : r.first.total;
     const firstTarget = r.kind === "page" ? r.targets.frame : r.targets.first;
@@ -239,7 +267,7 @@ const lines = [
       firstTarget !== undefined ? `≤ ${firstTarget} s ${verdict(firstValue, firstTarget)}` : "—"
     } | ${fmt(r.again?.total)} | ${r.targets.again !== undefined && r.again ? `≤ ${r.targets.again} s ${verdict(r.again.total, r.targets.again)}` : "—"} | ${
       r.first.status !== 200 ? `HTTP ${r.first.status} ` : ""
-    }${r.first.notes ?? ""} |`;
+    }${r.first.notes ?? ""} | ${r.first.steps ?? ""} |`;
   }),
   "",
   `Targets met: ${checked.filter(Boolean).length} of ${checked.length}.`,

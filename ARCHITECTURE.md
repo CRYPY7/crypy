@@ -541,6 +541,14 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   page, activity (recent-only fallback) and the alerts checker. Not through it: the token page's "is this a token"
   check (needs total supply live), the batch scanner's per-chain token check, the price engine's decimals (moves with
   the price job). Backups leave out the table's data (it refills itself).
+- **Stored prices (R1 part 2, 2026-11-27):** `server/tokens/prices.ts` `pricesFor(chain, tokens, livePricer,
+{keepTokens})` used by `readChainHoldings`: a stored price under 3 minutes old is used; "no reliable price" (price
+  null with a time on the token's row) is remembered 6 hours, never for the chain's well-known tokens; the rest is
+  priced live by the DEX engine and stored; if live pricing fails, stored prices up to 1 hour old are used; the native
+  coin's price is shared in memory for 1 minute. `server/tokens/price-job.ts` (worker job `prices`, every 3 minutes,
+  health check `job:prices`): re-prices up to 300 tokens per chain looked at in the last 7 days whose price is over 2
+  minutes old; a token the engine can't price that round keeps its older price. Each fresh chain reading carries
+  `readMs` (balances `{balances, prices}`, approvals and activity per chain), shown by `pnpm perf:server`.
 - `lib/portfolio/holdings.ts` (pure): values holdings, sorts them, hides likely spam (`link-in-name`, `bait-words` without price, `unreadable`) and excludes unpriced and spam tokens from totals.
 - `server/services/overview.ts`: all chains in parallel (`allSettled`), on-chain prices per chain (up to 300 tokens), cached 60 s per address.
 - Address page renders it on the server; no client JavaScript.

@@ -230,3 +230,110 @@ export async function pruneTokens(now = Date.now()): Promise<void> {
 export function resetTokenMemory() {
   memory.clear();
 }
+
+// ── Prices (R1 part 2) ────────────────────────────────────────────────────────────────────────────────────────────
+// A token's last USD price from CRYPY's own DEX price engine, or "no reliable price" (price null with a time). Kept
+// on the token's row; read by pages, refreshed by the background price job.
+
+export interface StoredPrice {
+  /** null: the engine found no reliable pool at `at`. */
+  usd: number | null;
+  at: number;
+}
+
+const priceMemory: Map<string, StoredPrice> = ((
+  globalThis as { __crypyTokenPrices?: Map<string, StoredPrice> }
+).__crypyTokenPrices ??= new Map());
+
+/** Stored prices for these tokens (memory, then the database), keyed by lower-case address. */
+export async function storedPrices(chain: string, addresses: readonly string[]): Promise<Map<string, StoredPrice>> {
+  const out = new Map<string, StoredPrice>();
+  const missing: string[] = [];
+  for (const address of new Set(addresses.map((a) => a.toLowerCase()))) {
+    const hit = priceMemory.get(keyOf(chain, address));
+    if (hit) out.set(address, hit);
+    else missing.push(address);
+  }
+  if (missing.length) {
+    const rows = await withTimeout(
+      getDb().then((db) =>
+        db
+          .select({ address: tokens.address, priceUsd: tokens.priceUsd, priceAt: tokens.priceAt })
+          .from(tokens)
+          .where(and(eq(tokens.chain, chain), inArray(tokens.address, missing))),
+      ),
+      DB_TIMEOUT_MS,
+      [],
+    );
+    for (const row of rows) {
+      if (!row.priceAt) continue;
+      const usd = row.priceUsd === null ? null : Number(row.priceUsd);
+      const price = { usd: usd !== null && Number.isFinite(usd) ? usd : null, at: row.priceAt.getTime() };
+      priceMemory.set(keyOf(chain, row.address), price);
+      out.set(row.address, price);
+    }
+  }
+  return out;
+}
+
+/** Stores prices (null = no reliable price found). Only tokens already in the registry are updated. */
+export async function storePrices(chain: string, prices: ReadonlyMap<string, number | null>, now = Date.now()) {
+  if (prices.size === 0) return;
+  for (const [address, usd] of prices) {
+    if (priceMemory.size >= MEMORY_MAX) priceMemory.clear();
+    priceMemory.set(keyOf(chain, address), { usd, at: now });
+  }
+  try {
+    const db = await getDb();
+    const at = new Date(now);
+    const priced = [...prices].filter(([, usd]) => usd !== null);
+    const unpriced = [...prices].filter(([, usd]) => usd === null).map(([a]) => a.toLowerCase());
+    for (const [address, usd] of priced)
+      await db
+        .update(tokens)
+        .set({ priceUsd: String(usd), priceAt: at })
+        .where(and(eq(tokens.chain, chain), eq(tokens.address, address.toLowerCase())));
+    for (let i = 0; i < unpriced.length; i += 500)
+      await db
+        .update(tokens)
+        .set({ priceUsd: null, priceAt: at })
+        .where(and(eq(tokens.chain, chain), inArray(tokens.address, unpriced.slice(i, i + 500))));
+  } catch {
+    // Best-effort: the token is priced live again next time.
+  }
+}
+
+/**
+ * Tokens the price job should refresh on one chain: looked at in the last `usedWithinMs`, with a price older than
+ * `olderThanMs` (tokens with no reliable price are left to pages, which ask again after a while).
+ */
+export async function tokensToReprice(
+  chain: string,
+  { usedWithinMs, olderThanMs, limit }: { usedWithinMs: number; olderThanMs: number; limit: number },
+  now = Date.now(),
+): Promise<{ address: string; decimals: number }[]> {
+  try {
+    const db = await getDb();
+    const rows = await db
+      .select({ address: tokens.address, decimals: tokens.decimals })
+      .from(tokens)
+      .where(
+        and(
+          eq(tokens.chain, chain),
+          sql`${tokens.usedAt} > ${new Date(now - usedWithinMs)}`,
+          sql`${tokens.priceUsd} is not null`,
+          lt(tokens.priceAt, new Date(now - olderThanMs)),
+        ),
+      )
+      .orderBy(tokens.priceAt)
+      .limit(limit);
+    return rows.flatMap((r) => (r.decimals === null ? [] : [{ address: r.address, decimals: r.decimals }]));
+  } catch {
+    return [];
+  }
+}
+
+/** Tests only. */
+export function resetPriceMemory() {
+  priceMemory.clear();
+}

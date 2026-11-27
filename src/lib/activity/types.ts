@@ -34,6 +34,8 @@ export type ActivitySource =
 
 export interface ChainActivity {
   chain: string;
+  /** How long this chain's read took, in ms (R1 part 2: read by the speed script). */
+  readMs?: number;
   source: ActivitySource;
   /** Older transfers exist: pass this block as the cursor to continue (inclusive). null = no more. */
   next: number | null;

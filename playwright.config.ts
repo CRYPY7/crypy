@@ -31,7 +31,7 @@ export default defineConfig({
     env: {
       PGLITE_DIR: "memory",
       // The daily token checks would add live network load to every test run; their logic has unit tests.
-      CRYPY_WORKER_SKIP: "token-checks,health",
+      CRYPY_WORKER_SKIP: "token-checks,health,prices",
       // The admin dashboard tests sign in with this test-only wallet.
       ADMIN_WALLETS: ADMIN_TEST_ADDRESS,
       // Outage drill for one address at a time (tests/e2e/saved-results.spec.ts); other tests aren't affected.

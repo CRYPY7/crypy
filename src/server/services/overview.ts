@@ -4,6 +4,7 @@ import { cacheLife } from "next/cache";
 import { type ChainConfig, type ChainKey, liveChains } from "@/config/chains";
 import { type ChainHoldings, buildChainHoldings } from "@/lib/portfolio/holdings";
 import { registry } from "@/server/chains/registry";
+import { pricesFor } from "@/server/tokens/prices";
 import { logTiming } from "@/server/diagnostics";
 import { freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { readSavedOne, saveResults } from "@/server/saved/store";
@@ -135,12 +136,10 @@ export async function readChainHoldings(chain: ChainConfig, address: string): Pr
     .sort((a, b) => Number(common.has(b.address.toLowerCase())) - Number(common.has(a.address.toLowerCase())))
     .slice(0, MAX_PRICED)
     .map((token) => ({ address: token.address, decimals: token.info!.decimals }));
-  let prices: Awaited<ReturnType<NonNullable<typeof adapter.getUsdPrices>>> | null = null;
-  try {
-    prices = (await adapter.getUsdPrices?.(chain, tokens)) ?? null;
-  } catch {
-    prices = null;
-  }
+  // Stored prices first; only tokens without a recent price (or recent "no price") are priced live (R1 part 2).
+  const prices = adapter.getUsdPrices
+    ? await pricesFor(chain.key, tokens, (missing) => adapter.getUsdPrices!(chain, missing), { keepTokens: common })
+    : null;
   logTiming(
     `overview ${chain.key}: balances ${listed - started} ms (${balances.tokens.length} tokens, ${balances.coverage}), ` +
       `prices ${Date.now() - listed} ms (${tokens.length} tokens)`,
@@ -153,5 +152,6 @@ export async function readChainHoldings(chain: ChainConfig, address: string): Pr
       (token) => token.toLowerCase(),
     ),
     pricesRead: prices !== null,
+    readMs: { balances: listed - started, prices: Date.now() - listed },
   };
 }
