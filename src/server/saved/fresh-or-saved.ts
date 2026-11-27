@@ -23,7 +23,12 @@ interface Entry {
   settled?: { at: number; ok: boolean; value?: unknown; error?: unknown };
 }
 
-export const WAIT_MS = 2_500;
+/**
+ * R2 (stored first, INFRASTRUCTURE_DESIGN.md §2–3): a wallet or token looked up in the last days shows its saved
+ * reading after this short wait (was 2.5 s), with its age and "checking for changes", while the fresh read finishes;
+ * a fresh read that is quicker than this is shown directly. Safety data keeps its age limits (MAX_AGE_MS).
+ */
+export const WAIT_MS = 250;
 const KEEP_MS = 60_000;
 const MAX_ENTRIES = 5_000;
 const entries = new Map<string, Entry>();

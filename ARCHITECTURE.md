@@ -710,14 +710,25 @@ DEX decoders, per chain family:                      (one per DEX design)
 - `src/lib/chains/selection.ts`: `ChainSelection` = used | all | pick; `parseSelection` keeps only chains the tool
   supports, in config order (stable links and cache keys); `resolveScope` returns the chains to scan plus the used
   and unused chains left out.
-- `src/server/services/chain-scope.ts`: `cachedChainUse` (search lookups + one common-token multicall per remaining
-  chain through the adapter's optional `holdsCommonToken`; chains whose check failed count as used) and
+- `src/server/services/chain-scope.ts`: `cachedChainUse` (fresh search lookups — code, sent transactions, coin
+  balance — plus the wallet's stored activity map for tokens, R2 below; chains whose check failed or couldn't be
+  confirmed count as used) and
   `chainScopeFor(address, capability, ?chains)` — link first, then the `crypy_chains` cookie, then "used".
   `apiChains` does the same for the APIs (no value = all chains, unchanged behaviour).
 - Services take an optional chain list: `cachedAddressOverview(address, only)`, `cachedApprovals(owner, only)`,
   `cachedActivity(owner, cursor, only)`.
 - UI: `ChainPicker` (client; writes only the link and the cookie) and `ChainScopeBar` (server; scanned line, and
   on safety pages a warning naming used chains that were not checked).
+
+- **Activity map (R2, 2026-11-27):** `server/wallet/activity-map.ts` `walletChains(address)` — the chains where a
+  wallet holds tokens. One discovery request for every Alchemy chain (`server/chains/evm/wallet-discovery.ts`,
+  Portfolio "Token Balances By Wallet", balances only, at most 2 pages, stops once every chain has a token; counted
+  at 1,000 units as `portfolio_balancesByAddress` until measured). Chains it couldn't confirm are checked with the
+  well-known-token multicall; if Alchemy fails, every chain is. A failed or unconfirmed check is `unknown` (scanned).
+  Stored as saved result kind `wallet-chains` (chain `*`), memory in front; fresh 6 h, then used at once and
+  refreshed in the background; a first discovery waits at most 2 s; kept 30 days after the last lookup. Coins, sent
+  transactions and code are never taken from the map (always fresh from the lookups), so safety pages see a chain
+  the moment the wallet sends a transaction there.
 
 ## 12g. More EVM chains (M7)
 
@@ -904,7 +915,7 @@ DEX decoders, per chain family:                      (one per DEX design)
   token security; gas shows "From N min ago" on the chain card; the Portfolio lists saved chains and skips "since you
   last looked" while any chain is missing or saved.
 - Fresh or saved (`server/saved/fresh-or-saved.ts`, 2026-11-25): per key (tool, subject, chain) one fresh read at a
-  time, shared; not back within `WAIT_MS` (2.5 s) and a saved reading exists → the saved one with `refreshing: true`
+  time, shared; not back within `WAIT_MS` (0.25 s since R2, was 2.5 s) and a saved reading exists → the saved one with `refreshing: true`
   (UI `CheckingNotice`, page reloads after 5 s); the fresh result is kept 60 s only when a page was shown a saved
   reading; failures are never kept. Used by `pageOverview` (per chain), `cachedApprovals`, `cachedActivity` (first
   page) and `cachedTokenSecurity` (CRYPY's saved report or the curated daily check ≤ 6 h). `readChainHoldings` is the

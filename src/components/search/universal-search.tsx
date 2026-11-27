@@ -76,8 +76,8 @@ interface ResolveResponse {
 }
 
 /**
- * Universal search. Recognises the format instantly in the browser, then asks the server
- * where the address or transaction lives and opens the right page.
+ * Universal search. Recognises the format instantly in the browser. A transaction hash opens its page at once (the
+ * page finds the chain); an address is looked up as soon as it is complete (before Enter), then the right page opens.
  * Without JavaScript the form still works through /<locale>/search.
  */
 export function UniversalSearch({
@@ -101,6 +101,22 @@ export function UniversalSearch({
   const hero = variant === "hero";
   const rootRef = useRef<HTMLDivElement>(null);
   const open = state.kind === "message" || state.kind === "choose";
+
+  // R2 instant search: a pasted or typed address is looked up while the visitor is still on the box, so Enter opens
+  // its page at once. Only the last complete address is kept; nothing is sent until the input has a valid format.
+  const earlyLookup = useRef<{ q: string; response: Promise<ResolveResponse> } | null>(null);
+  useEffect(() => {
+    const local = classifySearch(value);
+    if (local.kind !== "evm-address" || earlyLookup.current?.q === local.value) return;
+    const timer = setTimeout(() => {
+      const response = fetch(`/api/v1/search/resolve?q=${encodeURIComponent(local.value)}`).then(
+        (r) => r.json() as Promise<ResolveResponse>,
+      );
+      response.catch(() => {});
+      earlyLookup.current = { q: local.value, response };
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [value]);
 
   // The compact (header) result floats like a dropdown: close it on Esc or a click outside.
   useEffect(() => {
@@ -126,10 +142,24 @@ export function UniversalSearch({
       setState({ kind: "message", key: local.kind, tone: "warning" });
       return;
     }
+    // A transaction hash opens its page at once; the page finds the chain (R2 instant search).
+    if (local.kind === "evm-tx") {
+      router.push(localePath(locale, `/tx/${local.value}`));
+      setState({ kind: "idle" });
+      return;
+    }
     setState({ kind: "loading" });
     try {
-      const response = await fetch(`/api/v1/search/resolve?q=${encodeURIComponent(local.value)}`);
-      const body = (await response.json()) as ResolveResponse;
+      const pending = earlyLookup.current?.q === local.value ? earlyLookup.current.response : null;
+      earlyLookup.current = null;
+      // An early lookup that failed (or was refused) is asked again now.
+      const early = pending ? await pending.catch(() => null) : null;
+      const body =
+        early?.ok || early?.data
+          ? early
+          : ((await (
+              await fetch(`/api/v1/search/resolve?q=${encodeURIComponent(local.value)}`)
+            ).json()) as ResolveResponse);
       // No chain answered: an address still opens its page, which shows saved readings (stabilization S2).
       const offline = (!body.ok && body.error?.code === "UPSTREAM_UNAVAILABLE") || body.data?.status === "unavailable";
       if (offline && local.kind === "evm-address") {

@@ -78,6 +78,27 @@ async function TxContent({ params, searchParams }: Props) {
       return <Notice tone="warning">{t("search.result.unavailable")}</Notice>;
     }
     if (result.status === "invalid" || result.status === "bad-checksum") notFound();
+    // The same hash on several chains (rare): the visitor chooses.
+    if (result.status === "tx" && result.choices.length > 1) {
+      return (
+        <div className="flex flex-col gap-4">
+          <p>{t("search.result.choose")}</p>
+          <ul className="flex flex-col gap-2">
+            {result.choices.map((choice) => (
+              <li key={choice.path}>
+                <Link
+                  href={localePath(locale, choice.path)}
+                  prefetch={false}
+                  className="block rounded-xl border bg-card p-4 font-semibold hover:border-primary"
+                >
+                  {t(`chains.${choice.chain}`)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
     return <Notice tone="warning">{t("search.result.not-found-tx")}</Notice>;
   }
 

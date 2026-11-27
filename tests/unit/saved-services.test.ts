@@ -176,11 +176,11 @@ describe("saved results in the services", () => {
     mode = "slow";
     const started = Date.now();
     const slow = await pageOverview(ADDRESS, ["ethereum", "bsc"]);
-    expect(Date.now() - started).toBeLessThan(2_900);
+    expect(Date.now() - started).toBeLessThan(1_000); // R2: stored first, after a short wait
     expect(Object.keys(slow.refreshing ?? {})).toEqual(["bsc"]);
     expect(slow.saved).toBeUndefined();
     // When the fresh read is done, the next request gets it at once.
-    await new Promise((resolve) => setTimeout(resolve, 700));
+    await new Promise((resolve) => setTimeout(resolve, 3_000));
     const after = await pageOverview(ADDRESS, ["ethereum", "bsc"]);
     expect(after.refreshing).toBeUndefined();
     expect(after.totalUsd).toBe(6);

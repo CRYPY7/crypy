@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq, inArray, lt, sql } from "drizzle-orm";
+import { and, eq, inArray, lt, ne, sql } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
 import { savedResults } from "@/server/db/schema";
 
@@ -19,7 +19,9 @@ export type SavedKind =
   | "gas"
   | "transaction"
   | "goplus-token"
-  | "goplus-approvals";
+  | "goplus-approvals"
+  /** R2: which chains a wallet holds tokens on (one row per wallet, chain "*"). */
+  | "wallet-chains";
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -36,10 +38,14 @@ export const MAX_AGE_MS: Record<SavedKind, number> = {
   /** GoPlus answers (S3, B-005): reused for an hour (approvals 5 minutes); kept a day as a fallback when GoPlus is down. */
   "goplus-token": DAY,
   "goplus-approvals": DAY,
+  /** Shown while a fresh discovery runs in the background; see server/wallet/activity-map.ts. */
+  "wallet-chains": 30 * DAY,
 };
 
 /** Deleted this long after the subject was last looked up. */
 export const KEEP_MS = 7 * DAY;
+/** The activity map is tiny (~100 B per wallet) and kept longer (INFRASTRUCTURE_DESIGN.md §7). */
+export const KEEP_WALLET_CHAINS_MS = 30 * DAY;
 /** A result larger than this isn't saved (very big wallets): the page then says what couldn't be read, as before. */
 export const MAX_BYTES = 512 * 1024;
 const READ_TIMEOUT_MS = 1_500;
@@ -163,8 +169,13 @@ export async function readSavedOne<T>(
   return (await readSaved<T>(kind, subject, [chain], now)).get(chain);
 }
 
-/** Deletes results not looked up for 7 days; run with the hourly housekeeping. */
+/** Deletes results not looked up for 7 days (the activity map: 30 days); run with the hourly housekeeping. */
 export async function pruneSaved(now = Date.now()): Promise<void> {
   const db = await getDb();
-  await db.delete(savedResults).where(lt(savedResults.usedAt, new Date(now - KEEP_MS)));
+  await db
+    .delete(savedResults)
+    .where(and(ne(savedResults.kind, "wallet-chains"), lt(savedResults.usedAt, new Date(now - KEEP_MS))));
+  await db
+    .delete(savedResults)
+    .where(and(eq(savedResults.kind, "wallet-chains"), lt(savedResults.usedAt, new Date(now - KEEP_WALLET_CHAINS_MS))));
 }

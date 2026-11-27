@@ -95,6 +95,14 @@ const SAFETY_PARALLEL = 2;
 /** B-035: how often, and how long apart, a wallet whose token list is still being read is read again. */
 const COMPLETING_TRIES = 6;
 const COMPLETING_DELAY_MS = 4_000;
+
+/**
+ * Balances still being read on the server: a token list still completing, or (R2, stored first) a stored reading
+ * shown while the fresh one finishes. Both are read again quietly, so fresh numbers replace them.
+ */
+function stillReading(report: WalletReport): boolean {
+  return Boolean(report.overview.completing?.length || Object.keys(report.overview.refreshing ?? {}).length);
+}
 const HOLDINGS_PAGE = 25;
 
 const short = (a: string) => `${a.slice(0, 6)}…${a.slice(-4)}`;
@@ -194,7 +202,7 @@ export default function PortfolioTracker({
           if (!body.ok || !body.data || requests.current.get(address) !== id) return;
           const report = body.data;
           setLoads((prev) => ({ ...prev, [address]: { status: "ok", report } }));
-          if (!report.overview.completing?.length) return;
+          if (!stillReading(report)) return;
         } catch {
           return; // The balances already shown stay; the next refresh reads again.
         }
@@ -260,7 +268,7 @@ export default function PortfolioTracker({
           // Balances are shown; the safety badges come from this browser's result of the last 6 hours, else from their
           // own request.
           if (result.status === "ok") {
-            if (result.report.overview.completing?.length) followCompleting(address, id);
+            if (stillReading(result.report)) followCompleting(address, id);
             const remembered = freshEntry(readSafetyCache(), address, Date.now());
             if (remembered) {
               const state: SafetyState = { status: "ok", report: remembered.report, at: remembered.at };

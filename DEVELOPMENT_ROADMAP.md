@@ -440,6 +440,13 @@ Two ways to pay for every paid feature: pay as you go (on-chain fee per transact
 
 - **Phase A — low-risk earnings.** Gate: V1 live + legal and tax advice. CRYPY Pro, batch revoke, holder snapshot, bulk address scan (large lists, saved lists, scheduled re-scans on top of the free M4.5 tool), hardware-wallet affiliate links, crypto payments and credits.
 - **Phase B — on-chain fee tools.** Gate: contracts independently audited + multi-sig treasury set up. Multisender (real distributions only, token scan + anti-dusting), airdrop claim pages, liquidity and token lock with vesting, wallet migration, **safe token creator** (safe template only: no hidden mint/blacklist/pause, capped fixed tax, auto-verified source, lock prompt); signed discount passes for plan holders.
+- **Owner request 2026-11-27 (after the infrastructure rebuild R2–R5 and V1; usefulness check for owner approval first;
+  contract-deploying tools behind the Phase B gate):** a **liquidity manager** (create pools, add and remove liquidity on
+  Uniswap/PancakeSwap v2/v3 with a full preview and a simulated result before signing; "create pool → lock liquidity"
+  in one flow) and a **token manager** for owners (the token exactly as buyers and CRYPY's scanner see it; trust-building
+  actions: renounce, lock liquidity, verify source, lower taxes; no blacklist tools). The safe token creator above stays
+  safe by design (no mint, pause or blacklist switches). Reference seen: ChainTx; its key import, bulk wallet creation,
+  market-maker, bulk buy/sell and bundler tools stay out (D8 rules).
 - **Not recommended (owner informed 2026-11-19):** stealth/anonymous transfer services (laundering and legal risk, blocklisting) and wallet / batch-wallet creation (requires handling keys; phishing pattern; sybil and holder-inflation use).
 - **Phase C — business revenue.** Gate: steady usage + reliable data. CRYPY API, embeddable widgets, project dashboard, contract monitoring, due-diligence reports.
   V1 prep: M8 accounts include plan, entitlement and credit models (switched off).

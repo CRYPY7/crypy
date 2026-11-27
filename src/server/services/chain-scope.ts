@@ -1,35 +1,26 @@
 import "server-only";
-import { cacheLife } from "next/cache";
 import { cookies } from "next/headers";
 import { type ChainCapabilities, liveChains } from "@/config/chains";
 import { isActiveLookup } from "@/lib/chains/types";
 import { CHAINS_COOKIE, type ChainScope, parseSelection, resolveScope } from "@/lib/chains/selection";
-import { registry } from "@/server/chains/registry";
+import { walletChains } from "@/server/wallet/activity-map";
 import { cachedResolve } from "./lookups";
 
 /**
- * Chains where an address shows any use: contract code, sent transactions or a coin balance (from the search
- * lookups every page already does), plus — for chains without those — whether it holds any of the chain's
- * well-known tokens (one multicall), so a wallet that only ever received USDT still counts as used.
- * Chains whose check failed count as used, so a provider outage never narrows a scan.
+ * Chains where an address shows any use: contract code, sent transactions or a coin balance (from the search lookups
+ * every page already does, always fresh), plus the chains where it holds tokens from the wallet's stored activity map
+ * (R2: one discovery request for every chain, refreshed in the background), so a wallet that only ever received
+ * tokens still counts as used. Chains whose check failed or couldn't be confirmed count as used, so a provider outage
+ * never narrows a scan.
  */
 export async function cachedChainUse(address: string): Promise<string[]> {
-  "use cache";
-  cacheLife({ stale: 30, revalidate: 60, expire: 1800 }); // M9 speed: a repeat visit within 30 min opens at once (refreshed in the background)
-  const resolved = await cachedResolve(address);
+  const [resolved, map] = await Promise.all([cachedResolve(address), walletChains(address)]);
   const lookups = resolved.status === "address" ? resolved.lookups : [];
-  const used = new Set(lookups.filter(isActiveLookup).map((l) => l.chain));
+  const used = new Set<string>(lookups.filter(isActiveLookup).map((l) => l.chain));
   // A chain whose quick check failed counts as used: better to scan it than to skip it silently.
   if (resolved.status === "address") for (const chain of resolved.unavailable) used.add(chain);
-  await Promise.all(
-    liveChains
-      .filter((c) => !used.has(c.key))
-      .map(async (c) => {
-        const adapter = registry.adapters.find((a) => a.family === c.family);
-        const holds = await adapter?.holdsCommonToken?.(c, address).catch(() => false);
-        if (holds) used.add(c.key);
-      }),
-  );
+  else for (const chain of liveChains) used.add(chain.key);
+  for (const chain of [...map.tokens, ...map.unknown]) used.add(chain);
   return liveChains.filter((c) => used.has(c.key)).map((c) => c.key);
 }
 

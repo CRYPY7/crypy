@@ -1,6 +1,6 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-25
+Last updated: 2026-11-27
 
 ## Milestones
 
@@ -40,6 +40,39 @@ Last updated: 2026-11-25
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## R2 part 1: activity map, stored first, instant search (2026-11-27)
+
+- **Activity map:** which chains a wallet holds tokens on now comes from one discovery request for every Alchemy chain
+  (Portfolio "Token Balances By Wallet", at most 2 pages), stored for 30 days after the last lookup and refreshed in
+  the background after 6 hours. It replaces one well-known-token check per chain on every visit, and also finds
+  wallets that only ever received less-known tokens. Coins, sent transactions and contract code still come fresh
+  from the search lookups, so a chain the wallet just started using is never skipped by Approvals. Chains that
+  couldn't be confirmed are scanned (never skipped). Falls back to the old per-chain check when Alchemy fails.
+- **Stored first:** a wallet or token looked up in the last days shows its saved reading after 0.25 s (was 2.5 s),
+  with its age and "checking for changes", while the fresh read finishes and the page updates itself. Safety data
+  keeps its 6-hour limit.
+- **Search:** a transaction hash opens its page at once (the page finds the chain; a hash on several chains offers
+  the choice); a pasted address is looked up before Enter is pressed, so its page opens at once.
+- **Cost to watch:** discovery is counted at 1,000 Alchemy units per page until its real cost is known: the owner's
+  dashboard method `data/assets/tokens/balances/by-address` after the deploy.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 680 passed, 76 skipped (new: discovery page
+reading, page limit and early stop, fallback to the per-chain check, unconfirmed chains kept "unknown", stored map
+used after a restart, 30-day cleanup). Build passed. Browser, full run: 328 passed, 19 skipped, 1 failed — Portfolio
+didn't save its "since you last looked" total when a wallet came from a stored reading (now more frequent); fixed:
+Portfolio re-reads such wallets quietly, like token lists still completing. Re-run after the fix (Portfolio, saved
+results, address, transaction, chain picker, approvals, foundation): 88 passed, 4 skipped, 0 failed.
+
+## Measured after R1 part 2 (2026-11-27)
+
+- **Server, 11:48 UTC, second run:** 25 of 31 targets (baseline 20); address page full first view 2.3–3.2 s
+  (baseline 6.3–7.8); token security 1.3–1.7 s (8.5–9.8); Alchemy units per measurement run 10,322 (baseline 28,680;
+  105,478 with the all-chains list). Slowest steps now: approvals 4–7.5 s per chain, activity up to 7.3 s per chain,
+  spam-heavy balance lists 1.1–3.7 s per chain — visitors see stored results after 2.5 s while these finish. Next:
+  R2 (discovery, active chains only).
+- Automatic deployment from GitHub was prepared, then withdrawn at the owner's request (commit reverted); deployments
+  stay manual (owner pushes and runs `update.sh`).
 
 ## R1 part 2: stored prices, price job, step times (2026-11-27)
 

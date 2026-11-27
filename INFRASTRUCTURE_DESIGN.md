@@ -222,6 +222,11 @@ replacement meets §2.
 | R6   | Add the remaining Alchemy-indexed EVM chains, each live-tested                                                           | each chain passes its live test; §2 unchanged     |
 | R7   | Tier-B EVM chains; then Solana, Tron, Bitcoin adapters (each its own milestone)                                          | per family: adapter tests + security review       |
 
+**Status (2026-11-27):** R0 built; R1 parts 1–2 built and measured (25 of 31 targets); **R2 part 1 built**: activity
+map from one discovery request (stored 30 days, fresh 6 h), stored results shown after 0.25 s while the fresh read
+finishes, search opens transaction pages at once and looks addresses up before Enter. R2 part 2 (next): discovery's
+balances feed the address overview directly, so the per-chain token lists are read only where tokens were found.
+
 ## 12. Risks and open points
 
 - **Alchemy unit costs** may be higher than documented per request (they scale with networks). R0 measures them; the
