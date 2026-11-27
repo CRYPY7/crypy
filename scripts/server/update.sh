@@ -171,4 +171,15 @@ if [ "$LIVE" != ".next" ] && [ "$NEW" != ".next" ] && [ -d "$APP_DIR/.next" ]; t
 echo "Updated and running ($NEW on port $NEW_PORT, $(( $(date +%s) - started )) s after the code was pulled)."
 # Backups: keep the installed script and schedule in step with the code (never stops the update).
 bash "$APP_DIR/scripts/server/install-backup.sh" || echo "Backup install failed; the site is updated. Run it again: bash $APP_DIR/scripts/server/install-backup.sh"
+# Automatic deployment (enable-deploy.sh): keep root's copy of the deploy script in step with git HEAD.
+if [ -f /usr/local/sbin/crypy-deploy ]; then
+  deploy_src="$(mktemp)"
+  # shellcheck disable=SC2024 # root writes the file on purpose; crypy only reads its own repository.
+  if sudo -u crypy git -C "$APP_DIR" show HEAD:scripts/server/deploy.sh >"$deploy_src" 2>/dev/null && [ -s "$deploy_src" ] &&
+    ! cmp -s "$deploy_src" /usr/local/sbin/crypy-deploy; then
+    install -o root -g root -m 755 "$deploy_src" /usr/local/sbin/crypy-deploy
+    echo "Deploy script updated."
+  fi
+  rm -f "$deploy_src"
+fi
 bash "$APP_DIR/scripts/server/indexnow.sh" || true
