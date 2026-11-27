@@ -41,20 +41,6 @@ Last updated: 2026-11-25
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
-## Automatic deployment; measured after R1 part 2 (2026-11-27)
-
-- **Measured on the server after R1 part 2 (11:48 UTC, second run):** 25 of 31 targets (baseline 20); address page
-  full first view 2.3–3.2 s (baseline 6.3–7.8); token security 1.3–1.7 s (8.5–9.8); Alchemy units per measurement
-  run 10,322 (baseline 28,680; 105,478 with the all-chains list). Slowest steps now: approvals 4–7.5 s per chain,
-  activity up to 7.3 s per chain, spam-heavy balance lists 1.1–3.7 s per chain — visitors see stored results after
-  2.5 s while these finish. Next: R2 (discovery, active chains only).
-- **Automatic deployment (owner decision):** `.github/workflows/deploy.yml` deploys after every green "Server build"
-  through a key that can only run `crypy-deploy` (`scripts/server/deploy.sh`: `deploy` or `deploy perf`); `[perf]` in
-  a commit message also runs the speed measurement and keeps its output as the run's log. Set up once with
-  `scripts/server/enable-deploy.sh` and three repository secrets. Tested here: the key line keeps every other key
-  and replaces an earlier deploy key; any other request than the two is refused (exit 2). ShellCheck clean; workflow
-  file parses.
-
 ## R1 part 2: stored prices, price job, step times (2026-11-27)
 
 - **Measured after R1 part 1 (owner's server, 08:46 UTC):** 20 of 31 targets; balances 2.8–3.2 s; one run cost

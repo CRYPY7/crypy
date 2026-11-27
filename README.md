@@ -81,23 +81,6 @@ sitemap's pages. SEO plan and status: `SEO_ROADMAP.md`.
 Behind Cloudflare, `bash /opt/crypy/app/scripts/server/cloudflare-only.sh on` lets only Cloudflare reach the web
 ports (run it again now and then to refresh Cloudflare's address list; `off` undoes it).
 
-### Automatic deployment
-
-Every push to `main` is built by GitHub ("Server build"); when that is green, the "Deploy" workflow connects to the
-server and runs `update.sh` (no gap for visitors; a failed update leaves the previous version running). A commit
-message containing `[perf]` also runs `pnpm perf:server`; the output is the run's "deploy-log" file.
-
-Switching it on (once, as root on the server):
-
-1. `bash /opt/crypy/app/scripts/server/enable-deploy.sh`
-2. In GitHub → Settings → Secrets and variables → Actions, add the three secrets it prints (`DEPLOY_HOST`,
-   `DEPLOY_KNOWN_HOSTS`, `DEPLOY_SSH_KEY`). The private key is shown once and deleted from the server.
-
-The key can only run `/usr/local/sbin/crypy-deploy` (`scripts/server/deploy.sh`, a root-owned copy from git HEAD):
-`restrict` turns off terminals and forwarding, and the script accepts only `deploy` and `deploy perf`. Anyone who can
-push to `main` can deploy, so keep push access to trusted accounts. To switch it off, delete the
-`crypy-github-deploy` line from `/root/.ssh/authorized_keys`.
-
 ### Backups
 
 Every night at 03:17 UTC the server saves the database to `/var/backups/crypy` (kept 14 days) and, once set up below,

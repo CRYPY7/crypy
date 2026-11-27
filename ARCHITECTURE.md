@@ -427,12 +427,6 @@ folder per instance in `.crypy-instance-<port>.env`); `update.sh` starts the new
 nginx upstream (`.crypy-port`) with a graceful reload once it answers, then stops the old one. Only the process named
 in `.crypy-worker` runs the background worker (`server/worker-owner.ts`).
 
-Automatic deployment (2026-11-27): `.github/workflows/deploy.yml` runs after a green "Server build" on `main` and
-connects as root with a key restricted in `authorized_keys` to `restrict,command="/usr/local/sbin/crypy-deploy"`
-(`scripts/server/deploy.sh`, installed from git HEAD by `enable-deploy.sh` and refreshed by `update.sh`), which
-accepts only `deploy` or `deploy perf`, takes a lock, runs `update.sh` and optionally the speed script. Host key
-pinned (`DEPLOY_KNOWN_HOSTS`); without the three secrets the workflow ends with a note.
-
 Builds (B-019): `.github/workflows/server-build.yml` builds `.next-a` and `.next-b` in `/opt/crypy/app` on GitHub and
 publishes them as pre-release `build-<commit>` with SHA-256 files and `crypy-build-env` (commit and `NEXT_PUBLIC_`
 values); `update.sh` downloads and checks them, and builds on the server only as a fallback (`CRYPY_BUILD_HERE=1`).
