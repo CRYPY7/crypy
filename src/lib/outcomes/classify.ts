@@ -68,11 +68,13 @@ export function classifyOverview(o: {
   chains: { chain: string; coverage: string }[];
   unavailable: readonly string[];
   pricesAvailable: boolean;
+  pending?: readonly string[];
 }): Classified {
-  if (o.chains.length === 0 && o.unavailable.length > 0)
+  if (o.chains.length === 0 && o.unavailable.length > 0 && !o.pending?.length)
     return { outcome: "error", reasons: ["all chains unavailable"] };
   const reasons = [
     ...o.unavailable.map((c) => `chain unavailable: ${c}`),
+    ...(o.pending ?? []).map((c) => `chain still reading: ${c}`),
     ...o.chains.filter((c) => c.coverage !== "full").map((c) => `token list ${c.coverage}: ${c.chain}`),
     ...(o.pricesAvailable ? [] : ["prices unavailable"]),
   ];

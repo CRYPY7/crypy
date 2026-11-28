@@ -54,6 +54,8 @@ interface ChainView {
   lookup?: AddressLookup;
   holdings?: ChainHoldings;
   active: boolean;
+  /** R3: still being read (no saved reading, first read slow): shown as such, never as empty. */
+  pending?: boolean;
 }
 
 function buildViews(lookups: AddressLookup[], overview: AddressOverview): ChainView[] {
@@ -65,7 +67,14 @@ function buildViews(lookups: AddressLookup[], overview: AddressOverview): ChainV
     const holdsSomething = Boolean(
       holdings && (holdings.visible.length > 1 || holdings.visible.some((h) => h.amount.raw !== "0")),
     );
-    return { chain, lookup, holdings, active: (lookup ? isActiveLookup(lookup) : false) || holdsSomething };
+    const pending = overview.pending?.includes(chain) ?? false;
+    return {
+      chain,
+      lookup,
+      holdings,
+      pending,
+      active: (lookup ? isActiveLookup(lookup) : false) || holdsSomething || pending,
+    };
   });
 }
 
@@ -118,6 +127,7 @@ async function AddressContent({
   const savedChains = Object.entries(overview.saved ?? {}).filter(([c]) => scope.scan.includes(c));
   const checkingChains = Object.entries(overview.refreshing ?? {}).filter(([c]) => scope.scan.includes(c));
   const completingChains = (overview.completing ?? []).filter((c) => scope.scan.includes(c));
+  const pendingChains = (overview.pending ?? []).filter((c) => scope.scan.includes(c));
   const f = t.raw("entity.freshness") as Record<string, string>;
   const retry = { retry: f.retry!, retrying: f.retrying! };
   const total = scope.chains.length;
@@ -224,6 +234,17 @@ async function AddressContent({
               title={f.checkingTitle!}
               pending={f.checkingPending!}
               body={f.checkingBody!}
+            />
+          ))}
+          {pendingChains.map((chain) => (
+            <CheckingNotice
+              key={`pending-${chain}`}
+              at={overview.fetchedAt}
+              locale={locale}
+              chain={t(`chains.${chain}`)}
+              title={f.pendingTitle!}
+              pending={f.pendingTitle!}
+              body={f.pendingBody!}
             />
           ))}
           {completingChains.length > 0 && (
@@ -380,6 +401,7 @@ function IdentityCard({
     fact = `${formatUsd(holdings.totalUsd, locale)}${tokenCount ? ` · ${t("entity.address.identity.tokens", { count: tokenCount })}` : ""}`;
   else if (nativeBalance && nativeBalance.amount.raw !== "0")
     fact = `${formatAmount(nativeBalance.amount.raw, nativeBalance.amount.decimals, locale, 4)} ${nativeBalance.symbol}`;
+  else if (view.pending && !holdings) fact = t("entity.freshness.pendingFact");
   else if (notChecked && !holdings) fact = t("entity.freshness.notCheckedTitle", { chain: t(`chains.${view.chain}`) });
   else fact = t("entity.address.balances.empty", { chain: t(`chains.${view.chain}`) });
 

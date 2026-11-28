@@ -3077,7 +3077,11 @@
       "tokenCheckingTitle": "Report from {ago} ({time}) · checking for changes…",
       "tokenCheckingPending": "Report from an earlier check · checking for changes…",
       "tokenCheckingBody": "A fresh check is running and this page updates by itself. The owner may have changed settings since: wait for it before you buy.",
-      "savedTx": "{chain} didn't answer just now. A confirmed transaction doesn't change: only its confirmation count and today's dollar values may have."
+      "savedTx": "{chain} didn't answer just now. A confirmed transaction doesn't change: only its confirmation count and today's dollar values may have.",
+      "pendingTitle": "{chain}: still reading…",
+      "pendingBody": "This chain is taking longer than usual. It isn't empty: this page updates by itself when it's ready.",
+      "pendingFact": "Still reading…",
+      "totalPending": "Not included yet (still reading): {chains}."
     },
     "crawler": "This page shows live blockchain data for people using a browser. Automated clients and crawlers get no live data here.",
     "qr": {
@@ -3694,7 +3698,8 @@
       "watchText": "Get a Telegram message when one of these wallets sends or receives, or gives a new approval.",
       "watchButton": "Set up alerts",
       "watchNote": "Needs a free sign-in with your wallet (a message to sign, no transaction). Up to 10 watched items; you choose which of your {count} wallets.",
-      "chainsSaved": "Couldn't read now, shown from an earlier reading (up to 7 days old): {chains}. Totals include them."
+      "chainsSaved": "Couldn't read now, shown from an earlier reading (up to 7 days old): {chains}. Totals include them.",
+      "chainsReading": "Still reading: {chains}. The total updates by itself in a moment."
     },
     "watchlist": {
       "loading": "Loading…",

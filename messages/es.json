@@ -3077,7 +3077,11 @@
       "tokenCheckingTitle": "Informe de {ago} ({time}) · buscando cambios…",
       "tokenCheckingPending": "Informe de una comprobación anterior · buscando cambios…",
       "tokenCheckingBody": "Se está haciendo una comprobación nueva y esta página se actualiza sola. El propietario puede haber cambiado la configuración desde entonces: espera el resultado antes de comprar.",
-      "savedTx": "{chain} no respondió ahora. Una transacción confirmada no cambia: solo pueden haber cambiado su número de confirmaciones y los valores en dólares de hoy."
+      "savedTx": "{chain} no respondió ahora. Una transacción confirmada no cambia: solo pueden haber cambiado su número de confirmaciones y los valores en dólares de hoy.",
+      "pendingTitle": "{chain}: todavía leyendo…",
+      "pendingBody": "Esta red está tardando más de lo habitual. No está vacía: esta página se actualiza sola cuando esté lista.",
+      "pendingFact": "Todavía leyendo…",
+      "totalPending": "Aún no incluido (todavía leyendo): {chains}."
     },
     "crawler": "Esta página muestra datos de blockchain en vivo para personas que usan un navegador. Los clientes automáticos y rastreadores no reciben datos en vivo aquí.",
     "qr": {
@@ -3694,7 +3698,8 @@
       "watchText": "Recibe un mensaje en Telegram cuando una de estas billeteras envíe o reciba fondos, o dé una nueva aprobación.",
       "watchButton": "Configurar alertas",
       "watchNote": "Requiere iniciar sesión gratis con tu billetera (un mensaje para firmar, sin transacción). Hasta 10 elementos vigilados; tú eliges cuáles de tus {count} billeteras.",
-      "chainsSaved": "No se pudo leer ahora; se muestra una lectura anterior (de hasta 7 días): {chains}. Los totales la incluyen."
+      "chainsSaved": "No se pudo leer ahora; se muestra una lectura anterior (de hasta 7 días): {chains}. Los totales la incluyen.",
+      "chainsReading": "Todavía leyendo: {chains}. El total se actualiza solo en un momento."
     },
     "watchlist": {
       "loading": "Cargando…",

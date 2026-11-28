@@ -55,6 +55,8 @@ interface WalletReport {
     saved?: Record<string, string>;
     refreshing?: Record<string, string>;
     completing?: string[];
+    /** R3: chains still being read (not in `chains` yet). */
+    pending?: string[];
   };
 }
 
@@ -101,7 +103,11 @@ const COMPLETING_DELAY_MS = 4_000;
  * shown while the fresh one finishes. Both are read again quietly, so fresh numbers replace them.
  */
 function stillReading(report: WalletReport): boolean {
-  return Boolean(report.overview.completing?.length || Object.keys(report.overview.refreshing ?? {}).length);
+  return Boolean(
+    report.overview.completing?.length ||
+    report.overview.pending?.length ||
+    Object.keys(report.overview.refreshing ?? {}).length,
+  );
 }
 const HOLDINGS_PAGE = 25;
 
@@ -332,7 +338,10 @@ export default function PortfolioTracker({
       Object.values(loads).some(
         (l) =>
           l?.status === "ok" &&
-          (l.report.overview.unavailable.length > 0 || l.report.overview.saved || l.report.overview.refreshing),
+          (l.report.overview.unavailable.length > 0 ||
+            l.report.overview.saved ||
+            l.report.overview.refreshing ||
+            l.report.overview.pending?.length),
       )
     )
       return;
@@ -363,6 +372,7 @@ export default function PortfolioTracker({
     return load?.status === "ok" ? [load.report] : [];
   });
   const unavailableChains = [...new Set(balanceReports.flatMap((r) => r.overview.unavailable))];
+  const readingChains = [...new Set(balanceReports.flatMap((r) => r.overview.pending ?? []))];
   const pricesMissing = balanceReports.some((r) => !r.overview.pricesAvailable);
   const savedChains = [
     ...new Set(
@@ -594,7 +604,11 @@ export default function PortfolioTracker({
           </div>
         )}
 
-        {(failed.length > 0 || unavailableChains.length > 0 || savedChains.length > 0 || pricesMissing) && (
+        {(failed.length > 0 ||
+          unavailableChains.length > 0 ||
+          readingChains.length > 0 ||
+          savedChains.length > 0 ||
+          pricesMissing) && (
           <div className="mt-4 flex flex-col gap-1 rounded-xl border border-medium/40 bg-medium/8 p-3 text-sm">
             {failed.length > 0 && (
               <p className="flex items-start gap-2">
@@ -620,6 +634,11 @@ export default function PortfolioTracker({
             )}
             {unavailableChains.length > 0 && (
               <p>{fill(s.chainsDown!, { chains: unavailableChains.map(chainName).join(", ") })}</p>
+            )}
+            {readingChains.length > 0 && (
+              <p data-freshness="reading">
+                {fill(s.chainsReading!, { chains: readingChains.map(chainName).join(", ") })}
+              </p>
             )}
             {savedChains.length > 0 && (
               <p data-freshness="saved">{fill(s.chainsSaved!, { chains: savedChains.map(chainName).join(", ") })}</p>

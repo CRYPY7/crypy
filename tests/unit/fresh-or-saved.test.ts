@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { freshOrSaved, resetFreshOrSaved } from "@/server/saved/fresh-or-saved";
+import { freshOrSaved, freshSavedOrPending, resetFreshOrSaved } from "@/server/saved/fresh-or-saved";
 
 /** Stabilization S2 (B-006, B-013, B-018): never wait long when a saved reading exists. */
 const saved = (data: string) => async () => ({ data, savedAt: "2026-11-24T10:00:00.000Z" });
@@ -128,5 +128,54 @@ describe("freshOrSaved", () => {
       () => false,
     );
     expect(reload).toEqual({ kind: "fresh", value: "partial-2" });
+  });
+
+  it("R3: with nothing saved, a slow chain is 'pending' after the give-up time, and the reload gets the fresh read", async () => {
+    const nothing = async () => undefined;
+    const started = Date.now();
+    const first = await freshSavedOrPending(
+      "k-pending",
+      () => later(300, "new"),
+      nothing,
+      () => {},
+      100,
+      undefined,
+      20,
+    );
+    expect(first).toEqual({ kind: "pending" });
+    expect(Date.now() - started).toBeLessThan(250);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    const reload = await freshSavedOrPending(
+      "k-pending",
+      () => later(300, "other"),
+      nothing,
+      () => {},
+      100,
+    );
+    expect(reload).toEqual({ kind: "fresh", value: "new" });
+  });
+
+  it("R3: a quick chain is shown fresh, and a failure within the give-up time is still reported", async () => {
+    const nothing = async () => undefined;
+    expect(
+      await freshSavedOrPending(
+        "k-quick",
+        () => later(20, "new"),
+        nothing,
+        () => {},
+        1_000,
+      ),
+    ).toEqual({
+      kind: "fresh",
+      value: "new",
+    });
+    const failed = await freshSavedOrPending(
+      "k-fail",
+      () => later(20, null).then(() => Promise.reject(new Error("down"))),
+      nothing,
+      () => {},
+      1_000,
+    );
+    expect(failed.kind).toBe("failed");
   });
 });

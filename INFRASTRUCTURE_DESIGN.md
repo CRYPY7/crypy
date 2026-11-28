@@ -226,7 +226,9 @@ replacement meets §2.
 map from one discovery request (stored 30 days, fresh 6 h), stored results shown after 0.25 s while the fresh read
 finishes, search opens transaction pages at once and looks addresses up before Enter. Measured 2026-11-28 after the
 second-visit fix: **31 of 31 targets**. **R2 part 2 built:** token lists show a first view after 2 s and finish in
-the background. Next: R3 (address overview, Balance Scanner, Portfolio streamed per chain).
+the background. **R3 built:** a page waits at most 3 s for a chain with no stored reading, then shows the rest and
+marks that chain "still reading" (self-updating); Portfolio badges reuse GoPlus answers up to 6 h. Next: R4
+(Approvals and Activity on active chains, faster scans).
 
 ## 12. Risks and open points
 

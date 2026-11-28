@@ -6,7 +6,7 @@ import { type ChainHoldings, buildChainHoldings } from "@/lib/portfolio/holdings
 import { registry } from "@/server/chains/registry";
 import { pricesFor } from "@/server/tokens/prices";
 import { logTiming } from "@/server/diagnostics";
-import { freshOrSaved } from "@/server/saved/fresh-or-saved";
+import { freshSavedOrPending } from "@/server/saved/fresh-or-saved";
 import { readSavedOne, saveResults } from "@/server/saved/store";
 
 export interface AddressOverview {
@@ -26,7 +26,15 @@ export interface AddressOverview {
   refreshing?: Partial<Record<ChainKey, string>>;
   /** B-035: chains whose token list is still being read in the background (the page looks again shortly). */
   completing?: ChainKey[];
+  /**
+   * R3: chains with no saved reading whose first read took longer than `PENDING_MS`: not in `chains` yet, still being
+   * read in the background (the page looks again shortly). Never shown as empty.
+   */
+  pending?: ChainKey[];
 }
+
+/** R3: how long a page waits for a chain that has no saved reading before showing the others without it. */
+export const PENDING_MS = 3_000;
 
 const nativeNames: Record<ChainKey, string> = {
   ethereum: "Ether",
@@ -46,7 +54,13 @@ export async function cachedAddressOverview(address: string, only?: readonly str
   const overview = await pageOverview(address, only);
   // A full, fresh answer is kept 30 minutes (refreshed in the background); one with a chain missing or shown from a
   // saved reading only for a second, so "Try again" and the page's own reload read again.
-  if (overview.unavailable.length > 0 || overview.saved || overview.refreshing || overview.completing)
+  if (
+    overview.unavailable.length > 0 ||
+    overview.saved ||
+    overview.refreshing ||
+    overview.completing ||
+    overview.pending
+  )
     cacheLife({ stale: 0, revalidate: 1, expire: 1 });
   else cacheLife({ stale: 30, revalidate: 60, expire: 1800 });
   return overview;
@@ -79,7 +93,7 @@ export function overviewForChecks(
     for (const [k, v] of forChecks) if (now - v.at >= CHECKS_KEEP_MS) forChecks.delete(k);
     if (forChecks.size >= CHECKS_MAX) forChecks.delete(forChecks.keys().next().value!);
   }
-  const promise = pageOverview(address, only);
+  const promise = pageOverview(address, only, Number.POSITIVE_INFINITY);
   forChecks.set(key, { at: now, promise });
   promise.catch(() => forChecks.delete(key));
   return promise;
@@ -97,11 +111,16 @@ export function resetOverviewForChecks(): void {
  * incomplete, so it can fill a gap but never replace a complete reading. The health checks and the alerts checker
  * use `addressOverview` and always see the chains as they are now.
  */
-export async function pageOverview(address: string, only?: readonly string[]): Promise<AddressOverview> {
+export async function pageOverview(
+  address: string,
+  only?: readonly string[],
+  /** Pages: `PENDING_MS`. Approvals and Activity need every chain's holdings, so they wait (Infinity). */
+  giveUpMs: number = PENDING_MS,
+): Promise<AddressOverview> {
   const targets = balanceChains(only);
   const results = await Promise.all(
     targets.map((chain) =>
-      freshOrSaved<ChainHoldings>(
+      freshSavedOrPending<ChainHoldings>(
         `balances|${address.toLowerCase()}|${chain.key}`,
         () => readChainHoldings(chain, address),
         () => readSavedOne<ChainHoldings>("balances", address, chain.key),
@@ -111,7 +130,7 @@ export async function pageOverview(address: string, only?: readonly string[]): P
             { chain: holdings.chain, data: holdings, quality: holdings.coverage === "full" ? 2 : 1 },
           ]);
         },
-        undefined,
+        giveUpMs,
         // A list still completing isn't kept: the page's reload reads again and gets the finished list.
         (holdings) => !holdings.completing,
       ),
@@ -122,9 +141,11 @@ export async function pageOverview(address: string, only?: readonly string[]): P
   const saved: Partial<Record<ChainKey, string>> = {};
   const refreshing: Partial<Record<ChainKey, string>> = {};
   const completing: ChainKey[] = [];
+  const pending: ChainKey[] = [];
   results.forEach((result, i) => {
     const key = targets[i]!.key;
     if (result.kind === "failed") return unavailable.push(key);
+    if (result.kind === "pending") return pending.push(key);
     chains.push(result.value);
     if (result.kind === "saved") (result.refreshing ? refreshing : saved)[key] = result.savedAt;
     else if (result.value.completing) completing.push(key);
@@ -138,6 +159,7 @@ export async function pageOverview(address: string, only?: readonly string[]): P
     ...(Object.keys(saved).length ? { saved } : {}),
     ...(Object.keys(refreshing).length ? { refreshing } : {}),
     ...(completing.length ? { completing } : {}),
+    ...(pending.length ? { pending } : {}),
   };
 }
 

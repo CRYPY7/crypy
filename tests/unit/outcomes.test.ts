@@ -191,4 +191,12 @@ describe("owner messages", () => {
       { tool: "gas", kind: "fixed", errors: 0, total: 0, reason: null, minutes: 15 },
     ]);
   });
+
+  it("R3: chains still being read make a partial answer, never an error", async () => {
+    const { classifyOverview } = await import("@/lib/outcomes/classify");
+    expect(classifyOverview({ chains: [], unavailable: [], pricesAvailable: true, pending: ["polygon"] })).toEqual({
+      outcome: "partial",
+      reasons: ["chain still reading: polygon"],
+    });
+  });
 });

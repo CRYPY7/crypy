@@ -3077,7 +3077,11 @@
       "tokenCheckingTitle": "{ago} tarihli rapor ({time}) · değişiklikler kontrol ediliyor…",
       "tokenCheckingPending": "Daha önceki bir kontrolün raporu · değişiklikler kontrol ediliyor…",
       "tokenCheckingBody": "Yeni bir kontrol yapılıyor ve bu sayfa kendiliğinden güncellenir. Sahip o zamandan beri ayarları değiştirmiş olabilir: satın almadan önce sonucu bekleyin.",
-      "savedTx": "{chain} şu anda yanıt vermedi. Onaylanmış bir işlem değişmez: yalnızca onay sayısı ve bugünkü dolar değerleri değişmiş olabilir."
+      "savedTx": "{chain} şu anda yanıt vermedi. Onaylanmış bir işlem değişmez: yalnızca onay sayısı ve bugünkü dolar değerleri değişmiş olabilir.",
+      "pendingTitle": "{chain}: hâlâ okunuyor…",
+      "pendingBody": "Bu ağ her zamankinden uzun sürüyor. Boş değil: hazır olduğunda bu sayfa kendiliğinden güncellenir.",
+      "pendingFact": "Hâlâ okunuyor…",
+      "totalPending": "Henüz dahil değil (hâlâ okunuyor): {chains}."
     },
     "crawler": "Bu sayfa, tarayıcı kullanan kişilere canlı blokzincir verisi gösterir. Otomatik istemciler ve tarayıcı botları burada canlı veri almaz.",
     "qr": {
@@ -3694,7 +3698,8 @@
       "watchText": "Bu cüzdanlardan biri gönderdiğinde, aldığında veya yeni bir onay verdiğinde Telegram mesajı alın.",
       "watchButton": "Uyarıları kur",
       "watchNote": "Cüzdanınızla ücretsiz giriş gerekir (imzalanacak bir mesaj, işlem değil). En fazla 10 izlenen öğe; {count} cüzdanınızdan hangilerini seçeceğinize siz karar verirsiniz.",
-      "chainsSaved": "Şu anda okunamadı, daha önceki bir okuma (en fazla 7 günlük) gösteriliyor: {chains}. Toplamlara dahildir."
+      "chainsSaved": "Şu anda okunamadı, daha önceki bir okuma (en fazla 7 günlük) gösteriliyor: {chains}. Toplamlara dahildir.",
+      "chainsReading": "Hâlâ okunuyor: {chains}. Toplam birazdan kendiliğinden güncellenir."
     },
     "watchlist": {
       "loading": "Yükleniyor…",

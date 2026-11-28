@@ -3077,7 +3077,11 @@
       "tokenCheckingTitle": "Báo cáo từ {ago} ({time}) · đang kiểm tra thay đổi…",
       "tokenCheckingPending": "Báo cáo từ lần kiểm tra trước · đang kiểm tra thay đổi…",
       "tokenCheckingBody": "Đang chạy lần kiểm tra mới và trang này sẽ tự cập nhật. Chủ sở hữu có thể đã thay đổi cài đặt kể từ đó: hãy chờ kết quả trước khi mua.",
-      "savedTx": "{chain} vừa không phản hồi. Giao dịch đã xác nhận không thay đổi: chỉ số lần xác nhận và giá trị đô la hôm nay có thể đã khác."
+      "savedTx": "{chain} vừa không phản hồi. Giao dịch đã xác nhận không thay đổi: chỉ số lần xác nhận và giá trị đô la hôm nay có thể đã khác.",
+      "pendingTitle": "{chain}: vẫn đang đọc…",
+      "pendingBody": "Chuỗi này mất nhiều thời gian hơn bình thường. Nó không trống: trang này sẽ tự cập nhật khi sẵn sàng.",
+      "pendingFact": "Vẫn đang đọc…",
+      "totalPending": "Chưa tính vào (vẫn đang đọc): {chains}."
     },
     "crawler": "Trang này hiển thị dữ liệu blockchain trực tiếp cho người dùng trình duyệt. Ứng dụng tự động và trình thu thập dữ liệu không nhận được dữ liệu trực tiếp ở đây.",
     "qr": {
@@ -3694,7 +3698,8 @@
       "watchText": "Nhận tin nhắn Telegram khi một trong các ví này gửi, nhận hoặc cấp phê duyệt mới.",
       "watchButton": "Thiết lập cảnh báo",
       "watchNote": "Cần đăng nhập miễn phí bằng ví (ký một tin nhắn, không phải giao dịch). Tối đa 10 mục theo dõi; bạn chọn ví nào trong {count} ví của mình.",
-      "chainsSaved": "Không đọc được lúc này, hiển thị lần đọc trước (tối đa 7 ngày): {chains}. Tổng có bao gồm phần này."
+      "chainsSaved": "Không đọc được lúc này, hiển thị lần đọc trước (tối đa 7 ngày): {chains}. Tổng có bao gồm phần này.",
+      "chainsReading": "Vẫn đang đọc: {chains}. Tổng sẽ tự cập nhật trong giây lát."
     },
     "watchlist": {
       "loading": "Đang tải…",

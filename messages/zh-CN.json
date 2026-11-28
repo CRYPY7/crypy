@@ -3077,7 +3077,11 @@
       "tokenCheckingTitle": "{ago}的报告（{time}）· 正在检查变化…",
       "tokenCheckingPending": "较早检查的报告 · 正在检查变化…",
       "tokenCheckingBody": "新的检查正在进行，本页面会自动更新。所有者此后可能更改了设置：请等待结果后再购买。",
-      "savedTx": "{chain} 刚才没有响应。已确认的交易不会改变：只有确认数和当前的美元价值可能有变化。"
+      "savedTx": "{chain} 刚才没有响应。已确认的交易不会改变：只有确认数和当前的美元价值可能有变化。",
+      "pendingTitle": "{chain}：仍在读取…",
+      "pendingBody": "这条链比平时慢。它并不是空的：准备好后本页面会自动更新。",
+      "pendingFact": "仍在读取…",
+      "totalPending": "尚未计入（仍在读取）：{chains}。"
     },
     "crawler": "本页面为使用浏览器的用户显示实时区块链数据。自动化客户端和爬虫在此不会获得实时数据。",
     "qr": {
@@ -3694,7 +3698,8 @@
       "watchText": "当这些钱包中的某个发送、接收或给出新授权时，通过 Telegram 收到消息。",
       "watchButton": "设置提醒",
       "watchNote": "需要用钱包免费登录（签名一条消息，不是交易）。最多监控 10 项；您可从 {count} 个钱包中选择。",
-      "chainsSaved": "目前无法读取，显示的是较早的读取结果（最多 7 天前）：{chains}。总额已包含这些数据。"
+      "chainsSaved": "目前无法读取，显示的是较早的读取结果（最多 7 天前）：{chains}。总额已包含这些数据。",
+      "chainsReading": "仍在读取：{chains}。总额稍后会自动更新。"
     },
     "watchlist": {
       "loading": "加载中…",

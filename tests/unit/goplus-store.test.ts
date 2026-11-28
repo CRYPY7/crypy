@@ -54,6 +54,21 @@ describe("saved GoPlus answers", () => {
     expect((await goPlusToken(1, TOKEN)).status).toBe("unavailable");
   });
 
+  it("R3: Portfolio's badges reuse an answer up to 6 hours old without calling GoPlus; pages don't", async () => {
+    fetchMock.mockImplementation(async () =>
+      json({ code: 1, result: { [TOKEN]: { is_honeypot: "0", buy_tax: "0", sell_tax: "0.01" } } }),
+    );
+    const first = await goPlusToken(1, TOKEN);
+    expect(first.status).toBe("ok");
+    await settle();
+    await ageAll(2 * 3_600_000);
+    const calls = fetchMock.mock.calls.length;
+    expect((await goPlusToken(1, TOKEN, "portfolio")).status).toBe("ok");
+    expect(fetchMock.mock.calls.length).toBe(calls);
+    await goPlusToken(1, TOKEN, "page");
+    expect(fetchMock.mock.calls.length).toBe(calls + 1);
+  });
+
   it("approvals: reused for 5 minutes; when GoPlus is down a saved list fills in as partial", async () => {
     const list = json({
       code: 1,

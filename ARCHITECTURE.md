@@ -531,6 +531,13 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   without usable details are read from the contract. The per-chain `alchemy_getTokenBalances` list stays as the
   fallback (first page failing, budget used, `CRYPY_WALLET_TOKENS=off`) and for background work (alerts checks);
   the balances health check reads one page (`withWalletTokenPages(1, …)`).
+- **Pending chains (R3, 2026-11-28):** `pageOverview(address, only, giveUpMs = PENDING_MS)` uses
+  `freshSavedOrPending`: with no saved reading, a chain not read within `PENDING_MS` (3 s) is returned in
+  `overview.pending` (not in `chains`); its read continues and is kept for the reload; the answer is cached 1 s. Page:
+  `CheckingNotice` per pending chain (`entity.freshness.pendingTitle/Body`), card fact "Still reading…", `TotalValue`
+  line `totalPending`. Portfolio: `stillReading` follows pending wallets; no snapshot while any chain is pending.
+  `overviewForChecks` (Approvals, Activity) passes `Infinity`: they need every chain's holdings. GoPlus token answers
+  are reused up to 6 h for priority "portfolio" (`GOPLUS_PORTFOLIO_REUSE_MS`), 1 h otherwise.
 - **Token list first view (R2 part 2, 2026-11-28):** the per-chain `alchemy_getTokenBalances` list runs once per
   wallet and chain (`sharedTokenList`, kept `LISTING_KEEP_MS` 2 minutes after it ends; failures not kept), up to
   `MAX_TOKEN_PAGES` (10) or `TOKEN_LIST_BUDGET_MS` (15 s). Page reads wait `FIRST_VIEW_MS` (2 s), then show the

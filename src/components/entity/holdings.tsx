@@ -65,6 +65,13 @@ export async function TotalValue({
           })}
         </p>
       )}
+      {overview.pending && overview.pending.length > 0 && (
+        <p className="mt-3 text-sm font-medium text-medium">
+          {t("entity.freshness.totalPending", {
+            chains: overview.pending.map((c) => t(`chains.${c}`)).join(", "),
+          })}
+        </p>
+      )}
       <p className="mt-3 text-xs text-muted-foreground">
         {t("entity.address.balances.totalNote")} {t("entity.address.balances.pricesBy")} ·{" "}
         {t("entity.address.balances.updated", { time: `${time} UTC` })}

@@ -48,7 +48,7 @@ export function resetFreshOrSaved(): void {
   entries.clear();
 }
 
-export async function freshOrSaved<T>(
+export function freshOrSaved<T>(
   key: string,
   fresh: () => Promise<T>,
   saved: () => Promise<Saved<T> | undefined>,
@@ -57,6 +57,35 @@ export async function freshOrSaved<T>(
   /** R2: a fresh result for which this says false (e.g. a token list still completing) is never kept for reloads. */
   keep: (value: T) => boolean = () => true,
 ): Promise<FreshOrSaved<T>> {
+  return run(key, fresh, saved, onFresh, waitMs, keep, Number.POSITIVE_INFINITY) as Promise<FreshOrSaved<T>>;
+}
+
+/**
+ * R3: like `freshOrSaved`, but when there is no saved reading either, the caller waits at most `giveUpMs` (from the
+ * start) and then gets `pending`: the page shows the other chains and says this one is still being read; the fresh
+ * read continues and is kept for the page's reload. One slow chain never holds up the others.
+ */
+export function freshSavedOrPending<T>(
+  key: string,
+  fresh: () => Promise<T>,
+  saved: () => Promise<Saved<T> | undefined>,
+  onFresh: (value: T) => void,
+  giveUpMs: number,
+  keep: (value: T) => boolean = () => true,
+  waitMs = WAIT_MS,
+): Promise<FreshOrSaved<T> | { kind: "pending" }> {
+  return run(key, fresh, saved, onFresh, waitMs, keep, giveUpMs);
+}
+
+async function run<T>(
+  key: string,
+  fresh: () => Promise<T>,
+  saved: () => Promise<Saved<T> | undefined>,
+  onFresh: (value: T) => void,
+  waitMs: number,
+  keep: (value: T) => boolean,
+  giveUpMs: number,
+): Promise<FreshOrSaved<T> | { kind: "pending" }> {
   const now = Date.now();
   // R2: the saved reading is asked for first, before the fresh read starts. On a 1-CPU server the fresh read (many
   // node requests, big token lists) can keep the process busy for seconds; asked afterwards, the saved reading's
@@ -142,6 +171,25 @@ export async function freshOrSaved<T>(
     // It may have finished while the saved reading was being read.
     if (entry.settled?.ok) return { kind: "fresh", value: entry.settled.value as T };
     return { kind: "saved", value: old.data, savedAt: old.savedAt, refreshing: true };
+  }
+  // No saved reading: wait for the fresh read, at most until `giveUpMs` after the start.
+  const left = giveUpMs - (Date.now() - now);
+  if (Number.isFinite(left)) {
+    let giveUp: ReturnType<typeof setTimeout> | undefined;
+    const outcome = await Promise.race([
+      running.then(
+        (value) => ({ done: true as const, ok: true as const, value }),
+        (error: unknown) => ({ done: true as const, ok: false as const, error }),
+      ),
+      new Promise<{ done: false }>(
+        (resolve) => (giveUp = setTimeout(() => resolve({ done: false }), Math.max(0, left))),
+      ),
+    ]).finally(() => clearTimeout(giveUp));
+    if (!outcome.done) {
+      entry.awaited = true; // the page reloads for it
+      return { kind: "pending" };
+    }
+    return outcome.ok ? { kind: "fresh", value: outcome.value } : { kind: "failed", error: outcome.error };
   }
   try {
     return { kind: "fresh", value: await running };

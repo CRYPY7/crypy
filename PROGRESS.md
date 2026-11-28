@@ -41,6 +41,45 @@ Last updated: 2026-11-28
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## R3: one slow chain never holds up the others; Portfolio badges after a restart (2026-11-28)
+
+- **Why:** a chain with no stored reading was waited for however long it took, so one slow chain held up the whole
+  address page (every other chain, the total and the chain cards) and the Portfolio's wallet row.
+- **Built:** pages wait at most 3 s (`PENDING_MS`) for a chain with no stored reading (`freshSavedOrPending`). Then
+  they show the other chains and the total, with "Ethereum: still reading… It isn't empty: this page updates by
+  itself when it's ready.", a "Still reading…" chain card and "Not included yet (still reading): Ethereum." under
+  the total. The read continues and is kept for the page's own reload. Portfolio re-reads such wallets quietly, says
+  "Still reading: Ethereum. The total updates by itself in a moment." and doesn't save its "since you last looked"
+  total until every chain is in. Approvals and Activity still wait for every chain's holdings (they need them).
+  Visitor outcomes count "chain still reading" as partial, never as an error. New texts in all 7 languages.
+- **Portfolio safety after a restart (16–21 s on the first request after the last two updates):** its badges ask
+  GoPlus about up to 8 tokens per wallet, and saved answers were reused only for an hour, so on a freshly started
+  server those calls queued behind page checks at GoPlus's free pace (one every 2 s). Portfolio now reuses a saved
+  GoPlus answer up to 6 hours old (the limit for safety data); pages keep the 1-hour rule. Likely cause, to confirm
+  with the next measurement after an update.
+- **Design note:** this uses the page's existing self-update instead of rebuilding the page into one streamed piece
+  per chain: the same result (no chain waits for another beyond 3 s) with far less change to a page that has many
+  cross-chain parts (cards, filter, total, notices).
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 694 passed, 76 skipped (new: "pending" after
+the give-up time and the reload gets the fresh read; quick chains and failures unchanged; outcome counted as
+partial; Portfolio reuses a 2-hour-old GoPlus answer, pages don't). Build passed. Browser: 330 passed, 20 skipped,
+0 failed (new: a chain 4 s slow with nothing saved shows "still reading", the total says it isn't included yet, and
+the page fills it in by itself; desktop and phone).
+
+## Measured after R2 part 2 (2026-11-28)
+
+- **Server, two runs right after the update:** first run 30 of 33 (with the owner's extra wallet), second 31 of 31.
+  The three misses in the first run were all first requests to the freshly started version: address page frame
+  0.31 s (target 0.2), Binance 8 balances again 0.39 s (target 0.3), and Approvals for the test wallet 5.75 s (Base
+  had no stored approvals reading, so it waited for a fresh scan; R4 makes those scans faster).
+- **Alchemy token-list units fell 80%:** `alchemy_getTokenBalances` 580 per run (was 2,920), because each wallet's
+  list is now read once and shared. Total per run 7,006 (baseline 28,680).
+- **Binance 8** (the extra wallet) already had stored readings (it is used in the batch-scanner tests), so this run
+  doesn't show a truly new spam-heavy wallet: 1.60 s first, within target.
+- **To look at in R3:** Portfolio safety took 16 s and 21 s on the first request after the last two updates (0.03 s
+  after that). It happens only on a freshly started server.
+
 ## R2 part 2: token lists show a first view after 2 s (2026-11-28)
 
 - **Why:** wallets full of airdropped tokens spent 4.7–5.9 s per chain paging through Alchemy's token list before the

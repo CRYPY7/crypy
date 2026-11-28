@@ -3077,7 +3077,11 @@
       "tokenCheckingTitle": "Relatório de {ago} ({time}) · verificando mudanças…",
       "tokenCheckingPending": "Relatório de uma verificação anterior · verificando mudanças…",
       "tokenCheckingBody": "Uma nova verificação está em andamento e esta página se atualiza sozinha. O dono pode ter mudado configurações desde então: espere o resultado antes de comprar.",
-      "savedTx": "{chain} não respondeu agora. Uma transação confirmada não muda: só o número de confirmações e os valores em dólar de hoje podem ter mudado."
+      "savedTx": "{chain} não respondeu agora. Uma transação confirmada não muda: só o número de confirmações e os valores em dólar de hoje podem ter mudado.",
+      "pendingTitle": "{chain}: ainda lendo…",
+      "pendingBody": "Esta rede está demorando mais que o normal. Ela não está vazia: esta página se atualiza sozinha quando estiver pronta.",
+      "pendingFact": "Ainda lendo…",
+      "totalPending": "Ainda não incluído (ainda lendo): {chains}."
     },
     "crawler": "Esta página mostra dados de blockchain ao vivo para pessoas usando um navegador. Clientes automáticos e rastreadores não recebem dados ao vivo aqui.",
     "qr": {
@@ -3694,7 +3698,8 @@
       "watchText": "Receba uma mensagem no Telegram quando uma destas carteiras enviar, receber ou der uma nova aprovação.",
       "watchButton": "Configurar alertas",
       "watchNote": "Exige entrar grátis com sua carteira (uma mensagem para assinar, sem transação). Até 10 itens monitorados; você escolhe quais das suas {count} carteiras.",
-      "chainsSaved": "Não foi possível ler agora; exibido de uma leitura anterior (de até 7 dias): {chains}. Os totais incluem esses valores."
+      "chainsSaved": "Não foi possível ler agora; exibido de uma leitura anterior (de até 7 dias): {chains}. Os totais incluem esses valores.",
+      "chainsReading": "Ainda lendo: {chains}. O total se atualiza sozinho em instantes."
     },
     "watchlist": {
       "loading": "Carregando…",

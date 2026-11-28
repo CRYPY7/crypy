@@ -119,7 +119,10 @@ async function goPlusTokenRead(
   // (also after a restart); when GoPlus is busy or down, one up to a day old fills in. The page shows when GoPlus
   // checked (`facts.fetchedAt`), so an older answer is never presented as new.
   const stored = await readSavedOne<GoPlusResult>("goplus-token", address, String(chainId));
-  if (stored && Date.now() - Date.parse(stored.savedAt) < GOPLUS_REUSE_MS) {
+  // R3: Portfolio's badges reuse an answer up to 6 hours old (the limit for safety data): they check up to 8 tokens per
+  // wallet, and asking GoPlus again after an hour queued them behind page checks (16–21 s after a restart).
+  const reuseMs = priority === "portfolio" ? GOPLUS_PORTFOLIO_REUSE_MS : GOPLUS_REUSE_MS;
+  if (stored && Date.now() - Date.parse(stored.savedAt) < reuseMs) {
     life.set({ revalidate: 600, expire: 3600 });
     return stored.data;
   }
@@ -173,6 +176,7 @@ async function goPlusTokenRead(
 
 /** A saved GoPlus token answer this young is reused without asking GoPlus (the page cache kept it as long). */
 const GOPLUS_REUSE_MS = 3_600_000;
+const GOPLUS_PORTFOLIO_REUSE_MS = 6 * 3_600_000;
 /** A saved approval list this young is reused (the page cache kept it as long). */
 const GOPLUS_APPROVALS_REUSE_MS = 300_000;
 

@@ -91,6 +91,31 @@ test("a slow chain shows its last reading at once, marked 'checking for changes'
   await expect(page.getByText("Includes Ethereum from an earlier reading.").filter({ visible: true })).toHaveCount(0);
 });
 
+test("R3: a slow chain with nothing saved doesn't hold up the others: 'still reading', then it fills in", async ({
+  page,
+}, info) => {
+  test.setTimeout(120_000);
+  // A different address per screen size, so neither finds a reading saved by the other.
+  const address =
+    info.project.name === "desktop"
+      ? "0x00000000219ab540356cBB839Cbe05303d7705Fa"
+      : "0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97";
+  // Ethereum answers 4 s late for this address; the page waits at most 3 s for a chain with no saved reading.
+  setFaults([`slow:ethereum:${address.toLowerCase()}`]);
+  await page.waitForTimeout(700);
+  await page.goto(`/en/address/${address}?chains=ethereum,bsc`);
+  const reading = page.locator('[data-freshness="checking"]').filter({ visible: true });
+  await expect(reading).toHaveCount(1, { timeout: 30_000 });
+  await expect(reading).toContainText("Ethereum: still reading…");
+  await expect(reading).toContainText("It isn't empty");
+  await expect(page.getByText("Not included yet (still reading): Ethereum.").filter({ visible: true })).toBeVisible();
+
+  // The page reloads itself and shows Ethereum.
+  await expect(reading).toHaveCount(0, { timeout: 40_000 });
+  await expect(page.getByText(/still reading/).filter({ visible: true })).toHaveCount(0);
+  setFaults([]);
+});
+
 test.describe("crawlers on result pages (S3, B-021 follow-up)", () => {
   test("a known crawler gets the light page with no blockchain lookups", async ({ request }, info) => {
     test.skip(info.project.name !== "desktop", "one run is enough");
