@@ -46,12 +46,9 @@ const ALCHEMY_CU: Record<string, number> = {
   eth_getLogs: 60,
   alchemy_getTokenBalances: 20,
   alchemy_getAssetTransfers: 120,
-  // Portfolio API "Tokens By Wallet" (wallet-tokens.ts), per page of 100 tokens across 5 chains. Alchemy lists 360 and
-  // says the cost grows with the networks asked; the owner's dashboard (2026-11-26) put it between 360 and ~920 per
-  // request, so it is counted high until step R2 measures it exactly.
-  portfolio_tokensByAddress: 1_000,
-  // R2 discovery, "Token Balances By Wallet" (balances only, no metadata): counted as high as the list above until the
-  // owner's dashboard shows its real cost (method "data/assets/tokens/balances/by-address").
+  // R2 discovery, "Token Balances By Wallet" (balances only, no metadata): counted high (the related "Tokens By Wallet"
+  // cost 360–920 per request on the owner's dashboard, 2026-11-26) until the dashboard shows its real cost (method
+  // "data/assets/tokens/balances/by-address").
   portfolio_balancesByAddress: 1_000,
 };
 const DEFAULT_CU = 20;

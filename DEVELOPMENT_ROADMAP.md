@@ -2,7 +2,11 @@
 
 Status: **Approved** — Nov 2026 (rev. 6). **M0–M2.5 done; M3–M6 built (M6 on 2026-11-21).** Every milestone ends with typecheck, lint, tests and build actually run, PROGRESS.md updated, owner review.
 
-> **Current priority (owner decision 2026-11-24): Stabilization (S0–S6, below).** New features (Token Market &
+> **Current priority (owner decision 2026-11-28): R6, more EVM chains**, then new features (each with a usefulness
+> check first). The infrastructure rebuild R0–R5 is done (31 of 31 speed targets on the server; INFRASTRUCTURE_DESIGN.md)
+> and the feature freeze is lifted.
+>
+> **Before that (owner decision 2026-11-24): Stabilization (S0–S6, below).** New features (Token Market &
 > Charts, new chains, new tools) wait until S6 passes. No redesign: the current design stays.
 
 ## Stabilization — make every live feature work for everyone, always (owner decision 2026-11-24)

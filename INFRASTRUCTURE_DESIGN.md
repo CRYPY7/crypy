@@ -227,8 +227,10 @@ map from one discovery request (stored 30 days, fresh 6 h), stored results shown
 finishes, search opens transaction pages at once and looks addresses up before Enter. Measured 2026-11-28 after the
 second-visit fix: **31 of 31 targets**. **R2 part 2 built:** token lists show a first view after 2 s and finish in
 the background. **R3 built:** a page waits at most 3 s for a chain with no stored reading, then shows the rest and
-marks that chain "still reading" (self-updating); Portfolio badges reuse GoPlus answers up to 6 h. Next: R4
-(Approvals and Activity on active chains, faster scans).
+marks that chain "still reading" (self-updating); Portfolio badges reuse GoPlus answers up to 6 h. **R4 closed
+2026-11-28** (31 of 31 targets; fresh scans limited by GoPlus's answer time and Alchemy's free per-second limit,
+hidden by stored readings). **R5 done 2026-11-28** (old paths and unused code removed). The feature freeze is lifted
+(owner decision 2026-11-28); next: **R6**, the remaining Alchemy-indexed EVM chains, each live-tested.
 
 ## 12. Risks and open points
 

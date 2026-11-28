@@ -106,16 +106,3 @@ export function EntitySkeleton() {
     </div>
   );
 }
-
-export function FactList({ items }: { items: { label: string; value: React.ReactNode }[] }) {
-  return (
-    <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
-      {items.map((item) => (
-        <div key={item.label}>
-          <dt className="text-xs font-medium text-muted-foreground">{item.label}</dt>
-          <dd className="mt-0.5">{item.value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}

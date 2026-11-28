@@ -41,6 +41,39 @@ Last updated: 2026-11-28
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## R5: cleanup; infrastructure rebuild finished, feature freeze lifted (2026-11-28)
+
+- **Owner decision (2026-11-28):** R5 cleanup, then more chains (R6), then new features.
+- **Removed:** the B-035 all-chains token list (`wallet-tokens.ts`, its setting `CRYPY_WALLET_TOKENS` and its tests):
+  switched off on the server since 2026-11-27 and replaced by R2 discovery and the per-chain list's first view. The
+  balances health check now reads like a page does. Unused code found by a scan of imports and exports: a dropdown
+  menu component from the original setup, `FactList`, `shortHex`, `featuredTools`, `cachedTxLookup`, two unused
+  constants and one unused test helper. `getChainByCaip` stays (the lookup other chain families will need).
+- **Checked, already on the new layer:** the transaction page, activity and the alerts checker read token details
+  from the registry (since R1); approvals since R4. Left as they are, on purpose: the token page's "is this a token"
+  check (needs the total supply read live) and the batch scanner's per-chain token check (asks each chain directly
+  whether the contract is a token there).
+- **Owner's server:** the `CRYPY_WALLET_TOKENS=off` line in `.env.local` is now ignored and can be deleted.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 685 passed, 76 skipped (11 tests of removed
+code removed with it). Build passed. Browser: 330 passed, 20 skipped, 0 failed.
+
+## Measured after R4 part 1 (2026-11-28)
+
+- **Server, four runs after the update: 30, 31, 31 and 31 of 31 targets** (the one miss: gas 2.04 s on the first
+  request after the update). Alchemy units per run 5,308–11,556.
+- **Approvals, step times:** every step finishes within ~0.1 s of the GoPlus approval list (e.g. reads 7.0 s, prices
+  7.0 s, Sourcify 7.1 s on BNB Chain): GoPlus's own answer time (about 3–13 s) is the floor of a fresh scan. Visitors
+  see stored readings in 0.3 s meanwhile.
+- **Activity: no change, and my diagnosis was partly wrong.** The run used 2,400 transfer-list units both before and
+  after (20 calls: 2 per chain for 2 wallets): the two first-transaction calls were already being skipped by their
+  1.5 s limit. The real cause is that the speed script reads two wallets' activity on five chains at the same time,
+  20 calls at 120 units each against Alchemy's 250 units a second, so the last chain waits ~9–10 s. A single visitor's
+  wallet needs half that (about 5 s for the last chain), and stored readings show in 0.3 s. Storing the first
+  transaction still saves those calls when they would have run.
+- **Decision:** R4 closes here. What remains is outside CRYPY: GoPlus's answer time and Alchemy's free per-second
+  limit; both are hidden by stored readings and the 3-second cut-off.
+
 ## R4 part 1: faster Approvals and Activity scans, with step times (2026-11-28)
 
 - **Activity's 10 s on Polygon was a queue, not a slow chain.** A first page made 4 Alchemy calls per chain (sent,

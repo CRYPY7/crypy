@@ -33,7 +33,3 @@ export function Breadcrumbs({ items, label }: { items: Crumb[]; label: string })
     </nav>
   );
 }
-
-export function shortHex(value: string): string {
-  return value.length > 14 ? `${value.slice(0, 6)}…${value.slice(-4)}` : value;
-}

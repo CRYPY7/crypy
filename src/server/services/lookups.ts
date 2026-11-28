@@ -5,7 +5,7 @@ import { freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { MAX_AGE_MS, type Saved, readSavedOne, saveResults } from "@/server/saved/store";
 import { cacheLife } from "next/cache";
 import { getChain } from "@/config/chains";
-import type { AddressLookup, TxDetails, TxLookup } from "@/lib/chains/types";
+import type { AddressLookup, TxDetails } from "@/lib/chains/types";
 import { registry } from "@/server/chains/registry";
 import { evaluate } from "@/lib/security/evaluate";
 import type { SecurityReport } from "@/lib/security/types";
@@ -61,17 +61,6 @@ export async function cachedTokenLookup(chainKey: string, address: string): Prom
   if (!parsed || parsed.checksumValid === false) return null;
   return found.adapter.lookupAddress(found.chain, parsed.normalized);
 }
-
-export async function cachedTxLookup(chainKey: string, hash: string): Promise<TxLookup | null> {
-  "use cache";
-  // Pending transactions change quickly; confirmed ones never do. Keep it short and simple here.
-  cacheLife({ stale: 10, revalidate: 15, expire: 120 });
-  const found = adapterFor(chainKey);
-  if (!found) return null;
-  const parsedHash = found.adapter.parseTxId(hash);
-  return parsedHash ? found.adapter.lookupTransaction(found.chain, parsedHash) : null;
-}
-
 /** Full transaction details for the transaction page. Short cache: confirmations and pending status move. */
 export async function cachedTxDetails(chainKey: string, hash: string): Promise<TxDetails | null> {
   "use cache";

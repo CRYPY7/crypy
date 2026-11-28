@@ -3,7 +3,6 @@ import type { PublicClient } from "viem";
 
 /** R2 part 2: a slow token list shows a first view after FIRST_VIEW_MS; the reload gets the finished list. */
 process.env.PGLITE_DIR = "memory";
-vi.mock("@/server/chains/evm/wallet-tokens", () => ({ walletTokens: async () => null }));
 
 const { getEvmBalances, resetTokenListings, FIRST_VIEW_MS } = await import("@/server/chains/evm/balances");
 const { getChain } = await import("@/config/chains");

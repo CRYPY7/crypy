@@ -98,12 +98,6 @@ export function overviewForChecks(
   promise.catch(() => forChecks.delete(key));
   return promise;
 }
-
-/** For tests. */
-export function resetOverviewForChecks(): void {
-  forChecks.clear();
-}
-
 /**
  * For pages (stabilization S2): each chain is read fresh; a chain whose read fails, or takes longer than a moment,
  * shows its last saved reading (up to 7 days old) with its time, while the fresh read finishes in the background

@@ -13,7 +13,6 @@ import { registry } from "@/server/chains/registry";
 import { getDb } from "@/server/db/client";
 import { tokenChecks } from "@/server/db/schema";
 import { addressOverview } from "@/server/services/overview";
-import { withWalletTokenPages } from "@/server/chains/evm/wallet-tokens";
 import { tokenSecurityReport } from "@/server/services/lookups";
 import { resolveSearch } from "@/server/services/resolve";
 import { CHECK_EVERY_MS } from "@/server/services/token-checks";
@@ -106,8 +105,7 @@ export const probes: Record<string, Probe> = {
 
   async "tool:balances"() {
     const chainKey = nextToolChain();
-    // One page of the all-chains token list is enough to see it answer (B-035: 200 units instead of up to 6,000).
-    const overview = await withWalletTokenPages(1, () => addressOverview(WALLET, [chainKey]));
+    const overview = await addressOverview(WALLET, [chainKey]);
     if (overview.unavailable.includes(chainKey as never) || !overview.chains.length)
       throw new Error(`balances unavailable on ${chainKey}`);
     if (!overview.pricesAvailable) throw new Error(`prices unavailable on ${chainKey}`);

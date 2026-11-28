@@ -39,7 +39,6 @@ const schema = z.object({
    * B-035: "off" stops reading a wallet's tokens with Alchemy's Portfolio API (all chains in one list) and uses the
    * per-chain token list instead.
    */
-  CRYPY_WALLET_TOKENS: z.enum(["on", "off"]).default("on"),
   /** Requests per day per extra provider. */
   RPC_DAILY_REQUESTS: z.coerce.number().int().positive().default(50_000),
   /**
@@ -128,7 +127,6 @@ const parsed = schema.safeParse({
   ALCHEMY_MONTHLY_CU: process.env.ALCHEMY_MONTHLY_CU || undefined,
   ALCHEMY_DAILY_CU: process.env.ALCHEMY_DAILY_CU || undefined,
   RPC_DAILY_REQUESTS: process.env.RPC_DAILY_REQUESTS || undefined,
-  CRYPY_WALLET_TOKENS: process.env.CRYPY_WALLET_TOKENS || undefined,
   SCAN_MAX_RUNNING: process.env.SCAN_MAX_RUNNING || undefined,
   SCAN_MAX_QUEUED: process.env.SCAN_MAX_QUEUED || undefined,
   SCAN_MAX_WALLETS: process.env.SCAN_MAX_WALLETS || undefined,

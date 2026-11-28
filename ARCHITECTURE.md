@@ -523,15 +523,10 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
 ## 11a. Balances (M3)
 
 - `ChainFamilyAdapter.getBalances(chain, address)` → `ChainBalances { native, tokens[], coverage }`. EVM: `server/chains/evm/balances.ts` lists tokens with Alchemy `alchemy_getTokenBalances` (100 per page, max 3 pages) and reads metadata by multicall; without Alchemy it checks `ChainConfig.commonTokens` and reports `coverage: "common-only"`.
-- B-035 (2026-11-26): with an Alchemy key, tokens come first from `server/chains/evm/wallet-tokens.ts`: Alchemy's
-  Portfolio API (`assets/tokens/by-address`, 200 CU per page of 100 across every chain, names and decimals
-  included). One shared reading per wallet (all live chains), up to 30 pages; a page waits at most 1.5 s after the
-  first page, then shows what arrived (`coverage: "truncated"`, `completing: true`; well-known tokens read directly)
-  while the reading continues; the finished list is kept 2 minutes, so the page's own reload (`CheckingNotice`,
-  `overview.completing`, cached 1 s) and Portfolio's quiet re-reads (every 4 s, at most 6) get it at once. Tokens
-  without usable details are read from the contract. The per-chain `alchemy_getTokenBalances` list stays as the
-  fallback (first page failing, budget used, `CRYPY_WALLET_TOKENS=off`) and for background work (alerts checks);
-  the balances health check reads one page (`withWalletTokenPages(1, …)`).
+- B-035 (2026-11-26, removed in R5 on 2026-11-28): an all-chains token list from Alchemy's Portfolio API
+  (`wallet-tokens.ts`) was tried first; it cost 360–920 units per page and was switched off on the server
+  (`CRYPY_WALLET_TOKENS=off`) on 2026-11-27, then removed with its setting. Token lists come from the per-chain
+  `alchemy_getTokenBalances` list (first view after 2 s, below); which chains hold tokens comes from R2 discovery.
 - **Approvals and Activity scans (R4 part 1, 2026-11-28):** approvals read each chain's held tokens from
   `overviewForChecks(owner, [chain])` (its own chain only), token details from the registry (`evmTokenDetails`) and
   prices through `pricesFor` (stored first); `ApprovalsFacts.steps` (ms since the start when each step finished) is

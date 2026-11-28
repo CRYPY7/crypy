@@ -9,9 +9,6 @@ export interface QuietHours {
   end: number;
   timeZone: string;
 }
-
-export const DEFAULT_QUIET = { on: true, start: 23 * 60, end: 7 * 60 } as const;
-
 /** Minutes after midnight at `now` in `timeZone` (UTC when the zone is unknown). */
 export function localMinutes(now: Date, timeZone: string): number {
   let parts: Intl.DateTimeFormatPart[];

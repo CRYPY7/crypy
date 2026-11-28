@@ -203,5 +203,3 @@ export const tools: readonly ToolDefinition[] = [
 export function getTool(id: string): ToolDefinition | undefined {
   return tools.find((tool) => tool.id === id);
 }
-
-export const featuredTools = tools.filter((tool) => tool.featured);

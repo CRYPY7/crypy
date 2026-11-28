@@ -101,7 +101,6 @@ for (const [power, signatures] of Object.entries(POWER_SIGNATURES)) {
   for (const signature of signatures)
     LOOKUP.set(toFunctionSelector(`function ${signature}`), { power: power as OwnerPower, signature });
 }
-export const OWNER_SELECTOR = toFunctionSelector("function owner()");
 export const HAS_ROLE_SELECTOR = toFunctionSelector("function hasRole(bytes32,address)");
 
 export function powersIn(codes: string[]): PowerFact[] {
