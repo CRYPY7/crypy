@@ -41,6 +41,26 @@ Last updated: 2026-11-28
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Confirmed after a restart; update warm-up (2026-11-28)
+
+- **Portfolio safety after a restart: 0.36 s** (was 12–21 s on the first request after each update); no "slow
+  portfolio safety" log line. Closed.
+- **One miss left in that run:** the address page frame took 0.35 s (target 0.2) on the first request to the freshly
+  started process. A new process loads each page's code on its first request.
+- **Built:** `update.sh` now warms the new version before nginx switches to it: it opens every result page type
+  (address, approvals, activity, transaction, token, search) with no user agent, which CRYPY treats as a crawler
+  (the code loads, no blockchain lookups), the main tool pages, and each API with invalid input (loads, answers 400
+  at once), plus gas. Tried here against a production build: all answered, the pages came back as the crawler
+  version; the very first page took 8.8 s on the fresh process, which visitors no longer wait for. ShellCheck clean.
+
+## Measured after the GoPlus "not listed" fix (2026-11-28)
+
+- **Server, 14:05 UTC, both runs after the update: 31 of 31 targets.** Alchemy units per run 7,006–8,852.
+- **Portfolio safety, first request after the update: 12.7 s**; the new log line showed why: approvals 253 ms, token
+  flags 12,697 ms. Expected for this one run: the "not listed" GoPlus answers were never in the database before this
+  update, so this run asked GoPlus once more and saved them. To confirm, the next restart should show Portfolio safety
+  under a few seconds.
+
 ## Measured after R3; Portfolio safety after a restart, second fix (2026-11-28)
 
 - **Server, 13:10 UTC (after the R3 update):** first run 30 of 31 (the exchange wallet's second balance visit 0.39 s,

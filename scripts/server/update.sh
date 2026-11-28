@@ -146,6 +146,23 @@ if ! answers "$NEW_PORT"; then
   exit 1
 fi
 
+# Warm-up before the switch: a fresh process loads each page's code on its first request (the first visitor after an
+# update waited ~0.3 s more for the frame). Pages are opened with no user agent, which CRYPY treats as a crawler: their
+# code loads but they make no blockchain lookups. APIs get invalid input: they load and answer "invalid" at once.
+warm() {
+  local base="http://127.0.0.1:$1" addr="0x000000000000000000000000000000000000dEaD"
+  local tx="0x0000000000000000000000000000000000000000000000000000000000000001"
+  local path
+  for path in "/en/address/$addr" "/en/address/$addr/approvals" "/en/address/$addr/activity" "/en/tx/$tx" \
+    "/en/token/ethereum/$addr" "/en/tools" "/en/tools/portfolio" "/en/tools/batch-balance" "/en/search?q=x" \
+    "/api/v1/address/x/portfolio" "/api/v1/address/x/approvals" "/api/v1/address/x/activity" \
+    "/api/v1/search/resolve?q=x" "/api/v1/token/ethereum/x/security" "/api/v1/tx/x" "/api/v1/gas"; do
+    curl -s -o /dev/null -m 20 -A "" "$base$path" || true
+  done
+}
+warm "$NEW_PORT"
+echo "Warmed up the new version's pages."
+
 # Switch: nginx reloads gracefully (open connections finish on the old process), then the worker moves over.
 write_file .crypy-port "$NEW_PORT"
 write_file .crypy-dist "$NEW"

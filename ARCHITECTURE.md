@@ -424,7 +424,8 @@ Accepted (documented):
 
 Updates without a gap (B-023): the app runs as `crypy@<port>` (template from `app-unit.sh`, ports 3000 / 3001, build
 folder per instance in `.crypy-instance-<port>.env`); `update.sh` starts the new build on the other port, switches the
-nginx upstream (`.crypy-port`) with a graceful reload once it answers, then stops the old one. Only the process named
+nginx upstream (`.crypy-port`) with a graceful reload once it answers and has been warmed up (each page type opened
+with no user agent, i.e. as a crawler with no lookups, and each API with invalid input), then stops the old one. Only the process named
 in `.crypy-worker` runs the background worker (`server/worker-owner.ts`).
 
 Builds (B-019): `.github/workflows/server-build.yml` builds `.next-a` and `.next-b` in `/opt/crypy/app` on GitHub and
