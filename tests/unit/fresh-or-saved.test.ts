@@ -68,4 +68,40 @@ describe("freshOrSaved", () => {
     });
     expect(fresh).toHaveBeenCalledTimes(2);
   });
+
+  it("R2: the saved reading is asked for before the fresh read starts", async () => {
+    const order: string[] = [];
+    await freshOrSaved(
+      "k-order",
+      async () => (order.push("fresh"), "new"),
+      async () => (order.push("saved"), { data: "old", savedAt: "2026-11-24T10:00:00.000Z" }),
+      () => {},
+      50,
+    );
+    expect(order).toEqual(["saved", "fresh"]);
+  });
+
+  it("R2: a fresh read finishing while the database is still answering is shown at once", async () => {
+    const started = Date.now();
+    const result = await freshOrSaved(
+      "k-race",
+      () => later(80, "new"),
+      () => later(400, { data: "old", savedAt: "2026-11-24T10:00:00.000Z" }),
+      () => {},
+      20,
+    );
+    expect(result).toEqual({ kind: "fresh", value: "new" });
+    expect(Date.now() - started).toBeLessThan(300);
+  });
+
+  it("R2: a fresh read failing while the database answers gives the saved reading, not 'checking for changes'", async () => {
+    const result = await freshOrSaved(
+      "k-race-fail",
+      () => later(40, null).then(() => Promise.reject(new Error("down"))),
+      () => later(150, { data: "old", savedAt: "2026-11-24T10:00:00.000Z" }),
+      () => {},
+      20,
+    );
+    expect(result).toMatchObject({ kind: "saved", value: "old", refreshing: false });
+  });
 });

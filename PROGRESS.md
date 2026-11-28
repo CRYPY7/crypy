@@ -1,6 +1,6 @@
 # CRYPY — Progress
 
-Last updated: 2026-11-27
+Last updated: 2026-11-28
 
 ## Milestones
 
@@ -40,6 +40,35 @@ Last updated: 2026-11-27
 | Languages wave 1 (6 Beta languages)                    | 🟡 Built 2026-11-23: all text and 12 guides translated; native review pending for each        |
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
+
+## R2 part 1 measured; second visits to Approvals fixed (2026-11-28)
+
+- **Server after R2 part 1 (owner, 2026-11-27): 29 of 31 targets** (before: 25). Address page 0.8–1.8 s (was
+  2.3–4.9 s); balances, activity and token security under 1 s on first and repeat; the exchange wallet now passes.
+  Alchemy units per run 9,092–16,286; discovery counted at 1,000 units a page (7 and 2 pages in the two runs) until
+  its real cost shows on the dashboard.
+- **The two misses: "Approvals, again" took 2.8–6.4 s** although the first visit answered in 0.3 s from stored
+  readings. Reproduced here on one CPU core with stored readings: first 0.26–1.4 s, again 4.6–5.8 s. Timing lines
+  showed the second request never ran the approvals code: it waited for Next.js to finish storing the first answer,
+  which Next.js does only after every cached helper started inside it has finished. The fresh approval scan started
+  by the first visit called cached helpers (GoPlus, Sourcify, balances), which take seconds.
+- **Fix:** no cached function waits on a fresh read any more. The outside-source helpers the fresh reads call (GoPlus
+  token reports, GoPlus approval lists, Sourcify) are remembered in a small in-memory cache (`server/memo.ts`, same
+  lifetimes as before, one read per key at a time, keyed by priority too) instead of Next.js "use cache"; Approvals
+  and Activity read holdings through a shared one-minute memory (`overviewForChecks`). The stored reading is also
+  asked for before the fresh read starts, and whichever arrives first is used; "looked up" times are written at
+  most hourly. A first attempt ran fresh reads in a context captured at server start; it broke GoPlus (cached
+  functions don't run outside a request) and was dropped before delivery — caught by the browser tests (FLOKI's
+  liquidity card) and the GoPlus log line going silent.
+- **Measured here after the fix (one core, stored readings):** approvals again 0.31 s and 0.008 s (were 5.8 s and
+  4.6 s); activity again 0.006–0.01 s; after the refresh, fresh results with GoPlus answering (FLOKI ok; approvals
+  4 of 5 chains ok, one held back by GoPlus's free pace).
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 685 passed, 76 skipped (new: the in-memory
+cache — one shared read, lifetime per answer, failures not kept, size cap; stored reading asked first; fresh read
+finishing first wins; a failing fresh read gives the stored reading without "checking for changes"). Build passed.
+Browser: 329 passed, 19 skipped, 0 failed. The Portfolio test now waits up to a minute for the "since you last
+looked" total, which is saved once every wallet shows fresh numbers (stored balances can come first since R2).
 
 ## R2 part 1: activity map, stored first, instant search (2026-11-27)
 

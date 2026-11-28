@@ -56,12 +56,18 @@ export async function freshOrSaved<T>(
   waitMs = WAIT_MS,
 ): Promise<FreshOrSaved<T>> {
   const now = Date.now();
+  // R2: the saved reading is asked for first, before the fresh read starts. On a 1-CPU server the fresh read (many
+  // node requests, big token lists) can keep the process busy for seconds; asked afterwards, the saved reading's
+  // database answer queued behind it, ran out of time and the page waited for the whole fresh read instead.
+  let savedRequest: Promise<Saved<T> | undefined> | null = null;
+  const savedReading = () => (savedRequest ??= saved().catch(() => undefined));
   let entry = entries.get(key);
   if (entry?.settled && now - entry.settled.at > KEEP_MS) {
     entries.delete(key);
     entry = undefined;
   }
   if (entry?.settled?.ok) return { kind: "fresh", value: entry.settled.value as T };
+  void savedReading();
   if (!entry) {
     prune(now);
     const created: Entry = { promise: Promise.resolve() };
@@ -102,13 +108,33 @@ export async function freshOrSaved<T>(
   clearTimeout(timer);
   if (first !== TIMEOUT) {
     if (first.ok) return { kind: "fresh", value: first.value };
-    const old = await saved().catch(() => undefined);
+    const old = await savedReading();
     return old
       ? { kind: "saved", value: old.data, savedAt: old.savedAt, refreshing: false }
       : { kind: "failed", error: first.error };
   }
-  // Slow: show the saved reading if there is one; otherwise wait for the fresh read.
-  const old = await saved().catch(() => undefined);
+  // Slow: show the saved reading if there is one; otherwise wait for the fresh read. Whichever comes first wins, so a
+  // fresh read finishing while the database answers slowly is shown at once.
+  const raced = await Promise.race([
+    savedReading().then((old) => ({ from: "saved" as const, old })),
+    running.then(
+      () => ({ from: "fresh" as const, old: undefined }),
+      () => ({ from: "fresh" as const, old: undefined }),
+    ),
+  ]);
+  if (raced.from === "fresh") {
+    if (entry.settled?.ok) return { kind: "fresh", value: entry.settled.value as T };
+    // The fresh read failed: the saved reading, marked as not refreshing, or the failure.
+    const error = await running.then(
+      () => undefined,
+      (e: unknown) => e,
+    );
+    const fallback = await savedReading();
+    return fallback
+      ? { kind: "saved", value: fallback.data, savedAt: fallback.savedAt, refreshing: false }
+      : { kind: "failed", error };
+  }
+  const old = raced.old;
   if (old) {
     entry.awaited = true;
     // It may have finished while the saved reading was being read.

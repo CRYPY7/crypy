@@ -6,7 +6,7 @@ import type { ActivityFacts, ChainActivity } from "@/lib/activity/types";
 import { registry } from "@/server/chains/registry";
 import { type FreshOrSaved, freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { readSavedOne, saveResults } from "@/server/saved/store";
-import { cachedAddressOverview } from "./overview";
+import { overviewForChecks } from "./overview";
 
 export interface ActivityReport extends ActivityFacts {
   /** Tokens the balance view hides as likely spam (lower-case), for the spam filter. */
@@ -49,7 +49,7 @@ export async function cachedActivity(
   "use cache";
   const cursors = parseCursor(cursor);
   // Not awaited here: the history source doesn't need balances, so it starts at once.
-  const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
+  const overviewRequest = overviewForChecks(owner, only).catch(() => null);
   const targets = liveChains.filter(
     (chain) =>
       chain.capabilities.activity && (!only || only.includes(chain.key)) && (cursor === null || cursors.has(chain.key)),

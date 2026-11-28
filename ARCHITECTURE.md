@@ -918,7 +918,13 @@ DEX decoders, per chain family:                      (one per DEX design)
   time, shared; not back within `WAIT_MS` (0.25 s since R2, was 2.5 s) and a saved reading exists → the saved one with `refreshing: true`
   (UI `CheckingNotice`, page reloads after 5 s); the fresh result is kept 60 s only when a page was shown a saved
   reading; failures are never kept. Used by `pageOverview` (per chain), `cachedApprovals`, `cachedActivity` (first
-  page) and `cachedTokenSecurity` (CRYPY's saved report or the curated daily check ≤ 6 h). `readChainHoldings` is the
+  page) and `cachedTokenSecurity` (CRYPY's saved report or the curated daily check ≤ 6 h). Since R2 (2026-11-28): the
+  saved reading is requested before the fresh read starts and whichever arrives first after `WAIT_MS` is used.
+  Rule: a "use cache" function must not start, without awaiting it, another "use cache" function or work that calls
+  one — Next.js stores the outer result only when every cached function started inside it has finished, so the next
+  visitor would wait for the whole background read. Hence GoPlus (token, approvals) and Sourcify use `server/memo.ts`
+  (in-memory, lifetime per answer, keyed by priority) instead of "use cache", and Approvals and Activity read holdings
+  through `overviewForChecks` (plain, shared one minute). `readChainHoldings` is the
   shared one-chain read; `addressOverview` (health checks, alerts) never uses saved readings.
 - Transactions: kind `transaction`, saved only when final or 64+ confirmations; shown with `savedAt` when the read
   throws. `resolveAddressPage`: when no chain answers the lookup, a valid address still opens its page (header search

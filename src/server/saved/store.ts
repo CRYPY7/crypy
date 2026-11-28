@@ -49,6 +49,7 @@ export const KEEP_WALLET_CHAINS_MS = 30 * DAY;
 /** A result larger than this isn't saved (very big wallets): the page then says what couldn't be read, as before. */
 export const MAX_BYTES = 512 * 1024;
 const READ_TIMEOUT_MS = 1_500;
+const TOUCH_MS = 3_600_000;
 
 export interface Saved<T> {
   data: T;
@@ -133,24 +134,21 @@ export async function readSaved<T>(
     READ_TIMEOUT_MS,
     [],
   );
+  const touch: string[] = [];
   for (const row of rows) {
     if (now - row.savedAt.getTime() > MAX_AGE_MS[kind]) continue;
     out.set(row.chain, { data: row.data as T, savedAt: row.savedAt.toISOString() });
+    // "Looked up" only decides deletion after days: written at most hourly, not on every read.
+    if (!row.usedAt || now - row.usedAt.getTime() > TOUCH_MS) touch.push(row.chain);
   }
-  if (out.size > 0) {
+  if (touch.length > 0) {
     void (async () => {
       try {
         const db = await getDb();
         await db
           .update(savedResults)
           .set({ usedAt: new Date(now) })
-          .where(
-            and(
-              eq(savedResults.kind, kind),
-              eq(savedResults.subject, key),
-              inArray(savedResults.chain, [...out.keys()]),
-            ),
-          );
+          .where(and(eq(savedResults.kind, kind), eq(savedResults.subject, key), inArray(savedResults.chain, touch)));
       } catch {
         // Best-effort.
       }

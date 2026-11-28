@@ -9,7 +9,7 @@ process.env.PGLITE_DIR = "memory";
 
 const { resetDb, getDb } = await import("@/server/db/client");
 const { savedResults } = await import("@/server/db/schema");
-const { goPlusToken, goPlusApprovals } = await import("@/server/security/external");
+const { goPlusToken, goPlusApprovals, resetOutsideSources } = await import("@/server/security/external");
 const { resetGoPlusPace } = await import("@/server/security/goplus-budget");
 
 const TOKEN = "0x1111111111111111111111111111111111111111";
@@ -18,13 +18,15 @@ const json = (body: unknown) => new Response(JSON.stringify(body), { status: 200
 const settle = () => new Promise((resolve) => setTimeout(resolve, 60));
 const tokenAnswer = json({ code: 1, result: { [TOKEN]: { is_honeypot: "0", buy_tax: "0", sell_tax: "0.01" } } });
 
-/** Makes every saved answer `ms` older. */
+/** Makes every saved answer `ms` older (and forgets the in-memory copies, which would have expired too). */
 async function ageAll(ms: number) {
+  resetOutsideSources();
   const db = await getDb();
   await db.update(savedResults).set({ savedAt: sql`${savedResults.savedAt} - (${ms} * interval '1 millisecond')` });
 }
 
 beforeEach(() => {
+  resetOutsideSources();
   fetchMock.mockReset();
   resetGoPlusPace();
 });

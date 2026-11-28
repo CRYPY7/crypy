@@ -9,7 +9,7 @@ import { runHeavy } from "@/server/heavy/queue";
 import type { GoPlusPriority } from "@/server/security/goplus-budget";
 import { freshOrSaved } from "@/server/saved/fresh-or-saved";
 import { readSavedOne, saveResults } from "@/server/saved/store";
-import { cachedAddressOverview } from "./overview";
+import { overviewForChecks } from "./overview";
 
 export interface ChainApprovals {
   chain: ChainKey;
@@ -45,7 +45,7 @@ export async function cachedApprovals(
 ): Promise<ApprovalsReport> {
   "use cache";
   // Not awaited here: each chain starts its outside lookups while the balances load.
-  const overviewRequest = cachedAddressOverview(owner, only).catch(() => null);
+  const overviewRequest = overviewForChecks(owner, only).catch(() => null);
   const targets = liveChains.filter((chain) => chain.capabilities.approvals && (!only || only.includes(chain.key)));
   // Tokens the balance view hides as likely spam: approvals on them never need attention.
   const spamTokens = overviewRequest.then(

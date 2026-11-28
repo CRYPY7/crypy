@@ -36,7 +36,7 @@ test("empty portfolio explains itself; the add dialog refuses seed phrases, bad 
 });
 
 test("two wallets: combined total, wallet rows, holdings, kept after reload, removable", async ({ page }) => {
-  test.setTimeout(150_000);
+  test.setTimeout(210_000);
   await page.goto("/en/tools/portfolio");
   await page.evaluate(
     ([a, b]) =>
@@ -64,9 +64,14 @@ test("two wallets: combined total, wallet rows, holdings, kept after reload, rem
   await expect(main.getByRole("heading", { name: "Top holdings" })).toBeVisible();
   await expect(main.getByRole("cell", { name: /^ETH/ }).first()).toBeVisible();
   await expect(main.getByText(/^Safe$/)).toHaveCount(0);
-  // The last total is kept for "since you last looked".
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("crypy.portfolio") ?? "{}"));
-  expect(typeof saved.snapshot?.totalUsd).toBe("number");
+  // The last total is kept for "since you last looked", once every wallet shows fresh numbers. Since R2 a wallet can
+  // show its stored balances first and the fresh ones a few seconds later (read again quietly), so this is awaited.
+  await expect
+    .poll(
+      () => page.evaluate(() => typeof JSON.parse(localStorage.getItem("crypy.portfolio") ?? "{}").snapshot?.totalUsd),
+      { timeout: 60_000 },
+    )
+    .toBe("number");
 
   await main.getByRole("button", { name: "Remove Exchange from the portfolio" }).click();
   await expect(rows).toHaveCount(1);

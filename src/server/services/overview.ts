@@ -52,6 +52,44 @@ export async function cachedAddressOverview(address: string, only?: readonly str
   return overview;
 }
 
+const CHECKS_KEEP_MS = 60_000;
+const CHECKS_MAX = 2_000;
+const forChecks: Map<string, { at: number; promise: Promise<AddressOverview> }> = ((
+  globalThis as { __crypyOverviewForChecks?: Map<string, { at: number; promise: Promise<AddressOverview> }> }
+).__crypyOverviewForChecks ??= new Map());
+
+/**
+ * The holdings that Approvals and Activity need inside their own cached functions (held tokens, spam tokens).
+ *
+ * Not a "use cache" function on purpose (R2, found on the server 2026-11-28): Next.js stores a cached function's
+ * result only once every cached function it started has finished. Approvals and Activity start this without waiting
+ * for it (so their answer isn't delayed), and when it was `cachedAddressOverview` a second request for the same
+ * wallet waited for the whole balance read (4–6 s) even though the first request had answered in 0.3 s. Shared in
+ * memory for a minute instead; the per-chain reads underneath are the same shared reads the pages use.
+ */
+export function overviewForChecks(
+  address: string,
+  only?: readonly string[],
+  now = Date.now(),
+): Promise<AddressOverview> {
+  const key = `${address.toLowerCase()}|${only?.join(",") ?? "*"}`;
+  const hit = forChecks.get(key);
+  if (hit && now - hit.at < CHECKS_KEEP_MS) return hit.promise;
+  if (forChecks.size >= CHECKS_MAX) {
+    for (const [k, v] of forChecks) if (now - v.at >= CHECKS_KEEP_MS) forChecks.delete(k);
+    if (forChecks.size >= CHECKS_MAX) forChecks.delete(forChecks.keys().next().value!);
+  }
+  const promise = pageOverview(address, only);
+  forChecks.set(key, { at: now, promise });
+  promise.catch(() => forChecks.delete(key));
+  return promise;
+}
+
+/** For tests. */
+export function resetOverviewForChecks(): void {
+  forChecks.clear();
+}
+
 /**
  * For pages (stabilization S2): each chain is read fresh; a chain whose read fails, or takes longer than a moment,
  * shows its last saved reading (up to 7 days old) with its time, while the fresh read finishes in the background
