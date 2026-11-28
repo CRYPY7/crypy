@@ -106,6 +106,8 @@ export async function portfolioBalances(address: string): Promise<PortfolioBalan
 }
 
 /** Part 2: approvals needing attention and GoPlus-flagged tokens, at Portfolio priority. */
+const SLOW_LOG_MS = 5_000;
+
 export async function portfolioSafety(address: string): Promise<PortfolioSafetyReport> {
   const started = Date.now();
   const { balanceChains, approvalChains } = await scope(address);
@@ -134,12 +136,13 @@ export async function portfolioSafety(address: string): Promise<PortfolioSafetyR
       null,
     ),
   ]);
-  logTiming(
-    `portfolio safety: approvals ${approvalsMs < 0 ? "timed out" : `${approvalsMs} ms`}${
-      approvals?.partial ? " (partial)" : ""
-    }, flags ${flagsMs < 0 ? "timed out" : `${flagsMs} ms`}${
-      flagged && flagged.skipped > 0 ? ` (${flagged.skipped} skipped)` : ""
-    }, total ${Date.now() - started} ms`,
-  );
+  const line = `portfolio safety: approvals ${approvalsMs < 0 ? "timed out" : `${approvalsMs} ms`}${
+    approvals?.partial ? " (partial)" : ""
+  }, flags ${flagsMs < 0 ? "timed out" : `${flagsMs} ms`}${
+    flagged && flagged.skipped > 0 ? ` (${flagged.skipped} skipped)` : ""
+  }, total ${Date.now() - started} ms`;
+  logTiming(line);
+  // Always logged when slow (no addresses), so a slow first request after an update says which part waited.
+  if (Date.now() - started > SLOW_LOG_MS) console.warn(`[crypy] slow ${line}`);
   return { approvals, flagged };
 }

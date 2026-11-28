@@ -41,6 +41,21 @@ Last updated: 2026-11-28
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## Measured after R3; Portfolio safety after a restart, second fix (2026-11-28)
+
+- **Server, 13:10 UTC (after the R3 update):** first run 30 of 31 (the exchange wallet's second balance visit 0.39 s,
+  target 0.3), second run 31 of 31. Alchemy units per run 7,112–10,906.
+- **Portfolio safety, first request after the update: 13.9 s** (was 16–21 s): the 6-hour reuse helped but wasn't
+  the whole cause. Found: when GoPlus hasn't analysed a token it answers "not listed", and that answer was kept only
+  in memory for 10 minutes, never in the database, so after every restart Portfolio asked GoPlus again about each
+  such token, at one call every 2 s. Now saved like a full answer (reused 1 hour, 6 for Portfolio). Portfolio safety
+  also logs a line whenever it takes over 5 s (`[crypy] slow portfolio safety: approvals … ms, flags … ms`, no
+  addresses), so if anything else is slow after an update, the server log names the part.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 695 passed, 76 skipped (new: a "not listed" answer survives a
+restart without a new GoPlus call). Build passed. Browser (Portfolio, token security, approvals, token checks): 22
+passed, 0 failed.
+
 ## R3: one slow chain never holds up the others; Portfolio badges after a restart (2026-11-28)
 
 - **Why:** a chain with no stored reading was waited for however long it took, so one slow chain held up the whole

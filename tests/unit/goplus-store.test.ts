@@ -69,6 +69,17 @@ describe("saved GoPlus answers", () => {
     expect(fetchMock.mock.calls.length).toBe(calls + 1);
   });
 
+  it("R3: a 'not listed' answer is saved too, so a restart doesn't ask GoPlus again", async () => {
+    const OTHER = "0x3333333333333333333333333333333333333333";
+    fetchMock.mockImplementation(async () => json({ code: 1, result: {} }));
+    expect((await goPlusToken(1, OTHER)).status).toBe("not-listed");
+    await settle();
+    resetOutsideSources(); // a restart: memory empty, the database kept
+    const calls = fetchMock.mock.calls.length;
+    expect((await goPlusToken(1, OTHER, "portfolio")).status).toBe("not-listed");
+    expect(fetchMock.mock.calls.length).toBe(calls);
+  });
+
   it("approvals: reused for 5 minutes; when GoPlus is down a saved list fills in as partial", async () => {
     const list = json({
       code: 1,

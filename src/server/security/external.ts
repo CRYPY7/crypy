@@ -157,8 +157,12 @@ async function goPlusTokenRead(
     const entry = json.result[address.toLowerCase()];
     // GoPlus answers with an empty entry for tokens it hasn't analysed yet.
     if (!entry || entry.is_honeypot === undefined) {
+      // R3: saved like a full answer, so a restart doesn't ask GoPlus again about every token it doesn't list (Portfolio
+      // checks up to 8 per wallet; these calls queued for 14–21 s after each update).
+      const notListed: GoPlusResult = { status: "not-listed" };
+      void saveResults("goplus-token", address, [{ chain: String(chainId), data: notListed }]);
       life.set({ revalidate: 600, expire: 3600 });
-      return { status: "not-listed" };
+      return notListed;
     }
     const result: GoPlusResult = {
       status: "ok",
