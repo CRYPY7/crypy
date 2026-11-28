@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq, inArray, lt, ne, sql } from "drizzle-orm";
+import { and, eq, inArray, lt, notInArray, sql } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
 import { savedResults } from "@/server/db/schema";
 
@@ -21,7 +21,9 @@ export type SavedKind =
   | "goplus-token"
   | "goplus-approvals"
   /** R2: which chains a wallet holds tokens on (one row per wallet, chain "*"). */
-  | "wallet-chains";
+  | "wallet-chains"
+  /** R4: a wallet's first transfer on a chain (never changes once found). */
+  | "first-activity";
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -40,11 +42,12 @@ export const MAX_AGE_MS: Record<SavedKind, number> = {
   "goplus-approvals": DAY,
   /** Shown while a fresh discovery runs in the background; see server/wallet/activity-map.ts. */
   "wallet-chains": 30 * DAY,
+  "first-activity": 365 * DAY,
 };
 
 /** Deleted this long after the subject was last looked up. */
 export const KEEP_MS = 7 * DAY;
-/** The activity map is tiny (~100 B per wallet) and kept longer (INFRASTRUCTURE_DESIGN.md §7). */
+/** The activity map and first-activity dates are tiny and kept longer (INFRASTRUCTURE_DESIGN.md §7). */
 export const KEEP_WALLET_CHAINS_MS = 30 * DAY;
 /** A result larger than this isn't saved (very big wallets): the page then says what couldn't be read, as before. */
 export const MAX_BYTES = 512 * 1024;
@@ -170,10 +173,11 @@ export async function readSavedOne<T>(
 /** Deletes results not looked up for 7 days (the activity map: 30 days); run with the hourly housekeeping. */
 export async function pruneSaved(now = Date.now()): Promise<void> {
   const db = await getDb();
+  const longKept: SavedKind[] = ["wallet-chains", "first-activity"];
   await db
     .delete(savedResults)
-    .where(and(ne(savedResults.kind, "wallet-chains"), lt(savedResults.usedAt, new Date(now - KEEP_MS))));
+    .where(and(notInArray(savedResults.kind, longKept), lt(savedResults.usedAt, new Date(now - KEEP_MS))));
   await db
     .delete(savedResults)
-    .where(and(eq(savedResults.kind, "wallet-chains"), lt(savedResults.usedAt, new Date(now - KEEP_WALLET_CHAINS_MS))));
+    .where(and(inArray(savedResults.kind, longKept), lt(savedResults.usedAt, new Date(now - KEEP_WALLET_CHAINS_MS))));
 }

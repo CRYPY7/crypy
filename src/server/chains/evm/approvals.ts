@@ -9,6 +9,9 @@ import { type GoPlusApprovalLead, goPlusApprovals, sourcifyVerified } from "@/se
 import type { GoPlusPriority } from "@/server/security/goplus-budget";
 import { accountTypes } from "./batch";
 import { getOnchainPrices } from "./prices";
+import { evmTokenDetails } from "./token-details";
+import type { TokenDetails } from "@/server/tokens/registry";
+import { pricesFor } from "@/server/tokens/prices";
 import { getEvmClient } from "./providers";
 import { dexDeployments } from "./security/dex-registry";
 
@@ -82,12 +85,23 @@ export async function getEvmApprovals(
   // Outside lists don't need the block or the held tokens: start them first (they are the slowest part).
   // Portfolio calls may wait their turn in GoPlus's line first (goplus-budget.ts), so they get longer.
   const goplusMs = priority === "portfolio" ? GOPLUS_PORTFOLIO_MS : GOPLUS_MS;
-  const goplusRequest = withTimeout(goPlusApprovals(chainId, wallet, priority), goplusMs, {
-    status: "unavailable" as const,
-  });
+  // R4: how long each step took (diagnostics; the speed script prints the slowest).
+  const started = Date.now();
+  const steps: Record<string, number> = {};
+  const timed = <T>(name: string, p: Promise<T>): Promise<T> =>
+    p.finally(() => {
+      steps[name] = Date.now() - started;
+    });
+  const goplusRequest = timed(
+    "goplus",
+    withTimeout(goPlusApprovals(chainId, wallet, priority), goplusMs, { status: "unavailable" as const }),
+  );
   const [block, heldTokens] = await Promise.all([
     client.getBlockNumber(),
-    Promise.resolve(heldTokensInput).catch(() => [] as string[]),
+    timed(
+      "held",
+      Promise.resolve(heldTokensInput).catch(() => [] as string[]),
+    ),
   ]);
   const key = (kind: string, token: string, spender: string) =>
     `${kind}|${token.toLowerCase()}|${spender.toLowerCase()}`;
@@ -112,10 +126,13 @@ export async function getEvmApprovals(
   const [goplus, recent] = await Promise.all([
     goplusRequest,
     // A supplementary source: a slow node must not hold the page up (the page then says events weren't searched).
-    withTimeout(recentApprovals(client, chain.key, wallet, block, heldTokens.slice(0, MAX_HELD)), RECENT_MS, {
-      read: false,
-      items: [],
-    }),
+    timed(
+      "recent",
+      withTimeout(recentApprovals(client, chain.key, wallet, block, heldTokens.slice(0, MAX_HELD)), RECENT_MS, {
+        read: false,
+        items: [],
+      }),
+    ),
   ]);
   if (goplus.status !== "unavailable") for (const lead of goplus.leads) add({ ...lead, lead }, "goplus");
   for (const r of recent.items) add(r, "recent-logs");
@@ -139,73 +156,73 @@ export async function getEvmApprovals(
   // 3. Read every candidate on-chain at one block.
   const list = [...candidates.values()];
   const tokens = [...new Set(list.map((c) => c.token))];
-  const [reads, meta, balances, blockHeader] = await Promise.all([
-    client.multicall({
-      allowFailure: true,
-      blockNumber: block,
-      contracts: list.map((c) =>
-        c.kind === "token"
-          ? {
-              address: getAddress(c.token),
-              abi: erc20Abi,
-              functionName: "allowance" as const,
-              args: [wallet, getAddress(c.spender)] as const,
-            }
-          : {
-              address: getAddress(c.token),
-              abi: nftAbi,
-              functionName: "isApprovedForAll" as const,
-              args: [wallet, getAddress(c.spender)] as const,
-            },
-      ),
-    }),
-    client.multicall({
-      allowFailure: true,
-      blockNumber: block,
-      contracts: tokens.flatMap((t) =>
-        (["symbol", "name", "decimals"] as const).map((functionName) => ({
+  const [reads, meta, balances, blockHeader] = await timed(
+    "reads",
+    Promise.all([
+      client.multicall({
+        allowFailure: true,
+        blockNumber: block,
+        contracts: list.map((c) =>
+          c.kind === "token"
+            ? {
+                address: getAddress(c.token),
+                abi: erc20Abi,
+                functionName: "allowance" as const,
+                args: [wallet, getAddress(c.spender)] as const,
+              }
+            : {
+                address: getAddress(c.token),
+                abi: nftAbi,
+                functionName: "isApprovedForAll" as const,
+                args: [wallet, getAddress(c.spender)] as const,
+              },
+        ),
+      }),
+      // R4: names and decimals from the shared token registry (read from the chain only for tokens it doesn't know).
+      evmTokenDetails(client, chain.key, tokens).catch(() => new Map<string, TokenDetails | null>()),
+      client.multicall({
+        allowFailure: true,
+        blockNumber: block,
+        contracts: tokens.map((t) => ({
           address: getAddress(t),
           abi: erc20Abi,
-          functionName,
+          functionName: "balanceOf" as const,
+          args: [wallet] as const,
         })),
-      ),
-    }),
-    client.multicall({
-      allowFailure: true,
-      blockNumber: block,
-      contracts: tokens.map((t) => ({
-        address: getAddress(t),
-        abi: erc20Abi,
-        functionName: "balanceOf" as const,
-        args: [wallet] as const,
-      })),
-    }),
-    client.getBlock({ blockNumber: block }),
-  ]);
+      }),
+      client.getBlock({ blockNumber: block }),
+    ]),
+  );
   const tokenInfo = new Map<
     string,
     { symbol: string; name: string; decimals: number | null; balance: string | null }
   >();
   tokens.forEach((t, i) => {
-    const get = (j: number) => (meta[i * 3 + j]?.status === "success" ? meta[i * 3 + j]!.result : null);
-    const decimals = get(2);
+    const details = meta.get(t.toLowerCase()) ?? null;
     const bal = balances[i];
     tokenInfo.set(t, {
-      symbol: sanitizeTokenText(typeof get(0) === "string" ? (get(0) as string) : "", 24) || "?",
-      name: sanitizeTokenText(typeof get(1) === "string" ? (get(1) as string) : "", 64),
-      decimals: typeof decimals === "number" ? decimals : null,
+      symbol: sanitizeTokenText(details?.symbol ?? "", 24) || "?",
+      name: sanitizeTokenText(details?.name ?? "", 64),
+      decimals: details ? details.decimals : null,
       balance: bal?.status === "success" ? String(bal.result) : null,
     });
   });
   // Prices for "at risk now" only need the token list: read them while the steps below run.
-  const pricesRequest = withTimeout(
-    getOnchainPrices(
-      client,
-      chain,
-      tokens.map((t) => ({ address: t, decimals: tokenInfo.get(t)?.decimals ?? null })),
+  // R4: stored prices first (refreshed every 3 minutes by the price job); only tokens without one are priced live.
+  const pricesRequest = timed(
+    "prices",
+    withTimeout(
+      pricesFor(
+        chain.key,
+        tokens.flatMap((t) => {
+          const decimals = tokenInfo.get(t)?.decimals;
+          return decimals === null || decimals === undefined ? [] : [{ address: t, decimals }];
+        }),
+        async (missing) => (await getOnchainPrices(client, chain, missing)).tokens,
+      ),
+      OPTIONAL_MS,
+      null,
     ),
-    OPTIONAL_MS,
-    null,
   );
   const live = list.flatMap((c, i): { c: Candidate; allowance: bigint | null }[] => {
     const r = reads[i];
@@ -227,16 +244,19 @@ export async function getEvmApprovals(
     permitSpenders.map((spender) => ({ token, spender, permit2 })),
   );
   const permitReads = permitPairs.length
-    ? await client.multicall({
-        allowFailure: true,
-        blockNumber: block,
-        contracts: permitPairs.map((p) => ({
-          address: getAddress(p.permit2),
-          abi: permit2Abi,
-          functionName: "allowance" as const,
-          args: [wallet, getAddress(p.token), getAddress(p.spender)] as const,
-        })),
-      })
+    ? await timed(
+        "permit2",
+        client.multicall({
+          allowFailure: true,
+          blockNumber: block,
+          contracts: permitPairs.map((p) => ({
+            address: getAddress(p.permit2),
+            abi: permit2Abi,
+            functionName: "allowance" as const,
+            args: [wallet, getAddress(p.token), getAddress(p.spender)] as const,
+          })),
+        }),
+      )
     : [];
   const blockTime = Number(blockHeader.timestamp);
   const permitLive = permitPairs.flatMap((p, i) => {
@@ -249,22 +269,28 @@ export async function getEvmApprovals(
   // 5. Who the spenders are.
   const spenderList = [...new Set([...live.map((x) => x.c.spender), ...permitLive.map((p) => p.spender)])];
   const types = spenderList.length
-    ? await accountTypes(
-        client,
-        spenderList.map((s) => getAddress(s)),
-        block,
+    ? await timed(
+        "spenders",
+        accountTypes(
+          client,
+          spenderList.map((s) => getAddress(s)),
+          block,
+        ),
       )
     : [];
   const unknownContracts = spenderList.filter((s, i) => types[i] === "contract" && !knownContract(chain.key, s));
   const verified = new Map<string, boolean | null>();
-  await Promise.all(
-    unknownContracts.slice(0, MAX_SOURCE_CHECKS).map(async (s) => {
-      const r = await withTimeout(sourcifyVerified(chainId, getAddress(s)), OPTIONAL_MS, null);
-      verified.set(
-        s,
-        r ? (r.source.status === "verified" ? true : r.source.status === "not-found" ? false : null) : null,
-      );
-    }),
+  await timed(
+    "sourcify",
+    Promise.all(
+      unknownContracts.slice(0, MAX_SOURCE_CHECKS).map(async (s) => {
+        const r = await withTimeout(sourcifyVerified(chainId, getAddress(s)), OPTIONAL_MS, null);
+        verified.set(
+          s,
+          r ? (r.source.status === "verified" ? true : r.source.status === "not-found" ? false : null) : null,
+        );
+      }),
+    ),
   );
   const leadFlags = new Map<string, GoPlusApprovalLead["flags"]>();
   const createdAt = new Map<string, number>();
@@ -291,7 +317,7 @@ export async function getEvmApprovals(
 
   // 6. Prices for "at risk now".
   const prices = await pricesRequest;
-  const priceOf = (t: string) => prices?.tokens.get(t.toLowerCase())?.usd ?? null;
+  const priceOf = (t: string) => prices?.get(t.toLowerCase())?.usd ?? null;
   const atRisk = (token: string, allowance: bigint) => {
     const info = tokenInfo.get(token);
     const price = priceOf(token);
@@ -347,6 +373,7 @@ export async function getEvmApprovals(
     checkedAt: Date.now(),
     approvals,
     sources: { goplus: goplus.status, recentLogs: recent.read, knownSpenders: held.length > 0 },
+    steps: { ...steps, total: Date.now() - started },
   };
 }
 

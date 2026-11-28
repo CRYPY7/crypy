@@ -9,6 +9,7 @@ import { getOnchainPrices } from "./prices";
 import { evmTokenDetails } from "./token-details";
 import { discardBody } from "@/server/http/discard";
 import { noteAlchemyLimited, waitForAlchemy } from "./alchemy-pace";
+import { readSavedOne, saveResults } from "@/server/saved/store";
 import {
   alchemyUnits,
   BudgetExhaustedError,
@@ -149,6 +150,7 @@ export function parseAlchemyTransfer(
  * come afterwards and wait briefly, so they never push a chain's history out.
  */
 export const HISTORY_WAIT_MS = 10_000;
+type FirstActivity = NonNullable<ChainActivity["first"]>;
 export const FIRST_ACTIVITY_WAIT_MS = 1_500;
 
 async function alchemyCall(provider: Provider, params: Record<string, unknown>, maxWaitMs = HISTORY_WAIT_MS) {
@@ -397,7 +399,13 @@ export async function getEvmActivity(
   const provider = alchemyProvider(chain);
   if (provider) {
     try {
-      const page = await historyPage(chain, provider, getAddress(owner), before, before === null);
+      // R4: a wallet's first transfer never changes: found once, then stored, so later first pages make 2 Alchemy
+      // calls per chain instead of 4 (with five chains at 120 units a call, the last chain waited ~10 s in the
+      // per-second budget).
+      const known = before === null ? await readSavedOne<FirstActivity>("first-activity", owner, chain.key) : undefined;
+      const page = await historyPage(chain, provider, getAddress(owner), before, before === null && !known);
+      if (known) page.first = known.data;
+      else if (page.first) void saveResults("first-activity", owner, [{ chain: chain.key, data: page.first }]);
       await fillTimes(client, page.list);
       return {
         chain: {

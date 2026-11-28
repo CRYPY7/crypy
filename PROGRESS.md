@@ -41,6 +41,33 @@ Last updated: 2026-11-28
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## R4 part 1: faster Approvals and Activity scans, with step times (2026-11-28)
+
+- **Activity's 10 s on Polygon was a queue, not a slow chain.** A first page made 4 Alchemy calls per chain (sent,
+  received, and two to find the wallet's first transfer) at 120 units each: 2,400 units for five chains, paced at 250
+  units a second, so the last chain asked (Polygon 10 s, Arbitrum 9, Base 7, BNB Chain 6) waited ~10 s. A wallet's
+  first transfer never changes: it is now found once and stored per wallet and chain (`first-activity`, kept 30 days
+  after the last lookup), so later first pages make 2 calls per chain. Expected: the last chain's wait roughly halves.
+- **Approvals, per chain:** each chain now waits only for its own balances (it waited for every chain's); token names
+  and decimals come from the shared token registry (were read from each contract on every scan); prices come from
+  the stored prices refreshed every 3 minutes (were worked out live, up to 7 s). Each scan now reports when each step
+  finished (`readMs`: held, goplus, recent, reads, prices, permit2, spenders, sourcify), and `pnpm perf:server` prints
+  the slowest. Measured here (public nodes, no Alchemy key): held tokens ~3.0 s, GoPlus's approval list 4.6–5.5 s,
+  everything else within 0.2 s after GoPlus. GoPlus's list looks like the floor; the server's numbers will tell.
+
+**Checks:** typecheck, lint, Prettier clean. Unit: 696 passed, 76 skipped (new: the first transfer is asked for
+once, stored, and the next first page makes 2 calls instead of 4). Build passed. Browser: 330 passed, 20 skipped,
+0 failed.
+
+## Measured after the update warm-up (2026-11-28)
+
+- **Two runs, each right after an update/restart with the warm-up:** 29 of 31 and 30 of 31. The address page frame
+  was 0.04–0.08 s in both (was 0.31–0.35 s on the first request after a restart): the warm-up works, and Portfolio
+  safety stayed fast after both restarts (0.29–0.56 s).
+- **Misses, each once and on the first minutes of a fresh process:** the Ethereum transaction 3.25 s (1.06 s after the
+  next restart; providers' speeds are relearned after a start, so the first reads may go to a slow one), CAKE token
+  security second visit 0.52 s, the exchange wallet's second balance visit 0.31 s (target 0.3). Watched, not acted on.
+
 ## Confirmed after a restart; update warm-up (2026-11-28)
 
 - **Portfolio safety after a restart: 0.36 s** (was 12–21 s on the first request after each update); no "slow

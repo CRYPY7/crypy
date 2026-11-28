@@ -172,7 +172,7 @@ function slowSteps(data) {
     const ms = c.readMs ?? c.chain?.readMs;
     if (typeof ms === "number") steps.push({ name: String(chain), dur: ms });
     else if (ms && typeof ms === "object")
-      for (const [step, dur] of Object.entries(ms)) steps.push({ name: `${step}-${chain}`, dur });
+      for (const [step, dur] of Object.entries(ms)) if (step !== "total") steps.push({ name: `${step}-${chain}`, dur });
   }
   return steps
     .filter((s) => Number.isFinite(s.dur) && s.dur >= 300)

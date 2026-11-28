@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, it, vi } from "vitest";
 
 // A made-up key, so CRYPY sets up Alchemy as a provider; every request goes to the stand-in below.
+process.env.PGLITE_DIR = "memory";
 process.env.ALCHEMY_API_KEY = "testkey0123456789abcdef";
 const { liveChains } = await import("@/config/chains");
 const { getEvmActivity } = await import("@/server/chains/evm/activity");

@@ -532,6 +532,11 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000   # production: https://crypy.org
   without usable details are read from the contract. The per-chain `alchemy_getTokenBalances` list stays as the
   fallback (first page failing, budget used, `CRYPY_WALLET_TOKENS=off`) and for background work (alerts checks);
   the balances health check reads one page (`withWalletTokenPages(1, …)`).
+- **Approvals and Activity scans (R4 part 1, 2026-11-28):** approvals read each chain's held tokens from
+  `overviewForChecks(owner, [chain])` (its own chain only), token details from the registry (`evmTokenDetails`) and
+  prices through `pricesFor` (stored first); `ApprovalsFacts.steps` (ms since the start when each step finished) is
+  passed on as `ChainApprovals.readMs`. Activity stores a wallet's first transfer per chain (saved kind
+  `first-activity`, kept like the activity map) and skips the two first-activity calls when it is known.
 - **Pending chains (R3, 2026-11-28):** `pageOverview(address, only, giveUpMs = PENDING_MS)` uses
   `freshSavedOrPending`: with no saved reading, a chain not read within `PENDING_MS` (3 s) is returned in
   `overview.pending` (not in `chains`); its read continues and is kept for the reload; the answer is cached 1 s. Page:

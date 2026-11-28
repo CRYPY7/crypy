@@ -56,4 +56,6 @@ export interface ApprovalsFacts {
   approvals: ApprovalFact[];
   /** Which discovery sources answered this time. */
   sources: { goplus: "ok" | "partial" | "unavailable"; recentLogs: boolean; knownSpenders: boolean };
+  /** R4: time each step took, in ms (diagnostics; read by the speed script). */
+  steps?: Record<string, number>;
 }

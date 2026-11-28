@@ -16,8 +16,8 @@ export interface ChainApprovals {
   block: string;
   approvals: RatedApproval[];
   sources: ApprovalsFacts["sources"];
-  /** How long this chain's check took, in ms (R1 part 2: read by the speed script). */
-  readMs?: number;
+  /** How long this chain's check took, in ms, per step since R4 (read by the speed script). */
+  readMs?: number | Record<string, number>;
 }
 
 export interface ApprovalsReport {
@@ -44,18 +44,7 @@ export async function cachedApprovals(
   priority: GoPlusPriority = "page",
 ): Promise<ApprovalsReport> {
   "use cache";
-  // Not awaited here: each chain starts its outside lookups while the balances load.
-  const overviewRequest = overviewForChecks(owner, only).catch(() => null);
   const targets = liveChains.filter((chain) => chain.capabilities.approvals && (!only || only.includes(chain.key)));
-  // Tokens the balance view hides as likely spam: approvals on them never need attention.
-  const spamTokens = overviewRequest.then(
-    (overview) =>
-      new Set(
-        (overview?.chains ?? []).flatMap((c) =>
-          c.hidden.flatMap((h) => (h.kind === "token" && h.address ? [h.address.toLowerCase()] : [])),
-        ),
-      ),
-  );
   // Stabilization S2: each chain is checked fresh; one that fails, or takes longer than a moment, shows its last
   // complete check (at most 6 hours old) while the fresh one finishes in the background. Only complete checks are
   // saved (isFullCheck).
@@ -67,12 +56,25 @@ export async function cachedApprovals(
           const adapter = registry.adapters.find((a) => a.family === chain.family);
           if (!adapter?.getApprovals) throw new Error("Approvals not supported");
           await chainDrill(chain.key, owner);
-          const held = overviewRequest.then((overview) => {
-            const holdings = overview?.chains.find((c) => c.chain === chain.key);
-            return [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
+          // R4: each chain waits only for its own balances (was: every chain's), not awaited here so the outside
+          // lookups start while they load.
+          const holdingsRequest = overviewForChecks(owner, [chain.key])
+            .then((overview) => overview.chains.find((c) => c.chain === chain.key) ?? null)
+            .catch(() => null);
+          const held = holdingsRequest.then((holdings) =>
+            [...(holdings?.visible ?? []), ...(holdings?.hidden ?? [])].flatMap((h) =>
               h.kind === "token" && h.address ? [h.address] : [],
-            );
-          });
+            ),
+          );
+          // Tokens the balance view hides as likely spam: approvals on them never need attention.
+          const spamTokens = holdingsRequest.then(
+            (holdings) =>
+              new Set(
+                (holdings?.hidden ?? []).flatMap((h) =>
+                  h.kind === "token" && h.address ? [h.address.toLowerCase()] : [],
+                ),
+              ),
+          );
           const getApprovals = adapter.getApprovals.bind(adapter);
           // S3: heavy checks share one line (server/heavy/queue.ts): pages first, background work behind.
           const started = Date.now();
@@ -82,7 +84,8 @@ export async function cachedApprovals(
             block: facts.block,
             approvals: rateApprovals(facts.approvals, await spamTokens),
             sources: facts.sources,
-            readMs: Date.now() - started,
+            // R4: each step's time (read by the speed script), or the whole check's when steps aren't reported.
+            readMs: facts.steps ?? Date.now() - started,
           };
         },
         () => readSavedOne<ChainApprovals>("approvals", owner, chain.key),
