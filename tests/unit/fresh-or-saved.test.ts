@@ -104,4 +104,29 @@ describe("freshOrSaved", () => {
     );
     expect(result).toMatchObject({ kind: "saved", value: "old", refreshing: false });
   });
+
+  it("R2: a fresh result the caller says not to keep (still completing) is read again on the reload", async () => {
+    let reads = 0;
+    const saved = async () => ({ data: "old", savedAt: "2026-11-24T10:00:00.000Z" });
+    const fresh = () => later(60, `partial-${++reads}`);
+    const shown = await freshOrSaved(
+      "k-keep",
+      fresh,
+      saved,
+      () => {},
+      10,
+      () => false,
+    );
+    expect(shown).toMatchObject({ kind: "saved", refreshing: true });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const reload = await freshOrSaved(
+      "k-keep",
+      fresh,
+      saved,
+      () => {},
+      200,
+      () => false,
+    );
+    expect(reload).toEqual({ kind: "fresh", value: "partial-2" });
+  });
 });

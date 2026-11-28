@@ -54,6 +54,8 @@ export async function freshOrSaved<T>(
   saved: () => Promise<Saved<T> | undefined>,
   onFresh: (value: T) => void,
   waitMs = WAIT_MS,
+  /** R2: a fresh result for which this says false (e.g. a token list still completing) is never kept for reloads. */
+  keep: (value: T) => boolean = () => true,
 ): Promise<FreshOrSaved<T>> {
   const now = Date.now();
   // R2: the saved reading is asked for first, before the fresh read starts. On a 1-CPU server the fresh read (many
@@ -75,7 +77,7 @@ export async function freshOrSaved<T>(
       (value) => {
         created.settled = { at: Date.now(), ok: true, value };
         // Only kept when a page is waiting for it; otherwise the page cache already holds it.
-        if (!created.awaited) entries.delete(key);
+        if (!created.awaited || !keep(value)) entries.delete(key);
         try {
           onFresh(value);
         } catch {

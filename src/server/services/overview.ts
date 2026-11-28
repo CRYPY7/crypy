@@ -111,6 +111,9 @@ export async function pageOverview(address: string, only?: readonly string[]): P
             { chain: holdings.chain, data: holdings, quality: holdings.coverage === "full" ? 2 : 1 },
           ]);
         },
+        undefined,
+        // A list still completing isn't kept: the page's reload reads again and gets the finished list.
+        (holdings) => !holdings.completing,
       ),
     ),
   );

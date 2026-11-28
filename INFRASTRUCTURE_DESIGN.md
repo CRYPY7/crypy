@@ -224,8 +224,9 @@ replacement meets §2.
 
 **Status (2026-11-27):** R0 built; R1 parts 1–2 built and measured (25 of 31 targets); **R2 part 1 built**: activity
 map from one discovery request (stored 30 days, fresh 6 h), stored results shown after 0.25 s while the fresh read
-finishes, search opens transaction pages at once and looks addresses up before Enter. R2 part 2 (next): discovery's
-balances feed the address overview directly, so the per-chain token lists are read only where tokens were found.
+finishes, search opens transaction pages at once and looks addresses up before Enter. Measured 2026-11-28 after the
+second-visit fix: **31 of 31 targets**. **R2 part 2 built:** token lists show a first view after 2 s and finish in
+the background. Next: R3 (address overview, Balance Scanner, Portfolio streamed per chain).
 
 ## 12. Risks and open points
 

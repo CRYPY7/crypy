@@ -41,6 +41,37 @@ Last updated: 2026-11-28
 | Stabilization S0–S6 (owner decision 2026-11-24)        | 🟡 In progress: S0, S1 started; S2 built; S3 started 2026-11-25; features paused until S6     |
 | M3–M9                                                  | Planned (see DEVELOPMENT_ROADMAP.md)                                                          |
 
+## R2 part 2: token lists show a first view after 2 s (2026-11-28)
+
+- **Why:** wallets full of airdropped tokens spent 4.7–5.9 s per chain paging through Alchemy's token list before the
+  chain could be shown. Stored readings hide that for wallets seen before; a wallet nobody had looked up waited.
+- **Built:** one shared token list per wallet and chain (`sharedTokenList` in `server/chains/evm/balances.ts`); a
+  page shows what has arrived after 2 s (`FIRST_VIEW_MS`) plus the chain's well-known tokens (read directly, so they
+  are never missed), marked "still reading this wallet's full token list"; the list keeps going in the background
+  (up to 10 pages or 15 s, was cut at 5 s) and is kept 2 minutes, so the page's own reload and Portfolio's quiet
+  re-reads get the whole list. Each page's token details go into the token registry while the next page loads. A
+  result still completing is never kept as the answer for reloads (`freshOrSaved` `keep` option). Background work
+  (alerts checks) waits for the whole list, as before.
+- **Not done (judged not worth it):** skipping the token list on chains where discovery found no tokens: an empty list
+  answers in one request, and the slow chains are the ones full of tokens.
+
+**Checks:** typecheck, lint, Prettier, translation check clean. Unit: 690 passed, 76 skipped (new: the shared list —
+shared while running, pages so far, warming, kept 2 minutes, failures not kept; a slow list gives a first view after
+2 s with the well-known tokens and "completing", and the reload gets the full list; a completing result isn't kept).
+Build passed. Browser: 329 passed, 19 skipped, 0 failed. To measure on the server: a spam-heavy wallet nobody has
+looked up yet should show each chain within about 3 s.
+
+## Measured after the R2 fix: 31 of 31 targets (2026-11-28)
+
+- **Server, 09:35 UTC, both runs: 31 of 31 targets** (baseline 2026-11-26: 20). Search 0.12–0.73 s; address page
+  0.67–0.72 s with the frame in 0.01–0.06 s (baseline 6.3–7.8 s); balances 0.30–1.07 s; approvals 0.27–0.30 s and
+  again 0.01–0.12 s (were 2.8–6.4 s); activity 0.28–0.59 s; token security 0.26–0.52 s (baseline 8.5–9.8 s);
+  transaction 0.05–0.35 s; gas 0.76–1.04 s.
+- **Alchemy units per run: 7,714–7,776** (baseline 28,680; 105,478 with the old all-chains list).
+- **Still slow underneath** (hidden by stored readings, but felt by wallets nobody has looked up yet): fresh balance
+  reads of spam-heavy wallets 4.7–5.9 s per chain, approvals up to 7.1 s per chain, activity up to 10.7 s on Polygon.
+  Next: R2 part 2 (balances read only where discovery found tokens), then R3/R4.
+
 ## R2 part 1 measured; second visits to Approvals fixed (2026-11-28)
 
 - **Server after R2 part 1 (owner, 2026-11-27): 29 of 31 targets** (before: 25). Address page 0.8–1.8 s (was

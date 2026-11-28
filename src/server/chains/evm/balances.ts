@@ -32,7 +32,15 @@ export const MAX_TOKEN_PAGES = 10;
  * thousands of airdropped tokens need all 10 pages, which took 6–15 s on the owner's PC. After this long, no further
  * page is requested and the list is marked as cut off (the page says some tokens may be missing).
  */
-export const TOKEN_LIST_BUDGET_MS = 5_000;
+export const TOKEN_LIST_BUDGET_MS = 15_000;
+/**
+ * R2 part 2: a page shows what the list has after this long (plus the well-known tokens, read directly), marked as
+ * still completing; the list keeps going in the background up to `TOKEN_LIST_BUDGET_MS` and the page's reload gets
+ * the whole list. Background work (alerts checks) waits for the whole list.
+ */
+export const FIRST_VIEW_MS = 2_000;
+/** A finished list is kept this long for the page's reload and for other tools reading the same wallet. */
+export const LISTING_KEEP_MS = 120_000;
 const PAGE_SIZE = 100;
 
 const tokenBalancesSchema = z.object({
@@ -80,8 +88,8 @@ export function parseTokenBalancesPage(json: unknown): {
 export async function listTokensFromAlchemy(
   provider: Provider,
   owner: string,
-  /** Called with each page as it arrives, so its token details can be read while the next page loads. */
-  onPage?: (tokens: ListedToken[]) => void,
+  /** Called with each page as it arrives (its tokens and how many entries it had). */
+  onPage?: (page: { tokens: ListedToken[]; entries: number }) => void,
 ): Promise<{ tokens: ListedToken[]; truncated: boolean; entries: number }> {
   const tokens: ListedToken[] = [];
   let entries = 0;
@@ -92,7 +100,7 @@ export async function listTokensFromAlchemy(
     if (pageKey) options.pageKey = pageKey;
     // Metered like every other request: once today's budget is used, fall back to well-known tokens.
     if (budgetExhausted(provider)) throw new BudgetExhaustedError(provider.name);
-    // Shares Alchemy's per-second budget; waits at most 2 s (the whole list has a 5 s time budget).
+    // Shares Alchemy's per-second budget; waits at most 2 s per page.
     await waitForAlchemy(alchemyUnits("alchemy_getTokenBalances"), 2_000);
     recordUsage(provider, "alchemy_getTokenBalances");
     const response = await limitedFetch(provider.url, {
@@ -115,7 +123,7 @@ export async function listTokensFromAlchemy(
     const result = parseTokenBalancesPage(await response.json());
     tokens.push(...result.tokens);
     entries += result.entries;
-    onPage?.(result.tokens);
+    onPage?.({ tokens: result.tokens, entries: result.entries });
     pageKey = result.pageKey;
     if (pageKey && Date.now() - started > TOKEN_LIST_BUDGET_MS) {
       logTiming(`alchemy token list: ${page + 1} pages (time budget), ${entries} entries, ${Date.now() - started} ms`);
@@ -183,6 +191,63 @@ async function readMetadata(
   });
 }
 
+type ListResult = { tokens: ListedToken[]; truncated: boolean; entries: number };
+interface Listing {
+  /** Tokens listed so far (grows while pages arrive). */
+  sofar: ListedToken[];
+  entries: number;
+  full: Promise<ListResult>;
+  doneAt?: number;
+}
+const listings: Map<string, Listing> = ((
+  globalThis as { __crypyTokenListings?: Map<string, Listing> }
+).__crypyTokenListings ??= new Map());
+
+/** For tests. */
+export function resetTokenListings(): void {
+  listings.clear();
+}
+
+/**
+ * One token list per wallet and chain at a time, shared by every request (R2 part 2); kept `LISTING_KEEP_MS` after
+ * it finishes. Each page's token details go into the token registry while the next page is listed.
+ */
+export function sharedTokenList(
+  provider: Provider,
+  owner: string,
+  chainKey: string,
+  warm: (page: ListedToken[]) => void,
+  list: typeof listTokensFromAlchemy = listTokensFromAlchemy,
+  now = Date.now(),
+): Listing {
+  const key = `${chainKey}|${owner.toLowerCase()}`;
+  const existing = listings.get(key);
+  if (existing && (existing.doneAt === undefined || now - existing.doneAt < LISTING_KEEP_MS)) return existing;
+  for (const [k, l] of listings) if (l.doneAt !== undefined && now - l.doneAt >= LISTING_KEEP_MS) listings.delete(k);
+  const listing: Listing = {
+    sofar: [],
+    entries: 0,
+    full: Promise.resolve({ tokens: [], truncated: false, entries: 0 }),
+  };
+  listing.full = list(provider, owner, (page) => {
+    listing.sofar.push(...page.tokens);
+    listing.entries += page.entries;
+    warm(page.tokens);
+  }).then(
+    (result) => {
+      listing.doneAt = Date.now();
+      return result;
+    },
+    (error: unknown) => {
+      listings.delete(key); // a failed list isn't kept: the next request tries again
+      throw error;
+    },
+  );
+  listing.full.catch(() => {});
+  listings.set(key, listing);
+  return listing;
+}
+
 export async function getEvmBalances(
   client: PublicClient,
   chain: ChainConfig,
@@ -228,16 +293,29 @@ export async function getEvmBalances(
   } else {
     try {
       if (!alchemy) throw new Error("No token index configured");
-      // Each page's token details are read while the next page is listed.
-      const pages: Promise<RawTokenBalance[]>[] = [];
-      const result = await listTokensFromAlchemy(alchemy, owner, (page) => {
-        const read = readMetadata(client, chain.key, page);
-        read.catch(() => {}); // If listing fails later, these reads are dropped: never an unhandled rejection.
-        pages.push(read);
+      // R2 part 2: one shared list per wallet and chain; each page's details are stored while the next is listed.
+      const listing = sharedTokenList(alchemy, owner, chain.key, (page) => {
+        void readMetadata(client, chain.key, page).catch(() => {});
       });
+      let result: ListResult;
+      if (isBackground()) result = await listing.full;
+      else {
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        const firstView = await Promise.race([
+          listing.full,
+          new Promise<null>((resolve) => (timer = setTimeout(() => resolve(null), FIRST_VIEW_MS))),
+        ]).finally(() => clearTimeout(timer));
+        if (firstView) result = firstView;
+        else {
+          // Still listing: show what has arrived; the page looks again shortly (`completing`).
+          result = { tokens: [...listing.sofar], truncated: true, entries: listing.entries };
+          completing = true;
+        }
+      }
+      const pages: Promise<RawTokenBalance[]>[] = [readMetadata(client, chain.key, result.tokens)];
       if (result.truncated) {
-        // A cut-off list must never miss the well-known tokens: check them directly (one multicall) and add any the
-        // list didn't reach.
+        // A cut-off or still-completing list must never miss the well-known tokens: check them directly (one
+        // multicall) and add any the list didn't reach.
         const seen = new Set(result.tokens.map((t) => t.address.toLowerCase()));
         const extra = listCommonTokens(client, chain, owner)
           .then((common) => common.filter((t) => !seen.has(t.address.toLowerCase())))
